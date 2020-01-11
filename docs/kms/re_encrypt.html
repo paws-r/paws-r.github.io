@@ -6,24 +6,27 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Encrypts data on the server side with a new customer master key (CMK)
-without exposing the plaintext of the data on the client side — kms_re_encrypt • paws</title>
+<title>Decrypts ciphertext and then reencrypts it entirely within AWS KMS — kms_re_encrypt • paws</title>
+
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -31,14 +34,16 @@ without exposing the plaintext of the data on the client side — kms_re_encrypt
 
 
 
-<meta property="og:title" content="Encrypts data on the server side with a new customer master key (CMK)
-without exposing the plaintext of the data on the client side — kms_re_encrypt" />
 
-<meta property="og:description" content="Encrypts data on the server side with a new customer master key (CMK)
-without exposing the plaintext of the data on the client side. The data
-is first decrypted and then reencrypted. You can also use this operation
-to change the encryption context of a ciphertext." />
+<meta property="og:title" content="Decrypts ciphertext and then reencrypts it entirely within AWS KMS — kms_re_encrypt" />
+<meta property="og:description" content="Decrypts ciphertext and then reencrypts it entirely within AWS KMS. You
+can use this operation to change the customer master key (CMK) under
+which data is encrypted, such as when you manually rotate
+a CMK or change the CMK that protects a ciphertext. You can also use it
+to reencrypt ciphertext under the same CMK, such as to change the
+encryption context of a ciphertext." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -50,6 +55,7 @@ to change the encryption context of a ciphertext." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -68,7 +74,7 @@ to change the encryption context of a ciphertext." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -76,7 +82,7 @@ to change the encryption context of a ciphertext." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -85,11 +91,10 @@ to change the encryption context of a ciphertext." />
 <li>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -100,29 +105,30 @@ to change the encryption context of a ciphertext." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Encrypts data on the server side with a new customer master key (CMK)
-without exposing the plaintext of the data on the client side</h1>
+    <h1>Decrypts ciphertext and then reencrypts it entirely within AWS KMS</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/kms_operations.R'><code>R/kms_operations.R</code></a></small>
     <div class="hidden name"><code>kms_re_encrypt.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
-    <p>Encrypts data on the server side with a new customer master key (CMK)
-without exposing the plaintext of the data on the client side. The data
-is first decrypted and then reencrypted. You can also use this operation
-to change the encryption context of a ciphertext.</p>
-    
+    <p>Decrypts ciphertext and then reencrypts it entirely within AWS KMS. You
+can use this operation to change the customer master key (CMK) under
+which data is encrypted, such as when you <a href='https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html#rotate-keys-manually'>manually rotate</a>
+a CMK or change the CMK that protects a ciphertext. You can also use it
+to reencrypt ciphertext under the same CMK, such as to change the
+encryption context of a ciphertext.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kms_re_encrypt</span>(<span class='no'>CiphertextBlob</span>, <span class='no'>SourceEncryptionContext</span>,
-  <span class='no'>DestinationKeyId</span>, <span class='no'>DestinationEncryptionContext</span>, <span class='no'>GrantTokens</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>kms_re_encrypt</span>(<span class='no'>CiphertextBlob</span>, <span class='no'>SourceEncryptionContext</span>, <span class='no'>SourceKeyId</span>,
+  <span class='no'>DestinationKeyId</span>, <span class='no'>DestinationEncryptionContext</span>,
+  <span class='no'>SourceEncryptionAlgorithm</span>, <span class='no'>DestinationEncryptionAlgorithm</span>, <span class='no'>GrantTokens</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -132,12 +138,49 @@ to change the encryption context of a ciphertext.</p>
     </tr>
     <tr>
       <th>SourceEncryptionContext</th>
-      <td><p>Encryption context used to encrypt and decrypt the data specified in the
-<code>CiphertextBlob</code> parameter.</p></td>
+      <td><p>Specifies the encryption context to use to decrypt the ciphertext. Enter
+the same encryption context that was used to encrypt the ciphertext.</p>
+<p>An <em>encryption context</em> is a collection of non-secret key-value pairs
+that represents additional authenticated data. When you use an
+encryption context to encrypt data, you must specify the same (an exact
+case-sensitive match) encryption context to decrypt the data. An
+encryption context is optional when encrypting with a symmetric CMK, but
+it is highly recommended.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context'>Encryption Context</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>SourceKeyId</th>
+      <td><p>A unique identifier for the CMK that is used to decrypt the ciphertext
+before it reencrypts it using the destination CMK.</p>
+<p>This parameter is required only when the ciphertext was encrypted under
+an asymmetric CMK. Otherwise, AWS KMS uses the metadata that it adds to
+the ciphertext blob to determine which CMK was used to encrypt the
+ciphertext. However, you can use this parameter to ensure that a
+particular CMK (of any kind) is used to decrypt the ciphertext before it
+is reencrypted.</p>
+<p>If you specify a <code>KeyId</code> value, the decrypt part of the <code>ReEncrypt</code>
+operation succeeds only if the specified CMK was used to encrypt the
+ciphertext.</p>
+<p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias
+name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>.</p>
+<p>For example:</p><ul>
+<li><p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code></p></li>
+<li><p>Key ARN:
+<code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code></p></li>
+<li><p>Alias name: <code>alias/ExampleAlias</code></p></li>
+<li><p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code></p></li>
+</ul>
+
+<p>To get the key ID and key ARN for a CMK, use ListKeys or DescribeKey. To
+get the alias name and alias ARN, use ListAliases.</p></td>
     </tr>
     <tr>
       <th>DestinationKeyId</th>
-      <td><p>[required] A unique identifier for the CMK that is used to reencrypt the data.</p>
+      <td><p>[required] A unique identifier for the CMK that is used to reencrypt the data.
+Specify a symmetric or asymmetric CMK with a <code>KeyUsage</code> value of
+<code>ENCRYPT_DECRYPT</code>. To find the <code>KeyUsage</code> value of a CMK, use the
+DescribeKey operation.</p>
 <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias
 name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>.
 To specify a CMK in a different AWS account, you must use the key ARN or
@@ -155,7 +198,36 @@ get the alias name and alias ARN, use ListAliases.</p></td>
     </tr>
     <tr>
       <th>DestinationEncryptionContext</th>
-      <td><p>Encryption context to use when the data is reencrypted.</p></td>
+      <td><p>Specifies that encryption context to use when the reencrypting the data.</p>
+<p>A destination encryption context is valid only when the destination CMK
+is a symmetric CMK. The standard ciphertext format for asymmetric CMKs
+does not include fields for metadata.</p>
+<p>An <em>encryption context</em> is a collection of non-secret key-value pairs
+that represents additional authenticated data. When you use an
+encryption context to encrypt data, you must specify the same (an exact
+case-sensitive match) encryption context to decrypt the data. An
+encryption context is optional when encrypting with a symmetric CMK, but
+it is highly recommended.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context'>Encryption Context</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>SourceEncryptionAlgorithm</th>
+      <td><p>Specifies the encryption algorithm that AWS KMS will use to decrypt the
+ciphertext before it is reencrypted. The default value,
+<code>SYMMETRIC_DEFAULT</code>, represents the algorithm used for symmetric CMKs.</p>
+<p>Specify the same algorithm that was used to encrypt the ciphertext. If
+you specify a different algorithm, the decrypt attempt fails.</p>
+<p>This parameter is required only when the ciphertext was encrypted under
+an asymmetric CMK.</p></td>
+    </tr>
+    <tr>
+      <th>DestinationEncryptionAlgorithm</th>
+      <td><p>Specifies the encryption algorithm that AWS KMS will use to reecrypt the
+data after it has decrypted it. The default value, <code>SYMMETRIC_DEFAULT</code>,
+represents the encryption algorithm used for symmetric CMKs.</p>
+<p>This parameter is required only when the destination CMK is an
+asymmetric CMK.</p></td>
     </tr>
     <tr>
       <th>GrantTokens</th>
@@ -164,64 +236,102 @@ get the alias name and alias ARN, use ListAliases.</p></td>
 in the <em>AWS Key Management Service Developer Guide</em>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>You can reencrypt data using CMKs in different AWS accounts.</p>
-<p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as
-<code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the
-destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code>
-permission in your <a href='https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html'>key policies</a>
-to permit reencryption from or to the CMK. This permission is
-automatically included in the key policy when you create a CMK through
-the console. But you must include it manually when you create a CMK
-programmatically or when you set a key policy with the PutKeyPolicy
-operation.</p>
-<p>The result of this operation varies with the key state of the CMK. For
-details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html'>How Key State Affects Use of a Customer Master Key</a>
+    <p>The <code>ReEncrypt</code> operation can decrypt ciphertext that was encrypted by
+using an AWS KMS CMK in an AWS KMS operation, such as Encrypt or
+GenerateDataKey. It can also decrypt ciphertext that was encrypted by
+using the public key of an asymmetric CMK outside of AWS KMS. However,
+it cannot decrypt ciphertext produced by other libraries, such as the
+<a href='https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/'>AWS Encryption SDK</a>
+or <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html'>Amazon S3 client-side encryption</a>.
+These libraries return a ciphertext format that is incompatible with AWS
+KMS.</p>
+<p>When you use the <code>ReEncrypt</code> operation, you need to provide information
+for the decrypt operation and the subsequent encrypt operation.</p><ul>
+<li><p>If your ciphertext was encrypted under an asymmetric CMK, you must
+identify the <em>source CMK</em>, that is, the CMK that encrypted the
+ciphertext. You must also supply the encryption algorithm that was
+used. This information is required to decrypt the data.</p></li>
+<li><p>It is optional, but you can specify a source CMK even when the
+ciphertext was encrypted under a symmetric CMK. This ensures that
+the ciphertext is decrypted only by using a particular CMK. If the
+CMK that you specify cannot decrypt the ciphertext, the <code>ReEncrypt</code>
+operation fails.</p></li>
+<li><p>To reencrypt the data, you must specify the <em>destination CMK</em>, that
+is, the CMK that re-encrypts the data after it is decrypted. You can
+select a symmetric or asymmetric CMK. If the destination CMK is an
+asymmetric CMK, you must also provide the encryption algorithm. The
+algorithm that you choose must be compatible with the CMK.</p>
+<p>When you use an asymmetric CMK to encrypt or reencrypt data, be sure
+to record the CMK and encryption algorithm that you choose. You will
+be required to provide the same CMK and encryption algorithm when
+you decrypt the data. If the CMK and algorithm do not match the
+values used to encrypt the data, the decrypt operation fails.</p>
+<p>You are not required to supply the CMK ID and encryption algorithm
+when you decrypt with symmetric CMKs because AWS KMS stores this
+information in the ciphertext blob. AWS KMS cannot store metadata in
+ciphertext generated with asymmetric keys. The standard format for
+asymmetric key ciphertext does not include configurable fields.</p></li>
+</ul>
+
+<p>Unlike other AWS KMS API operations, <code>ReEncrypt</code> callers must have two
+permissions:</p><ul>
+<li><p><code>kms:EncryptFrom</code> permission on the source CMK</p></li>
+<li><p><code>kms:EncryptTo</code> permission on the destination CMK</p></li>
+</ul>
+
+<p>To permit reencryption from</p>
+<p>or to a CMK, include the <code>"kms:ReEncrypt*"</code> permission in your <a href='https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html'>key policy</a>.
+This permission is automatically included in the key policy when you use
+the console to create a CMK. But you must include it manually when you
+create a CMK programmatically or when you use the PutKeyPolicy operation
+set a key policy.</p>
+<p>The CMK that you use for this operation must be in a compatible key
+state. For details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html'>How Key State Affects Use of a Customer Master Key</a>
 in the <em>AWS Key Management Service Developer Guide</em>.</p>
-    
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
-    <pre>svc$re_encrypt(
+    
+<pre>svc$re_encrypt(
   CiphertextBlob = raw,
   SourceEncryptionContext = list(
     "string"
   ),
+  SourceKeyId = "string",
   DestinationKeyId = "string",
   DestinationEncryptionContext = list(
     "string"
   ),
+  SourceEncryptionAlgorithm = "SYMMETRIC_DEFAULT"|"RSAES_OAEP_SHA_1"|"RSAES_OAEP_SHA_256",
+  DestinationEncryptionAlgorithm = "SYMMETRIC_DEFAULT"|"RSAES_OAEP_SHA_1"|"RSAES_OAEP_SHA_256",
   GrantTokens = list(
     "string"
   )
 )
 </pre>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples">
-# The following example reencrypts data with the specified CMK.
+    <pre class="examples"><span class='co'># The following example reencrypts data with the specified CMK.</span>
 <span class='no'>svc</span>$<span class='fu'>re_encrypt</span>(
   <span class='kw'>CiphertextBlob</span> <span class='kw'>=</span> <span class='st'>"&lt;binary data&gt;"</span>,
   <span class='kw'>DestinationKeyId</span> <span class='kw'>=</span> <span class='st'>"0987dcba-09fe-87dc-65ba-ab0987654321"</span>
-)
-</pre>
+)</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-
       <li><a href="#request-syntax">Request syntax</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -229,13 +339,16 @@ in the <em>AWS Key Management Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

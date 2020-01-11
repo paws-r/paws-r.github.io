@@ -6,23 +6,28 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Looks up management events captured by CloudTrail — cloudtrail_lookup_events • paws</title>
+<title>Looks up management events or CloudTrail Insights events that are
+captured by CloudTrail — cloudtrail_lookup_events • paws</title>
+
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,13 +35,16 @@
 
 
 
-<meta property="og:title" content="Looks up management events captured by CloudTrail — cloudtrail_lookup_events" />
 
+<meta property="og:title" content="Looks up management events or CloudTrail Insights events that are
+captured by CloudTrail — cloudtrail_lookup_events" />
 <meta property="og:description" content="Looks up management events
-captured by CloudTrail. Events for a region can be looked up in that
-region during the last 90 days. Lookup supports the following
-attributes:" />
+or CloudTrail Insights events
+that are captured by CloudTrail. You can look up events that occurred in
+a region within the last 90 days. Lookup supports the following
+attributes for management events:" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -48,6 +56,7 @@ attributes:" />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -66,7 +75,7 @@ attributes:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -74,7 +83,7 @@ attributes:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -83,11 +92,10 @@ attributes:" />
 <li>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -98,28 +106,29 @@ attributes:" />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Looks up management events captured by CloudTrail</h1>
+    <h1>Looks up management events or CloudTrail Insights events that are
+captured by CloudTrail</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/cloudtrail_operations.R'><code>R/cloudtrail_operations.R</code></a></small>
     <div class="hidden name"><code>cloudtrail_lookup_events.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
     <p>Looks up <a href='https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events'>management events</a>
-captured by CloudTrail. Events for a region can be looked up in that
-region during the last 90 days. Lookup supports the following
-attributes:</p>
-    
+or <a href='https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-insights-events'>CloudTrail Insights events</a>
+that are captured by CloudTrail. You can look up events that occurred in
+a region within the last 90 days. Lookup supports the following
+attributes for management events:</p>
     </div>
 
     <pre class="usage"><span class='fu'>cloudtrail_lookup_events</span>(<span class='no'>LookupAttributes</span>, <span class='no'>StartTime</span>, <span class='no'>EndTime</span>,
-  <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
-    
+  <span class='no'>EventCategory</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -141,6 +150,13 @@ are returned. If the specified end time is before the specified start
 time, an error is returned.</p></td>
     </tr>
     <tr>
+      <th>EventCategory</th>
+      <td><p>Specifies the event category. If you do not specify an event category,
+events of the category are not returned in the response. For example, if
+you do not specify <code>insight</code> as the value of <code>EventCategory</code>, no
+Insights events are returned.</p></td>
+    </tr>
+    <tr>
       <th>MaxResults</th>
       <td><p>The number of events to return. Possible values are 1 through 50. The
 default is 50.</p></td>
@@ -150,14 +166,15 @@ default is 50.</p></td>
       <td><p>The token to use to get the next page of results after a previous API
 call. This token must be passed in with the same parameters that were
 specified in the the original call. For example, if the original call
-specified an AttributeKey of 'Username' with a value of 'root', the
+specified an AttributeKey of \'Username\' with a value of \'root\', the
 call with NextToken should include those same parameters.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <ul>
+    
+<ul>
 <li><p>AWS access key</p></li>
 <li><p>Event ID</p></li>
 <li><p>Event name</p></li>
@@ -167,18 +184,22 @@ call with NextToken should include those same parameters.</p></td>
 <li><p>Resource type</p></li>
 <li><p>User name</p></li>
 </ul>
-    <p>All attributes are optional. The default number of results returned is
+
+<p>Lookup supports the following attributes for Insights events:</p><ul>
+<li><p>Event ID</p></li>
+<li><p>Event name</p></li>
+<li><p>Event source</p></li>
+</ul>
+
+<p>All attributes are optional. The default number of results returned is
 50, with a maximum of 50 possible. The response includes a token that
 you can use to get the next page of results.</p>
-<p>The rate of lookup requests is limited to one per second per account. If
+<p>The rate of lookup requests is limited to two per second per account. If
 this limit is exceeded, a throttling error occurs.</p>
-<p>Events that occurred during the selected time range will not be
-available for lookup if CloudTrail logging was not enabled when the
-events occurred.</p>
-    
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
-    <pre>svc$lookup_events(
+    
+<pre>svc$lookup_events(
   LookupAttributes = list(
     list(
       AttributeKey = "EventId"|"EventName"|"ReadOnly"|"Username"|"ResourceType"|"ResourceName"|"EventSource"|"AccessKeyId",
@@ -191,25 +212,25 @@ events occurred.</p>
   EndTime = as.POSIXct(
     "2015-01-01"
   ),
+  EventCategory = "insight",
   MaxResults = 123,
   NextToken = "string"
 )
 </pre>
-    
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-
       <li><a href="#request-syntax">Request syntax</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -217,13 +238,16 @@ events occurred.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

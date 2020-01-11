@@ -10,21 +10,25 @@
 publishes the requested data set to the specified S3 bucket and notifies
 the specified SNS topic once the data is available — marketplacecommerceanalytics_generate_data_set • paws</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,12 +36,13 @@ the specified SNS topic once the data is available — marketplacecommerceanalyt
 
 
 
+
 <meta property="og:title" content="Given a data set type and data set publication date, asynchronously
 publishes the requested data set to the specified S3 bucket and notifies
 the specified SNS topic once the data is available — marketplacecommerceanalytics_generate_data_set" />
-
-<meta property="og:description" content="Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name data_set_type_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy." />
+<meta property="og:description" content="Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -49,6 +54,7 @@ the specified SNS topic once the data is available — marketplacecommerceanalyt
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -67,7 +73,7 @@ the specified SNS topic once the data is available — marketplacecommerceanalyt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -75,7 +81,7 @@ the specified SNS topic once the data is available — marketplacecommerceanalyt
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -84,11 +90,10 @@ the specified SNS topic once the data is available — marketplacecommerceanalyt
 <li>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -99,6 +104,7 @@ the specified SNS topic once the data is available — marketplacecommerceanalyt
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -112,15 +118,13 @@ the specified SNS topic once the data is available</h1>
     </div>
 
     <div class="ref-description">
-    
-    <p>Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name data_set_type_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
-    
+    <p>Given a data set type and data set publication date, asynchronously publishes the requested data set to the specified S3 bucket and notifies the specified SNS topic once the data is available. Returns a unique request identifier that can be used to correlate requests with notifications from the SNS topic. Data sets will be published in comma-separated values (CSV) format with the file name {data_set_type}_YYYY-MM-DD.csv. If a file with the same name already exists (e.g. if the same data set is requested twice), the original file will be overwritten by the new file. Requires a Role with an attached permissions policy providing Allow permissions for the following actions: s3:PutObject, s3:GetBucketLocation, sns:GetTopicAttributes, sns:Publish, iam:GetRolePolicy.</p>
     </div>
 
     <pre class="usage"><span class='fu'>marketplacecommerceanalytics_generate_data_set</span>(<span class='no'>dataSetType</span>,
   <span class='no'>dataSetPublicationDate</span>, <span class='no'>roleNameArn</span>, <span class='no'>destinationS3BucketName</span>,
   <span class='no'>destinationS3Prefix</span>, <span class='no'>snsTopicArn</span>, <span class='no'>customerDefinedValues</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -128,81 +132,82 @@ the specified SNS topic once the data is available</h1>
       <th>dataSetType</th>
       <td><p>[required] The desired data set type.</p><ul>
 <li><p><strong>customer\_subscriber\_hourly\_monthly\_subscriptions</strong></p>
-<p>From 2014-07-21 to present: Available daily by 5:00 PM Pacific Time.</p></li>
+<p>From 2014-07-21 to present: Available daily by 24:00 UTC.</p></li>
 <li><p><strong>customer\_subscriber\_annual\_subscriptions</strong></p>
-<p>From 2014-07-21 to present: Available daily by 5:00 PM Pacific Time.</p></li>
+<p>From 2014-07-21 to present: Available daily by 24:00 UTC.</p></li>
 <li><p><strong>daily\_business\_usage\_by\_instance\_type</strong></p>
-<p>From 2015-01-26 to present: Available daily by 5:00 PM Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available daily by 24:00 UTC.</p></li>
 <li><p><strong>daily\_business\_fees</strong></p>
-<p>From 2015-01-26 to present: Available daily by 5:00 PM Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available daily by 24:00 UTC.</p></li>
 <li><p><strong>daily\_business\_free\_trial\_conversions</strong></p>
-<p>From 2015-01-26 to present: Available daily by 5:00 PM Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available daily by 24:00 UTC.</p></li>
 <li><p><strong>daily\_business\_new\_instances</strong></p>
-<p>From 2015-01-26 to present: Available daily by 5:00 PM Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available daily by 24:00 UTC.</p></li>
 <li><p><strong>daily\_business\_new\_product\_subscribers</strong></p>
-<p>From 2015-01-26 to present: Available daily by 5:00 PM Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available daily by 24:00 UTC.</p></li>
 <li><p><strong>daily\_business\_canceled\_product\_subscribers</strong></p>
-<p>From 2015-01-26 to present: Available daily by 5:00 PM Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available daily by 24:00 UTC.</p></li>
 <li><p><strong>monthly\_revenue\_billing\_and\_revenue\_data</strong></p>
 <p>From 2015-02 to 2017-06: Available monthly on the 4th day of the
-month by 5:00pm Pacific Time. Data includes metered transactions
-(e.g. hourly) from two months prior.</p>
+month by 24:00 UTC. Data includes metered transactions (e.g. hourly)
+from two months prior.</p>
 <p>From 2017-07 to present: Available monthly on the 15th day of the
-month by 5:00pm Pacific Time. Data includes metered transactions
-(e.g. hourly) from one month prior.</p></li>
+month by 24:00 UTC. Data includes metered transactions (e.g. hourly)
+from one month prior.</p></li>
 <li><p><strong>monthly\_revenue\_annual\_subscriptions</strong></p>
 <p>From 2015-02 to 2017-06: Available monthly on the 4th day of the
-month by 5:00pm Pacific Time. Data includes up-front software
-charges (e.g. annual) from one month prior.</p>
+month by 24:00 UTC. Data includes up-front software charges (e.g.
+annual) from one month prior.</p>
 <p>From 2017-07 to present: Available monthly on the 15th day of the
-month by 5:00pm Pacific Time. Data includes up-front software
-charges (e.g. annual) from one month prior.</p></li>
+month by 24:00 UTC. Data includes up-front software charges (e.g.
+annual) from one month prior.</p></li>
+<li><p><strong>monthly\_revenue\_field\_demonstration\_usage</strong></p>
+<p>From 2018-03-15 to present: Available monthly on the 15th day of the
+month by 24:00 UTC.</p></li>
+<li><p><strong>monthly\_revenue\_flexible\_payment\_schedule</strong></p>
+<p>From 2018-11-15 to present: Available monthly on the 15th day of the
+month by 24:00 UTC.</p></li>
 <li><p><strong>disbursed\_amount\_by\_product</strong></p>
-<p>From 2015-01-26 to present: Available every 30 days by 5:00 PM
-Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available every 30 days by 24:00 UTC.</p></li>
 <li><p><strong>disbursed\_amount\_by\_product\_with\_uncollected\_funds</strong></p>
-<p>From 2012-04-19 to 2015-01-25: Available every 30 days by 5:00 PM
-Pacific Time.</p>
+<p>From 2012-04-19 to 2015-01-25: Available every 30 days by 24:00 UTC.</p>
 <p>From 2015-01-26 to present: This data set was split into three data
 sets: disbursed\_amount\_by\_product,
 disbursed\_amount\_by\_age\_of\_uncollected\_funds, and
 disbursed\_amount\_by\_age\_of\_disbursed\_funds.</p></li>
 <li><p><strong>disbursed\_amount\_by\_instance\_hours</strong></p>
-<p>From 2012-09-04 to present: Available every 30 days by 5:00 PM
-Pacific Time.</p></li>
+<p>From 2012-09-04 to present: Available every 30 days by 24:00 UTC.</p></li>
 <li><p><strong>disbursed\_amount\_by\_customer\_geo</strong></p>
-<p>From 2012-04-19 to present: Available every 30 days by 5:00 PM
-Pacific Time.</p></li>
+<p>From 2012-04-19 to present: Available every 30 days by 24:00 UTC.</p></li>
 <li><p><strong>disbursed\_amount\_by\_age\_of\_uncollected\_funds</strong></p>
-<p>From 2015-01-26 to present: Available every 30 days by 5:00 PM
-Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available every 30 days by 24:00 UTC.</p></li>
 <li><p><strong>disbursed\_amount\_by\_age\_of\_disbursed\_funds</strong></p>
-<p>From 2015-01-26 to present: Available every 30 days by 5:00 PM
-Pacific Time.</p></li>
+<p>From 2015-01-26 to present: Available every 30 days by 24:00 UTC.</p></li>
+<li><p><strong>disbursed\_amount\_by\_age\_of\_past\_due\_funds</strong></p>
+<p>From 2018-04-07 to present: Available every 30 days by 24:00 UTC.</p></li>
+<li><p><strong>disbursed\_amount\_by\_uncollected\_funds\_breakdown</strong></p>
+<p>From 2019-10-04 to present: Available every 30 days by 24:00 UTC.</p></li>
 <li><p><strong>customer\_profile\_by\_industry</strong></p>
-<p>From 2015-10-01 to 2017-06-29: Available daily by 5:00 PM Pacific
-Time.</p>
+<p>From 2015-10-01 to 2017-06-29: Available daily by 24:00 UTC.</p>
 <p>From 2017-06-30 to present: This data set is no longer available.</p></li>
 <li><p><strong>customer\_profile\_by\_revenue</strong></p>
-<p>From 2015-10-01 to 2017-06-29: Available daily by 5:00 PM Pacific
-Time.</p>
+<p>From 2015-10-01 to 2017-06-29: Available daily by 24:00 UTC.</p>
 <p>From 2017-06-30 to present: This data set is no longer available.</p></li>
 <li><p><strong>customer\_profile\_by\_geography</strong></p>
-<p>From 2015-10-01 to 2017-06-29: Available daily by 5:00 PM Pacific
-Time.</p>
+<p>From 2015-10-01 to 2017-06-29: Available daily by 24:00 UTC.</p>
 <p>From 2017-06-30 to present: This data set is no longer available.</p></li>
 <li><p><strong>sales\_compensation\_billed\_revenue</strong></p>
 <p>From 2016-12 to 2017-06: Available monthly on the 4th day of the
-month by 5:00pm Pacific Time. Data includes metered transactions
-(e.g. hourly) from two months prior, and up-front software charges
-(e.g. annual) from one month prior.</p>
+month by 24:00 UTC. Data includes metered transactions (e.g. hourly)
+from two months prior, and up-front software charges (e.g. annual)
+from one month prior.</p>
 <p>From 2017-06 to present: Available monthly on the 15th day of the
-month by 5:00pm Pacific Time. Data includes metered transactions
-(e.g. hourly) from one month prior, and up-front software charges
-(e.g. annual) from one month prior.</p></li>
+month by 24:00 UTC. Data includes metered transactions (e.g. hourly)
+from one month prior, and up-front software charges (e.g. annual)
+from one month prior.</p></li>
 <li><p><strong>us\_sales\_and\_use\_tax\_records</strong></p>
 <p>From 2017-02-15 to present: Available monthly on the 15th day of the
-month by 5:00 PM Pacific Time.</p></li>
+month by 24:00 UTC.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -230,11 +235,12 @@ month by 5:00 PM Pacific Time.</p></li>
       <td><p>(Optional) Key-value pairs which will be returned, unmodified, in the Amazon SNS notification message and the data set metadata file. These key-value pairs can be used to correlated responses with tracking information from other systems.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
-    <pre>svc$generate_data_set(
-  dataSetType = "customer_subscriber_hourly_monthly_subscriptions"|"customer_subscriber_annual_subscriptions"|"daily_business_usage_by_instance_type"|"daily_business_fees"|"daily_business_free_trial_conversions"|"daily_business_new_instances"|"daily_business_new_product_subscribers"|"daily_business_canceled_product_subscribers"|"monthly_revenue_billing_and_revenue_data"|"monthly_revenue_annual_subscriptions"|"disbursed_amount_by_product"|"disbursed_amount_by_product_with_uncollected_funds"|"disbursed_amount_by_instance_hours"|"disbursed_amount_by_customer_geo"|"disbursed_amount_by_age_of_uncollected_funds"|"disbursed_amount_by_age_of_disbursed_funds"|"customer_profile_by_industry"|"customer_profile_by_revenue"|"customer_profile_by_geography"|"sales_compensation_billed_revenue"|"us_sales_and_use_tax_records",
+    
+<pre>svc$generate_data_set(
+  dataSetType = "customer_subscriber_hourly_monthly_subscriptions"|"customer_subscriber_annual_subscriptions"|"daily_business_usage_by_instance_type"|"daily_business_fees"|"daily_business_free_trial_conversions"|"daily_business_new_instances"|"daily_business_new_product_subscribers"|"daily_business_canceled_product_subscribers"|"monthly_revenue_billing_and_revenue_data"|"monthly_revenue_annual_subscriptions"|"monthly_revenue_field_demonstration_usage"|"monthly_revenue_flexible_payment_schedule"|"disbursed_amount_by_product"|"disbursed_amount_by_product_with_uncollected_funds"|"disbursed_amount_by_instance_hours"|"disbursed_amount_by_customer_geo"|"disbursed_amount_by_age_of_uncollected_funds"|"disbursed_amount_by_age_of_disbursed_funds"|"disbursed_amount_by_age_of_past_due_funds"|"disbursed_amount_by_uncollected_funds_breakdown"|"customer_profile_by_industry"|"customer_profile_by_revenue"|"customer_profile_by_geography"|"sales_compensation_billed_revenue"|"us_sales_and_use_tax_records",
   dataSetPublicationDate = as.POSIXct(
     "2015-01-01"
   ),
@@ -247,19 +253,19 @@ month by 5:00 PM Pacific Time.</p></li>
   )
 )
 </pre>
-    
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#request-syntax">Request syntax</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -267,13 +273,16 @@ month by 5:00 PM Pacific Time.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

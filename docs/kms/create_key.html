@@ -6,23 +6,28 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates a customer managed customer master key (CMK) in your AWS account — kms_create_key • paws</title>
+<title>Creates a unique customer managed customer master key (CMK) in your AWS
+account and Region — kms_create_key • paws</title>
+
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,11 +35,14 @@
 
 
 
-<meta property="og:title" content="Creates a customer managed customer master key (CMK) in your AWS account — kms_create_key" />
 
-<meta property="og:description" content="Creates a customer managed customer master key
-(CMK) in your AWS account." />
+<meta property="og:title" content="Creates a unique customer managed customer master key (CMK) in your AWS
+account and Region — kms_create_key" />
+<meta property="og:description" content="Creates a unique customer managed customer master key
+(CMK) in your AWS account and Region. You cannot use this operation to
+create a CMK in a different AWS account." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -46,6 +54,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -64,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -72,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -81,11 +90,10 @@
 <li>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -96,26 +104,27 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Creates a customer managed customer master key (CMK) in your AWS account</h1>
+    <h1>Creates a unique customer managed customer master key (CMK) in your AWS
+account and Region</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/kms_operations.R'><code>R/kms_operations.R</code></a></small>
     <div class="hidden name"><code>kms_create_key.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
-    <p>Creates a customer managed <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys'>customer master key</a>
-(CMK) in your AWS account.</p>
-    
+    <p>Creates a unique customer managed <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master-keys'>customer master key</a>
+(CMK) in your AWS account and Region. You cannot use this operation to
+create a CMK in a different AWS account.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kms_create_key</span>(<span class='no'>Policy</span>, <span class='no'>Description</span>, <span class='no'>KeyUsage</span>, <span class='no'>Origin</span>, <span class='no'>CustomKeyStoreId</span>,
-  <span class='no'>BypassPolicyLockoutSafetyCheck</span>, <span class='no'>Tags</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>kms_create_key</span>(<span class='no'>Policy</span>, <span class='no'>Description</span>, <span class='no'>KeyUsage</span>, <span class='no'>CustomerMasterKeySpec</span>,
+  <span class='no'>Origin</span>, <span class='no'>CustomKeyStoreId</span>, <span class='no'>BypassPolicyLockoutSafetyCheck</span>, <span class='no'>Tags</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -123,7 +132,7 @@
       <th>Policy</th>
       <td><p>The key policy to attach to the CMK.</p>
 <p>If you provide a key policy, it must meet the following criteria:</p><ul>
-<li><p>If you don't set <code>BypassPolicyLockoutSafetyCheck</code> to true, the key
+<li><p>If you don\'t set <code>BypassPolicyLockoutSafetyCheck</code> to true, the key
 policy must allow the principal that is making the <code>CreateKey</code>
 request to make a subsequent PutKeyPolicy request on the CMK. This
 reduces the risk that the CMK becomes unmanageable. For more
@@ -152,26 +161,65 @@ for a task.</p></td>
     </tr>
     <tr>
       <th>KeyUsage</th>
-      <td><p>The cryptographic operations for which you can use the CMK. The only
-valid value is <code>ENCRYPT_DECRYPT</code>, which means you can use the CMK to
-encrypt and decrypt data.</p></td>
+      <td><p>Determines the cryptographic operations for which you can use the CMK.
+The default value is <code>ENCRYPT_DECRYPT</code>. This parameter is required only
+for asymmetric CMKs. You can\'t change the <code>KeyUsage</code> value after the
+CMK is created.</p>
+<p>Select only one valid value.</p><ul>
+<li><p>For symmetric CMKs, omit the parameter or specify <code>ENCRYPT_DECRYPT</code>.</p></li>
+<li><p>For asymmetric CMKs with RSA key material, specify <code>ENCRYPT_DECRYPT</code>
+or <code>SIGN_VERIFY</code>.</p></li>
+<li><p>For asymmetric CMKs with ECC key material, specify <code>SIGN_VERIFY</code>.</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>CustomerMasterKeySpec</th>
+      <td><p>Specifies the type of CMK to create. The <code>CustomerMasterKeySpec</code>
+determines whether the CMK contains a symmetric key or an asymmetric key
+pair. It also determines the encryption algorithms or signing algorithms
+that the CMK supports. You can\'t change the <code>CustomerMasterKeySpec</code>
+after the CMK is created. To further restrict the algorithms that can be
+used with the CMK, use its key policy or IAM policy.</p>
+<p>For help with choosing a key spec for your CMK, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html#cmk-key-spec'>Selecting a Customer Master Key Spec</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p>The default value, <code>SYMMETRIC_DEFAULT</code>, creates a CMK with a 256-bit
+symmetric key.</p>
+<p>AWS KMS supports the following key specs for CMKs:</p><ul>
+<li><p>Symmetric key (default)</p><ul>
+<li><p><code>SYMMETRIC_DEFAULT</code> (AES-256-GCM)</p></li>
+</ul></li>
+<li><p>Asymmetric RSA key pairs</p><ul>
+<li><p><code>RSA_2048</code></p></li>
+<li><p><code>RSA_3072</code></p></li>
+<li><p><code>RSA_4096</code></p></li>
+</ul></li>
+<li><p>Asymmetric NIST-recommended elliptic curve key pairs</p><ul>
+<li><p><code>ECC_NIST_P256</code> (secp256r1)</p></li>
+<li><p><code>ECC_NIST_P384</code> (secp384r1)</p></li>
+<li><p><code>ECC_NIST_P521</code> (secp521r1)</p></li>
+</ul></li>
+<li><p>Other asymmetric elliptic curve key pairs</p><ul>
+<li><p><code>ECC_SECG_P256K1</code> (secp256k1), commonly used for
+cryptocurrencies.</p></li>
+</ul></li>
+</ul></td>
     </tr>
     <tr>
       <th>Origin</th>
       <td><p>The source of the key material for the CMK. You cannot change the origin
-after you create the CMK.</p>
-<p>The default is <code>AWS_KMS</code>, which means AWS KMS creates the key material
-in its own key store.</p>
+after you create the CMK. The default is <code>AWS_KMS</code>, which means AWS KMS
+creates the key material.</p>
 <p>When the parameter value is <code>EXTERNAL</code>, AWS KMS creates a CMK without
 key material so that you can import key material from your existing key
 management infrastructure. For more information about importing key
 material into AWS KMS, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html'>Importing Key Material</a>
-in the <em>AWS Key Management Service Developer Guide</em>.</p>
+in the <em>AWS Key Management Service Developer Guide</em>. This value is valid
+only for symmetric CMKs.</p>
 <p>When the parameter value is <code>AWS_CLOUDHSM</code>, AWS KMS creates the CMK in
 an AWS KMS <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key store</a>
 and creates its key material in the associated AWS CloudHSM cluster. You
 must also use the <code>CustomKeyStoreId</code> parameter to identify the custom
-key store.</p></td>
+key store. This value is valid only for symmetric CMKs.</p></td>
     </tr>
     <tr>
       <th>CustomKeyStoreId</th>
@@ -181,6 +229,8 @@ CMK in a custom key store, you must also specify the <code>Origin</code> paramet
 with a value of <code>AWS_CLOUDHSM</code>. The AWS CloudHSM cluster that is
 associated with the custom key store must have at least two active HSMs,
 each in a different Availability Zone in the Region.</p>
+<p>This parameter is valid only for symmetric CMKs. You cannot create an
+asymmetric CMK in a custom key store.</p>
 <p>To find the ID of a custom key store, use the DescribeCustomKeyStores
 operation.</p>
 <p>The response includes the custom key store ID and the ID of the AWS
@@ -205,37 +255,81 @@ subsequent PutKeyPolicy request on the CMK.</p>
     </tr>
     <tr>
       <th>Tags</th>
-      <td><p>One or more tags. Each tag consists of a tag key and a tag value. Tag
-keys and tag values are both required, but tag values can be empty
-(null) strings.</p>
-<p>Use this parameter to tag the CMK when it is created. Alternately, you
-can omit this parameter and instead tag the CMK after it is created
-using TagResource.</p></td>
+      <td><p>One or more tags. Each tag consists of a tag key and a tag value. Both
+the tag key and the tag value are required, but the tag value can be an
+empty (null) string.</p>
+<p>When you add tags to an AWS resource, AWS generates a cost allocation
+report with usage and costs aggregated by tags. For information about
+adding, changing, deleting and listing tags for CMKs, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/tagging-keys.html'>Tagging Keys</a>.</p>
+<p>Use this parameter to tag the CMK when it is created. To add tags to an
+existing CMK, use the TagResource operation.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>You can use a CMK to encrypt small amounts of data (up to 4096 bytes)
-directly. But CMKs are more commonly used to encrypt the <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys'>data keys</a>
-that are used to encrypt data.</p>
-<p>To create a CMK for imported key material, use the <code>Origin</code> parameter
-with a value of <code>EXTERNAL</code>.</p>
-<p>To create a CMK in a <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key store</a>,
-use the <code>CustomKeyStoreId</code> parameter to specify the custom key store.
-You must also use the <code>Origin</code> parameter with a value of <code>AWS_CLOUDHSM</code>.
-The AWS CloudHSM cluster that is associated with the custom key store
-must have at least two active HSMs in different Availability Zones in
-the AWS Region.</p>
-<p>You cannot use this operation to create a CMK in a different AWS
-account.</p>
-    
+    <p>You can use the <code>CreateKey</code> operation to create symmetric or asymmetric
+CMKs.</p><ul>
+<li><p><strong>Symmetric CMKs</strong> contain a 256-bit symmetric key that never leaves
+AWS KMS unencrypted. To use the CMK, you must call AWS KMS. You can
+use a symmetric CMK to encrypt and decrypt small amounts of data,
+but they are typically used to generate <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys'>data keys</a>
+or data key pairs. For details, see GenerateDataKey and
+GenerateDataKeyPair.</p></li>
+<li><p><strong>Asymmetric CMKs</strong> can contain an RSA key pair or an Elliptic Curve
+(ECC) key pair. The private key in an asymmetric CMK never leaves
+AWS KMS unencrypted. However, you can use the GetPublicKey operation
+to download the public key so it can be used outside of AWS KMS.
+CMKs with RSA key pairs can be used to encrypt or decrypt data or
+sign and verify messages (but not both). CMKs with ECC key pairs can
+be used only to sign and verify messages.</p></li>
+</ul>
+
+<p>For information about symmetric and asymmetric CMKs, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html'>Using Symmetric and Asymmetric CMKs</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p>To create different types of CMKs, use the following guidance:</p>
+<p>Asymmetric CMKs</p>
+<p>:   To create an asymmetric CMK, use the <code>CustomerMasterKeySpec</code>
+parameter to specify the type of key material in the CMK. Then, use
+the <code>KeyUsage</code> parameter to determine whether the CMK will be used
+to encrypt and decrypt or sign and verify. You can\'t change these
+properties after the CMK is created.</p>
+<p>Symmetric CMKs</p>
+<p>:   When creating a symmetric CMK, you don\'t need to specify the
+<code>CustomerMasterKeySpec</code> or <code>KeyUsage</code> parameters. The default value
+for <code>CustomerMasterKeySpec</code>, <code>SYMMETRIC_DEFAULT</code>, and the default
+value for <code>KeyUsage</code>, <code>ENCRYPT_DECRYPT</code>, are the only valid values
+for symmetric CMKs.</p>
+<p>Imported Key Material</p>
+<p>:   To import your own key material, begin by creating a symmetric CMK
+with no key material. To do this, use the <code>Origin</code> parameter of
+<code>CreateKey</code> with a value of <code>EXTERNAL</code>. Next, use
+GetParametersForImport operation to get a public key and import
+token, and use the public key to encrypt your key material. Then,
+use ImportKeyMaterial with your import token to import the key
+material. For step-by-step instructions, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html'>Importing Key Material</a>
+in the <strong>AWS Key Management Service Developer Guide</strong> . You cannot
+import the key material into an asymmetric CMK.</p>
+<p>Custom Key Stores</p>
+<p>:   To create a symmetric CMK in a <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key store</a>,
+use the <code>CustomKeyStoreId</code> parameter to specify the custom key
+store. You must also use the <code>Origin</code> parameter with a value of
+<code>AWS_CLOUDHSM</code>. The AWS CloudHSM cluster that is associated with the
+custom key store must have at least two active HSMs in different
+Availability Zones in the AWS Region.</p><pre>You cannot create an asymmetric CMK in a custom key store. For
+information about custom key stores in AWS KMS see [Using Custom Key
+Stores](https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html)
+in the **AWS Key Management Service Developer Guide** .
+</pre>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
-    <pre>svc$create_key(
+    
+<pre>svc$create_key(
   Policy = "string",
   Description = "string",
-  KeyUsage = "ENCRYPT_DECRYPT",
+  KeyUsage = "SIGN_VERIFY"|"ENCRYPT_DECRYPT",
+  CustomerMasterKeySpec = "RSA_2048"|"RSA_3072"|"RSA_4096"|"ECC_NIST_P256"|"ECC_NIST_P384"|"ECC_NIST_P521"|"ECC_SECG_P256K1"|"SYMMETRIC_DEFAULT",
   Origin = "AWS_KMS"|"EXTERNAL"|"AWS_CLOUDHSM",
   CustomKeyStoreId = "string",
   BypassPolicyLockoutSafetyCheck = TRUE|FALSE,
@@ -247,35 +341,31 @@ account.</p>
   )
 )
 </pre>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples">
-# The following example creates a CMK.
+    <pre class="examples"><span class='co'># The following example creates a CMK.</span>
 <span class='no'>svc</span>$<span class='fu'>create_key</span>(
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(
+  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
       <span class='kw'>TagKey</span> <span class='kw'>=</span> <span class='st'>"CreatedBy"</span>,
       <span class='kw'>TagValue</span> <span class='kw'>=</span> <span class='st'>"ExampleUser"</span>
     )
   )
-)
-</pre>
+)</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#details">Details</a></li>
-
       <li><a href="#request-syntax">Request syntax</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -283,13 +373,16 @@ account.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

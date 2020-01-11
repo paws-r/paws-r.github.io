@@ -8,21 +8,25 @@
 
 <title>AWS CodeCommit — codecommit • paws</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +34,8 @@
 
 
 
-<meta property="og:title" content="AWS CodeCommit — codecommit" />
 
+<meta property="og:title" content="AWS CodeCommit — codecommit" />
 <meta property="og:description" content="This is the AWS CodeCommit API Reference. This reference provides
 descriptions of the operations and data types for AWS CodeCommit API
 along with usage examples.
@@ -49,43 +53,45 @@ UpdateRepositoryDescription, which sets or updates the description
 of the repository.
 UpdateRepositoryName, which changes the name of the repository. If
 you change the name of a repository, no other users of that
-repository will be able to access it until you send them the new
-HTTPS or SSH URL to use.
-" />
+repository can access it until you send them the new HTTPS or SSH
+URL to use.
 
-<meta property="og:description" content="Branches, by calling the following:
-CreateBranch, which creates a new branch in a specified repository.
+
+Branches, by calling the following:
+CreateBranch, which creates a branch in a specified repository.
 DeleteBranch, which deletes the specified branch in a repository
 unless it is the default branch.
 GetBranch, which returns information about a specified branch.
 ListBranches, which lists all branches for a specified repository.
 UpdateDefaultBranch, which changes the default branch for a
 repository.
-" />
 
-<meta property="og:description" content="Files, by calling the following:
+
+Files, by calling the following:
 DeleteFile, which deletes the content of a specified file from a
 specified branch.
 GetBlob, which returns the base-64 encoded content of an individual
-Git blob object within a repository.
+Git blob object in a repository.
 GetFile, which returns the base-64 encoded content of a specified
 file.
 GetFolder, which returns the contents of a specified folder or
 directory.
 PutFile, which adds or modifies a single file in a specified
 repository and branch.
-" />
 
-<meta property="og:description" content="Commits, by calling the following:
+
+Commits, by calling the following:
+BatchGetCommits, which returns information about one or more commits
+in a repository.
 CreateCommit, which creates a commit for changes to a repository.
 GetCommit, which returns information about a commit, including
 commit messages and author and committer information.
 GetDifferences, which returns information about the differences in a
-valid commit specifier (such as a branch, tag, HEAD, commit ID or
+valid commit specifier (such as a branch, tag, HEAD, commit ID, or
 other fully qualified reference).
-" />
 
-<meta property="og:description" content="Merges, by calling the following:
+
+Merges, by calling the following:
 BatchDescribeMergeConflicts, which returns information about
 conflicts in a merge between commits in a repository.
 CreateUnreferencedMergeCommit, which creates an unreferenced commit
@@ -106,17 +112,30 @@ MergeBranchesBySquash, which merges two branches using the squash
 merge option.
 MergeBranchesByThreeWay, which merges two branches using the
 three-way merge option.
-" />
 
-<meta property="og:description" content="Pull requests, by calling the following:
+
+Pull requests, by calling the following:
 CreatePullRequest, which creates a pull request in a specified
 repository.
+CreatePullRequestApprovalRule, which creates an approval rule for a
+specified pull request.
+DeletePullRequestApprovalRule, which deletes an approval rule for a
+specified pull request.
 DescribePullRequestEvents, which returns information about one or
 more pull request events.
+EvaluatePullRequestApprovalRules, which evaluates whether a pull
+request has met all the conditions specified in its associated
+approval rules.
 GetCommentsForPullRequest, which returns information about comments
 on a specified pull request.
 GetPullRequest, which returns information about a specified pull
 request.
+GetPullRequestApprovalStates, which returns information about the
+approval states for a specified pull request.
+GetPullRequestOverrideState, which returns information about whether
+approval rules have been set aside (overriden) for a pull request,
+and if so, the Amazon Resource Name (ARN) of the user or identity
+that overrode the rules and their requirements for the pull request.
 ListPullRequests, which lists all pull requests for a repository.
 MergePullRequestByFastForward, which merges the source destination
 branch of a pull request into the specified destination branch for
@@ -127,15 +146,63 @@ pull request using the squash merge option.
 MergePullRequestByThreeWay. which merges the source destination
 branch of a pull request into the specified destination branch for
 that pull request using the three-way merge option.
+OverridePullRequestApprovalRules, which sets aside all approval rule
+requirements for a pull request.
 PostCommentForPullRequest, which posts a comment to a pull request
 at the specified line, file, or request.
+UpdatePullRequestApprovalRuleContent, which updates the structure of
+an approval rule for a pull request.
+UpdatePullRequestApprovalState, which updates the state of an
+approval on a pull request.
 UpdatePullRequestDescription, which updates the description of a
 pull request.
 UpdatePullRequestStatus, which updates the status of a pull request.
 UpdatePullRequestTitle, which updates the title of a pull request.
-" />
 
-<meta property="og:description" content="Comments in a repository, by calling the following:
+
+Approval rule templates, by calling the following:
+AssociateApprovalRuleTemplateWithRepository, which associates a
+template with a specified repository. After the template is
+associated with a repository, AWS CodeCommit creates approval rules
+that match the template conditions on every pull request created in
+the specified repository.
+BatchAssociateApprovalRuleTemplateWithRepositories, which associates
+a template with one or more specified repositories. After the
+template is associated with a repository, AWS CodeCommit creates
+approval rules that match the template conditions on every pull
+request created in the specified repositories.
+BatchDisassociateApprovalRuleTemplateFromRepositories, which removes
+the association between a template and specified repositories so
+that approval rules based on the template are not automatically
+created when pull requests are created in those repositories.
+CreateApprovalRuleTemplate, which creates a template for approval
+rules that can then be associated with one or more repositories in
+your AWS account.
+DeleteApprovalRuleTemplate, which deletes the specified template. It
+does not remove approval rules on pull requests already created with
+the template.
+DisassociateApprovalRuleTemplateFromRepository, which removes the
+association between a template and a repository so that approval
+rules based on the template are not automatically created when pull
+requests are created in the specified repository.
+GetApprovalRuleTemplate, which returns information about an approval
+rule template.
+ListApprovalRuleTemplates, which lists all approval rule templates
+in the AWS Region in your AWS account.
+ListAssociatedApprovalRuleTemplatesForRepository, which lists all
+approval rule templates that are associated with a specified
+repository.
+ListRepositoriesForApprovalRuleTemplate, which lists all
+repositories associated with the specified approval rule template.
+UpdateApprovalRuleTemplateDescription, which updates the description
+of an approval rule template.
+UpdateApprovalRuleTemplateName, which updates the name of an
+approval rule template.
+UpdateApprovalRuleTemplateContent, which updates the content of an
+approval rule template.
+
+
+Comments in a repository, by calling the following:
 DeleteCommentContent, which deletes the content of a comment on a
 commit in a repository.
 GetComment, which returns information about a comment on a commit.
@@ -147,28 +214,29 @@ comparison between two commit specifiers in a repository.
 PostCommentReply, which creates a reply to a comment.
 UpdateComment, which updates the content of a comment on a commit in
 a repository.
-" />
 
-<meta property="og:description" content="Tags used to tag resources in AWS CodeCommit (not Git tags), by calling
+
+Tags used to tag resources in AWS CodeCommit (not Git tags), by calling
 the following:
 ListTagsForResource, which gets information about AWS tags for a
 specified Amazon Resource Name (ARN) in AWS CodeCommit.
 TagResource, which adds or updates tags for a resource in AWS
 CodeCommit.
 UntagResource, which removes tags for a resource in AWS CodeCommit.
-" />
 
-<meta property="og:description" content="Triggers, by calling the following:
+
+Triggers, by calling the following:
 GetRepositoryTriggers, which returns information about triggers
 configured for a repository.
 PutRepositoryTriggers, which replaces all triggers for a repository
 and can be used to create or delete triggers.
 TestRepositoryTriggers, which tests the functionality of a
 repository trigger by sending data to the trigger target.
-" />
 
-<meta property="og:description" content="For information about how to use AWS CodeCommit, see the AWS CodeCommit User Guide." />
+
+For information about how to use AWS CodeCommit, see the AWS CodeCommit User Guide." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -180,6 +248,7 @@ repository trigger by sending data to the trigger target.
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -198,7 +267,7 @@ repository trigger by sending data to the trigger target.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
       </span>
     </div>
 
@@ -206,7 +275,7 @@ repository trigger by sending data to the trigger target.
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -215,11 +284,10 @@ repository trigger by sending data to the trigger target.
 <li>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -230,6 +298,7 @@ repository trigger by sending data to the trigger target.
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -241,7 +310,6 @@ repository trigger by sending data to the trigger target.
     </div>
 
     <div class="ref-description">
-    
     <p>This is the <em>AWS CodeCommit API Reference</em>. This reference provides
 descriptions of the operations and data types for AWS CodeCommit API
 along with usage examples.</p>
@@ -259,12 +327,12 @@ associated with your AWS account.</p></li>
 of the repository.</p></li>
 <li><p>UpdateRepositoryName, which changes the name of the repository. If
 you change the name of a repository, no other users of that
-repository will be able to access it until you send them the new
-HTTPS or SSH URL to use.</p></li>
+repository can access it until you send them the new HTTPS or SSH
+URL to use.</p></li>
 </ul>
 
-    <p>Branches, by calling the following:</p><ul>
-<li><p>CreateBranch, which creates a new branch in a specified repository.</p></li>
+<p>Branches, by calling the following:</p><ul>
+<li><p>CreateBranch, which creates a branch in a specified repository.</p></li>
 <li><p>DeleteBranch, which deletes the specified branch in a repository
 unless it is the default branch.</p></li>
 <li><p>GetBranch, which returns information about a specified branch.</p></li>
@@ -273,11 +341,11 @@ unless it is the default branch.</p></li>
 repository.</p></li>
 </ul>
 
-    <p>Files, by calling the following:</p><ul>
+<p>Files, by calling the following:</p><ul>
 <li><p>DeleteFile, which deletes the content of a specified file from a
 specified branch.</p></li>
 <li><p>GetBlob, which returns the base-64 encoded content of an individual
-Git blob object within a repository.</p></li>
+Git blob object in a repository.</p></li>
 <li><p>GetFile, which returns the base-64 encoded content of a specified
 file.</p></li>
 <li><p>GetFolder, which returns the contents of a specified folder or
@@ -286,16 +354,18 @@ directory.</p></li>
 repository and branch.</p></li>
 </ul>
 
-    <p>Commits, by calling the following:</p><ul>
+<p>Commits, by calling the following:</p><ul>
+<li><p>BatchGetCommits, which returns information about one or more commits
+in a repository.</p></li>
 <li><p>CreateCommit, which creates a commit for changes to a repository.</p></li>
 <li><p>GetCommit, which returns information about a commit, including
 commit messages and author and committer information.</p></li>
 <li><p>GetDifferences, which returns information about the differences in a
-valid commit specifier (such as a branch, tag, HEAD, commit ID or
+valid commit specifier (such as a branch, tag, HEAD, commit ID, or
 other fully qualified reference).</p></li>
 </ul>
 
-    <p>Merges, by calling the following:</p><ul>
+<p>Merges, by calling the following:</p><ul>
 <li><p>BatchDescribeMergeConflicts, which returns information about
 conflicts in a merge between commits in a repository.</p></li>
 <li><p>CreateUnreferencedMergeCommit, which creates an unreferenced commit
@@ -318,15 +388,28 @@ merge option.</p></li>
 three-way merge option.</p></li>
 </ul>
 
-    <p>Pull requests, by calling the following:</p><ul>
+<p>Pull requests, by calling the following:</p><ul>
 <li><p>CreatePullRequest, which creates a pull request in a specified
 repository.</p></li>
+<li><p>CreatePullRequestApprovalRule, which creates an approval rule for a
+specified pull request.</p></li>
+<li><p>DeletePullRequestApprovalRule, which deletes an approval rule for a
+specified pull request.</p></li>
 <li><p>DescribePullRequestEvents, which returns information about one or
 more pull request events.</p></li>
+<li><p>EvaluatePullRequestApprovalRules, which evaluates whether a pull
+request has met all the conditions specified in its associated
+approval rules.</p></li>
 <li><p>GetCommentsForPullRequest, which returns information about comments
 on a specified pull request.</p></li>
 <li><p>GetPullRequest, which returns information about a specified pull
 request.</p></li>
+<li><p>GetPullRequestApprovalStates, which returns information about the
+approval states for a specified pull request.</p></li>
+<li><p>GetPullRequestOverrideState, which returns information about whether
+approval rules have been set aside (overriden) for a pull request,
+and if so, the Amazon Resource Name (ARN) of the user or identity
+that overrode the rules and their requirements for the pull request.</p></li>
 <li><p>ListPullRequests, which lists all pull requests for a repository.</p></li>
 <li><p>MergePullRequestByFastForward, which merges the source destination
 branch of a pull request into the specified destination branch for
@@ -337,15 +420,63 @@ pull request using the squash merge option.</p></li>
 <li><p>MergePullRequestByThreeWay. which merges the source destination
 branch of a pull request into the specified destination branch for
 that pull request using the three-way merge option.</p></li>
+<li><p>OverridePullRequestApprovalRules, which sets aside all approval rule
+requirements for a pull request.</p></li>
 <li><p>PostCommentForPullRequest, which posts a comment to a pull request
 at the specified line, file, or request.</p></li>
+<li><p>UpdatePullRequestApprovalRuleContent, which updates the structure of
+an approval rule for a pull request.</p></li>
+<li><p>UpdatePullRequestApprovalState, which updates the state of an
+approval on a pull request.</p></li>
 <li><p>UpdatePullRequestDescription, which updates the description of a
 pull request.</p></li>
 <li><p>UpdatePullRequestStatus, which updates the status of a pull request.</p></li>
 <li><p>UpdatePullRequestTitle, which updates the title of a pull request.</p></li>
 </ul>
 
-    <p>Comments in a repository, by calling the following:</p><ul>
+<p>Approval rule templates, by calling the following:</p><ul>
+<li><p>AssociateApprovalRuleTemplateWithRepository, which associates a
+template with a specified repository. After the template is
+associated with a repository, AWS CodeCommit creates approval rules
+that match the template conditions on every pull request created in
+the specified repository.</p></li>
+<li><p>BatchAssociateApprovalRuleTemplateWithRepositories, which associates
+a template with one or more specified repositories. After the
+template is associated with a repository, AWS CodeCommit creates
+approval rules that match the template conditions on every pull
+request created in the specified repositories.</p></li>
+<li><p>BatchDisassociateApprovalRuleTemplateFromRepositories, which removes
+the association between a template and specified repositories so
+that approval rules based on the template are not automatically
+created when pull requests are created in those repositories.</p></li>
+<li><p>CreateApprovalRuleTemplate, which creates a template for approval
+rules that can then be associated with one or more repositories in
+your AWS account.</p></li>
+<li><p>DeleteApprovalRuleTemplate, which deletes the specified template. It
+does not remove approval rules on pull requests already created with
+the template.</p></li>
+<li><p>DisassociateApprovalRuleTemplateFromRepository, which removes the
+association between a template and a repository so that approval
+rules based on the template are not automatically created when pull
+requests are created in the specified repository.</p></li>
+<li><p>GetApprovalRuleTemplate, which returns information about an approval
+rule template.</p></li>
+<li><p>ListApprovalRuleTemplates, which lists all approval rule templates
+in the AWS Region in your AWS account.</p></li>
+<li><p>ListAssociatedApprovalRuleTemplatesForRepository, which lists all
+approval rule templates that are associated with a specified
+repository.</p></li>
+<li><p>ListRepositoriesForApprovalRuleTemplate, which lists all
+repositories associated with the specified approval rule template.</p></li>
+<li><p>UpdateApprovalRuleTemplateDescription, which updates the description
+of an approval rule template.</p></li>
+<li><p>UpdateApprovalRuleTemplateName, which updates the name of an
+approval rule template.</p></li>
+<li><p>UpdateApprovalRuleTemplateContent, which updates the content of an
+approval rule template.</p></li>
+</ul>
+
+<p>Comments in a repository, by calling the following:</p><ul>
 <li><p>DeleteCommentContent, which deletes the content of a comment on a
 commit in a repository.</p></li>
 <li><p>GetComment, which returns information about a comment on a commit.</p></li>
@@ -359,7 +490,7 @@ comparison between two commit specifiers in a repository.</p></li>
 a repository.</p></li>
 </ul>
 
-    <p>Tags used to tag resources in AWS CodeCommit (not Git tags), by calling
+<p>Tags used to tag resources in AWS CodeCommit (not Git tags), by calling
 the following:</p><ul>
 <li><p>ListTagsForResource, which gets information about AWS tags for a
 specified Amazon Resource Name (ARN) in AWS CodeCommit.</p></li>
@@ -368,7 +499,7 @@ CodeCommit.</p></li>
 <li><p>UntagResource, which removes tags for a resource in AWS CodeCommit.</p></li>
 </ul>
 
-    <p>Triggers, by calling the following:</p><ul>
+<p>Triggers, by calling the following:</p><ul>
 <li><p>GetRepositoryTriggers, which returns information about triggers
 configured for a repository.</p></li>
 <li><p>PutRepositoryTriggers, which replaces all triggers for a repository
@@ -377,143 +508,141 @@ and can be used to create or delete triggers.</p></li>
 repository trigger by sending data to the trigger target.</p></li>
 </ul>
 
-    <p>For information about how to use AWS CodeCommit, see the <a href='https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html'>AWS CodeCommit User Guide</a>.</p>
-    
+<p>For information about how to use AWS CodeCommit, see the <a href='https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html'>AWS CodeCommit User Guide</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>codecommit</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>codecommit</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>config</th>
+      <td><p>Optional configuration of credentials, endpoint, and/or region.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
+
+    
+<pre>svc &lt;- codecommit(
+  config = list(
+    credentials = list(
+      creds = list(
+        access_key_id = "string",
+        secret_access_key = "string",
+        session_token = "string"
+      ),
+      profile = "string"
+    ),
+    endpoint = "string",
+    region = "string"
+  )
+)
+</pre>
+
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
     
-    <table class='table'>
-<tr><td></td><td><a href='batch_describe_merge_conflicts.html'>batch_describe_merge_conflicts</a></td></tr>
-<tr><td></td><td>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy</td></tr>
-<tr><td></td><td><a href='batch_get_repositories.html'>batch_get_repositories</a></td></tr>
-<tr><td></td><td>Returns information about one or more repositories</td></tr>
-<tr><td></td><td><a href='create_branch.html'>create_branch</a></td></tr>
-<tr><td></td><td>Creates a new branch in a repository and points the branch to a commit</td></tr>
-<tr><td></td><td><a href='create_commit.html'>create_commit</a></td></tr>
-<tr><td></td><td>Creates a commit for a repository on the tip of a specified branch</td></tr>
-<tr><td></td><td><a href='create_pull_request.html'>create_pull_request</a></td></tr>
-<tr><td></td><td>Creates a pull request in the specified repository</td></tr>
-<tr><td></td><td><a href='create_repository.html'>create_repository</a></td></tr>
-<tr><td></td><td>Creates a new, empty repository</td></tr>
-<tr><td></td><td><a href='create_unreferenced_merge_commit.html'>create_unreferenced_merge_commit</a></td></tr>
-<tr><td></td><td>Creates an unreferenced commit that represents the result of merging two branches using a specified merge strategy</td></tr>
-<tr><td></td><td><a href='delete_branch.html'>delete_branch</a></td></tr>
-<tr><td></td><td>Deletes a branch from a repository, unless that branch is the default branch for the repository</td></tr>
-<tr><td></td><td><a href='delete_comment_content.html'>delete_comment_content</a></td></tr>
-<tr><td></td><td>Deletes the content of a comment made on a change, file, or commit in a repository</td></tr>
-<tr><td></td><td><a href='delete_file.html'>delete_file</a></td></tr>
-<tr><td></td><td>Deletes a specified file from a specified branch</td></tr>
-<tr><td></td><td><a href='delete_repository.html'>delete_repository</a></td></tr>
-<tr><td></td><td>Deletes a repository</td></tr>
-<tr><td></td><td><a href='describe_merge_conflicts.html'>describe_merge_conflicts</a></td></tr>
-<tr><td></td><td>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy</td></tr>
-<tr><td></td><td><a href='describe_pull_request_events.html'>describe_pull_request_events</a></td></tr>
-<tr><td></td><td>Returns information about one or more pull request events</td></tr>
-<tr><td></td><td><a href='get_blob.html'>get_blob</a></td></tr>
-<tr><td></td><td>Returns the base-64 encoded content of an individual blob within a repository</td></tr>
-<tr><td></td><td><a href='get_branch.html'>get_branch</a></td></tr>
-<tr><td></td><td>Returns information about a repository branch, including its name and the last commit ID</td></tr>
-<tr><td></td><td><a href='get_comment.html'>get_comment</a></td></tr>
-<tr><td></td><td>Returns the content of a comment made on a change, file, or commit in a repository</td></tr>
-<tr><td></td><td><a href='get_comments_for_compared_commit.html'>get_comments_for_compared_commit</a></td></tr>
-<tr><td></td><td>Returns information about comments made on the comparison between two commits</td></tr>
-<tr><td></td><td><a href='get_comments_for_pull_request.html'>get_comments_for_pull_request</a></td></tr>
-<tr><td></td><td>Returns comments made on a pull request</td></tr>
-<tr><td></td><td><a href='get_commit.html'>get_commit</a></td></tr>
-<tr><td></td><td>Returns information about a commit, including commit message and committer information</td></tr>
-<tr><td></td><td><a href='get_differences.html'>get_differences</a></td></tr>
-<tr><td></td><td>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID or other fully qualified reference)</td></tr>
-<tr><td></td><td><a href='get_file.html'>get_file</a></td></tr>
-<tr><td></td><td>Returns the base-64 encoded contents of a specified file and its metadata</td></tr>
-<tr><td></td><td><a href='get_folder.html'>get_folder</a></td></tr>
-<tr><td></td><td>Returns the contents of a specified folder in a repository</td></tr>
-<tr><td></td><td><a href='get_merge_commit.html'>get_merge_commit</a></td></tr>
-<tr><td></td><td>Returns information about a specified merge commit</td></tr>
-<tr><td></td><td><a href='get_merge_conflicts.html'>get_merge_conflicts</a></td></tr>
-<tr><td></td><td>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository</td></tr>
-<tr><td></td><td><a href='get_merge_options.html'>get_merge_options</a></td></tr>
-<tr><td></td><td>Returns information about the merge options available for merging two specified branches</td></tr>
-<tr><td></td><td><a href='get_pull_request.html'>get_pull_request</a></td></tr>
-<tr><td></td><td>Gets information about a pull request in a specified repository</td></tr>
-<tr><td></td><td><a href='get_repository.html'>get_repository</a></td></tr>
-<tr><td></td><td>Returns information about a repository</td></tr>
-<tr><td></td><td><a href='get_repository_triggers.html'>get_repository_triggers</a></td></tr>
-<tr><td></td><td>Gets information about triggers configured for a repository</td></tr>
-<tr><td></td><td><a href='list_branches.html'>list_branches</a></td></tr>
-<tr><td></td><td>Gets information about one or more branches in a repository</td></tr>
-<tr><td></td><td><a href='list_pull_requests.html'>list_pull_requests</a></td></tr>
-<tr><td></td><td>Returns a list of pull requests for a specified repository</td></tr>
-<tr><td></td><td><a href='list_repositories.html'>list_repositories</a></td></tr>
-<tr><td></td><td>Gets information about one or more repositories</td></tr>
-<tr><td></td><td><a href='list_tags_for_resource.html'>list_tags_for_resource</a></td></tr>
-<tr><td></td><td>Gets information about AWS tags for a specified Amazon Resource Name (ARN) in AWS CodeCommit</td></tr>
-<tr><td></td><td><a href='merge_branches_by_fast_forward.html'>merge_branches_by_fast_forward</a></td></tr>
-<tr><td></td><td>Merges two branches using the fast-forward merge strategy</td></tr>
-<tr><td></td><td><a href='merge_branches_by_squash.html'>merge_branches_by_squash</a></td></tr>
-<tr><td></td><td>Merges two branches using the squash merge strategy</td></tr>
-<tr><td></td><td><a href='merge_branches_by_three_way.html'>merge_branches_by_three_way</a></td></tr>
-<tr><td></td><td>Merges two specified branches using the three-way merge strategy</td></tr>
-<tr><td></td><td><a href='merge_pull_request_by_fast_forward.html'>merge_pull_request_by_fast_forward</a></td></tr>
-<tr><td></td><td>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge strategy</td></tr>
-<tr><td></td><td><a href='merge_pull_request_by_squash.html'>merge_pull_request_by_squash</a></td></tr>
-<tr><td></td><td>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the squash merge strategy</td></tr>
-<tr><td></td><td><a href='merge_pull_request_by_three_way.html'>merge_pull_request_by_three_way</a></td></tr>
-<tr><td></td><td>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the three-way merge strategy</td></tr>
-<tr><td></td><td><a href='post_comment_for_compared_commit.html'>post_comment_for_compared_commit</a></td></tr>
-<tr><td></td><td>Posts a comment on the comparison between two commits</td></tr>
-<tr><td></td><td><a href='post_comment_for_pull_request.html'>post_comment_for_pull_request</a></td></tr>
-<tr><td></td><td>Posts a comment on a pull request</td></tr>
-<tr><td></td><td><a href='post_comment_reply.html'>post_comment_reply</a></td></tr>
-<tr><td></td><td>Posts a comment in reply to an existing comment on a comparison between commits or a pull request</td></tr>
-<tr><td></td><td><a href='put_file.html'>put_file</a></td></tr>
-<tr><td></td><td>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch</td></tr>
-<tr><td></td><td><a href='put_repository_triggers.html'>put_repository_triggers</a></td></tr>
-<tr><td></td><td>Replaces all triggers for a repository</td></tr>
-<tr><td></td><td><a href='tag_resource.html'>tag_resource</a></td></tr>
-<tr><td></td><td>Adds or updates tags for a resource in AWS CodeCommit</td></tr>
-<tr><td></td><td><a href='test_repository_triggers.html'>test_repository_triggers</a></td></tr>
-<tr><td></td><td>Tests the functionality of repository triggers by sending information to the trigger target</td></tr>
-<tr><td></td><td><a href='untag_resource.html'>untag_resource</a></td></tr>
-<tr><td></td><td>Removes tags for a resource in AWS CodeCommit</td></tr>
-<tr><td></td><td><a href='update_comment.html'>update_comment</a></td></tr>
-<tr><td></td><td>Replaces the contents of a comment</td></tr>
-<tr><td></td><td><a href='update_default_branch.html'>update_default_branch</a></td></tr>
-<tr><td></td><td>Sets or changes the default branch name for the specified repository</td></tr>
-<tr><td></td><td><a href='update_pull_request_description.html'>update_pull_request_description</a></td></tr>
-<tr><td></td><td>Replaces the contents of the description of a pull request</td></tr>
-<tr><td></td><td><a href='update_pull_request_status.html'>update_pull_request_status</a></td></tr>
-<tr><td></td><td>Updates the status of a pull request</td></tr>
-<tr><td></td><td><a href='update_pull_request_title.html'>update_pull_request_title</a></td></tr>
-<tr><td></td><td>Replaces the title of a pull request</td></tr>
-<tr><td></td><td><a href='update_repository_description.html'>update_repository_description</a></td></tr>
-<tr><td></td><td>Sets or changes the comment or description for a repository</td></tr>
-<tr><td></td><td><a href='update_repository_name.html'>update_repository_name</a></td></tr>
-<tr><td></td><td>Renames a repository</td></tr>
+
+<table class='table'>
+<tr><td><a href='associate_approval_rule_template_with_repository.html'>associate_approval_rule_template_with_repository</a></td><td>Creates an association between an approval rule template and a specified repository</td></tr>
+<tr><td><a href='batch_associate_approval_rule_template_with_repositories.html'>batch_associate_approval_rule_template_with_repositories</a></td><td>Creates an association between an approval rule template and one or more specified repositories</td></tr>
+<tr><td><a href='batch_describe_merge_conflicts.html'>batch_describe_merge_conflicts</a></td><td>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy</td></tr>
+<tr><td><a href='batch_disassociate_approval_rule_template_from_repositories.html'>batch_disassociate_approval_rule_template_from_repositories</a></td><td>Removes the association between an approval rule template and one or more specified repositories</td></tr>
+<tr><td><a href='batch_get_commits.html'>batch_get_commits</a></td><td>Returns information about the contents of one or more commits in a repository</td></tr>
+<tr><td><a href='batch_get_repositories.html'>batch_get_repositories</a></td><td>Returns information about one or more repositories</td></tr>
+<tr><td><a href='create_approval_rule_template.html'>create_approval_rule_template</a></td><td>Creates a template for approval rules that can then be associated with one or more repositories in your AWS account</td></tr>
+<tr><td><a href='create_branch.html'>create_branch</a></td><td>Creates a branch in a repository and points the branch to a commit</td></tr>
+<tr><td><a href='create_commit.html'>create_commit</a></td><td>Creates a commit for a repository on the tip of a specified branch</td></tr>
+<tr><td><a href='create_pull_request.html'>create_pull_request</a></td><td>Creates a pull request in the specified repository</td></tr>
+<tr><td><a href='create_pull_request_approval_rule.html'>create_pull_request_approval_rule</a></td><td>Creates an approval rule for a pull request</td></tr>
+<tr><td><a href='create_repository.html'>create_repository</a></td><td>Creates a new, empty repository</td></tr>
+<tr><td><a href='create_unreferenced_merge_commit.html'>create_unreferenced_merge_commit</a></td><td>Creates an unreferenced commit that represents the result of merging two branches using a specified merge strategy</td></tr>
+<tr><td><a href='delete_approval_rule_template.html'>delete_approval_rule_template</a></td><td>Deletes a specified approval rule template</td></tr>
+<tr><td><a href='delete_branch.html'>delete_branch</a></td><td>Deletes a branch from a repository, unless that branch is the default branch for the repository</td></tr>
+<tr><td><a href='delete_comment_content.html'>delete_comment_content</a></td><td>Deletes the content of a comment made on a change, file, or commit in a repository</td></tr>
+<tr><td><a href='delete_file.html'>delete_file</a></td><td>Deletes a specified file from a specified branch</td></tr>
+<tr><td><a href='delete_pull_request_approval_rule.html'>delete_pull_request_approval_rule</a></td><td>Deletes an approval rule from a specified pull request</td></tr>
+<tr><td><a href='delete_repository.html'>delete_repository</a></td><td>Deletes a repository</td></tr>
+<tr><td><a href='describe_merge_conflicts.html'>describe_merge_conflicts</a></td><td>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy</td></tr>
+<tr><td><a href='describe_pull_request_events.html'>describe_pull_request_events</a></td><td>Returns information about one or more pull request events</td></tr>
+<tr><td><a href='disassociate_approval_rule_template_from_repository.html'>disassociate_approval_rule_template_from_repository</a></td><td>Removes the association between a template and a repository so that approval rules based on the template are not automatically created when pull requests are created in the specified repository</td></tr>
+<tr><td><a href='evaluate_pull_request_approval_rules.html'>evaluate_pull_request_approval_rules</a></td><td>Evaluates whether a pull request has met all the conditions specified in its associated approval rules</td></tr>
+<tr><td><a href='get_approval_rule_template.html'>get_approval_rule_template</a></td><td>Returns information about a specified approval rule template</td></tr>
+<tr><td><a href='get_blob.html'>get_blob</a></td><td>Returns the base-64 encoded content of an individual blob in a repository</td></tr>
+<tr><td><a href='get_branch.html'>get_branch</a></td><td>Returns information about a repository branch, including its name and the last commit ID</td></tr>
+<tr><td><a href='get_comment.html'>get_comment</a></td><td>Returns the content of a comment made on a change, file, or commit in a repository</td></tr>
+<tr><td><a href='get_comments_for_compared_commit.html'>get_comments_for_compared_commit</a></td><td>Returns information about comments made on the comparison between two commits</td></tr>
+<tr><td><a href='get_comments_for_pull_request.html'>get_comments_for_pull_request</a></td><td>Returns comments made on a pull request</td></tr>
+<tr><td><a href='get_commit.html'>get_commit</a></td><td>Returns information about a commit, including commit message and committer information</td></tr>
+<tr><td><a href='get_differences.html'>get_differences</a></td><td>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID, or other fully qualified reference)</td></tr>
+<tr><td><a href='get_file.html'>get_file</a></td><td>Returns the base-64 encoded contents of a specified file and its metadata</td></tr>
+<tr><td><a href='get_folder.html'>get_folder</a></td><td>Returns the contents of a specified folder in a repository</td></tr>
+<tr><td><a href='get_merge_commit.html'>get_merge_commit</a></td><td>Returns information about a specified merge commit</td></tr>
+<tr><td><a href='get_merge_conflicts.html'>get_merge_conflicts</a></td><td>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository</td></tr>
+<tr><td><a href='get_merge_options.html'>get_merge_options</a></td><td>Returns information about the merge options available for merging two specified branches</td></tr>
+<tr><td><a href='get_pull_request.html'>get_pull_request</a></td><td>Gets information about a pull request in a specified repository</td></tr>
+<tr><td><a href='get_pull_request_approval_states.html'>get_pull_request_approval_states</a></td><td>Gets information about the approval states for a specified pull request</td></tr>
+<tr><td><a href='get_pull_request_override_state.html'>get_pull_request_override_state</a></td><td>Returns information about whether approval rules have been set aside (overridden) for a pull request, and if so, the Amazon Resource Name (ARN) of the user or identity that overrode the rules and their requirements for the pull request</td></tr>
+<tr><td><a href='get_repository.html'>get_repository</a></td><td>Returns information about a repository</td></tr>
+<tr><td><a href='get_repository_triggers.html'>get_repository_triggers</a></td><td>Gets information about triggers configured for a repository</td></tr>
+<tr><td><a href='list_approval_rule_templates.html'>list_approval_rule_templates</a></td><td>Lists all approval rule templates in the specified AWS Region in your AWS account</td></tr>
+<tr><td><a href='list_associated_approval_rule_templates_for_repository.html'>list_associated_approval_rule_templates_for_repository</a></td><td>Lists all approval rule templates that are associated with a specified repository</td></tr>
+<tr><td><a href='list_branches.html'>list_branches</a></td><td>Gets information about one or more branches in a repository</td></tr>
+<tr><td><a href='list_pull_requests.html'>list_pull_requests</a></td><td>Returns a list of pull requests for a specified repository</td></tr>
+<tr><td><a href='list_repositories.html'>list_repositories</a></td><td>Gets information about one or more repositories</td></tr>
+<tr><td><a href='list_repositories_for_approval_rule_template.html'>list_repositories_for_approval_rule_template</a></td><td>Lists all repositories associated with the specified approval rule template</td></tr>
+<tr><td><a href='list_tags_for_resource.html'>list_tags_for_resource</a></td><td>Gets information about AWS tags for a specified Amazon Resource Name (ARN) in AWS CodeCommit</td></tr>
+<tr><td><a href='merge_branches_by_fast_forward.html'>merge_branches_by_fast_forward</a></td><td>Merges two branches using the fast-forward merge strategy</td></tr>
+<tr><td><a href='merge_branches_by_squash.html'>merge_branches_by_squash</a></td><td>Merges two branches using the squash merge strategy</td></tr>
+<tr><td><a href='merge_branches_by_three_way.html'>merge_branches_by_three_way</a></td><td>Merges two specified branches using the three-way merge strategy</td></tr>
+<tr><td><a href='merge_pull_request_by_fast_forward.html'>merge_pull_request_by_fast_forward</a></td><td>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge strategy</td></tr>
+<tr><td><a href='merge_pull_request_by_squash.html'>merge_pull_request_by_squash</a></td><td>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the squash merge strategy</td></tr>
+<tr><td><a href='merge_pull_request_by_three_way.html'>merge_pull_request_by_three_way</a></td><td>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the three-way merge strategy</td></tr>
+<tr><td><a href='override_pull_request_approval_rules.html'>override_pull_request_approval_rules</a></td><td>Sets aside (overrides) all approval rule requirements for a specified pull request</td></tr>
+<tr><td><a href='post_comment_for_compared_commit.html'>post_comment_for_compared_commit</a></td><td>Posts a comment on the comparison between two commits</td></tr>
+<tr><td><a href='post_comment_for_pull_request.html'>post_comment_for_pull_request</a></td><td>Posts a comment on a pull request</td></tr>
+<tr><td><a href='post_comment_reply.html'>post_comment_reply</a></td><td>Posts a comment in reply to an existing comment on a comparison between commits or a pull request</td></tr>
+<tr><td><a href='put_file.html'>put_file</a></td><td>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch</td></tr>
+<tr><td><a href='put_repository_triggers.html'>put_repository_triggers</a></td><td>Replaces all triggers for a repository</td></tr>
+<tr><td><a href='tag_resource.html'>tag_resource</a></td><td>Adds or updates tags for a resource in AWS CodeCommit</td></tr>
+<tr><td><a href='test_repository_triggers.html'>test_repository_triggers</a></td><td>Tests the functionality of repository triggers by sending information to the trigger target</td></tr>
+<tr><td><a href='untag_resource.html'>untag_resource</a></td><td>Removes tags for a resource in AWS CodeCommit</td></tr>
+<tr><td><a href='update_approval_rule_template_content.html'>update_approval_rule_template_content</a></td><td>Updates the content of an approval rule template</td></tr>
+<tr><td><a href='update_approval_rule_template_description.html'>update_approval_rule_template_description</a></td><td>Updates the description for a specified approval rule template</td></tr>
+<tr><td><a href='update_approval_rule_template_name.html'>update_approval_rule_template_name</a></td><td>Updates the name of a specified approval rule template</td></tr>
+<tr><td><a href='update_comment.html'>update_comment</a></td><td>Replaces the contents of a comment</td></tr>
+<tr><td><a href='update_default_branch.html'>update_default_branch</a></td><td>Sets or changes the default branch name for the specified repository</td></tr>
+<tr><td><a href='update_pull_request_approval_rule_content.html'>update_pull_request_approval_rule_content</a></td><td>Updates the structure of an approval rule created specifically for a pull request</td></tr>
+<tr><td><a href='update_pull_request_approval_state.html'>update_pull_request_approval_state</a></td><td>Updates the state of a user's approval on a pull request</td></tr>
+<tr><td><a href='update_pull_request_description.html'>update_pull_request_description</a></td><td>Replaces the contents of the description of a pull request</td></tr>
+<tr><td><a href='update_pull_request_status.html'>update_pull_request_status</a></td><td>Updates the status of a pull request</td></tr>
+<tr><td><a href='update_pull_request_title.html'>update_pull_request_title</a></td><td>Replaces the title of a pull request</td></tr>
+<tr><td><a href='update_repository_description.html'>update_repository_description</a></td><td>Sets or changes the comment or description for a repository</td></tr>
+<tr><td><a href='update_repository_name.html'>update_repository_name</a></td><td>Renames a repository</td></tr>
 </table>
-    
+
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>codecommit</span>()
-<span class='no'>svc</span>$<span class='fu'>batch_describe_merge_conflicts</span>(
+<span class='no'>svc</span>$<span class='fu'>associate_approval_rule_template_with_repository</span>(
   <span class='kw'>Foo</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)
-</pre>
+)</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#service-syntax">Service syntax</a></li>
       <li><a href="#operations">Operations</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -521,13 +650,16 @@ repository trigger by sending data to the trigger target.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
