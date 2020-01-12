@@ -11,5 +11,6 @@ export R_USER
 .PHONY: all
 
 all:
+	@rm -fr docs
 	@Rscript docs.R
-	@./docs.sh
+	@sh docs.sh

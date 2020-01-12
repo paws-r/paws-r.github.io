@@ -39,4 +39,12 @@ build_site <- function (src, dst) {
   detach("pkgdown_all")
 }
 
+# Get the index for the CRAN version of Paws.
+dir <- tempdir()
+build_site("../paws/cran/paws", dir)
+
+# Generate all the documentation.
 build_site("../paws/paws", "./docs")
+
+# Copy the CRAN index.
+file.copy(file.path(dir, "reference/index.html"), "./docs/reference", overwrite = TRUE)
