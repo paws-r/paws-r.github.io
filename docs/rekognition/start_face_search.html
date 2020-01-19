@@ -38,6 +38,8 @@ faces of persons detected in a stored video — rekognition_start_face_search �
 
 <meta property="og:title" content="Starts the asynchronous search for faces in a collection that match the
 faces of persons detected in a stored video — rekognition_start_face_search" />
+<meta property="og:description" content="Starts the asynchronous search for faces in a collection that match the
+faces of persons detected in a stored video." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,6 +116,8 @@ faces of persons detected in a stored video</h1>
     </div>
 
     <div class="ref-description">
+    <p>Starts the asynchronous search for faces in a collection that match the
+faces of persons detected in a stored video.</p>
     </div>
 
     <pre class="usage"><span class='fu'>rekognition_start_face_search</span>(<span class='no'>Video</span>, <span class='no'>ClientRequestToken</span>,
@@ -137,17 +141,60 @@ accidently started more than once.</p></td>
     <tr>
       <th>FaceMatchThreshold</th>
       <td><p>The minimum confidence in the person match to return. For example,
-don\'t return any matches where confidence in matches is less than 70\<!-- %. -->
-The default value is 80\<!-- %.} --></p>
-<p>CollectionId[required] ID of the collection that contains the faces you want to search for.</p>
-<p>NotificationChannelThe ARN of the Amazon SNS topic to which you want Amazon Rekognition
-Video to publish the completion status of the search.</p>
-<p>JobTagAn identifier you specify that\'s returned in the completion
+don\'t return any matches where confidence in matches is less than 70%.
+The default value is 80%.</p></td>
+    </tr>
+    <tr>
+      <th>CollectionId</th>
+      <td><p>[required] ID of the collection that contains the faces you want to search for.</p></td>
+    </tr>
+    <tr>
+      <th>NotificationChannel</th>
+      <td><p>The ARN of the Amazon SNS topic to which you want Amazon Rekognition
+Video to publish the completion status of the search.</p></td>
+    </tr>
+    <tr>
+      <th>JobTag</th>
+      <td><p>An identifier you specify that\'s returned in the completion
 notification that\'s published to your Amazon Simple Notification
 Service topic. For example, you can use <code>JobTag</code> to group related jobs
 and identify them in the completion notification.</p></td>
     </tr>
     </table>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The video must be stored in an Amazon S3 bucket. Use Video to specify
+the bucket name and the filename of the video. <code>StartFaceSearch</code> returns
+a job identifier (<code>JobId</code>) which you use to get the search results once
+the search has completed. When searching is finished, Amazon Rekognition
+Video publishes a completion status to the Amazon Simple Notification
+Service topic that you specify in <code>NotificationChannel</code>. To get the
+search results, first check that the status value published to the
+Amazon SNS topic is <code>SUCCEEDED</code>. If so, call GetFaceSearch and pass the
+job identifier (<code>JobId</code>) from the initial call to <code>StartFaceSearch</code>. For
+more information, see procedure-person-search-videos.</p>
+    <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
+
+    
+<pre>svc$start_face_search(
+  Video = list(
+    S3Object = list(
+      Bucket = "string",
+      Name = "string",
+      Version = "string"
+    )
+  ),
+  ClientRequestToken = "string",
+  FaceMatchThreshold = 123.0,
+  CollectionId = "string",
+  NotificationChannel = list(
+    SNSTopicArn = "string",
+    RoleArn = "string"
+  ),
+  JobTag = "string"
+)
+</pre>
 
 
   </div>
@@ -155,6 +202,8 @@ and identify them in the completion notification.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#details">Details</a></li>
+      <li><a href="#request-syntax">Request syntax</a></li>
     </ul>
 
   </div>

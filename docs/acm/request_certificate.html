@@ -36,6 +36,10 @@
 
 
 <meta property="og:title" content="Requests an ACM certificate for use with other AWS services — acm_request_certificate" />
+<meta property="og:description" content="Requests an ACM certificate for use with other AWS services. To request
+an ACM certificate, you must specify a fully qualified domain name
+(FQDN) in the DomainName parameter. You can also specify additional
+FQDNs in the SubjectAlternativeNames parameter." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,6 +115,10 @@
     </div>
 
     <div class="ref-description">
+    <p>Requests an ACM certificate for use with other AWS services. To request
+an ACM certificate, you must specify a fully qualified domain name
+(FQDN) in the <code>DomainName</code> parameter. You can also specify additional
+FQDNs in the <code>SubjectAlternativeNames</code> parameter.</p>
     </div>
 
     <pre class="usage"><span class='fu'>acm_request_certificate</span>(<span class='no'>DomainName</span>, <span class='no'>ValidationMethod</span>,
@@ -123,17 +131,24 @@
     <tr>
       <th>DomainName</th>
       <td><p>[required] Fully qualified domain name (FQDN), such as www.example.com, that you
-want to secure with an ACM certificate. Use an asterisk (\emph) to create a
+want to secure with an ACM certificate. Use an asterisk (*) to create a
 wildcard certificate that protects several sites in the same domain. For
-example, }.example.com protects www.example.com, site.example.com, and
-images.example.com.The first domain name you enter cannot exceed 64 octets, including
+example, *.example.com protects www.example.com, site.example.com, and
+images.example.com.</p>
+<p>The first domain name you enter cannot exceed 64 octets, including
 periods. Each subsequent Subject Alternative Name (SAN), however, can be
-up to 253 octets in length.</p>
-<p>ValidationMethodThe method you want to use if you are requesting a public certificate to
+up to 253 octets in length.</p></td>
+    </tr>
+    <tr>
+      <th>ValidationMethod</th>
+      <td><p>The method you want to use if you are requesting a public certificate to
 validate that you own or control domain. You can <a href='https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html'>validate with DNS</a>
 or <a href='https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-email.html'>validate with email</a>.
-We recommend that you use DNS validation.</p>
-<p>SubjectAlternativeNamesAdditional FQDNs to be included in the Subject Alternative Name
+We recommend that you use DNS validation.</p></td>
+    </tr>
+    <tr>
+      <th>SubjectAlternativeNames</th>
+      <td><p>Additional FQDNs to be included in the Subject Alternative Name
 extension of the ACM certificate. For example, add the name
 www.example.net to a certificate for which the <code>DomainName</code> field is
 www.example.com if users can reach your site by using either name. The
@@ -141,10 +156,10 @@ maximum number of domain names that you can add to an ACM certificate is
 100. However, the initial limit is 10 domain names. If you need more
 than 10 names, you must request a limit increase. For more information,
 see
-<a href='https://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html'>Limits</a>.The maximum length of a SAN DNS name is 253 octets. The name is made up
+<a href='https://docs.aws.amazon.com/acm/latest/userguide/acm-limits.html'>Limits</a>.</p>
+<p>The maximum length of a SAN DNS name is 253 octets. The name is made up
 of multiple labels separated by periods. No label can be longer than 63
-octets. Consider the following examples:
-<ul>
+octets. Consider the following examples:</p><ul>
 <li><p><code>(63 octets).(63 octets).(63 octets).(61 octets)</code> is legal because
 the total length is 253 octets (63+1+63+1+63+1+61) and no label
 exceeds 63 octets.</p></li>
@@ -154,31 +169,85 @@ the first label exceeds 63 octets.</p></li>
 <li><p><code>(63 octets).(63 octets).(63 octets).(62 octets)</code> is not legal
 because the total length of the DNS name (63+1+63+1+63+1+62) exceeds
 253 octets.</p></li>
-</ul></p>
-<p>IdempotencyTokenCustomer chosen string that can be used to distinguish between calls to
+</ul></td>
+    </tr>
+    <tr>
+      <th>IdempotencyToken</th>
+      <td><p>Customer chosen string that can be used to distinguish between calls to
 <code>RequestCertificate</code>. Idempotency tokens time out after one hour.
 Therefore, if you call <code>RequestCertificate</code> multiple times with the same
 idempotency token within one hour, ACM recognizes that you are
 requesting only one certificate and will issue only one. If you change
 the idempotency token for each call, ACM recognizes that you are
-requesting multiple certificates.</p>
-<p>DomainValidationOptionsThe domain name that you want ACM to use to send you emails so that you
-can validate domain ownership.</p>
-<p>OptionsCurrently, you can use this parameter to specify whether to add the
+requesting multiple certificates.</p></td>
+    </tr>
+    <tr>
+      <th>DomainValidationOptions</th>
+      <td><p>The domain name that you want ACM to use to send you emails so that you
+can validate domain ownership.</p></td>
+    </tr>
+    <tr>
+      <th>Options</th>
+      <td><p>Currently, you can use this parameter to specify whether to add the
 certificate to a certificate transparency log. Certificate transparency
 makes it possible to detect SSL/TLS certificates that have been
 mistakenly or maliciously issued. Certificates that have not been logged
 typically produce an error message in a browser. For more information,
-see <a href='https://docs.aws.amazon.com/acm/latest/userguide/acm-bestpractices.html#best-practices-transparency'>Opting Out of Certificate Transparency Logging</a>.</p>
-<p>CertificateAuthorityArnThe Amazon Resource Name (ARN) of the private certificate authority (CA)
+see <a href='https://docs.aws.amazon.com/acm/latest/userguide/acm-bestpractices.html#best-practices-transparency'>Opting Out of Certificate Transparency Logging</a>.</p></td>
+    </tr>
+    <tr>
+      <th>CertificateAuthorityArn</th>
+      <td><p>The Amazon Resource Name (ARN) of the private certificate authority (CA)
 that will be used to issue the certificate. If you do not provide an ARN
 and you are trying to request a private certificate, ACM will attempt to
 issue a public certificate. For more information about private CAs, see
 the <a href='https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaWelcome.html'>AWS Certificate Manager Private Certificate Authority (PCA)</a>
-user guide. The ARN must have the following form:<code>arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012</code></p>
-<p>TagsOne or more resource tags to associate with the certificate.</p></td>
+user guide. The ARN must have the following form:</p>
+<p><code>arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012</code></p></td>
+    </tr>
+    <tr>
+      <th>Tags</th>
+      <td><p>One or more resource tags to associate with the certificate.</p></td>
     </tr>
     </table>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If you are requesting a private certificate, domain validation is not
+required. If you are requesting a public certificate, each domain name
+that you specify must be validated to verify that you own or control the
+domain. You can use <a href='https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html'>DNS validation</a>
+or <a href='https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-email.html'>email validation</a>.
+We recommend that you use DNS validation. ACM issues public certificates
+after receiving approval from the domain owner.</p>
+    <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
+
+    
+<pre>svc$request_certificate(
+  DomainName = "string",
+  ValidationMethod = "EMAIL"|"DNS",
+  SubjectAlternativeNames = list(
+    "string"
+  ),
+  IdempotencyToken = "string",
+  DomainValidationOptions = list(
+    list(
+      DomainName = "string",
+      ValidationDomain = "string"
+    )
+  ),
+  Options = list(
+    CertificateTransparencyLoggingPreference = "ENABLED"|"DISABLED"
+  ),
+  CertificateAuthorityArn = "string",
+  Tags = list(
+    list(
+      Key = "string",
+      Value = "string"
+    )
+  )
+)
+</pre>
 
 
   </div>
@@ -186,6 +255,8 @@ user guide. The ARN must have the following form:<code>arn:aws:acm-pca:region:ac
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#details">Details</a></li>
+      <li><a href="#request-syntax">Request syntax</a></li>
     </ul>
 
   </div>
