@@ -6,28 +6,32 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Registers your on-premises server or virtual machine with Amazon EC2 so
-that you can manage these resources using Run Command — ssm_create_activation • paws</title>
+<title>Generates an activation code and activation ID you can use to register
+your on-premises server or virtual machine (VM) with Systems Manager — ssm_create_activation • paws</title>
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script href="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -36,13 +40,16 @@ that you can manage these resources using Run Command — ssm_create_activation 
 
 
 
-<meta property="og:title" content="Registers your on-premises server or virtual machine with Amazon EC2 so
-that you can manage these resources using Run Command — ssm_create_activation" />
-<meta property="og:description" content="Registers your on-premises server or virtual machine with Amazon EC2 so
-that you can manage these resources using Run Command. An on-premises
-server or virtual machine that has been registered with EC2 is called a
-managed instance. For more information about activations, see Setting Up AWS Systems Manager for Hybrid Environments." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Generates an activation code and activation ID you can use to register
+your on-premises server or virtual machine (VM) with Systems Manager — ssm_create_activation" />
+<meta property="og:description" content="Generates an activation code and activation ID you can use to register
+your on-premises server or virtual machine (VM) with Systems Manager.
+Registering these machines with Systems Manager makes it possible to
+manage them using Systems Manager capabilities. You use the activation
+code and ID when installing SSM Agent on machines in your hybrid
+environment. For more information about requirements for managing
+on-premises instances and VMs using Systems Manager, see Setting up AWS Systems Manager for hybrid environments
+in the AWS Systems Manager User Guide." />
 
 
 
@@ -60,7 +67,7 @@ managed instance. For more information about activations, see Setting Up AWS Sys
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -74,7 +81,7 @@ managed instance. For more information about activations, see Setting Up AWS Sys
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
       </span>
     </div>
 
@@ -93,7 +100,7 @@ managed instance. For more information about activations, see Setting Up AWS Sys
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/paws-r/paws">
+  <a href="https://github.com/paws-r/paws/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -111,17 +118,21 @@ managed instance. For more information about activations, see Setting Up AWS Sys
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Registers your on-premises server or virtual machine with Amazon EC2 so
-that you can manage these resources using Run Command</h1>
+    <h1>Generates an activation code and activation ID you can use to register
+your on-premises server or virtual machine (VM) with Systems Manager</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/ssm_operations.R'><code>R/ssm_operations.R</code></a></small>
     <div class="hidden name"><code>ssm_create_activation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Registers your on-premises server or virtual machine with Amazon EC2 so
-that you can manage these resources using Run Command. An on-premises
-server or virtual machine that has been registered with EC2 is called a
-managed instance. For more information about activations, see <a href='http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html'>Setting Up AWS Systems Manager for Hybrid Environments</a>.</p>
+    <p>Generates an activation code and activation ID you can use to register
+your on-premises server or virtual machine (VM) with Systems Manager.
+Registering these machines with Systems Manager makes it possible to
+manage them using Systems Manager capabilities. You use the activation
+code and ID when installing SSM Agent on machines in your hybrid
+environment. For more information about requirements for managing
+on-premises instances and VMs using Systems Manager, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html'>Setting up AWS Systems Manager for hybrid environments</a>
+in the <em>AWS Systems Manager User Guide</em>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>ssm_create_activation</span>(<span class='no'>Description</span>, <span class='no'>DefaultInstanceName</span>, <span class='no'>IamRole</span>,
@@ -133,20 +144,23 @@ managed instance. For more information about activations, see <a href='http://do
     <tr>
       <th>Description</th>
       <td><p>A user-defined description of the resource that you want to register
-with Amazon EC2.</p>
+with Systems Manager.</p>
 <p>Do not enter personally identifiable information in this field.</p></td>
     </tr>
     <tr>
       <th>DefaultInstanceName</th>
       <td><p>The name of the registered, managed instance as it will appear in the
-Amazon EC2 console or when you use the AWS command line tools to list
-EC2 resources.</p>
+Systems Manager console or when you use the AWS command line tools to
+list Systems Manager resources.</p>
 <p>Do not enter personally identifiable information in this field.</p></td>
     </tr>
     <tr>
       <th>IamRole</th>
       <td><p>[required] The Amazon Identity and Access Management (IAM) role that you want to
-assign to the managed instance.</p></td>
+assign to the managed instance. This IAM role must provide AssumeRole
+permissions for the Systems Manager service principal
+<code>ssm.amazonaws.com</code>. For more information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-service-role.html'>Create an IAM service role for a hybrid environment</a>
+in the <em>AWS Systems Manager User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>RegistrationLimit</th>
@@ -184,35 +198,36 @@ remove tags from your managed instances, see RemoveTagsFromResource.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>On-premises servers or VMs that are registered with Systems Manager and
+EC2 instances that you manage with Systems Manager are all called
+<em>managed instances</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre>svc$create_activation(
-  Description = "string",
-  DefaultInstanceName = "string",
-  IamRole = "string",
-  RegistrationLimit = 123,
-  ExpirationDate = as.POSIXct(
-    "2015-01-01"
+<pre><span class='no'>svc</span>$<span class='fu'>create_activation</span>(
+  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
+  <span class='kw'>DefaultInstanceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
+  <span class='kw'>IamRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
+  <span class='kw'>RegistrationLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
+  <span class='kw'>ExpirationDate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+    <span class='st'>"2015-01-01"</span>
   ),
-  Tags = list(
-    list(
-      Key = "string",
-      Value = "string"
+  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
+      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
     )
   )
-)
-</pre>
+)</pre>
 
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#request-syntax">Request syntax</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -223,7 +238,7 @@ remove tags from your managed instances, see RemoveTagsFromResource.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script href="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -36,9 +40,12 @@
 
 
 <meta property="og:title" content="AWS CodeStar connections — codestarconnections" />
-<meta property="og:description" content="This AWS CodeStar Connections API Reference provides descriptions and
+<meta property="og:description" content="AWS CodeStar Connections
+The CodeStar Connections feature is in preview release and is subject to
+change.
+This AWS CodeStar Connections API Reference provides descriptions and
 usage examples of the operations and data types for the AWS CodeStar
-Connections API. You can use the Connections API to work with
+Connections API. You can use the connections API to work with
 connections and installations.
 Connections are configurations that you use to connect AWS resources
 to external code repositories. Each connection is a resource that can be
@@ -52,6 +59,8 @@ connection handshake. Installations are the apps that are used to
 conduct this handshake. For example, the installation for the Bitbucket
 provider type is the Bitbucket Cloud app. When you create a connection,
 you can choose an existing installation or create one.
+When you want to create a connection to an installed provider type such
+as GitHub Enterprise Server, you create a host for your connections.
 You can work with connections by calling:
 CreateConnection, which creates a uniquely named connection that can
 be referenced by services such as CodePipeline.
@@ -62,8 +71,27 @@ ListConnections, which lists the connections associated with your
 account.
 
 
-For information about how to use AWS CodeStar Connections, see the AWS CodePipeline User Guide." />
-<meta name="twitter:card" content="summary" />
+You can work with hosts by calling:
+CreateHost, which creates a host that represents the infrastructure
+where your provider is installed.
+DeleteHost, which deletes the specified host.
+GetHost, which returns information about the host, including the
+setup status.
+ListHosts, which lists the hosts associated with your account.
+
+
+You can work with tags in AWS CodeStar Connections by calling the
+following:
+ListTagsForResource, which gets information about AWS tags for a
+specified Amazon Resource Name (ARN) in AWS CodeStar Connections.
+TagResource, which adds or updates tags for a resource in AWS
+CodeStar Connections.
+UntagResource, which removes tags for a resource in AWS CodeStar
+Connections.
+
+
+For information about how to use AWS CodeStar Connections, see the
+Developer Tools User Guide." />
 
 
 
@@ -81,7 +109,7 @@ For information about how to use AWS CodeStar Connections, see the AWS CodePipel
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -95,7 +123,7 @@ For information about how to use AWS CodeStar Connections, see the AWS CodePipel
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
       </span>
     </div>
 
@@ -114,7 +142,7 @@ For information about how to use AWS CodeStar Connections, see the AWS CodePipel
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/paws-r/paws">
+  <a href="https://github.com/paws-r/paws/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -138,9 +166,12 @@ For information about how to use AWS CodeStar Connections, see the AWS CodePipel
     </div>
 
     <div class="ref-description">
-    <p>This AWS CodeStar Connections API Reference provides descriptions and
+    <p>AWS CodeStar Connections</p>
+<p>The CodeStar Connections feature is in preview release and is subject to
+change.</p>
+<p>This AWS CodeStar Connections API Reference provides descriptions and
 usage examples of the operations and data types for the AWS CodeStar
-Connections API. You can use the Connections API to work with
+Connections API. You can use the connections API to work with
 connections and installations.</p>
 <p><em>Connections</em> are configurations that you use to connect AWS resources
 to external code repositories. Each connection is a resource that can be
@@ -154,6 +185,8 @@ connection handshake. <em>Installations</em> are the apps that are used to
 conduct this handshake. For example, the installation for the Bitbucket
 provider type is the Bitbucket Cloud app. When you create a connection,
 you can choose an existing installation or create one.</p>
+<p>When you want to create a connection to an installed provider type such
+as GitHub Enterprise Server, you create a <em>host</em> for your connections.</p>
 <p>You can work with connections by calling:</p><ul>
 <li><p>CreateConnection, which creates a uniquely named connection that can
 be referenced by services such as CodePipeline.</p></li>
@@ -164,7 +197,27 @@ including the connection status.</p></li>
 account.</p></li>
 </ul>
 
-<p>For information about how to use AWS CodeStar Connections, see the <a href='https://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html'>AWS CodePipeline User Guide</a>.</p>
+<p>You can work with hosts by calling:</p><ul>
+<li><p>CreateHost, which creates a host that represents the infrastructure
+where your provider is installed.</p></li>
+<li><p>DeleteHost, which deletes the specified host.</p></li>
+<li><p>GetHost, which returns information about the host, including the
+setup status.</p></li>
+<li><p>ListHosts, which lists the hosts associated with your account.</p></li>
+</ul>
+
+<p>You can work with tags in AWS CodeStar Connections by calling the
+following:</p><ul>
+<li><p>ListTagsForResource, which gets information about AWS tags for a
+specified Amazon Resource Name (ARN) in AWS CodeStar Connections.</p></li>
+<li><p>TagResource, which adds or updates tags for a resource in AWS
+CodeStar Connections.</p></li>
+<li><p>UntagResource, which removes tags for a resource in AWS CodeStar
+Connections.</p></li>
+</ul>
+
+<p>For information about how to use AWS CodeStar Connections, see the
+<a href='https://docs.aws.amazon.com/dtconsole/latest/userguide/welcome-connections.html'>Developer Tools User Guide</a>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>codestarconnections</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
@@ -181,21 +234,20 @@ account.</p></li>
     <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
 
     
-<pre>svc &lt;- codestarconnections(
-  config = list(
-    credentials = list(
-      creds = list(
-        access_key_id = "string",
-        secret_access_key = "string",
-        session_token = "string"
+<pre><span class='no'>svc</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>codestarconnections</span>(
+  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='kw'>creds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='kw'>access_key_id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
+        <span class='kw'>secret_access_key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
+        <span class='kw'>session_token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
       ),
-      profile = "string"
+      <span class='kw'>profile</span> <span class='kw'>=</span> <span class='st'>"string"</span>
     ),
-    endpoint = "string",
-    region = "string"
+    <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
+    <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
   )
-)
-</pre>
+)</pre>
 
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
@@ -203,28 +255,32 @@ account.</p></li>
 
 <table class='table'>
 <tr><td><a href='create_connection.html'>create_connection</a></td><td>Creates a connection that can then be given to other AWS services like CodePipeline so that it can access third-party code repositories</td></tr>
+<tr><td><a href='create_host.html'>create_host</a></td><td>Creates a resource that represents the infrastructure where a third-party provider is installed</td></tr>
 <tr><td><a href='delete_connection.html'>delete_connection</a></td><td>The connection to be deleted</td></tr>
+<tr><td><a href='delete_host.html'>delete_host</a></td><td>The host to be deleted</td></tr>
 <tr><td><a href='get_connection.html'>get_connection</a></td><td>Returns the connection ARN and details such as status, owner, and provider type</td></tr>
+<tr><td><a href='get_host.html'>get_host</a></td><td>Returns the host ARN and details such as status, provider type, endpoint, and, if applicable, the VPC configuration</td></tr>
 <tr><td><a href='list_connections.html'>list_connections</a></td><td>Lists the connections associated with your account</td></tr>
+<tr><td><a href='list_hosts.html'>list_hosts</a></td><td>Lists the hosts associated with your account</td></tr>
+<tr><td><a href='list_tags_for_resource.html'>list_tags_for_resource</a></td><td>Gets the set of key-value pairs (metadata) that are used to manage the resource</td></tr>
+<tr><td><a href='tag_resource.html'>tag_resource</a></td><td>Adds to or modifies the tags of the given resource</td></tr>
+<tr><td><a href='untag_resource.html'>untag_resource</a></td><td>Removes tags from an AWS resource</td></tr>
 </table>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>codestarconnections</span>()
+    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>codestarconnections</span>()
 <span class='no'>svc</span>$<span class='fu'>create_connection</span>(
   <span class='kw'>Foo</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+)
+}</pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#service-syntax">Service syntax</a></li>
-      <li><a href="#operations">Operations</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -235,7 +291,7 @@ account.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

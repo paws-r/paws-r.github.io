@@ -6,28 +6,33 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sets the specified open ports for an Amazon Lightsail instance, and
-closes all ports for every protocol not included in the current request — lightsail_put_instance_public_ports • paws</title>
+<title>Opens ports for a specific Amazon Lightsail instance, and specifies the
+IP addresses allowed to connect to the instance through the ports, and
+the protocol — lightsail_put_instance_public_ports • paws</title>
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script href="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -36,11 +41,16 @@ closes all ports for every protocol not included in the current request — ligh
 
 
 
-<meta property="og:title" content="Sets the specified open ports for an Amazon Lightsail instance, and
-closes all ports for every protocol not included in the current request — lightsail_put_instance_public_ports" />
-<meta property="og:description" content="Sets the specified open ports for an Amazon Lightsail instance, and
-closes all ports for every protocol not included in the current request." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Opens ports for a specific Amazon Lightsail instance, and specifies the
+IP addresses allowed to connect to the instance through the ports, and
+the protocol — lightsail_put_instance_public_ports" />
+<meta property="og:description" content="Opens ports for a specific Amazon Lightsail instance, and specifies the
+IP addresses allowed to connect to the instance through the ports, and
+the protocol. This action also closes all currently open ports that are
+not included in the request. Include all of the ports and the protocols
+you want to open in your PutInstancePublicPortsrequest. Or use the
+OpenInstancePublicPorts action to open ports without closing currently
+open ports." />
 
 
 
@@ -58,7 +68,7 @@ closes all ports for every protocol not included in the current request." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -72,7 +82,7 @@ closes all ports for every protocol not included in the current request." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
       </span>
     </div>
 
@@ -91,7 +101,7 @@ closes all ports for every protocol not included in the current request." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/paws-r/paws">
+  <a href="https://github.com/paws-r/paws/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -109,15 +119,21 @@ closes all ports for every protocol not included in the current request." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sets the specified open ports for an Amazon Lightsail instance, and
-closes all ports for every protocol not included in the current request</h1>
+    <h1>Opens ports for a specific Amazon Lightsail instance, and specifies the
+IP addresses allowed to connect to the instance through the ports, and
+the protocol</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/lightsail_operations.R'><code>R/lightsail_operations.R</code></a></small>
     <div class="hidden name"><code>lightsail_put_instance_public_ports.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Sets the specified open ports for an Amazon Lightsail instance, and
-closes all ports for every protocol not included in the current request.</p>
+    <p>Opens ports for a specific Amazon Lightsail instance, and specifies the
+IP addresses allowed to connect to the instance through the ports, and
+the protocol. This action also closes all currently open ports that are
+not included in the request. Include all of the ports and the protocols
+you want to open in your <code>PutInstancePublicPorts</code>request. Or use the
+<code>OpenInstancePublicPorts</code> action to open ports without closing currently
+open ports.</p>
     </div>
 
     <pre class="usage"><span class='fu'>lightsail_put_instance_public_ports</span>(<span class='no'>portInfos</span>, <span class='no'>instanceName</span>)</pre>
@@ -127,44 +143,46 @@ closes all ports for every protocol not included in the current request.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>portInfos</th>
-      <td><p>[required] Specifies information about the public port(s).</p></td>
+      <td><p>[required] An array of objects to describe the ports to open for the specified
+instance.</p></td>
     </tr>
     <tr>
       <th>instanceName</th>
-      <td><p>[required] The Lightsail instance name of the public port(s) you are setting.</p></td>
+      <td><p>[required] The name of the instance for which to open ports.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The <code>put instance public ports</code> operation supports tag-based access
-control via resource tags applied to the resource identified by
-<code>instance name</code>. For more information, see the <a href='https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags'>Lightsail Dev Guide</a>.</p>
+    <p>The <code>PutInstancePublicPorts</code> action supports tag-based access control
+via resource tags applied to the resource identified by <code>instanceName</code>.
+For more information, see the <a href='https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags'>Lightsail Dev Guide</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre>svc$put_instance_public_ports(
-  portInfos = list(
-    list(
-      fromPort = 123,
-      toPort = 123,
-      protocol = "tcp"|"all"|"udp"
+<pre><span class='no'>svc</span>$<span class='fu'>put_instance_public_ports</span>(
+  <span class='kw'>portInfos</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='kw'>fromPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
+      <span class='kw'>toPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
+      <span class='kw'>protocol</span> <span class='kw'>=</span> <span class='st'>"tcp"</span><span class='kw'>|</span><span class='st'>"all"</span><span class='kw'>|</span><span class='st'>"udp"</span><span class='kw'>|</span><span class='st'>"icmp"</span>,
+      <span class='kw'>cidrs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='st'>"string"</span>
+      ),
+      <span class='kw'>cidrListAliases</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='st'>"string"</span>
+      )
     )
   ),
-  instanceName = "string"
-)
-</pre>
+  <span class='kw'>instanceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
+)</pre>
 
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#request-syntax">Request syntax</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -175,7 +193,7 @@ control via resource tags applied to the resource identified by
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
