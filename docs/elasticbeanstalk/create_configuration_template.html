@@ -46,7 +46,15 @@ a specific Elastic Beanstalk application — elasticbeanstalk_create_configurati
 a specific Elastic Beanstalk application. You define application
 configuration settings in a configuration template. You can then use the
 configuration template to deploy different versions of the application
-with the same configuration settings." />
+with the same configuration settings.
+Templates aren't associated with any environment. The EnvironmentName
+response element is always null.
+Related Topics
+DescribeConfigurationOptions
+DescribeConfigurationSettings
+ListAvailableSolutionStacks
+
+" />
 
 
 
@@ -78,7 +86,7 @@ with the same configuration settings." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +94,7 @@ with the same configuration settings." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +106,7 @@ with the same configuration settings." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,11 +135,19 @@ a specific Elastic Beanstalk application. You define application
 configuration settings in a configuration template. You can then use the
 configuration template to deploy different versions of the application
 with the same configuration settings.</p>
+<p>Templates aren't associated with any environment. The <code>EnvironmentName</code>
+response element is always <code>null</code>.</p>
+<p>Related Topics</p><ul>
+<li><p>DescribeConfigurationOptions</p></li>
+<li><p>DescribeConfigurationSettings</p></li>
+<li><p>ListAvailableSolutionStacks</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>elasticbeanstalk_create_configuration_template</span>(<span class='no'>ApplicationName</span>,
-  <span class='no'>TemplateName</span>, <span class='no'>SolutionStackName</span>, <span class='no'>PlatformArn</span>, <span class='no'>SourceConfiguration</span>,
-  <span class='no'>EnvironmentId</span>, <span class='no'>Description</span>, <span class='no'>OptionSettings</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>elasticbeanstalk_create_configuration_template</span><span class='op'>(</span><span class='va'>ApplicationName</span>,
+  <span class='va'>TemplateName</span>, <span class='va'>SolutionStackName</span>, <span class='va'>PlatformArn</span>, <span class='va'>SourceConfiguration</span>,
+  <span class='va'>EnvironmentId</span>, <span class='va'>Description</span>, <span class='va'>OptionSettings</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,8 +172,8 @@ configuration template. It also determines the set of configuration
 options as well as the possible and default values. For more
 information, see <a href='https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.platforms.html'>Supported Platforms</a>
 in the <em>AWS Elastic Beanstalk Developer Guide</em>.</p>
-<p>You must specify <code>SolutionStackName</code> if you don\'t specify
-<code>PlatformArn</code>, <code>EnvironmentId</code>, or <code>SourceConfiguration</code>.</p>
+<p>You must specify <code>SolutionStackName</code> if you don't specify <code>PlatformArn</code>,
+<code>EnvironmentId</code>, or <code>SourceConfiguration</code>.</p>
 <p>Use the
 <a href='https://docs.aws.amazon.com/elasticbeanstalk/latest/api/API_ListAvailableSolutionStacks.html'><code>ListAvailableSolutionStacks</code></a>
 API to obtain a list of available solution stacks.</p></td>
@@ -167,7 +183,7 @@ API to obtain a list of available solution stacks.</p></td>
       <td><p>The Amazon Resource Name (ARN) of the custom platform. For more
 information, see <a href='https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/custom-platforms.html'>Custom Platforms</a>
 in the <em>AWS Elastic Beanstalk Developer Guide</em>.</p>
-<p>If you specify <code>PlatformArn</code>, then don\'t specify <code>SolutionStackName</code>.</p></td>
+<p>If you specify <code>PlatformArn</code>, then don't specify <code>SolutionStackName</code>.</p></td>
     </tr>
     <tr>
       <th>SourceConfiguration</th>
@@ -176,7 +192,7 @@ specified, Elastic Beanstalk uses the configuration values from the
 specified configuration template to create a new configuration.</p>
 <p>Values specified in <code>OptionSettings</code> override any values obtained from
 the <code>SourceConfiguration</code>.</p>
-<p>You must specify <code>SourceConfiguration</code> if you don\'t specify
+<p>You must specify <code>SourceConfiguration</code> if you don't specify
 <code>PlatformArn</code>, <code>EnvironmentId</code>, or <code>SolutionStackName</code>.</p>
 <p>Constraint: If both solution stack name and source configuration are
 specified, the solution stack of the source configuration template must
@@ -185,7 +201,7 @@ match the specified solution stack name.</p></td>
     <tr>
       <th>EnvironmentId</th>
       <td><p>The ID of an environment whose settings you want to use to create the
-configuration template. You must specify <code>EnvironmentId</code> if you don\'t
+configuration template. You must specify <code>EnvironmentId</code> if you don't
 specify <code>PlatformArn</code>, <code>SolutionStackName</code>, or <code>SourceConfiguration</code>.</p></td>
     </tr>
     <tr>
@@ -206,57 +222,50 @@ in the <em>AWS Elastic Beanstalk Developer Guide</em>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Templates aren\'t associated with any environment. The <code>EnvironmentName</code>
-response element is always <code>null</code>.</p>
-<p>Related Topics</p><ul>
-<li><p>DescribeConfigurationOptions</p></li>
-<li><p>DescribeConfigurationSettings</p></li>
-<li><p>ListAvailableSolutionStacks</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_configuration_template</span>(
-  <span class='kw'>ApplicationName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TemplateName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SolutionStackName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PlatformArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ApplicationName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>TemplateName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>EnvironmentId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OptionSettings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ResourceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>OptionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_configuration_template</span><span class='op'>(</span>
+  ApplicationName <span class='op'>=</span> <span class='st'>"string"</span>,
+  TemplateName <span class='op'>=</span> <span class='st'>"string"</span>,
+  SolutionStackName <span class='op'>=</span> <span class='st'>"string"</span>,
+  PlatformArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ApplicationName <span class='op'>=</span> <span class='st'>"string"</span>,
+    TemplateName <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  EnvironmentId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  OptionSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ResourceName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+      OptionName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following operation creates a configuration template named my-app-v1</span>
 <span class='co'># from the settings applied to an environment with the id e-rpqsewtp2j:</span>
-<span class='no'>svc</span>$<span class='fu'>create_configuration_template</span>(
-  <span class='kw'>ApplicationName</span> <span class='kw'>=</span> <span class='st'>"my-app"</span>,
-  <span class='kw'>EnvironmentId</span> <span class='kw'>=</span> <span class='st'>"e-rpqsewtp2j"</span>,
-  <span class='kw'>TemplateName</span> <span class='kw'>=</span> <span class='st'>"my-app-v1"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_configuration_template</span><span class='op'>(</span>
+  ApplicationName <span class='op'>=</span> <span class='st'>"my-app"</span>,
+  EnvironmentId <span class='op'>=</span> <span class='st'>"e-rpqsewtp2j"</span>,
+  TemplateName <span class='op'>=</span> <span class='st'>"my-app-v1"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -272,7 +281,7 @@ response element is always <code>null</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

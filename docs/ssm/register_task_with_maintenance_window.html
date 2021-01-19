@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,10 +118,10 @@
     <p>Adds a new task to a maintenance window.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_register_task_with_maintenance_window</span>(<span class='no'>WindowId</span>, <span class='no'>Targets</span>, <span class='no'>TaskArn</span>,
-  <span class='no'>ServiceRoleArn</span>, <span class='no'>TaskType</span>, <span class='no'>TaskParameters</span>, <span class='no'>TaskInvocationParameters</span>,
-  <span class='no'>Priority</span>, <span class='no'>MaxConcurrency</span>, <span class='no'>MaxErrors</span>, <span class='no'>LoggingInfo</span>, <span class='no'>Name</span>, <span class='no'>Description</span>,
-  <span class='no'>ClientToken</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_register_task_with_maintenance_window</span><span class='op'>(</span><span class='va'>WindowId</span>, <span class='va'>Targets</span>, <span class='va'>TaskArn</span>,
+  <span class='va'>ServiceRoleArn</span>, <span class='va'>TaskType</span>, <span class='va'>TaskParameters</span>, <span class='va'>TaskInvocationParameters</span>,
+  <span class='va'>Priority</span>, <span class='va'>MaxConcurrency</span>, <span class='va'>MaxErrors</span>, <span class='va'>LoggingInfo</span>, <span class='va'>Name</span>, <span class='va'>Description</span>,
+  <span class='va'>ClientToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,11 +132,17 @@
     </tr>
     <tr>
       <th>Targets</th>
-      <td><p>[required] The targets (either instances or maintenance window targets).</p>
+      <td><p>The targets (either instances or maintenance window targets).</p>
+<p>One or more targets must be specified for maintenance window Run
+Command-type tasks. Depending on the task, targets are optional for
+other maintenance window task types (Automation, AWS Lambda, and AWS
+Step Functions). For more information about running tasks that do not
+specify targets, see see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html'>Registering maintenance window tasks without targets</a>
+in the <em>AWS Systems Manager User Guide</em>.</p>
 <p>Specify instances using the following format:</p>
 <p><code>Key=InstanceIds,Values=&amp;lt;instance-id-1&amp;gt;,&amp;lt;instance-id-2&amp;gt;</code></p>
 <p>Specify maintenance window targets using the following format:</p>
-<p><code>Key=WindowTargetIds;,Values=&amp;lt;window-target-id-1&amp;gt;,&amp;lt;window-target-id-2&amp;gt;</code></p></td>
+<p><code>Key=WindowTargetIds,Values=&amp;lt;window-target-id-1&amp;gt;,&amp;lt;window-target-id-2&amp;gt;</code></p></td>
     </tr>
     <tr>
       <th>TaskArn</th>
@@ -146,7 +152,7 @@
       <th>ServiceRoleArn</th>
       <td><p>The ARN of the IAM service role for Systems Manager to assume when
 running a maintenance window task. If you do not specify a service role
-ARN, Systems Manager uses your account\'s service-linked role. If no
+ARN, Systems Manager uses your account's service-linked role. If no
 service-linked role for Systems Manager exists in your account, it is
 created when you run <code>RegisterTaskWithMaintenanceWindow</code>.</p>
 <p>For more information, see the following topics in the in the <em>AWS
@@ -182,12 +188,20 @@ parallel.</p></td>
     </tr>
     <tr>
       <th>MaxConcurrency</th>
-      <td><p>[required] The maximum number of targets this task can be run for in parallel.</p></td>
+      <td><p>The maximum number of targets this task can be run for in parallel.</p>
+<p>For maintenance window tasks without a target specified, you cannot
+supply a value for this option. Instead, the system inserts a
+placeholder value of <code>1</code>. This value does not affect the running of your
+task.</p></td>
     </tr>
     <tr>
       <th>MaxErrors</th>
-      <td><p>[required] The maximum number of errors allowed before this task stops being
-scheduled.</p></td>
+      <td><p>The maximum number of errors allowed before this task stops being
+scheduled.</p>
+<p>For maintenance window tasks without a target specified, you cannot
+supply a value for this option. Instead, the system inserts a
+placeholder value of <code>1</code>. This value does not affect the running of your
+task.</p></td>
     </tr>
     <tr>
       <th>LoggingInfo</th>
@@ -217,83 +231,84 @@ MaintenanceWindowTaskInvocationParameters.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>register_task_with_maintenance_window</span>(
-  <span class='kw'>WindowId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Targets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>register_task_with_maintenance_window</span><span class='op'>(</span>
+  WindowId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>TaskArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServiceRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TaskType</span> <span class='kw'>=</span> <span class='st'>"RUN_COMMAND"</span><span class='kw'>|</span><span class='st'>"AUTOMATION"</span><span class='kw'>|</span><span class='st'>"STEP_FUNCTIONS"</span><span class='kw'>|</span><span class='st'>"LAMBDA"</span>,
-  <span class='kw'>TaskParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TaskArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServiceRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  TaskType <span class='op'>=</span> <span class='st'>"RUN_COMMAND"</span><span class='op'>|</span><span class='st'>"AUTOMATION"</span><span class='op'>|</span><span class='st'>"STEP_FUNCTIONS"</span><span class='op'>|</span><span class='st'>"LAMBDA"</span>,
+  TaskParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>TaskInvocationParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RunCommand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Comment</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>CloudWatchOutputConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>CloudWatchLogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>CloudWatchOutputEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-      ),
-      <span class='kw'>DocumentHash</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DocumentHashType</span> <span class='kw'>=</span> <span class='st'>"Sha256"</span><span class='kw'>|</span><span class='st'>"Sha1"</span>,
-      <span class='kw'>DocumentVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>NotificationConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>NotificationArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>NotificationEvents</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='st'>"All"</span><span class='kw'>|</span><span class='st'>"InProgress"</span><span class='kw'>|</span><span class='st'>"Success"</span><span class='kw'>|</span><span class='st'>"TimedOut"</span><span class='kw'>|</span><span class='st'>"Cancelled"</span><span class='kw'>|</span><span class='st'>"Failed"</span>
-        ),
-        <span class='kw'>NotificationType</span> <span class='kw'>=</span> <span class='st'>"Command"</span><span class='kw'>|</span><span class='st'>"Invocation"</span>
-      ),
-      <span class='kw'>OutputS3BucketName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>OutputS3KeyPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TaskInvocationParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RunCommand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Comment <span class='op'>=</span> <span class='st'>"string"</span>,
+      CloudWatchOutputConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        CloudWatchLogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+        CloudWatchOutputEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+      <span class='op'>)</span>,
+      DocumentHash <span class='op'>=</span> <span class='st'>"string"</span>,
+      DocumentHashType <span class='op'>=</span> <span class='st'>"Sha256"</span><span class='op'>|</span><span class='st'>"Sha1"</span>,
+      DocumentVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+      NotificationConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        NotificationArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        NotificationEvents <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='st'>"All"</span><span class='op'>|</span><span class='st'>"InProgress"</span><span class='op'>|</span><span class='st'>"Success"</span><span class='op'>|</span><span class='st'>"TimedOut"</span><span class='op'>|</span><span class='st'>"Cancelled"</span><span class='op'>|</span><span class='st'>"Failed"</span>
+        <span class='op'>)</span>,
+        NotificationType <span class='op'>=</span> <span class='st'>"Command"</span><span class='op'>|</span><span class='st'>"Invocation"</span>
+      <span class='op'>)</span>,
+      OutputS3BucketName <span class='op'>=</span> <span class='st'>"string"</span>,
+      OutputS3KeyPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>ServiceRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>TimeoutSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>Automation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DocumentVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      ServiceRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      TimeoutSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    Automation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DocumentVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+      Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>StepFunctions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Input</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>Lambda</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ClientContext</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Qualifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Payload</span> <span class='kw'>=</span> <span class='no'>raw</span>
-    )
-  ),
-  <span class='kw'>Priority</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MaxConcurrency</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxErrors</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LoggingInfo</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3BucketName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>S3KeyPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>S3Region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    StepFunctions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Input <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    Lambda <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ClientContext <span class='op'>=</span> <span class='st'>"string"</span>,
+      Qualifier <span class='op'>=</span> <span class='st'>"string"</span>,
+      Payload <span class='op'>=</span> <span class='va'>raw</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Priority <span class='op'>=</span> <span class='fl'>123</span>,
+  MaxConcurrency <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxErrors <span class='op'>=</span> <span class='st'>"string"</span>,
+  LoggingInfo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3BucketName <span class='op'>=</span> <span class='st'>"string"</span>,
+    S3KeyPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+    S3Region <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -311,7 +326,7 @@ MaintenanceWindowTaskInvocationParameters.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

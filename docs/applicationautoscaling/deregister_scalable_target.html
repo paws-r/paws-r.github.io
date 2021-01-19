@@ -44,7 +44,9 @@ finished using it — applicationautoscaling_deregister_scalable_target • paws
 finished using it — applicationautoscaling_deregister_scalable_target" />
 <meta property="og:description" content="Deregisters an Application Auto Scaling scalable target when you have
 finished using it. To see which resources have been registered, use
-DescribeScalableTargets." />
+DescribeScalableTargets.
+Deregistering a scalable target deletes the scaling policies and the
+scheduled actions that are associated with it." />
 
 
 
@@ -76,7 +78,7 @@ DescribeScalableTargets." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +86,7 @@ DescribeScalableTargets." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +98,7 @@ DescribeScalableTargets." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +125,12 @@ finished using it</h1>
     <p>Deregisters an Application Auto Scaling scalable target when you have
 finished using it. To see which resources have been registered, use
 <a href='https://docs.aws.amazon.com/autoscaling/application/APIReference/API_DescribeScalableTargets.html'>DescribeScalableTargets</a>.</p>
+<p>Deregistering a scalable target deletes the scaling policies and the
+scheduled actions that are associated with it.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>applicationautoscaling_deregister_scalable_target</span>(<span class='no'>ServiceNamespace</span>,
-  <span class='no'>ResourceId</span>, <span class='no'>ScalableDimension</span>)</pre>
+    <pre class="usage"><span class='fu'>applicationautoscaling_deregister_scalable_target</span><span class='op'>(</span><span class='va'>ServiceNamespace</span>,
+  <span class='va'>ResourceId</span>, <span class='va'>ScalableDimension</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,6 +175,9 @@ our <a href='https://github.com/aws/aws-auto-scaling-custom-resource'>GitHub rep
 type and unique identifier are specified using the endpoint ARN.
 Example:
 <code>arn:aws:comprehend:us-west-2:123456789012:document-classifier-endpoint/EXAMPLE</code>.</p></li>
+<li><p>Amazon Comprehend entity recognizer endpoint - The resource type and
+unique identifier are specified using the endpoint ARN. Example:
+<code>arn:aws:comprehend:us-west-2:123456789012:entity-recognizer-endpoint/EXAMPLE</code>.</p></li>
 <li><p>Lambda provisioned concurrency - The resource type is <code>function</code> and
 the unique identifier is the function name with a function version
 or alias name suffix that is not <code>$LATEST</code>. Example:
@@ -178,6 +185,9 @@ or alias name suffix that is not <code>$LATEST</code>. Example:
 <li><p>Amazon Keyspaces table - The resource type is <code>table</code> and the unique
 identifier is the table name. Example:
 <code>keyspace/mykeyspace/table/mytable</code>.</p></li>
+<li><p>Amazon MSK cluster - The resource type and unique identifier are
+specified using the cluster ARN. Example:
+<code>arn:aws:kafka:us-east-1:123456789012:cluster/demo-cluster-1/6357e0b2-0e6a-4b86-a0b4-70df934c2e31-5</code>.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -210,40 +220,44 @@ a custom resource provided by your own application or service.</p></li>
 <li><p><code>comprehend:document-classifier-endpoint:DesiredInferenceUnits</code> -
 The number of inference units for an Amazon Comprehend document
 classification endpoint.</p></li>
+<li><p><code>comprehend:entity-recognizer-endpoint:DesiredInferenceUnits</code> - The
+number of inference units for an Amazon Comprehend entity recognizer
+endpoint.</p></li>
 <li><p><code>lambda:function:ProvisionedConcurrency</code> - The provisioned
 concurrency for a Lambda function.</p></li>
 <li><p><code>cassandra:table:ReadCapacityUnits</code> - The provisioned read capacity
 for an Amazon Keyspaces table.</p></li>
 <li><p><code>cassandra:table:WriteCapacityUnits</code> - The provisioned write
 capacity for an Amazon Keyspaces table.</p></li>
+<li><p><code>kafka:broker-storage:VolumeSize</code> - The provisioned volume size (in
+GiB) for brokers in an Amazon MSK cluster.</p></li>
 </ul></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Deregistering a scalable target deletes the scaling policies and the
-scheduled actions that are associated with it.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>deregister_scalable_target</span>(
-  <span class='kw'>ServiceNamespace</span> <span class='kw'>=</span> <span class='st'>"ecs"</span><span class='kw'>|</span><span class='st'>"elasticmapreduce"</span><span class='kw'>|</span><span class='st'>"ec2"</span><span class='kw'>|</span><span class='st'>"appstream"</span><span class='kw'>|</span><span class='st'>"dynamodb"</span><span class='kw'>|</span><span class='st'>"rds"</span><span class='kw'>|</span><span class='st'>"sagemaker"</span><span class='kw'>|</span><span class='st'>"custom-resource"</span><span class='kw'>|</span><span class='st'>"comprehend"</span><span class='kw'>|</span><span class='st'>"lambda"</span><span class='kw'>|</span><span class='st'>"cassandra"</span>,
-  <span class='kw'>ResourceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ScalableDimension</span> <span class='kw'>=</span> <span class='st'>"ecs:service:DesiredCount"</span><span class='kw'>|</span><span class='st'>"ec2:spot-fleet-request:TargetCapacity"</span><span class='kw'>|</span><span class='st'>"elasticmapreduce:instancegroup:InstanceCount"</span><span class='kw'>|</span><span class='st'>"appstream:fleet:DesiredCapacity"</span><span class='kw'>|</span><span class='st'>"dynamodb:table:ReadCapacityUnits"</span><span class='kw'>|</span><span class='st'>"dynamodb:table:WriteCapacityUnits"</span><span class='kw'>|</span><span class='st'>"dynamodb:index:ReadCapacityUnits"</span><span class='kw'>|</span><span class='st'>"dynamodb:index:WriteCapacityUnits"</span><span class='kw'>|</span><span class='st'>"rds:cluster:ReadReplicaCount"</span><span class='kw'>|</span><span class='st'>"sagemaker:variant:DesiredInstanceCount"</span><span class='kw'>|</span><span class='st'>"custom-resource:ResourceType:Property"</span><span class='kw'>|</span><span class='st'>"comprehend:document-classifier-endpoint:DesiredInferenceUnits"</span><span class='kw'>|</span><span class='st'>"lambda:function:ProvisionedConcurrency"</span><span class='kw'>|</span><span class='st'>"cassandra:table:ReadCapacityUnits"</span><span class='kw'>|</span><span class='st'>"cassandra:table:WriteCapacityUnits"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>deregister_scalable_target</span><span class='op'>(</span>
+  ServiceNamespace <span class='op'>=</span> <span class='st'>"ecs"</span><span class='op'>|</span><span class='st'>"elasticmapreduce"</span><span class='op'>|</span><span class='st'>"ec2"</span><span class='op'>|</span><span class='st'>"appstream"</span><span class='op'>|</span><span class='st'>"dynamodb"</span><span class='op'>|</span><span class='st'>"rds"</span><span class='op'>|</span><span class='st'>"sagemaker"</span><span class='op'>|</span><span class='st'>"custom-resource"</span><span class='op'>|</span><span class='st'>"comprehend"</span><span class='op'>|</span><span class='st'>"lambda"</span><span class='op'>|</span><span class='st'>"cassandra"</span><span class='op'>|</span><span class='st'>"kafka"</span>,
+  ResourceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ScalableDimension <span class='op'>=</span> <span class='st'>"ecs:service:DesiredCount"</span><span class='op'>|</span><span class='st'>"ec2:spot-fleet-request:TargetCapacity"</span><span class='op'>|</span><span class='st'>"elasticmapreduce:instancegroup:InstanceCount"</span><span class='op'>|</span><span class='st'>"appstream:fleet:DesiredCapacity"</span><span class='op'>|</span><span class='st'>"dynamodb:table:ReadCapacityUnits"</span><span class='op'>|</span><span class='st'>"dynamodb:table:WriteCapacityUnits"</span><span class='op'>|</span><span class='st'>"dynamodb:index:ReadCapacityUnits"</span><span class='op'>|</span><span class='st'>"dynamodb:index:WriteCapacityUnits"</span><span class='op'>|</span><span class='st'>"rds:cluster:ReadReplicaCount"</span><span class='op'>|</span><span class='st'>"sagemaker:variant:DesiredInstanceCount"</span><span class='op'>|</span><span class='st'>"custom-resource:ResourceType:Property"</span><span class='op'>|</span><span class='st'>"comprehend:document-classifier-endpoint:DesiredInferenceUnits"</span><span class='op'>|</span><span class='st'>"comprehend:entity-recognizer-endpoint:DesiredInferenceUnits"</span><span class='op'>|</span><span class='st'>"lambda:function:ProvisionedConcurrency"</span><span class='op'>|</span><span class='st'>"cassandra:table:ReadCapacityUnits"</span><span class='op'>|</span><span class='st'>"cassandra:table:WriteCapacityUnits"</span><span class='op'>|</span><span class='st'>"kafka:broker-storage:VolumeSize"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example deregisters a scalable target for an Amazon ECS service</span>
 <span class='co'># called web-app that is running in the default cluster.</span>
-<span class='no'>svc</span>$<span class='fu'>deregister_scalable_target</span>(
-  <span class='kw'>ResourceId</span> <span class='kw'>=</span> <span class='st'>"service/default/web-app"</span>,
-  <span class='kw'>ScalableDimension</span> <span class='kw'>=</span> <span class='st'>"ecs:service:DesiredCount"</span>,
-  <span class='kw'>ServiceNamespace</span> <span class='kw'>=</span> <span class='st'>"ecs"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>deregister_scalable_target</span><span class='op'>(</span>
+  ResourceId <span class='op'>=</span> <span class='st'>"service/default/web-app"</span>,
+  ScalableDimension <span class='op'>=</span> <span class='st'>"ecs:service:DesiredCount"</span>,
+  ServiceNamespace <span class='op'>=</span> <span class='st'>"ecs"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -259,7 +273,7 @@ scheduled actions that are associated with it.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

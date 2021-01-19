@@ -41,7 +41,36 @@
 
 <meta property="og:title" content="Delete a streaming distribution — cloudfront_delete_streaming_distribution" />
 <meta property="og:description" content="Delete a streaming distribution. To delete an RTMP distribution using
-the CloudFront API, perform the following steps." />
+the CloudFront API, perform the following steps.
+To delete an RTMP distribution using the CloudFront API:
+Disable the RTMP distribution.
+Submit a GET Streaming Distribution Config request to get the
+current configuration and the Etag header for the distribution.
+Update the XML document that was returned in the response to your
+GET Streaming Distribution Config request to change the value of
+Enabled to false.
+Submit a PUT Streaming Distribution Config request to update the
+configuration for your distribution. In the request body, include
+the XML document that you updated in Step 3. Then set the value of
+the HTTP If-Match header to the value of the ETag header that
+CloudFront returned when you submitted the
+GET Streaming Distribution Config request in Step 2.
+Review the response to the PUT Streaming Distribution Config
+request to confirm that the distribution was successfully disabled.
+Submit a GET Streaming Distribution Config request to confirm that
+your changes have propagated. When propagation is complete, the
+value of Status is Deployed.
+Submit a DELETE Streaming Distribution request. Set the value of
+the HTTP If-Match header to the value of the ETag header that
+CloudFront returned when you submitted the
+GET Streaming Distribution Config request in Step 2.
+Review the response to your DELETE Streaming Distribution request
+to confirm that the distribution was successfully deleted.
+
+
+For information about deleting a distribution using the CloudFront
+console, see Deleting a Distribution
+in the Amazon CloudFront Developer Guide." />
 
 
 
@@ -73,7 +102,7 @@ the CloudFront API, perform the following steps." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +110,7 @@ the CloudFront API, perform the following steps." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +122,7 @@ the CloudFront API, perform the following steps." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,27 +147,7 @@ the CloudFront API, perform the following steps." />
     <div class="ref-description">
     <p>Delete a streaming distribution. To delete an RTMP distribution using
 the CloudFront API, perform the following steps.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>cloudfront_delete_streaming_distribution</span>(<span class='no'>Id</span>, <span class='no'>IfMatch</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Id</th>
-      <td><p>[required] The distribution ID.</p></td>
-    </tr>
-    <tr>
-      <th>IfMatch</th>
-      <td><p>The value of the <code>ETag</code> header that you received when you disabled the
-streaming distribution. For example: <code>E2QWRUHAPOMQZL</code>.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><strong>To delete an RTMP distribution using the CloudFront API</strong>:</p><ol>
+<p><strong>To delete an RTMP distribution using the CloudFront API</strong>:</p><ol>
 <li><p>Disable the RTMP distribution.</p></li>
 <li><p>Submit a <code>GET Streaming Distribution Config</code> request to get the
 current configuration and the <code>Etag</code> header for the distribution.</p></li>
@@ -167,13 +176,32 @@ to confirm that the distribution was successfully deleted.</p></li>
 <p>For information about deleting a distribution using the CloudFront
 console, see <a href='https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html'>Deleting a Distribution</a>
 in the <em>Amazon CloudFront Developer Guide</em>.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>cloudfront_delete_streaming_distribution</span><span class='op'>(</span><span class='va'>Id</span>, <span class='va'>IfMatch</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Id</th>
+      <td><p>[required] The distribution ID.</p></td>
+    </tr>
+    <tr>
+      <th>IfMatch</th>
+      <td><p>The value of the <code>ETag</code> header that you received when you disabled the
+streaming distribution. For example: <code>E2QWRUHAPOMQZL</code>.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>delete_streaming_distribution</span>(
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IfMatch</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_streaming_distribution</span><span class='op'>(</span>
+  Id <span class='op'>=</span> <span class='st'>"string"</span>,
+  IfMatch <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -191,7 +219,7 @@ in the <em>Amazon CloudFront Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

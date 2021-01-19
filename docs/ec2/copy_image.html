@@ -44,7 +44,14 @@ current Region — ec2_copy_image • paws</title>
 current Region — ec2_copy_image" />
 <meta property="og:description" content="Initiates the copy of an AMI from the specified source Region to the
 current Region. You specify the destination Region by using its endpoint
-when making the request." />
+when making the request.
+Copies of encrypted backing snapshots for the AMI are encrypted. Copies
+of unencrypted backing snapshots remain unencrypted, unless you set
+Encrypted during the copy operation. You cannot create an unencrypted
+copy of an encrypted backing snapshot.
+For more information about the prerequisites and limits when copying an
+AMI, see Copying an AMI
+in the Amazon Elastic Compute Cloud User Guide." />
 
 
 
@@ -76,7 +83,7 @@ when making the request." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +91,7 @@ when making the request." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +103,7 @@ when making the request." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +130,17 @@ current Region</h1>
     <p>Initiates the copy of an AMI from the specified source Region to the
 current Region. You specify the destination Region by using its endpoint
 when making the request.</p>
+<p>Copies of encrypted backing snapshots for the AMI are encrypted. Copies
+of unencrypted backing snapshots remain unencrypted, unless you set
+<code>Encrypted</code> during the copy operation. You cannot create an unencrypted
+copy of an encrypted backing snapshot.</p>
+<p>For more information about the prerequisites and limits when copying an
+AMI, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html'>Copying an AMI</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_copy_image</span>(<span class='no'>ClientToken</span>, <span class='no'>Description</span>, <span class='no'>Encrypted</span>, <span class='no'>KmsKeyId</span>, <span class='no'>Name</span>,
-  <span class='no'>SourceImageId</span>, <span class='no'>SourceRegion</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_copy_image</span><span class='op'>(</span><span class='va'>ClientToken</span>, <span class='va'>Description</span>, <span class='va'>Encrypted</span>, <span class='va'>KmsKeyId</span>, <span class='va'>Name</span>,
+  <span class='va'>SourceImageId</span>, <span class='va'>SourceRegion</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,7 +148,7 @@ when making the request.</p>
     <tr>
       <th>ClientToken</th>
       <td><p>Unique, case-sensitive identifier you provide to ensure idempotency of
-the request. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html'>How to Ensure Idempotency</a>
+the request. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html'>How to Ensure Idempotency</a>
 in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
     </tr>
     <tr>
@@ -153,26 +167,23 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>KmsKeyId</th>
-      <td><p>An identifier for the symmetric AWS Key Management Service (AWS KMS)
-customer master key (CMK) to use when creating the encrypted volume.
-This parameter is only required if you want to use a non-default CMK; if
-this parameter is not specified, the default CMK for EBS is used. If a
-<code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set.</p>
-<p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias
-name, or alias ARN. When using an alias name, prefix it with \"alias/\".
-For example:</p><ul>
-<li><p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code></p></li>
-<li><p>Key ARN:
-<code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code></p></li>
-<li><p>Alias name: <code>alias/ExampleAlias</code></p></li>
-<li><p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code></p></li>
+      <td><p>The identifier of the symmetric AWS Key Management Service (AWS KMS)
+customer master key (CMK) to use when creating encrypted volumes. If
+this parameter is not specified, your AWS managed CMK for EBS is used.
+If you specify a CMK, you must also set the encrypted state to <code>true</code>.</p>
+<p>You can specify a CMK using any of the following:</p><ul>
+<li><p>Key ID. For example, 1234abcd-12ab-34cd-56ef-1234567890ab.</p></li>
+<li><p>Key alias. For example, alias/ExampleAlias.</p></li>
+<li><p>Key ARN. For example,
+arn:aws:kms:us-east-1:012345678910:key/1234abcd-12ab-34cd-56ef-1234567890ab.</p></li>
+<li><p>Alias ARN. For example,
+arn:aws:kms:us-east-1:012345678910:alias/ExampleAlias.</p></li>
 </ul>
 
-<p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call
-may appear to complete even though you provided an invalid identifier.
-This action will eventually report failure.</p>
-<p>The specified CMK must exist in the Region that the snapshot is being
-copied to.</p>
+<p>AWS authenticates the CMK asynchronously. Therefore, if you specify an
+identifier that is not valid, the action can appear to complete, but
+eventually fails.</p>
+<p>The specified CMK must exist in the destination Region.</p>
 <p>Amazon EBS does not support asymmetric CMKs.</p></td>
     </tr>
     <tr>
@@ -196,41 +207,35 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Copies of encrypted backing snapshots for the AMI are encrypted. Copies
-of unencrypted backing snapshots remain unencrypted, unless you set
-<code>Encrypted</code> during the copy operation. You cannot create an unencrypted
-copy of an encrypted backing snapshot.</p>
-<p>For more information about the prerequisites and limits when copying an
-AMI, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html'>Copying an AMI</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>copy_image</span>(
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Encrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceImageId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceRegion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>copy_image</span><span class='op'>(</span>
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Encrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceImageId <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceRegion <span class='op'>=</span> <span class='st'>"string"</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example copies the specified AMI from the us-east-1 region to the</span>
 <span class='co'># current region.</span>
-<span class='no'>svc</span>$<span class='fu'>copy_image</span>(
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"My server"</span>,
-  <span class='kw'>SourceImageId</span> <span class='kw'>=</span> <span class='st'>"ami-5731123e"</span>,
-  <span class='kw'>SourceRegion</span> <span class='kw'>=</span> <span class='st'>"us-east-1"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>copy_image</span><span class='op'>(</span>
+  Description <span class='op'>=</span> <span class='st'>""</span>,
+  Name <span class='op'>=</span> <span class='st'>"My server"</span>,
+  SourceImageId <span class='op'>=</span> <span class='st'>"ami-5731123e"</span>,
+  SourceRegion <span class='op'>=</span> <span class='st'>"us-east-1"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -246,7 +251,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,16 @@
 
 
 <meta property="og:title" content="Describes the specified EBS volumes or all of your EBS volumes — ec2_describe_volumes" />
-<meta property="og:description" content="Describes the specified EBS volumes or all of your EBS volumes." />
+<meta property="og:description" content="Describes the specified EBS volumes or all of your EBS volumes.
+If you are describing a long list of volumes, we recommend that you
+paginate the output to make the list more manageable. The MaxResults
+parameter sets the maximum number of results returned in a single page.
+If the list of results exceeds your MaxResults value, then that number
+of results is returned along with a NextToken value that can be passed
+to a subsequent DescribeVolumes request to retrieve the remaining
+results.
+For more information about EBS volumes, see Amazon EBS volumes
+in the Amazon Elastic Compute Cloud User Guide." />
 
 
 
@@ -72,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +89,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +101,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,9 +125,18 @@
 
     <div class="ref-description">
     <p>Describes the specified EBS volumes or all of your EBS volumes.</p>
+<p>If you are describing a long list of volumes, we recommend that you
+paginate the output to make the list more manageable. The <code>MaxResults</code>
+parameter sets the maximum number of results returned in a single page.
+If the list of results exceeds your <code>MaxResults</code> value, then that number
+of results is returned along with a <code>NextToken</code> value that can be passed
+to a subsequent <code>DescribeVolumes</code> request to retrieve the remaining
+results.</p>
+<p>For more information about EBS volumes, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volumes.html'>Amazon EBS volumes</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_describe_volumes</span>(<span class='no'>Filters</span>, <span class='no'>VolumeIds</span>, <span class='no'>DryRun</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_describe_volumes</span><span class='op'>(</span><span class='va'>Filters</span>, <span class='va'>VolumeIds</span>, <span class='va'>DryRun</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,35 +152,33 @@ on instance termination.</p></li>
 mapping (for example, <code>/dev/sda1</code>).</p></li>
 <li><p><code>attachment.instance-id</code> - The ID of the instance the volume is
 attached to.</p></li>
-<li><p><code>attachment.status</code> - The attachment state (<code>attaching</code> \|
-<code>attached</code> \| <code>detaching</code>).</p></li>
+<li><p><code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code>
+| <code>detaching</code>).</p></li>
 <li><p><code>availability-zone</code> - The Availability Zone in which the volume was
 created.</p></li>
 <li><p><code>create-time</code> - The time stamp when the volume was created.</p></li>
-<li><p><code>encrypted</code> - Indicates whether the volume is encrypted (<code>true</code> \|
+<li><p><code>encrypted</code> - Indicates whether the volume is encrypted (<code>true</code> |
 <code>false</code>)</p></li>
 <li><p><code>multi-attach-enabled</code> - Indicates whether the volume is enabled for
-Multi-Attach (<code>true</code> \| <code>false</code>)</p></li>
+Multi-Attach (<code>true</code> | <code>false</code>)</p></li>
 <li><p><code>fast-restored</code> - Indicates whether the volume was created from a
-snapshot that is enabled for fast snapshot restore (<code>true</code> \|
+snapshot that is enabled for fast snapshot restore (<code>true</code> |
 <code>false</code>).</p></li>
 <li><p><code>size</code> - The size of the volume, in GiB.</p></li>
 <li><p><code>snapshot-id</code> - The snapshot from which the volume was created.</p></li>
-<li><p><code>status</code> - The status of the volume (<code>creating</code> \| <code>available</code> \|
-<code>in-use</code> \| <code>deleting</code> \| <code>deleted</code> \| <code>error</code>).</p></li>
-<li><p><code>tag</code>:\&lt;key\&gt; - The key/value combination of a tag assigned to the
-resource. Use the tag key in the filter name and the tag value as
-the filter value. For example, to find all resources that have a tag
-with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for
-the filter name and <code>TeamA</code> for the filter value.</p></li>
+<li><p><code>status</code> - The state of the volume (<code>creating</code> | <code>available</code> |
+<code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p></li>
+<li><p><code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to
+the resource. Use the tag key in the filter name and the tag value
+as the filter value. For example, to find all resources that have a
+tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code>
+for the filter name and <code>TeamA</code> for the filter value.</p></li>
 <li><p><code>tag-key</code> - The key of a tag assigned to the resource. Use this
 filter to find all resources assigned a tag with a specific key,
 regardless of the tag value.</p></li>
 <li><p><code>volume-id</code> - The volume ID.</p></li>
-<li><p><code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for
-General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for
-Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for
-Magnetic volumes.</p></li>
+<li><p><code>volume-type</code> - The Amazon EBS volume type (<code>gp2</code> | <code>gp3</code> | <code>io1</code> |
+<code>io2</code> | <code>st1</code> | <code>sc1</code>| <code>standard</code>)</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -199,63 +215,55 @@ is <code>null</code> when there are no more results to return.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you are describing a long list of volumes, we recommend that you
-paginate the output to make the list more manageable. The <code>MaxResults</code>
-parameter sets the maximum number of results returned in a single page.
-If the list of results exceeds your <code>MaxResults</code> value, then that number
-of results is returned along with a <code>NextToken</code> value that can be passed
-to a subsequent <code>DescribeVolumes</code> request to retrieve the remaining
-results.</p>
-<p>For more information about EBS volumes, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html'>Amazon EBS Volumes</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_volumes</span>(
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_volumes</span><span class='op'>(</span>
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>VolumeIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  VolumeIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example describes all of your volumes in the default region.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_volumes</span>()
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_volumes</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># This example describes all volumes that are both attached to the</span>
 <span class='co'># instance with the ID i-1234567890abcdef0 and set to delete when the</span>
 <span class='co'># instance terminates.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_volumes</span>(
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"attachment.instance-id"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_volumes</span><span class='op'>(</span>
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"attachment.instance-id"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"i-1234567890abcdef0"</span>
-      )
-    ),
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"attachment.delete-on-termination"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"attachment.delete-on-termination"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"true"</span>
-      )
-    )
-  )
-)
-}</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -271,7 +279,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -46,8 +46,36 @@ evaluating whether your AWS resources comply with your desired
 configurations — configservice_put_organization_config_rule" />
 <meta property="og:description" content="Adds or updates organization config rule for your entire organization
 evaluating whether your AWS resources comply with your desired
-configurations. Only a master account can create or update an
-organization config rule." />
+configurations.
+Only a master account and a delegated administrator can create or update
+an organization config rule. When calling this API with a delegated
+administrator, you must ensure AWS Organizations
+ListDelegatedAdministrator permissions are added.
+This API enables organization service access through the
+EnableAWSServiceAccess action and creates a service linked role
+AWSServiceRoleForConfigMultiAccountSetup in the master or delegated
+administrator account of your organization. The service linked role is
+created only when the role does not exist in the caller account. AWS
+Config verifies the existence of role with GetRole action.
+To use this API with delegated administrator, register a delegated
+administrator by calling AWS Organization
+register-delegated-administrator for
+config-multiaccountsetup.amazonaws.com.
+You can use this action to create both custom AWS Config rules and AWS
+managed Config rules. If you are adding a new custom AWS Config rule,
+you must first create AWS Lambda function in the master account or a
+delegated administrator that the rule invokes to evaluate your
+resources. When you use the PutOrganizationConfigRule action to add
+the rule to AWS Config, you must specify the Amazon Resource Name (ARN)
+that AWS Lambda assigns to the function. If you are adding an AWS
+managed Config rule, specify the rule's identifier for the
+RuleIdentifier key.
+The maximum number of organization config rules that AWS Config supports
+is 150 and 3 delegated administrator per organization.
+Prerequisite: Ensure you call EnableAllFeatures API to enable all
+features in an organization.
+Specify either OrganizationCustomRuleMetadata or
+OrganizationManagedRuleMetadata." />
 
 
 
@@ -79,7 +107,7 @@ organization config rule." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +115,7 @@ organization config rule." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +127,7 @@ organization config rule." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,13 +154,41 @@ configurations</h1>
     <div class="ref-description">
     <p>Adds or updates organization config rule for your entire organization
 evaluating whether your AWS resources comply with your desired
-configurations. Only a master account can create or update an
-organization config rule.</p>
+configurations.</p>
+<p>Only a master account and a delegated administrator can create or update
+an organization config rule. When calling this API with a delegated
+administrator, you must ensure AWS Organizations
+<code>ListDelegatedAdministrator</code> permissions are added.</p>
+<p>This API enables organization service access through the
+<code>EnableAWSServiceAccess</code> action and creates a service linked role
+<code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated
+administrator account of your organization. The service linked role is
+created only when the role does not exist in the caller account. AWS
+Config verifies the existence of role with <code>GetRole</code> action.</p>
+<p>To use this API with delegated administrator, register a delegated
+administrator by calling AWS Organization
+<code>register-delegated-administrator</code> for
+<code>config-multiaccountsetup.amazonaws.com</code>.</p>
+<p>You can use this action to create both custom AWS Config rules and AWS
+managed Config rules. If you are adding a new custom AWS Config rule,
+you must first create AWS Lambda function in the master account or a
+delegated administrator that the rule invokes to evaluate your
+resources. When you use the <code>PutOrganizationConfigRule</code> action to add
+the rule to AWS Config, you must specify the Amazon Resource Name (ARN)
+that AWS Lambda assigns to the function. If you are adding an AWS
+managed Config rule, specify the rule's identifier for the
+<code>RuleIdentifier</code> key.</p>
+<p>The maximum number of organization config rules that AWS Config supports
+is 150 and 3 delegated administrator per organization.</p>
+<p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all
+features in an organization.</p>
+<p>Specify either <code>OrganizationCustomRuleMetadata</code> or
+<code>OrganizationManagedRuleMetadata</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>configservice_put_organization_config_rule</span>(<span class='no'>OrganizationConfigRuleName</span>,
-  <span class='no'>OrganizationManagedRuleMetadata</span>, <span class='no'>OrganizationCustomRuleMetadata</span>,
-  <span class='no'>ExcludedAccounts</span>)</pre>
+    <pre class="usage"><span class='fu'>configservice_put_organization_config_rule</span><span class='op'>(</span><span class='va'>OrganizationConfigRuleName</span>,
+  <span class='va'>OrganizationManagedRuleMetadata</span>, <span class='va'>OrganizationCustomRuleMetadata</span>,
+  <span class='va'>ExcludedAccounts</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,62 +212,43 @@ organization config rule.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This API enables organization service access through the
-<code>EnableAWSServiceAccess</code> action and creates a service linked role
-<code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your
-organization. The service linked role is created only when the role does
-not exist in the master account. AWS Config verifies the existence of
-role with <code>GetRole</code> action.</p>
-<p>You can use this action to create both custom AWS Config rules and AWS
-managed Config rules. If you are adding a new custom AWS Config rule,
-you must first create AWS Lambda function in the master account that the
-rule invokes to evaluate your resources. When you use the
-<code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you
-must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to
-the function. If you are adding an AWS managed Config rule, specify the
-rule\'s identifier for the <code>RuleIdentifier</code> key.</p>
-<p>The maximum number of organization config rules that AWS Config supports
-is 150.</p>
-<p>Specify either <code>OrganizationCustomRuleMetadata</code> or
-<code>OrganizationManagedRuleMetadata</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_organization_config_rule</span>(
-  <span class='kw'>OrganizationConfigRuleName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OrganizationManagedRuleMetadata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>RuleIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>InputParameters</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>MaximumExecutionFrequency</span> <span class='kw'>=</span> <span class='st'>"One_Hour"</span><span class='kw'>|</span><span class='st'>"Three_Hours"</span><span class='kw'>|</span><span class='st'>"Six_Hours"</span><span class='kw'>|</span><span class='st'>"Twelve_Hours"</span><span class='kw'>|</span><span class='st'>"TwentyFour_Hours"</span>,
-    <span class='kw'>ResourceTypesScope</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_organization_config_rule</span><span class='op'>(</span>
+  OrganizationConfigRuleName <span class='op'>=</span> <span class='st'>"string"</span>,
+  OrganizationManagedRuleMetadata <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Description <span class='op'>=</span> <span class='st'>"string"</span>,
+    RuleIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+    InputParameters <span class='op'>=</span> <span class='st'>"string"</span>,
+    MaximumExecutionFrequency <span class='op'>=</span> <span class='st'>"One_Hour"</span><span class='op'>|</span><span class='st'>"Three_Hours"</span><span class='op'>|</span><span class='st'>"Six_Hours"</span><span class='op'>|</span><span class='st'>"Twelve_Hours"</span><span class='op'>|</span><span class='st'>"TwentyFour_Hours"</span>,
+    ResourceTypesScope <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>ResourceIdScope</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>TagKeyScope</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>TagValueScope</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>OrganizationCustomRuleMetadata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>LambdaFunctionArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>OrganizationConfigRuleTriggerTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='st'>"ConfigurationItemChangeNotification"</span><span class='kw'>|</span><span class='st'>"OversizedConfigurationItemChangeNotification"</span><span class='kw'>|</span><span class='st'>"ScheduledNotification"</span>
-    ),
-    <span class='kw'>InputParameters</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>MaximumExecutionFrequency</span> <span class='kw'>=</span> <span class='st'>"One_Hour"</span><span class='kw'>|</span><span class='st'>"Three_Hours"</span><span class='kw'>|</span><span class='st'>"Six_Hours"</span><span class='kw'>|</span><span class='st'>"Twelve_Hours"</span><span class='kw'>|</span><span class='st'>"TwentyFour_Hours"</span>,
-    <span class='kw'>ResourceTypesScope</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    ResourceIdScope <span class='op'>=</span> <span class='st'>"string"</span>,
+    TagKeyScope <span class='op'>=</span> <span class='st'>"string"</span>,
+    TagValueScope <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  OrganizationCustomRuleMetadata <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Description <span class='op'>=</span> <span class='st'>"string"</span>,
+    LambdaFunctionArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    OrganizationConfigRuleTriggerTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"ConfigurationItemChangeNotification"</span><span class='op'>|</span><span class='st'>"OversizedConfigurationItemChangeNotification"</span><span class='op'>|</span><span class='st'>"ScheduledNotification"</span>
+    <span class='op'>)</span>,
+    InputParameters <span class='op'>=</span> <span class='st'>"string"</span>,
+    MaximumExecutionFrequency <span class='op'>=</span> <span class='st'>"One_Hour"</span><span class='op'>|</span><span class='st'>"Three_Hours"</span><span class='op'>|</span><span class='st'>"Six_Hours"</span><span class='op'>|</span><span class='st'>"Twelve_Hours"</span><span class='op'>|</span><span class='st'>"TwentyFour_Hours"</span>,
+    ResourceTypesScope <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>ResourceIdScope</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>TagKeyScope</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>TagValueScope</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ExcludedAccounts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    ResourceIdScope <span class='op'>=</span> <span class='st'>"string"</span>,
+    TagKeyScope <span class='op'>=</span> <span class='st'>"string"</span>,
+    TagValueScope <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  ExcludedAccounts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -229,7 +266,7 @@ is 150.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

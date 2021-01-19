@@ -43,7 +43,20 @@
 <meta property="og:description" content="Updates settings for a FlexMatch matchmaking configuration. These
 changes affect all matches and game sessions that are created after the
 update. To update settings, specify the configuration name to be updated
-and provide the new settings." />
+and provide the new settings.
+Learn more
+Design a FlexMatch Matchmaker
+Related operations
+CreateMatchmakingConfiguration
+DescribeMatchmakingConfigurations
+UpdateMatchmakingConfiguration
+DeleteMatchmakingConfiguration
+CreateMatchmakingRuleSet
+DescribeMatchmakingRuleSets
+ValidateMatchmakingRuleSet
+DeleteMatchmakingRuleSet
+
+" />
 
 
 
@@ -75,7 +88,7 @@ and provide the new settings." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +96,7 @@ and provide the new settings." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +108,7 @@ and provide the new settings." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,13 +135,26 @@ and provide the new settings." />
 changes affect all matches and game sessions that are created after the
 update. To update settings, specify the configuration name to be updated
 and provide the new settings.</p>
+<p><strong>Learn more</strong></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-configuration.html'>Design a FlexMatch Matchmaker</a></p>
+<p><strong>Related operations</strong></p><ul>
+<li><p>CreateMatchmakingConfiguration</p></li>
+<li><p>DescribeMatchmakingConfigurations</p></li>
+<li><p>UpdateMatchmakingConfiguration</p></li>
+<li><p>DeleteMatchmakingConfiguration</p></li>
+<li><p>CreateMatchmakingRuleSet</p></li>
+<li><p>DescribeMatchmakingRuleSets</p></li>
+<li><p>ValidateMatchmakingRuleSet</p></li>
+<li><p>DeleteMatchmakingRuleSet</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_update_matchmaking_configuration</span>(<span class='no'>Name</span>, <span class='no'>Description</span>,
-  <span class='no'>GameSessionQueueArns</span>, <span class='no'>RequestTimeoutSeconds</span>, <span class='no'>AcceptanceTimeoutSeconds</span>,
-  <span class='no'>AcceptanceRequired</span>, <span class='no'>RuleSetName</span>, <span class='no'>NotificationTarget</span>,
-  <span class='no'>AdditionalPlayerCount</span>, <span class='no'>CustomEventData</span>, <span class='no'>GameProperties</span>, <span class='no'>GameSessionData</span>,
-  <span class='no'>BackfillMode</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_update_matchmaking_configuration</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>Description</span>,
+  <span class='va'>GameSessionQueueArns</span>, <span class='va'>RequestTimeoutSeconds</span>, <span class='va'>AcceptanceTimeoutSeconds</span>,
+  <span class='va'>AcceptanceRequired</span>, <span class='va'>RuleSetName</span>, <span class='va'>NotificationTarget</span>,
+  <span class='va'>AdditionalPlayerCount</span>, <span class='va'>CustomEventData</span>, <span class='va'>GameProperties</span>, <span class='va'>GameSessionData</span>,
+  <span class='va'>BackfillMode</span>, <span class='va'>FlexMatchMode</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,9 +173,11 @@ use either the configuration name or ARN value.</p></td>
       <td><p>Amazon Resource Name
 (<a href='https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html'>ARN</a>)
 that is assigned to a GameLift game session queue resource and uniquely
-identifies it. ARNs are unique across all Regions. These queues are used
-when placing game sessions for matches that are created with this
-matchmaking configuration. Queues can be located in any Region.</p></td>
+identifies it. ARNs are unique across all Regions. Queues can be located
+in any Region. Queues are used to start new GameLift-hosted game
+sessions for matches that are created with this matchmaking
+configuration. If <code>FlexMatchMode</code> is set to <code>STANDALONE</code>, do not set
+this parameter.</p></td>
     </tr>
     <tr>
       <th>RequestTimeoutSeconds</th>
@@ -160,14 +188,17 @@ be resubmitted as needed.</p></td>
     <tr>
       <th>AcceptanceTimeoutSeconds</th>
       <td><p>The length of time (in seconds) to wait for players to accept a proposed
-match. If any player rejects the match or fails to accept before the
-timeout, the ticket continues to look for an acceptable match.</p></td>
+match, if acceptance is required. If any player rejects the match or
+fails to accept before the timeout, the tickets are returned to the
+ticket pool and continue to be evaluated for an acceptable match.</p></td>
     </tr>
     <tr>
       <th>AcceptanceRequired</th>
       <td><p>A flag that indicates whether a match that was created with this
 configuration must be accepted by the matched players. To require
-acceptance, set to TRUE.</p></td>
+acceptance, set to TRUE. With this option enabled, matchmaking tickets
+use the status <code>REQUIRES_ACCEPTANCE</code> to indicate when a completed
+potential match is waiting for player acceptance.</p></td>
     </tr>
     <tr>
       <th>RuleSetName</th>
@@ -179,15 +210,16 @@ same Region.</p></td>
     <tr>
       <th>NotificationTarget</th>
       <td><p>An SNS topic ARN that is set up to receive matchmaking notifications.
-See <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html'>Setting up Notifications for Matchmaking</a>
+See <a href='https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-notification.html'>Setting up Notifications for Matchmaking</a>
 for more information.</p></td>
     </tr>
     <tr>
       <th>AdditionalPlayerCount</th>
       <td><p>The number of player slots in a match to keep open for future players.
-For example, assume that the configuration\'s rule set specifies a match
+For example, assume that the configuration's rule set specifies a match
 for a single 12-person team. If the additional player count is set to 2,
-only 10 players are initially selected for the match.</p></td>
+only 10 players are initially selected for the match. This parameter is
+not used if <code>FlexMatchMode</code> is set to <code>STANDALONE</code>.</p></td>
     </tr>
     <tr>
       <th>CustomEventData</th>
@@ -201,7 +233,8 @@ pairs. These properties are passed to a game server process in the
 GameSession object with a request to start a new game session (see
 <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession'>Start a Game Session</a>).
 This information is added to the new GameSession object that is created
-for a successful match.</p></td>
+for a successful match. This parameter is not used if <code>FlexMatchMode</code> is
+set to <code>STANDALONE</code>.</p></td>
     </tr>
     <tr>
       <th>GameSessionData</th>
@@ -209,7 +242,8 @@ for a successful match.</p></td>
 value. This data is passed to a game server process in the GameSession
 object with a request to start a new game session (see <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession'>Start a Game Session</a>).
 This information is added to the new GameSession object that is created
-for a successful match.</p></td>
+for a successful match. This parameter is not used if <code>FlexMatchMode</code> is
+set to <code>STANDALONE</code>.</p></td>
     </tr>
     <tr>
       <th>BackfillMode</th>
@@ -218,50 +252,51 @@ matchmaking configuration. Specify MANUAL when your game manages
 backfill requests manually or does not use the match backfill feature.
 Specify AUTOMATIC to have GameLift create a StartMatchBackfill request
 whenever a game session has one or more open slots. Learn more about
-manual and automatic backfill in <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/match-backfill.html'>Backfill Existing Games with FlexMatch</a>.</p></td>
+manual and automatic backfill in <a href='https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-backfill.html'>Backfill Existing Games with FlexMatch</a>.
+Automatic backfill is not available when <code>FlexMatchMode</code> is set to
+<code>STANDALONE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>FlexMatchMode</th>
+      <td><p>Indicates whether this matchmaking configuration is being used with
+GameLift hosting or as a standalone matchmaking solution.</p><ul>
+<li><p><strong>STANDALONE</strong> - FlexMatch forms matches and returns match
+information, including players and team assignments, in a
+<a href='https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-events.html#match-events-matchmakingsucceeded'>MatchmakingSucceeded</a>
+event.</p></li>
+<li><p><strong>WITH\_QUEUE</strong> - FlexMatch forms matches and uses the specified
+GameLift queue to start a game session for the match.</p></li>
+</ul></td>
     </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><strong>Learn more</strong></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/match-configuration.html'>Design a FlexMatch Matchmaker</a></p>
-<p><strong>Related operations</strong></p><ul>
-<li><p>CreateMatchmakingConfiguration</p></li>
-<li><p>DescribeMatchmakingConfigurations</p></li>
-<li><p>UpdateMatchmakingConfiguration</p></li>
-<li><p>DeleteMatchmakingConfiguration</p></li>
-<li><p>CreateMatchmakingRuleSet</p></li>
-<li><p>DescribeMatchmakingRuleSets</p></li>
-<li><p>ValidateMatchmakingRuleSet</p></li>
-<li><p>DeleteMatchmakingRuleSet</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_matchmaking_configuration</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameSessionQueueArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_matchmaking_configuration</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameSessionQueueArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>RequestTimeoutSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>AcceptanceTimeoutSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>AcceptanceRequired</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>RuleSetName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NotificationTarget</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AdditionalPlayerCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>CustomEventData</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>GameSessionData</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>BackfillMode</span> <span class='kw'>=</span> <span class='st'>"AUTOMATIC"</span><span class='kw'>|</span><span class='st'>"MANUAL"</span>
-)</pre>
+  <span class='op'>)</span>,
+  RequestTimeoutSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  AcceptanceTimeoutSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  AcceptanceRequired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  RuleSetName <span class='op'>=</span> <span class='st'>"string"</span>,
+  NotificationTarget <span class='op'>=</span> <span class='st'>"string"</span>,
+  AdditionalPlayerCount <span class='op'>=</span> <span class='fl'>123</span>,
+  CustomEventData <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  GameSessionData <span class='op'>=</span> <span class='st'>"string"</span>,
+  BackfillMode <span class='op'>=</span> <span class='st'>"AUTOMATIC"</span><span class='op'>|</span><span class='st'>"MANUAL"</span>,
+  FlexMatchMode <span class='op'>=</span> <span class='st'>"STANDALONE"</span><span class='op'>|</span><span class='st'>"WITH_QUEUE"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -279,7 +314,7 @@ manual and automatic backfill in <a href='https://docs.aws.amazon.com/gamelift/l
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

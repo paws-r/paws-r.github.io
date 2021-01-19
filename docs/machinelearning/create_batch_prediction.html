@@ -44,7 +44,15 @@
 process exist in one or more data files referenced by a DataSource.
 This operation creates a new BatchPrediction, and uses an MLModel
 and the data files referenced by the DataSource as information
-sources." />
+sources.
+CreateBatchPrediction is an asynchronous operation. In response to
+CreateBatchPrediction, Amazon Machine Learning (Amazon ML) immediately
+returns and sets the BatchPrediction status to PENDING. After the
+BatchPrediction completes, Amazon ML sets the status to COMPLETED.
+You can poll for status updates by using the GetBatchPrediction
+operation and checking the Status parameter of the result. After the
+COMPLETED status appears, the results are available in the location
+specified by the OutputUri parameter." />
 
 
 
@@ -76,7 +84,7 @@ sources." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +92,7 @@ sources." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +104,7 @@ sources." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,10 +132,18 @@ process exist in one or more data files referenced by a <code>DataSource</code>.
 This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code>
 and the data files referenced by the <code>DataSource</code> as information
 sources.</p>
+<p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to
+<code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately
+returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the
+<code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>.</p>
+<p>You can poll for status updates by using the GetBatchPrediction
+operation and checking the <code>Status</code> parameter of the result. After the
+<code>COMPLETED</code> status appears, the results are available in the location
+specified by the <code>OutputUri</code> parameter.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>machinelearning_create_batch_prediction</span>(<span class='no'>BatchPredictionId</span>,
-  <span class='no'>BatchPredictionName</span>, <span class='no'>MLModelId</span>, <span class='no'>BatchPredictionDataSourceId</span>, <span class='no'>OutputUri</span>)</pre>
+    <pre class="usage"><span class='fu'>machinelearning_create_batch_prediction</span><span class='op'>(</span><span class='va'>BatchPredictionId</span>,
+  <span class='va'>BatchPredictionName</span>, <span class='va'>MLModelId</span>, <span class='va'>BatchPredictionDataSourceId</span>, <span class='va'>OutputUri</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,32 +172,23 @@ predict.</p></td>
       <td><p>[required] The location of an Amazon Simple Storage Service (Amazon S3) bucket or
 directory to store the batch prediction results. The following
 substrings are not allowed in the <code>s3 key</code> portion of the <code>outputURI</code>
-field: \':\', \'//\', \'/./\', \'/../\'.</p>
+field: ':', '//', '/./', '/../'.</p>
 <p>Amazon ML needs permissions to store and retrieve the logs on your
-behalf. For information about how to set permissions, see the <a href='http://docs.aws.amazon.com/machine-learning/latest/dg'>Amazon Machine Learning Developer Guide</a>.</p></td>
+behalf. For information about how to set permissions, see the <a href='https://docs.aws.amazon.com/machine-learning/latest/dg/'>Amazon Machine Learning Developer Guide</a>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to
-<code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately
-returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the
-<code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>.</p>
-<p>You can poll for status updates by using the GetBatchPrediction
-operation and checking the <code>Status</code> parameter of the result. After the
-<code>COMPLETED</code> status appears, the results are available in the location
-specified by the <code>OutputUri</code> parameter.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_batch_prediction</span>(
-  <span class='kw'>BatchPredictionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>BatchPredictionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MLModelId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>BatchPredictionDataSourceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OutputUri</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_batch_prediction</span><span class='op'>(</span>
+  BatchPredictionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  BatchPredictionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  MLModelId <span class='op'>=</span> <span class='st'>"string"</span>,
+  BatchPredictionDataSourceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  OutputUri <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -199,7 +206,7 @@ specified by the <code>OutputUri</code> parameter.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,26 @@
 
 
 <meta property="og:title" content="Creates an AWS Firewall Manager policy — fms_put_policy" />
-<meta property="og:description" content="Creates an AWS Firewall Manager policy." />
+<meta property="og:description" content="Creates an AWS Firewall Manager policy.
+Firewall Manager provides the following types of policies:
+An AWS WAF policy (type WAFV2), which defines rule groups to run
+first in the corresponding AWS WAF web ACL and rule groups to run
+last in the web ACL.
+An AWS WAF Classic policy (type WAF), which defines a rule group.
+A Shield Advanced policy, which applies Shield Advanced protection
+to specified accounts and resources.
+A security group policy, which manages VPC security groups across
+your AWS organization.
+An AWS Network Firewall policy, which provides firewall rules to
+filter network traffic in specified Amazon VPCs.
+
+
+Each policy is specific to one of the types. If you want to enforce more
+than one policy type across accounts, create multiple policies. You can
+create multiple policies for each type.
+You must be subscribed to Shield Advanced to create a Shield Advanced
+policy. For more information about subscribing to Shield Advanced, see
+CreateSubscription." />
 
 
 
@@ -72,7 +91,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +99,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +111,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,9 +135,28 @@
 
     <div class="ref-description">
     <p>Creates an AWS Firewall Manager policy.</p>
+<p>Firewall Manager provides the following types of policies:</p><ul>
+<li><p>An AWS WAF policy (type WAFV2), which defines rule groups to run
+first in the corresponding AWS WAF web ACL and rule groups to run
+last in the web ACL.</p></li>
+<li><p>An AWS WAF Classic policy (type WAF), which defines a rule group.</p></li>
+<li><p>A Shield Advanced policy, which applies Shield Advanced protection
+to specified accounts and resources.</p></li>
+<li><p>A security group policy, which manages VPC security groups across
+your AWS organization.</p></li>
+<li><p>An AWS Network Firewall policy, which provides firewall rules to
+filter network traffic in specified Amazon VPCs.</p></li>
+</ul>
+
+<p>Each policy is specific to one of the types. If you want to enforce more
+than one policy type across accounts, create multiple policies. You can
+create multiple policies for each type.</p>
+<p>You must be subscribed to Shield Advanced to create a Shield Advanced
+policy. For more information about subscribing to Shield Advanced, see
+<a href='https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html'>CreateSubscription</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fms_put_policy</span>(<span class='no'>Policy</span>, <span class='no'>TagList</span>)</pre>
+    <pre class="usage"><span class='fu'>fms_put_policy</span><span class='op'>(</span><span class='va'>Policy</span>, <span class='va'>TagList</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,67 +171,49 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Firewall Manager provides the following types of policies:</p><ul>
-<li><p>A Shield Advanced policy, which applies Shield Advanced protection
-to specified accounts and resources</p></li>
-<li><p>An AWS WAF policy (type WAFV2), which defines rule groups to run
-first in the corresponding AWS WAF web ACL and rule groups to run
-last in the web ACL.</p></li>
-<li><p>An AWS WAF Classic policy (type WAF), which defines a rule group.</p></li>
-<li><p>A security group policy, which manages VPC security groups across
-your AWS organization.</p></li>
-</ul>
-
-<p>Each policy is specific to one of the types. If you want to enforce more
-than one policy type across accounts, create multiple policies. You can
-create multiple policies for each type.</p>
-<p>You must be subscribed to Shield Advanced to create a Shield Advanced
-policy. For more information about subscribing to Shield Advanced, see
-<a href='https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html'>CreateSubscription</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_policy</span>(
-  <span class='kw'>Policy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>PolicyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>PolicyName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>PolicyUpdateToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SecurityServicePolicyData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"WAF"</span><span class='kw'>|</span><span class='st'>"WAFV2"</span><span class='kw'>|</span><span class='st'>"SHIELD_ADVANCED"</span><span class='kw'>|</span><span class='st'>"SECURITY_GROUPS_COMMON"</span><span class='kw'>|</span><span class='st'>"SECURITY_GROUPS_CONTENT_AUDIT"</span><span class='kw'>|</span><span class='st'>"SECURITY_GROUPS_USAGE_AUDIT"</span>,
-      <span class='kw'>ManagedServiceData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ResourceTypeList</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_policy</span><span class='op'>(</span>
+  Policy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    PolicyId <span class='op'>=</span> <span class='st'>"string"</span>,
+    PolicyName <span class='op'>=</span> <span class='st'>"string"</span>,
+    PolicyUpdateToken <span class='op'>=</span> <span class='st'>"string"</span>,
+    SecurityServicePolicyData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"WAF"</span><span class='op'>|</span><span class='st'>"WAFV2"</span><span class='op'>|</span><span class='st'>"SHIELD_ADVANCED"</span><span class='op'>|</span><span class='st'>"SECURITY_GROUPS_COMMON"</span><span class='op'>|</span><span class='st'>"SECURITY_GROUPS_CONTENT_AUDIT"</span><span class='op'>|</span><span class='st'>"SECURITY_GROUPS_USAGE_AUDIT"</span><span class='op'>|</span><span class='st'>"NETWORK_FIREWALL"</span>,
+      ManagedServiceData <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    ResourceType <span class='op'>=</span> <span class='st'>"string"</span>,
+    ResourceTypeList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>ResourceTags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>ExcludeResourceTags</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>RemediationEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>IncludeMap</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    ResourceTags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Key <span class='op'>=</span> <span class='st'>"string"</span>,
+        Value <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ExcludeResourceTags <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    RemediationEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    IncludeMap <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>ExcludeMap</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ExcludeMap <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>TagList</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TagList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -211,7 +231,7 @@ policy. For more information about subscribing to Shield Advanced, see
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

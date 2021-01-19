@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,7 +118,8 @@
     <p>Updates an Amazon QuickSight user.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>quicksight_update_user</span>(<span class='no'>UserName</span>, <span class='no'>AwsAccountId</span>, <span class='no'>Namespace</span>, <span class='no'>Email</span>, <span class='no'>Role</span>)</pre>
+    <pre class="usage"><span class='fu'>quicksight_update_user</span><span class='op'>(</span><span class='va'>UserName</span>, <span class='va'>AwsAccountId</span>, <span class='va'>Namespace</span>, <span class='va'>Email</span>, <span class='va'>Role</span>,
+  <span class='va'>CustomPermissionsName</span>, <span class='va'>UnapplyCustomPermissions</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,27 +143,65 @@ ID for the AWS account that contains your Amazon QuickSight account.</p></td>
     </tr>
     <tr>
       <th>Role</th>
-      <td><p>[required] The Amazon QuickSight role of the user. The user role can be one of the
-following:</p><ul>
+      <td><p>[required] The Amazon QuickSight role of the user. The role can be one of the
+following default security cohorts:</p><ul>
 <li><p><code>READER</code>: A user who has read-only access to dashboards.</p></li>
 <li><p><code>AUTHOR</code>: A user who can create data sources, datasets, analyses,
 and dashboards.</p></li>
 <li><p><code>ADMIN</code>: A user who is an author, who can also manage Amazon
 QuickSight settings.</p></li>
-</ul></td>
+</ul>
+
+<p>The name of the QuickSight role is invisible to the user except for the
+console screens dealing with permissions.</p></td>
+    </tr>
+    <tr>
+      <th>CustomPermissionsName</th>
+      <td><p>(Enterprise edition only) The name of the custom permissions profile
+that you want to assign to this user. Customized permissions allows you
+to control a user's access by restricting access the following
+operations:</p><ul>
+<li><p>Create and update data sources</p></li>
+<li><p>Create and update datasets</p></li>
+<li><p>Create and update email reports</p></li>
+<li><p>Subscribe to email reports</p></li>
+</ul>
+
+<p>A set of custom permissions includes any combination of these
+restrictions. Currently, you need to create the profile names for custom
+permission sets by using the QuickSight console. Then, you use the
+<code>RegisterUser</code> API operation to assign the named set of permissions to a
+QuickSight user.</p>
+<p>QuickSight custom permissions are applied through IAM policies.
+Therefore, they override the permissions typically granted by assigning
+QuickSight users to one of the default security cohorts in QuickSight
+(admin, author, reader).</p>
+<p>This feature is available only to QuickSight Enterprise edition
+subscriptions that use SAML 2.0-Based Federation for Single Sign-On
+(SSO).</p></td>
+    </tr>
+    <tr>
+      <th>UnapplyCustomPermissions</th>
+      <td><p>A flag that you use to indicate that you want to remove all custom
+permissions from this user. Using this parameter resets the user to the
+state it was in before a custom permissions profile was applied. This
+parameter defaults to NULL and it doesn't accept any other value.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_user</span>(
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AwsAccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Email</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Role</span> <span class='kw'>=</span> <span class='st'>"ADMIN"</span><span class='kw'>|</span><span class='st'>"AUTHOR"</span><span class='kw'>|</span><span class='st'>"READER"</span><span class='kw'>|</span><span class='st'>"RESTRICTED_AUTHOR"</span><span class='kw'>|</span><span class='st'>"RESTRICTED_READER"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_user</span><span class='op'>(</span>
+  UserName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AwsAccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+  Email <span class='op'>=</span> <span class='st'>"string"</span>,
+  Role <span class='op'>=</span> <span class='st'>"ADMIN"</span><span class='op'>|</span><span class='st'>"AUTHOR"</span><span class='op'>|</span><span class='st'>"READER"</span><span class='op'>|</span><span class='st'>"RESTRICTED_AUTHOR"</span><span class='op'>|</span><span class='st'>"RESTRICTED_READER"</span>,
+  CustomPermissionsName <span class='op'>=</span> <span class='st'>"string"</span>,
+  UnapplyCustomPermissions <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -180,7 +219,7 @@ QuickSight settings.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

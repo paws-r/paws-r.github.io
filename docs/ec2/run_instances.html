@@ -43,7 +43,47 @@ have permissions — ec2_run_instances • paws</title>
 <meta property="og:title" content="Launches the specified number of instances using an AMI for which you
 have permissions — ec2_run_instances" />
 <meta property="og:description" content="Launches the specified number of instances using an AMI for which you
-have permissions." />
+have permissions.
+You can specify a number of options, or leave the default options. The
+following rules apply:
+[EC2-VPC] If you don't specify a subnet ID, we choose a default
+subnet from your default VPC for you. If you don't have a default
+VPC, you must specify a subnet ID in the request.
+[EC2-Classic] If don't specify an Availability Zone, we choose one
+for you.
+Some instance types must be launched into a VPC. If you do not have
+a default VPC, or if you do not specify a subnet ID, the request
+fails. For more information, see Instance types available only in a VPC.
+[EC2-VPC] All instances have a network interface with a primary
+private IPv4 address. If you don't specify this address, we choose
+one from the IPv4 range of your subnet.
+Not all instance types support IPv6 addresses. For more information,
+see Instance types.
+If you don't specify a security group ID, we use the default
+security group. For more information, see Security groups.
+If any of the AMIs have a product code attached for which the user
+has not subscribed, the request fails.
+
+
+You can create a launch template,
+which is a resource that contains the parameters to launch an instance.
+When you launch an instance using RunInstances, you can specify the
+launch template instead of specifying the launch parameters.
+To ensure faster instance launches, break up large requests into smaller
+batches. For example, create five separate launch requests for 100
+instances each instead of one launch request for 500 instances.
+An instance is ready for you to use when it's in the running state.
+You can check the state of your instance using DescribeInstances. You
+can tag instances and EBS volumes during launch, after launch, or both.
+For more information, see CreateTags and Tagging your Amazon EC2 resources.
+Linux instances have access to the public key of the key pair at boot.
+You can use this key to provide secure access to the instance. Amazon
+EC2 public images use this feature to provide secure access without
+passwords. For more information, see Key pairs
+in the Amazon Elastic Compute Cloud User Guide.
+For troubleshooting, see What to do if an instance immediately terminates,
+and Troubleshooting connecting to your instance
+in the Amazon Elastic Compute Cloud User Guide." />
 
 
 
@@ -75,7 +115,7 @@ have permissions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +123,7 @@ have permissions." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +135,7 @@ have permissions." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,18 +161,59 @@ have permissions</h1>
     <div class="ref-description">
     <p>Launches the specified number of instances using an AMI for which you
 have permissions.</p>
+<p>You can specify a number of options, or leave the default options. The
+following rules apply:</p><ul>
+<li><p>[EC2-VPC] If you don't specify a subnet ID, we choose a default
+subnet from your default VPC for you. If you don't have a default
+VPC, you must specify a subnet ID in the request.</p></li>
+<li><p>[EC2-Classic] If don't specify an Availability Zone, we choose one
+for you.</p></li>
+<li><p>Some instance types must be launched into a VPC. If you do not have
+a default VPC, or if you do not specify a subnet ID, the request
+fails. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types'>Instance types available only in a VPC</a>.</p></li>
+<li><p>[EC2-VPC] All instances have a network interface with a primary
+private IPv4 address. If you don't specify this address, we choose
+one from the IPv4 range of your subnet.</p></li>
+<li><p>Not all instance types support IPv6 addresses. For more information,
+see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html'>Instance types</a>.</p></li>
+<li><p>If you don't specify a security group ID, we use the default
+security group. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html'>Security groups</a>.</p></li>
+<li><p>If any of the AMIs have a product code attached for which the user
+has not subscribed, the request fails.</p></li>
+</ul>
+
+<p>You can create a <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html'>launch template</a>,
+which is a resource that contains the parameters to launch an instance.
+When you launch an instance using RunInstances, you can specify the
+launch template instead of specifying the launch parameters.</p>
+<p>To ensure faster instance launches, break up large requests into smaller
+batches. For example, create five separate launch requests for 100
+instances each instead of one launch request for 500 instances.</p>
+<p>An instance is ready for you to use when it's in the <code>running</code> state.
+You can check the state of your instance using DescribeInstances. You
+can tag instances and EBS volumes during launch, after launch, or both.
+For more information, see CreateTags and <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html'>Tagging your Amazon EC2 resources</a>.</p>
+<p>Linux instances have access to the public key of the key pair at boot.
+You can use this key to provide secure access to the instance. Amazon
+EC2 public images use this feature to provide secure access without
+passwords. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html'>Key pairs</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
+<p>For troubleshooting, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/troubleshooting-launch.html#troubleshooting-launch-internal'>What to do if an instance immediately terminates</a>,
+and <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html'>Troubleshooting connecting to your instance</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_run_instances</span>(<span class='no'>BlockDeviceMappings</span>, <span class='no'>ImageId</span>, <span class='no'>InstanceType</span>,
-  <span class='no'>Ipv6AddressCount</span>, <span class='no'>Ipv6Addresses</span>, <span class='no'>KernelId</span>, <span class='no'>KeyName</span>, <span class='no'>MaxCount</span>, <span class='no'>MinCount</span>,
-  <span class='no'>Monitoring</span>, <span class='no'>Placement</span>, <span class='no'>RamdiskId</span>, <span class='no'>SecurityGroupIds</span>, <span class='no'>SecurityGroups</span>,
-  <span class='no'>SubnetId</span>, <span class='no'>UserData</span>, <span class='no'>AdditionalInfo</span>, <span class='no'>ClientToken</span>, <span class='no'>DisableApiTermination</span>,
-  <span class='no'>DryRun</span>, <span class='no'>EbsOptimized</span>, <span class='no'>IamInstanceProfile</span>,
-  <span class='no'>InstanceInitiatedShutdownBehavior</span>, <span class='no'>NetworkInterfaces</span>, <span class='no'>PrivateIpAddress</span>,
-  <span class='no'>ElasticGpuSpecification</span>, <span class='no'>ElasticInferenceAccelerators</span>,
-  <span class='no'>TagSpecifications</span>, <span class='no'>LaunchTemplate</span>, <span class='no'>InstanceMarketOptions</span>,
-  <span class='no'>CreditSpecification</span>, <span class='no'>CpuOptions</span>, <span class='no'>CapacityReservationSpecification</span>,
-  <span class='no'>HibernationOptions</span>, <span class='no'>LicenseSpecifications</span>, <span class='no'>MetadataOptions</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_run_instances</span><span class='op'>(</span><span class='va'>BlockDeviceMappings</span>, <span class='va'>ImageId</span>, <span class='va'>InstanceType</span>,
+  <span class='va'>Ipv6AddressCount</span>, <span class='va'>Ipv6Addresses</span>, <span class='va'>KernelId</span>, <span class='va'>KeyName</span>, <span class='va'>MaxCount</span>, <span class='va'>MinCount</span>,
+  <span class='va'>Monitoring</span>, <span class='va'>Placement</span>, <span class='va'>RamdiskId</span>, <span class='va'>SecurityGroupIds</span>, <span class='va'>SecurityGroups</span>,
+  <span class='va'>SubnetId</span>, <span class='va'>UserData</span>, <span class='va'>AdditionalInfo</span>, <span class='va'>ClientToken</span>, <span class='va'>DisableApiTermination</span>,
+  <span class='va'>DryRun</span>, <span class='va'>EbsOptimized</span>, <span class='va'>IamInstanceProfile</span>,
+  <span class='va'>InstanceInitiatedShutdownBehavior</span>, <span class='va'>NetworkInterfaces</span>, <span class='va'>PrivateIpAddress</span>,
+  <span class='va'>ElasticGpuSpecification</span>, <span class='va'>ElasticInferenceAccelerators</span>,
+  <span class='va'>TagSpecifications</span>, <span class='va'>LaunchTemplate</span>, <span class='va'>InstanceMarketOptions</span>,
+  <span class='va'>CreditSpecification</span>, <span class='va'>CpuOptions</span>, <span class='va'>CapacityReservationSpecification</span>,
+  <span class='va'>HibernationOptions</span>, <span class='va'>LicenseSpecifications</span>, <span class='va'>MetadataOptions</span>,
+  <span class='va'>EnclaveOptions</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,7 +239,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
 network interface. Amazon EC2 chooses the IPv6 addresses from the range
 of your subnet. You cannot specify this option and the option to assign
 specific IPv6 addresses in the same request. You can specify this option
-if you\'ve specified a minimum number of instances to launch.</p>
+if you've specified a minimum number of instances to launch.</p>
 <p>You cannot specify this option and the network interfaces option in the
 same request.</p></td>
     </tr>
@@ -167,7 +248,7 @@ same request.</p></td>
       <td><p>[EC2-VPC] The IPv6 addresses from the range of the subnet to associate
 with the primary network interface. You cannot specify this option and
 the option to assign a number of IPv6 addresses in the same request. You
-cannot specify this option if you\'ve specified a minimum number of
+cannot specify this option if you've specified a minimum number of
 instances to launch.</p>
 <p>You cannot specify this option and the network interfaces option in the
 same request.</p></td>
@@ -177,7 +258,7 @@ same request.</p></td>
       <td><p>The ID of the kernel.</p>
 <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For
 more information, see
-<a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html'>PV-GRUB</a>
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedKernels.html'>PV-GRUB</a>
 in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
     </tr>
     <tr>
@@ -186,7 +267,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
 <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateKeyPair.html'>CreateKeyPair</a>
 or
 <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ImportKeyPair.html'>ImportKeyPair</a>.</p>
-<p>If you do not specify a key pair, you can\'t connect to the instance
+<p>If you do not specify a key pair, you can't connect to the instance
 unless you choose an AMI that is configured to allow users another way
 to log in.</p></td>
     </tr>
@@ -195,9 +276,9 @@ to log in.</p></td>
       <td><p>[required] The maximum number of instances to launch. If you specify more instances
 than Amazon EC2 can launch in the target Availability Zone, Amazon EC2
 launches the largest possible number of instances above <code>MinCount</code>.</p>
-<p>Constraints: Between 1 and the maximum number you\'re allowed for the
+<p>Constraints: Between 1 and the maximum number you're allowed for the
 specified instance type. For more information about the default limits,
-and how to request an increase, see <a href='http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2'>How many instances can I run in Amazon EC2</a>
+and how to request an increase, see <a href='https://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2'>How many instances can I run in Amazon EC2</a>
 in the Amazon EC2 FAQ.</p></td>
     </tr>
     <tr>
@@ -205,9 +286,9 @@ in the Amazon EC2 FAQ.</p></td>
       <td><p>[required] The minimum number of instances to launch. If you specify a minimum that
 is more instances than Amazon EC2 can launch in the target Availability
 Zone, Amazon EC2 launches no instances.</p>
-<p>Constraints: Between 1 and the maximum number you\'re allowed for the
+<p>Constraints: Between 1 and the maximum number you're allowed for the
 specified instance type. For more information about the default limits,
-and how to request an increase, see <a href='http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2'>How many instances can I run in Amazon EC2</a>
+and how to request an increase, see <a href='https://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2'>How many instances can I run in Amazon EC2</a>
 in the Amazon EC2 General FAQ.</p></td>
     </tr>
     <tr>
@@ -226,7 +307,7 @@ whether you need to specify a RAM disk. To find kernel requirements, go
 to the AWS Resource Center and search for the kernel ID.</p>
 <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For
 more information, see
-<a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html'>PV-GRUB</a>
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedKernels.html'>PV-GRUB</a>
 in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
     </tr>
     <tr>
@@ -273,7 +354,7 @@ generated token is used for the request to ensure idempotency.</p>
     </tr>
     <tr>
       <th>DisableApiTermination</th>
-      <td><p>If you set this parameter to <code>true</code>, you can\'t terminate the instance
+      <td><p>If you set this parameter to <code>true</code>, you can't terminate the instance
 using the Amazon EC2 console, CLI, or API; otherwise, you can. To change
 this attribute after launch, use
 <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceAttribute.html'>ModifyInstanceAttribute</a>.
@@ -294,7 +375,7 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
       <td><p>Indicates whether the instance is optimized for Amazon EBS I/O. This
 optimization provides dedicated throughput to Amazon EBS and an
 optimized configuration stack to provide optimal Amazon EBS I/O
-performance. This optimization isn\'t available with all instance types.
+performance. This optimization isn't available with all instance types.
 Additional usage charges apply when using an EBS-optimized instance.</p>
 <p>Default: <code>false</code></p></td>
     </tr>
@@ -319,10 +400,10 @@ part of the network interface.</p></td>
       <th>PrivateIpAddress</th>
       <td><p>[EC2-VPC] The primary IPv4 address. You must specify a value from the
 IPv4 address range of the subnet.</p>
-<p>Only one private IP address can be designated as primary. You can\'t
-specify this option if you\'ve specified the option to designate a
+<p>Only one private IP address can be designated as primary. You can't
+specify this option if you've specified the option to designate a
 private IP address as the primary IP address in a network interface
-specification. You cannot specify this option if you\'re launching more
+specification. You cannot specify this option if you're launching more
 than one instance in the request.</p>
 <p>You cannot specify this option and the network interfaces option in the
 same request.</p></td>
@@ -383,7 +464,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
     <tr>
       <th>CapacityReservationSpecification</th>
       <td><p>Information about the Capacity Reservation targeting option. If you do
-not specify this parameter, the instance\'s Capacity Reservation
+not specify this parameter, the instance's Capacity Reservation
 preference defaults to <code>open</code>, which enables it to run in any open
 Capacity Reservation that has matching attributes (instance type,
 platform, Availability Zone).</p></td>
@@ -392,7 +473,9 @@ platform, Availability Zone).</p></td>
       <th>HibernationOptions</th>
       <td><p>Indicates whether an instance is enabled for hibernation. For more
 information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html'>Hibernate your instance</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
+<p>You can't enable hibernation and AWS Nitro Enclaves on the same
+instance.</p></td>
     </tr>
     <tr>
       <th>LicenseSpecifications</th>
@@ -403,246 +486,222 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
       <td><p>The metadata options for the instance. For more information, see
 <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html'>Instance metadata and user data</a>.</p></td>
     </tr>
+    <tr>
+      <th>EnclaveOptions</th>
+      <td><p>Indicates whether the instance is enabled for AWS Nitro Enclaves. For
+more information, see <a href='https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html'>What is AWS Nitro Enclaves?</a>
+in the <em>AWS Nitro Enclaves User Guide</em>.</p>
+<p>You can't enable AWS Nitro Enclaves and hibernation on the same
+instance.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can specify a number of options, or leave the default options. The
-following rules apply:</p><ul>
-<li><p>[EC2-VPC] If you don\'t specify a subnet ID, we choose a default
-subnet from your default VPC for you. If you don\'t have a default
-VPC, you must specify a subnet ID in the request.</p></li>
-<li><p>[EC2-Classic] If don\'t specify an Availability Zone, we choose
-one for you.</p></li>
-<li><p>Some instance types must be launched into a VPC. If you do not have
-a default VPC, or if you do not specify a subnet ID, the request
-fails. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types'>Instance types available only in a VPC</a>.</p></li>
-<li><p>[EC2-VPC] All instances have a network interface with a primary
-private IPv4 address. If you don\'t specify this address, we choose
-one from the IPv4 range of your subnet.</p></li>
-<li><p>Not all instance types support IPv6 addresses. For more information,
-see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html'>Instance types</a>.</p></li>
-<li><p>If you don\'t specify a security group ID, we use the default
-security group. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html'>Security groups</a>.</p></li>
-<li><p>If any of the AMIs have a product code attached for which the user
-has not subscribed, the request fails.</p></li>
-</ul>
-
-<p>You can create a <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html'>launch template</a>,
-which is a resource that contains the parameters to launch an instance.
-When you launch an instance using RunInstances, you can specify the
-launch template instead of specifying the launch parameters.</p>
-<p>To ensure faster instance launches, break up large requests into smaller
-batches. For example, create five separate launch requests for 100
-instances each instead of one launch request for 500 instances.</p>
-<p>An instance is ready for you to use when it\'s in the <code>running</code> state.
-You can check the state of your instance using DescribeInstances. You
-can tag instances and EBS volumes during launch, after launch, or both.
-For more information, see CreateTags and <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html'>Tagging your Amazon EC2 resources</a>.</p>
-<p>Linux instances have access to the public key of the key pair at boot.
-You can use this key to provide secure access to the instance. Amazon
-EC2 public images use this feature to provide secure access without
-passwords. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html'>Key pairs</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
-<p>For troubleshooting, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html'>What to do if an instance immediately terminates</a>,
-and <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html'>Troubleshooting connecting to your instance</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>run_instances</span>(
-  <span class='kw'>BlockDeviceMappings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DeviceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>VirtualName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Ebs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>DeleteOnTermination</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>Iops</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>SnapshotId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>VolumeSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>VolumeType</span> <span class='kw'>=</span> <span class='st'>"standard"</span><span class='kw'>|</span><span class='st'>"io1"</span><span class='kw'>|</span><span class='st'>"gp2"</span><span class='kw'>|</span><span class='st'>"sc1"</span><span class='kw'>|</span><span class='st'>"st1"</span>,
-        <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Encrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-      ),
-      <span class='kw'>NoDevice</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ImageId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"t1.micro"</span><span class='kw'>|</span><span class='st'>"t2.nano"</span><span class='kw'>|</span><span class='st'>"t2.micro"</span><span class='kw'>|</span><span class='st'>"t2.small"</span><span class='kw'>|</span><span class='st'>"t2.medium"</span><span class='kw'>|</span><span class='st'>"t2.large"</span><span class='kw'>|</span><span class='st'>"t2.xlarge"</span><span class='kw'>|</span><span class='st'>"t2.2xlarge"</span><span class='kw'>|</span><span class='st'>"t3.nano"</span><span class='kw'>|</span><span class='st'>"t3.micro"</span><span class='kw'>|</span><span class='st'>"t3.small"</span><span class='kw'>|</span><span class='st'>"t3.medium"</span><span class='kw'>|</span><span class='st'>"t3.large"</span><span class='kw'>|</span><span class='st'>"t3.xlarge"</span><span class='kw'>|</span><span class='st'>"t3.2xlarge"</span><span class='kw'>|</span><span class='st'>"t3a.nano"</span><span class='kw'>|</span><span class='st'>"t3a.micro"</span><span class='kw'>|</span><span class='st'>"t3a.small"</span><span class='kw'>|</span><span class='st'>"t3a.medium"</span><span class='kw'>|</span><span class='st'>"t3a.large"</span><span class='kw'>|</span><span class='st'>"t3a.xlarge"</span><span class='kw'>|</span><span class='st'>"t3a.2xlarge"</span><span class='kw'>|</span><span class='st'>"m1.small"</span><span class='kw'>|</span><span class='st'>"m1.medium"</span><span class='kw'>|</span><span class='st'>"m1.large"</span><span class='kw'>|</span><span class='st'>"m1.xlarge"</span><span class='kw'>|</span><span class='st'>"m3.medium"</span><span class='kw'>|</span><span class='st'>"m3.large"</span><span class='kw'>|</span><span class='st'>"m3.xlarge"</span><span class='kw'>|</span><span class='st'>"m3.2xlarge"</span><span class='kw'>|</span><span class='st'>"m4.large"</span><span class='kw'>|</span><span class='st'>"m4.xlarge"</span><span class='kw'>|</span><span class='st'>"m4.2xlarge"</span><span class='kw'>|</span><span class='st'>"m4.4xlarge"</span><span class='kw'>|</span><span class='st'>"m4.10xlarge"</span><span class='kw'>|</span><span class='st'>"m4.16xlarge"</span><span class='kw'>|</span><span class='st'>"m2.xlarge"</span><span class='kw'>|</span><span class='st'>"m2.2xlarge"</span><span class='kw'>|</span><span class='st'>"m2.4xlarge"</span><span class='kw'>|</span><span class='st'>"cr1.8xlarge"</span><span class='kw'>|</span><span class='st'>"r3.large"</span><span class='kw'>|</span><span class='st'>"r3.xlarge"</span><span class='kw'>|</span><span class='st'>"r3.2xlarge"</span><span class='kw'>|</span><span class='st'>"r3.4xlarge"</span><span class='kw'>|</span><span class='st'>"r3.8xlarge"</span><span class='kw'>|</span><span class='st'>"r4.large"</span><span class='kw'>|</span><span class='st'>"r4.xlarge"</span><span class='kw'>|</span><span class='st'>"r4.2xlarge"</span><span class='kw'>|</span><span class='st'>"r4.4xlarge"</span><span class='kw'>|</span><span class='st'>"r4.8xlarge"</span><span class='kw'>|</span><span class='st'>"r4.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5.large"</span><span class='kw'>|</span><span class='st'>"r5.xlarge"</span><span class='kw'>|</span><span class='st'>"r5.2xlarge"</span><span class='kw'>|</span><span class='st'>"r5.4xlarge"</span><span class='kw'>|</span><span class='st'>"r5.8xlarge"</span><span class='kw'>|</span><span class='st'>"r5.12xlarge"</span><span class='kw'>|</span><span class='st'>"r5.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5.24xlarge"</span><span class='kw'>|</span><span class='st'>"r5.metal"</span><span class='kw'>|</span><span class='st'>"r5a.large"</span><span class='kw'>|</span><span class='st'>"r5a.xlarge"</span><span class='kw'>|</span><span class='st'>"r5a.2xlarge"</span><span class='kw'>|</span><span class='st'>"r5a.4xlarge"</span><span class='kw'>|</span><span class='st'>"r5a.8xlarge"</span><span class='kw'>|</span><span class='st'>"r5a.12xlarge"</span><span class='kw'>|</span><span class='st'>"r5a.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5a.24xlarge"</span><span class='kw'>|</span><span class='st'>"r5d.large"</span><span class='kw'>|</span><span class='st'>"r5d.xlarge"</span><span class='kw'>|</span><span class='st'>"r5d.2xlarge"</span><span class='kw'>|</span><span class='st'>"r5d.4xlarge"</span><span class='kw'>|</span><span class='st'>"r5d.8xlarge"</span><span class='kw'>|</span><span class='st'>"r5d.12xlarge"</span><span class='kw'>|</span><span class='st'>"r5d.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5d.24xlarge"</span><span class='kw'>|</span><span class='st'>"r5d.metal"</span><span class='kw'>|</span><span class='st'>"r5ad.large"</span><span class='kw'>|</span><span class='st'>"r5ad.xlarge"</span><span class='kw'>|</span><span class='st'>"r5ad.2xlarge"</span><span class='kw'>|</span><span class='st'>"r5ad.4xlarge"</span><span class='kw'>|</span><span class='st'>"r5ad.8xlarge"</span><span class='kw'>|</span><span class='st'>"r5ad.12xlarge"</span><span class='kw'>|</span><span class='st'>"r5ad.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5ad.24xlarge"</span><span class='kw'>|</span><span class='st'>"r6g.metal"</span><span class='kw'>|</span><span class='st'>"r6g.medium"</span><span class='kw'>|</span><span class='st'>"r6g.large"</span><span class='kw'>|</span><span class='st'>"r6g.xlarge"</span><span class='kw'>|</span><span class='st'>"r6g.2xlarge"</span><span class='kw'>|</span><span class='st'>"r6g.4xlarge"</span><span class='kw'>|</span><span class='st'>"r6g.8xlarge"</span><span class='kw'>|</span><span class='st'>"r6g.12xlarge"</span><span class='kw'>|</span><span class='st'>"r6g.16xlarge"</span><span class='kw'>|</span><span class='st'>"x1.16xlarge"</span><span class='kw'>|</span><span class='st'>"x1.32xlarge"</span><span class='kw'>|</span><span class='st'>"x1e.xlarge"</span><span class='kw'>|</span><span class='st'>"x1e.2xlarge"</span><span class='kw'>|</span><span class='st'>"x1e.4xlarge"</span><span class='kw'>|</span><span class='st'>"x1e.8xlarge"</span><span class='kw'>|</span><span class='st'>"x1e.16xlarge"</span><span class='kw'>|</span><span class='st'>"x1e.32xlarge"</span><span class='kw'>|</span><span class='st'>"i2.xlarge"</span><span class='kw'>|</span><span class='st'>"i2.2xlarge"</span><span class='kw'>|</span><span class='st'>"i2.4xlarge"</span><span class='kw'>|</span><span class='st'>"i2.8xlarge"</span><span class='kw'>|</span><span class='st'>"i3.large"</span><span class='kw'>|</span><span class='st'>"i3.xlarge"</span><span class='kw'>|</span><span class='st'>"i3.2xlarge"</span><span class='kw'>|</span><span class='st'>"i3.4xlarge"</span><span class='kw'>|</span><span class='st'>"i3.8xlarge"</span><span class='kw'>|</span><span class='st'>"i3.16xlarge"</span><span class='kw'>|</span><span class='st'>"i3.metal"</span><span class='kw'>|</span><span class='st'>"i3en.large"</span><span class='kw'>|</span><span class='st'>"i3en.xlarge"</span><span class='kw'>|</span><span class='st'>"i3en.2xlarge"</span><span class='kw'>|</span><span class='st'>"i3en.3xlarge"</span><span class='kw'>|</span><span class='st'>"i3en.6xlarge"</span><span class='kw'>|</span><span class='st'>"i3en.12xlarge"</span><span class='kw'>|</span><span class='st'>"i3en.24xlarge"</span><span class='kw'>|</span><span class='st'>"i3en.metal"</span><span class='kw'>|</span><span class='st'>"hi1.4xlarge"</span><span class='kw'>|</span><span class='st'>"hs1.8xlarge"</span><span class='kw'>|</span><span class='st'>"c1.medium"</span><span class='kw'>|</span><span class='st'>"c1.xlarge"</span><span class='kw'>|</span><span class='st'>"c3.large"</span><span class='kw'>|</span><span class='st'>"c3.xlarge"</span><span class='kw'>|</span><span class='st'>"c3.2xlarge"</span><span class='kw'>|</span><span class='st'>"c3.4xlarge"</span><span class='kw'>|</span><span class='st'>"c3.8xlarge"</span><span class='kw'>|</span><span class='st'>"c4.large"</span><span class='kw'>|</span><span class='st'>"c4.xlarge"</span><span class='kw'>|</span><span class='st'>"c4.2xlarge"</span><span class='kw'>|</span><span class='st'>"c4.4xlarge"</span><span class='kw'>|</span><span class='st'>"c4.8xlarge"</span><span class='kw'>|</span><span class='st'>"c5.large"</span><span class='kw'>|</span><span class='st'>"c5.xlarge"</span><span class='kw'>|</span><span class='st'>"c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"c5.12xlarge"</span><span class='kw'>|</span><span class='st'>"c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"c5.24xlarge"</span><span class='kw'>|</span><span class='st'>"c5.metal"</span><span class='kw'>|</span><span class='st'>"c5a.large"</span><span class='kw'>|</span><span class='st'>"c5a.xlarge"</span><span class='kw'>|</span><span class='st'>"c5a.2xlarge"</span><span class='kw'>|</span><span class='st'>"c5a.4xlarge"</span><span class='kw'>|</span><span class='st'>"c5a.8xlarge"</span><span class='kw'>|</span><span class='st'>"c5a.12xlarge"</span><span class='kw'>|</span><span class='st'>"c5a.16xlarge"</span><span class='kw'>|</span><span class='st'>"c5a.24xlarge"</span><span class='kw'>|</span><span class='st'>"c5d.large"</span><span class='kw'>|</span><span class='st'>"c5d.xlarge"</span><span class='kw'>|</span><span class='st'>"c5d.2xlarge"</span><span class='kw'>|</span><span class='st'>"c5d.4xlarge"</span><span class='kw'>|</span><span class='st'>"c5d.9xlarge"</span><span class='kw'>|</span><span class='st'>"c5d.12xlarge"</span><span class='kw'>|</span><span class='st'>"c5d.18xlarge"</span><span class='kw'>|</span><span class='st'>"c5d.24xlarge"</span><span class='kw'>|</span><span class='st'>"c5d.metal"</span><span class='kw'>|</span><span class='st'>"c5n.large"</span><span class='kw'>|</span><span class='st'>"c5n.xlarge"</span><span class='kw'>|</span><span class='st'>"c5n.2xlarge"</span><span class='kw'>|</span><span class='st'>"c5n.4xlarge"</span><span class='kw'>|</span><span class='st'>"c5n.9xlarge"</span><span class='kw'>|</span><span class='st'>"c5n.18xlarge"</span><span class='kw'>|</span><span class='st'>"c6g.metal"</span><span class='kw'>|</span><span class='st'>"c6g.medium"</span><span class='kw'>|</span><span class='st'>"c6g.large"</span><span class='kw'>|</span><span class='st'>"c6g.xlarge"</span><span class='kw'>|</span><span class='st'>"c6g.2xlarge"</span><span class='kw'>|</span><span class='st'>"c6g.4xlarge"</span><span class='kw'>|</span><span class='st'>"c6g.8xlarge"</span><span class='kw'>|</span><span class='st'>"c6g.12xlarge"</span><span class='kw'>|</span><span class='st'>"c6g.16xlarge"</span><span class='kw'>|</span><span class='st'>"cc1.4xlarge"</span><span class='kw'>|</span><span class='st'>"cc2.8xlarge"</span><span class='kw'>|</span><span class='st'>"g2.2xlarge"</span><span class='kw'>|</span><span class='st'>"g2.8xlarge"</span><span class='kw'>|</span><span class='st'>"g3.4xlarge"</span><span class='kw'>|</span><span class='st'>"g3.8xlarge"</span><span class='kw'>|</span><span class='st'>"g3.16xlarge"</span><span class='kw'>|</span><span class='st'>"g3s.xlarge"</span><span class='kw'>|</span><span class='st'>"g4dn.xlarge"</span><span class='kw'>|</span><span class='st'>"g4dn.2xlarge"</span><span class='kw'>|</span><span class='st'>"g4dn.4xlarge"</span><span class='kw'>|</span><span class='st'>"g4dn.8xlarge"</span><span class='kw'>|</span><span class='st'>"g4dn.12xlarge"</span><span class='kw'>|</span><span class='st'>"g4dn.16xlarge"</span><span class='kw'>|</span><span class='st'>"g4dn.metal"</span><span class='kw'>|</span><span class='st'>"cg1.4xlarge"</span><span class='kw'>|</span><span class='st'>"p2.xlarge"</span><span class='kw'>|</span><span class='st'>"p2.8xlarge"</span><span class='kw'>|</span><span class='st'>"p2.16xlarge"</span><span class='kw'>|</span><span class='st'>"p3.2xlarge"</span><span class='kw'>|</span><span class='st'>"p3.8xlarge"</span><span class='kw'>|</span><span class='st'>"p3.16xlarge"</span><span class='kw'>|</span><span class='st'>"p3dn.24xlarge"</span><span class='kw'>|</span><span class='st'>"d2.xlarge"</span><span class='kw'>|</span><span class='st'>"d2.2xlarge"</span><span class='kw'>|</span><span class='st'>"d2.4xlarge"</span><span class='kw'>|</span><span class='st'>"d2.8xlarge"</span><span class='kw'>|</span><span class='st'>"f1.2xlarge"</span><span class='kw'>|</span><span class='st'>"f1.4xlarge"</span><span class='kw'>|</span><span class='st'>"f1.16xlarge"</span><span class='kw'>|</span><span class='st'>"m5.large"</span><span class='kw'>|</span><span class='st'>"m5.xlarge"</span><span class='kw'>|</span><span class='st'>"m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"m5.8xlarge"</span><span class='kw'>|</span><span class='st'>"m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"m5.16xlarge"</span><span class='kw'>|</span><span class='st'>"m5.24xlarge"</span><span class='kw'>|</span><span class='st'>"m5.metal"</span><span class='kw'>|</span><span class='st'>"m5a.large"</span><span class='kw'>|</span><span class='st'>"m5a.xlarge"</span><span class='kw'>|</span><span class='st'>"m5a.2xlarge"</span><span class='kw'>|</span><span class='st'>"m5a.4xlarge"</span><span class='kw'>|</span><span class='st'>"m5a.8xlarge"</span><span class='kw'>|</span><span class='st'>"m5a.12xlarge"</span><span class='kw'>|</span><span class='st'>"m5a.16xlarge"</span><span class='kw'>|</span><span class='st'>"m5a.24xlarge"</span><span class='kw'>|</span><span class='st'>"m5d.large"</span><span class='kw'>|</span><span class='st'>"m5d.xlarge"</span><span class='kw'>|</span><span class='st'>"m5d.2xlarge"</span><span class='kw'>|</span><span class='st'>"m5d.4xlarge"</span><span class='kw'>|</span><span class='st'>"m5d.8xlarge"</span><span class='kw'>|</span><span class='st'>"m5d.12xlarge"</span><span class='kw'>|</span><span class='st'>"m5d.16xlarge"</span><span class='kw'>|</span><span class='st'>"m5d.24xlarge"</span><span class='kw'>|</span><span class='st'>"m5d.metal"</span><span class='kw'>|</span><span class='st'>"m5ad.large"</span><span class='kw'>|</span><span class='st'>"m5ad.xlarge"</span><span class='kw'>|</span><span class='st'>"m5ad.2xlarge"</span><span class='kw'>|</span><span class='st'>"m5ad.4xlarge"</span><span class='kw'>|</span><span class='st'>"m5ad.8xlarge"</span><span class='kw'>|</span><span class='st'>"m5ad.12xlarge"</span><span class='kw'>|</span><span class='st'>"m5ad.16xlarge"</span><span class='kw'>|</span><span class='st'>"m5ad.24xlarge"</span><span class='kw'>|</span><span class='st'>"h1.2xlarge"</span><span class='kw'>|</span><span class='st'>"h1.4xlarge"</span><span class='kw'>|</span><span class='st'>"h1.8xlarge"</span><span class='kw'>|</span><span class='st'>"h1.16xlarge"</span><span class='kw'>|</span><span class='st'>"z1d.large"</span><span class='kw'>|</span><span class='st'>"z1d.xlarge"</span><span class='kw'>|</span><span class='st'>"z1d.2xlarge"</span><span class='kw'>|</span><span class='st'>"z1d.3xlarge"</span><span class='kw'>|</span><span class='st'>"z1d.6xlarge"</span><span class='kw'>|</span><span class='st'>"z1d.12xlarge"</span><span class='kw'>|</span><span class='st'>"z1d.metal"</span><span class='kw'>|</span><span class='st'>"u-6tb1.metal"</span><span class='kw'>|</span><span class='st'>"u-9tb1.metal"</span><span class='kw'>|</span><span class='st'>"u-12tb1.metal"</span><span class='kw'>|</span><span class='st'>"u-18tb1.metal"</span><span class='kw'>|</span><span class='st'>"u-24tb1.metal"</span><span class='kw'>|</span><span class='st'>"a1.medium"</span><span class='kw'>|</span><span class='st'>"a1.large"</span><span class='kw'>|</span><span class='st'>"a1.xlarge"</span><span class='kw'>|</span><span class='st'>"a1.2xlarge"</span><span class='kw'>|</span><span class='st'>"a1.4xlarge"</span><span class='kw'>|</span><span class='st'>"a1.metal"</span><span class='kw'>|</span><span class='st'>"m5dn.large"</span><span class='kw'>|</span><span class='st'>"m5dn.xlarge"</span><span class='kw'>|</span><span class='st'>"m5dn.2xlarge"</span><span class='kw'>|</span><span class='st'>"m5dn.4xlarge"</span><span class='kw'>|</span><span class='st'>"m5dn.8xlarge"</span><span class='kw'>|</span><span class='st'>"m5dn.12xlarge"</span><span class='kw'>|</span><span class='st'>"m5dn.16xlarge"</span><span class='kw'>|</span><span class='st'>"m5dn.24xlarge"</span><span class='kw'>|</span><span class='st'>"m5n.large"</span><span class='kw'>|</span><span class='st'>"m5n.xlarge"</span><span class='kw'>|</span><span class='st'>"m5n.2xlarge"</span><span class='kw'>|</span><span class='st'>"m5n.4xlarge"</span><span class='kw'>|</span><span class='st'>"m5n.8xlarge"</span><span class='kw'>|</span><span class='st'>"m5n.12xlarge"</span><span class='kw'>|</span><span class='st'>"m5n.16xlarge"</span><span class='kw'>|</span><span class='st'>"m5n.24xlarge"</span><span class='kw'>|</span><span class='st'>"r5dn.large"</span><span class='kw'>|</span><span class='st'>"r5dn.xlarge"</span><span class='kw'>|</span><span class='st'>"r5dn.2xlarge"</span><span class='kw'>|</span><span class='st'>"r5dn.4xlarge"</span><span class='kw'>|</span><span class='st'>"r5dn.8xlarge"</span><span class='kw'>|</span><span class='st'>"r5dn.12xlarge"</span><span class='kw'>|</span><span class='st'>"r5dn.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5dn.24xlarge"</span><span class='kw'>|</span><span class='st'>"r5n.large"</span><span class='kw'>|</span><span class='st'>"r5n.xlarge"</span><span class='kw'>|</span><span class='st'>"r5n.2xlarge"</span><span class='kw'>|</span><span class='st'>"r5n.4xlarge"</span><span class='kw'>|</span><span class='st'>"r5n.8xlarge"</span><span class='kw'>|</span><span class='st'>"r5n.12xlarge"</span><span class='kw'>|</span><span class='st'>"r5n.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5n.24xlarge"</span><span class='kw'>|</span><span class='st'>"inf1.xlarge"</span><span class='kw'>|</span><span class='st'>"inf1.2xlarge"</span><span class='kw'>|</span><span class='st'>"inf1.6xlarge"</span><span class='kw'>|</span><span class='st'>"inf1.24xlarge"</span><span class='kw'>|</span><span class='st'>"m6g.metal"</span><span class='kw'>|</span><span class='st'>"m6g.medium"</span><span class='kw'>|</span><span class='st'>"m6g.large"</span><span class='kw'>|</span><span class='st'>"m6g.xlarge"</span><span class='kw'>|</span><span class='st'>"m6g.2xlarge"</span><span class='kw'>|</span><span class='st'>"m6g.4xlarge"</span><span class='kw'>|</span><span class='st'>"m6g.8xlarge"</span><span class='kw'>|</span><span class='st'>"m6g.12xlarge"</span><span class='kw'>|</span><span class='st'>"m6g.16xlarge"</span>,
-  <span class='kw'>Ipv6AddressCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Ipv6Addresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Ipv6Address</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>KernelId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>KeyName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MinCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Monitoring</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>Placement</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AvailabilityZone</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Affinity</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>GroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>PartitionNumber</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>HostId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Tenancy</span> <span class='kw'>=</span> <span class='st'>"default"</span><span class='kw'>|</span><span class='st'>"dedicated"</span><span class='kw'>|</span><span class='st'>"host"</span>,
-    <span class='kw'>SpreadDomain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>HostResourceGroupArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>RamdiskId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>run_instances</span><span class='op'>(</span>
+  BlockDeviceMappings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DeviceName <span class='op'>=</span> <span class='st'>"string"</span>,
+      VirtualName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Ebs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        DeleteOnTermination <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        Iops <span class='op'>=</span> <span class='fl'>123</span>,
+        SnapshotId <span class='op'>=</span> <span class='st'>"string"</span>,
+        VolumeSize <span class='op'>=</span> <span class='fl'>123</span>,
+        VolumeType <span class='op'>=</span> <span class='st'>"standard"</span><span class='op'>|</span><span class='st'>"io1"</span><span class='op'>|</span><span class='st'>"io2"</span><span class='op'>|</span><span class='st'>"gp2"</span><span class='op'>|</span><span class='st'>"sc1"</span><span class='op'>|</span><span class='st'>"st1"</span><span class='op'>|</span><span class='st'>"gp3"</span>,
+        KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+        Throughput <span class='op'>=</span> <span class='fl'>123</span>,
+        Encrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+      <span class='op'>)</span>,
+      NoDevice <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ImageId <span class='op'>=</span> <span class='st'>"string"</span>,
+  InstanceType <span class='op'>=</span> <span class='st'>"t1.micro"</span><span class='op'>|</span><span class='st'>"t2.nano"</span><span class='op'>|</span><span class='st'>"t2.micro"</span><span class='op'>|</span><span class='st'>"t2.small"</span><span class='op'>|</span><span class='st'>"t2.medium"</span><span class='op'>|</span><span class='st'>"t2.large"</span><span class='op'>|</span><span class='st'>"t2.xlarge"</span><span class='op'>|</span><span class='st'>"t2.2xlarge"</span><span class='op'>|</span><span class='st'>"t3.nano"</span><span class='op'>|</span><span class='st'>"t3.micro"</span><span class='op'>|</span><span class='st'>"t3.small"</span><span class='op'>|</span><span class='st'>"t3.medium"</span><span class='op'>|</span><span class='st'>"t3.large"</span><span class='op'>|</span><span class='st'>"t3.xlarge"</span><span class='op'>|</span><span class='st'>"t3.2xlarge"</span><span class='op'>|</span><span class='st'>"t3a.nano"</span><span class='op'>|</span><span class='st'>"t3a.micro"</span><span class='op'>|</span><span class='st'>"t3a.small"</span><span class='op'>|</span><span class='st'>"t3a.medium"</span><span class='op'>|</span><span class='st'>"t3a.large"</span><span class='op'>|</span><span class='st'>"t3a.xlarge"</span><span class='op'>|</span><span class='st'>"t3a.2xlarge"</span><span class='op'>|</span><span class='st'>"t4g.nano"</span><span class='op'>|</span><span class='st'>"t4g.micro"</span><span class='op'>|</span><span class='st'>"t4g.small"</span><span class='op'>|</span><span class='st'>"t4g.medium"</span><span class='op'>|</span><span class='st'>"t4g.large"</span><span class='op'>|</span><span class='st'>"t4g.xlarge"</span><span class='op'>|</span><span class='st'>"t4g.2xlarge"</span><span class='op'>|</span><span class='st'>"m1.small"</span><span class='op'>|</span><span class='st'>"m1.medium"</span><span class='op'>|</span><span class='st'>"m1.large"</span><span class='op'>|</span><span class='st'>"m1.xlarge"</span><span class='op'>|</span><span class='st'>"m3.medium"</span><span class='op'>|</span><span class='st'>"m3.large"</span><span class='op'>|</span><span class='st'>"m3.xlarge"</span><span class='op'>|</span><span class='st'>"m3.2xlarge"</span><span class='op'>|</span><span class='st'>"m4.large"</span><span class='op'>|</span><span class='st'>"m4.xlarge"</span><span class='op'>|</span><span class='st'>"m4.2xlarge"</span><span class='op'>|</span><span class='st'>"m4.4xlarge"</span><span class='op'>|</span><span class='st'>"m4.10xlarge"</span><span class='op'>|</span><span class='st'>"m4.16xlarge"</span><span class='op'>|</span><span class='st'>"m2.xlarge"</span><span class='op'>|</span><span class='st'>"m2.2xlarge"</span><span class='op'>|</span><span class='st'>"m2.4xlarge"</span><span class='op'>|</span><span class='st'>"cr1.8xlarge"</span><span class='op'>|</span><span class='st'>"r3.large"</span><span class='op'>|</span><span class='st'>"r3.xlarge"</span><span class='op'>|</span><span class='st'>"r3.2xlarge"</span><span class='op'>|</span><span class='st'>"r3.4xlarge"</span><span class='op'>|</span><span class='st'>"r3.8xlarge"</span><span class='op'>|</span><span class='st'>"r4.large"</span><span class='op'>|</span><span class='st'>"r4.xlarge"</span><span class='op'>|</span><span class='st'>"r4.2xlarge"</span><span class='op'>|</span><span class='st'>"r4.4xlarge"</span><span class='op'>|</span><span class='st'>"r4.8xlarge"</span><span class='op'>|</span><span class='st'>"r4.16xlarge"</span><span class='op'>|</span><span class='st'>"r5.large"</span><span class='op'>|</span><span class='st'>"r5.xlarge"</span><span class='op'>|</span><span class='st'>"r5.2xlarge"</span><span class='op'>|</span><span class='st'>"r5.4xlarge"</span><span class='op'>|</span><span class='st'>"r5.8xlarge"</span><span class='op'>|</span><span class='st'>"r5.12xlarge"</span><span class='op'>|</span><span class='st'>"r5.16xlarge"</span><span class='op'>|</span><span class='st'>"r5.24xlarge"</span><span class='op'>|</span><span class='st'>"r5.metal"</span><span class='op'>|</span><span class='st'>"r5a.large"</span><span class='op'>|</span><span class='st'>"r5a.xlarge"</span><span class='op'>|</span><span class='st'>"r5a.2xlarge"</span><span class='op'>|</span><span class='st'>"r5a.4xlarge"</span><span class='op'>|</span><span class='st'>"r5a.8xlarge"</span><span class='op'>|</span><span class='st'>"r5a.12xlarge"</span><span class='op'>|</span><span class='st'>"r5a.16xlarge"</span><span class='op'>|</span><span class='st'>"r5a.24xlarge"</span><span class='op'>|</span><span class='st'>"r5b.large"</span><span class='op'>|</span><span class='st'>"r5b.xlarge"</span><span class='op'>|</span><span class='st'>"r5b.2xlarge"</span><span class='op'>|</span><span class='st'>"r5b.4xlarge"</span><span class='op'>|</span><span class='st'>"r5b.8xlarge"</span><span class='op'>|</span><span class='st'>"r5b.12xlarge"</span><span class='op'>|</span><span class='st'>"r5b.16xlarge"</span><span class='op'>|</span><span class='st'>"r5b.24xlarge"</span><span class='op'>|</span><span class='st'>"r5b.metal"</span><span class='op'>|</span><span class='st'>"r5d.large"</span><span class='op'>|</span><span class='st'>"r5d.xlarge"</span><span class='op'>|</span><span class='st'>"r5d.2xlarge"</span><span class='op'>|</span><span class='st'>"r5d.4xlarge"</span><span class='op'>|</span><span class='st'>"r5d.8xlarge"</span><span class='op'>|</span><span class='st'>"r5d.12xlarge"</span><span class='op'>|</span><span class='st'>"r5d.16xlarge"</span><span class='op'>|</span><span class='st'>"r5d.24xlarge"</span><span class='op'>|</span><span class='st'>"r5d.metal"</span><span class='op'>|</span><span class='st'>"r5ad.large"</span><span class='op'>|</span><span class='st'>"r5ad.xlarge"</span><span class='op'>|</span><span class='st'>"r5ad.2xlarge"</span><span class='op'>|</span><span class='st'>"r5ad.4xlarge"</span><span class='op'>|</span><span class='st'>"r5ad.8xlarge"</span><span class='op'>|</span><span class='st'>"r5ad.12xlarge"</span><span class='op'>|</span><span class='st'>"r5ad.16xlarge"</span><span class='op'>|</span><span class='st'>"r5ad.24xlarge"</span><span class='op'>|</span><span class='st'>"r6g.metal"</span><span class='op'>|</span><span class='st'>"r6g.medium"</span><span class='op'>|</span><span class='st'>"r6g.large"</span><span class='op'>|</span><span class='st'>"r6g.xlarge"</span><span class='op'>|</span><span class='st'>"r6g.2xlarge"</span><span class='op'>|</span><span class='st'>"r6g.4xlarge"</span><span class='op'>|</span><span class='st'>"r6g.8xlarge"</span><span class='op'>|</span><span class='st'>"r6g.12xlarge"</span><span class='op'>|</span><span class='st'>"r6g.16xlarge"</span><span class='op'>|</span><span class='st'>"r6gd.metal"</span><span class='op'>|</span><span class='st'>"r6gd.medium"</span><span class='op'>|</span><span class='st'>"r6gd.large"</span><span class='op'>|</span><span class='st'>"r6gd.xlarge"</span><span class='op'>|</span><span class='st'>"r6gd.2xlarge"</span><span class='op'>|</span><span class='st'>"r6gd.4xlarge"</span><span class='op'>|</span><span class='st'>"r6gd.8xlarge"</span><span class='op'>|</span><span class='st'>"r6gd.12xlarge"</span><span class='op'>|</span><span class='st'>"r6gd.16xlarge"</span><span class='op'>|</span><span class='st'>"x1.16xlarge"</span><span class='op'>|</span><span class='st'>"x1.32xlarge"</span><span class='op'>|</span><span class='st'>"x1e.xlarge"</span><span class='op'>|</span><span class='st'>"x1e.2xlarge"</span><span class='op'>|</span><span class='st'>"x1e.4xlarge"</span><span class='op'>|</span><span class='st'>"x1e.8xlarge"</span><span class='op'>|</span><span class='st'>"x1e.16xlarge"</span><span class='op'>|</span><span class='st'>"x1e.32xlarge"</span><span class='op'>|</span><span class='st'>"i2.xlarge"</span><span class='op'>|</span><span class='st'>"i2.2xlarge"</span><span class='op'>|</span><span class='st'>"i2.4xlarge"</span><span class='op'>|</span><span class='st'>"i2.8xlarge"</span><span class='op'>|</span><span class='st'>"i3.large"</span><span class='op'>|</span><span class='st'>"i3.xlarge"</span><span class='op'>|</span><span class='st'>"i3.2xlarge"</span><span class='op'>|</span><span class='st'>"i3.4xlarge"</span><span class='op'>|</span><span class='st'>"i3.8xlarge"</span><span class='op'>|</span><span class='st'>"i3.16xlarge"</span><span class='op'>|</span><span class='st'>"i3.metal"</span><span class='op'>|</span><span class='st'>"i3en.large"</span><span class='op'>|</span><span class='st'>"i3en.xlarge"</span><span class='op'>|</span><span class='st'>"i3en.2xlarge"</span><span class='op'>|</span><span class='st'>"i3en.3xlarge"</span><span class='op'>|</span><span class='st'>"i3en.6xlarge"</span><span class='op'>|</span><span class='st'>"i3en.12xlarge"</span><span class='op'>|</span><span class='st'>"i3en.24xlarge"</span><span class='op'>|</span><span class='st'>"i3en.metal"</span><span class='op'>|</span><span class='st'>"hi1.4xlarge"</span><span class='op'>|</span><span class='st'>"hs1.8xlarge"</span><span class='op'>|</span><span class='st'>"c1.medium"</span><span class='op'>|</span><span class='st'>"c1.xlarge"</span><span class='op'>|</span><span class='st'>"c3.large"</span><span class='op'>|</span><span class='st'>"c3.xlarge"</span><span class='op'>|</span><span class='st'>"c3.2xlarge"</span><span class='op'>|</span><span class='st'>"c3.4xlarge"</span><span class='op'>|</span><span class='st'>"c3.8xlarge"</span><span class='op'>|</span><span class='st'>"c4.large"</span><span class='op'>|</span><span class='st'>"c4.xlarge"</span><span class='op'>|</span><span class='st'>"c4.2xlarge"</span><span class='op'>|</span><span class='st'>"c4.4xlarge"</span><span class='op'>|</span><span class='st'>"c4.8xlarge"</span><span class='op'>|</span><span class='st'>"c5.large"</span><span class='op'>|</span><span class='st'>"c5.xlarge"</span><span class='op'>|</span><span class='st'>"c5.2xlarge"</span><span class='op'>|</span><span class='st'>"c5.4xlarge"</span><span class='op'>|</span><span class='st'>"c5.9xlarge"</span><span class='op'>|</span><span class='st'>"c5.12xlarge"</span><span class='op'>|</span><span class='st'>"c5.18xlarge"</span><span class='op'>|</span><span class='st'>"c5.24xlarge"</span><span class='op'>|</span><span class='st'>"c5.metal"</span><span class='op'>|</span><span class='st'>"c5a.large"</span><span class='op'>|</span><span class='st'>"c5a.xlarge"</span><span class='op'>|</span><span class='st'>"c5a.2xlarge"</span><span class='op'>|</span><span class='st'>"c5a.4xlarge"</span><span class='op'>|</span><span class='st'>"c5a.8xlarge"</span><span class='op'>|</span><span class='st'>"c5a.12xlarge"</span><span class='op'>|</span><span class='st'>"c5a.16xlarge"</span><span class='op'>|</span><span class='st'>"c5a.24xlarge"</span><span class='op'>|</span><span class='st'>"c5ad.large"</span><span class='op'>|</span><span class='st'>"c5ad.xlarge"</span><span class='op'>|</span><span class='st'>"c5ad.2xlarge"</span><span class='op'>|</span><span class='st'>"c5ad.4xlarge"</span><span class='op'>|</span><span class='st'>"c5ad.8xlarge"</span><span class='op'>|</span><span class='st'>"c5ad.12xlarge"</span><span class='op'>|</span><span class='st'>"c5ad.16xlarge"</span><span class='op'>|</span><span class='st'>"c5ad.24xlarge"</span><span class='op'>|</span><span class='st'>"c5d.large"</span><span class='op'>|</span><span class='st'>"c5d.xlarge"</span><span class='op'>|</span><span class='st'>"c5d.2xlarge"</span><span class='op'>|</span><span class='st'>"c5d.4xlarge"</span><span class='op'>|</span><span class='st'>"c5d.9xlarge"</span><span class='op'>|</span><span class='st'>"c5d.12xlarge"</span><span class='op'>|</span><span class='st'>"c5d.18xlarge"</span><span class='op'>|</span><span class='st'>"c5d.24xlarge"</span><span class='op'>|</span><span class='st'>"c5d.metal"</span><span class='op'>|</span><span class='st'>"c5n.large"</span><span class='op'>|</span><span class='st'>"c5n.xlarge"</span><span class='op'>|</span><span class='st'>"c5n.2xlarge"</span><span class='op'>|</span><span class='st'>"c5n.4xlarge"</span><span class='op'>|</span><span class='st'>"c5n.9xlarge"</span><span class='op'>|</span><span class='st'>"c5n.18xlarge"</span><span class='op'>|</span><span class='st'>"c5n.metal"</span><span class='op'>|</span><span class='st'>"c6g.metal"</span><span class='op'>|</span><span class='st'>"c6g.medium"</span><span class='op'>|</span><span class='st'>"c6g.large"</span><span class='op'>|</span><span class='st'>"c6g.xlarge"</span><span class='op'>|</span><span class='st'>"c6g.2xlarge"</span><span class='op'>|</span><span class='st'>"c6g.4xlarge"</span><span class='op'>|</span><span class='st'>"c6g.8xlarge"</span><span class='op'>|</span><span class='st'>"c6g.12xlarge"</span><span class='op'>|</span><span class='st'>"c6g.16xlarge"</span><span class='op'>|</span><span class='st'>"c6gd.metal"</span><span class='op'>|</span><span class='st'>"c6gd.medium"</span><span class='op'>|</span><span class='st'>"c6gd.large"</span><span class='op'>|</span><span class='st'>"c6gd.xlarge"</span><span class='op'>|</span><span class='st'>"c6gd.2xlarge"</span><span class='op'>|</span><span class='st'>"c6gd.4xlarge"</span><span class='op'>|</span><span class='st'>"c6gd.8xlarge"</span><span class='op'>|</span><span class='st'>"c6gd.12xlarge"</span><span class='op'>|</span><span class='st'>"c6gd.16xlarge"</span><span class='op'>|</span><span class='st'>"c6gn.medium"</span><span class='op'>|</span><span class='st'>"c6gn.large"</span><span class='op'>|</span><span class='st'>"c6gn.xlarge"</span><span class='op'>|</span><span class='st'>"c6gn.2xlarge"</span><span class='op'>|</span><span class='st'>"c6gn.4xlarge"</span><span class='op'>|</span><span class='st'>"c6gn.8xlarge"</span><span class='op'>|</span><span class='st'>"c6gn.12xlarge"</span><span class='op'>|</span><span class='st'>"c6gn.16xlarge"</span><span class='op'>|</span><span class='st'>"cc1.4xlarge"</span><span class='op'>|</span><span class='st'>"cc2.8xlarge"</span><span class='op'>|</span><span class='st'>"g2.2xlarge"</span><span class='op'>|</span><span class='st'>"g2.8xlarge"</span><span class='op'>|</span><span class='st'>"g3.4xlarge"</span><span class='op'>|</span><span class='st'>"g3.8xlarge"</span><span class='op'>|</span><span class='st'>"g3.16xlarge"</span><span class='op'>|</span><span class='st'>"g3s.xlarge"</span><span class='op'>|</span><span class='st'>"g4ad.4xlarge"</span><span class='op'>|</span><span class='st'>"g4ad.8xlarge"</span><span class='op'>|</span><span class='st'>"g4ad.16xlarge"</span><span class='op'>|</span><span class='st'>"g4dn.xlarge"</span><span class='op'>|</span><span class='st'>"g4dn.2xlarge"</span><span class='op'>|</span><span class='st'>"g4dn.4xlarge"</span><span class='op'>|</span><span class='st'>"g4dn.8xlarge"</span><span class='op'>|</span><span class='st'>"g4dn.12xlarge"</span><span class='op'>|</span><span class='st'>"g4dn.16xlarge"</span><span class='op'>|</span><span class='st'>"g4dn.metal"</span><span class='op'>|</span><span class='st'>"cg1.4xlarge"</span><span class='op'>|</span><span class='st'>"p2.xlarge"</span><span class='op'>|</span><span class='st'>"p2.8xlarge"</span><span class='op'>|</span><span class='st'>"p2.16xlarge"</span><span class='op'>|</span><span class='st'>"p3.2xlarge"</span><span class='op'>|</span><span class='st'>"p3.8xlarge"</span><span class='op'>|</span><span class='st'>"p3.16xlarge"</span><span class='op'>|</span><span class='st'>"p3dn.24xlarge"</span><span class='op'>|</span><span class='st'>"p4d.24xlarge"</span><span class='op'>|</span><span class='st'>"d2.xlarge"</span><span class='op'>|</span><span class='st'>"d2.2xlarge"</span><span class='op'>|</span><span class='st'>"d2.4xlarge"</span><span class='op'>|</span><span class='st'>"d2.8xlarge"</span><span class='op'>|</span><span class='st'>"d3.xlarge"</span><span class='op'>|</span><span class='st'>"d3.2xlarge"</span><span class='op'>|</span><span class='st'>"d3.4xlarge"</span><span class='op'>|</span><span class='st'>"d3.8xlarge"</span><span class='op'>|</span><span class='st'>"d3en.xlarge"</span><span class='op'>|</span><span class='st'>"d3en.2xlarge"</span><span class='op'>|</span><span class='st'>"d3en.4xlarge"</span><span class='op'>|</span><span class='st'>"d3en.6xlarge"</span><span class='op'>|</span><span class='st'>"d3en.8xlarge"</span><span class='op'>|</span><span class='st'>"d3en.12xlarge"</span><span class='op'>|</span><span class='st'>"f1.2xlarge"</span><span class='op'>|</span><span class='st'>"f1.4xlarge"</span><span class='op'>|</span><span class='st'>"f1.16xlarge"</span><span class='op'>|</span><span class='st'>"m5.large"</span><span class='op'>|</span><span class='st'>"m5.xlarge"</span><span class='op'>|</span><span class='st'>"m5.2xlarge"</span><span class='op'>|</span><span class='st'>"m5.4xlarge"</span><span class='op'>|</span><span class='st'>"m5.8xlarge"</span><span class='op'>|</span><span class='st'>"m5.12xlarge"</span><span class='op'>|</span><span class='st'>"m5.16xlarge"</span><span class='op'>|</span><span class='st'>"m5.24xlarge"</span><span class='op'>|</span><span class='st'>"m5.metal"</span><span class='op'>|</span><span class='st'>"m5a.large"</span><span class='op'>|</span><span class='st'>"m5a.xlarge"</span><span class='op'>|</span><span class='st'>"m5a.2xlarge"</span><span class='op'>|</span><span class='st'>"m5a.4xlarge"</span><span class='op'>|</span><span class='st'>"m5a.8xlarge"</span><span class='op'>|</span><span class='st'>"m5a.12xlarge"</span><span class='op'>|</span><span class='st'>"m5a.16xlarge"</span><span class='op'>|</span><span class='st'>"m5a.24xlarge"</span><span class='op'>|</span><span class='st'>"m5d.large"</span><span class='op'>|</span><span class='st'>"m5d.xlarge"</span><span class='op'>|</span><span class='st'>"m5d.2xlarge"</span><span class='op'>|</span><span class='st'>"m5d.4xlarge"</span><span class='op'>|</span><span class='st'>"m5d.8xlarge"</span><span class='op'>|</span><span class='st'>"m5d.12xlarge"</span><span class='op'>|</span><span class='st'>"m5d.16xlarge"</span><span class='op'>|</span><span class='st'>"m5d.24xlarge"</span><span class='op'>|</span><span class='st'>"m5d.metal"</span><span class='op'>|</span><span class='st'>"m5ad.large"</span><span class='op'>|</span><span class='st'>"m5ad.xlarge"</span><span class='op'>|</span><span class='st'>"m5ad.2xlarge"</span><span class='op'>|</span><span class='st'>"m5ad.4xlarge"</span><span class='op'>|</span><span class='st'>"m5ad.8xlarge"</span><span class='op'>|</span><span class='st'>"m5ad.12xlarge"</span><span class='op'>|</span><span class='st'>"m5ad.16xlarge"</span><span class='op'>|</span><span class='st'>"m5ad.24xlarge"</span><span class='op'>|</span><span class='st'>"m5zn.large"</span><span class='op'>|</span><span class='st'>"m5zn.xlarge"</span><span class='op'>|</span><span class='st'>"m5zn.2xlarge"</span><span class='op'>|</span><span class='st'>"m5zn.3xlarge"</span><span class='op'>|</span><span class='st'>"m5zn.6xlarge"</span><span class='op'>|</span><span class='st'>"m5zn.12xlarge"</span><span class='op'>|</span><span class='st'>"m5zn.metal"</span><span class='op'>|</span><span class='st'>"h1.2xlarge"</span><span class='op'>|</span><span class='st'>"h1.4xlarge"</span><span class='op'>|</span><span class='st'>"h1.8xlarge"</span><span class='op'>|</span><span class='st'>"h1.16xlarge"</span><span class='op'>|</span><span class='st'>"z1d.large"</span><span class='op'>|</span><span class='st'>"z1d.xlarge"</span><span class='op'>|</span><span class='st'>"z1d.2xlarge"</span><span class='op'>|</span><span class='st'>"z1d.3xlarge"</span><span class='op'>|</span><span class='st'>"z1d.6xlarge"</span><span class='op'>|</span><span class='st'>"z1d.12xlarge"</span><span class='op'>|</span><span class='st'>"z1d.metal"</span><span class='op'>|</span><span class='st'>"u-6tb1.metal"</span><span class='op'>|</span><span class='st'>"u-9tb1.metal"</span><span class='op'>|</span><span class='st'>"u-12tb1.metal"</span><span class='op'>|</span><span class='st'>"u-18tb1.metal"</span><span class='op'>|</span><span class='st'>"u-24tb1.metal"</span><span class='op'>|</span><span class='st'>"a1.medium"</span><span class='op'>|</span><span class='st'>"a1.large"</span><span class='op'>|</span><span class='st'>"a1.xlarge"</span><span class='op'>|</span><span class='st'>"a1.2xlarge"</span><span class='op'>|</span><span class='st'>"a1.4xlarge"</span><span class='op'>|</span><span class='st'>"a1.metal"</span><span class='op'>|</span><span class='st'>"m5dn.large"</span><span class='op'>|</span><span class='st'>"m5dn.xlarge"</span><span class='op'>|</span><span class='st'>"m5dn.2xlarge"</span><span class='op'>|</span><span class='st'>"m5dn.4xlarge"</span><span class='op'>|</span><span class='st'>"m5dn.8xlarge"</span><span class='op'>|</span><span class='st'>"m5dn.12xlarge"</span><span class='op'>|</span><span class='st'>"m5dn.16xlarge"</span><span class='op'>|</span><span class='st'>"m5dn.24xlarge"</span><span class='op'>|</span><span class='st'>"m5n.large"</span><span class='op'>|</span><span class='st'>"m5n.xlarge"</span><span class='op'>|</span><span class='st'>"m5n.2xlarge"</span><span class='op'>|</span><span class='st'>"m5n.4xlarge"</span><span class='op'>|</span><span class='st'>"m5n.8xlarge"</span><span class='op'>|</span><span class='st'>"m5n.12xlarge"</span><span class='op'>|</span><span class='st'>"m5n.16xlarge"</span><span class='op'>|</span><span class='st'>"m5n.24xlarge"</span><span class='op'>|</span><span class='st'>"r5dn.large"</span><span class='op'>|</span><span class='st'>"r5dn.xlarge"</span><span class='op'>|</span><span class='st'>"r5dn.2xlarge"</span><span class='op'>|</span><span class='st'>"r5dn.4xlarge"</span><span class='op'>|</span><span class='st'>"r5dn.8xlarge"</span><span class='op'>|</span><span class='st'>"r5dn.12xlarge"</span><span class='op'>|</span><span class='st'>"r5dn.16xlarge"</span><span class='op'>|</span><span class='st'>"r5dn.24xlarge"</span><span class='op'>|</span><span class='st'>"r5n.large"</span><span class='op'>|</span><span class='st'>"r5n.xlarge"</span><span class='op'>|</span><span class='st'>"r5n.2xlarge"</span><span class='op'>|</span><span class='st'>"r5n.4xlarge"</span><span class='op'>|</span><span class='st'>"r5n.8xlarge"</span><span class='op'>|</span><span class='st'>"r5n.12xlarge"</span><span class='op'>|</span><span class='st'>"r5n.16xlarge"</span><span class='op'>|</span><span class='st'>"r5n.24xlarge"</span><span class='op'>|</span><span class='st'>"inf1.xlarge"</span><span class='op'>|</span><span class='st'>"inf1.2xlarge"</span><span class='op'>|</span><span class='st'>"inf1.6xlarge"</span><span class='op'>|</span><span class='st'>"inf1.24xlarge"</span><span class='op'>|</span><span class='st'>"m6g.metal"</span><span class='op'>|</span><span class='st'>"m6g.medium"</span><span class='op'>|</span><span class='st'>"m6g.large"</span><span class='op'>|</span><span class='st'>"m6g.xlarge"</span><span class='op'>|</span><span class='st'>"m6g.2xlarge"</span><span class='op'>|</span><span class='st'>"m6g.4xlarge"</span><span class='op'>|</span><span class='st'>"m6g.8xlarge"</span><span class='op'>|</span><span class='st'>"m6g.12xlarge"</span><span class='op'>|</span><span class='st'>"m6g.16xlarge"</span><span class='op'>|</span><span class='st'>"m6gd.metal"</span><span class='op'>|</span><span class='st'>"m6gd.medium"</span><span class='op'>|</span><span class='st'>"m6gd.large"</span><span class='op'>|</span><span class='st'>"m6gd.xlarge"</span><span class='op'>|</span><span class='st'>"m6gd.2xlarge"</span><span class='op'>|</span><span class='st'>"m6gd.4xlarge"</span><span class='op'>|</span><span class='st'>"m6gd.8xlarge"</span><span class='op'>|</span><span class='st'>"m6gd.12xlarge"</span><span class='op'>|</span><span class='st'>"m6gd.16xlarge"</span><span class='op'>|</span><span class='st'>"mac1.metal"</span>,
+  Ipv6AddressCount <span class='op'>=</span> <span class='fl'>123</span>,
+  Ipv6Addresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Ipv6Address <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  KernelId <span class='op'>=</span> <span class='st'>"string"</span>,
+  KeyName <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxCount <span class='op'>=</span> <span class='fl'>123</span>,
+  MinCount <span class='op'>=</span> <span class='fl'>123</span>,
+  Monitoring <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  Placement <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AvailabilityZone <span class='op'>=</span> <span class='st'>"string"</span>,
+    Affinity <span class='op'>=</span> <span class='st'>"string"</span>,
+    GroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+    PartitionNumber <span class='op'>=</span> <span class='fl'>123</span>,
+    HostId <span class='op'>=</span> <span class='st'>"string"</span>,
+    Tenancy <span class='op'>=</span> <span class='st'>"default"</span><span class='op'>|</span><span class='st'>"dedicated"</span><span class='op'>|</span><span class='st'>"host"</span>,
+    SpreadDomain <span class='op'>=</span> <span class='st'>"string"</span>,
+    HostResourceGroupArn <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  RamdiskId <span class='op'>=</span> <span class='st'>"string"</span>,
+  SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SecurityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  SecurityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SubnetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>UserData</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AdditionalInfo</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DisableApiTermination</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>EbsOptimized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>IamInstanceProfile</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Arn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>InstanceInitiatedShutdownBehavior</span> <span class='kw'>=</span> <span class='st'>"stop"</span><span class='kw'>|</span><span class='st'>"terminate"</span>,
-  <span class='kw'>NetworkInterfaces</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>AssociatePublicIpAddress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>DeleteOnTermination</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DeviceIndex</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>Groups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  SubnetId <span class='op'>=</span> <span class='st'>"string"</span>,
+  UserData <span class='op'>=</span> <span class='st'>"string"</span>,
+  AdditionalInfo <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  DisableApiTermination <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  EbsOptimized <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  IamInstanceProfile <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Arn <span class='op'>=</span> <span class='st'>"string"</span>,
+    Name <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  InstanceInitiatedShutdownBehavior <span class='op'>=</span> <span class='st'>"stop"</span><span class='op'>|</span><span class='st'>"terminate"</span>,
+  NetworkInterfaces <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      AssociatePublicIpAddress <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      DeleteOnTermination <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Description <span class='op'>=</span> <span class='st'>"string"</span>,
+      DeviceIndex <span class='op'>=</span> <span class='fl'>123</span>,
+      Groups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>Ipv6AddressCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>Ipv6Addresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Ipv6Address</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>NetworkInterfaceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>PrivateIpAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>PrivateIpAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Primary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-          <span class='kw'>PrivateIpAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>SecondaryPrivateIpAddressCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>SubnetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>InterfaceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>PrivateIpAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ElasticGpuSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ElasticInferenceAccelerators</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Count</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  ),
-  <span class='kw'>TagSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='kw'>|</span><span class='st'>"customer-gateway"</span><span class='kw'>|</span><span class='st'>"dedicated-host"</span><span class='kw'>|</span><span class='st'>"dhcp-options"</span><span class='kw'>|</span><span class='st'>"elastic-ip"</span><span class='kw'>|</span><span class='st'>"elastic-gpu"</span><span class='kw'>|</span><span class='st'>"export-image-task"</span><span class='kw'>|</span><span class='st'>"export-instance-task"</span><span class='kw'>|</span><span class='st'>"fleet"</span><span class='kw'>|</span><span class='st'>"fpga-image"</span><span class='kw'>|</span><span class='st'>"host-reservation"</span><span class='kw'>|</span><span class='st'>"image"</span><span class='kw'>|</span><span class='st'>"import-image-task"</span><span class='kw'>|</span><span class='st'>"import-snapshot-task"</span><span class='kw'>|</span><span class='st'>"instance"</span><span class='kw'>|</span><span class='st'>"internet-gateway"</span><span class='kw'>|</span><span class='st'>"key-pair"</span><span class='kw'>|</span><span class='st'>"launch-template"</span><span class='kw'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='kw'>|</span><span class='st'>"natgateway"</span><span class='kw'>|</span><span class='st'>"network-acl"</span><span class='kw'>|</span><span class='st'>"network-interface"</span><span class='kw'>|</span><span class='st'>"placement-group"</span><span class='kw'>|</span><span class='st'>"reserved-instances"</span><span class='kw'>|</span><span class='st'>"route-table"</span><span class='kw'>|</span><span class='st'>"security-group"</span><span class='kw'>|</span><span class='st'>"snapshot"</span><span class='kw'>|</span><span class='st'>"spot-fleet-request"</span><span class='kw'>|</span><span class='st'>"spot-instances-request"</span><span class='kw'>|</span><span class='st'>"subnet"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-session"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-target"</span><span class='kw'>|</span><span class='st'>"transit-gateway"</span><span class='kw'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='kw'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='kw'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='kw'>|</span><span class='st'>"volume"</span><span class='kw'>|</span><span class='st'>"vpc"</span><span class='kw'>|</span><span class='st'>"vpc-peering-connection"</span><span class='kw'>|</span><span class='st'>"vpn-connection"</span><span class='kw'>|</span><span class='st'>"vpn-gateway"</span><span class='kw'>|</span><span class='st'>"vpc-flow-log"</span>,
-      <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>LaunchTemplate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>LaunchTemplateId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>LaunchTemplateName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>InstanceMarketOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>MarketType</span> <span class='kw'>=</span> <span class='st'>"spot"</span>,
-    <span class='kw'>SpotOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>MaxPrice</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>SpotInstanceType</span> <span class='kw'>=</span> <span class='st'>"one-time"</span><span class='kw'>|</span><span class='st'>"persistent"</span>,
-      <span class='kw'>BlockDurationMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>ValidUntil</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+      <span class='op'>)</span>,
+      Ipv6AddressCount <span class='op'>=</span> <span class='fl'>123</span>,
+      Ipv6Addresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Ipv6Address <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      NetworkInterfaceId <span class='op'>=</span> <span class='st'>"string"</span>,
+      PrivateIpAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+      PrivateIpAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Primary <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+          PrivateIpAddress <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      SecondaryPrivateIpAddressCount <span class='op'>=</span> <span class='fl'>123</span>,
+      SubnetId <span class='op'>=</span> <span class='st'>"string"</span>,
+      AssociateCarrierIpAddress <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      InterfaceType <span class='op'>=</span> <span class='st'>"string"</span>,
+      NetworkCardIndex <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  PrivateIpAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+  ElasticGpuSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ElasticInferenceAccelerators <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"string"</span>,
+      Count <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TagSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ResourceType <span class='op'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='op'>|</span><span class='st'>"customer-gateway"</span><span class='op'>|</span><span class='st'>"dedicated-host"</span><span class='op'>|</span><span class='st'>"dhcp-options"</span><span class='op'>|</span><span class='st'>"egress-only-internet-gateway"</span><span class='op'>|</span><span class='st'>"elastic-ip"</span><span class='op'>|</span><span class='st'>"elastic-gpu"</span><span class='op'>|</span><span class='st'>"export-image-task"</span><span class='op'>|</span><span class='st'>"export-instance-task"</span><span class='op'>|</span><span class='st'>"fleet"</span><span class='op'>|</span><span class='st'>"fpga-image"</span><span class='op'>|</span><span class='st'>"host-reservation"</span><span class='op'>|</span><span class='st'>"image"</span><span class='op'>|</span><span class='st'>"import-image-task"</span><span class='op'>|</span><span class='st'>"import-snapshot-task"</span><span class='op'>|</span><span class='st'>"instance"</span><span class='op'>|</span><span class='st'>"internet-gateway"</span><span class='op'>|</span><span class='st'>"key-pair"</span><span class='op'>|</span><span class='st'>"launch-template"</span><span class='op'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='op'>|</span><span class='st'>"natgateway"</span><span class='op'>|</span><span class='st'>"network-acl"</span><span class='op'>|</span><span class='st'>"network-interface"</span><span class='op'>|</span><span class='st'>"network-insights-analysis"</span><span class='op'>|</span><span class='st'>"network-insights-path"</span><span class='op'>|</span><span class='st'>"placement-group"</span><span class='op'>|</span><span class='st'>"reserved-instances"</span><span class='op'>|</span><span class='st'>"route-table"</span><span class='op'>|</span><span class='st'>"security-group"</span><span class='op'>|</span><span class='st'>"snapshot"</span><span class='op'>|</span><span class='st'>"spot-fleet-request"</span><span class='op'>|</span><span class='st'>"spot-instances-request"</span><span class='op'>|</span><span class='st'>"subnet"</span><span class='op'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='op'>|</span><span class='st'>"traffic-mirror-session"</span><span class='op'>|</span><span class='st'>"traffic-mirror-target"</span><span class='op'>|</span><span class='st'>"transit-gateway"</span><span class='op'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='op'>|</span><span class='st'>"transit-gateway-connect-peer"</span><span class='op'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='op'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='op'>|</span><span class='st'>"volume"</span><span class='op'>|</span><span class='st'>"vpc"</span><span class='op'>|</span><span class='st'>"vpc-peering-connection"</span><span class='op'>|</span><span class='st'>"vpn-connection"</span><span class='op'>|</span><span class='st'>"vpn-gateway"</span><span class='op'>|</span><span class='st'>"vpc-flow-log"</span>,
+      Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Key <span class='op'>=</span> <span class='st'>"string"</span>,
+          Value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  LaunchTemplate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    LaunchTemplateId <span class='op'>=</span> <span class='st'>"string"</span>,
+    LaunchTemplateName <span class='op'>=</span> <span class='st'>"string"</span>,
+    Version <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  InstanceMarketOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    MarketType <span class='op'>=</span> <span class='st'>"spot"</span>,
+    SpotOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      MaxPrice <span class='op'>=</span> <span class='st'>"string"</span>,
+      SpotInstanceType <span class='op'>=</span> <span class='st'>"one-time"</span><span class='op'>|</span><span class='st'>"persistent"</span>,
+      BlockDurationMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+      ValidUntil <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
         <span class='st'>"2015-01-01"</span>
-      ),
-      <span class='kw'>InstanceInterruptionBehavior</span> <span class='kw'>=</span> <span class='st'>"hibernate"</span><span class='kw'>|</span><span class='st'>"stop"</span><span class='kw'>|</span><span class='st'>"terminate"</span>
-    )
-  ),
-  <span class='kw'>CreditSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CpuCredits</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>CpuOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CoreCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>ThreadsPerCore</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>CapacityReservationSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CapacityReservationPreference</span> <span class='kw'>=</span> <span class='st'>"open"</span><span class='kw'>|</span><span class='st'>"none"</span>,
-    <span class='kw'>CapacityReservationTarget</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CapacityReservationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>HibernationOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Configured</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>LicenseSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>LicenseConfigurationArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>MetadataOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>HttpTokens</span> <span class='kw'>=</span> <span class='st'>"optional"</span><span class='kw'>|</span><span class='st'>"required"</span>,
-    <span class='kw'>HttpPutResponseHopLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>HttpEndpoint</span> <span class='kw'>=</span> <span class='st'>"disabled"</span><span class='kw'>|</span><span class='st'>"enabled"</span>
-  )
-)</pre>
+      <span class='op'>)</span>,
+      InstanceInterruptionBehavior <span class='op'>=</span> <span class='st'>"hibernate"</span><span class='op'>|</span><span class='st'>"stop"</span><span class='op'>|</span><span class='st'>"terminate"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  CreditSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CpuCredits <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  CpuOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CoreCount <span class='op'>=</span> <span class='fl'>123</span>,
+    ThreadsPerCore <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  CapacityReservationSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CapacityReservationPreference <span class='op'>=</span> <span class='st'>"open"</span><span class='op'>|</span><span class='st'>"none"</span>,
+    CapacityReservationTarget <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CapacityReservationId <span class='op'>=</span> <span class='st'>"string"</span>,
+      CapacityReservationResourceGroupArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  HibernationOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Configured <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  LicenseSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      LicenseConfigurationArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MetadataOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    HttpTokens <span class='op'>=</span> <span class='st'>"optional"</span><span class='op'>|</span><span class='st'>"required"</span>,
+    HttpPutResponseHopLimit <span class='op'>=</span> <span class='fl'>123</span>,
+    HttpEndpoint <span class='op'>=</span> <span class='st'>"disabled"</span><span class='op'>|</span><span class='st'>"enabled"</span>
+  <span class='op'>)</span>,
+  EnclaveOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example launches an instance using the specified AMI, instance</span>
 <span class='co'># type, security group, subnet, block device mapping, and tags.</span>
-<span class='no'>svc</span>$<span class='fu'>run_instances</span>(
-  <span class='kw'>BlockDeviceMappings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DeviceName</span> <span class='kw'>=</span> <span class='st'>"/dev/sdh"</span>,
-      <span class='kw'>Ebs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>VolumeSize</span> <span class='kw'>=</span> <span class='fl'>100L</span>
-      )
-    )
-  ),
-  <span class='kw'>ImageId</span> <span class='kw'>=</span> <span class='st'>"ami-abc12345"</span>,
-  <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"t2.micro"</span>,
-  <span class='kw'>KeyName</span> <span class='kw'>=</span> <span class='st'>"my-key-pair"</span>,
-  <span class='kw'>MaxCount</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>MinCount</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>run_instances</span><span class='op'>(</span>
+  BlockDeviceMappings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DeviceName <span class='op'>=</span> <span class='st'>"/dev/sdh"</span>,
+      Ebs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        VolumeSize <span class='op'>=</span> <span class='fl'>100L</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ImageId <span class='op'>=</span> <span class='st'>"ami-abc12345"</span>,
+  InstanceType <span class='op'>=</span> <span class='st'>"t2.micro"</span>,
+  KeyName <span class='op'>=</span> <span class='st'>"my-key-pair"</span>,
+  MaxCount <span class='op'>=</span> <span class='fl'>1L</span>,
+  MinCount <span class='op'>=</span> <span class='fl'>1L</span>,
+  SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"sg-1a2b3c4d"</span>
-  ),
-  <span class='kw'>SubnetId</span> <span class='kw'>=</span> <span class='st'>"subnet-6e7f829e"</span>,
-  <span class='kw'>TagSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"instance"</span>,
-      <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Purpose"</span>,
-          <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"test"</span>
-        )
-      )
-    )
-  )
-)
-}</pre>
+  <span class='op'>)</span>,
+  SubnetId <span class='op'>=</span> <span class='st'>"subnet-6e7f829e"</span>,
+  TagSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ResourceType <span class='op'>=</span> <span class='st'>"instance"</span>,
+      Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Key <span class='op'>=</span> <span class='st'>"Purpose"</span>,
+          Value <span class='op'>=</span> <span class='st'>"test"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -658,7 +717,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

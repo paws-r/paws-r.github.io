@@ -43,7 +43,17 @@ for use with a VPC — ec2_authorize_security_group_egress • paws</title>
 <meta property="og:title" content="[VPC only] Adds the specified egress rules to a security group
 for use with a VPC — ec2_authorize_security_group_egress" />
 <meta property="og:description" content="[VPC only] Adds the specified egress rules to a security group for use
-with a VPC." />
+with a VPC.
+An outbound rule permits instances to send traffic to the specified IPv4
+or IPv6 CIDR address ranges, or to the instances associated with the
+specified destination security groups.
+You specify a protocol for each rule (for example, TCP). For the TCP and
+UDP protocols, you must also specify the destination port or port range.
+For the ICMP protocol, you must also specify the ICMP type and code. You
+can use -1 for the type or code to mean all types or all codes.
+Rule changes are propagated to affected instances as quickly as
+possible. However, a small delay might occur.
+For more information about VPC security group limits, see Amazon VPC Limits." />
 
 
 
@@ -75,7 +85,7 @@ with a VPC." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +93,7 @@ with a VPC." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +105,7 @@ with a VPC." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,11 +131,21 @@ for use with a VPC</h1>
     <div class="ref-description">
     <p>[VPC only] Adds the specified egress rules to a security group for use
 with a VPC.</p>
+<p>An outbound rule permits instances to send traffic to the specified IPv4
+or IPv6 CIDR address ranges, or to the instances associated with the
+specified destination security groups.</p>
+<p>You specify a protocol for each rule (for example, TCP). For the TCP and
+UDP protocols, you must also specify the destination port or port range.
+For the ICMP protocol, you must also specify the ICMP type and code. You
+can use -1 for the type or code to mean all types or all codes.</p>
+<p>Rule changes are propagated to affected instances as quickly as
+possible. However, a small delay might occur.</p>
+<p>For more information about VPC security group limits, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html'>Amazon VPC Limits</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_authorize_security_group_egress</span>(<span class='no'>DryRun</span>, <span class='no'>GroupId</span>, <span class='no'>IpPermissions</span>,
-  <span class='no'>CidrIp</span>, <span class='no'>FromPort</span>, <span class='no'>IpProtocol</span>, <span class='no'>ToPort</span>, <span class='no'>SourceSecurityGroupName</span>,
-  <span class='no'>SourceSecurityGroupOwnerId</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_authorize_security_group_egress</span><span class='op'>(</span><span class='va'>DryRun</span>, <span class='va'>GroupId</span>, <span class='va'>IpPermissions</span>,
+  <span class='va'>CidrIp</span>, <span class='va'>FromPort</span>, <span class='va'>IpProtocol</span>, <span class='va'>ToPort</span>, <span class='va'>SourceSecurityGroupName</span>,
+  <span class='va'>SourceSecurityGroupOwnerId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,7 +163,7 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     <tr>
       <th>IpPermissions</th>
-      <td><p>The sets of IP permissions. You can\'t specify a destination security
+      <td><p>The sets of IP permissions. You can't specify a destination security
 group and a CIDR IP address range in the same set of permissions.</p></td>
     </tr>
     <tr>
@@ -175,107 +195,98 @@ security group.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>An outbound rule permits instances to send traffic to the specified IPv4
-or IPv6 CIDR address ranges, or to the instances associated with the
-specified destination security groups.</p>
-<p>You specify a protocol for each rule (for example, TCP). For the TCP and
-UDP protocols, you must also specify the destination port or port range.
-For the ICMP protocol, you must also specify the ICMP type and code. You
-can use -1 for the type or code to mean all types or all codes.</p>
-<p>Rule changes are propagated to affected instances as quickly as
-possible. However, a small delay might occur.</p>
-<p>For more information about VPC security group limits, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html'>Amazon VPC Limits</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>authorize_security_group_egress</span>(
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>GroupId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IpPermissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>FromPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>IpProtocol</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>IpRanges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>CidrIp</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>Ipv6Ranges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>CidrIpv6</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>PrefixListIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>PrefixListId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>ToPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>UserIdGroupPairs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>GroupId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>GroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>PeeringStatus</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>UserId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>VpcId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>VpcPeeringConnectionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>CidrIp</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>FromPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>IpProtocol</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ToPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>SourceSecurityGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceSecurityGroupOwnerId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>authorize_security_group_egress</span><span class='op'>(</span>
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  GroupId <span class='op'>=</span> <span class='st'>"string"</span>,
+  IpPermissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      FromPort <span class='op'>=</span> <span class='fl'>123</span>,
+      IpProtocol <span class='op'>=</span> <span class='st'>"string"</span>,
+      IpRanges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          CidrIp <span class='op'>=</span> <span class='st'>"string"</span>,
+          Description <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      Ipv6Ranges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          CidrIpv6 <span class='op'>=</span> <span class='st'>"string"</span>,
+          Description <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      PrefixListIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Description <span class='op'>=</span> <span class='st'>"string"</span>,
+          PrefixListId <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      ToPort <span class='op'>=</span> <span class='fl'>123</span>,
+      UserIdGroupPairs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Description <span class='op'>=</span> <span class='st'>"string"</span>,
+          GroupId <span class='op'>=</span> <span class='st'>"string"</span>,
+          GroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+          PeeringStatus <span class='op'>=</span> <span class='st'>"string"</span>,
+          UserId <span class='op'>=</span> <span class='st'>"string"</span>,
+          VpcId <span class='op'>=</span> <span class='st'>"string"</span>,
+          VpcPeeringConnectionId <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  CidrIp <span class='op'>=</span> <span class='st'>"string"</span>,
+  FromPort <span class='op'>=</span> <span class='fl'>123</span>,
+  IpProtocol <span class='op'>=</span> <span class='st'>"string"</span>,
+  ToPort <span class='op'>=</span> <span class='fl'>123</span>,
+  SourceSecurityGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceSecurityGroupOwnerId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example adds a rule that grants access to the specified address</span>
 <span class='co'># ranges on TCP port 80.</span>
-<span class='no'>svc</span>$<span class='fu'>authorize_security_group_egress</span>(
-  <span class='kw'>GroupId</span> <span class='kw'>=</span> <span class='st'>"sg-1a2b3c4d"</span>,
-  <span class='kw'>IpPermissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>FromPort</span> <span class='kw'>=</span> <span class='fl'>80L</span>,
-      <span class='kw'>IpProtocol</span> <span class='kw'>=</span> <span class='st'>"tcp"</span>,
-      <span class='kw'>IpRanges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>CidrIp</span> <span class='kw'>=</span> <span class='st'>"10.0.0.0/16"</span>
-        )
-      ),
-      <span class='kw'>ToPort</span> <span class='kw'>=</span> <span class='fl'>80L</span>
-    )
-  )
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>authorize_security_group_egress</span><span class='op'>(</span>
+  GroupId <span class='op'>=</span> <span class='st'>"sg-1a2b3c4d"</span>,
+  IpPermissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      FromPort <span class='op'>=</span> <span class='fl'>80L</span>,
+      IpProtocol <span class='op'>=</span> <span class='st'>"tcp"</span>,
+      IpRanges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          CidrIp <span class='op'>=</span> <span class='st'>"10.0.0.0/16"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      ToPort <span class='op'>=</span> <span class='fl'>80L</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># This example adds a rule that grants access to the specified security</span>
 <span class='co'># group on TCP port 80.</span>
-<span class='no'>svc</span>$<span class='fu'>authorize_security_group_egress</span>(
-  <span class='kw'>GroupId</span> <span class='kw'>=</span> <span class='st'>"sg-1a2b3c4d"</span>,
-  <span class='kw'>IpPermissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>FromPort</span> <span class='kw'>=</span> <span class='fl'>80L</span>,
-      <span class='kw'>IpProtocol</span> <span class='kw'>=</span> <span class='st'>"tcp"</span>,
-      <span class='kw'>ToPort</span> <span class='kw'>=</span> <span class='fl'>80L</span>,
-      <span class='kw'>UserIdGroupPairs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>GroupId</span> <span class='kw'>=</span> <span class='st'>"sg-4b51a32f"</span>
-        )
-      )
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>authorize_security_group_egress</span><span class='op'>(</span>
+  GroupId <span class='op'>=</span> <span class='st'>"sg-1a2b3c4d"</span>,
+  IpPermissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      FromPort <span class='op'>=</span> <span class='fl'>80L</span>,
+      IpProtocol <span class='op'>=</span> <span class='st'>"tcp"</span>,
+      ToPort <span class='op'>=</span> <span class='fl'>80L</span>,
+      UserIdGroupPairs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          GroupId <span class='op'>=</span> <span class='st'>"sg-4b51a32f"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -291,7 +302,7 @@ possible. However, a small delay might occur.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

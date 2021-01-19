@@ -42,7 +42,23 @@
 <meta property="og:title" content="The CreateHIT operation creates a new Human Intelligence Task (HIT) — mturk_create_hit" />
 <meta property="og:description" content="The CreateHIT operation creates a new Human Intelligence Task (HIT).
 The new HIT is made available for Workers to find and accept on the
-Amazon Mechanical Turk website." />
+Amazon Mechanical Turk website.
+This operation allows you to specify a new HIT by passing in values for
+the properties of the HIT, such as its title, reward amount and number
+of assignments. When you pass these values to CreateHIT, a new HIT is
+created for you, with a new HITTypeID. The HITTypeID can be used to
+create additional HITs in the future without needing to specify common
+parameters such as the title, description and reward amount each time.
+An alternative way to create HITs is to first generate a HITTypeID using
+the CreateHITType operation and then call the CreateHITWithHITType
+operation. This is the recommended best practice for Requesters who are
+creating large numbers of HITs.
+CreateHIT also supports several ways to provide question data: by
+providing a value for the Question parameter that fully specifies the
+contents of the HIT, or by providing a HitLayoutId and associated
+HitLayoutParameters.
+If a HIT is created with 10 or more maximum assignments, there is an
+additional fee. For more information, see Amazon Mechanical Turk Pricing." />
 
 
 
@@ -74,7 +90,7 @@ Amazon Mechanical Turk website." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +98,7 @@ Amazon Mechanical Turk website." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +110,7 @@ Amazon Mechanical Turk website." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,13 +136,29 @@ Amazon Mechanical Turk website." />
     <p>The <code>CreateHIT</code> operation creates a new Human Intelligence Task (HIT).
 The new HIT is made available for Workers to find and accept on the
 Amazon Mechanical Turk website.</p>
+<p>This operation allows you to specify a new HIT by passing in values for
+the properties of the HIT, such as its title, reward amount and number
+of assignments. When you pass these values to <code>CreateHIT</code>, a new HIT is
+created for you, with a new <code>HITTypeID</code>. The HITTypeID can be used to
+create additional HITs in the future without needing to specify common
+parameters such as the title, description and reward amount each time.</p>
+<p>An alternative way to create HITs is to first generate a HITTypeID using
+the <code>CreateHITType</code> operation and then call the <code>CreateHITWithHITType</code>
+operation. This is the recommended best practice for Requesters who are
+creating large numbers of HITs.</p>
+<p>CreateHIT also supports several ways to provide question data: by
+providing a value for the <code>Question</code> parameter that fully specifies the
+contents of the HIT, or by providing a <code>HitLayoutId</code> and associated
+<code>HitLayoutParameters</code>.</p>
+<p>If a HIT is created with 10 or more maximum assignments, there is an
+additional fee. For more information, see <a href='https://requester.mturk.com/pricing'>Amazon Mechanical Turk Pricing</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mturk_create_hit</span>(<span class='no'>MaxAssignments</span>, <span class='no'>AutoApprovalDelayInSeconds</span>,
-  <span class='no'>LifetimeInSeconds</span>, <span class='no'>AssignmentDurationInSeconds</span>, <span class='no'>Reward</span>, <span class='no'>Title</span>, <span class='no'>Keywords</span>,
-  <span class='no'>Description</span>, <span class='no'>Question</span>, <span class='no'>RequesterAnnotation</span>, <span class='no'>QualificationRequirements</span>,
-  <span class='no'>UniqueRequestToken</span>, <span class='no'>AssignmentReviewPolicy</span>, <span class='no'>HITReviewPolicy</span>,
-  <span class='no'>HITLayoutId</span>, <span class='no'>HITLayoutParameters</span>)</pre>
+    <pre class="usage"><span class='fu'>mturk_create_hit</span><span class='op'>(</span><span class='va'>MaxAssignments</span>, <span class='va'>AutoApprovalDelayInSeconds</span>,
+  <span class='va'>LifetimeInSeconds</span>, <span class='va'>AssignmentDurationInSeconds</span>, <span class='va'>Reward</span>, <span class='va'>Title</span>, <span class='va'>Keywords</span>,
+  <span class='va'>Description</span>, <span class='va'>Question</span>, <span class='va'>RequesterAnnotation</span>, <span class='va'>QualificationRequirements</span>,
+  <span class='va'>UniqueRequestToken</span>, <span class='va'>AssignmentReviewPolicy</span>, <span class='va'>HITReviewPolicy</span>,
+  <span class='va'>HITLayoutId</span>, <span class='va'>HITLayoutParameters</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,7 +229,7 @@ whitespace.</p>
       <td><p>An arbitrary data field. The RequesterAnnotation parameter lets your
 application attach arbitrary data to the HIT for tracking purposes. For
 example, this parameter could be an identifier internal to the
-Requester\'s application that corresponds with the HIT.</p>
+Requester's application that corresponds with the HIT.</p>
 <p>The RequesterAnnotation parameter for a HIT is only visible to the
 Requester who created the HIT. It is not shown to the Worker, or any
 other Requester.</p>
@@ -206,7 +238,7 @@ submit. It does not affect how your HITs are grouped.</p></td>
     </tr>
     <tr>
       <th>QualificationRequirements</th>
-      <td><p>Conditions that a Worker\'s Qualifications must meet in order to accept
+      <td><p>Conditions that a Worker's Qualifications must meet in order to accept
 the HIT. A HIT can have between zero and ten Qualification requirements.
 All requirements must be met in order for a Worker to accept the HIT.
 Additionally, other actions can be restricted using the <code>ActionsGuarded</code>
@@ -253,102 +285,85 @@ information, see HITLayout.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation allows you to specify a new HIT by passing in values for
-the properties of the HIT, such as its title, reward amount and number
-of assignments. When you pass these values to <code>CreateHIT</code>, a new HIT is
-created for you, with a new <code>HITTypeID</code>. The HITTypeID can be used to
-create additional HITs in the future without needing to specify common
-parameters such as the title, description and reward amount each time.</p>
-<p>An alternative way to create HITs is to first generate a HITTypeID using
-the <code>CreateHITType</code> operation and then call the <code>CreateHITWithHITType</code>
-operation. This is the recommended best practice for Requesters who are
-creating large numbers of HITs.</p>
-<p>CreateHIT also supports several ways to provide question data: by
-providing a value for the <code>Question</code> parameter that fully specifies the
-contents of the HIT, or by providing a <code>HitLayoutId</code> and associated
-<code>HitLayoutParameters</code>.</p>
-<p>If a HIT is created with 10 or more maximum assignments, there is an
-additional fee. For more information, see <a href='https://requester.mturk.com/pricing'>Amazon Mechanical Turk Pricing</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_hit</span>(
-  <span class='kw'>MaxAssignments</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>AutoApprovalDelayInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>LifetimeInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>AssignmentDurationInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Reward</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Title</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Keywords</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Question</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RequesterAnnotation</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>QualificationRequirements</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>QualificationTypeId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Comparator</span> <span class='kw'>=</span> <span class='st'>"LessThan"</span><span class='kw'>|</span><span class='st'>"LessThanOrEqualTo"</span><span class='kw'>|</span><span class='st'>"GreaterThan"</span><span class='kw'>|</span><span class='st'>"GreaterThanOrEqualTo"</span><span class='kw'>|</span><span class='st'>"EqualTo"</span><span class='kw'>|</span><span class='st'>"NotEqualTo"</span><span class='kw'>|</span><span class='st'>"Exists"</span><span class='kw'>|</span><span class='st'>"DoesNotExist"</span><span class='kw'>|</span><span class='st'>"In"</span><span class='kw'>|</span><span class='st'>"NotIn"</span>,
-      <span class='kw'>IntegerValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_hit</span><span class='op'>(</span>
+  MaxAssignments <span class='op'>=</span> <span class='fl'>123</span>,
+  AutoApprovalDelayInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  LifetimeInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  AssignmentDurationInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  Reward <span class='op'>=</span> <span class='st'>"string"</span>,
+  Title <span class='op'>=</span> <span class='st'>"string"</span>,
+  Keywords <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Question <span class='op'>=</span> <span class='st'>"string"</span>,
+  RequesterAnnotation <span class='op'>=</span> <span class='st'>"string"</span>,
+  QualificationRequirements <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      QualificationTypeId <span class='op'>=</span> <span class='st'>"string"</span>,
+      Comparator <span class='op'>=</span> <span class='st'>"LessThan"</span><span class='op'>|</span><span class='st'>"LessThanOrEqualTo"</span><span class='op'>|</span><span class='st'>"GreaterThan"</span><span class='op'>|</span><span class='st'>"GreaterThanOrEqualTo"</span><span class='op'>|</span><span class='st'>"EqualTo"</span><span class='op'>|</span><span class='st'>"NotEqualTo"</span><span class='op'>|</span><span class='st'>"Exists"</span><span class='op'>|</span><span class='st'>"DoesNotExist"</span><span class='op'>|</span><span class='st'>"In"</span><span class='op'>|</span><span class='st'>"NotIn"</span>,
+      IntegerValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='fl'>123</span>
-      ),
-      <span class='kw'>LocaleValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Country</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Subdivision</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>RequiredToPreview</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>ActionsGuarded</span> <span class='kw'>=</span> <span class='st'>"Accept"</span><span class='kw'>|</span><span class='st'>"PreviewAndAccept"</span><span class='kw'>|</span><span class='st'>"DiscoverPreviewAndAccept"</span>
-    )
-  ),
-  <span class='kw'>UniqueRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AssignmentReviewPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>PolicyName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      LocaleValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Country <span class='op'>=</span> <span class='st'>"string"</span>,
+          Subdivision <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      RequiredToPreview <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      ActionsGuarded <span class='op'>=</span> <span class='st'>"Accept"</span><span class='op'>|</span><span class='st'>"PreviewAndAccept"</span><span class='op'>|</span><span class='st'>"DiscoverPreviewAndAccept"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  UniqueRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  AssignmentReviewPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    PolicyName <span class='op'>=</span> <span class='st'>"string"</span>,
+    Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Key <span class='op'>=</span> <span class='st'>"string"</span>,
+        Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>MapEntries</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        MapEntries <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Key <span class='op'>=</span> <span class='st'>"string"</span>,
+            Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            )
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>HITReviewPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>PolicyName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  HITReviewPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    PolicyName <span class='op'>=</span> <span class='st'>"string"</span>,
+    Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Key <span class='op'>=</span> <span class='st'>"string"</span>,
+        Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>MapEntries</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        MapEntries <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Key <span class='op'>=</span> <span class='st'>"string"</span>,
+            Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            )
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>HITLayoutId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HITLayoutParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  HITLayoutId <span class='op'>=</span> <span class='st'>"string"</span>,
+  HITLayoutParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -366,7 +381,7 @@ additional fee. For more information, see <a href='https://requester.mturk.com/p
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

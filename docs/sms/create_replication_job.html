@@ -74,7 +74,7 @@ creates an Amazon Machine Image (AMI)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ creates an Amazon Machine Image (AMI)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@ creates an Amazon Machine Image (AMI)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,16 +122,16 @@ replication runs to replicate your server to AWS. Each replication run
 creates an Amazon Machine Image (AMI).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sms_create_replication_job</span>(<span class='no'>serverId</span>, <span class='no'>seedReplicationTime</span>, <span class='no'>frequency</span>,
-  <span class='no'>runOnce</span>, <span class='no'>licenseType</span>, <span class='no'>roleName</span>, <span class='no'>description</span>, <span class='no'>numberOfRecentAmisToKeep</span>,
-  <span class='no'>encrypted</span>, <span class='no'>kmsKeyId</span>)</pre>
+    <pre class="usage"><span class='fu'>sms_create_replication_job</span><span class='op'>(</span><span class='va'>serverId</span>, <span class='va'>seedReplicationTime</span>, <span class='va'>frequency</span>,
+  <span class='va'>runOnce</span>, <span class='va'>licenseType</span>, <span class='va'>roleName</span>, <span class='va'>description</span>, <span class='va'>numberOfRecentAmisToKeep</span>,
+  <span class='va'>encrypted</span>, <span class='va'>kmsKeyId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>serverId</th>
-      <td><p>[required] The identifier of the server.</p></td>
+      <td><p>[required] The ID of the server.</p></td>
     </tr>
     <tr>
       <th>seedReplicationTime</th>
@@ -143,7 +143,7 @@ creates an Amazon Machine Image (AMI).</p>
     </tr>
     <tr>
       <th>runOnce</th>
-      <td></td>
+      <td><p>Indicates whether to run the replication job one time.</p></td>
     </tr>
     <tr>
       <th>licenseType</th>
@@ -160,46 +160,46 @@ replication run.</p></td>
     </tr>
     <tr>
       <th>numberOfRecentAmisToKeep</th>
-      <td><p>The maximum number of SMS-created AMIs to retain. The oldest will be
-deleted once the maximum number is reached and a new AMI is created.</p></td>
+      <td><p>The maximum number of SMS-created AMIs to retain. The oldest is deleted
+after the maximum number is reached and a new AMI is created.</p></td>
     </tr>
     <tr>
       <th>encrypted</th>
-      <td><p>When <em>true</em>, the replication job produces encrypted AMIs. See also
-<code>KmsKeyId</code> below.</p></td>
+      <td><p>Indicates whether the replication job produces encrypted AMIs.</p></td>
     </tr>
     <tr>
       <th>kmsKeyId</th>
-      <td><p>KMS key ID for replication jobs that produce encrypted AMIs. Can be any
-of the following:</p><ul>
+      <td><p>The ID of the KMS key for replication jobs that produce encrypted AMIs.
+This value can be any of the following:</p><ul>
 <li><p>KMS key ID</p></li>
 <li><p>KMS key alias</p></li>
-<li><p>ARN referring to KMS key ID</p></li>
-<li><p>ARN referring to KMS key alias</p></li>
+<li><p>ARN referring to the KMS key ID</p></li>
+<li><p>ARN referring to the KMS key alias</p></li>
 </ul>
 
-<p>If encrypted is <em>true</em> but a KMS key id is not specified, the
-customer\'s default KMS key for EBS is used.</p></td>
+<p>If encrypted is <em>true</em> but a KMS key ID is not specified, the customer's
+default KMS key for Amazon EBS is used.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_replication_job</span>(
-  <span class='kw'>serverId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>seedReplicationTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_replication_job</span><span class='op'>(</span>
+  serverId <span class='op'>=</span> <span class='st'>"string"</span>,
+  seedReplicationTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>frequency</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>runOnce</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>licenseType</span> <span class='kw'>=</span> <span class='st'>"AWS"</span><span class='kw'>|</span><span class='st'>"BYOL"</span>,
-  <span class='kw'>roleName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>numberOfRecentAmisToKeep</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>encrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>kmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  frequency <span class='op'>=</span> <span class='fl'>123</span>,
+  runOnce <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  licenseType <span class='op'>=</span> <span class='st'>"AWS"</span><span class='op'>|</span><span class='st'>"BYOL"</span>,
+  roleName <span class='op'>=</span> <span class='st'>"string"</span>,
+  description <span class='op'>=</span> <span class='st'>"string"</span>,
+  numberOfRecentAmisToKeep <span class='op'>=</span> <span class='fl'>123</span>,
+  encrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  kmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -217,7 +217,7 @@ customer\'s default KMS key for EBS is used.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

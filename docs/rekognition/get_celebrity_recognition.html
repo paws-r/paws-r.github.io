@@ -43,7 +43,44 @@ analysis started by StartCelebrityRecognition — rekognition_get_celebrity_reco
 <meta property="og:title" content="Gets the celebrity recognition results for a Amazon Rekognition Video
 analysis started by StartCelebrityRecognition — rekognition_get_celebrity_recognition" />
 <meta property="og:description" content="Gets the celebrity recognition results for a Amazon Rekognition Video
-analysis started by StartCelebrityRecognition." />
+analysis started by StartCelebrityRecognition.
+Celebrity recognition in a video is an asynchronous operation. Analysis
+is started by a call to StartCelebrityRecognition which returns a job
+identifier (JobId). When the celebrity recognition operation finishes,
+Amazon Rekognition Video publishes a completion status to the Amazon
+Simple Notification Service topic registered in the initial call to
+StartCelebrityRecognition. To get the results of the celebrity
+recognition analysis, first check that the status value published to the
+Amazon SNS topic is SUCCEEDED. If so, call GetCelebrityDetection and
+pass the job identifier (JobId) from the initial call to
+StartCelebrityDetection.
+For more information, see Working With Stored Videos in the Amazon
+Rekognition Developer Guide.
+GetCelebrityRecognition returns detected celebrities and the time(s)
+they are detected in an array (Celebrities) of CelebrityRecognition
+objects. Each CelebrityRecognition contains information about the
+celebrity in a CelebrityDetail object and the time, Timestamp, the
+celebrity was detected.
+GetCelebrityRecognition only returns the default facial attributes
+(BoundingBox, Confidence, Landmarks, Pose, and Quality). The
+other facial attributes listed in the Face object of the following
+response syntax are not returned. For more information, see FaceDetail
+in the Amazon Rekognition Developer Guide.
+By default, the Celebrities array is sorted by time (milliseconds from
+the start of the video). You can also sort the array by celebrity by
+specifying the value ID in the SortBy input parameter.
+The CelebrityDetail object includes the celebrity identifer and
+additional information urls. If you don't store the additional
+information urls, you can get them later by calling GetCelebrityInfo
+with the celebrity identifer.
+No information is returned for faces not recognized as celebrities.
+Use MaxResults parameter to limit the number of labels returned. If
+there are more results than specified in MaxResults, the value of
+NextToken in the operation response contains a pagination token for
+getting the next set of results. To get the next page of results, call
+GetCelebrityDetection and populate the NextToken request parameter
+with the token value returned from the previous call to
+GetCelebrityRecognition." />
 
 
 
@@ -75,7 +112,7 @@ analysis started by StartCelebrityRecognition." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +120,7 @@ analysis started by StartCelebrityRecognition." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +132,7 @@ analysis started by StartCelebrityRecognition." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +158,47 @@ analysis started by StartCelebrityRecognition</h1>
     <div class="ref-description">
     <p>Gets the celebrity recognition results for a Amazon Rekognition Video
 analysis started by StartCelebrityRecognition.</p>
+<p>Celebrity recognition in a video is an asynchronous operation. Analysis
+is started by a call to StartCelebrityRecognition which returns a job
+identifier (<code>JobId</code>). When the celebrity recognition operation finishes,
+Amazon Rekognition Video publishes a completion status to the Amazon
+Simple Notification Service topic registered in the initial call to
+<code>StartCelebrityRecognition</code>. To get the results of the celebrity
+recognition analysis, first check that the status value published to the
+Amazon SNS topic is <code>SUCCEEDED</code>. If so, call <code>GetCelebrityDetection</code> and
+pass the job identifier (<code>JobId</code>) from the initial call to
+<code>StartCelebrityDetection</code>.</p>
+<p>For more information, see Working With Stored Videos in the Amazon
+Rekognition Developer Guide.</p>
+<p><code>GetCelebrityRecognition</code> returns detected celebrities and the time(s)
+they are detected in an array (<code>Celebrities</code>) of CelebrityRecognition
+objects. Each <code>CelebrityRecognition</code> contains information about the
+celebrity in a CelebrityDetail object and the time, <code>Timestamp</code>, the
+celebrity was detected.</p>
+<p><code>GetCelebrityRecognition</code> only returns the default facial attributes
+(<code>BoundingBox</code>, <code>Confidence</code>, <code>Landmarks</code>, <code>Pose</code>, and <code>Quality</code>). The
+other facial attributes listed in the <code>Face</code> object of the following
+response syntax are not returned. For more information, see FaceDetail
+in the Amazon Rekognition Developer Guide.</p>
+<p>By default, the <code>Celebrities</code> array is sorted by time (milliseconds from
+the start of the video). You can also sort the array by celebrity by
+specifying the value <code>ID</code> in the <code>SortBy</code> input parameter.</p>
+<p>The <code>CelebrityDetail</code> object includes the celebrity identifer and
+additional information urls. If you don't store the additional
+information urls, you can get them later by calling GetCelebrityInfo
+with the celebrity identifer.</p>
+<p>No information is returned for faces not recognized as celebrities.</p>
+<p>Use MaxResults parameter to limit the number of labels returned. If
+there are more results than specified in <code>MaxResults</code>, the value of
+<code>NextToken</code> in the operation response contains a pagination token for
+getting the next set of results. To get the next page of results, call
+<code>GetCelebrityDetection</code> and populate the <code>NextToken</code> request parameter
+with the token value returned from the previous call to
+<code>GetCelebrityRecognition</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_get_celebrity_recognition</span>(<span class='no'>JobId</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>,
-  <span class='no'>SortBy</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_get_celebrity_recognition</span><span class='op'>(</span><span class='va'>JobId</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span>,
+  <span class='va'>SortBy</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,54 +229,16 @@ the time the celebrity was recognized.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Celebrity recognition in a video is an asynchronous operation. Analysis
-is started by a call to StartCelebrityRecognition which returns a job
-identifier (<code>JobId</code>). When the celebrity recognition operation finishes,
-Amazon Rekognition Video publishes a completion status to the Amazon
-Simple Notification Service topic registered in the initial call to
-<code>StartCelebrityRecognition</code>. To get the results of the celebrity
-recognition analysis, first check that the status value published to the
-Amazon SNS topic is <code>SUCCEEDED</code>. If so, call <code>GetCelebrityDetection</code> and
-pass the job identifier (<code>JobId</code>) from the initial call to
-<code>StartCelebrityDetection</code>.</p>
-<p>For more information, see Working With Stored Videos in the Amazon
-Rekognition Developer Guide.</p>
-<p><code>GetCelebrityRecognition</code> returns detected celebrities and the time(s)
-they are detected in an array (<code>Celebrities</code>) of CelebrityRecognition
-objects. Each <code>CelebrityRecognition</code> contains information about the
-celebrity in a CelebrityDetail object and the time, <code>Timestamp</code>, the
-celebrity was detected.</p>
-<p><code>GetCelebrityRecognition</code> only returns the default facial attributes
-(<code>BoundingBox</code>, <code>Confidence</code>, <code>Landmarks</code>, <code>Pose</code>, and <code>Quality</code>). The
-other facial attributes listed in the <code>Face</code> object of the following
-response syntax are not returned. For more information, see FaceDetail
-in the Amazon Rekognition Developer Guide.</p>
-<p>By default, the <code>Celebrities</code> array is sorted by time (milliseconds from
-the start of the video). You can also sort the array by celebrity by
-specifying the value <code>ID</code> in the <code>SortBy</code> input parameter.</p>
-<p>The <code>CelebrityDetail</code> object includes the celebrity identifer and
-additional information urls. If you don\'t store the additional
-information urls, you can get them later by calling GetCelebrityInfo
-with the celebrity identifer.</p>
-<p>No information is returned for faces not recognized as celebrities.</p>
-<p>Use MaxResults parameter to limit the number of labels returned. If
-there are more results than specified in <code>MaxResults</code>, the value of
-<code>NextToken</code> in the operation response contains a pagination token for
-getting the next set of results. To get the next page of results, call
-<code>GetCelebrityDetection</code> and populate the <code>NextToken</code> request parameter
-with the token value returned from the previous call to
-<code>GetCelebrityRecognition</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_celebrity_recognition</span>(
-  <span class='kw'>JobId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SortBy</span> <span class='kw'>=</span> <span class='st'>"ID"</span><span class='kw'>|</span><span class='st'>"TIMESTAMP"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_celebrity_recognition</span><span class='op'>(</span>
+  JobId <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  SortBy <span class='op'>=</span> <span class='st'>"ID"</span><span class='op'>|</span><span class='st'>"TIMESTAMP"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -220,7 +256,7 @@ with the token value returned from the previous call to
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

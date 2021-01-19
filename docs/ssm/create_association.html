@@ -86,7 +86,7 @@ start the service." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@ start the service." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@ start the service." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -145,10 +145,11 @@ is not running, then the association might instruct State Manager to
 start the service.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_create_association</span>(<span class='no'>Name</span>, <span class='no'>DocumentVersion</span>, <span class='no'>InstanceId</span>, <span class='no'>Parameters</span>,
-  <span class='no'>Targets</span>, <span class='no'>ScheduleExpression</span>, <span class='no'>OutputLocation</span>, <span class='no'>AssociationName</span>,
-  <span class='no'>AutomationTargetParameterName</span>, <span class='no'>MaxErrors</span>, <span class='no'>MaxConcurrency</span>,
-  <span class='no'>ComplianceSeverity</span>, <span class='no'>SyncCompliance</span>, <span class='no'>ApplyOnlyAtCronInterval</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_create_association</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>DocumentVersion</span>, <span class='va'>InstanceId</span>, <span class='va'>Parameters</span>,
+  <span class='va'>Targets</span>, <span class='va'>ScheduleExpression</span>, <span class='va'>OutputLocation</span>, <span class='va'>AssociationName</span>,
+  <span class='va'>AutomationTargetParameterName</span>, <span class='va'>MaxErrors</span>, <span class='va'>MaxConcurrency</span>,
+  <span class='va'>ComplianceSeverity</span>, <span class='va'>SyncCompliance</span>, <span class='va'>ApplyOnlyAtCronInterval</span>,
+  <span class='va'>TargetLocations</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -228,7 +229,7 @@ to 10%, then the system stops sending the request when the sixth error
 is received.</p>
 <p>Executions that are already running an association when MaxErrors is
 reached are allowed to complete, but some of these executions may fail
-as well. If you need to ensure that there won\'t be more than max-errors
+as well. If you need to ensure that there won't be more than max-errors
 failed executions, set MaxConcurrency to 1 so that executions proceed
 one at a time.</p></td>
     </tr>
@@ -254,7 +255,7 @@ MaxConcurrency.</p></td>
 or <code>MANUAL</code>. In <code>AUTO</code> mode, the system uses the status of the
 association execution to determine the compliance status. If the
 association execution runs successfully, then the association is
-<code>COMPLIANT</code>. If the association execution doesn\'t run successfully, the
+<code>COMPLIANT</code>. If the association execution doesn't run successfully, the
 association is <code>NON-COMPLIANT</code>.</p>
 <p>In <code>MANUAL</code> mode, you must specify the <code>AssociationId</code> as a parameter
 for the PutComplianceItems API action. In this case, compliance data is
@@ -266,47 +267,68 @@ PutComplianceItems API action.</p>
       <th>ApplyOnlyAtCronInterval</th>
       <td><p>By default, when you create a new associations, the system runs it
 immediately after it is created and then according to the schedule you
-specified. Specify this option if you don\'t want an association to run
-immediately after you create it.</p></td>
+specified. Specify this option if you don't want an association to run
+immediately after you create it. This parameter is not supported for
+rate expressions.</p></td>
+    </tr>
+    <tr>
+      <th>TargetLocations</th>
+      <td><p>A location is a combination of AWS Regions and AWS accounts where you
+want to run the association. Use this action to create an association in
+multiple Regions and multiple accounts.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_association</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DocumentVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InstanceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_association</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  DocumentVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  InstanceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Targets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>ScheduleExpression</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OutputLocation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Location</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>OutputS3Region</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>OutputS3BucketName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>OutputS3KeyPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>AssociationName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AutomationTargetParameterName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxErrors</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxConcurrency</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ComplianceSeverity</span> <span class='kw'>=</span> <span class='st'>"CRITICAL"</span><span class='kw'>|</span><span class='st'>"HIGH"</span><span class='kw'>|</span><span class='st'>"MEDIUM"</span><span class='kw'>|</span><span class='st'>"LOW"</span><span class='kw'>|</span><span class='st'>"UNSPECIFIED"</span>,
-  <span class='kw'>SyncCompliance</span> <span class='kw'>=</span> <span class='st'>"AUTO"</span><span class='kw'>|</span><span class='st'>"MANUAL"</span>,
-  <span class='kw'>ApplyOnlyAtCronInterval</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ScheduleExpression <span class='op'>=</span> <span class='st'>"string"</span>,
+  OutputLocation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      OutputS3Region <span class='op'>=</span> <span class='st'>"string"</span>,
+      OutputS3BucketName <span class='op'>=</span> <span class='st'>"string"</span>,
+      OutputS3KeyPrefix <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  AssociationName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AutomationTargetParameterName <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxErrors <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxConcurrency <span class='op'>=</span> <span class='st'>"string"</span>,
+  ComplianceSeverity <span class='op'>=</span> <span class='st'>"CRITICAL"</span><span class='op'>|</span><span class='st'>"HIGH"</span><span class='op'>|</span><span class='st'>"MEDIUM"</span><span class='op'>|</span><span class='st'>"LOW"</span><span class='op'>|</span><span class='st'>"UNSPECIFIED"</span>,
+  SyncCompliance <span class='op'>=</span> <span class='st'>"AUTO"</span><span class='op'>|</span><span class='st'>"MANUAL"</span>,
+  ApplyOnlyAtCronInterval <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  TargetLocations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Accounts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      Regions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      TargetLocationMaxConcurrency <span class='op'>=</span> <span class='st'>"string"</span>,
+      TargetLocationMaxErrors <span class='op'>=</span> <span class='st'>"string"</span>,
+      ExecutionRoleName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -324,7 +346,7 @@ immediately after you create it.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

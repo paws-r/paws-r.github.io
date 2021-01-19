@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,8 +118,8 @@
     <p>Creates a data store, which is a repository for messages.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iotanalytics_create_datastore</span>(<span class='no'>datastoreName</span>, <span class='no'>datastoreStorage</span>,
-  <span class='no'>retentionPeriod</span>, <span class='no'>tags</span>)</pre>
+    <pre class="usage"><span class='fu'>iotanalytics_create_datastore</span><span class='op'>(</span><span class='va'>datastoreName</span>, <span class='va'>datastoreStorage</span>,
+  <span class='va'>retentionPeriod</span>, <span class='va'>tags</span>, <span class='va'>fileFormatConfiguration</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,46 +130,68 @@
     </tr>
     <tr>
       <th>datastoreStorage</th>
-      <td><p>Where data store data is stored. You may choose one of
-\"serviceManagedS3\" or \"customerManagedS3\" storage. If not specified,
-the default is \"serviceManagedS3\". This cannot be changed after the
-data store is created.</p></td>
+      <td><p>Where data store data is stored. You can choose one of
+<code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the
+default is <code>serviceManagedS3</code>. You cannot change this storage option
+after the data store is created.</p></td>
     </tr>
     <tr>
       <th>retentionPeriod</th>
       <td><p>How long, in days, message data is kept for the data store. When
-\"customerManagedS3\" storage is selected, this parameter is ignored.</p></td>
+<code>customerManagedS3</code> storage is selected, this parameter is ignored.</p></td>
     </tr>
     <tr>
       <th>tags</th>
       <td><p>Metadata which can be used to manage the data store.</p></td>
+    </tr>
+    <tr>
+      <th>fileFormatConfiguration</th>
+      <td><p>Contains the configuration information of file formats. AWS IoT
+Analytics data stores support JSON and
+<a href='https://parquet.apache.org/'>Parquet</a>.</p>
+<p>The default file format is JSON. You can specify only one format.</p>
+<p>You can't change the file format after you create the data store.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_datastore</span>(
-  <span class='kw'>datastoreName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>datastoreStorage</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>serviceManagedS3</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>customerManagedS3</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>keyPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>roleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>retentionPeriod</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>unlimited</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>numberOfDays</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_datastore</span><span class='op'>(</span>
+  datastoreName <span class='op'>=</span> <span class='st'>"string"</span>,
+  datastoreStorage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    serviceManagedS3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    customerManagedS3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+      keyPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      roleArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  retentionPeriod <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    unlimited <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    numberOfDays <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  fileFormatConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    jsonConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    parquetConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      schemaDefinition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        columns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            name <span class='op'>=</span> <span class='st'>"string"</span>,
+            type <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -187,7 +209,7 @@ data store is created.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

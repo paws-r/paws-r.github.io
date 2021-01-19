@@ -40,7 +40,18 @@
 
 
 <meta property="og:title" content="Creates a custom slot type or replaces an existing custom slot type — lexmodelbuildingservice_put_slot_type" />
-<meta property="og:description" content="Creates a custom slot type or replaces an existing custom slot type." />
+<meta property="og:description" content="Creates a custom slot type or replaces an existing custom slot type.
+To create a custom slot type, specify a name for the slot type and a set
+of enumeration values, which are the values that a slot of this type can
+assume. For more information, see how-it-works.
+If you specify the name of an existing slot type, the fields in the
+request replace the existing values in the $LATEST version of the slot
+type. Amazon Lex removes the fields that you don't provide in the
+request. If you don't specify required fields, Amazon Lex throws an
+exception. When you update the $LATEST version of a slot type, if a
+bot uses the $LATEST version of an intent that contains the slot type,
+the bot's status field is set to NOT_BUILT.
+This operation requires permissions for the lex:PutSlotType action." />
 
 
 
@@ -72,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +91,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +103,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +127,22 @@
 
     <div class="ref-description">
     <p>Creates a custom slot type or replaces an existing custom slot type.</p>
+<p>To create a custom slot type, specify a name for the slot type and a set
+of enumeration values, which are the values that a slot of this type can
+assume. For more information, see how-it-works.</p>
+<p>If you specify the name of an existing slot type, the fields in the
+request replace the existing values in the <code>$LATEST</code> version of the slot
+type. Amazon Lex removes the fields that you don't provide in the
+request. If you don't specify required fields, Amazon Lex throws an
+exception. When you update the <code>$LATEST</code> version of a slot type, if a
+bot uses the <code>$LATEST</code> version of an intent that contains the slot type,
+the bot's <code>status</code> field is set to <code>NOT_BUILT</code>.</p>
+<p>This operation requires permissions for the <code>lex:PutSlotType</code> action.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lexmodelbuildingservice_put_slot_type</span>(<span class='no'>name</span>, <span class='no'>description</span>,
-  <span class='no'>enumerationValues</span>, <span class='no'>checksum</span>, <span class='no'>valueSelectionStrategy</span>, <span class='no'>createVersion</span>,
-  <span class='no'>parentSlotTypeSignature</span>, <span class='no'>slotTypeConfigurations</span>)</pre>
+    <pre class="usage"><span class='fu'>lexmodelbuildingservice_put_slot_type</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>description</span>,
+  <span class='va'>enumerationValues</span>, <span class='va'>checksum</span>, <span class='va'>valueSelectionStrategy</span>, <span class='va'>createVersion</span>,
+  <span class='va'>parentSlotTypeSignature</span>, <span class='va'>slotTypeConfigurations</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -128,11 +150,11 @@
     <tr>
       <th>name</th>
       <td><p>[required] The name of the slot type. The name is <em>not</em> case sensitive.</p>
-<p>The name can\'t match a built-in slot type name, or a built-in slot type
-name with \"AMAZON.\" removed. For example, because there is a built-in
-slot type called <code>AMAZON.DATE</code>, you can\'t create a custom slot type
+<p>The name can't match a built-in slot type name, or a built-in slot type
+name with "AMAZON." removed. For example, because there is a built-in
+slot type called <code>AMAZON.DATE</code>, you can't create a custom slot type
 called <code>DATE</code>.</p>
-<p>For a list of built-in slot types, see <a href='https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference'>Slot Type Reference</a>
+<p>For a list of built-in slot types, see <a href='https://developer.amazon.com/en-US/docs/alexa/custom-skills/slot-type-reference.html'>Slot Type Reference</a>
 in the <em>Alexa Skills Kit</em>.</p></td>
     </tr>
     <tr>
@@ -145,6 +167,8 @@ in the <em>Alexa Skills Kit</em>.</p></td>
 slot type can take. Each value can have a list of <code>synonyms</code>, which are
 additional values that help train the machine learning model about the
 values that it resolves for a slot.</p>
+<p>A regular expression slot type doesn't require enumeration values. All
+other slot types require a list of enumeration values.</p>
 <p>When Amazon Lex resolves a slot value, it generates a resolution list
 that contains up to five possible values for the slot. If you are using
 a Lambda function, this resolution list is passed to the function. If
@@ -160,7 +184,7 @@ use.</p></td>
 you specify a checksum you get a <code>BadRequestException</code> exception.</p>
 <p>When you want to update a slot type, set the <code>checksum</code> field to the
 checksum of the most recent revision of the <code>$LATEST</code> version. If you
-don\'t specify the <code> checksum</code> field, or if the checksum does not match
+don't specify the <code> checksum</code> field, or if the checksum does not match
 the <code>$LATEST</code> version, you get a <code>PreconditionFailedException</code>
 exception.</p></td>
     </tr>
@@ -175,7 +199,7 @@ return the first value in the resolution list as the slot type
 value. If there is no resolution list, null is returned.</p></li>
 </ul>
 
-<p>If you don\'t specify the <code>valueSelectionStrategy</code>, the default is
+<p>If you don't specify the <code>valueSelectionStrategy</code>, the default is
 <code>ORIGINAL_VALUE</code>.</p></td>
     </tr>
     <tr>
@@ -198,64 +222,54 @@ The configuration is added to the settings for the parent slot type.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To create a custom slot type, specify a name for the slot type and a set
-of enumeration values, which are the values that a slot of this type can
-assume. For more information, see how-it-works.</p>
-<p>If you specify the name of an existing slot type, the fields in the
-request replace the existing values in the <code>$LATEST</code> version of the slot
-type. Amazon Lex removes the fields that you don\'t provide in the
-request. If you don\'t specify required fields, Amazon Lex throws an
-exception. When you update the <code>$LATEST</code> version of a slot type, if a
-bot uses the <code>$LATEST</code> version of an intent that contains the slot type,
-the bot\'s <code>status</code> field is set to <code>NOT_BUILT</code>.</p>
-<p>This operation requires permissions for the <code>lex:PutSlotType</code> action.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_slot_type</span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>enumerationValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>synonyms</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_slot_type</span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"string"</span>,
+  description <span class='op'>=</span> <span class='st'>"string"</span>,
+  enumerationValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      value <span class='op'>=</span> <span class='st'>"string"</span>,
+      synonyms <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>checksum</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>valueSelectionStrategy</span> <span class='kw'>=</span> <span class='st'>"ORIGINAL_VALUE"</span><span class='kw'>|</span><span class='st'>"TOP_RESOLUTION"</span>,
-  <span class='kw'>createVersion</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>parentSlotTypeSignature</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>slotTypeConfigurations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>regexConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  )
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  checksum <span class='op'>=</span> <span class='st'>"string"</span>,
+  valueSelectionStrategy <span class='op'>=</span> <span class='st'>"ORIGINAL_VALUE"</span><span class='op'>|</span><span class='st'>"TOP_RESOLUTION"</span>,
+  createVersion <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  parentSlotTypeSignature <span class='op'>=</span> <span class='st'>"string"</span>,
+  slotTypeConfigurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      regexConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        pattern <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example shows how to create a slot type that describes pizza</span>
 <span class='co'># sauces.</span>
-<span class='no'>svc</span>$<span class='fu'>put_slot_type</span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"PizzaSauceType"</span>,
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"Available pizza sauces"</span>,
-  <span class='kw'>enumerationValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"red"</span>
-    ),
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"white"</span>
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_slot_type</span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"PizzaSauceType"</span>,
+  description <span class='op'>=</span> <span class='st'>"Available pizza sauces"</span>,
+  enumerationValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      value <span class='op'>=</span> <span class='st'>"red"</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      value <span class='op'>=</span> <span class='st'>"white"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -271,7 +285,7 @@ the bot\'s <code>status</code> field is set to <code>NOT_BUILT</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -47,7 +47,17 @@ zones — route53_list_hosted_zones_by_vpc" />
 <meta property="og:description" content="Lists all the private hosted zones that a specified VPC is associated
 with, regardless of which AWS account or AWS service owns the hosted
 zones. The HostedZoneOwner structure in the response contains one of
-the following values:" />
+the following values:
+An OwningAccount element, which contains the account number of
+either the current AWS account or another AWS account. Some
+services, such as AWS Cloud Map, create hosted zones using the
+current account.
+An OwningService element, which identifies the AWS service that
+created and owns the hosted zone. For example, if a hosted zone was
+created by Amazon Elastic File System (Amazon EFS), the value of
+Owner is efs.amazonaws.com.
+
+" />
 
 
 
@@ -79,7 +89,7 @@ the following values:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +97,7 @@ the following values:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +109,7 @@ the following values:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,10 +137,20 @@ zones</h1>
     <p>Lists all the private hosted zones that a specified VPC is associated
 with, regardless of which AWS account or AWS service owns the hosted
 zones. The <code>HostedZoneOwner</code> structure in the response contains one of
-the following values:</p>
+the following values:</p><ul>
+<li><p>An <code>OwningAccount</code> element, which contains the account number of
+either the current AWS account or another AWS account. Some
+services, such as AWS Cloud Map, create hosted zones using the
+current account.</p></li>
+<li><p>An <code>OwningService</code> element, which identifies the AWS service that
+created and owns the hosted zone. For example, if a hosted zone was
+created by Amazon Elastic File System (Amazon EFS), the value of
+<code>Owner</code> is <code>efs.amazonaws.com</code>.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>route53_list_hosted_zones_by_vpc</span>(<span class='no'>VPCId</span>, <span class='no'>VPCRegion</span>, <span class='no'>MaxItems</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>route53_list_hosted_zones_by_vpc</span><span class='op'>(</span><span class='va'>VPCId</span>, <span class='va'>VPCRegion</span>, <span class='va'>MaxItems</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,8 +169,8 @@ you created the VPC in.</p></td>
       <td><p>(Optional) The maximum number of hosted zones that you want Amazon Route
 53 to return. If the specified VPC is associated with more than
 <code>MaxItems</code> hosted zones, the response includes a <code>NextToken</code> element.
-<code>NextToken</code> contains the hosted zone ID of the first hosted zone that
-Route 53 will return if you submit another request.</p></td>
+<code>NextToken</code> contains an encrypted token that identifies the first hosted
+zone that Route 53 will return if you submit another request.</p></td>
     </tr>
     <tr>
       <th>NextToken</th>
@@ -159,34 +179,21 @@ VPC is associated with more hosted zones. To get more hosted zones,
 submit another <code>ListHostedZonesByVPC</code> request.</p>
 <p>For the value of <code>NextToken</code>, specify the value of <code>NextToken</code> from the
 previous response.</p>
-<p>If the previous response didn\'t include a <code>NextToken</code> element, there
-are no more hosted zones to get.</p></td>
+<p>If the previous response didn't include a <code>NextToken</code> element, there are
+no more hosted zones to get.</p></td>
     </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>An <code>OwningAccount</code> element, which contains the account number of
-either the current AWS account or another AWS account. Some
-services, such as AWS Cloud Map, create hosted zones using the
-current account.</p></li>
-<li><p>An <code>OwningService</code> element, which identifies the AWS service that
-created and owns the hosted zone. For example, if a hosted zone was
-created by Amazon Elastic File System (Amazon EFS), the value of
-<code>Owner</code> is <code>efs.amazonaws.com</code>.</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_hosted_zones_by_vpc</span>(
-  <span class='kw'>VPCId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VPCRegion</span> <span class='kw'>=</span> <span class='st'>"us-east-1"</span><span class='kw'>|</span><span class='st'>"us-east-2"</span><span class='kw'>|</span><span class='st'>"us-west-1"</span><span class='kw'>|</span><span class='st'>"us-west-2"</span><span class='kw'>|</span><span class='st'>"eu-west-1"</span><span class='kw'>|</span><span class='st'>"eu-west-2"</span><span class='kw'>|</span><span class='st'>"eu-west-3"</span><span class='kw'>|</span><span class='st'>"eu-central-1"</span><span class='kw'>|</span><span class='st'>"ap-east-1"</span><span class='kw'>|</span><span class='st'>"me-south-1"</span><span class='kw'>|</span><span class='st'>"us-gov-west-1"</span><span class='kw'>|</span><span class='st'>"us-gov-east-1"</span><span class='kw'>|</span><span class='st'>"us-iso-east-1"</span><span class='kw'>|</span><span class='st'>"us-isob-east-1"</span><span class='kw'>|</span><span class='st'>"ap-southeast-1"</span><span class='kw'>|</span><span class='st'>"ap-southeast-2"</span><span class='kw'>|</span><span class='st'>"ap-south-1"</span><span class='kw'>|</span><span class='st'>"ap-northeast-1"</span><span class='kw'>|</span><span class='st'>"ap-northeast-2"</span><span class='kw'>|</span><span class='st'>"ap-northeast-3"</span><span class='kw'>|</span><span class='st'>"eu-north-1"</span><span class='kw'>|</span><span class='st'>"sa-east-1"</span><span class='kw'>|</span><span class='st'>"ca-central-1"</span><span class='kw'>|</span><span class='st'>"cn-north-1"</span><span class='kw'>|</span><span class='st'>"af-south-1"</span><span class='kw'>|</span><span class='st'>"eu-south-1"</span>,
-  <span class='kw'>MaxItems</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_hosted_zones_by_vpc</span><span class='op'>(</span>
+  VPCId <span class='op'>=</span> <span class='st'>"string"</span>,
+  VPCRegion <span class='op'>=</span> <span class='st'>"us-east-1"</span><span class='op'>|</span><span class='st'>"us-east-2"</span><span class='op'>|</span><span class='st'>"us-west-1"</span><span class='op'>|</span><span class='st'>"us-west-2"</span><span class='op'>|</span><span class='st'>"eu-west-1"</span><span class='op'>|</span><span class='st'>"eu-west-2"</span><span class='op'>|</span><span class='st'>"eu-west-3"</span><span class='op'>|</span><span class='st'>"eu-central-1"</span><span class='op'>|</span><span class='st'>"ap-east-1"</span><span class='op'>|</span><span class='st'>"me-south-1"</span><span class='op'>|</span><span class='st'>"us-gov-west-1"</span><span class='op'>|</span><span class='st'>"us-gov-east-1"</span><span class='op'>|</span><span class='st'>"us-iso-east-1"</span><span class='op'>|</span><span class='st'>"us-isob-east-1"</span><span class='op'>|</span><span class='st'>"ap-southeast-1"</span><span class='op'>|</span><span class='st'>"ap-southeast-2"</span><span class='op'>|</span><span class='st'>"ap-south-1"</span><span class='op'>|</span><span class='st'>"ap-northeast-1"</span><span class='op'>|</span><span class='st'>"ap-northeast-2"</span><span class='op'>|</span><span class='st'>"ap-northeast-3"</span><span class='op'>|</span><span class='st'>"eu-north-1"</span><span class='op'>|</span><span class='st'>"sa-east-1"</span><span class='op'>|</span><span class='st'>"ca-central-1"</span><span class='op'>|</span><span class='st'>"cn-north-1"</span><span class='op'>|</span><span class='st'>"af-south-1"</span><span class='op'>|</span><span class='st'>"eu-south-1"</span>,
+  MaxItems <span class='op'>=</span> <span class='st'>"string"</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -204,7 +211,7 @@ created by Amazon Elastic File System (Amazon EFS), the value of
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

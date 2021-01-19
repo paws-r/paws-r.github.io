@@ -46,7 +46,25 @@ stops and the HDFS partition is lost. To prevent loss of data, configure
 the last step of the job flow to store results in Amazon S3. If the
 JobFlowInstancesConfig KeepJobFlowAliveWhenNoSteps parameter is set to
 TRUE, the cluster transitions to the WAITING state rather than
-shutting down after the steps have completed." />
+shutting down after the steps have completed.
+For additional protection, you can set the JobFlowInstancesConfig
+TerminationProtected parameter to TRUE to lock the cluster and
+prevent it from being terminated by API call, user intervention, or in
+the event of a job flow error.
+A maximum of 256 steps are allowed in each job flow.
+If your cluster is long-running (such as a Hive data warehouse) or
+complex, you may require more than 256 steps to process your data. You
+can bypass the 256-step limitation in various ways, including using the
+SSH shell to connect to the master node and submitting queries directly
+to the software running on the master node, such as Hive and Hadoop. For
+more information on how to do this, see Add More than 256 Steps to a Cluster
+in the Amazon EMR Management Guide.
+For long running clusters, we recommend that you periodically store your
+results.
+The instance fleets configuration is available only in Amazon EMR
+versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow
+request can contain InstanceFleets parameters or InstanceGroups
+parameters, but not both." />
 
 
 
@@ -78,7 +96,7 @@ shutting down after the steps have completed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +104,7 @@ shutting down after the steps have completed." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +116,7 @@ shutting down after the steps have completed." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -128,15 +146,33 @@ the last step of the job flow to store results in Amazon S3. If the
 JobFlowInstancesConfig <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to
 <code>TRUE</code>, the cluster transitions to the WAITING state rather than
 shutting down after the steps have completed.</p>
+<p>For additional protection, you can set the JobFlowInstancesConfig
+<code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and
+prevent it from being terminated by API call, user intervention, or in
+the event of a job flow error.</p>
+<p>A maximum of 256 steps are allowed in each job flow.</p>
+<p>If your cluster is long-running (such as a Hive data warehouse) or
+complex, you may require more than 256 steps to process your data. You
+can bypass the 256-step limitation in various ways, including using the
+SSH shell to connect to the master node and submitting queries directly
+to the software running on the master node, such as Hive and Hadoop. For
+more information on how to do this, see <a href='https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html'>Add More than 256 Steps to a Cluster</a>
+in the <em>Amazon EMR Management Guide</em>.</p>
+<p>For long running clusters, we recommend that you periodically store your
+results.</p>
+<p>The instance fleets configuration is available only in Amazon EMR
+versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow
+request can contain InstanceFleets parameters or InstanceGroups
+parameters, but not both.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>emr_run_job_flow</span>(<span class='no'>Name</span>, <span class='no'>LogUri</span>, <span class='no'>LogEncryptionKmsKeyId</span>, <span class='no'>AdditionalInfo</span>,
-  <span class='no'>AmiVersion</span>, <span class='no'>ReleaseLabel</span>, <span class='no'>Instances</span>, <span class='no'>Steps</span>, <span class='no'>BootstrapActions</span>,
-  <span class='no'>SupportedProducts</span>, <span class='no'>NewSupportedProducts</span>, <span class='no'>Applications</span>, <span class='no'>Configurations</span>,
-  <span class='no'>VisibleToAllUsers</span>, <span class='no'>JobFlowRole</span>, <span class='no'>ServiceRole</span>, <span class='no'>Tags</span>,
-  <span class='no'>SecurityConfiguration</span>, <span class='no'>AutoScalingRole</span>, <span class='no'>ScaleDownBehavior</span>, <span class='no'>CustomAmiId</span>,
-  <span class='no'>EbsRootVolumeSize</span>, <span class='no'>RepoUpgradeOnBoot</span>, <span class='no'>KerberosAttributes</span>,
-  <span class='no'>StepConcurrencyLevel</span>, <span class='no'>ManagedScalingPolicy</span>)</pre>
+    <pre class="usage"><span class='fu'>emr_run_job_flow</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>LogUri</span>, <span class='va'>LogEncryptionKmsKeyId</span>, <span class='va'>AdditionalInfo</span>,
+  <span class='va'>AmiVersion</span>, <span class='va'>ReleaseLabel</span>, <span class='va'>Instances</span>, <span class='va'>Steps</span>, <span class='va'>BootstrapActions</span>,
+  <span class='va'>SupportedProducts</span>, <span class='va'>NewSupportedProducts</span>, <span class='va'>Applications</span>, <span class='va'>Configurations</span>,
+  <span class='va'>VisibleToAllUsers</span>, <span class='va'>JobFlowRole</span>, <span class='va'>ServiceRole</span>, <span class='va'>Tags</span>,
+  <span class='va'>SecurityConfiguration</span>, <span class='va'>AutoScalingRole</span>, <span class='va'>ScaleDownBehavior</span>, <span class='va'>CustomAmiId</span>,
+  <span class='va'>EbsRootVolumeSize</span>, <span class='va'>RepoUpgradeOnBoot</span>, <span class='va'>KerberosAttributes</span>,
+  <span class='va'>StepConcurrencyLevel</span>, <span class='va'>ManagedScalingPolicy</span>, <span class='va'>PlacementGroupConfigs</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,9 +189,9 @@ value is not provided, logs are not created.</p></td>
     <tr>
       <th>LogEncryptionKmsKeyId</th>
       <td><p>The AWS KMS customer master key (CMK) used for encrypting log files. If
-a value is not provided, the logs will remain encrypted by AES-256. This
-attribute is only available with EMR version 5.30.0 and later, excluding
-EMR 6.0.0.</p></td>
+a value is not provided, the logs remain encrypted by AES-256. This
+attribute is only available with Amazon EMR version 5.30.0 and later,
+excluding Amazon EMR 6.0.0.</p></td>
     </tr>
     <tr>
       <th>AdditionalInfo</th>
@@ -196,10 +232,10 @@ nodes.</p></td>
       <td><p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and
 later, use Applications.</p>
 <p>A list of strings that indicates third-party software to use. For more
-information, see the <a href='https://docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf'>Amazon EMR Developer Guide</a>.
+information, see the <a href='https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-release-3x.html'>Amazon EMR Developer Guide</a>.
 Currently supported values are:</p><ul>
-<li><p>\"mapr-m3\" - launch the job flow using MapR M3 Edition.</p></li>
-<li><p>\"mapr-m5\" - launch the job flow using MapR M5 Edition.</p></li>
+<li><p>"mapr-m3" - launch the job flow using MapR M3 Edition.</p></li>
+<li><p>"mapr-m5" - launch the job flow using MapR M5 Edition.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -209,20 +245,20 @@ later, use Applications.</p>
 <p>A list of strings that indicates third-party software to use with the
 job flow that accepts a user argument list. EMR accepts and forwards the
 argument list to the corresponding installation script as bootstrap
-action arguments. For more information, see \"Launch a Job Flow on the
-MapR Distribution for Hadoop\" in the <a href='https://docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf'>Amazon EMR Developer Guide</a>.
+action arguments. For more information, see "Launch a Job Flow on the
+MapR Distribution for Hadoop" in the <a href='https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-release-3x.html'>Amazon EMR Developer Guide</a>.
 Supported values are:</p><ul>
-<li><p>\"mapr-m3\" - launch the cluster using MapR M3 Edition.</p></li>
-<li><p>\"mapr-m5\" - launch the cluster using MapR M5 Edition.</p></li>
-<li><p>\"mapr\" with the user arguments specifying \"\--edition,m3\" or
-\"\--edition,m5\" - launch the job flow using MapR M3 or M5 Edition
+<li><p>"mapr-m3" - launch the cluster using MapR M3 Edition.</p></li>
+<li><p>"mapr-m5" - launch the cluster using MapR M5 Edition.</p></li>
+<li><p>"mapr" with the user arguments specifying "--edition,m3" or
+"--edition,m5" - launch the job flow using MapR M3 or M5 Edition
 respectively.</p></li>
-<li><p>\"mapr-m7\" - launch the cluster using MapR M7 Edition.</p></li>
-<li><p>\"hunk\" - launch the cluster with the Hunk Big Data Analtics
+<li><p>"mapr-m7" - launch the cluster using MapR M7 Edition.</p></li>
+<li><p>"hunk" - launch the cluster with the Hunk Big Data Analtics
 Platform.</p></li>
-<li><p>\"hue\"- launch the cluster with Hue installed.</p></li>
-<li><p>\"spark\" - launch the cluster with Apache Spark installed.</p></li>
-<li><p>\"ganglia\" - launch the cluster with the Ganglia Monitoring System
+<li><p>"hue"- launch the cluster with Hue installed.</p></li>
+<li><p>"spark" - launch the cluster with Apache Spark installed.</p></li>
+<li><p>"ganglia" - launch the cluster with the Ganglia Monitoring System
 installed.</p></li>
 </ul></td>
     </tr>
@@ -282,10 +318,10 @@ at the instance-hour boundary, regardless of when the request to
 terminate the instance was submitted. This option is only available with
 Amazon EMR 5.1.0 and later and is the default for clusters created using
 that version. <code>TERMINATE_AT_TASK_COMPLETION</code> indicates that Amazon EMR
-blacklists and drains tasks from nodes before terminating the Amazon EC2
-instances, regardless of the instance-hour boundary. With either
-behavior, Amazon EMR removes the least active nodes first and blocks
-instance termination if it could lead to HDFS corruption.
+adds nodes to a deny list and drains tasks from nodes before terminating
+the Amazon EC2 instances, regardless of the instance-hour boundary. With
+either behavior, Amazon EMR removes the least active nodes first and
+blocks instance termination if it could lead to HDFS corruption.
 <code>TERMINATE_AT_TASK_COMPLETION</code> available only in Amazon EMR version
 4.1.0 and later, and is the default for versions of Amazon EMR earlier
 than 5.1.0.</p></td>
@@ -305,9 +341,9 @@ For information about finding an AMI ID, see <a href='https://docs.aws.amazon.co
     </tr>
     <tr>
       <th>EbsRootVolumeSize</th>
-      <td><p>The size, in GiB, of the EBS root device volume of the Linux AMI that is
-used for each EC2 instance. Available in Amazon EMR version 4.x and
-later.</p></td>
+      <td><p>The size, in GiB, of the Amazon EBS root device volume of the Linux AMI
+that is used for each EC2 instance. Available in Amazon EMR version 4.x
+and later.</p></td>
     </tr>
     <tr>
       <th>RepoUpgradeOnBoot</th>
@@ -322,7 +358,7 @@ manually.</p></td>
       <th>KerberosAttributes</th>
       <td><p>Attributes for Kerberos configuration when Kerberos authentication is
 enabled using a security configuration. For more information see <a href='https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html'>Use Kerberos Authentication</a>
-in the <em>EMR Management Guide</em>.</p></td>
+in the <em>Amazon EMR Management Guide</em>.</p></td>
     </tr>
     <tr>
       <th>StepConcurrencyLevel</th>
@@ -333,280 +369,271 @@ default value is <code>1</code>. The maximum value is <code>256</code>.</p></td>
       <th>ManagedScalingPolicy</th>
       <td><p>The specified managed scaling policy for an Amazon EMR cluster.</p></td>
     </tr>
+    <tr>
+      <th>PlacementGroupConfigs</th>
+      <td><p>The specified placement group configuration for an Amazon EMR cluster.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For additional protection, you can set the JobFlowInstancesConfig
-<code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and
-prevent it from being terminated by API call, user intervention, or in
-the event of a job flow error.</p>
-<p>A maximum of 256 steps are allowed in each job flow.</p>
-<p>If your cluster is long-running (such as a Hive data warehouse) or
-complex, you may require more than 256 steps to process your data. You
-can bypass the 256-step limitation in various ways, including using the
-SSH shell to connect to the master node and submitting queries directly
-to the software running on the master node, such as Hive and Hadoop. For
-more information on how to do this, see <a href='https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html'>Add More than 256 Steps to a Cluster</a>
-in the <em>Amazon EMR Management Guide</em>.</p>
-<p>For long running clusters, we recommend that you periodically store your
-results.</p>
-<p>The instance fleets configuration is available only in Amazon EMR
-versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow
-request can contain InstanceFleets parameters or InstanceGroups
-parameters, but not both.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>run_job_flow</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LogUri</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LogEncryptionKmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AdditionalInfo</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AmiVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReleaseLabel</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Instances</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>MasterInstanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SlaveInstanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>InstanceCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>InstanceGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Market</span> <span class='kw'>=</span> <span class='st'>"ON_DEMAND"</span><span class='kw'>|</span><span class='st'>"SPOT"</span>,
-        <span class='kw'>InstanceRole</span> <span class='kw'>=</span> <span class='st'>"MASTER"</span><span class='kw'>|</span><span class='st'>"CORE"</span><span class='kw'>|</span><span class='st'>"TASK"</span>,
-        <span class='kw'>BidPrice</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>InstanceCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Configurations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Classification</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Configurations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-            <span class='kw'>Properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>run_job_flow</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  LogUri <span class='op'>=</span> <span class='st'>"string"</span>,
+  LogEncryptionKmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  AdditionalInfo <span class='op'>=</span> <span class='st'>"string"</span>,
+  AmiVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReleaseLabel <span class='op'>=</span> <span class='st'>"string"</span>,
+  Instances <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    MasterInstanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+    SlaveInstanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+    InstanceCount <span class='op'>=</span> <span class='fl'>123</span>,
+    InstanceGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Name <span class='op'>=</span> <span class='st'>"string"</span>,
+        Market <span class='op'>=</span> <span class='st'>"ON_DEMAND"</span><span class='op'>|</span><span class='st'>"SPOT"</span>,
+        InstanceRole <span class='op'>=</span> <span class='st'>"MASTER"</span><span class='op'>|</span><span class='st'>"CORE"</span><span class='op'>|</span><span class='st'>"TASK"</span>,
+        BidPrice <span class='op'>=</span> <span class='st'>"string"</span>,
+        InstanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+        InstanceCount <span class='op'>=</span> <span class='fl'>123</span>,
+        Configurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Classification <span class='op'>=</span> <span class='st'>"string"</span>,
+            Configurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+            Properties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            )
-          )
-        ),
-        <span class='kw'>EbsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>EbsBlockDeviceConfigs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>VolumeSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>VolumeType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>Iops</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-                <span class='kw'>SizeInGB</span> <span class='kw'>=</span> <span class='fl'>123</span>
-              ),
-              <span class='kw'>VolumesPerInstance</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            )
-          ),
-          <span class='kw'>EbsOptimized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-        ),
-        <span class='kw'>AutoScalingPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Constraints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>MinCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>MaxCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>
-          ),
-          <span class='kw'>Rules</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>Action</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>Market</span> <span class='kw'>=</span> <span class='st'>"ON_DEMAND"</span><span class='kw'>|</span><span class='st'>"SPOT"</span>,
-                <span class='kw'>SimpleScalingPolicyConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                  <span class='kw'>AdjustmentType</span> <span class='kw'>=</span> <span class='st'>"CHANGE_IN_CAPACITY"</span><span class='kw'>|</span><span class='st'>"PERCENT_CHANGE_IN_CAPACITY"</span><span class='kw'>|</span><span class='st'>"EXACT_CAPACITY"</span>,
-                  <span class='kw'>ScalingAdjustment</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-                  <span class='kw'>CoolDown</span> <span class='kw'>=</span> <span class='fl'>123</span>
-                )
-              ),
-              <span class='kw'>Trigger</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>CloudWatchAlarmDefinition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                  <span class='kw'>ComparisonOperator</span> <span class='kw'>=</span> <span class='st'>"GREATER_THAN_OR_EQUAL"</span><span class='kw'>|</span><span class='st'>"GREATER_THAN"</span><span class='kw'>|</span><span class='st'>"LESS_THAN"</span><span class='kw'>|</span><span class='st'>"LESS_THAN_OR_EQUAL"</span>,
-                  <span class='kw'>EvaluationPeriods</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-                  <span class='kw'>MetricName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                  <span class='kw'>Namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                  <span class='kw'>Period</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-                  <span class='kw'>Statistic</span> <span class='kw'>=</span> <span class='st'>"SAMPLE_COUNT"</span><span class='kw'>|</span><span class='st'>"AVERAGE"</span><span class='kw'>|</span><span class='st'>"SUM"</span><span class='kw'>|</span><span class='st'>"MINIMUM"</span><span class='kw'>|</span><span class='st'>"MAXIMUM"</span>,
-                  <span class='kw'>Threshold</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-                  <span class='kw'>Unit</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"SECONDS"</span><span class='kw'>|</span><span class='st'>"MICRO_SECONDS"</span><span class='kw'>|</span><span class='st'>"MILLI_SECONDS"</span><span class='kw'>|</span><span class='st'>"BYTES"</span><span class='kw'>|</span><span class='st'>"KILO_BYTES"</span><span class='kw'>|</span><span class='st'>"MEGA_BYTES"</span><span class='kw'>|</span><span class='st'>"GIGA_BYTES"</span><span class='kw'>|</span><span class='st'>"TERA_BYTES"</span><span class='kw'>|</span><span class='st'>"BITS"</span><span class='kw'>|</span><span class='st'>"KILO_BITS"</span><span class='kw'>|</span><span class='st'>"MEGA_BITS"</span><span class='kw'>|</span><span class='st'>"GIGA_BITS"</span><span class='kw'>|</span><span class='st'>"TERA_BITS"</span><span class='kw'>|</span><span class='st'>"PERCENT"</span><span class='kw'>|</span><span class='st'>"COUNT"</span><span class='kw'>|</span><span class='st'>"BYTES_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"KILO_BYTES_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"MEGA_BYTES_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"GIGA_BYTES_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"TERA_BYTES_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"BITS_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"KILO_BITS_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"MEGA_BITS_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"GIGA_BITS_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"TERA_BITS_PER_SECOND"</span><span class='kw'>|</span><span class='st'>"COUNT_PER_SECOND"</span>,
-                  <span class='kw'>Dimensions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    ),
-    <span class='kw'>InstanceFleets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>InstanceFleetType</span> <span class='kw'>=</span> <span class='st'>"MASTER"</span><span class='kw'>|</span><span class='st'>"CORE"</span><span class='kw'>|</span><span class='st'>"TASK"</span>,
-        <span class='kw'>TargetOnDemandCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>TargetSpotCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>InstanceTypeConfigs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>WeightedCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>BidPrice</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>BidPriceAsPercentageOfOnDemandPrice</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-            <span class='kw'>EbsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>EbsBlockDeviceConfigs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                  <span class='kw'>VolumeSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                    <span class='kw'>VolumeType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                    <span class='kw'>Iops</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-                    <span class='kw'>SizeInGB</span> <span class='kw'>=</span> <span class='fl'>123</span>
-                  ),
-                  <span class='kw'>VolumesPerInstance</span> <span class='kw'>=</span> <span class='fl'>123</span>
-                )
-              ),
-              <span class='kw'>EbsOptimized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-            ),
-            <span class='kw'>Configurations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>Classification</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>Configurations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-                <span class='kw'>Properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        EbsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          EbsBlockDeviceConfigs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              VolumeSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                VolumeType <span class='op'>=</span> <span class='st'>"string"</span>,
+                Iops <span class='op'>=</span> <span class='fl'>123</span>,
+                SizeInGB <span class='op'>=</span> <span class='fl'>123</span>
+              <span class='op'>)</span>,
+              VolumesPerInstance <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          EbsOptimized <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+        <span class='op'>)</span>,
+        AutoScalingPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Constraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            MinCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+            MaxCapacity <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>,
+          Rules <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Name <span class='op'>=</span> <span class='st'>"string"</span>,
+              Description <span class='op'>=</span> <span class='st'>"string"</span>,
+              Action <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                Market <span class='op'>=</span> <span class='st'>"ON_DEMAND"</span><span class='op'>|</span><span class='st'>"SPOT"</span>,
+                SimpleScalingPolicyConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  AdjustmentType <span class='op'>=</span> <span class='st'>"CHANGE_IN_CAPACITY"</span><span class='op'>|</span><span class='st'>"PERCENT_CHANGE_IN_CAPACITY"</span><span class='op'>|</span><span class='st'>"EXACT_CAPACITY"</span>,
+                  ScalingAdjustment <span class='op'>=</span> <span class='fl'>123</span>,
+                  CoolDown <span class='op'>=</span> <span class='fl'>123</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>,
+              Trigger <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                CloudWatchAlarmDefinition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  ComparisonOperator <span class='op'>=</span> <span class='st'>"GREATER_THAN_OR_EQUAL"</span><span class='op'>|</span><span class='st'>"GREATER_THAN"</span><span class='op'>|</span><span class='st'>"LESS_THAN"</span><span class='op'>|</span><span class='st'>"LESS_THAN_OR_EQUAL"</span>,
+                  EvaluationPeriods <span class='op'>=</span> <span class='fl'>123</span>,
+                  MetricName <span class='op'>=</span> <span class='st'>"string"</span>,
+                  Namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+                  Period <span class='op'>=</span> <span class='fl'>123</span>,
+                  Statistic <span class='op'>=</span> <span class='st'>"SAMPLE_COUNT"</span><span class='op'>|</span><span class='st'>"AVERAGE"</span><span class='op'>|</span><span class='st'>"SUM"</span><span class='op'>|</span><span class='st'>"MINIMUM"</span><span class='op'>|</span><span class='st'>"MAXIMUM"</span>,
+                  Threshold <span class='op'>=</span> <span class='fl'>123.0</span>,
+                  Unit <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"SECONDS"</span><span class='op'>|</span><span class='st'>"MICRO_SECONDS"</span><span class='op'>|</span><span class='st'>"MILLI_SECONDS"</span><span class='op'>|</span><span class='st'>"BYTES"</span><span class='op'>|</span><span class='st'>"KILO_BYTES"</span><span class='op'>|</span><span class='st'>"MEGA_BYTES"</span><span class='op'>|</span><span class='st'>"GIGA_BYTES"</span><span class='op'>|</span><span class='st'>"TERA_BYTES"</span><span class='op'>|</span><span class='st'>"BITS"</span><span class='op'>|</span><span class='st'>"KILO_BITS"</span><span class='op'>|</span><span class='st'>"MEGA_BITS"</span><span class='op'>|</span><span class='st'>"GIGA_BITS"</span><span class='op'>|</span><span class='st'>"TERA_BITS"</span><span class='op'>|</span><span class='st'>"PERCENT"</span><span class='op'>|</span><span class='st'>"COUNT"</span><span class='op'>|</span><span class='st'>"BYTES_PER_SECOND"</span><span class='op'>|</span><span class='st'>"KILO_BYTES_PER_SECOND"</span><span class='op'>|</span><span class='st'>"MEGA_BYTES_PER_SECOND"</span><span class='op'>|</span><span class='st'>"GIGA_BYTES_PER_SECOND"</span><span class='op'>|</span><span class='st'>"TERA_BYTES_PER_SECOND"</span><span class='op'>|</span><span class='st'>"BITS_PER_SECOND"</span><span class='op'>|</span><span class='st'>"KILO_BITS_PER_SECOND"</span><span class='op'>|</span><span class='st'>"MEGA_BITS_PER_SECOND"</span><span class='op'>|</span><span class='st'>"GIGA_BITS_PER_SECOND"</span><span class='op'>|</span><span class='st'>"TERA_BITS_PER_SECOND"</span><span class='op'>|</span><span class='st'>"COUNT_PER_SECOND"</span>,
+                  Dimensions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+                      Value <span class='op'>=</span> <span class='st'>"string"</span>
+                    <span class='op'>)</span>
+                  <span class='op'>)</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    InstanceFleets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Name <span class='op'>=</span> <span class='st'>"string"</span>,
+        InstanceFleetType <span class='op'>=</span> <span class='st'>"MASTER"</span><span class='op'>|</span><span class='st'>"CORE"</span><span class='op'>|</span><span class='st'>"TASK"</span>,
+        TargetOnDemandCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+        TargetSpotCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+        InstanceTypeConfigs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            InstanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+            WeightedCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+            BidPrice <span class='op'>=</span> <span class='st'>"string"</span>,
+            BidPriceAsPercentageOfOnDemandPrice <span class='op'>=</span> <span class='fl'>123.0</span>,
+            EbsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              EbsBlockDeviceConfigs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  VolumeSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                    VolumeType <span class='op'>=</span> <span class='st'>"string"</span>,
+                    Iops <span class='op'>=</span> <span class='fl'>123</span>,
+                    SizeInGB <span class='op'>=</span> <span class='fl'>123</span>
+                  <span class='op'>)</span>,
+                  VolumesPerInstance <span class='op'>=</span> <span class='fl'>123</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>,
+              EbsOptimized <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+            <span class='op'>)</span>,
+            Configurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                Classification <span class='op'>=</span> <span class='st'>"string"</span>,
+                Configurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+                Properties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                   <span class='st'>"string"</span>
-                )
-              )
-            )
-          )
-        ),
-        <span class='kw'>LaunchSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>SpotSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>TimeoutDurationMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>TimeoutAction</span> <span class='kw'>=</span> <span class='st'>"SWITCH_TO_ON_DEMAND"</span><span class='kw'>|</span><span class='st'>"TERMINATE_CLUSTER"</span>,
-            <span class='kw'>BlockDurationMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>AllocationStrategy</span> <span class='kw'>=</span> <span class='st'>"capacity-optimized"</span>
-          ),
-          <span class='kw'>OnDemandSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>AllocationStrategy</span> <span class='kw'>=</span> <span class='st'>"lowest-price"</span>
-          )
-        )
-      )
-    ),
-    <span class='kw'>Ec2KeyName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Placement</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>AvailabilityZone</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>AvailabilityZones</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+                <span class='op'>)</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        LaunchSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          SpotSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            TimeoutDurationMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+            TimeoutAction <span class='op'>=</span> <span class='st'>"SWITCH_TO_ON_DEMAND"</span><span class='op'>|</span><span class='st'>"TERMINATE_CLUSTER"</span>,
+            BlockDurationMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+            AllocationStrategy <span class='op'>=</span> <span class='st'>"capacity-optimized"</span>
+          <span class='op'>)</span>,
+          OnDemandSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            AllocationStrategy <span class='op'>=</span> <span class='st'>"lowest-price"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Ec2KeyName <span class='op'>=</span> <span class='st'>"string"</span>,
+    Placement <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      AvailabilityZone <span class='op'>=</span> <span class='st'>"string"</span>,
+      AvailabilityZones <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>KeepJobFlowAliveWhenNoSteps</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>TerminationProtected</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>HadoopVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Ec2SubnetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Ec2SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    KeepJobFlowAliveWhenNoSteps <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    TerminationProtected <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    HadoopVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+    Ec2SubnetId <span class='op'>=</span> <span class='st'>"string"</span>,
+    Ec2SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>EmrManagedMasterSecurityGroup</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>EmrManagedSlaveSecurityGroup</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ServiceAccessSecurityGroup</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>AdditionalMasterSecurityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    EmrManagedMasterSecurityGroup <span class='op'>=</span> <span class='st'>"string"</span>,
+    EmrManagedSlaveSecurityGroup <span class='op'>=</span> <span class='st'>"string"</span>,
+    ServiceAccessSecurityGroup <span class='op'>=</span> <span class='st'>"string"</span>,
+    AdditionalMasterSecurityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>AdditionalSlaveSecurityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    AdditionalSlaveSecurityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Steps</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ActionOnFailure</span> <span class='kw'>=</span> <span class='st'>"TERMINATE_JOB_FLOW"</span><span class='kw'>|</span><span class='st'>"TERMINATE_CLUSTER"</span><span class='kw'>|</span><span class='st'>"CANCEL_AND_WAIT"</span><span class='kw'>|</span><span class='st'>"CONTINUE"</span>,
-      <span class='kw'>HadoopJarStep</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        ),
-        <span class='kw'>Jar</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>MainClass</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Steps <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      ActionOnFailure <span class='op'>=</span> <span class='st'>"TERMINATE_JOB_FLOW"</span><span class='op'>|</span><span class='st'>"TERMINATE_CLUSTER"</span><span class='op'>|</span><span class='st'>"CANCEL_AND_WAIT"</span><span class='op'>|</span><span class='st'>"CONTINUE"</span>,
+      HadoopJarStep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Properties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Key <span class='op'>=</span> <span class='st'>"string"</span>,
+            Value <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        Jar <span class='op'>=</span> <span class='st'>"string"</span>,
+        MainClass <span class='op'>=</span> <span class='st'>"string"</span>,
+        Args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>BootstrapActions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ScriptBootstrapAction</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Path</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  BootstrapActions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      ScriptBootstrapAction <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Path <span class='op'>=</span> <span class='st'>"string"</span>,
+        Args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>SupportedProducts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  SupportedProducts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>NewSupportedProducts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  NewSupportedProducts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>Applications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Applications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Version <span class='op'>=</span> <span class='st'>"string"</span>,
+      Args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>AdditionalInfo</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      AdditionalInfo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>Configurations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Classification</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Configurations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-      <span class='kw'>Properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Configurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Classification <span class='op'>=</span> <span class='st'>"string"</span>,
+      Configurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+      Properties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>VisibleToAllUsers</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>JobFlowRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServiceRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>SecurityConfiguration</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AutoScalingRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ScaleDownBehavior</span> <span class='kw'>=</span> <span class='st'>"TERMINATE_AT_INSTANCE_HOUR"</span><span class='kw'>|</span><span class='st'>"TERMINATE_AT_TASK_COMPLETION"</span>,
-  <span class='kw'>CustomAmiId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EbsRootVolumeSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>RepoUpgradeOnBoot</span> <span class='kw'>=</span> <span class='st'>"SECURITY"</span><span class='kw'>|</span><span class='st'>"NONE"</span>,
-  <span class='kw'>KerberosAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Realm</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>KdcAdminPassword</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>CrossRealmTrustPrincipalPassword</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ADDomainJoinUser</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ADDomainJoinPassword</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>StepConcurrencyLevel</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ManagedScalingPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ComputeLimits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>UnitType</span> <span class='kw'>=</span> <span class='st'>"InstanceFleetUnits"</span><span class='kw'>|</span><span class='st'>"Instances"</span><span class='kw'>|</span><span class='st'>"VCPU"</span>,
-      <span class='kw'>MinimumCapacityUnits</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>MaximumCapacityUnits</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>MaximumOnDemandCapacityUnits</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>MaximumCoreCapacityUnits</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  )
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  VisibleToAllUsers <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  JobFlowRole <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServiceRole <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  SecurityConfiguration <span class='op'>=</span> <span class='st'>"string"</span>,
+  AutoScalingRole <span class='op'>=</span> <span class='st'>"string"</span>,
+  ScaleDownBehavior <span class='op'>=</span> <span class='st'>"TERMINATE_AT_INSTANCE_HOUR"</span><span class='op'>|</span><span class='st'>"TERMINATE_AT_TASK_COMPLETION"</span>,
+  CustomAmiId <span class='op'>=</span> <span class='st'>"string"</span>,
+  EbsRootVolumeSize <span class='op'>=</span> <span class='fl'>123</span>,
+  RepoUpgradeOnBoot <span class='op'>=</span> <span class='st'>"SECURITY"</span><span class='op'>|</span><span class='st'>"NONE"</span>,
+  KerberosAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Realm <span class='op'>=</span> <span class='st'>"string"</span>,
+    KdcAdminPassword <span class='op'>=</span> <span class='st'>"string"</span>,
+    CrossRealmTrustPrincipalPassword <span class='op'>=</span> <span class='st'>"string"</span>,
+    ADDomainJoinUser <span class='op'>=</span> <span class='st'>"string"</span>,
+    ADDomainJoinPassword <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  StepConcurrencyLevel <span class='op'>=</span> <span class='fl'>123</span>,
+  ManagedScalingPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ComputeLimits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      UnitType <span class='op'>=</span> <span class='st'>"InstanceFleetUnits"</span><span class='op'>|</span><span class='st'>"Instances"</span><span class='op'>|</span><span class='st'>"VCPU"</span>,
+      MinimumCapacityUnits <span class='op'>=</span> <span class='fl'>123</span>,
+      MaximumCapacityUnits <span class='op'>=</span> <span class='fl'>123</span>,
+      MaximumOnDemandCapacityUnits <span class='op'>=</span> <span class='fl'>123</span>,
+      MaximumCoreCapacityUnits <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  PlacementGroupConfigs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      InstanceRole <span class='op'>=</span> <span class='st'>"MASTER"</span><span class='op'>|</span><span class='st'>"CORE"</span><span class='op'>|</span><span class='st'>"TASK"</span>,
+      PlacementStrategy <span class='op'>=</span> <span class='st'>"SPREAD"</span><span class='op'>|</span><span class='st'>"PARTITION"</span><span class='op'>|</span><span class='st'>"CLUSTER"</span><span class='op'>|</span><span class='st'>"NONE"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -624,7 +651,7 @@ parameters, but not both.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

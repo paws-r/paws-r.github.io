@@ -40,11 +40,39 @@
 
 
 <meta property="og:title" content="Updates capacity settings for a fleet — gamelift_update_fleet_capacity" />
-<meta property="og:description" content="Updates capacity settings for a fleet. Use this action to specify the
+<meta property="og:description" content="Updates capacity settings for a fleet. Use this operation to specify the
 number of EC2 instances (hosts) that you want this fleet to contain.
-Before calling this action, you may want to call
+Before calling this operation, you may want to call
 DescribeEC2InstanceLimits to get the maximum capacity based on the
-fleet\'s EC2 instance type." />
+fleet's EC2 instance type.
+Specify minimum and maximum number of instances. Amazon GameLift will
+not change fleet capacity to values fall outside of this range. This is
+particularly important when using auto-scaling (see PutScalingPolicy) to
+allow capacity to adjust based on player demand while imposing limits on
+automatic adjustments.
+To update fleet capacity, specify the fleet ID and the number of
+instances you want the fleet to host. If successful, Amazon GameLift
+starts or terminates instances so that the fleet's active instance count
+matches the desired instance count. You can view a fleet's current
+capacity information by calling DescribeFleetCapacity. If the desired
+instance count is higher than the instance type's limit, the &quot;Limit
+Exceeded&quot; exception occurs.
+Learn more
+Setting up GameLift Fleets
+Related operations
+CreateFleet
+ListFleets
+DeleteFleet
+DescribeFleetAttributes
+Update fleets:
+UpdateFleetAttributes
+UpdateFleetCapacity
+UpdateFleetPortSettings
+UpdateRuntimeConfiguration
+
+StartFleetActions or StopFleetActions
+
+" />
 
 
 
@@ -76,7 +104,7 @@ fleet\'s EC2 instance type." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +112,7 @@ fleet\'s EC2 instance type." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +124,7 @@ fleet\'s EC2 instance type." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,54 +147,23 @@ fleet\'s EC2 instance type." />
     </div>
 
     <div class="ref-description">
-    <p>Updates capacity settings for a fleet. Use this action to specify the
+    <p>Updates capacity settings for a fleet. Use this operation to specify the
 number of EC2 instances (hosts) that you want this fleet to contain.
-Before calling this action, you may want to call
+Before calling this operation, you may want to call
 DescribeEC2InstanceLimits to get the maximum capacity based on the
-fleet\'s EC2 instance type.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>gamelift_update_fleet_capacity</span>(<span class='no'>FleetId</span>, <span class='no'>DesiredInstances</span>, <span class='no'>MinSize</span>,
-  <span class='no'>MaxSize</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>FleetId</th>
-      <td><p>[required] A unique identifier for a fleet to update capacity for. You can use
-either the fleet ID or ARN value.</p></td>
-    </tr>
-    <tr>
-      <th>DesiredInstances</th>
-      <td><p>Number of EC2 instances you want this fleet to host.</p></td>
-    </tr>
-    <tr>
-      <th>MinSize</th>
-      <td><p>The minimum value allowed for the fleet\'s instance count. Default if
-not set is 0.</p></td>
-    </tr>
-    <tr>
-      <th>MaxSize</th>
-      <td><p>The maximum value allowed for the fleet\'s instance count. Default if
-not set is 1.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Specify minimum and maximum number of instances. Amazon GameLift will
+fleet's EC2 instance type.</p>
+<p>Specify minimum and maximum number of instances. Amazon GameLift will
 not change fleet capacity to values fall outside of this range. This is
 particularly important when using auto-scaling (see PutScalingPolicy) to
 allow capacity to adjust based on player demand while imposing limits on
 automatic adjustments.</p>
 <p>To update fleet capacity, specify the fleet ID and the number of
 instances you want the fleet to host. If successful, Amazon GameLift
-starts or terminates instances so that the fleet\'s active instance
-count matches the desired instance count. You can view a fleet\'s
-current capacity information by calling DescribeFleetCapacity. If the
-desired instance count is higher than the instance type\'s limit, the
-\"Limit Exceeded\" exception occurs.</p>
+starts or terminates instances so that the fleet's active instance count
+matches the desired instance count. You can view a fleet's current
+capacity information by calling DescribeFleetCapacity. If the desired
+instance count is higher than the instance type's limit, the "Limit
+Exceeded" exception occurs.</p>
 <p><strong>Learn more</strong></p>
 <p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html'>Setting up GameLift Fleets</a></p>
 <p><strong>Related operations</strong></p><ul>
@@ -183,15 +180,45 @@ desired instance count is higher than the instance type\'s limit, the
 <li><p>StartFleetActions or StopFleetActions</p></li>
 </ul>
 
+    </div>
+
+    <pre class="usage"><span class='fu'>gamelift_update_fleet_capacity</span><span class='op'>(</span><span class='va'>FleetId</span>, <span class='va'>DesiredInstances</span>, <span class='va'>MinSize</span>,
+  <span class='va'>MaxSize</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>FleetId</th>
+      <td><p>[required] A unique identifier for a fleet to update capacity for. You can use
+either the fleet ID or ARN value.</p></td>
+    </tr>
+    <tr>
+      <th>DesiredInstances</th>
+      <td><p>Number of EC2 instances you want this fleet to host.</p></td>
+    </tr>
+    <tr>
+      <th>MinSize</th>
+      <td><p>The minimum value allowed for the fleet's instance count. Default if not
+set is 0.</p></td>
+    </tr>
+    <tr>
+      <th>MaxSize</th>
+      <td><p>The maximum value allowed for the fleet's instance count. Default if not
+set is 1.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_fleet_capacity</span>(
-  <span class='kw'>FleetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DesiredInstances</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MinSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MaxSize</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_fleet_capacity</span><span class='op'>(</span>
+  FleetId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DesiredInstances <span class='op'>=</span> <span class='fl'>123</span>,
+  MinSize <span class='op'>=</span> <span class='fl'>123</span>,
+  MaxSize <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -209,7 +236,7 @@ desired instance count is higher than the instance type\'s limit, the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

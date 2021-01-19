@@ -43,7 +43,54 @@
 <meta property="og:description" content="Adds a grant to a customer master key (CMK). The grant allows the
 grantee principal to use the CMK when the conditions specified in the
 grant are met. When setting permissions, grants are an alternative to
-key policies." />
+key policies.
+To create a grant that allows a cryptographic operation
+only when the request includes a particular encryption context,
+use the Constraints parameter. For details, see GrantConstraints.
+You can create grants on symmetric and asymmetric CMKs. However, if the
+grant allows an operation that the CMK does not support, CreateGrant
+fails with a ValidationException.
+Grants for symmetric CMKs cannot allow operations that are not
+supported for symmetric CMKs, including Sign, Verify, and
+GetPublicKey. (There are limited exceptions to this rule for legacy
+operations, but you should not create a grant for an operation that
+AWS KMS does not support.)
+Grants for asymmetric CMKs cannot allow operations that are not
+supported for asymmetric CMKs, including operations that generate data keys
+or data key pairs,
+or operations related to automatic key rotation,
+imported key material,
+or CMKs in custom key stores.
+Grants for asymmetric CMKs with a KeyUsage of ENCRYPT_DECRYPT
+cannot allow the Sign or Verify operations. Grants for asymmetric
+CMKs with a KeyUsage of SIGN_VERIFY cannot allow the Encrypt or
+Decrypt operations.
+Grants for asymmetric CMKs cannot include an encryption context
+grant constraint. An encryption context is not supported on
+asymmetric CMKs.
+
+
+For information about symmetric and asymmetric CMKs, see Using Symmetric and Asymmetric CMKs
+in the AWS Key Management Service Developer Guide. For more
+information about grants, see
+Grants
+in the AWS Key Management Service Developer Guide .
+The CMK that you use for this operation must be in a compatible key
+state. For details, see How Key State Affects Use of a Customer Master Key
+in the AWS Key Management Service Developer Guide.
+Cross-account use: Yes. To perform this operation on a CMK in a
+different AWS account, specify the key ARN in the value of the KeyId
+parameter.
+Required permissions:
+kms:CreateGrant
+(key policy)
+Related operations:
+ListGrants
+ListRetirableGrants
+RetireGrant
+RevokeGrant
+
+" />
 
 
 
@@ -75,7 +122,7 @@ key policies." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +130,7 @@ key policies." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +142,7 @@ key policies." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +169,57 @@ key policies." />
 grantee principal to use the CMK when the conditions specified in the
 grant are met. When setting permissions, grants are an alternative to
 key policies.</p>
+<p>To create a grant that allows a <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations'>cryptographic operation</a>
+only when the request includes a particular <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context'>encryption context</a>,
+use the <code>Constraints</code> parameter. For details, see GrantConstraints.</p>
+<p>You can create grants on symmetric and asymmetric CMKs. However, if the
+grant allows an operation that the CMK does not support, <code>CreateGrant</code>
+fails with a <code>ValidationException</code>.</p><ul>
+<li><p>Grants for symmetric CMKs cannot allow operations that are not
+supported for symmetric CMKs, including Sign, Verify, and
+GetPublicKey. (There are limited exceptions to this rule for legacy
+operations, but you should not create a grant for an operation that
+AWS KMS does not support.)</p></li>
+<li><p>Grants for asymmetric CMKs cannot allow operations that are not
+supported for asymmetric CMKs, including operations that <a href='https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKey.html'>generate data keys</a>
+or <a href='https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKeyPair.html'>data key pairs</a>,
+or operations related to <a href='https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html'>automatic key rotation</a>,
+<a href='https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html'>imported key material</a>,
+or CMKs in <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key stores</a>.</p></li>
+<li><p>Grants for asymmetric CMKs with a <code>KeyUsage</code> of <code>ENCRYPT_DECRYPT</code>
+cannot allow the Sign or Verify operations. Grants for asymmetric
+CMKs with a <code>KeyUsage</code> of <code>SIGN_VERIFY</code> cannot allow the Encrypt or
+Decrypt operations.</p></li>
+<li><p>Grants for asymmetric CMKs cannot include an encryption context
+grant constraint. An encryption context is not supported on
+asymmetric CMKs.</p></li>
+</ul>
+
+<p>For information about symmetric and asymmetric CMKs, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html'>Using Symmetric and Asymmetric CMKs</a>
+in the <em>AWS Key Management Service Developer Guide</em>. For more
+information about grants, see
+<a href='https://docs.aws.amazon.com/kms/latest/developerguide/grants.html'>Grants</a>
+in the <strong>AWS Key Management Service Developer Guide</strong> .</p>
+<p>The CMK that you use for this operation must be in a compatible key
+state. For details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html'>How Key State Affects Use of a Customer Master Key</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p><strong>Cross-account use</strong>: Yes. To perform this operation on a CMK in a
+different AWS account, specify the key ARN in the value of the <code>KeyId</code>
+parameter.</p>
+<p><strong>Required permissions</strong>:
+<a href='https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html'>kms:CreateGrant</a>
+(key policy)</p>
+<p><strong>Related operations:</strong></p><ul>
+<li><p>ListGrants</p></li>
+<li><p>ListRetirableGrants</p></li>
+<li><p>RetireGrant</p></li>
+<li><p>RevokeGrant</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>kms_create_grant</span>(<span class='no'>KeyId</span>, <span class='no'>GranteePrincipal</span>, <span class='no'>RetiringPrincipal</span>, <span class='no'>Operations</span>,
-  <span class='no'>Constraints</span>, <span class='no'>GrantTokens</span>, <span class='no'>Name</span>)</pre>
+    <pre class="usage"><span class='fu'>kms_create_grant</span><span class='op'>(</span><span class='va'>KeyId</span>, <span class='va'>GranteePrincipal</span>, <span class='va'>RetiringPrincipal</span>, <span class='va'>Operations</span>,
+  <span class='va'>Constraints</span>, <span class='va'>GrantTokens</span>, <span class='va'>Name</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,7 +268,10 @@ in the Example ARNs section of the <em>AWS General Reference</em>.</p></td>
 only when the encryption context matches or includes the encryption
 context specified in this structure. For more information about
 encryption context, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context'>Encryption Context</a>
-in the <strong>AWS Key Management Service Developer Guide</strong> .</p></td>
+in the <strong>AWS Key Management Service Developer Guide</strong> .</p>
+<p>Grant constraints are not applied to operations that do not support an
+encryption context, such as cryptographic operations with asymmetric
+CMKs and management operations, such as DescribeKey or RetireGrant.</p></td>
     </tr>
     <tr>
       <th>GrantTokens</th>
@@ -184,8 +281,8 @@ in the <em>AWS Key Management Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
       <th>Name</th>
-      <td><p>A friendly name for identifying the grant. Use this value to prevent the
-unintended creation of duplicate grants when retrying this request.</p>
+      <td><p>A friendly name for the grant. Use this value to prevent the unintended
+creation of duplicate grants when retrying this request.</p>
 <p>When this value is absent, all <code>CreateGrant</code> requests result in a new
 grant with a unique <code>GrantId</code> even if all the supplied parameters are
 identical. This can result in unintended duplicates when you retry the
@@ -194,87 +291,52 @@ identical. This can result in unintended duplicates when you retry the
 identical parameters; if the grant already exists, the original
 <code>GrantId</code> is returned without creating a new grant. Note that the
 returned grant token is unique with every <code>CreateGrant</code> request, even
-when a duplicate <code>GrantId</code> is returned. All grant tokens obtained in
-this way can be used interchangeably.</p></td>
+when a duplicate <code>GrantId</code> is returned. All grant tokens for the same
+grant ID can be used interchangeably.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To create a grant that allows a <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#cryptographic-operations'>cryptographic operation</a>
-only when the request includes a particular <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context'>encryption context</a>,
-use the <code>Constraints</code> parameter. For details, see GrantConstraints.</p>
-<p>You can create grants on symmetric and asymmetric CMKs. However, if the
-grant allows an operation that the CMK does not support, <code>CreateGrant</code>
-fails with a <code>ValidationException</code>.</p><ul>
-<li><p>Grants for symmetric CMKs cannot allow operations that are not
-supported for symmetric CMKs, including Sign, Verify, and
-GetPublicKey. (There are limited exceptions to this rule for legacy
-operations, but you should not create a grant for an operation that
-AWS KMS does not support.)</p></li>
-<li><p>Grants for asymmetric CMKs cannot allow operations that are not
-supported for asymmetric CMKs, including operations that <a href='https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKey'>generate data keys</a>
-or <a href='https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKeyPair'>data key pairs</a>,
-or operations related to <a href='https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html'>automatic key rotation</a>,
-<a href='https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html'>imported key material</a>,
-or CMKs in <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key stores</a>.</p></li>
-<li><p>Grants for asymmetric CMKs with a <code>KeyUsage</code> of <code>ENCRYPT_DECRYPT</code>
-cannot allow the Sign or Verify operations. Grants for asymmetric
-CMKs with a <code>KeyUsage</code> of <code>SIGN_VERIFY</code> cannot allow the Encrypt or
-Decrypt operations.</p></li>
-<li><p>Grants for asymmetric CMKs cannot include an encryption context
-grant constraint. An encryption context is not supported on
-asymmetric CMKs.</p></li>
-</ul>
-
-<p>For information about symmetric and asymmetric CMKs, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html'>Using Symmetric and Asymmetric CMKs</a>
-in the <em>AWS Key Management Service Developer Guide</em>.</p>
-<p>To perform this operation on a CMK in a different AWS account, specify
-the key ARN in the value of the <code>KeyId</code> parameter. For more information
-about grants, see
-<a href='https://docs.aws.amazon.com/kms/latest/developerguide/grants.html'>Grants</a>
-in the <strong>AWS Key Management Service Developer Guide</strong> .</p>
-<p>The CMK that you use for this operation must be in a compatible key
-state. For details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html'>How Key State Affects Use of a Customer Master Key</a>
-in the <em>AWS Key Management Service Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_grant</span>(
-  <span class='kw'>KeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GranteePrincipal</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RetiringPrincipal</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Operations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"Decrypt"</span><span class='kw'>|</span><span class='st'>"Encrypt"</span><span class='kw'>|</span><span class='st'>"GenerateDataKey"</span><span class='kw'>|</span><span class='st'>"GenerateDataKeyWithoutPlaintext"</span><span class='kw'>|</span><span class='st'>"ReEncryptFrom"</span><span class='kw'>|</span><span class='st'>"ReEncryptTo"</span><span class='kw'>|</span><span class='st'>"Sign"</span><span class='kw'>|</span><span class='st'>"Verify"</span><span class='kw'>|</span><span class='st'>"GetPublicKey"</span><span class='kw'>|</span><span class='st'>"CreateGrant"</span><span class='kw'>|</span><span class='st'>"RetireGrant"</span><span class='kw'>|</span><span class='st'>"DescribeKey"</span><span class='kw'>|</span><span class='st'>"GenerateDataKeyPair"</span><span class='kw'>|</span><span class='st'>"GenerateDataKeyPairWithoutPlaintext"</span>
-  ),
-  <span class='kw'>Constraints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>EncryptionContextSubset</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_grant</span><span class='op'>(</span>
+  KeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  GranteePrincipal <span class='op'>=</span> <span class='st'>"string"</span>,
+  RetiringPrincipal <span class='op'>=</span> <span class='st'>"string"</span>,
+  Operations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"Decrypt"</span><span class='op'>|</span><span class='st'>"Encrypt"</span><span class='op'>|</span><span class='st'>"GenerateDataKey"</span><span class='op'>|</span><span class='st'>"GenerateDataKeyWithoutPlaintext"</span><span class='op'>|</span><span class='st'>"ReEncryptFrom"</span><span class='op'>|</span><span class='st'>"ReEncryptTo"</span><span class='op'>|</span><span class='st'>"Sign"</span><span class='op'>|</span><span class='st'>"Verify"</span><span class='op'>|</span><span class='st'>"GetPublicKey"</span><span class='op'>|</span><span class='st'>"CreateGrant"</span><span class='op'>|</span><span class='st'>"RetireGrant"</span><span class='op'>|</span><span class='st'>"DescribeKey"</span><span class='op'>|</span><span class='st'>"GenerateDataKeyPair"</span><span class='op'>|</span><span class='st'>"GenerateDataKeyPairWithoutPlaintext"</span>
+  <span class='op'>)</span>,
+  Constraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    EncryptionContextSubset <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>EncryptionContextEquals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    EncryptionContextEquals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>GrantTokens</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  GrantTokens <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example creates a grant that allows the specified IAM role</span>
 <span class='co'># to encrypt data with the specified customer master key (CMK).</span>
-<span class='no'>svc</span>$<span class='fu'>create_grant</span>(
-  <span class='kw'>GranteePrincipal</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::111122223333:role/ExampleRole"</span>,
-  <span class='kw'>KeyId</span> <span class='kw'>=</span> <span class='st'>"arn:aws:kms:us-east-2:444455556666:key/1234abcd-12ab-34cd-56ef-1234567890ab"</span>,
-  <span class='kw'>Operations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_grant</span><span class='op'>(</span>
+  GranteePrincipal <span class='op'>=</span> <span class='st'>"arn:aws:iam::111122223333:role/ExampleRole"</span>,
+  KeyId <span class='op'>=</span> <span class='st'>"arn:aws:kms:us-east-2:444455556666:key/1234abcd-12ab-34cd-56ef-1234567890ab"</span>,
+  Operations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"Encrypt"</span>,
     <span class='st'>"Decrypt"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -290,7 +352,7 @@ in the <em>AWS Key Management Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -41,7 +41,25 @@
 
 <meta property="og:title" content="AddJobFlowSteps adds new steps to a running cluster — emr_add_job_flow_steps" />
 <meta property="og:description" content="AddJobFlowSteps adds new steps to a running cluster. A maximum of 256
-steps are allowed in each job flow." />
+steps are allowed in each job flow.
+If your cluster is long-running (such as a Hive data warehouse) or
+complex, you may require more than 256 steps to process your data. You
+can bypass the 256-step limitation in various ways, including using SSH
+to connect to the master node and submitting queries directly to the
+software running on the master node, such as Hive and Hadoop. For more
+information on how to do this, see Add More than 256 Steps to a Cluster
+in the Amazon EMR Management Guide.
+A step specifies the location of a JAR file stored either on the master
+node of the cluster or in Amazon S3. Each step is performed by the main
+function of the main class of the JAR file. The main class can be
+specified either in the manifest of the JAR or by using the MainFunction
+parameter of the step.
+Amazon EMR executes each step in the order listed. For a step to be
+considered complete, the main function must exit with a zero exit code
+and all Hadoop jobs started while the step was running must have
+completed and run successfully.
+You can only add steps to a cluster that is in one of the following
+states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING." />
 
 
 
@@ -73,7 +91,7 @@ steps are allowed in each job flow." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +99,7 @@ steps are allowed in each job flow." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +111,7 @@ steps are allowed in each job flow." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,27 +136,7 @@ steps are allowed in each job flow." />
     <div class="ref-description">
     <p>AddJobFlowSteps adds new steps to a running cluster. A maximum of 256
 steps are allowed in each job flow.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>emr_add_job_flow_steps</span>(<span class='no'>JobFlowId</span>, <span class='no'>Steps</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>JobFlowId</th>
-      <td><p>[required] A string that uniquely identifies the job flow. This identifier is
-returned by RunJobFlow and can also be obtained from ListClusters.</p></td>
-    </tr>
-    <tr>
-      <th>Steps</th>
-      <td><p>[required] A list of StepConfig to be executed by the job flow.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If your cluster is long-running (such as a Hive data warehouse) or
+<p>If your cluster is long-running (such as a Hive data warehouse) or
 complex, you may require more than 256 steps to process your data. You
 can bypass the 256-step limitation in various ways, including using SSH
 to connect to the master node and submitting queries directly to the
@@ -156,31 +154,50 @@ and all Hadoop jobs started while the step was running must have
 completed and run successfully.</p>
 <p>You can only add steps to a cluster that is in one of the following
 states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>emr_add_job_flow_steps</span><span class='op'>(</span><span class='va'>JobFlowId</span>, <span class='va'>Steps</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>JobFlowId</th>
+      <td><p>[required] A string that uniquely identifies the job flow. This identifier is
+returned by RunJobFlow and can also be obtained from ListClusters.</p></td>
+    </tr>
+    <tr>
+      <th>Steps</th>
+      <td><p>[required] A list of StepConfig to be executed by the job flow.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>add_job_flow_steps</span>(
-  <span class='kw'>JobFlowId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Steps</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ActionOnFailure</span> <span class='kw'>=</span> <span class='st'>"TERMINATE_JOB_FLOW"</span><span class='kw'>|</span><span class='st'>"TERMINATE_CLUSTER"</span><span class='kw'>|</span><span class='st'>"CANCEL_AND_WAIT"</span><span class='kw'>|</span><span class='st'>"CONTINUE"</span>,
-      <span class='kw'>HadoopJarStep</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        ),
-        <span class='kw'>Jar</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>MainClass</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>add_job_flow_steps</span><span class='op'>(</span>
+  JobFlowId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Steps <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      ActionOnFailure <span class='op'>=</span> <span class='st'>"TERMINATE_JOB_FLOW"</span><span class='op'>|</span><span class='st'>"TERMINATE_CLUSTER"</span><span class='op'>|</span><span class='st'>"CANCEL_AND_WAIT"</span><span class='op'>|</span><span class='st'>"CONTINUE"</span>,
+      HadoopJarStep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Properties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Key <span class='op'>=</span> <span class='st'>"string"</span>,
+            Value <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        Jar <span class='op'>=</span> <span class='st'>"string"</span>,
+        MainClass <span class='op'>=</span> <span class='st'>"string"</span>,
+        Args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    )
-  )
-)</pre>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -198,7 +215,7 @@ states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

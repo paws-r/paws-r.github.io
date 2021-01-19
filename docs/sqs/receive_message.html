@@ -43,7 +43,41 @@
 <meta property="og:description" content="Retrieves one or more messages (up to 10), from the specified queue.
 Using the WaitTimeSeconds parameter enables long-poll support. For
 more information, see Amazon SQS Long Polling
-in the Amazon Simple Queue Service Developer Guide." />
+in the Amazon Simple Queue Service Developer Guide.
+Short poll is the default behavior where a weighted random set of
+machines is sampled on a ReceiveMessage call. Thus, only the messages
+on the sampled machines are returned. If the number of messages in the
+queue is small (fewer than 1,000), you most likely get fewer messages
+than you requested per ReceiveMessage call. If the number of messages
+in the queue is extremely small, you might not receive any messages in a
+particular ReceiveMessage response. If this happens, repeat the
+request.
+For each message returned, the response includes the following:
+The message body.
+An MD5 digest of the message body. For information about MD5, see
+RFC1321.
+The MessageId you received when you sent the message to the queue.
+The receipt handle.
+The message attributes.
+An MD5 digest of the message attributes.
+
+
+The receipt handle is the identifier you must provide when deleting the
+message. For more information, see Queue and Message Identifiers
+in the Amazon Simple Queue Service Developer Guide.
+You can provide the VisibilityTimeout parameter in your request. The
+parameter is applied to the messages that Amazon SQS returns in the
+response. If you don't include the parameter, the overall visibility
+timeout for the queue is used for the returned messages. For more
+information, see Visibility Timeout
+in the Amazon Simple Queue Service Developer Guide.
+A message that isn't deleted or a message whose visibility isn't
+extended before the visibility timeout expires counts as a failed
+receive. Depending on the configuration of the queue, the message might
+be sent to the dead-letter queue.
+In the future, new attributes might be added. If you write code that
+calls this action, we recommend that you structure your code so that it
+can handle new attributes gracefully." />
 
 
 
@@ -75,7 +109,7 @@ in the Amazon Simple Queue Service Developer Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +117,7 @@ in the Amazon Simple Queue Service Developer Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +129,7 @@ in the Amazon Simple Queue Service Developer Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,13 +154,47 @@ in the Amazon Simple Queue Service Developer Guide." />
     <div class="ref-description">
     <p>Retrieves one or more messages (up to 10), from the specified queue.
 Using the <code>WaitTimeSeconds</code> parameter enables long-poll support. For
-more information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html'>Amazon SQS Long Polling</a>
+more information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html#sqs-long-polling'>Amazon SQS Long Polling</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
+<p>Short poll is the default behavior where a weighted random set of
+machines is sampled on a <code>ReceiveMessage</code> call. Thus, only the messages
+on the sampled machines are returned. If the number of messages in the
+queue is small (fewer than 1,000), you most likely get fewer messages
+than you requested per <code>ReceiveMessage</code> call. If the number of messages
+in the queue is extremely small, you might not receive any messages in a
+particular <code>ReceiveMessage</code> response. If this happens, repeat the
+request.</p>
+<p>For each message returned, the response includes the following:</p><ul>
+<li><p>The message body.</p></li>
+<li><p>An MD5 digest of the message body. For information about MD5, see
+<a href='https://www.ietf.org/rfc/rfc1321.txt'>RFC1321</a>.</p></li>
+<li><p>The <code>MessageId</code> you received when you sent the message to the queue.</p></li>
+<li><p>The receipt handle.</p></li>
+<li><p>The message attributes.</p></li>
+<li><p>An MD5 digest of the message attributes.</p></li>
+</ul>
+
+<p>The receipt handle is the identifier you must provide when deleting the
+message. For more information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html'>Queue and Message Identifiers</a>
+in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
+<p>You can provide the <code>VisibilityTimeout</code> parameter in your request. The
+parameter is applied to the messages that Amazon SQS returns in the
+response. If you don't include the parameter, the overall visibility
+timeout for the queue is used for the returned messages. For more
+information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html'>Visibility Timeout</a>
+in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
+<p>A message that isn't deleted or a message whose visibility isn't
+extended before the visibility timeout expires counts as a failed
+receive. Depending on the configuration of the queue, the message might
+be sent to the dead-letter queue.</p>
+<p>In the future, new attributes might be added. If you write code that
+calls this action, we recommend that you structure your code so that it
+can handle new attributes gracefully.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sqs_receive_message</span>(<span class='no'>QueueUrl</span>, <span class='no'>AttributeNames</span>, <span class='no'>MessageAttributeNames</span>,
-  <span class='no'>MaxNumberOfMessages</span>, <span class='no'>VisibilityTimeout</span>, <span class='no'>WaitTimeSeconds</span>,
-  <span class='no'>ReceiveRequestAttemptId</span>)</pre>
+    <pre class="usage"><span class='fu'>sqs_receive_message</span><span class='op'>(</span><span class='va'>QueueUrl</span>, <span class='va'>AttributeNames</span>, <span class='va'>MessageAttributeNames</span>,
+  <span class='va'>MaxNumberOfMessages</span>, <span class='va'>VisibilityTimeout</span>, <span class='va'>WaitTimeSeconds</span>,
+  <span class='va'>ReceiveRequestAttemptId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,34 +208,34 @@ in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
       <th>AttributeNames</th>
       <td><p>A list of attributes that need to be returned along with each message.
 These attributes include:</p><ul>
-<li><p><code>All</code> -- Returns all values.</p></li>
-<li><p><code>ApproximateFirstReceiveTimestamp</code> -- Returns the time the message
-was first received from the queue (<a href='http://en.wikipedia.org/wiki/Unix_time'>epoch time</a> in milliseconds).</p></li>
-<li><p><code>ApproximateReceiveCount</code> -- Returns the number of times a message
+<li><p><code>All</code> – Returns all values.</p></li>
+<li><p><code>ApproximateFirstReceiveTimestamp</code> – Returns the time the message
+was first received from the queue (<a href='https://en.wikipedia.org/wiki/Unix_time'>epoch time</a> in milliseconds).</p></li>
+<li><p><code>ApproximateReceiveCount</code> – Returns the number of times a message
 has been received across all queues but not deleted.</p></li>
-<li><p><code>AWSTraceHeader</code> -- Returns the AWS X-Ray trace header string.</p></li>
+<li><p><code>AWSTraceHeader</code> – Returns the AWS X-Ray trace header string.</p></li>
 <li><p><code>SenderId</code></p><ul>
 <li><p>For an IAM user, returns the IAM user ID, for example
 <code>ABCDEFGHI1JKLMNOPQ23R</code>.</p></li>
 <li><p>For an IAM role, returns the IAM role ID, for example
 <code>ABCDE1F2GH3I4JK5LMNOP:i-a123b456</code>.</p></li>
 </ul></li>
-<li><p><code>SentTimestamp</code> -- Returns the time the message was sent to the
-queue (<a href='http://en.wikipedia.org/wiki/Unix_time'>epoch time</a> in
+<li><p><code>SentTimestamp</code> – Returns the time the message was sent to the queue
+(<a href='https://en.wikipedia.org/wiki/Unix_time'>epoch time</a> in
 milliseconds).</p></li>
-<li><p><code>MessageDeduplicationId</code> -- Returns the value provided by the
+<li><p><code>MessageDeduplicationId</code> – Returns the value provided by the
 producer that calls the <code>&lt;a&gt;SendMessage&lt;/a&gt;</code> action.</p></li>
-<li><p><code>MessageGroupId</code> -- Returns the value provided by the producer that
+<li><p><code>MessageGroupId</code> – Returns the value provided by the producer that
 calls the <code>&lt;a&gt;SendMessage&lt;/a&gt;</code> action. Messages with the same
 <code>MessageGroupId</code> are returned in sequence.</p></li>
-<li><p><code>SequenceNumber</code> -- Returns the value provided by Amazon SQS.</p></li>
+<li><p><code>SequenceNumber</code> – Returns the value provided by Amazon SQS.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>MessageAttributeNames</th>
       <td><p>The name of the message attribute, where <em>N</em> is the index.</p><ul>
 <li><p>The name can contain alphanumeric characters and the underscore
-(<code>_</code>), hyphen (<code>-</code>), and period (<code>.</code>).</p></li>
+(<code>_</code>), hyphen (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code>), and period (<code>.</code>).</p></li>
 <li><p>The name is case-sensitive and must be unique among all attribute
 names for the message.</p></li>
 <li><p>The name must not start with AWS-reserved prefixes such as <code>AWS.</code> or
@@ -222,7 +290,7 @@ set of messages, even if their visibility timeout has not yet expired.</p><ul>
 <code>ReceiveMessage</code> action.</p></li>
 <li><p>When you set <code>FifoQueue</code>, a caller of the <code>ReceiveMessage</code> action
 can provide a <code>ReceiveRequestAttemptId</code> explicitly.</p></li>
-<li><p>If a caller of the <code>ReceiveMessage</code> action doesn\'t provide a
+<li><p>If a caller of the <code>ReceiveMessage</code> action doesn't provide a
 <code>ReceiveRequestAttemptId</code>, Amazon SQS generates a
 <code>ReceiveRequestAttemptId</code>.</p></li>
 <li><p>It is possible to retry the <code>ReceiveMessage</code> action with the same
@@ -246,7 +314,7 @@ visibility timeout as necessary.</p></li>
 more messages belonging to the same <code>MessageGroupId</code> are returned
 until the visibility timeout expires. You can still receive messages
 with another <code>MessageGroupId</code> as long as it is also visible.</p></li>
-<li><p>If a caller of <code>ReceiveMessage</code> can\'t track the
+<li><p>If a caller of <code>ReceiveMessage</code> can't track the
 <code>ReceiveRequestAttemptId</code>, no retries work until the original
 visibility timeout expires. As a result, delays might occur but the
 messages in the queue remain in a strict order.</p></li>
@@ -261,58 +329,23 @@ in the <em>Amazon Simple Queue Service Developer Guide</em>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Short poll is the default behavior where a weighted random set of
-machines is sampled on a <code>ReceiveMessage</code> call. Thus, only the messages
-on the sampled machines are returned. If the number of messages in the
-queue is small (fewer than 1,000), you most likely get fewer messages
-than you requested per <code>ReceiveMessage</code> call. If the number of messages
-in the queue is extremely small, you might not receive any messages in a
-particular <code>ReceiveMessage</code> response. If this happens, repeat the
-request.</p>
-<p>For each message returned, the response includes the following:</p><ul>
-<li><p>The message body.</p></li>
-<li><p>An MD5 digest of the message body. For information about MD5, see
-<a href='https://www.ietf.org/rfc/rfc1321.txt'>RFC1321</a>.</p></li>
-<li><p>The <code>MessageId</code> you received when you sent the message to the queue.</p></li>
-<li><p>The receipt handle.</p></li>
-<li><p>The message attributes.</p></li>
-<li><p>An MD5 digest of the message attributes.</p></li>
-</ul>
-
-<p>The receipt handle is the identifier you must provide when deleting the
-message. For more information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-queue-message-identifiers.html'>Queue and Message Identifiers</a>
-in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
-<p>You can provide the <code>VisibilityTimeout</code> parameter in your request. The
-parameter is applied to the messages that Amazon SQS returns in the
-response. If you don\'t include the parameter, the overall visibility
-timeout for the queue is used for the returned messages. For more
-information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html'>Visibility Timeout</a>
-in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
-<p>A message that isn\'t deleted or a message whose visibility isn\'t
-extended before the visibility timeout expires counts as a failed
-receive. Depending on the configuration of the queue, the message might
-be sent to the dead-letter queue.</p>
-<p>In the future, new attributes might be added. If you write code that
-calls this action, we recommend that you structure your code so that it
-can handle new attributes gracefully.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>receive_message</span>(
-  <span class='kw'>QueueUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AttributeNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"All"</span><span class='kw'>|</span><span class='st'>"Policy"</span><span class='kw'>|</span><span class='st'>"VisibilityTimeout"</span><span class='kw'>|</span><span class='st'>"MaximumMessageSize"</span><span class='kw'>|</span><span class='st'>"MessageRetentionPeriod"</span><span class='kw'>|</span><span class='st'>"ApproximateNumberOfMessages"</span><span class='kw'>|</span><span class='st'>"ApproximateNumberOfMessagesNotVisible"</span><span class='kw'>|</span><span class='st'>"CreatedTimestamp"</span><span class='kw'>|</span><span class='st'>"LastModifiedTimestamp"</span><span class='kw'>|</span><span class='st'>"QueueArn"</span><span class='kw'>|</span><span class='st'>"ApproximateNumberOfMessagesDelayed"</span><span class='kw'>|</span><span class='st'>"DelaySeconds"</span><span class='kw'>|</span><span class='st'>"ReceiveMessageWaitTimeSeconds"</span><span class='kw'>|</span><span class='st'>"RedrivePolicy"</span><span class='kw'>|</span><span class='st'>"FifoQueue"</span><span class='kw'>|</span><span class='st'>"ContentBasedDeduplication"</span><span class='kw'>|</span><span class='st'>"KmsMasterKeyId"</span><span class='kw'>|</span><span class='st'>"KmsDataKeyReusePeriodSeconds"</span>
-  ),
-  <span class='kw'>MessageAttributeNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>receive_message</span><span class='op'>(</span>
+  QueueUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  AttributeNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"All"</span><span class='op'>|</span><span class='st'>"Policy"</span><span class='op'>|</span><span class='st'>"VisibilityTimeout"</span><span class='op'>|</span><span class='st'>"MaximumMessageSize"</span><span class='op'>|</span><span class='st'>"MessageRetentionPeriod"</span><span class='op'>|</span><span class='st'>"ApproximateNumberOfMessages"</span><span class='op'>|</span><span class='st'>"ApproximateNumberOfMessagesNotVisible"</span><span class='op'>|</span><span class='st'>"CreatedTimestamp"</span><span class='op'>|</span><span class='st'>"LastModifiedTimestamp"</span><span class='op'>|</span><span class='st'>"QueueArn"</span><span class='op'>|</span><span class='st'>"ApproximateNumberOfMessagesDelayed"</span><span class='op'>|</span><span class='st'>"DelaySeconds"</span><span class='op'>|</span><span class='st'>"ReceiveMessageWaitTimeSeconds"</span><span class='op'>|</span><span class='st'>"RedrivePolicy"</span><span class='op'>|</span><span class='st'>"FifoQueue"</span><span class='op'>|</span><span class='st'>"ContentBasedDeduplication"</span><span class='op'>|</span><span class='st'>"KmsMasterKeyId"</span><span class='op'>|</span><span class='st'>"KmsDataKeyReusePeriodSeconds"</span><span class='op'>|</span><span class='st'>"DeduplicationScope"</span><span class='op'>|</span><span class='st'>"FifoThroughputLimit"</span>
+  <span class='op'>)</span>,
+  MessageAttributeNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>MaxNumberOfMessages</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>VisibilityTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>WaitTimeSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ReceiveRequestAttemptId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  MaxNumberOfMessages <span class='op'>=</span> <span class='fl'>123</span>,
+  VisibilityTimeout <span class='op'>=</span> <span class='fl'>123</span>,
+  WaitTimeSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  ReceiveRequestAttemptId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -330,7 +363,7 @@ can handle new attributes gracefully.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

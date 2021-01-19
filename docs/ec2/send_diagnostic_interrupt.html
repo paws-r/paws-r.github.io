@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sends a diagnostic interrupt to the specified Amazon EC2 instance to
-trigger a <em>kernel panic</em> (on Linux instances), or a <em>blue screen</em>/<em>stop
-error</em> (on Windows instances) — ec2_send_diagnostic_interrupt • paws</title>
+trigger a kernel panic (on Linux instances), or a blue screen/stop error
+(on Windows instances) — ec2_send_diagnostic_interrupt • paws</title>
 
 
 <!-- jquery -->
@@ -42,13 +42,23 @@ error</em> (on Windows instances) — ec2_send_diagnostic_interrupt • paws</ti
 
 
 <meta property="og:title" content="Sends a diagnostic interrupt to the specified Amazon EC2 instance to
-trigger a <em>kernel panic</em> (on Linux instances), or a <em>blue screen</em>/<em>stop
-error</em> (on Windows instances) — ec2_send_diagnostic_interrupt" />
+trigger a kernel panic (on Linux instances), or a blue screen/stop error
+(on Windows instances) — ec2_send_diagnostic_interrupt" />
 <meta property="og:description" content="Sends a diagnostic interrupt to the specified Amazon EC2 instance to
 trigger a kernel panic (on Linux instances), or a blue screen/stop
 error (on Windows instances). For instances based on Intel and AMD
 processors, the interrupt is received as a non-maskable interrupt
-(NMI)." />
+(NMI).
+In general, the operating system crashes and reboots when a kernel panic
+or stop error is triggered. The operating system can also be configured
+to perform diagnostic tasks, such as generating a memory dump file,
+loading a secondary kernel, or obtaining a call trace.
+Before sending a diagnostic interrupt to your instance, ensure that its
+operating system is configured to perform the required diagnostic tasks.
+For more information about configuring your operating system to generate
+a crash dump when a kernel panic or stop error occurs, see Send a diagnostic interrupt
+(Linux instances) or Send a Diagnostic Interrupt
+(Windows instances)." />
 
 
 
@@ -80,7 +90,7 @@ processors, the interrupt is received as a non-maskable interrupt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +98,7 @@ processors, the interrupt is received as a non-maskable interrupt
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +110,7 @@ processors, the interrupt is received as a non-maskable interrupt
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,8 +128,8 @@ processors, the interrupt is received as a non-maskable interrupt
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Sends a diagnostic interrupt to the specified Amazon EC2 instance to
-trigger a <em>kernel panic</em> (on Linux instances), or a <em>blue screen</em>/<em>stop
-error</em> (on Windows instances)</h1>
+trigger a kernel panic (on Linux instances), or a blue screen/stop error
+(on Windows instances)</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/ec2_operations.R'><code>R/ec2_operations.R</code></a></small>
     <div class="hidden name"><code>ec2_send_diagnostic_interrupt.Rd</code></div>
     </div>
@@ -130,9 +140,19 @@ trigger a <em>kernel panic</em> (on Linux instances), or a <em>blue screen</em>/
 error</em> (on Windows instances). For instances based on Intel and AMD
 processors, the interrupt is received as a <em>non-maskable interrupt</em>
 (NMI).</p>
+<p>In general, the operating system crashes and reboots when a kernel panic
+or stop error is triggered. The operating system can also be configured
+to perform diagnostic tasks, such as generating a memory dump file,
+loading a secondary kernel, or obtaining a call trace.</p>
+<p>Before sending a diagnostic interrupt to your instance, ensure that its
+operating system is configured to perform the required diagnostic tasks.</p>
+<p>For more information about configuring your operating system to generate
+a crash dump when a kernel panic or stop error occurs, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/diagnostic-interrupt.html'>Send a diagnostic interrupt</a>
+(Linux instances) or <a href='https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/diagnostic-interrupt.html'>Send a Diagnostic Interrupt</a>
+(Windows instances).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_send_diagnostic_interrupt</span>(<span class='no'>InstanceId</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_send_diagnostic_interrupt</span><span class='op'>(</span><span class='va'>InstanceId</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,25 +170,14 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>In general, the operating system crashes and reboots when a kernel panic
-or stop error is triggered. The operating system can also be configured
-to perform diagnostic tasks, such as generating a memory dump file,
-loading a secondary kernel, or obtaining a call trace.</p>
-<p>Before sending a diagnostic interrupt to your instance, ensure that its
-operating system is configured to perform the required diagnostic tasks.</p>
-<p>For more information about configuring your operating system to generate
-a crash dump when a kernel panic or stop error occurs, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/diagnostic-interrupt.html'>Send a diagnostic interrupt</a>
-(Linux instances) or <a href='https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/diagnostic-interrupt.html'>Send a Diagnostic Interrupt</a>
-(Windows instances).</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>send_diagnostic_interrupt</span>(
-  <span class='kw'>InstanceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_diagnostic_interrupt</span><span class='op'>(</span>
+  InstanceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -186,7 +195,7 @@ a crash dump when a kernel panic or stop error occurs, see <a href='https://docs
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

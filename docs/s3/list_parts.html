@@ -42,16 +42,28 @@
 <meta property="og:title" content="Lists the parts that have been uploaded for a specific multipart upload — s3_list_parts" />
 <meta property="og:description" content="Lists the parts that have been uploaded for a specific multipart upload.
 This operation must include the upload ID, which you obtain by sending
-the initiate multipart upload request (see CreateMultipartUpload). This
-request returns a maximum of 1,000 uploaded parts. The default number of
-parts returned is 1,000 parts. You can restrict the number of parts
-returned by specifying the max-parts request parameter. If your
+the initiate multipart upload request (see
+CreateMultipartUpload).
+This request returns a maximum of 1,000 uploaded parts. The default
+number of parts returned is 1,000 parts. You can restrict the number of
+parts returned by specifying the max-parts request parameter. If your
 multipart upload consists of more than 1,000 parts, the response returns
 an IsTruncated field with the value of true, and a
 NextPartNumberMarker element. In subsequent ListParts requests you
 can include the part-number-marker query string parameter and set its
 value to the NextPartNumberMarker field value from the previous
-response." />
+response.
+For more information on multipart uploads, see Uploading Objects Using Multipart Upload.
+For information on permissions required to use the multipart upload API,
+see Multipart Upload API and Permissions.
+The following operations are related to ListParts:
+CreateMultipartUpload
+UploadPart
+CompleteMultipartUpload
+AbortMultipartUpload
+ListMultipartUploads
+
+" />
 
 
 
@@ -83,7 +95,7 @@ response." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -91,7 +103,7 @@ response." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,7 +115,7 @@ response." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -128,33 +140,53 @@ response." />
     <div class="ref-description">
     <p>Lists the parts that have been uploaded for a specific multipart upload.
 This operation must include the upload ID, which you obtain by sending
-the initiate multipart upload request (see CreateMultipartUpload). This
-request returns a maximum of 1,000 uploaded parts. The default number of
-parts returned is 1,000 parts. You can restrict the number of parts
-returned by specifying the <code>max-parts</code> request parameter. If your
+the initiate multipart upload request (see
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html'>CreateMultipartUpload</a>).
+This request returns a maximum of 1,000 uploaded parts. The default
+number of parts returned is 1,000 parts. You can restrict the number of
+parts returned by specifying the <code>max-parts</code> request parameter. If your
 multipart upload consists of more than 1,000 parts, the response returns
 an <code>IsTruncated</code> field with the value of true, and a
 <code>NextPartNumberMarker</code> element. In subsequent <code>ListParts</code> requests you
 can include the part-number-marker query string parameter and set its
 value to the <code>NextPartNumberMarker</code> field value from the previous
 response.</p>
+<p>For more information on multipart uploads, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html'>Uploading Objects Using Multipart Upload</a>.</p>
+<p>For information on permissions required to use the multipart upload API,
+see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html'>Multipart Upload API and Permissions</a>.</p>
+<p>The following operations are related to <code>ListParts</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html'>CreateMultipartUpload</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html'>UploadPart</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html'>CompleteMultipartUpload</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html'>AbortMultipartUpload</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html'>ListMultipartUploads</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_list_parts</span>(<span class='no'>Bucket</span>, <span class='no'>Key</span>, <span class='no'>MaxParts</span>, <span class='no'>PartNumberMarker</span>, <span class='no'>UploadId</span>,
-  <span class='no'>RequestPayer</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_list_parts</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Key</span>, <span class='va'>MaxParts</span>, <span class='va'>PartNumberMarker</span>, <span class='va'>UploadId</span>,
+  <span class='va'>RequestPayer</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Bucket</th>
-      <td><p>[required] Name of the bucket to which the parts are being uploaded.</p>
+      <td><p>[required] The name of the bucket to which the parts are being uploaded.</p>
 <p>When using this API with an access point, you must direct requests to
 the access point hostname. The access point hostname takes the form
 <em>AccessPointName</em>-<em>AccountId</em>.s3-accesspoint.<em>Region</em>.amazonaws.com.
-When using this operation using an access point through the AWS SDKs,
-you provide the access point ARN in place of the bucket name. For more
+When using this operation with an access point through the AWS SDKs, you
+provide the access point ARN in place of the bucket name. For more
 information about access point ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html'>Using Access Points</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>When using this API with Amazon S3 on Outposts, you must direct requests
+to the S3 on Outposts hostname. The S3 on Outposts hostname takes the
+form
+<em>AccessPointName</em>-<em>AccountId</em>.<em>outpostID</em>.s3-outposts.<em>Region</em>.amazonaws.com.
+When using this operation using S3 on Outposts through the AWS SDKs, you
+provide the Outposts bucket ARN in place of the bucket name. For more
+information about S3 on Outposts ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html'>Using S3 on Outposts</a>
 in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
@@ -178,44 +210,41 @@ higher part numbers will be listed.</p></td>
       <th>RequestPayer</th>
       <td></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For more information on multipart uploads, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html'>Uploading Objects Using Multipart Upload</a>.</p>
-<p>For information on permissions required to use the multipart upload API,
-see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html'>Multipart Upload API and Permissions</a>.</p>
-<p>The following operations are related to <code>ListParts</code>:</p><ul>
-<li><p>CreateMultipartUpload</p></li>
-<li><p>UploadPart</p></li>
-<li><p>CompleteMultipartUpload</p></li>
-<li><p>AbortMultipartUpload</p></li>
-<li><p>ListMultipartUploads</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_parts</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxParts</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>PartNumberMarker</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>UploadId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RequestPayer</span> <span class='kw'>=</span> <span class='st'>"requester"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_parts</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Key <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxParts <span class='op'>=</span> <span class='fl'>123</span>,
+  PartNumberMarker <span class='op'>=</span> <span class='fl'>123</span>,
+  UploadId <span class='op'>=</span> <span class='st'>"string"</span>,
+  RequestPayer <span class='op'>=</span> <span class='st'>"requester"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example lists parts uploaded for a specific multipart</span>
 <span class='co'># upload.</span>
-<span class='no'>svc</span>$<span class='fu'>list_parts</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"bigobject"</span>,
-  <span class='kw'>UploadId</span> <span class='kw'>=</span> <span class='st'>"example7YPBOJuoFiQ9cz4P3Pe6FIZwO4f7wN93uHsNBEw97pl5eNwzExg0LAT2dUN91cOmrEQHDsP..."</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_parts</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  Key <span class='op'>=</span> <span class='st'>"bigobject"</span>,
+  UploadId <span class='op'>=</span> <span class='st'>"example7YPBOJuoFiQ9cz4P3Pe6FIZwO4f7wN93uHsNBEw97pl5eNwzExg0LAT2dUN91cOmrEQHDsP..."</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -231,7 +260,7 @@ see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.h
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

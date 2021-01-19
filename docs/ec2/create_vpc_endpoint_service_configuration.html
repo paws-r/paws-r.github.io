@@ -43,8 +43,22 @@
 <meta property="og:title" content="Creates a VPC endpoint service configuration to which service consumers
 (AWS accounts, IAM users, and IAM roles) can connect — ec2_create_vpc_endpoint_service_configuration" />
 <meta property="og:description" content="Creates a VPC endpoint service configuration to which service consumers
-(AWS accounts, IAM users, and IAM roles) can connect. Service consumers
-can create an interface VPC endpoint to connect to your service." />
+(AWS accounts, IAM users, and IAM roles) can connect.
+To create an endpoint service configuration, you must first create one
+of the following for your service:
+A Network Load Balancer.
+Service consumers connect to your service using an interface
+endpoint.
+A Gateway Load Balancer.
+Service consumers connect to your service using a Gateway Load
+Balancer endpoint.
+
+
+For more information, see VPC Endpoint Services
+in the Amazon Virtual Private Cloud User Guide.
+If you set the private DNS name, you must prove that you own the private
+DNS domain name. For more information, see VPC Endpoint Service Private DNS Name Verification
+in the Amazon Virtual Private Cloud User Guide." />
 
 
 
@@ -76,7 +90,7 @@ can create an interface VPC endpoint to connect to your service." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +98,7 @@ can create an interface VPC endpoint to connect to your service." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +110,7 @@ can create an interface VPC endpoint to connect to your service." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,13 +135,27 @@ can create an interface VPC endpoint to connect to your service." />
 
     <div class="ref-description">
     <p>Creates a VPC endpoint service configuration to which service consumers
-(AWS accounts, IAM users, and IAM roles) can connect. Service consumers
-can create an interface VPC endpoint to connect to your service.</p>
+(AWS accounts, IAM users, and IAM roles) can connect.</p>
+<p>To create an endpoint service configuration, you must first create one
+of the following for your service:</p><ul>
+<li><p>A <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html'>Network Load Balancer</a>.
+Service consumers connect to your service using an interface
+endpoint.</p></li>
+<li><p>A <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html'>Gateway Load Balancer</a>.
+Service consumers connect to your service using a Gateway Load
+Balancer endpoint.</p></li>
+</ul>
+
+<p>For more information, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html'>VPC Endpoint Services</a>
+in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
+<p>If you set the private DNS name, you must prove that you own the private
+DNS domain name. For more information, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-services-dns-validation.html'>VPC Endpoint Service Private DNS Name Verification</a>
+in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_create_vpc_endpoint_service_configuration</span>(<span class='no'>DryRun</span>,
-  <span class='no'>AcceptanceRequired</span>, <span class='no'>PrivateDnsName</span>, <span class='no'>NetworkLoadBalancerArns</span>,
-  <span class='no'>ClientToken</span>, <span class='no'>TagSpecifications</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_create_vpc_endpoint_service_configuration</span><span class='op'>(</span><span class='va'>DryRun</span>,
+  <span class='va'>AcceptanceRequired</span>, <span class='va'>PrivateDnsName</span>, <span class='va'>NetworkLoadBalancerArns</span>,
+  <span class='va'>GatewayLoadBalancerArns</span>, <span class='va'>ClientToken</span>, <span class='va'>TagSpecifications</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,17 +175,22 @@ AcceptVpcEndpointConnections.</p></td>
     </tr>
     <tr>
       <th>PrivateDnsName</th>
-      <td><p>The private DNS name to assign to the VPC endpoint service.</p></td>
+      <td><p>(Interface endpoint configuration) The private DNS name to assign to the
+VPC endpoint service.</p></td>
     </tr>
     <tr>
       <th>NetworkLoadBalancerArns</th>
-      <td><p>[required] The Amazon Resource Names (ARNs) of one or more Network Load Balancers
+      <td><p>The Amazon Resource Names (ARNs) of one or more Network Load Balancers
 for your service.</p></td>
+    </tr>
+    <tr>
+      <th>GatewayLoadBalancerArns</th>
+      <td><p>The Amazon Resource Names (ARNs) of one or more Gateway Load Balancers.</p></td>
     </tr>
     <tr>
       <th>ClientToken</th>
       <td><p>Unique, case-sensitive identifier that you provide to ensure the
-idempotency of the request. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html'>How to Ensure Idempotency</a>.</p></td>
+idempotency of the request. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html'>How to Ensure Idempotency</a>.</p></td>
     </tr>
     <tr>
       <th>TagSpecifications</th>
@@ -165,37 +198,33 @@ idempotency of the request. For more information, see <a href='https://docs.aws.
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To create an endpoint service configuration, you must first create a
-Network Load Balancer for your service. For more information, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html'>VPC Endpoint Services</a>
-in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
-<p>If you set the private DNS name, you must prove that you own the private
-DNS domain name. For more information, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-services-dns-validation.html'>VPC Endpoint Service Private DNS Name Verification</a>
-in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_vpc_endpoint_service_configuration</span>(
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>AcceptanceRequired</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>PrivateDnsName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NetworkLoadBalancerArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_vpc_endpoint_service_configuration</span><span class='op'>(</span>
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  AcceptanceRequired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  PrivateDnsName <span class='op'>=</span> <span class='st'>"string"</span>,
+  NetworkLoadBalancerArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TagSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='kw'>|</span><span class='st'>"customer-gateway"</span><span class='kw'>|</span><span class='st'>"dedicated-host"</span><span class='kw'>|</span><span class='st'>"dhcp-options"</span><span class='kw'>|</span><span class='st'>"elastic-ip"</span><span class='kw'>|</span><span class='st'>"elastic-gpu"</span><span class='kw'>|</span><span class='st'>"export-image-task"</span><span class='kw'>|</span><span class='st'>"export-instance-task"</span><span class='kw'>|</span><span class='st'>"fleet"</span><span class='kw'>|</span><span class='st'>"fpga-image"</span><span class='kw'>|</span><span class='st'>"host-reservation"</span><span class='kw'>|</span><span class='st'>"image"</span><span class='kw'>|</span><span class='st'>"import-image-task"</span><span class='kw'>|</span><span class='st'>"import-snapshot-task"</span><span class='kw'>|</span><span class='st'>"instance"</span><span class='kw'>|</span><span class='st'>"internet-gateway"</span><span class='kw'>|</span><span class='st'>"key-pair"</span><span class='kw'>|</span><span class='st'>"launch-template"</span><span class='kw'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='kw'>|</span><span class='st'>"natgateway"</span><span class='kw'>|</span><span class='st'>"network-acl"</span><span class='kw'>|</span><span class='st'>"network-interface"</span><span class='kw'>|</span><span class='st'>"placement-group"</span><span class='kw'>|</span><span class='st'>"reserved-instances"</span><span class='kw'>|</span><span class='st'>"route-table"</span><span class='kw'>|</span><span class='st'>"security-group"</span><span class='kw'>|</span><span class='st'>"snapshot"</span><span class='kw'>|</span><span class='st'>"spot-fleet-request"</span><span class='kw'>|</span><span class='st'>"spot-instances-request"</span><span class='kw'>|</span><span class='st'>"subnet"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-session"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-target"</span><span class='kw'>|</span><span class='st'>"transit-gateway"</span><span class='kw'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='kw'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='kw'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='kw'>|</span><span class='st'>"volume"</span><span class='kw'>|</span><span class='st'>"vpc"</span><span class='kw'>|</span><span class='st'>"vpc-peering-connection"</span><span class='kw'>|</span><span class='st'>"vpn-connection"</span><span class='kw'>|</span><span class='st'>"vpn-gateway"</span><span class='kw'>|</span><span class='st'>"vpc-flow-log"</span>,
-      <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  GatewayLoadBalancerArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  TagSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ResourceType <span class='op'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='op'>|</span><span class='st'>"customer-gateway"</span><span class='op'>|</span><span class='st'>"dedicated-host"</span><span class='op'>|</span><span class='st'>"dhcp-options"</span><span class='op'>|</span><span class='st'>"egress-only-internet-gateway"</span><span class='op'>|</span><span class='st'>"elastic-ip"</span><span class='op'>|</span><span class='st'>"elastic-gpu"</span><span class='op'>|</span><span class='st'>"export-image-task"</span><span class='op'>|</span><span class='st'>"export-instance-task"</span><span class='op'>|</span><span class='st'>"fleet"</span><span class='op'>|</span><span class='st'>"fpga-image"</span><span class='op'>|</span><span class='st'>"host-reservation"</span><span class='op'>|</span><span class='st'>"image"</span><span class='op'>|</span><span class='st'>"import-image-task"</span><span class='op'>|</span><span class='st'>"import-snapshot-task"</span><span class='op'>|</span><span class='st'>"instance"</span><span class='op'>|</span><span class='st'>"internet-gateway"</span><span class='op'>|</span><span class='st'>"key-pair"</span><span class='op'>|</span><span class='st'>"launch-template"</span><span class='op'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='op'>|</span><span class='st'>"natgateway"</span><span class='op'>|</span><span class='st'>"network-acl"</span><span class='op'>|</span><span class='st'>"network-interface"</span><span class='op'>|</span><span class='st'>"network-insights-analysis"</span><span class='op'>|</span><span class='st'>"network-insights-path"</span><span class='op'>|</span><span class='st'>"placement-group"</span><span class='op'>|</span><span class='st'>"reserved-instances"</span><span class='op'>|</span><span class='st'>"route-table"</span><span class='op'>|</span><span class='st'>"security-group"</span><span class='op'>|</span><span class='st'>"snapshot"</span><span class='op'>|</span><span class='st'>"spot-fleet-request"</span><span class='op'>|</span><span class='st'>"spot-instances-request"</span><span class='op'>|</span><span class='st'>"subnet"</span><span class='op'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='op'>|</span><span class='st'>"traffic-mirror-session"</span><span class='op'>|</span><span class='st'>"traffic-mirror-target"</span><span class='op'>|</span><span class='st'>"transit-gateway"</span><span class='op'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='op'>|</span><span class='st'>"transit-gateway-connect-peer"</span><span class='op'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='op'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='op'>|</span><span class='st'>"volume"</span><span class='op'>|</span><span class='st'>"vpc"</span><span class='op'>|</span><span class='st'>"vpc-peering-connection"</span><span class='op'>|</span><span class='st'>"vpn-connection"</span><span class='op'>|</span><span class='st'>"vpn-gateway"</span><span class='op'>|</span><span class='st'>"vpc-flow-log"</span>,
+      Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Key <span class='op'>=</span> <span class='st'>"string"</span>,
+          Value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -213,7 +242,7 @@ in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

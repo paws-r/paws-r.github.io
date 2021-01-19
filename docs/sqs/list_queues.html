@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Returns a list of your queues — sqs_list_queues • paws</title>
+<title>Returns a list of your queues in the current region — sqs_list_queues • paws</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,21 @@
 
 
 
-<meta property="og:title" content="Returns a list of your queues — sqs_list_queues" />
-<meta property="og:description" content="Returns a list of your queues. The maximum number of queues that can be
-returned is 1,000. If you specify a value for the optional
-QueueNamePrefix parameter, only queues with a name that begins with
-the specified value are returned." />
+<meta property="og:title" content="Returns a list of your queues in the current region — sqs_list_queues" />
+<meta property="og:description" content="Returns a list of your queues in the current region. The response
+includes a maximum of 1,000 results. If you specify a value for the
+optional QueueNamePrefix parameter, only queues with a name that
+begins with the specified value are returned.
+The listQueues methods supports pagination. Set parameter MaxResults
+in the request to specify the maximum number of results to be returned
+in the response. If you do not set MaxResults, the response includes a
+maximum of 1,000 results. If you set MaxResults and there are
+additional results to display, the response includes a value for
+NextToken. Use NextToken as a parameter in your next request to
+listQueues to receive the next page of results.
+Cross-account permissions don't apply to this action. For more
+information, see Grant cross-account permissions to a role and a user name
+in the Amazon Simple Queue Service Developer Guide." />
 
 
 
@@ -75,7 +85,7 @@ the specified value are returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +93,7 @@ the specified value are returned." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +105,7 @@ the specified value are returned." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,19 +122,29 @@ the specified value are returned." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Returns a list of your queues</h1>
+    <h1>Returns a list of your queues in the current region</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/sqs_operations.R'><code>R/sqs_operations.R</code></a></small>
     <div class="hidden name"><code>sqs_list_queues.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns a list of your queues. The maximum number of queues that can be
-returned is 1,000. If you specify a value for the optional
-<code>QueueNamePrefix</code> parameter, only queues with a name that begins with
-the specified value are returned.</p>
+    <p>Returns a list of your queues in the current region. The response
+includes a maximum of 1,000 results. If you specify a value for the
+optional <code>QueueNamePrefix</code> parameter, only queues with a name that
+begins with the specified value are returned.</p>
+<p>The <code>listQueues</code> methods supports pagination. Set parameter <code>MaxResults</code>
+in the request to specify the maximum number of results to be returned
+in the response. If you do not set <code>MaxResults</code>, the response includes a
+maximum of 1,000 results. If you set <code>MaxResults</code> and there are
+additional results to display, the response includes a value for
+<code>NextToken</code>. Use <code>NextToken</code> as a parameter in your next request to
+<code>listQueues</code> to receive the next page of results.</p>
+<p>Cross-account permissions don't apply to this action. For more
+information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-basic-examples-of-sqs-policies.html#grant-cross-account-permissions-to-role-and-user-name'>Grant cross-account permissions to a role and a user name</a>
+in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sqs_list_queues</span>(<span class='no'>QueueNamePrefix</span>, <span class='no'>NextToken</span>, <span class='no'>MaxResults</span>)</pre>
+    <pre class="usage"><span class='fu'>sqs_list_queues</span><span class='op'>(</span><span class='va'>QueueNamePrefix</span>, <span class='va'>NextToken</span>, <span class='va'>MaxResults</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,23 +161,21 @@ name begins with the specified string are returned.</p>
     </tr>
     <tr>
       <th>MaxResults</th>
-      <td><p>Maximum number of results to include in the response.</p></td>
+      <td><p>Maximum number of results to include in the response. Value range is 1
+to 1000. You must set <code>MaxResults</code> to receive a value for <code>NextToken</code> in
+the response.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Cross-account permissions don\'t apply to this action. For more
-information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name'>Grant Cross-Account Permissions to a Role and a User Name</a>
-in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_queues</span>(
-  <span class='kw'>QueueNamePrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_queues</span><span class='op'>(</span>
+  QueueNamePrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -175,7 +193,7 @@ in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

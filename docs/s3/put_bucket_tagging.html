@@ -40,7 +40,48 @@
 
 
 <meta property="og:title" content="Sets the tags for a bucket — s3_put_bucket_tagging" />
-<meta property="og:description" content="Sets the tags for a bucket." />
+<meta property="og:description" content="Sets the tags for a bucket.
+Use tags to organize your AWS bill to reflect your own cost structure.
+To do this, sign up to get your AWS account bill with tag key values
+included. Then, to see the cost of combined resources, organize your
+billing information according to resources with the same tag key values.
+For example, you can tag several resources with a specific application
+name, and then organize your billing information to see the total cost
+of that application across several services. For more information, see
+Cost Allocation and Tagging.
+Within a bucket, if you add a tag that has the same key as an existing
+tag, the new value overwrites the old value. For more information, see
+Using Cost Allocation in Amazon S3 Bucket Tags.
+To use this operation, you must have permissions to perform the
+s3:PutBucketTagging action. The bucket owner has this permission by
+default and can grant this permission to others. For more information
+about permissions, see Permissions Related to Bucket Subresource Operations
+and Managing Access Permissions to Your Amazon S3 Resources.
+PutBucketTagging has the following special errors:
+Error code: InvalidTagError
+Description: The tag provided was not a valid tag. This error
+can occur if the tag did not pass input validation. For
+information about tag restrictions, see User-Defined Tag Restrictions
+and AWS-Generated Cost Allocation Tag Restrictions.
+
+Error code: MalformedXMLError
+Description: The XML provided does not match the schema.
+
+Error code: OperationAbortedError 
+Description: A conflicting conditional operation is currently in
+progress against this resource. Please try again.
+
+Error code: InternalError
+Description: The service was unable to apply the provided tag to
+the bucket.
+
+
+
+The following operations are related to PutBucketTagging:
+GetBucketTagging
+DeleteBucketTagging
+
+" />
 
 
 
@@ -72,7 +113,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +121,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,32 +157,7 @@
 
     <div class="ref-description">
     <p>Sets the tags for a bucket.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>s3_put_bucket_tagging</span>(<span class='no'>Bucket</span>, <span class='no'>ContentMD5</span>, <span class='no'>Tagging</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Bucket</th>
-      <td><p>[required] The bucket name.</p></td>
-    </tr>
-    <tr>
-      <th>ContentMD5</th>
-      <td><p>The base64-encoded 128-bit MD5 digest of the data. You must use this
-header as a message integrity check to verify that the request body was
-not corrupted in transit. For more information, see <a href='http://www.ietf.org/rfc/rfc1864.txt'>RFC 1864</a>.</p></td>
-    </tr>
-    <tr>
-      <th>Tagging</th>
-      <td><p>[required] Container for the <code>TagSet</code> and <code>Tag</code> elements.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Use tags to organize your AWS bill to reflect your own cost structure.
+<p>Use tags to organize your AWS bill to reflect your own cost structure.
 To do this, sign up to get your AWS account bill with tag key values
 included. Then, to see the cost of combined resources, organize your
 billing information according to resources with the same tag key values.
@@ -178,47 +194,82 @@ the bucket.</p></li>
 </ul>
 
 <p>The following operations are related to <code>PutBucketTagging</code>:</p><ul>
-<li><p>GetBucketTagging</p></li>
-<li><p>DeleteBucketTagging</p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketTagging.html'>GetBucketTagging</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html'>DeleteBucketTagging</a></p></li>
 </ul>
+
+    </div>
+
+    <pre class="usage"><span class='fu'>s3_put_bucket_tagging</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>ContentMD5</span>, <span class='va'>Tagging</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Bucket</th>
+      <td><p>[required] The bucket name.</p></td>
+    </tr>
+    <tr>
+      <th>ContentMD5</th>
+      <td><p>The base64-encoded 128-bit MD5 digest of the data. You must use this
+header as a message integrity check to verify that the request body was
+not corrupted in transit. For more information, see <a href='https://www.ietf.org/rfc/rfc1864.txt'>RFC 1864</a>.</p>
+<p>For requests made using the AWS Command Line Interface (CLI) or AWS
+SDKs, this field is calculated automatically.</p></td>
+    </tr>
+    <tr>
+      <th>Tagging</th>
+      <td><p>[required] Container for the <code>TagSet</code> and <code>Tag</code> elements.</p></td>
+    </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_bucket_tagging</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ContentMD5</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tagging</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>TagSet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_tagging</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  ContentMD5 <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tagging <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    TagSet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Key <span class='op'>=</span> <span class='st'>"string"</span>,
+        Value <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example sets tags on a bucket. Any existing tags are</span>
 <span class='co'># replaced.</span>
-<span class='no'>svc</span>$<span class='fu'>put_bucket_tagging</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>Tagging</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>TagSet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Key1"</span>,
-        <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"Value1"</span>
-      ),
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Key2"</span>,
-        <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"Value2"</span>
-      )
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_tagging</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  Tagging <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    TagSet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Key <span class='op'>=</span> <span class='st'>"Key1"</span>,
+        Value <span class='op'>=</span> <span class='st'>"Value1"</span>
+      <span class='op'>)</span>,
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Key <span class='op'>=</span> <span class='st'>"Key2"</span>,
+        Value <span class='op'>=</span> <span class='st'>"Value2"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -234,7 +285,7 @@ the bucket.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

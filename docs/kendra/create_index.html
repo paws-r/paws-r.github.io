@@ -43,7 +43,9 @@
 <meta property="og:description" content="Creates a new Amazon Kendra index. Index creation is an asynchronous
 operation. To determine if index creation has completed, check the
 Status field returned from a call to . The Status field is set to
-ACTIVE when the index is ready to use." />
+ACTIVE when the index is ready to use.
+Once the index is active you can index your documents using the
+operation or using one of the supported data sources." />
 
 
 
@@ -75,7 +77,7 @@ ACTIVE when the index is ready to use." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +85,7 @@ ACTIVE when the index is ready to use." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +97,7 @@ ACTIVE when the index is ready to use." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +124,13 @@ ACTIVE when the index is ready to use." />
 operation. To determine if index creation has completed, check the
 <code>Status</code> field returned from a call to . The <code>Status</code> field is set to
 <code>ACTIVE</code> when the index is ready to use.</p>
+<p>Once the index is active you can index your documents using the
+operation or using one of the supported data sources.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kendra_create_index</span>(<span class='no'>Name</span>, <span class='no'>Edition</span>, <span class='no'>RoleArn</span>,
-  <span class='no'>ServerSideEncryptionConfiguration</span>, <span class='no'>Description</span>, <span class='no'>ClientToken</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>kendra_create_index</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>Edition</span>, <span class='va'>RoleArn</span>,
+  <span class='va'>ServerSideEncryptionConfiguration</span>, <span class='va'>Description</span>, <span class='va'>ClientToken</span>, <span class='va'>Tags</span>,
+  <span class='va'>UserTokenConfigurations</span>, <span class='va'>UserContextPolicy</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,19 +144,21 @@ operation. To determine if index creation has completed, check the
       <td><p>The Amazon Kendra edition to use for the index. Choose
 <code>DEVELOPER_EDITION</code> for indexes intended for development, testing, or
 proof of concept. Use <code>ENTERPRISE_EDITION</code> for your production
-databases. Once you set the edition for an index, it can\'t be changed.</p></td>
+databases. Once you set the edition for an index, it can't be changed.</p>
+<p>The <code>Edition</code> parameter is optional. If you don't supply a value, the
+default is <code>ENTERPRISE_EDITION</code>.</p></td>
     </tr>
     <tr>
       <th>RoleArn</th>
-      <td><p>[required] An IAM role that gives Amazon Kendra permissions to access your Amazon
-CloudWatch logs and metrics. This is also the role used when you use the
-<code>BatchPutDocument</code> operation to index documents from an Amazon S3
-bucket.</p></td>
+      <td><p>[required] An AWS Identity and Access Management (IAM) role that gives Amazon
+Kendra permissions to access your Amazon CloudWatch logs and metrics.
+This is also the role used when you use the <code>BatchPutDocument</code> operation
+to index documents from an Amazon S3 bucket.</p></td>
     </tr>
     <tr>
       <th>ServerSideEncryptionConfiguration</th>
       <td><p>The identifier of the AWS KMS customer managed key (CMK) to use to
-encrypt data indexed by Amazon Kendra. Amazon Kendra doesn\'t support
+encrypt data indexed by Amazon Kendra. Amazon Kendra doesn't support
 asymmetric CMKs.</p></td>
     </tr>
     <tr>
@@ -162,7 +169,7 @@ asymmetric CMKs.</p></td>
       <th>ClientToken</th>
       <td><p>A token that you provide to identify the request to create an index.
 Multiple calls to the <code>CreateIndex</code> operation with the same client token
-will create only one index."</p></td>
+will create only one index.</p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -170,31 +177,66 @@ will create only one index."</p></td>
 to identify and organize your resources and to control access to
 resources.</p></td>
     </tr>
+    <tr>
+      <th>UserTokenConfigurations</th>
+      <td><p>The user token configuration.</p></td>
+    </tr>
+    <tr>
+      <th>UserContextPolicy</th>
+      <td><p>The user context policy.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>ATTRIBUTE\_FILTER</h3>
+
+
+<p>All indexed content is searchable and displayable for all users. If
+there is an access control list, it is ignored. You can filter on user
+and group attributes.</p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>USER\_TOKEN</h3>
+
+
+<p>Enables SSO and token-based user access control. All documents with no
+access control and all documents accessible to the user will be
+searchable and displayable.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Once the index is active you can index your documents using the
-operation or using one of the supported data sources.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_index</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Edition</span> <span class='kw'>=</span> <span class='st'>"DEVELOPER_EDITION"</span><span class='kw'>|</span><span class='st'>"ENTERPRISE_EDITION"</span>,
-  <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServerSideEncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_index</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Edition <span class='op'>=</span> <span class='st'>"DEVELOPER_EDITION"</span><span class='op'>|</span><span class='st'>"ENTERPRISE_EDITION"</span>,
+  RoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServerSideEncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  UserTokenConfigurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      JwtTokenTypeConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        KeyLocation <span class='op'>=</span> <span class='st'>"URL"</span><span class='op'>|</span><span class='st'>"SECRET_MANAGER"</span>,
+        URL <span class='op'>=</span> <span class='st'>"string"</span>,
+        SecretManagerArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        UserNameAttributeField <span class='op'>=</span> <span class='st'>"string"</span>,
+        GroupAttributeField <span class='op'>=</span> <span class='st'>"string"</span>,
+        Issuer <span class='op'>=</span> <span class='st'>"string"</span>,
+        ClaimRegex <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      JsonTokenTypeConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        UserNameAttributeField <span class='op'>=</span> <span class='st'>"string"</span>,
+        GroupAttributeField <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  UserContextPolicy <span class='op'>=</span> <span class='st'>"ATTRIBUTE_FILTER"</span><span class='op'>|</span><span class='st'>"USER_TOKEN"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -212,7 +254,7 @@ operation or using one of the supported data sources.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

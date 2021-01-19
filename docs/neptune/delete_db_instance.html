@@ -42,8 +42,17 @@
 <meta property="og:title" content="The DeleteDBInstance action deletes a previously provisioned DB instance — neptune_delete_db_instance" />
 <meta property="og:description" content="The DeleteDBInstance action deletes a previously provisioned DB
 instance. When you delete a DB instance, all automated backups for that
-instance are deleted and can\'t be recovered. Manual DB snapshots of the
-DB instance to be deleted by DeleteDBInstance are not deleted." />
+instance are deleted and can't be recovered. Manual DB snapshots of the
+DB instance to be deleted by DeleteDBInstance are not deleted.
+If you request a final DB snapshot the status of the Amazon Neptune DB
+instance is deleting until the DB snapshot is created. The API action
+DescribeDBInstance is used to monitor the status of this operation.
+The action can't be canceled or reverted once submitted.
+Note that when a DB instance is in a failure state and has a status of
+failed, incompatible-restore, or incompatible-network, you can
+only delete it when the SkipFinalSnapshot parameter is set to true.
+You can't delete a DB instance if it is the only instance in the DB
+cluster, or if it has deletion protection enabled." />
 
 
 
@@ -75,7 +84,7 @@ DB instance to be deleted by DeleteDBInstance are not deleted." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +92,7 @@ DB instance to be deleted by DeleteDBInstance are not deleted." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +104,7 @@ DB instance to be deleted by DeleteDBInstance are not deleted." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,12 +129,21 @@ DB instance to be deleted by DeleteDBInstance are not deleted." />
     <div class="ref-description">
     <p>The DeleteDBInstance action deletes a previously provisioned DB
 instance. When you delete a DB instance, all automated backups for that
-instance are deleted and can\'t be recovered. Manual DB snapshots of the
+instance are deleted and can't be recovered. Manual DB snapshots of the
 DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p>
+<p>If you request a final DB snapshot the status of the Amazon Neptune DB
+instance is <code>deleting</code> until the DB snapshot is created. The API action
+<code>DescribeDBInstance</code> is used to monitor the status of this operation.
+The action can't be canceled or reverted once submitted.</p>
+<p>Note that when a DB instance is in a failure state and has a status of
+<code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can
+only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p>
+<p>You can't delete a DB instance if it is the only instance in the DB
+cluster, or if it has deletion protection enabled.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>neptune_delete_db_instance</span>(<span class='no'>DBInstanceIdentifier</span>, <span class='no'>SkipFinalSnapshot</span>,
-  <span class='no'>FinalDBSnapshotIdentifier</span>)</pre>
+    <pre class="usage"><span class='fu'>neptune_delete_db_instance</span><span class='op'>(</span><span class='va'>DBInstanceIdentifier</span>, <span class='va'>SkipFinalSnapshot</span>,
+  <span class='va'>FinalDBSnapshotIdentifier</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,7 +151,7 @@ DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p>
     <tr>
       <th>DBInstanceIdentifier</th>
       <td><p>[required] The DB instance identifier for the DB instance to be deleted. This
-parameter isn\'t case-sensitive.</p>
+parameter isn't case-sensitive.</p>
 <p>Constraints:</p><ul>
 <li><p>Must match the name of an existing DB instance.</p></li>
 </ul></td>
@@ -145,9 +163,8 @@ is deleted. If <code>true</code> is specified, no DBSnapshot is created. If <cod
 is specified, a DB snapshot is created before the DB instance is
 deleted.</p>
 <p>Note that when a DB instance is in a failure state and has a status of
-\'failed\', \'incompatible-restore\', or \'incompatible-network\', it
-can only be deleted when the SkipFinalSnapshot parameter is set to
-\"true\".</p>
+'failed', 'incompatible-restore', or 'incompatible-network', it can only
+be deleted when the SkipFinalSnapshot parameter is set to "true".</p>
 <p>Specify <code>true</code> when deleting a Read Replica.</p>
 <p>The FinalDBSnapshotIdentifier parameter must be specified if
 SkipFinalSnapshot is <code>false</code>.</p>
@@ -168,25 +185,15 @@ parameter to true results in an error.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you request a final DB snapshot the status of the Amazon Neptune DB
-instance is <code>deleting</code> until the DB snapshot is created. The API action
-<code>DescribeDBInstance</code> is used to monitor the status of this operation.
-The action can\'t be canceled or reverted once submitted.</p>
-<p>Note that when a DB instance is in a failure state and has a status of
-<code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can
-only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p>
-<p>You can\'t delete a DB instance if it is the only instance in the DB
-cluster, or if it has deletion protection enabled.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>delete_db_instance</span>(
-  <span class='kw'>DBInstanceIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SkipFinalSnapshot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>FinalDBSnapshotIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_db_instance</span><span class='op'>(</span>
+  DBInstanceIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  SkipFinalSnapshot <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  FinalDBSnapshotIdentifier <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -204,7 +211,7 @@ cluster, or if it has deletion protection enabled.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

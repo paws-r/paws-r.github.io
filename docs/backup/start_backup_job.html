@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Starts a job to create a one-time backup of the specified resource — backup_start_backup_job • paws</title>
+<title>Starts an on-demand backup job for the specified resource — backup_start_backup_job • paws</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Starts a job to create a one-time backup of the specified resource — backup_start_backup_job" />
-<meta property="og:description" content="Starts a job to create a one-time backup of the specified resource." />
+<meta property="og:title" content="Starts an on-demand backup job for the specified resource — backup_start_backup_job" />
+<meta property="og:description" content="Starts an on-demand backup job for the specified resource." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -109,18 +109,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Starts a job to create a one-time backup of the specified resource</h1>
+    <h1>Starts an on-demand backup job for the specified resource</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/backup_operations.R'><code>R/backup_operations.R</code></a></small>
     <div class="hidden name"><code>backup_start_backup_job.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Starts a job to create a one-time backup of the specified resource.</p>
+    <p>Starts an on-demand backup job for the specified resource.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>backup_start_backup_job</span>(<span class='no'>BackupVaultName</span>, <span class='no'>ResourceArn</span>, <span class='no'>IamRoleArn</span>,
-  <span class='no'>IdempotencyToken</span>, <span class='no'>StartWindowMinutes</span>, <span class='no'>CompleteWindowMinutes</span>, <span class='no'>Lifecycle</span>,
-  <span class='no'>RecoveryPointTags</span>)</pre>
+    <pre class="usage"><span class='fu'>backup_start_backup_job</span><span class='op'>(</span><span class='va'>BackupVaultName</span>, <span class='va'>ResourceArn</span>, <span class='va'>IamRoleArn</span>,
+  <span class='va'>IdempotencyToken</span>, <span class='va'>StartWindowMinutes</span>, <span class='va'>CompleteWindowMinutes</span>, <span class='va'>Lifecycle</span>,
+  <span class='va'>RecoveryPointTags</span>, <span class='va'>BackupOptions</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,7 +150,7 @@ to <code>StartBackupJob</code>.</p></td>
     <tr>
       <th>StartWindowMinutes</th>
       <td><p>A value in minutes after a backup is scheduled before a job will be
-canceled if it doesn\'t start successfully. This value is optional.</p></td>
+canceled if it doesn't start successfully. This value is optional.</p></td>
     </tr>
     <tr>
       <th>CompleteWindowMinutes</th>
@@ -164,9 +164,9 @@ optional.</p></td>
 storage and when it expires. AWS Backup will transition and expire
 backups automatically according to the lifecycle that you define.</p>
 <p>Backups transitioned to cold storage must be stored in cold storage for
-a minimum of 90 days. Therefore, the "expire after days" setting must be
-90 days greater than the "transition to cold after days" setting. The
-"transition to cold after days" setting cannot be changed after a backup
+a minimum of 90 days. Therefore, the “expire after days” setting must be
+90 days greater than the “transition to cold after days” setting. The
+“transition to cold after days” setting cannot be changed after a backup
 has been transitioned to cold.</p></td>
     </tr>
     <tr>
@@ -174,26 +174,39 @@ has been transitioned to cold.</p></td>
       <td><p>To help organize your resources, you can assign your own metadata to the
 resources that you create. Each tag is a key-value pair.</p></td>
     </tr>
+    <tr>
+      <th>BackupOptions</th>
+      <td><p>Specifies the backup option for a selected resource. This option is only
+available for Windows VSS backup jobs.</p>
+<p>Valid values: Set to <code>"WindowsVSS”:“enabled"</code> to enable WindowsVSS
+backup option and create a VSS Windows backup. Set to
+“WindowsVSS”:”disabled” to create a regular backup. The WindowsVSS
+option is not enabled by default.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>start_backup_job</span>(
-  <span class='kw'>BackupVaultName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ResourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IamRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IdempotencyToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StartWindowMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>CompleteWindowMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Lifecycle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>MoveToColdStorageAfterDays</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>DeleteAfterDays</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>RecoveryPointTags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>start_backup_job</span><span class='op'>(</span>
+  BackupVaultName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ResourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  IamRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  IdempotencyToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  StartWindowMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+  CompleteWindowMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+  Lifecycle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    MoveToColdStorageAfterDays <span class='op'>=</span> <span class='fl'>123</span>,
+    DeleteAfterDays <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  RecoveryPointTags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>,
+  BackupOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -211,7 +224,7 @@ resources that you create. Each tag is a key-value pair.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

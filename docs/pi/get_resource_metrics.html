@@ -44,7 +44,9 @@ time period — pi_get_resource_metrics • paws</title>
 time period — pi_get_resource_metrics" />
 <meta property="og:description" content="Retrieve Performance Insights metrics for a set of data sources, over a
 time period. You can provide specific dimension groups and dimensions,
-and provide aggregation and filtering criteria for each group." />
+and provide aggregation and filtering criteria for each group.
+Each response element returns a maximum of 500 bytes. For larger
+elements, such as SQL statements, only the first 500 bytes are returned." />
 
 
 
@@ -76,7 +78,7 @@ and provide aggregation and filtering criteria for each group." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +86,7 @@ and provide aggregation and filtering criteria for each group." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +98,7 @@ and provide aggregation and filtering criteria for each group." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,25 +125,27 @@ time period</h1>
     <p>Retrieve Performance Insights metrics for a set of data sources, over a
 time period. You can provide specific dimension groups and dimensions,
 and provide aggregation and filtering criteria for each group.</p>
+<p>Each response element returns a maximum of 500 bytes. For larger
+elements, such as SQL statements, only the first 500 bytes are returned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pi_get_resource_metrics</span>(<span class='no'>ServiceType</span>, <span class='no'>Identifier</span>, <span class='no'>MetricQueries</span>,
-  <span class='no'>StartTime</span>, <span class='no'>EndTime</span>, <span class='no'>PeriodInSeconds</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>pi_get_resource_metrics</span><span class='op'>(</span><span class='va'>ServiceType</span>, <span class='va'>Identifier</span>, <span class='va'>MetricQueries</span>,
+  <span class='va'>StartTime</span>, <span class='va'>EndTime</span>, <span class='va'>PeriodInSeconds</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ServiceType</th>
-      <td><p>[required] The AWS service for which Performance Insights will return metrics. The
-only valid value for <em>ServiceType</em> is: <code>RDS</code></p></td>
+      <td><p>[required] The AWS service for which Performance Insights returns metrics. The only
+valid value for <em>ServiceType</em> is <code>RDS</code>.</p></td>
     </tr>
     <tr>
       <th>Identifier</th>
       <td><p>[required] An immutable, AWS Region-unique identifier for a data source.
 Performance Insights gathers metrics from this data source.</p>
-<p>To use an Amazon RDS instance as a data source, you specify its
-<code>DbiResourceId</code> value - for example: <code>db-FAIHNTYBKTGAUSUZQYPDS2GW4A</code></p></td>
+<p>To use a DB instance as a data source, specify its <code>DbiResourceId</code>
+value. For example, specify <code>db-FAIHNTYBKTGAUSUZQYPDS2GW4A</code>.</p></td>
     </tr>
     <tr>
       <th>MetricQueries</th>
@@ -152,14 +156,14 @@ filtering criteria.</p></td>
     <tr>
       <th>StartTime</th>
       <td><p>[required] The date and time specifying the beginning of the requested time series
-data. You can\'t specify a <code>StartTime</code> that\'s earlier than 7 days ago.
+data. You can't specify a <code>StartTime</code> that's earlier than 7 days ago.
 The value specified is <em>inclusive</em> - data points equal to or greater
 than <code>StartTime</code> will be returned.</p>
 <p>The value for <code>StartTime</code> must be earlier than the value for <code>EndTime</code>.</p></td>
     </tr>
     <tr>
       <th>EndTime</th>
-      <td><p>[required] The date and time specifiying the end of the requested time series data.
+      <td><p>[required] The date and time specifying the end of the requested time series data.
 The value specified is <em>exclusive</em> - data points less than (but not
 equal to) <code>EndTime</code> will be returned.</p>
 <p>The value for <code>EndTime</code> must be later than the value for <code>StartTime</code>.</p></td>
@@ -176,7 +180,7 @@ as one day (86400 seconds). Valid values are:</p><ul>
 <li><p><code>86400</code> (twenty-four hours)</p></li>
 </ul>
 
-<p>If you don\'t specify <code>PeriodInSeconds</code>, then Performance Insights will
+<p>If you don't specify <code>PeriodInSeconds</code>, then Performance Insights will
 choose a value for you, with a goal of returning roughly 100-200 data
 points in the response.</p></td>
     </tr>
@@ -197,34 +201,35 @@ token, up to the value specified by <code>MaxRecords</code>.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_resource_metrics</span>(
-  <span class='kw'>ServiceType</span> <span class='kw'>=</span> <span class='st'>"RDS"</span>,
-  <span class='kw'>Identifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MetricQueries</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Metric</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>GroupBy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Group</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Dimensions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_resource_metrics</span><span class='op'>(</span>
+  ServiceType <span class='op'>=</span> <span class='st'>"RDS"</span>,
+  Identifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  MetricQueries <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Metric <span class='op'>=</span> <span class='st'>"string"</span>,
+      GroupBy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Group <span class='op'>=</span> <span class='st'>"string"</span>,
+        Dimensions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>Limit</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      ),
-      <span class='kw'>Filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        Limit <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      Filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>StartTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  StartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>EndTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+  <span class='op'>)</span>,
+  EndTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>PeriodInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  PeriodInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -242,7 +247,7 @@ token, up to the value specified by <code>MaxRecords</code>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

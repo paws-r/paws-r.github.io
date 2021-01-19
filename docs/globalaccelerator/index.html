@@ -44,65 +44,108 @@
 developers who need detailed information about AWS Global Accelerator
 API actions, data types, and errors. For more information about Global
 Accelerator features, see the AWS Global Accelerator Developer Guide.
-AWS Global Accelerator is a service in which you create accelerators to
-improve availability and performance of your applications for local and
-global users.
-You must specify the US West (Oregon) Region to create or update
-accelerators.
-By default, Global Accelerator provides you with static IP addresses
-that you associate with your accelerator. (Instead of using the IP
-addresses that Global Accelerator provides, you can configure these
-entry points to be IPv4 addresses from your own IP address ranges that
-you bring to Global Accelerator.) The static IP addresses are anycast
-from the AWS edge network and distribute incoming application traffic
-across multiple endpoint resources in multiple AWS Regions, which
-increases the availability of your applications. Endpoints can be
-Network Load Balancers, Application Load Balancers, EC2 instances, or
-Elastic IP addresses that are located in one AWS Region or multiple
-Regions.
-Global Accelerator uses the AWS global network to route traffic to the
-optimal regional endpoint based on health, client location, and policies
-that you configure. The service reacts instantly to changes in health or
-configuration to ensure that internet traffic from clients is directed
-to only healthy endpoints.
-Global Accelerator includes components that work together to help you
-improve performance and availability for your applications:Static IP address
+AWS Global Accelerator is a service in which you create accelerators
+to improve the performance of your applications for local and global
+users. Depending on the type of accelerator you choose, you can gain
+additional benefits.
+By using a standard accelerator, you can improve availability of
+your internet applications that are used by a global audience. With
+a standard accelerator, Global Accelerator directs traffic to
+optimal endpoints over the AWS global network.
+For other scenarios, you might choose a custom routing accelerator.
+With a custom routing accelerator, you can use application logic to
+directly map one or more users to a specific endpoint among many
+endpoints.
 
 
-By default, AWS Global Accelerator provides you with a set of static IP
-addresses that are anycast from the AWS edge network and serve as the
-single fixed entry points for your clients. Or you can configure these
-entry points to be IPv4 addresses from your own IP address ranges that
-you bring to Global Accelerator (BYOIP). For more information, see
-Bring Your Own IP Addresses (BYOIP)
-in the AWS Global Accelerator Developer Guide. If you already have
-load balancers, EC2 instances, or Elastic IP addresses set up for your
-applications, you can easily add those to Global Accelerator to allow
-the resources to be accessed by the static IP addresses.
+Global Accelerator is a global service that supports endpoints in
+multiple AWS Regions but you must specify the US West (Oregon) Region to
+create or update accelerators.
+By default, Global Accelerator provides you with two static IP addresses
+that you associate with your accelerator. With a standard accelerator,
+instead of using the IP addresses that Global Accelerator provides, you
+can configure these entry points to be IPv4 addresses from your own IP
+address ranges that you bring to Global Accelerator. The static IP
+addresses are anycast from the AWS edge network. For a standard
+accelerator, they distribute incoming application traffic across
+multiple endpoint resources in multiple AWS Regions, which increases the
+availability of your applications. Endpoints for standard accelerators
+can be Network Load Balancers, Application Load Balancers, Amazon EC2
+instances, or Elastic IP addresses that are located in one AWS Region or
+multiple Regions. For custom routing accelerators, you map traffic that
+arrives to the static IP addresses to specific Amazon EC2 servers in
+endpoints that are virtual private cloud (VPC) subnets.
 The static IP addresses remain assigned to your accelerator for as long
 as it exists, even if you disable the accelerator and it no longer
 accepts or routes traffic. However, when you delete an accelerator,
 you lose the static IP addresses that are assigned to it, so you can no
-longer route traffic by using them. You can use IAM policies with Global
-Accelerator to limit the users who have permissions to delete an
-accelerator. For more information, see Authentication and Access Control
-in the AWS Global Accelerator Developer Guide.
+longer route traffic by using them. You can use IAM policies like
+tag-based permissions with Global Accelerator to limit the users who
+have permissions to delete an accelerator. For more information, see
+Tag-based policies.
+For standard accelerators, Global Accelerator uses the AWS global
+network to route traffic to the optimal regional endpoint based on
+health, client location, and policies that you configure. The service
+reacts instantly to changes in health or configuration to ensure that
+internet traffic from clients is always directed to healthy endpoints.
+For a list of the AWS Regions where Global Accelerator and other
+services are currently supported, see the AWS Region Table.
+AWS Global Accelerator includes the following components:Static IP addresses
+
+
+Global Accelerator provides you with a set of two static IP addresses
+that are anycast from the AWS edge network. If you bring your own IP
+address range to AWS (BYOIP) to use with a standard accelerator, you can
+instead assign IP addresses from your own pool to use with your
+accelerator. For more information, see Bring your own IP addresses (BYOIP) in AWS Global Accelerator.
+The IP addresses serve as single fixed entry points for your clients. If
+you already have Elastic Load Balancing load balancers, Amazon EC2
+instances, or Elastic IP address resources set up for your applications,
+you can easily add those to a standard accelerator in Global
+Accelerator. This allows Global Accelerator to use static IP addresses
+to access the resources.
+The static IP addresses remain assigned to your accelerator for as long
+as it exists, even if you disable the accelerator and it no longer
+accepts or routes traffic. However, when you delete an accelerator,
+you lose the static IP addresses that are assigned to it, so you can no
+longer route traffic by using them. You can use IAM policies like
+tag-based permissions with Global Accelerator to delete an accelerator.
+For more information, see Tag-based policies.
 
 Accelerator
 
 
-An accelerator directs traffic to optimal endpoints over the AWS global
-network to improve availability and performance for your internet
-applications that have a global audience. Each accelerator includes one
-or more listeners.
+An accelerator directs traffic to endpoints over the AWS global network
+to improve the performance of your internet applications. Each
+accelerator includes one or more listeners.
+There are two types of accelerators:
+A standard accelerator directs traffic to the optimal AWS endpoint
+based on several factors, including the user’s location, the health
+of the endpoint, and the endpoint weights that you configure. This
+improves the availability and performance of your applications.
+Endpoints can be Network Load Balancers, Application Load Balancers,
+Amazon EC2 instances, or Elastic IP addresses.
+A custom routing accelerator directs traffic to one of possibly
+thousands of Amazon EC2 instances running in a single or multiple
+virtual private clouds (VPCs). With custom routing, listener ports
+are mapped to statically associate port ranges with VPC subnets,
+which allows Global Accelerator to determine an EC2 instance IP
+address at the time of connection. By default, all port mapping
+destinations in a VPC subnet can't receive traffic. You can choose
+to configure all destinations in the subnet to receive traffic, or
+to specify individual port mappings that can receive traffic.
+
+
+For more information, see Types of accelerators.
 
 DNS name
 
 
 Global Accelerator assigns each accelerator a default Domain Name System
 (DNS) name, similar to a1234567890abcdef.awsglobalaccelerator.com,
-that points to your Global Accelerator static IP addresses. Depending on
-the use case, you can use your accelerator\'s static IP addresses or DNS
+that points to the static IP addresses that Global Accelerator assigns
+to you or that you choose from your own IP address range. Depending on
+the use case, you can use your accelerator's static IP addresses or DNS
 name to route traffic to your accelerator, or set up DNS records to
 route traffic using your own custom domain name.
 
@@ -122,35 +165,41 @@ Listener
 
 
 A listener processes inbound connections from clients to Global
-Accelerator, based on the protocol and port that you configure. Each
-listener has one or more endpoint groups associated with it, and traffic
-is forwarded to endpoints in one of the groups. You associate endpoint
-groups with listeners by specifying the Regions that you want to
-distribute traffic to. Traffic is distributed to optimal endpoints
-within the endpoint groups associated with a listener.
+Accelerator, based on the port (or port range) and protocol (or
+protocols) that you configure. A listener can be configured for TCP,
+UDP, or both TCP and UDP protocols. Each listener has one or more
+endpoint groups associated with it, and traffic is forwarded to
+endpoints in one of the groups. You associate endpoint groups with
+listeners by specifying the Regions that you want to distribute traffic
+to. With a standard accelerator, traffic is distributed to optimal
+endpoints within the endpoint groups associated with a listener.
 
 Endpoint group
 
 
 Each endpoint group is associated with a specific AWS Region. Endpoint
-groups include one or more endpoints in the Region. You can increase or
-reduce the percentage of traffic that would be otherwise directed to an
-endpoint group by adjusting a setting called a traffic dial. The
-traffic dial lets you easily do performance testing or blue/green
-deployment testing for new releases across different AWS Regions, for
-example.
+groups include one or more endpoints in the Region. With a standard
+accelerator, you can increase or reduce the percentage of traffic that
+would be otherwise directed to an endpoint group by adjusting a setting
+called a traffic dial. The traffic dial lets you easily do performance
+testing or blue/green deployment testing, for example, for new releases
+across different AWS Regions.
 
 Endpoint
 
 
-An endpoint is a Network Load Balancer, Application Load Balancer, EC2
-instance, or Elastic IP address. Traffic is routed to endpoints based on
-several factors, including the geo-proximity to the user, the health of
-the endpoint, and the configuration options that you choose, such as
-endpoint weights. For each endpoint, you can configure weights, which
-are numbers that you can use to specify the proportion of traffic to
-route to each one. This can be useful, for example, to do performance
-testing within a Region.
+An endpoint is a resource that Global Accelerator directs traffic to.
+Endpoints for standard accelerators can be Network Load Balancers,
+Application Load Balancers, Amazon EC2 instances, or Elastic IP
+addresses. An Application Load Balancer endpoint can be internet-facing
+or internal. Traffic for standard accelerators is routed to endpoints
+based on the health of the endpoint along with configuration options
+that you choose, such as endpoint weights. For each endpoint, you can
+configure weights, which are numbers that you can use to specify the
+proportion of traffic to route to each one. This can be useful, for
+example, to do performance testing within a Region.
+Endpoints for custom routing accelerators are virtual private cloud
+(VPC) subnets with one or many EC2 instances.
 " />
 
 
@@ -183,7 +232,7 @@ testing within a Region.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -191,7 +240,7 @@ testing within a Region.
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -203,7 +252,7 @@ testing within a Region.
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -229,70 +278,113 @@ testing within a Region.
     <p>This is the <em>AWS Global Accelerator API Reference</em>. This guide is for
 developers who need detailed information about AWS Global Accelerator
 API actions, data types, and errors. For more information about Global
-Accelerator features, see the <a href='https://docs.aws.amazon.com/global-accelerator/latest/dg/Welcome.html'>AWS Global Accelerator Developer Guide</a>.</p>
-<p>AWS Global Accelerator is a service in which you create accelerators to
-improve availability and performance of your applications for local and
-global users.</p>
-<p>You must specify the US West (Oregon) Region to create or update
-accelerators.</p>
-<p>By default, Global Accelerator provides you with static IP addresses
-that you associate with your accelerator. (Instead of using the IP
-addresses that Global Accelerator provides, you can configure these
-entry points to be IPv4 addresses from your own IP address ranges that
-you bring to Global Accelerator.) The static IP addresses are anycast
-from the AWS edge network and distribute incoming application traffic
-across multiple endpoint resources in multiple AWS Regions, which
-increases the availability of your applications. Endpoints can be
-Network Load Balancers, Application Load Balancers, EC2 instances, or
-Elastic IP addresses that are located in one AWS Region or multiple
-Regions.</p>
-<p>Global Accelerator uses the AWS global network to route traffic to the
-optimal regional endpoint based on health, client location, and policies
-that you configure. The service reacts instantly to changes in health or
-configuration to ensure that internet traffic from clients is directed
-to only healthy endpoints.</p>
-<p>Global Accelerator includes components that work together to help you
-improve performance and availability for your applications:</p><h3>Static IP address</h3>
+Accelerator features, see the <a href='https://docs.aws.amazon.com/global-accelerator/latest/dg/'>AWS Global Accelerator Developer Guide</a>.</p>
+<p>AWS Global Accelerator is a service in which you create <em>accelerators</em>
+to improve the performance of your applications for local and global
+users. Depending on the type of accelerator you choose, you can gain
+additional benefits.</p><ul>
+<li><p>By using a standard accelerator, you can improve availability of
+your internet applications that are used by a global audience. With
+a standard accelerator, Global Accelerator directs traffic to
+optimal endpoints over the AWS global network.</p></li>
+<li><p>For other scenarios, you might choose a custom routing accelerator.
+With a custom routing accelerator, you can use application logic to
+directly map one or more users to a specific endpoint among many
+endpoints.</p></li>
+</ul>
 
-
-<p>By default, AWS Global Accelerator provides you with a set of static IP
-addresses that are anycast from the AWS edge network and serve as the
-single fixed entry points for your clients. Or you can configure these
-entry points to be IPv4 addresses from your own IP address ranges that
-you bring to Global Accelerator (BYOIP). For more information, see
-<a href='https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html'>Bring Your Own IP Addresses (BYOIP)</a>
-in the <em>AWS Global Accelerator Developer Guide</em>. If you already have
-load balancers, EC2 instances, or Elastic IP addresses set up for your
-applications, you can easily add those to Global Accelerator to allow
-the resources to be accessed by the static IP addresses.</p>
+<p>Global Accelerator is a global service that supports endpoints in
+multiple AWS Regions but you must specify the US West (Oregon) Region to
+create or update accelerators.</p>
+<p>By default, Global Accelerator provides you with two static IP addresses
+that you associate with your accelerator. With a standard accelerator,
+instead of using the IP addresses that Global Accelerator provides, you
+can configure these entry points to be IPv4 addresses from your own IP
+address ranges that you bring to Global Accelerator. The static IP
+addresses are anycast from the AWS edge network. For a standard
+accelerator, they distribute incoming application traffic across
+multiple endpoint resources in multiple AWS Regions, which increases the
+availability of your applications. Endpoints for standard accelerators
+can be Network Load Balancers, Application Load Balancers, Amazon EC2
+instances, or Elastic IP addresses that are located in one AWS Region or
+multiple Regions. For custom routing accelerators, you map traffic that
+arrives to the static IP addresses to specific Amazon EC2 servers in
+endpoints that are virtual private cloud (VPC) subnets.</p>
 <p>The static IP addresses remain assigned to your accelerator for as long
 as it exists, even if you disable the accelerator and it no longer
 accepts or routes traffic. However, when you <em>delete</em> an accelerator,
 you lose the static IP addresses that are assigned to it, so you can no
-longer route traffic by using them. You can use IAM policies with Global
-Accelerator to limit the users who have permissions to delete an
-accelerator. For more information, see <a href='https://docs.aws.amazon.com/global-accelerator/latest/dg/auth-and-access-control.html'>Authentication and Access Control</a>
-in the <em>AWS Global Accelerator Developer Guide</em>.</p>
+longer route traffic by using them. You can use IAM policies like
+tag-based permissions with Global Accelerator to limit the users who
+have permissions to delete an accelerator. For more information, see
+<a href='https://docs.aws.amazon.com/global-accelerator/latest/dg/'>Tag-based policies</a>.</p>
+<p>For standard accelerators, Global Accelerator uses the AWS global
+network to route traffic to the optimal regional endpoint based on
+health, client location, and policies that you configure. The service
+reacts instantly to changes in health or configuration to ensure that
+internet traffic from clients is always directed to healthy endpoints.</p>
+<p>For a list of the AWS Regions where Global Accelerator and other
+services are currently supported, see the AWS Region Table.</p>
+<p>AWS Global Accelerator includes the following components:</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Static IP addresses</h3>
 
-<h3>Accelerator</h3>
+
+<p>Global Accelerator provides you with a set of two static IP addresses
+that are anycast from the AWS edge network. If you bring your own IP
+address range to AWS (BYOIP) to use with a standard accelerator, you can
+instead assign IP addresses from your own pool to use with your
+accelerator. For more information, see <a href='https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html'>Bring your own IP addresses (BYOIP) in AWS Global Accelerator</a>.</p>
+<p>The IP addresses serve as single fixed entry points for your clients. If
+you already have Elastic Load Balancing load balancers, Amazon EC2
+instances, or Elastic IP address resources set up for your applications,
+you can easily add those to a standard accelerator in Global
+Accelerator. This allows Global Accelerator to use static IP addresses
+to access the resources.</p>
+<p>The static IP addresses remain assigned to your accelerator for as long
+as it exists, even if you disable the accelerator and it no longer
+accepts or routes traffic. However, when you <em>delete</em> an accelerator,
+you lose the static IP addresses that are assigned to it, so you can no
+longer route traffic by using them. You can use IAM policies like
+tag-based permissions with Global Accelerator to delete an accelerator.
+For more information, see <a href='https://docs.aws.amazon.com/global-accelerator/latest/dg/'>Tag-based policies</a>.</p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Accelerator</h3>
 
 
-<p>An accelerator directs traffic to optimal endpoints over the AWS global
-network to improve availability and performance for your internet
-applications that have a global audience. Each accelerator includes one
-or more listeners.</p>
+<p>An accelerator directs traffic to endpoints over the AWS global network
+to improve the performance of your internet applications. Each
+accelerator includes one or more listeners.</p>
+<p>There are two types of accelerators:</p><ul>
+<li><p>A <em>standard</em> accelerator directs traffic to the optimal AWS endpoint
+based on several factors, including the user’s location, the health
+of the endpoint, and the endpoint weights that you configure. This
+improves the availability and performance of your applications.
+Endpoints can be Network Load Balancers, Application Load Balancers,
+Amazon EC2 instances, or Elastic IP addresses.</p></li>
+<li><p>A <em>custom routing</em> accelerator directs traffic to one of possibly
+thousands of Amazon EC2 instances running in a single or multiple
+virtual private clouds (VPCs). With custom routing, listener ports
+are mapped to statically associate port ranges with VPC subnets,
+which allows Global Accelerator to determine an EC2 instance IP
+address at the time of connection. By default, all port mapping
+destinations in a VPC subnet can't receive traffic. You can choose
+to configure all destinations in the subnet to receive traffic, or
+to specify individual port mappings that can receive traffic.</p></li>
+</ul>
 
-<h3>DNS name</h3>
+<p>For more information, see <a href='https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-accelerator-types.html'>Types of accelerators</a>.</p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>DNS name</h3>
 
 
 <p>Global Accelerator assigns each accelerator a default Domain Name System
 (DNS) name, similar to <code>a1234567890abcdef.awsglobalaccelerator.com</code>,
-that points to your Global Accelerator static IP addresses. Depending on
-the use case, you can use your accelerator\'s static IP addresses or DNS
+that points to the static IP addresses that Global Accelerator assigns
+to you or that you choose from your own IP address range. Depending on
+the use case, you can use your accelerator's static IP addresses or DNS
 name to route traffic to your accelerator, or set up DNS records to
 route traffic using your own custom domain name.</p>
 
-<h3>Network zone</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Network zone</h3>
 
 
 <p>A network zone services the static IP addresses for your accelerator
@@ -304,43 +396,49 @@ zone becomes unavailable due to IP address blocking by certain client
 networks, or network disruptions, then client applications can retry on
 the healthy static IP address from the other isolated network zone.</p>
 
-<h3>Listener</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Listener</h3>
 
 
 <p>A listener processes inbound connections from clients to Global
-Accelerator, based on the protocol and port that you configure. Each
-listener has one or more endpoint groups associated with it, and traffic
-is forwarded to endpoints in one of the groups. You associate endpoint
-groups with listeners by specifying the Regions that you want to
-distribute traffic to. Traffic is distributed to optimal endpoints
-within the endpoint groups associated with a listener.</p>
+Accelerator, based on the port (or port range) and protocol (or
+protocols) that you configure. A listener can be configured for TCP,
+UDP, or both TCP and UDP protocols. Each listener has one or more
+endpoint groups associated with it, and traffic is forwarded to
+endpoints in one of the groups. You associate endpoint groups with
+listeners by specifying the Regions that you want to distribute traffic
+to. With a standard accelerator, traffic is distributed to optimal
+endpoints within the endpoint groups associated with a listener.</p>
 
-<h3>Endpoint group</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Endpoint group</h3>
 
 
 <p>Each endpoint group is associated with a specific AWS Region. Endpoint
-groups include one or more endpoints in the Region. You can increase or
-reduce the percentage of traffic that would be otherwise directed to an
-endpoint group by adjusting a setting called a <em>traffic dial</em>. The
-traffic dial lets you easily do performance testing or blue/green
-deployment testing for new releases across different AWS Regions, for
-example.</p>
+groups include one or more endpoints in the Region. With a standard
+accelerator, you can increase or reduce the percentage of traffic that
+would be otherwise directed to an endpoint group by adjusting a setting
+called a <em>traffic dial</em>. The traffic dial lets you easily do performance
+testing or blue/green deployment testing, for example, for new releases
+across different AWS Regions.</p>
 
-<h3>Endpoint</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Endpoint</h3>
 
 
-<p>An endpoint is a Network Load Balancer, Application Load Balancer, EC2
-instance, or Elastic IP address. Traffic is routed to endpoints based on
-several factors, including the geo-proximity to the user, the health of
-the endpoint, and the configuration options that you choose, such as
-endpoint weights. For each endpoint, you can configure weights, which
-are numbers that you can use to specify the proportion of traffic to
-route to each one. This can be useful, for example, to do performance
-testing within a Region.</p>
+<p>An endpoint is a resource that Global Accelerator directs traffic to.</p>
+<p>Endpoints for standard accelerators can be Network Load Balancers,
+Application Load Balancers, Amazon EC2 instances, or Elastic IP
+addresses. An Application Load Balancer endpoint can be internet-facing
+or internal. Traffic for standard accelerators is routed to endpoints
+based on the health of the endpoint along with configuration options
+that you choose, such as endpoint weights. For each endpoint, you can
+configure weights, which are numbers that you can use to specify the
+proportion of traffic to route to each one. This can be useful, for
+example, to do performance testing within a Region.</p>
+<p>Endpoints for custom routing accelerators are virtual private cloud
+(VPC) subnets with one or many EC2 instances.</p>
 
     </div>
 
-    <pre class="usage"><span class='fu'>globalaccelerator</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>globalaccelerator</span><span class='op'>(</span>config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -354,48 +452,71 @@ testing within a Region.</p>
     <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
 
     
-<pre><span class='no'>svc</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>globalaccelerator</span>(
-  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>creds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>access_key_id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>secret_access_key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>session_token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>profile</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>globalaccelerator</span><span class='op'>(</span>
+  config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    credentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        access_key_id <span class='op'>=</span> <span class='st'>"string"</span>,
+        secret_access_key <span class='op'>=</span> <span class='st'>"string"</span>,
+        session_token <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      profile <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    endpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    region <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
     
 
 <table class='table'>
+<tr><td><a href='add_custom_routing_endpoints.html'>add_custom_routing_endpoints</a></td><td>Associate a virtual private cloud (VPC) subnet endpoint with your custom routing accelerator</td></tr>
 <tr><td><a href='advertise_byoip_cidr.html'>advertise_byoip_cidr</a></td><td>Advertises an IPv4 address range that is provisioned for use with your AWS resources through bring your own IP addresses (BYOIP)</td></tr>
+<tr><td><a href='allow_custom_routing_traffic.html'>allow_custom_routing_traffic</a></td><td>Specify the Amazon EC2 instance (destination) IP addresses and ports for a VPC subnet endpoint that can receive traffic for a custom routing accelerator</td></tr>
 <tr><td><a href='create_accelerator.html'>create_accelerator</a></td><td>Create an accelerator</td></tr>
+<tr><td><a href='create_custom_routing_accelerator.html'>create_custom_routing_accelerator</a></td><td>Create a custom routing accelerator</td></tr>
+<tr><td><a href='create_custom_routing_endpoint_group.html'>create_custom_routing_endpoint_group</a></td><td>Create an endpoint group for the specified listener for a custom routing accelerator</td></tr>
+<tr><td><a href='create_custom_routing_listener.html'>create_custom_routing_listener</a></td><td>Create a listener to process inbound connections from clients to a custom routing accelerator</td></tr>
 <tr><td><a href='create_endpoint_group.html'>create_endpoint_group</a></td><td>Create an endpoint group for the specified listener</td></tr>
 <tr><td><a href='create_listener.html'>create_listener</a></td><td>Create a listener to process inbound connections from clients to an accelerator</td></tr>
 <tr><td><a href='delete_accelerator.html'>delete_accelerator</a></td><td>Delete an accelerator</td></tr>
+<tr><td><a href='delete_custom_routing_accelerator.html'>delete_custom_routing_accelerator</a></td><td>Delete a custom routing accelerator</td></tr>
+<tr><td><a href='delete_custom_routing_endpoint_group.html'>delete_custom_routing_endpoint_group</a></td><td>Delete an endpoint group from a listener for a custom routing accelerator</td></tr>
+<tr><td><a href='delete_custom_routing_listener.html'>delete_custom_routing_listener</a></td><td>Delete a listener for a custom routing accelerator</td></tr>
 <tr><td><a href='delete_endpoint_group.html'>delete_endpoint_group</a></td><td>Delete an endpoint group from a listener</td></tr>
 <tr><td><a href='delete_listener.html'>delete_listener</a></td><td>Delete a listener from an accelerator</td></tr>
+<tr><td><a href='deny_custom_routing_traffic.html'>deny_custom_routing_traffic</a></td><td>Specify the Amazon EC2 instance (destination) IP addresses and ports for a VPC subnet endpoint that cannot receive traffic for a custom routing accelerator</td></tr>
 <tr><td><a href='deprovision_byoip_cidr.html'>deprovision_byoip_cidr</a></td><td>Releases the specified address range that you provisioned to use with your AWS resources through bring your own IP addresses (BYOIP) and deletes the corresponding address pool</td></tr>
 <tr><td><a href='describe_accelerator.html'>describe_accelerator</a></td><td>Describe an accelerator</td></tr>
 <tr><td><a href='describe_accelerator_attributes.html'>describe_accelerator_attributes</a></td><td>Describe the attributes of an accelerator</td></tr>
+<tr><td><a href='describe_custom_routing_accelerator.html'>describe_custom_routing_accelerator</a></td><td>Describe a custom routing accelerator</td></tr>
+<tr><td><a href='describe_custom_routing_accelerator_attributes.html'>describe_custom_routing_accelerator_attributes</a></td><td>Describe the attributes of a custom routing accelerator</td></tr>
+<tr><td><a href='describe_custom_routing_endpoint_group.html'>describe_custom_routing_endpoint_group</a></td><td>Describe an endpoint group for a custom routing accelerator</td></tr>
+<tr><td><a href='describe_custom_routing_listener.html'>describe_custom_routing_listener</a></td><td>The description of a listener for a custom routing accelerator</td></tr>
 <tr><td><a href='describe_endpoint_group.html'>describe_endpoint_group</a></td><td>Describe an endpoint group</td></tr>
 <tr><td><a href='describe_listener.html'>describe_listener</a></td><td>Describe a listener</td></tr>
 <tr><td><a href='list_accelerators.html'>list_accelerators</a></td><td>List the accelerators for an AWS account</td></tr>
 <tr><td><a href='list_byoip_cidrs.html'>list_byoip_cidrs</a></td><td>Lists the IP address ranges that were specified in calls to ProvisionByoipCidr, including the current state and a history of state changes</td></tr>
+<tr><td><a href='list_custom_routing_accelerators.html'>list_custom_routing_accelerators</a></td><td>List the custom routing accelerators for an AWS account</td></tr>
+<tr><td><a href='list_custom_routing_endpoint_groups.html'>list_custom_routing_endpoint_groups</a></td><td>List the endpoint groups that are associated with a listener for a custom routing accelerator</td></tr>
+<tr><td><a href='list_custom_routing_listeners.html'>list_custom_routing_listeners</a></td><td>List the listeners for a custom routing accelerator</td></tr>
+<tr><td><a href='list_custom_routing_port_mappings.html'>list_custom_routing_port_mappings</a></td><td>Provides a complete mapping from the public accelerator IP address and port to destination EC2 instance IP addresses and ports in the virtual public cloud (VPC) subnet endpoint for a custom routing accelerator</td></tr>
+<tr><td><a href='list_custom_routing_port_mappings_by_destination.html'>list_custom_routing_port_mappings_by_destination</a></td><td>List the port mappings for a specific EC2 instance (destination) in a VPC subnet endpoint</td></tr>
 <tr><td><a href='list_endpoint_groups.html'>list_endpoint_groups</a></td><td>List the endpoint groups that are associated with a listener</td></tr>
 <tr><td><a href='list_listeners.html'>list_listeners</a></td><td>List the listeners for an accelerator</td></tr>
 <tr><td><a href='list_tags_for_resource.html'>list_tags_for_resource</a></td><td>List all tags for an accelerator</td></tr>
 <tr><td><a href='provision_byoip_cidr.html'>provision_byoip_cidr</a></td><td>Provisions an IP address range to use with your AWS resources through bring your own IP addresses (BYOIP) and creates a corresponding address pool</td></tr>
+<tr><td><a href='remove_custom_routing_endpoints.html'>remove_custom_routing_endpoints</a></td><td>Remove endpoints from a custom routing accelerator</td></tr>
 <tr><td><a href='tag_resource.html'>tag_resource</a></td><td>Add tags to an accelerator resource</td></tr>
 <tr><td><a href='untag_resource.html'>untag_resource</a></td><td>Remove tags from a Global Accelerator resource</td></tr>
 <tr><td><a href='update_accelerator.html'>update_accelerator</a></td><td>Update an accelerator</td></tr>
 <tr><td><a href='update_accelerator_attributes.html'>update_accelerator_attributes</a></td><td>Update the attributes for an accelerator</td></tr>
+<tr><td><a href='update_custom_routing_accelerator.html'>update_custom_routing_accelerator</a></td><td>Update a custom routing accelerator</td></tr>
+<tr><td><a href='update_custom_routing_accelerator_attributes.html'>update_custom_routing_accelerator_attributes</a></td><td>Update the attributes for a custom routing accelerator</td></tr>
+<tr><td><a href='update_custom_routing_listener.html'>update_custom_routing_listener</a></td><td>Update a listener for a custom routing accelerator</td></tr>
 <tr><td><a href='update_endpoint_group.html'>update_endpoint_group</a></td><td>Update an endpoint group</td></tr>
 <tr><td><a href='update_listener.html'>update_listener</a></td><td>Update a listener</td></tr>
 <tr><td><a href='withdraw_byoip_cidr.html'>withdraw_byoip_cidr</a></td><td>Stops advertising an address range that is provisioned as an address pool</td></tr>
@@ -404,12 +525,14 @@ testing within a Region.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>globalaccelerator</span>()
-<span class='no'>svc</span>$<span class='fu'>advertise_byoip_cidr</span>(
-  <span class='kw'>Foo</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)
-}</pre>
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>globalaccelerator</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>add_custom_routing_endpoints</span><span class='op'>(</span>
+  Foo <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -425,7 +548,7 @@ testing within a Region.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

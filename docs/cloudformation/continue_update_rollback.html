@@ -47,7 +47,14 @@ continues rolling it back to the UPDATE_ROLLBACK_COMPLETE state.
 Depending on the cause of the failure, you can manually fix the error
 and continue the rollback. By continuing the rollback, you can return
 your stack to a working state (the UPDATE_ROLLBACK_COMPLETE state),
-and then try to update the stack again." />
+and then try to update the stack again.
+A stack goes into the UPDATE_ROLLBACK_FAILED state when AWS
+CloudFormation cannot roll back all changes after a failed stack update.
+For example, you might have a stack that is rolling back to an old
+database instance that was deleted outside of AWS CloudFormation.
+Because AWS CloudFormation doesn't know the database was deleted, it
+assumes that the database instance still exists and attempts to roll
+back to it, causing the update rollback to fail." />
 
 
 
@@ -79,7 +86,7 @@ and then try to update the stack again." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +94,7 @@ and then try to update the stack again." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +106,7 @@ and then try to update the stack again." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,10 +136,17 @@ Depending on the cause of the failure, you can manually <a href='https://docs.aw
 and continue the rollback. By continuing the rollback, you can return
 your stack to a working state (the <code>UPDATE_ROLLBACK_COMPLETE</code> state),
 and then try to update the stack again.</p>
+<p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS
+CloudFormation cannot roll back all changes after a failed stack update.
+For example, you might have a stack that is rolling back to an old
+database instance that was deleted outside of AWS CloudFormation.
+Because AWS CloudFormation doesn't know the database was deleted, it
+assumes that the database instance still exists and attempts to roll
+back to it, causing the update rollback to fail.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloudformation_continue_update_rollback</span>(<span class='no'>StackName</span>, <span class='no'>RoleARN</span>,
-  <span class='no'>ResourcesToSkip</span>, <span class='no'>ClientRequestToken</span>)</pre>
+    <pre class="usage"><span class='fu'>cloudformation_continue_update_rollback</span><span class='op'>(</span><span class='va'>StackName</span>, <span class='va'>RoleARN</span>,
+  <span class='va'>ResourcesToSkip</span>, <span class='va'>ClientRequestToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,7 +155,7 @@ and then try to update the stack again.</p>
       <th>StackName</th>
       <td><p>[required] The name or the unique ID of the stack that you want to continue rolling
 back.</p>
-<p>Don\'t specify the name of a nested stack (a stack that was created by
+<p>Don't specify the name of a nested stack (a stack that was created by
 using the <code>AWS::CloudFormation::Stack</code> resource). Instead, use this
 operation on the parent stack (the stack that contains the
 <code>AWS::CloudFormation::Stack</code> resource).</p></td>
@@ -150,12 +164,12 @@ operation on the parent stack (the stack that contains the
       <th>RoleARN</th>
       <td><p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management
 (IAM) role that AWS CloudFormation assumes to roll back the stack. AWS
-CloudFormation uses the role\'s credentials to make calls on your
-behalf. AWS CloudFormation always uses this role for all future
-operations on the stack. As long as users have permission to operate on
-the stack, AWS CloudFormation uses this role even if the users don\'t
-have permission to pass it. Ensure that the role grants least privilege.</p>
-<p>If you don\'t specify a value, AWS CloudFormation uses the role that was
+CloudFormation uses the role's credentials to make calls on your behalf.
+AWS CloudFormation always uses this role for all future operations on
+the stack. As long as users have permission to operate on the stack, AWS
+CloudFormation uses this role even if the users don't have permission to
+pass it. Ensure that the role grants least privilege.</p>
+<p>If you don't specify a value, AWS CloudFormation uses the role that was
 previously associated with the stack. If no role is available, AWS
 CloudFormation uses a temporary session that is generated from your user
 credentials.</p></td>
@@ -165,19 +179,19 @@ credentials.</p></td>
       <td><p>A list of the logical IDs of the resources that AWS CloudFormation skips
 during the continue update rollback operation. You can specify only
 resources that are in the <code>UPDATE_FAILED</code> state because a rollback
-failed. You can\'t specify resources that are in the <code>UPDATE_FAILED</code>
+failed. You can't specify resources that are in the <code>UPDATE_FAILED</code>
 state for other reasons, for example, because an update was cancelled.
 To check why a resource update failed, use the DescribeStackResources
 action, and view the resource status reason.</p>
 <p>Specify this property to skip rolling back resources that AWS
-CloudFormation can\'t successfully roll back. We recommend that you
+CloudFormation can't successfully roll back. We recommend that you
 <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-update-rollback-failed'>troubleshoot</a>
 resources before skipping them. AWS CloudFormation sets the status of
 the specified resources to <code>UPDATE_COMPLETE</code> and continues to roll back
 the stack. After the rollback is complete, the state of the skipped
 resources will be inconsistent with the state of the resources in the
 stack template. Before performing another stack update, you must update
-the stack or resources to be consistent with each other. If you don\'t,
+the stack or resources to be consistent with each other. If you don't,
 subsequent stack updates might fail, and the stack will become
 unrecoverable.</p>
 <p>Specify the minimum number of resources required to successfully roll
@@ -190,7 +204,7 @@ logical ID of a stack resource (<code>Type: AWS::CloudFormation::Stack</code>) i
 the <code>ResourcesToSkip</code> list, then its corresponding embedded stack must
 be in one of the following states: <code>DELETE_IN_PROGRESS</code>,
 <code>DELETE_COMPLETE</code>, or <code>DELETE_FAILED</code>.</p>
-<p>Don\'t confuse a child stack\'s name with its corresponding logical ID
+<p>Don't confuse a child stack's name with its corresponding logical ID
 defined in the parent stack. For an example of a continue update
 rollback operation with nested stacks, see <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-continueupdaterollback.html#nested-stacks'>Using ResourcesToSkip to recover a nested stacks hierarchy</a>.</p></td>
     </tr>
@@ -198,32 +212,24 @@ rollback operation with nested stacks, see <a href='https://docs.aws.amazon.com/
       <th>ClientRequestToken</th>
       <td><p>A unique identifier for this <code>ContinueUpdateRollback</code> request. Specify
 this token if you plan to retry requests so that AWS CloudFormation
-knows that you\'re not attempting to continue the rollback to a stack
+knows that you're not attempting to continue the rollback to a stack
 with the same name. You might retry <code>ContinueUpdateRollback</code> requests to
 ensure that AWS CloudFormation successfully received them.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A stack goes into the <code>UPDATE_ROLLBACK_FAILED</code> state when AWS
-CloudFormation cannot roll back all changes after a failed stack update.
-For example, you might have a stack that is rolling back to an old
-database instance that was deleted outside of AWS CloudFormation.
-Because AWS CloudFormation doesn\'t know the database was deleted, it
-assumes that the database instance still exists and attempts to roll
-back to it, causing the update rollback to fail.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>continue_update_rollback</span>(
-  <span class='kw'>StackName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ResourcesToSkip</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>continue_update_rollback</span><span class='op'>(</span>
+  StackName <span class='op'>=</span> <span class='st'>"string"</span>,
+  RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  ResourcesToSkip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ClientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  ClientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -241,7 +247,7 @@ back to it, causing the update rollback to fail.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

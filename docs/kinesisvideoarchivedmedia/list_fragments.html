@@ -43,7 +43,32 @@ timestamp range within the archived data — kinesisvideoarchivedmedia_list_frag
 <meta property="og:title" content="Returns a list of Fragment objects from the specified stream and
 timestamp range within the archived data — kinesisvideoarchivedmedia_list_fragments" />
 <meta property="og:description" content="Returns a list of Fragment objects from the specified stream and
-timestamp range within the archived data." />
+timestamp range within the archived data.
+Listing fragments is eventually consistent. This means that even if the
+producer receives an acknowledgment that a fragment is persisted, the
+result might not be returned immediately from a request to
+ListFragments. However, results are typically available in less than
+one second.
+You must first call the GetDataEndpoint API to get an endpoint. Then
+send the ListFragments requests to this endpoint using the
+--endpoint-url parameter.
+If an error is thrown after invoking a Kinesis Video Streams archived
+media API, in addition to the HTTP status code and the response body, it
+includes the following pieces of information:
+x-amz-ErrorType HTTP header – contains a more specific error type
+in addition to what the HTTP status code provides.
+x-amz-RequestId HTTP header – if you want to report an issue to
+AWS, the support team can better diagnose the problem if given the
+Request Id.
+
+
+Both the HTTP status code and the ErrorType header can be utilized to
+make programmatic decisions about whether errors are retry-able and
+under what conditions, as well as provide information on what actions
+the client programmer might need to take in order to successfully try
+again.
+For more information, see the Errors section at the bottom of this
+topic, as well as Common Errors." />
 
 
 
@@ -75,7 +100,7 @@ timestamp range within the archived data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +108,7 @@ timestamp range within the archived data." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +120,7 @@ timestamp range within the archived data." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +146,35 @@ timestamp range within the archived data</h1>
     <div class="ref-description">
     <p>Returns a list of Fragment objects from the specified stream and
 timestamp range within the archived data.</p>
+<p>Listing fragments is eventually consistent. This means that even if the
+producer receives an acknowledgment that a fragment is persisted, the
+result might not be returned immediately from a request to
+<code>ListFragments</code>. However, results are typically available in less than
+one second.</p>
+<p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then
+send the <code>ListFragments</code> requests to this endpoint using the
+<a href='https://docs.aws.amazon.com/cli/latest/reference/'>--endpoint-url parameter</a>.</p>
+<p>If an error is thrown after invoking a Kinesis Video Streams archived
+media API, in addition to the HTTP status code and the response body, it
+includes the following pieces of information:</p><ul>
+<li><p><code>x-amz-ErrorType</code> HTTP header – contains a more specific error type
+in addition to what the HTTP status code provides.</p></li>
+<li><p><code>x-amz-RequestId</code> HTTP header – if you want to report an issue to
+AWS, the support team can better diagnose the problem if given the
+Request Id.</p></li>
+</ul>
+
+<p>Both the HTTP status code and the ErrorType header can be utilized to
+make programmatic decisions about whether errors are retry-able and
+under what conditions, as well as provide information on what actions
+the client programmer might need to take in order to successfully try
+again.</p>
+<p>For more information, see the <strong>Errors</strong> section at the bottom of this
+topic, as well as <a href='https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/CommonErrors.html'>Common Errors</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kinesisvideoarchivedmedia_list_fragments</span>(<span class='no'>StreamName</span>, <span class='no'>MaxResults</span>,
-  <span class='no'>NextToken</span>, <span class='no'>FragmentSelector</span>)</pre>
+    <pre class="usage"><span class='fu'>kinesisvideoarchivedmedia_list_fragments</span><span class='op'>(</span><span class='va'>StreamName</span>, <span class='va'>MaxResults</span>,
+  <span class='va'>NextToken</span>, <span class='va'>FragmentSelector</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,13 +187,13 @@ timestamp range within the archived data.</p>
       <th>MaxResults</th>
       <td><p>The total number of fragments to return. If the total number of
 fragments available is more than the value specified in <code>max-results</code>,
-then a ListFragmentsOutput\$NextToken is provided in the output that you
+then a ListFragmentsOutput$NextToken is provided in the output that you
 can use to resume pagination.</p></td>
     </tr>
     <tr>
       <th>NextToken</th>
       <td><p>A token to specify where to start paginating. This is the
-ListFragmentsOutput\$NextToken from a previously truncated response.</p></td>
+ListFragmentsOutput$NextToken from a previously truncated response.</p></td>
     </tr>
     <tr>
       <th>FragmentSelector</th>
@@ -152,52 +202,26 @@ fragments to return.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Listing fragments is eventually consistent. This means that even if the
-producer receives an acknowledgment that a fragment is persisted, the
-result might not be returned immediately from a request to
-<code>ListFragments</code>. However, results are typically available in less than
-one second.</p>
-<p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then
-send the <code>ListFragments</code> requests to this endpoint using the
-<a href='https://docs.aws.amazon.com/cli/latest/reference/'>\--endpoint-url parameter</a>.</p>
-<p>If an error is thrown after invoking a Kinesis Video Streams archived
-media API, in addition to the HTTP status code and the response body, it
-includes the following pieces of information:</p><ul>
-<li><p><code>x-amz-ErrorType</code> HTTP header -- contains a more specific error type
-in addition to what the HTTP status code provides.</p></li>
-<li><p><code>x-amz-RequestId</code> HTTP header -- if you want to report an issue to
-AWS, the support team can better diagnose the problem if given the
-Request Id.</p></li>
-</ul>
-
-<p>Both the HTTP status code and the ErrorType header can be utilized to
-make programmatic decisions about whether errors are retry-able and
-under what conditions, as well as provide information on what actions
-the client programmer might need to take in order to successfully try
-again.</p>
-<p>For more information, see the <strong>Errors</strong> section at the bottom of this
-topic, as well as <a href='https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/CommonErrors.html'>Common Errors</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_fragments</span>(
-  <span class='kw'>StreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>FragmentSelector</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>FragmentSelectorType</span> <span class='kw'>=</span> <span class='st'>"PRODUCER_TIMESTAMP"</span><span class='kw'>|</span><span class='st'>"SERVER_TIMESTAMP"</span>,
-    <span class='kw'>TimestampRange</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>StartTimestamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_fragments</span><span class='op'>(</span>
+  StreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  FragmentSelector <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    FragmentSelectorType <span class='op'>=</span> <span class='st'>"PRODUCER_TIMESTAMP"</span><span class='op'>|</span><span class='st'>"SERVER_TIMESTAMP"</span>,
+    TimestampRange <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      StartTimestamp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
         <span class='st'>"2015-01-01"</span>
-      ),
-      <span class='kw'>EndTimestamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+      <span class='op'>)</span>,
+      EndTimestamp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
         <span class='st'>"2015-01-01"</span>
-      )
-    )
-  )
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -215,7 +239,7 @@ topic, as well as <a href='https://docs.aws.amazon.com/kinesisvideostreams/lates
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

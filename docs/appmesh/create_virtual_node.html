@@ -40,7 +40,32 @@
 
 
 <meta property="og:title" content="Creates a virtual node within a service mesh — appmesh_create_virtual_node" />
-<meta property="og:description" content="Creates a virtual node within a service mesh." />
+<meta property="og:description" content="Creates a virtual node within a service mesh.
+A virtual node acts as a logical pointer to a particular task group,
+such as an Amazon ECS service or a Kubernetes deployment. When you
+create a virtual node, you can specify the service discovery information
+for your task group, and whether the proxy running in a task group will
+communicate with other proxies using Transport Layer Security (TLS).
+You define a listener for any inbound traffic that your virtual node
+expects. Any virtual service that your virtual node expects to
+communicate to is specified as a backend.
+The response metadata for your new virtual node contains the arn that
+is associated with the virtual node. Set this value to the full ARN; for
+example,
+arn:aws:appmesh:us-west-2:123456789012:myMesh/default/virtualNode/myApp)
+as the APPMESH_RESOURCE_ARN environment variable for your task group's
+Envoy proxy container in your task definition or pod spec. This is then
+mapped to the node.id and node.cluster Envoy parameters.
+By default, App Mesh uses the name of the resource you specified in
+APPMESH_RESOURCE_ARN when Envoy is referring to itself in metrics and
+traces. You can override this behavior by setting the
+APPMESH_RESOURCE_CLUSTER environment variable with your own name.
+AWS Cloud Map is not available in the eu-south-1 Region.
+For more information about virtual nodes, see Virtual nodes.
+You must be using 1.15.0 or later of the Envoy image when setting
+these variables. For more information about App Mesh Envoy variables,
+see Envoy image
+in the AWS App Mesh User Guide." />
 
 
 
@@ -72,7 +97,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +105,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +117,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +141,35 @@
 
     <div class="ref-description">
     <p>Creates a virtual node within a service mesh.</p>
+<p>A virtual node acts as a logical pointer to a particular task group,
+such as an Amazon ECS service or a Kubernetes deployment. When you
+create a virtual node, you can specify the service discovery information
+for your task group, and whether the proxy running in a task group will
+communicate with other proxies using Transport Layer Security (TLS).</p>
+<p>You define a <code>listener</code> for any inbound traffic that your virtual node
+expects. Any virtual service that your virtual node expects to
+communicate to is specified as a <code>backend</code>.</p>
+<p>The response metadata for your new virtual node contains the <code>arn</code> that
+is associated with the virtual node. Set this value to the full ARN; for
+example,
+<code>arn:aws:appmesh:us-west-2:123456789012:myMesh/default/virtualNode/myApp</code>)
+as the <code>APPMESH_RESOURCE_ARN</code> environment variable for your task group's
+Envoy proxy container in your task definition or pod spec. This is then
+mapped to the <code>node.id</code> and <code>node.cluster</code> Envoy parameters.</p>
+<p>By default, App Mesh uses the name of the resource you specified in
+<code>APPMESH_RESOURCE_ARN</code> when Envoy is referring to itself in metrics and
+traces. You can override this behavior by setting the
+<code>APPMESH_RESOURCE_CLUSTER</code> environment variable with your own name.</p>
+<p>AWS Cloud Map is not available in the eu-south-1 Region.</p>
+<p>For more information about virtual nodes, see <a href='https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html'>Virtual nodes</a>.
+You must be using <code>1.15.0</code> or later of the Envoy image when setting
+these variables. For more information about App Mesh Envoy variables,
+see <a href='https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html'>Envoy image</a>
+in the AWS App Mesh User Guide.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>appmesh_create_virtual_node</span>(<span class='no'>clientToken</span>, <span class='no'>meshName</span>, <span class='no'>meshOwner</span>, <span class='no'>spec</span>,
-  <span class='no'>tags</span>, <span class='no'>virtualNodeName</span>)</pre>
+    <pre class="usage"><span class='fu'>appmesh_create_virtual_node</span><span class='op'>(</span><span class='va'>clientToken</span>, <span class='va'>meshName</span>, <span class='va'>meshOwner</span>, <span class='va'>spec</span>,
+  <span class='va'>tags</span>, <span class='va'>virtualNodeName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,183 +209,189 @@ length of 256 characters.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A virtual node acts as a logical pointer to a particular task group,
-such as an Amazon ECS service or a Kubernetes deployment. When you
-create a virtual node, you can specify the service discovery information
-for your task group, and whether the proxy running in a task group will
-communicate with other proxies using Transport Layer Security (TLS).</p>
-<p>You define a <code>listener</code> for any inbound traffic that your virtual node
-expects. Any virtual service that your virtual node expects to
-communicate to is specified as a <code>backend</code>.</p>
-<p>The response metadata for your new virtual node contains the <code>arn</code> that
-is associated with the virtual node. Set this value (either the full ARN
-or the truncated resource name: for example,
-<code>mesh/default/virtualNode/simpleapp</code>) as the <code>APPMESH_VIRTUAL_NODE_NAME</code>
-environment variable for your task group\'s Envoy proxy container in
-your task definition or pod spec. This is then mapped to the <code>node.id</code>
-and <code>node.cluster</code> Envoy parameters.</p>
-<p>If you require your Envoy stats or tracing to use a different name, you
-can override the <code>node.cluster</code> value that is set by
-<code>APPMESH_VIRTUAL_NODE_NAME</code> with the <code>APPMESH_VIRTUAL_NODE_CLUSTER</code>
-environment variable.</p>
-<p>For more information about virtual nodes, see <a href='https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html'>Virtual nodes</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_virtual_node</span>(
-  <span class='kw'>clientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>meshName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>meshOwner</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>spec</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>backendDefaults</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>clientPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>tls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>enforce</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-          <span class='kw'>ports</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_virtual_node</span><span class='op'>(</span>
+  clientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  meshName <span class='op'>=</span> <span class='st'>"string"</span>,
+  meshOwner <span class='op'>=</span> <span class='st'>"string"</span>,
+  spec <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    backendDefaults <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      clientPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        tls <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          enforce <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+          ports <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='fl'>123</span>
-          ),
-          <span class='kw'>validation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>trust</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>acm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>certificateAuthorityArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+          <span class='op'>)</span>,
+          validation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            trust <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              acm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                certificateAuthorityArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                   <span class='st'>"string"</span>
-                )
-              ),
-              <span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>certificateChain</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-              )
-            )
-          )
-        )
-      )
-    ),
-    <span class='kw'>backends</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>virtualService</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>clientPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>tls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>enforce</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-              <span class='kw'>ports</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+                <span class='op'>)</span>
+              <span class='op'>)</span>,
+              file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                certificateChain <span class='op'>=</span> <span class='st'>"string"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    backends <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        virtualService <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          clientPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            tls <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              enforce <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+              ports <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                 <span class='fl'>123</span>
-              ),
-              <span class='kw'>validation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>trust</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                  <span class='kw'>acm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                    <span class='kw'>certificateAuthorityArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+              <span class='op'>)</span>,
+              validation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                trust <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  acm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                    certificateAuthorityArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                       <span class='st'>"string"</span>
-                    )
-                  ),
-                  <span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                    <span class='kw'>certificateChain</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-                  )
-                )
-              )
-            )
-          ),
-          <span class='kw'>virtualServiceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>listeners</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>healthCheck</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>healthyThreshold</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>intervalMillis</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>port</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>protocol</span> <span class='kw'>=</span> <span class='st'>"grpc"</span><span class='kw'>|</span><span class='st'>"http"</span><span class='kw'>|</span><span class='st'>"http2"</span><span class='kw'>|</span><span class='st'>"tcp"</span>,
-          <span class='kw'>timeoutMillis</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>unhealthyThreshold</span> <span class='kw'>=</span> <span class='fl'>123</span>
-        ),
-        <span class='kw'>portMapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>port</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>protocol</span> <span class='kw'>=</span> <span class='st'>"grpc"</span><span class='kw'>|</span><span class='st'>"http"</span><span class='kw'>|</span><span class='st'>"http2"</span><span class='kw'>|</span><span class='st'>"tcp"</span>
-        ),
-        <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>grpc</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>idle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"ms"</span><span class='kw'>|</span><span class='st'>"s"</span>,
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            ),
-            <span class='kw'>perRequest</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"ms"</span><span class='kw'>|</span><span class='st'>"s"</span>,
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            )
-          ),
-          <span class='kw'>http</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>idle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"ms"</span><span class='kw'>|</span><span class='st'>"s"</span>,
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            ),
-            <span class='kw'>perRequest</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"ms"</span><span class='kw'>|</span><span class='st'>"s"</span>,
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            )
-          ),
-          <span class='kw'>http2</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>idle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"ms"</span><span class='kw'>|</span><span class='st'>"s"</span>,
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            ),
-            <span class='kw'>perRequest</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"ms"</span><span class='kw'>|</span><span class='st'>"s"</span>,
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            )
-          ),
-          <span class='kw'>tcp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>idle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"ms"</span><span class='kw'>|</span><span class='st'>"s"</span>,
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            )
-          )
-        ),
-        <span class='kw'>tls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>certificate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>acm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>certificateArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            ),
-            <span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>certificateChain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>privateKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          ),
-          <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"DISABLED"</span><span class='kw'>|</span><span class='st'>"PERMISSIVE"</span><span class='kw'>|</span><span class='st'>"STRICT"</span>
-        )
-      )
-    ),
-    <span class='kw'>logging</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>accessLog</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>file</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>serviceDiscovery</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>awsCloudMap</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>attributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        ),
-        <span class='kw'>namespaceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>serviceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>dns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>hostname</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>virtualNodeName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+                    <span class='op'>)</span>
+                  <span class='op'>)</span>,
+                  file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                    certificateChain <span class='op'>=</span> <span class='st'>"string"</span>
+                  <span class='op'>)</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          virtualServiceName <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    listeners <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        connectionPool <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          grpc <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            maxRequests <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>,
+          http <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            maxConnections <span class='op'>=</span> <span class='fl'>123</span>,
+            maxPendingRequests <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>,
+          http2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            maxRequests <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>,
+          tcp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            maxConnections <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        healthCheck <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          healthyThreshold <span class='op'>=</span> <span class='fl'>123</span>,
+          intervalMillis <span class='op'>=</span> <span class='fl'>123</span>,
+          path <span class='op'>=</span> <span class='st'>"string"</span>,
+          port <span class='op'>=</span> <span class='fl'>123</span>,
+          protocol <span class='op'>=</span> <span class='st'>"http"</span><span class='op'>|</span><span class='st'>"tcp"</span><span class='op'>|</span><span class='st'>"http2"</span><span class='op'>|</span><span class='st'>"grpc"</span>,
+          timeoutMillis <span class='op'>=</span> <span class='fl'>123</span>,
+          unhealthyThreshold <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>,
+        outlierDetection <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          baseEjectionDuration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+            value <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>,
+          interval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+            value <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>,
+          maxEjectionPercent <span class='op'>=</span> <span class='fl'>123</span>,
+          maxServerErrors <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>,
+        portMapping <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          port <span class='op'>=</span> <span class='fl'>123</span>,
+          protocol <span class='op'>=</span> <span class='st'>"http"</span><span class='op'>|</span><span class='st'>"tcp"</span><span class='op'>|</span><span class='st'>"http2"</span><span class='op'>|</span><span class='st'>"grpc"</span>
+        <span class='op'>)</span>,
+        timeout <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          grpc <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            idle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+              value <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>,
+            perRequest <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+              value <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          http <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            idle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+              value <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>,
+            perRequest <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+              value <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          http2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            idle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+              value <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>,
+            perRequest <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+              value <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          tcp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            idle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              unit <span class='op'>=</span> <span class='st'>"s"</span><span class='op'>|</span><span class='st'>"ms"</span>,
+              value <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        tls <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          certificate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            acm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              certificateArn <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>,
+            file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              certificateChain <span class='op'>=</span> <span class='st'>"string"</span>,
+              privateKey <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          mode <span class='op'>=</span> <span class='st'>"STRICT"</span><span class='op'>|</span><span class='st'>"PERMISSIVE"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    logging <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      accessLog <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          path <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    serviceDiscovery <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      awsCloudMap <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        attributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            key <span class='op'>=</span> <span class='st'>"string"</span>,
+            value <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        namespaceName <span class='op'>=</span> <span class='st'>"string"</span>,
+        serviceName <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      dns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        hostname <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  virtualNodeName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -353,7 +409,7 @@ environment variable.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

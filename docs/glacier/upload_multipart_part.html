@@ -42,7 +42,42 @@
 <meta property="og:title" content="This operation uploads a part of an archive — glacier_upload_multipart_part" />
 <meta property="og:description" content="This operation uploads a part of an archive. You can upload archive
 parts in any order. You can also upload them in parallel. You can upload
-up to 10,000 parts for a multipart upload." />
+up to 10,000 parts for a multipart upload.
+Amazon Glacier rejects your upload part request if any of the following
+conditions is true:
+SHA256 tree hash does not matchTo ensure that part data is not
+corrupted in transmission, you compute a SHA256 tree hash of the
+part and include it in your request. Upon receiving the part data,
+Amazon S3 Glacier also computes a SHA256 tree hash. If these hash
+values don't match, the operation fails. For information about
+computing a SHA256 tree hash, see Computing Checksums.
+Part size does not matchThe size of each part except the last
+must match the size specified in the corresponding
+InitiateMultipartUpload request. The size of the last part must be
+the same size as, or smaller than, the specified size.
+If you upload a part whose size is smaller than the part size you
+specified in your initiate multipart upload request and that part is
+not the last part, then the upload part request will succeed.
+However, the subsequent Complete Multipart Upload request will fail.
+Range does not alignThe byte range value in the request does not
+align with the part size specified in the corresponding initiate
+request. For example, if you specify a part size of 4194304 bytes (4
+MB), then 0 to 4194303 bytes (4 MB - 1) and 4194304 (4 MB) to
+8388607 (8 MB - 1) are valid part ranges. However, if you set a
+range value of 2 MB to 6 MB, the range does not align with the part
+size and the upload will fail.
+
+
+This operation is idempotent. If you upload the same part multiple
+times, the data included in the most recent request overwrites the
+previously uploaded data.
+An AWS account has full permission to perform all operations (actions).
+However, AWS Identity and Access Management (IAM) users don't have any
+permissions by default. You must grant them explicit permission to
+perform specific actions. For more information, see Access Control Using AWS Identity and Access Management (IAM).
+For conceptual information and underlying REST API, see Uploading Large Archives in Parts (Multipart Upload)
+and Upload Part
+in the Amazon Glacier Developer Guide." />
 
 
 
@@ -74,7 +109,7 @@ up to 10,000 parts for a multipart upload." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +117,7 @@ up to 10,000 parts for a multipart upload." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +129,7 @@ up to 10,000 parts for a multipart upload." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +155,45 @@ up to 10,000 parts for a multipart upload." />
     <p>This operation uploads a part of an archive. You can upload archive
 parts in any order. You can also upload them in parallel. You can upload
 up to 10,000 parts for a multipart upload.</p>
+<p>Amazon Glacier rejects your upload part request if any of the following
+conditions is true:</p><ul>
+<li><p><strong>SHA256 tree hash does not match</strong>To ensure that part data is not
+corrupted in transmission, you compute a SHA256 tree hash of the
+part and include it in your request. Upon receiving the part data,
+Amazon S3 Glacier also computes a SHA256 tree hash. If these hash
+values don't match, the operation fails. For information about
+computing a SHA256 tree hash, see <a href='https://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html'>Computing Checksums</a>.</p></li>
+<li><p><strong>Part size does not match</strong>The size of each part except the last
+must match the size specified in the corresponding
+InitiateMultipartUpload request. The size of the last part must be
+the same size as, or smaller than, the specified size.</p>
+<p>If you upload a part whose size is smaller than the part size you
+specified in your initiate multipart upload request and that part is
+not the last part, then the upload part request will succeed.
+However, the subsequent Complete Multipart Upload request will fail.</p></li>
+<li><p><strong>Range does not align</strong>The byte range value in the request does not
+align with the part size specified in the corresponding initiate
+request. For example, if you specify a part size of 4194304 bytes (4
+MB), then 0 to 4194303 bytes (4 MB - 1) and 4194304 (4 MB) to
+8388607 (8 MB - 1) are valid part ranges. However, if you set a
+range value of 2 MB to 6 MB, the range does not align with the part
+size and the upload will fail.</p></li>
+</ul>
+
+<p>This operation is idempotent. If you upload the same part multiple
+times, the data included in the most recent request overwrites the
+previously uploaded data.</p>
+<p>An AWS account has full permission to perform all operations (actions).
+However, AWS Identity and Access Management (IAM) users don't have any
+permissions by default. You must grant them explicit permission to
+perform specific actions. For more information, see <a href='https://docs.aws.amazon.com/amazonglacier/latest/dev/auth-and-access-control.html'>Access Control Using AWS Identity and Access Management (IAM)</a>.</p>
+<p>For conceptual information and underlying REST API, see <a href='https://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html'>Uploading Large Archives in Parts (Multipart Upload)</a>
+and <a href='https://docs.aws.amazon.com/amazonglacier/latest/dev/api-upload-part.html'>Upload Part</a>
+in the <em>Amazon Glacier Developer Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>glacier_upload_multipart_part</span>(<span class='no'>accountId</span>, <span class='no'>vaultName</span>, <span class='no'>uploadId</span>, <span class='no'>checksum</span>,
-  <span class='no'>range</span>, <span class='no'>body</span>)</pre>
+    <pre class="usage"><span class='fu'>glacier_upload_multipart_part</span><span class='op'>(</span><span class='va'>accountId</span>, <span class='va'>vaultName</span>, <span class='va'>uploadId</span>, <span class='va'>checksum</span>,
+  <span class='va'>range</span>, <span class='va'>body</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,9 +202,9 @@ up to 10,000 parts for a multipart upload.</p>
       <th>accountId</th>
       <td><p>[required] The <code>AccountId</code> value is the AWS account ID of the account that owns the
 vault. You can either specify an AWS account ID or optionally a single
-\'<code>-</code>\' (hyphen), in which case Amazon S3 Glacier uses the AWS account
-ID associated with the credentials used to sign the request. If you use
-an account ID, do not include any hyphens (\'-\') in the ID.</p></td>
+'<code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code>' (hyphen), in which case Amazon S3 Glacier uses the AWS account ID
+associated with the credentials used to sign the request. If you use an
+account ID, do not include any hyphens ('-') in the ID.</p></td>
     </tr>
     <tr>
       <th>vaultName</th>
@@ -161,69 +231,35 @@ follows RFC 2616. An example header is Content-Range:bytes 0-4194303/*.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Amazon Glacier rejects your upload part request if any of the following
-conditions is true:</p><ul>
-<li><p><strong>SHA256 tree hash does not match</strong>To ensure that part data is not
-corrupted in transmission, you compute a SHA256 tree hash of the
-part and include it in your request. Upon receiving the part data,
-Amazon S3 Glacier also computes a SHA256 tree hash. If these hash
-values don\'t match, the operation fails. For information about
-computing a SHA256 tree hash, see <a href='https://docs.aws.amazon.com/amazonglacier/latest/dev/checksum-calculations.html'>Computing Checksums</a>.</p></li>
-<li><p><strong>Part size does not match</strong>The size of each part except the last
-must match the size specified in the corresponding
-InitiateMultipartUpload request. The size of the last part must be
-the same size as, or smaller than, the specified size.</p>
-<p>If you upload a part whose size is smaller than the part size you
-specified in your initiate multipart upload request and that part is
-not the last part, then the upload part request will succeed.
-However, the subsequent Complete Multipart Upload request will fail.</p></li>
-<li><p><strong>Range does not align</strong>The byte range value in the request does not
-align with the part size specified in the corresponding initiate
-request. For example, if you specify a part size of 4194304 bytes (4
-MB), then 0 to 4194303 bytes (4 MB - 1) and 4194304 (4 MB) to
-8388607 (8 MB - 1) are valid part ranges. However, if you set a
-range value of 2 MB to 6 MB, the range does not align with the part
-size and the upload will fail.</p></li>
-</ul>
-
-<p>This operation is idempotent. If you upload the same part multiple
-times, the data included in the most recent request overwrites the
-previously uploaded data.</p>
-<p>An AWS account has full permission to perform all operations (actions).
-However, AWS Identity and Access Management (IAM) users don\'t have any
-permissions by default. You must grant them explicit permission to
-perform specific actions. For more information, see <a href='https://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html'>Access Control Using AWS Identity and Access Management (IAM)</a>.</p>
-<p>For conceptual information and underlying REST API, see <a href='https://docs.aws.amazon.com/amazonglacier/latest/dev/uploading-archive-mpu.html'>Uploading Large Archives in Parts (Multipart Upload)</a>
-and <a href='https://docs.aws.amazon.com/amazonglacier/latest/dev/api-upload-part.html'>Upload Part</a>
-in the <em>Amazon Glacier Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>upload_multipart_part</span>(
-  <span class='kw'>accountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>vaultName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>uploadId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>checksum</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>range</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>body</span> <span class='kw'>=</span> <span class='no'>raw</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>upload_multipart_part</span><span class='op'>(</span>
+  accountId <span class='op'>=</span> <span class='st'>"string"</span>,
+  vaultName <span class='op'>=</span> <span class='st'>"string"</span>,
+  uploadId <span class='op'>=</span> <span class='st'>"string"</span>,
+  checksum <span class='op'>=</span> <span class='st'>"string"</span>,
+  range <span class='op'>=</span> <span class='st'>"string"</span>,
+  body <span class='op'>=</span> <span class='va'>raw</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The example uploads the first 1 MiB (1024 x 1024 bytes) part of an</span>
 <span class='co'># archive.</span>
-<span class='no'>svc</span>$<span class='fu'>upload_multipart_part</span>(
-  <span class='kw'>accountId</span> <span class='kw'>=</span> <span class='st'>"-"</span>,
-  <span class='kw'>body</span> <span class='kw'>=</span> <span class='st'>"part1"</span>,
-  <span class='kw'>checksum</span> <span class='kw'>=</span> <span class='st'>"c06f7cd4baacb087002a99a5f48bf953"</span>,
-  <span class='kw'>range</span> <span class='kw'>=</span> <span class='st'>"bytes 0-1048575/*"</span>,
-  <span class='kw'>uploadId</span> <span class='kw'>=</span> <span class='st'>"19gaRezEXAMPLES6Ry5YYdqthHOC_kGRCT03L9yetr220UmPtBYKk-OssZtLqyFu7sY1_lR7vgFuJV..."</span>,
-  <span class='kw'>vaultName</span> <span class='kw'>=</span> <span class='st'>"examplevault"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>upload_multipart_part</span><span class='op'>(</span>
+  accountId <span class='op'>=</span> <span class='st'>"-"</span>,
+  body <span class='op'>=</span> <span class='st'>"part1"</span>,
+  checksum <span class='op'>=</span> <span class='st'>"c06f7cd4baacb087002a99a5f48bf953"</span>,
+  range <span class='op'>=</span> <span class='st'>"bytes 0-1048575/*"</span>,
+  uploadId <span class='op'>=</span> <span class='st'>"19gaRezEXAMPLES6Ry5YYdqthHOC_kGRCT03L9yetr220UmPtBYKk-OssZtLqyFu7sY1_lR7vgFuJV..."</span>,
+  vaultName <span class='op'>=</span> <span class='st'>"examplevault"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -239,7 +275,7 @@ in the <em>Amazon Glacier Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

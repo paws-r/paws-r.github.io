@@ -45,7 +45,23 @@ requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by
 either the Amazon Redshift console, the Amazon SNS console, or the
 Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a
 topic in Amazon SNS and subscribe to the topic. The ARN is displayed in
-the SNS console." />
+the SNS console.
+You can specify the source type, and lists of Amazon Redshift source
+IDs, event categories, and event severities. Notifications will be sent
+for all events you want that match those criteria. For example, you can
+specify source type = cluster, source ID = my-cluster-1 and mycluster2,
+event categories = Availability, Backup, and severity = ERROR. The
+subscription will only send notifications for those ERROR events in the
+Availability and Backup categories for the specified clusters.
+If you specify both the source type and source IDs, such as source type
+= cluster and source identifier = my-cluster-1, notifications will be
+sent for all the cluster events for my-cluster-1. If you specify a
+source type but do not specify a source identifier, you will receive
+notice of the events for the objects of that type in your AWS account.
+If you do not specify either the SourceType nor the SourceIdentifier,
+you will be notified of events generated from all Amazon Redshift
+sources belonging to your AWS account. You must specify a source type if
+you specify a source ID." />
 
 
 
@@ -77,7 +93,7 @@ the SNS console." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +101,7 @@ the SNS console." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +113,7 @@ the SNS console." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,10 +142,26 @@ either the Amazon Redshift console, the Amazon SNS console, or the
 Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a
 topic in Amazon SNS and subscribe to the topic. The ARN is displayed in
 the SNS console.</p>
+<p>You can specify the source type, and lists of Amazon Redshift source
+IDs, event categories, and event severities. Notifications will be sent
+for all events you want that match those criteria. For example, you can
+specify source type = cluster, source ID = my-cluster-1 and mycluster2,
+event categories = Availability, Backup, and severity = ERROR. The
+subscription will only send notifications for those ERROR events in the
+Availability and Backup categories for the specified clusters.</p>
+<p>If you specify both the source type and source IDs, such as source type
+= cluster and source identifier = my-cluster-1, notifications will be
+sent for all the cluster events for my-cluster-1. If you specify a
+source type but do not specify a source identifier, you will receive
+notice of the events for the objects of that type in your AWS account.
+If you do not specify either the SourceType nor the SourceIdentifier,
+you will be notified of events generated from all Amazon Redshift
+sources belonging to your AWS account. You must specify a source type if
+you specify a source ID.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>redshift_create_event_subscription</span>(<span class='no'>SubscriptionName</span>, <span class='no'>SnsTopicArn</span>,
-  <span class='no'>SourceType</span>, <span class='no'>SourceIds</span>, <span class='no'>EventCategories</span>, <span class='no'>Severity</span>, <span class='no'>Enabled</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>redshift_create_event_subscription</span><span class='op'>(</span><span class='va'>SubscriptionName</span>, <span class='va'>SnsTopicArn</span>,
+  <span class='va'>SourceType</span>, <span class='va'>SourceIds</span>, <span class='va'>EventCategories</span>, <span class='va'>Severity</span>, <span class='va'>Enabled</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,46 +225,29 @@ event notification subscription.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can specify the source type, and lists of Amazon Redshift source
-IDs, event categories, and event severities. Notifications will be sent
-for all events you want that match those criteria. For example, you can
-specify source type = cluster, source ID = my-cluster-1 and mycluster2,
-event categories = Availability, Backup, and severity = ERROR. The
-subscription will only send notifications for those ERROR events in the
-Availability and Backup categories for the specified clusters.</p>
-<p>If you specify both the source type and source IDs, such as source type
-= cluster and source identifier = my-cluster-1, notifications will be
-sent for all the cluster events for my-cluster-1. If you specify a
-source type but do not specify a source identifier, you will receive
-notice of the events for the objects of that type in your AWS account.
-If you do not specify either the SourceType nor the SourceIdentifier,
-you will be notified of events generated from all Amazon Redshift
-sources belonging to your AWS account. You must specify a source type if
-you specify a source ID.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_event_subscription</span>(
-  <span class='kw'>SubscriptionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SnsTopicArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_event_subscription</span><span class='op'>(</span>
+  SubscriptionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  SnsTopicArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceType <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>EventCategories</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  EventCategories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Severity</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  Severity <span class='op'>=</span> <span class='st'>"string"</span>,
+  Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -250,7 +265,7 @@ you specify a source ID.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

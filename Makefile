@@ -2,7 +2,7 @@
 # to the folder containing their package library. On Windows, it is in
 # ~/Documents/R, whereas in Linux/macOS it is in ~/R.
 ifdef OS
-	R_USER := ${HOME}/Documents
+	R_USER := ${HOME}
 else
 	R_USER := ${HOME}
 endif

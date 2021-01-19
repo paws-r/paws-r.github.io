@@ -44,7 +44,23 @@ accounts, within the specified Regions — cloudformation_update_stack_instances
 accounts, within the specified Regions — cloudformation_update_stack_instances" />
 <meta property="og:description" content="Updates the parameter values for stack instances for the specified
 accounts, within the specified Regions. A stack instance refers to a
-stack in a specific account and Region." />
+stack in a specific account and Region.
+You can only update stack instances in Regions and accounts where they
+already exist; to create additional stack instances, use
+CreateStackInstances.
+During stack set updates, any parameters overridden for a stack instance
+are not updated, but retain their overridden value.
+You can only update the parameter values that are specified in the
+stack set; to add or delete a parameter itself, use
+UpdateStackSet
+to update the stack set template. If you add a parameter to a template,
+before you can override the parameter value specified in the stack set
+you must first use
+UpdateStackSet
+to update all stack instances with the updated template and parameter
+value specified in the stack set. Once a stack instance has been updated
+with the new parameter, you can then override the parameter value using
+UpdateStackInstances." />
 
 
 
@@ -76,7 +92,7 @@ stack in a specific account and Region." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +100,7 @@ stack in a specific account and Region." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +112,7 @@ stack in a specific account and Region." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,11 +139,27 @@ accounts, within the specified Regions</h1>
     <p>Updates the parameter values for stack instances for the specified
 accounts, within the specified Regions. A stack instance refers to a
 stack in a specific account and Region.</p>
+<p>You can only update stack instances in Regions and accounts where they
+already exist; to create additional stack instances, use
+<a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html'>CreateStackInstances</a>.</p>
+<p>During stack set updates, any parameters overridden for a stack instance
+are not updated, but retain their overridden value.</p>
+<p>You can only update the parameter <em>values</em> that are specified in the
+stack set; to add or delete a parameter itself, use
+<a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html'>UpdateStackSet</a>
+to update the stack set template. If you add a parameter to a template,
+before you can override the parameter value specified in the stack set
+you must first use
+<a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html'>UpdateStackSet</a>
+to update all stack instances with the updated template and parameter
+value specified in the stack set. Once a stack instance has been updated
+with the new parameter, you can then override the parameter value using
+<code>UpdateStackInstances</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloudformation_update_stack_instances</span>(<span class='no'>StackSetName</span>, <span class='no'>Accounts</span>,
-  <span class='no'>DeploymentTargets</span>, <span class='no'>Regions</span>, <span class='no'>ParameterOverrides</span>, <span class='no'>OperationPreferences</span>,
-  <span class='no'>OperationId</span>)</pre>
+    <pre class="usage"><span class='fu'>cloudformation_update_stack_instances</span><span class='op'>(</span><span class='va'>StackSetName</span>, <span class='va'>Accounts</span>,
+  <span class='va'>DeploymentTargets</span>, <span class='va'>Regions</span>, <span class='va'>ParameterOverrides</span>, <span class='va'>OperationPreferences</span>,
+  <span class='va'>OperationId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,8 +183,8 @@ the specified accounts and Regions.</p>
 which you want to update parameter values for stack instances. If your
 update targets OUs, the overridden parameter values only apply to the
 accounts that are currently in the target OUs and their child OUs.
-Accounts added to the target OUs and their child OUs in the future
-won\'t use the overridden values.</p>
+Accounts added to the target OUs and their child OUs in the future won't
+use the overridden values.</p>
 <p>You can specify <code>Accounts</code> or <code>DeploymentTargets</code>, but not both.</p></td>
     </tr>
     <tr>
@@ -211,67 +243,50 @@ AWS CloudFormation performs the stack set operation only once, even if
 you retry the request multiple times. You might retry stack set
 operation requests to ensure that AWS CloudFormation successfully
 received them.</p>
-<p>If you don\'t specify an operation ID, the SDK generates one
+<p>If you don't specify an operation ID, the SDK generates one
 automatically.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can only update stack instances in Regions and accounts where they
-already exist; to create additional stack instances, use
-<a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html'>CreateStackInstances</a>.</p>
-<p>During stack set updates, any parameters overridden for a stack instance
-are not updated, but retain their overridden value.</p>
-<p>You can only update the parameter <em>values</em> that are specified in the
-stack set; to add or delete a parameter itself, use
-<a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html'>UpdateStackSet</a>
-to update the stack set template. If you add a parameter to a template,
-before you can override the parameter value specified in the stack set
-you must first use
-<a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html'>UpdateStackSet</a>
-to update all stack instances with the updated template and parameter
-value specified in the stack set. Once a stack instance has been updated
-with the new parameter, you can then override the parameter value using
-<code>UpdateStackInstances</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_stack_instances</span>(
-  <span class='kw'>StackSetName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Accounts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_stack_instances</span><span class='op'>(</span>
+  StackSetName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Accounts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DeploymentTargets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Accounts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  DeploymentTargets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Accounts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>OrganizationalUnitIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    OrganizationalUnitIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Regions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Regions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ParameterOverrides</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ParameterKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ParameterValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>UsePreviousValue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>ResolvedValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>OperationPreferences</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RegionOrder</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  ParameterOverrides <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ParameterKey <span class='op'>=</span> <span class='st'>"string"</span>,
+      ParameterValue <span class='op'>=</span> <span class='st'>"string"</span>,
+      UsePreviousValue <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      ResolvedValue <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  OperationPreferences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RegionOrder <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>FailureToleranceCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>FailureTolerancePercentage</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>MaxConcurrentCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>MaxConcurrentPercentage</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>OperationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+    <span class='op'>)</span>,
+    FailureToleranceCount <span class='op'>=</span> <span class='fl'>123</span>,
+    FailureTolerancePercentage <span class='op'>=</span> <span class='fl'>123</span>,
+    MaxConcurrentCount <span class='op'>=</span> <span class='fl'>123</span>,
+    MaxConcurrentPercentage <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  OperationId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -289,7 +304,7 @@ with the new parameter, you can then override the parameter value using
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

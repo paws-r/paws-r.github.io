@@ -42,9 +42,17 @@ status to Disposed — codeartifact_dispose_package_versions • paws</title>
 
 <meta property="og:title" content="Deletes the assets in package versions and sets the package versions'
 status to Disposed — codeartifact_dispose_package_versions" />
-<meta property="og:description" content="Deletes the assets in package versions and sets the package versions\'
+<meta property="og:description" content="Deletes the assets in package versions and sets the package versions'
 status to Disposed. A disposed package version cannot be restored in
-your repository because its assets are deleted." />
+your repository because its assets are deleted.
+To view all disposed package versions in a repository, use
+ListPackageVersions
+and set the
+status
+parameter to Disposed.
+To view information about a disposed package version, use
+DescribePackageVersion
+.." />
 
 
 
@@ -76,7 +84,7 @@ your repository because its assets are deleted." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +92,7 @@ your repository because its assets are deleted." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +104,7 @@ your repository because its assets are deleted." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,13 +128,21 @@ status to Disposed</h1>
     </div>
 
     <div class="ref-description">
-    <p>Deletes the assets in package versions and sets the package versions\'
+    <p>Deletes the assets in package versions and sets the package versions'
 status to <code>Disposed</code>. A disposed package version cannot be restored in
 your repository because its assets are deleted.</p>
+<p>To view all disposed package versions in a repository, use
+<a href='https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_ListPackageVersions.html'><code>ListPackageVersions</code></a>
+and set the
+<a href='https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_ListPackageVersions.html#API_ListPackageVersions_RequestSyntax'><code>status</code></a>
+parameter to <code>Disposed</code>.</p>
+<p>To view information about a disposed package version, use
+<a href='https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_DescribePackageVersion.html'><code>DescribePackageVersion</code></a>
+..</p>
     </div>
 
-    <pre class="usage"><span class='fu'>codeartifact_dispose_package_versions</span>(<span class='no'>domain</span>, <span class='no'>domainOwner</span>, <span class='no'>repository</span>,
-  <span class='no'>format</span>, <span class='no'>namespace</span>, <span class='no'>package</span>, <span class='no'>versions</span>, <span class='no'>versionRevisions</span>, <span class='no'>expectedStatus</span>)</pre>
+    <pre class="usage"><span class='fu'>codeartifact_dispose_package_versions</span><span class='op'>(</span><span class='va'>domain</span>, <span class='va'>domainOwner</span>, <span class='va'>repository</span>,
+  <span class='va'>format</span>, <span class='va'>namespace</span>, <span class='va'>package</span>, <span class='va'>versions</span>, <span class='va'>versionRevisions</span>, <span class='va'>expectedStatus</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,6 +168,7 @@ dispose. The valid values are:</p><ul>
 <li><p><code>npm</code></p></li>
 <li><p><code>pypi</code></p></li>
 <li><p><code>maven</code></p></li>
+<li><p><code>nuget</code></p></li>
 </ul></td>
     </tr>
     <tr>
@@ -162,6 +179,8 @@ namespace depends on its type. For example:</p><ul>
 <li><p>The namespace of an npm package is its <code>scope</code>.</p></li>
 <li><p>A Python package does not contain a corresponding component, so
 Python packages do not have a namespace.</p></li>
+<li><p>A NuGet package does not contain a corresponding component, so NuGet
+packages do not have a namespace.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -188,36 +207,25 @@ Python packages do not have a namespace.</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To view all disposed package versions in a repository, use
-<code>&lt;a href="https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_ListPackageVersions.html"&gt;ListackageVersions&lt;/a&gt;</code>
-and set the
-<code>&lt;a href="https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_ListPackageVersions.html#API_ListPackageVersions_RequestSyntax"&gt;status&lt;/a&gt;</code>
-parameter to <code>Disposed</code>.</p>
-<p>To view information about a disposed package version, use
-<code>&lt;a href="https://docs.aws.amazon.com/codeartifact/latest/APIReference/API_ListPackageVersions.html"&gt;ListPackageVersions&lt;/a&gt;</code>
-and set the
-<code>&lt;a href="https://docs.aws.amazon.com/API_ListPackageVersions.html#codeartifact-ListPackageVersions-response-status"&gt;status&lt;/a&gt;</code>
-parameter to <code>Disposed</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>dispose_package_versions</span>(
-  <span class='kw'>domain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>domainOwner</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>repository</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"npm"</span><span class='kw'>|</span><span class='st'>"pypi"</span><span class='kw'>|</span><span class='st'>"maven"</span>,
-  <span class='kw'>namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>versions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>dispose_package_versions</span><span class='op'>(</span>
+  domain <span class='op'>=</span> <span class='st'>"string"</span>,
+  domainOwner <span class='op'>=</span> <span class='st'>"string"</span>,
+  repository <span class='op'>=</span> <span class='st'>"string"</span>,
+  format <span class='op'>=</span> <span class='st'>"npm"</span><span class='op'>|</span><span class='st'>"pypi"</span><span class='op'>|</span><span class='st'>"maven"</span><span class='op'>|</span><span class='st'>"nuget"</span>,
+  namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+  package <span class='op'>=</span> <span class='st'>"string"</span>,
+  versions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>versionRevisions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  versionRevisions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>expectedStatus</span> <span class='kw'>=</span> <span class='st'>"Published"</span><span class='kw'>|</span><span class='st'>"Unfinished"</span><span class='kw'>|</span><span class='st'>"Unlisted"</span><span class='kw'>|</span><span class='st'>"Archived"</span><span class='kw'>|</span><span class='st'>"Disposed"</span><span class='kw'>|</span><span class='st'>"Deleted"</span>
-)</pre>
+  <span class='op'>)</span>,
+  expectedStatus <span class='op'>=</span> <span class='st'>"Published"</span><span class='op'>|</span><span class='st'>"Unfinished"</span><span class='op'>|</span><span class='st'>"Unlisted"</span><span class='op'>|</span><span class='st'>"Archived"</span><span class='op'>|</span><span class='st'>"Disposed"</span><span class='op'>|</span><span class='st'>"Deleted"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -235,7 +243,7 @@ parameter to <code>Disposed</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -43,7 +43,48 @@
 <meta property="og:description" content="Creates a replication configuration or replaces an existing one. For
 more information, see
 Replication
-in the Amazon S3 Developer Guide." />
+in the Amazon S3 Developer Guide.
+To perform this operation, the user or role performing the operation
+must have the
+iam:PassRole
+permission.
+Specify the replication configuration in the request body. In the
+replication configuration, you provide the name of the destination
+bucket or buckets where you want Amazon S3 to replicate objects, the IAM
+role that Amazon S3 can assume to replicate objects on your behalf, and
+other relevant information.
+A replication configuration must include at least one rule, and can
+contain a maximum of 1,000. Each rule identifies a subset of objects to
+replicate by filtering the objects in the source bucket. To choose
+additional subsets of objects to replicate, add a rule for each subset.
+To specify a subset of the objects in the source bucket to apply a
+replication rule to, add the Filter element as a child of the Rule
+element. You can filter objects based on an object key prefix, one or
+more object tags, or both. When you add the Filter element in the
+configuration, you must also add the following elements:
+DeleteMarkerReplication, Status, and Priority.
+If you are using an earlier version of the replication configuration,
+Amazon S3 handles replication of delete markers differently. For more
+information, see Backward Compatibility.
+For information about enabling versioning on a bucket, see Using Versioning.
+By default, a resource owner, in this case the AWS account that created
+the bucket, can perform this operation. The resource owner can also
+grant others permissions to perform the operation. For more information
+about permissions, see Specifying Permissions in a Policy
+and Managing Access Permissions to Your Amazon S3 Resources.
+Handling Replication of Encrypted Objects
+By default, Amazon S3 doesn't replicate objects that are stored at rest
+using server-side encryption with CMKs stored in AWS KMS. To replicate
+AWS KMS-encrypted objects, add the following: SourceSelectionCriteria,
+SseKmsEncryptedObjects, Status, EncryptionConfiguration, and
+ReplicaKmsKeyID. For information about replication configuration, see
+Replicating Objects Created with SSE Using CMKs stored in AWS KMS.
+For information on PutBucketReplication errors, see List of replication-related error codes
+The following operations are related to PutBucketReplication:
+GetBucketReplication
+DeleteBucketReplication
+
+" />
 
 
 
@@ -75,7 +116,7 @@ in the Amazon S3 Developer Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +124,7 @@ in the Amazon S3 Developer Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +136,7 @@ in the Amazon S3 Developer Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +163,51 @@ in the Amazon S3 Developer Guide." />
 more information, see
 <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html'>Replication</a>
 in the <em>Amazon S3 Developer Guide</em>.</p>
+<p>To perform this operation, the user or role performing the operation
+must have the
+<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html'>iam:PassRole</a>
+permission.</p>
+<p>Specify the replication configuration in the request body. In the
+replication configuration, you provide the name of the destination
+bucket or buckets where you want Amazon S3 to replicate objects, the IAM
+role that Amazon S3 can assume to replicate objects on your behalf, and
+other relevant information.</p>
+<p>A replication configuration must include at least one rule, and can
+contain a maximum of 1,000. Each rule identifies a subset of objects to
+replicate by filtering the objects in the source bucket. To choose
+additional subsets of objects to replicate, add a rule for each subset.</p>
+<p>To specify a subset of the objects in the source bucket to apply a
+replication rule to, add the Filter element as a child of the Rule
+element. You can filter objects based on an object key prefix, one or
+more object tags, or both. When you add the Filter element in the
+configuration, you must also add the following elements:
+<code>DeleteMarkerReplication</code>, <code>Status</code>, and <code>Priority</code>.</p>
+<p>If you are using an earlier version of the replication configuration,
+Amazon S3 handles replication of delete markers differently. For more
+information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-add-config.html#replication-backward-compat-considerations'>Backward Compatibility</a>.</p>
+<p>For information about enabling versioning on a bucket, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html'>Using Versioning</a>.</p>
+<p>By default, a resource owner, in this case the AWS account that created
+the bucket, can perform this operation. The resource owner can also
+grant others permissions to perform the operation. For more information
+about permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html'>Specifying Permissions in a Policy</a>
+and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html'>Managing Access Permissions to Your Amazon S3 Resources</a>.</p>
+<p><strong>Handling Replication of Encrypted Objects</strong></p>
+<p>By default, Amazon S3 doesn't replicate objects that are stored at rest
+using server-side encryption with CMKs stored in AWS KMS. To replicate
+AWS KMS-encrypted objects, add the following: <code>SourceSelectionCriteria</code>,
+<code>SseKmsEncryptedObjects</code>, <code>Status</code>, <code>EncryptionConfiguration</code>, and
+<code>ReplicaKmsKeyID</code>. For information about replication configuration, see
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-config-for-kms-objects.html'>Replicating Objects Created with SSE Using CMKs stored in AWS KMS</a>.</p>
+<p>For information on <code>PutBucketReplication</code> errors, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ReplicationErrorCodeList'>List of replication-related error codes</a></p>
+<p>The following operations are related to <code>PutBucketReplication</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketReplication.html'>GetBucketReplication</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketReplication.html'>DeleteBucketReplication</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_put_bucket_replication</span>(<span class='no'>Bucket</span>, <span class='no'>ContentMD5</span>, <span class='no'>ReplicationConfiguration</span>,
-  <span class='no'>Token</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_put_bucket_replication</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>ContentMD5</span>, <span class='va'>ReplicationConfiguration</span>,
+  <span class='va'>Token</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,7 +220,9 @@ in the <em>Amazon S3 Developer Guide</em>.</p>
       <th>ContentMD5</th>
       <td><p>The base64-encoded 128-bit MD5 digest of the data. You must use this
 header as a message integrity check to verify that the request body was
-not corrupted in transit. For more information, see <a href='http://www.ietf.org/rfc/rfc1864.txt'>RFC 1864</a>.</p></td>
+not corrupted in transit. For more information, see <a href='https://www.ietf.org/rfc/rfc1864.txt'>RFC 1864</a>.</p>
+<p>For requests made using the AWS Command Line Interface (CLI) or AWS
+SDKs, this field is calculated automatically.</p></td>
     </tr>
     <tr>
       <th>ReplicationConfiguration</th>
@@ -146,143 +230,114 @@ not corrupted in transit. For more information, see <a href='http://www.ietf.org
     </tr>
     <tr>
       <th>Token</th>
-      <td></td>
+      <td><p>A token to allow Object Lock to be enabled for an existing bucket.</p></td>
+    </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
     </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To perform this operation, the user or role performing the operation
-must have the
-<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html'>iam:PassRole</a>
-permission.</p>
-<p>Specify the replication configuration in the request body. In the
-replication configuration, you provide the name of the destination
-bucket where you want Amazon S3 to replicate objects, the IAM role that
-Amazon S3 can assume to replicate objects on your behalf, and other
-relevant information.</p>
-<p>A replication configuration must include at least one rule, and can
-contain a maximum of 1,000. Each rule identifies a subset of objects to
-replicate by filtering the objects in the source bucket. To choose
-additional subsets of objects to replicate, add a rule for each subset.
-All rules must specify the same destination bucket.</p>
-<p>To specify a subset of the objects in the source bucket to apply a
-replication rule to, add the Filter element as a child of the Rule
-element. You can filter objects based on an object key prefix, one or
-more object tags, or both. When you add the Filter element in the
-configuration, you must also add the following elements:
-<code>DeleteMarkerReplication</code>, <code>Status</code>, and <code>Priority</code>.</p>
-<p>For information about enabling versioning on a bucket, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html'>Using Versioning</a>.</p>
-<p>By default, a resource owner, in this case the AWS account that created
-the bucket, can perform this operation. The resource owner can also
-grant others permissions to perform the operation. For more information
-about permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html'>Specifying Permissions in a Policy</a>
-and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html'>Managing Access Permissions to Your Amazon S3 Resources</a>.</p>
-<p><strong>Handling Replication of Encrypted Objects</strong></p>
-<p>By default, Amazon S3 doesn\'t replicate objects that are stored at rest
-using server-side encryption with CMKs stored in AWS KMS. To replicate
-AWS KMS-encrypted objects, add the following: <code>SourceSelectionCriteria</code>,
-<code>SseKmsEncryptedObjects</code>, <code>Status</code>, <code>EncryptionConfiguration</code>, and
-<code>ReplicaKmsKeyID</code>. For information about replication configuration, see
-<a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-config-for-kms-objects.html'>Replicating Objects Created with SSE Using CMKs stored in AWS KMS</a>.</p>
-<p>For information on <code>PutBucketReplication</code> errors, see
-ReplicationErrorCodeList</p>
-<p>The following operations are related to <code>PutBucketReplication</code>:</p><ul>
-<li><p>GetBucketReplication</p></li>
-<li><p>DeleteBucketReplication</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_bucket_replication</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ContentMD5</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReplicationConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Role</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Rules</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>ID</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Priority</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Tag</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          ),
-          <span class='kw'>And</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-              )
-            )
-          )
-        ),
-        <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>,
-        <span class='kw'>SourceSelectionCriteria</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>SseKmsEncryptedObjects</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>
-          )
-        ),
-        <span class='kw'>ExistingObjectReplication</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>
-        ),
-        <span class='kw'>Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Account</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>StorageClass</span> <span class='kw'>=</span> <span class='st'>"STANDARD"</span><span class='kw'>|</span><span class='st'>"REDUCED_REDUNDANCY"</span><span class='kw'>|</span><span class='st'>"STANDARD_IA"</span><span class='kw'>|</span><span class='st'>"ONEZONE_IA"</span><span class='kw'>|</span><span class='st'>"INTELLIGENT_TIERING"</span><span class='kw'>|</span><span class='st'>"GLACIER"</span><span class='kw'>|</span><span class='st'>"DEEP_ARCHIVE"</span>,
-          <span class='kw'>AccessControlTranslation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Owner</span> <span class='kw'>=</span> <span class='st'>"Destination"</span>
-          ),
-          <span class='kw'>EncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>ReplicaKmsKeyID</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          ),
-          <span class='kw'>ReplicationTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>,
-            <span class='kw'>Time</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Minutes</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            )
-          ),
-          <span class='kw'>Metrics</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>,
-            <span class='kw'>EventThreshold</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Minutes</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            )
-          )
-        ),
-        <span class='kw'>DeleteMarkerReplication</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>Token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_replication</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  ContentMD5 <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReplicationConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Role <span class='op'>=</span> <span class='st'>"string"</span>,
+    Rules <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ID <span class='op'>=</span> <span class='st'>"string"</span>,
+        Priority <span class='op'>=</span> <span class='fl'>123</span>,
+        Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+        Filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+          Tag <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Key <span class='op'>=</span> <span class='st'>"string"</span>,
+            Value <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          And <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+            Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                Key <span class='op'>=</span> <span class='st'>"string"</span>,
+                Value <span class='op'>=</span> <span class='st'>"string"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        Status <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>,
+        SourceSelectionCriteria <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          SseKmsEncryptedObjects <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Status <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>
+          <span class='op'>)</span>,
+          ReplicaModifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Status <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        ExistingObjectReplication <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Status <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>
+        <span class='op'>)</span>,
+        Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+          Account <span class='op'>=</span> <span class='st'>"string"</span>,
+          StorageClass <span class='op'>=</span> <span class='st'>"STANDARD"</span><span class='op'>|</span><span class='st'>"REDUCED_REDUNDANCY"</span><span class='op'>|</span><span class='st'>"STANDARD_IA"</span><span class='op'>|</span><span class='st'>"ONEZONE_IA"</span><span class='op'>|</span><span class='st'>"INTELLIGENT_TIERING"</span><span class='op'>|</span><span class='st'>"GLACIER"</span><span class='op'>|</span><span class='st'>"DEEP_ARCHIVE"</span><span class='op'>|</span><span class='st'>"OUTPOSTS"</span>,
+          AccessControlTranslation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Owner <span class='op'>=</span> <span class='st'>"Destination"</span>
+          <span class='op'>)</span>,
+          EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            ReplicaKmsKeyID <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          ReplicationTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Status <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>,
+            Time <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Minutes <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          Metrics <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Status <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>,
+            EventThreshold <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Minutes <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        DeleteMarkerReplication <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Status <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Token <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example sets replication configuration on a bucket.</span>
-<span class='no'>svc</span>$<span class='fu'>put_bucket_replication</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>ReplicationConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Role</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/examplerole"</span>,
-    <span class='kw'>Rules</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"arn:aws:s3:::destinationbucket"</span>,
-          <span class='kw'>StorageClass</span> <span class='kw'>=</span> <span class='st'>"STANDARD"</span>
-        ),
-        <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>""</span>,
-        <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span>
-      )
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_replication</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  ReplicationConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Role <span class='op'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/examplerole"</span>,
+    Rules <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Bucket <span class='op'>=</span> <span class='st'>"arn:aws:s3:::destinationbucket"</span>,
+          StorageClass <span class='op'>=</span> <span class='st'>"STANDARD"</span>
+        <span class='op'>)</span>,
+        Prefix <span class='op'>=</span> <span class='st'>""</span>,
+        Status <span class='op'>=</span> <span class='st'>"Enabled"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -298,7 +353,7 @@ ReplicationErrorCodeList</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

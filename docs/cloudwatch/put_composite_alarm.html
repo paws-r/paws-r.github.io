@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates or updates a <em>composite alarm</em> — cloudwatch_put_composite_alarm • paws</title>
+<title>Creates or updates a composite alarm — cloudwatch_put_composite_alarm • paws</title>
 
 
 <!-- jquery -->
@@ -39,12 +39,42 @@
 
 
 
-<meta property="og:title" content="Creates or updates a <em>composite alarm</em> — cloudwatch_put_composite_alarm" />
+<meta property="og:title" content="Creates or updates a composite alarm — cloudwatch_put_composite_alarm" />
 <meta property="og:description" content="Creates or updates a composite alarm. When you create a composite
 alarm, you specify a rule expression for the alarm that takes into
 account the alarm states of other alarms that you have created. The
 composite alarm goes into ALARM state only if all conditions of the rule
-are met." />
+are met.
+The alarms specified in a composite alarm's rule expression can include
+metric alarms and other composite alarms.
+Using composite alarms can reduce alarm noise. You can create multiple
+metric alarms, and also create a composite alarm and set up alerts only
+for the composite alarm. For example, you could create a composite alarm
+that goes into ALARM state only when more than one of the underlying
+metric alarms are in ALARM state.
+Currently, the only alarm actions that can be taken by composite alarms
+are notifying SNS topics.
+It is possible to create a loop or cycle of composite alarms, where
+composite alarm A depends on composite alarm B, and composite alarm B
+also depends on composite alarm A. In this scenario, you can't delete
+any composite alarm that is part of the cycle because there is always
+still a composite alarm that depends on that alarm that you want to
+delete.
+To get out of such a situation, you must break the cycle by changing the
+rule of one of the composite alarms in the cycle to remove a dependency
+that creates the cycle. The simplest change to make to break a cycle is
+to change the AlarmRule of one of the alarms to False.
+Additionally, the evaluation of composite alarms stops if CloudWatch
+detects a cycle in the evaluation path.
+When this operation creates an alarm, the alarm state is immediately set
+to INSUFFICIENT_DATA. The alarm is then evaluated and its state is set
+appropriately. Any actions associated with the new state are then
+executed. For a composite alarm, this initial time after creation is the
+only time that the alarm can be in INSUFFICIENT_DATA state.
+When you update an existing alarm, its state is left unchanged, but the
+update completely overwrites the previous configuration of the alarm.
+If you are an IAM user, you must have iam:CreateServiceLinkedRole to
+create a composite alarm that has Systems Manager OpsItem actions." />
 
 
 
@@ -76,7 +106,7 @@ are met." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +114,7 @@ are met." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +126,7 @@ are met." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -113,7 +143,7 @@ are met." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Creates or updates a <em>composite alarm</em></h1>
+    <h1>Creates or updates a composite alarm</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/cloudwatch_operations.R'><code>R/cloudwatch_operations.R</code></a></small>
     <div class="hidden name"><code>cloudwatch_put_composite_alarm.Rd</code></div>
     </div>
@@ -124,11 +154,41 @@ alarm, you specify a rule expression for the alarm that takes into
 account the alarm states of other alarms that you have created. The
 composite alarm goes into ALARM state only if all conditions of the rule
 are met.</p>
+<p>The alarms specified in a composite alarm's rule expression can include
+metric alarms and other composite alarms.</p>
+<p>Using composite alarms can reduce alarm noise. You can create multiple
+metric alarms, and also create a composite alarm and set up alerts only
+for the composite alarm. For example, you could create a composite alarm
+that goes into ALARM state only when more than one of the underlying
+metric alarms are in ALARM state.</p>
+<p>Currently, the only alarm actions that can be taken by composite alarms
+are notifying SNS topics.</p>
+<p>It is possible to create a loop or cycle of composite alarms, where
+composite alarm A depends on composite alarm B, and composite alarm B
+also depends on composite alarm A. In this scenario, you can't delete
+any composite alarm that is part of the cycle because there is always
+still a composite alarm that depends on that alarm that you want to
+delete.</p>
+<p>To get out of such a situation, you must break the cycle by changing the
+rule of one of the composite alarms in the cycle to remove a dependency
+that creates the cycle. The simplest change to make to break a cycle is
+to change the <code>AlarmRule</code> of one of the alarms to <code>False</code>.</p>
+<p>Additionally, the evaluation of composite alarms stops if CloudWatch
+detects a cycle in the evaluation path.</p>
+<p>When this operation creates an alarm, the alarm state is immediately set
+to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set
+appropriately. Any actions associated with the new state are then
+executed. For a composite alarm, this initial time after creation is the
+only time that the alarm can be in <code>INSUFFICIENT_DATA</code> state.</p>
+<p>When you update an existing alarm, its state is left unchanged, but the
+update completely overwrites the previous configuration of the alarm.</p>
+<p>If you are an IAM user, you must have <code>iam:CreateServiceLinkedRole</code> to
+create a composite alarm that has Systems Manager OpsItem actions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloudwatch_put_composite_alarm</span>(<span class='no'>ActionsEnabled</span>, <span class='no'>AlarmActions</span>,
-  <span class='no'>AlarmDescription</span>, <span class='no'>AlarmName</span>, <span class='no'>AlarmRule</span>, <span class='no'>InsufficientDataActions</span>,
-  <span class='no'>OKActions</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>cloudwatch_put_composite_alarm</span><span class='op'>(</span><span class='va'>ActionsEnabled</span>, <span class='va'>AlarmActions</span>,
+  <span class='va'>AlarmDescription</span>, <span class='va'>AlarmName</span>, <span class='va'>AlarmRule</span>, <span class='va'>InsufficientDataActions</span>,
+  <span class='va'>OKActions</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,7 +204,8 @@ alarm state of the composite alarm. The default is <code>TRUE</code>.</p></td>
 from any other state. Each action is specified as an Amazon Resource
 Name (ARN).</p>
 <p>Valid Values:
-<code>arn:aws:sns:&lt;i&gt;region&lt;/i&gt;:&lt;i&gt;account-id&lt;/i&gt;:&lt;i&gt;sns-topic-name&lt;/i&gt; </code></p></td>
+<code>arn:aws:sns:&lt;i&gt;region&lt;/i&gt;:&lt;i&gt;account-id&lt;/i&gt;:&lt;i&gt;sns-topic-name&lt;/i&gt; </code> |
+<code>arn:aws:ssm:&lt;i&gt;region&lt;/i&gt;:&lt;i&gt;account-id&lt;/i&gt;:opsitem:&lt;i&gt;severity&lt;/i&gt; </code></p></td>
     </tr>
     <tr>
       <th>AlarmDescription</th>
@@ -152,13 +213,13 @@ Name (ARN).</p>
     </tr>
     <tr>
       <th>AlarmName</th>
-      <td><p>[required] The name for the composite alarm. This name must be unique within your
-AWS account.</p></td>
+      <td><p>[required] The name for the composite alarm. This name must be unique within the
+Region.</p></td>
     </tr>
     <tr>
       <th>AlarmRule</th>
       <td><p>[required] An expression that specifies which other alarms are to be evaluated to
-determine this composite alarm\'s state. For each alarm that you
+determine this composite alarm's state. For each alarm that you
 reference, you designate a function that specifies whether that alarm
 needs to be in ALARM state, OK state, or INSUFFICIENT\_DATA state. You
 can use operators (AND, OR and NOT) to combine multiple functions in a
@@ -180,7 +241,7 @@ if the named alarm is in INSUFFICIENT\_DATA state.</p></li>
 <p>TRUE and FALSE are useful for testing a complex <code>AlarmRule</code> structure,
 and for testing your alarm actions.</p>
 <p>Alarm names specified in <code>AlarmRule</code> can be surrounded with
-double-quotes (\"), but do not have to be.</p>
+double-quotes ("), but do not have to be.</p>
 <p>The following are some examples of <code>AlarmRule</code>:</p><ul>
 <li><p><code>ALARM(CPUUtilizationTooHigh) AND ALARM(DiskReadOpsTooHigh)</code>
 specifies that the composite alarm goes into ALARM state only if
@@ -200,7 +261,7 @@ action on high CPU or disk usage if a known network problem is also
 occurring.</p></li>
 </ul>
 
-<p>The <code>AlarmRule</code> can specify as many as 100 \"children\" alarms. The
+<p>The <code>AlarmRule</code> can specify as many as 100 "children" alarms. The
 <code>AlarmRule</code> expression can have as many as 500 elements. Elements are
 child alarms, TRUE or FALSE statements, and parentheses.</p></td>
     </tr>
@@ -230,60 +291,31 @@ access or change only resources with certain tag values.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The alarms specified in a composite alarm\'s rule expression can include
-metric alarms and other composite alarms.</p>
-<p>Using composite alarms can reduce alarm noise. You can create multiple
-metric alarms, and also create a composite alarm and set up alerts only
-for the composite alarm. For example, you could create a composite alarm
-that goes into ALARM state only when more than one of the underlying
-metric alarms are in ALARM state.</p>
-<p>Currently, the only alarm actions that can be taken by composite alarms
-are notifying SNS topics.</p>
-<p>It is possible to create a loop or cycle of composite alarms, where
-composite alarm A depends on composite alarm B, and composite alarm B
-also depends on composite alarm A. In this scenario, you can\'t delete
-any composite alarm that is part of the cycle because there is always
-still a composite alarm that depends on that alarm that you want to
-delete.</p>
-<p>To get out of such a situation, you must break the cycle by changing the
-rule of one of the composite alarms in the cycle to remove a dependency
-that creates the cycle. The simplest change to make to break a cycle is
-to change the <code>AlarmRule</code> of one of the alarms to <code>False</code>.</p>
-<p>Additionally, the evaluation of composite alarms stops if CloudWatch
-detects a cycle in the evaluation path.</p>
-<p>When this operation creates an alarm, the alarm state is immediately set
-to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set
-appropriately. Any actions associated with the new state are then
-executed. For a composite alarm, this initial time after creation is the
-only time that the alarm can be in <code>INSUFFICIENT_DATA</code> state.</p>
-<p>When you update an existing alarm, its state is left unchanged, but the
-update completely overwrites the previous configuration of the alarm.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_composite_alarm</span>(
-  <span class='kw'>ActionsEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>AlarmActions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_composite_alarm</span><span class='op'>(</span>
+  ActionsEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  AlarmActions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AlarmDescription</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AlarmName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AlarmRule</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InsufficientDataActions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  AlarmDescription <span class='op'>=</span> <span class='st'>"string"</span>,
+  AlarmName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AlarmRule <span class='op'>=</span> <span class='st'>"string"</span>,
+  InsufficientDataActions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>OKActions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  OKActions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -301,7 +333,7 @@ update completely overwrites the previous configuration of the alarm.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -43,9 +43,26 @@ file system — fsx_update_file_system • paws</title>
 <meta property="og:title" content="Use this operation to update the configuration of an existing Amazon FSx
 file system — fsx_update_file_system" />
 <meta property="og:description" content="Use this operation to update the configuration of an existing Amazon FSx
-file system. For an Amazon FSx for Lustre file system, you can update
-only the WeeklyMaintenanceStartTime. For an Amazon for Windows File
-Server file system, you can update the following properties:" />
+file system. You can update multiple properties in a single request.
+For Amazon FSx for Windows File Server file systems, you can update the
+following properties:
+AutomaticBackupRetentionDays
+DailyAutomaticBackupStartTime
+SelfManagedActiveDirectoryConfiguration
+StorageCapacity
+ThroughputCapacity
+WeeklyMaintenanceStartTime
+
+
+For Amazon FSx for Lustre file systems, you can update the following
+properties:
+AutoImportPolicy
+AutomaticBackupRetentionDays
+DailyAutomaticBackupStartTime
+StorageCapacity
+WeeklyMaintenanceStartTime
+
+" />
 
 
 
@@ -77,7 +94,7 @@ Server file system, you can update the following properties:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +102,7 @@ Server file system, you can update the following properties:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +114,7 @@ Server file system, you can update the following properties:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,13 +139,30 @@ file system</h1>
 
     <div class="ref-description">
     <p>Use this operation to update the configuration of an existing Amazon FSx
-file system. For an Amazon FSx for Lustre file system, you can update
-only the WeeklyMaintenanceStartTime. For an Amazon for Windows File
-Server file system, you can update the following properties:</p>
+file system. You can update multiple properties in a single request.</p>
+<p>For Amazon FSx for Windows File Server file systems, you can update the
+following properties:</p><ul>
+<li><p>AutomaticBackupRetentionDays</p></li>
+<li><p>DailyAutomaticBackupStartTime</p></li>
+<li><p>SelfManagedActiveDirectoryConfiguration</p></li>
+<li><p>StorageCapacity</p></li>
+<li><p>ThroughputCapacity</p></li>
+<li><p>WeeklyMaintenanceStartTime</p></li>
+</ul>
+
+<p>For Amazon FSx for Lustre file systems, you can update the following
+properties:</p><ul>
+<li><p>AutoImportPolicy</p></li>
+<li><p>AutomaticBackupRetentionDays</p></li>
+<li><p>DailyAutomaticBackupStartTime</p></li>
+<li><p>StorageCapacity</p></li>
+<li><p>WeeklyMaintenanceStartTime</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>fsx_update_file_system</span>(<span class='no'>FileSystemId</span>, <span class='no'>ClientRequestToken</span>,
-  <span class='no'>StorageCapacity</span>, <span class='no'>WindowsConfiguration</span>, <span class='no'>LustreConfiguration</span>)</pre>
+    <pre class="usage"><span class='fu'>fsx_update_file_system</span><span class='op'>(</span><span class='va'>FileSystemId</span>, <span class='va'>ClientRequestToken</span>,
+  <span class='va'>StorageCapacity</span>, <span class='va'>WindowsConfiguration</span>, <span class='va'>LustreConfiguration</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,15 +179,31 @@ when you use the AWS Command Line Interface (AWS CLI) or an AWS SDK.</p></td>
     </tr>
     <tr>
       <th>StorageCapacity</th>
-      <td><p>Use this parameter to increase the storage capacity of an Amazon FSx for
-Windows File Server file system. Specifies the storage capacity target
-value, GiB, for the file system you\'re updating. The storage capacity
-target value must be at least 10 percent (%) greater than the current
-storage capacity value. In order to increase storage capacity, the file
-system needs to have at least 16 MB/s of throughput capacity. You cannot
-make a storage capacity increase request if there is an existing storage
-capacity increase request in progress. For more information, see
-<a href='https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html'>Managing Storage Capacity</a>.</p></td>
+      <td><p>Use this parameter to increase the storage capacity of an Amazon FSx
+file system. Specifies the storage capacity target value, GiB, to
+increase the storage capacity for the file system that you're updating.
+You cannot make a storage capacity increase request if there is an
+existing storage capacity increase request in progress.</p>
+<p>For Windows file systems, the storage capacity target value must be at
+least 10 percent (%) greater than the current storage capacity value. In
+order to increase storage capacity, the file system must have at least
+16 MB/s of throughput capacity.</p>
+<p>For Lustre file systems, the storage capacity target value can be the
+following:</p><ul>
+<li><p>For <code>SCRATCH_2</code> and <code>PERSISTENT_1 SSD</code> deployment types, valid
+values are in multiples of 2400 GiB. The value must be greater than
+the current storage capacity.</p></li>
+<li><p>For <code>PERSISTENT HDD</code> file systems, valid values are multiples of
+6000 GiB for 12 MB/s/TiB file systems and multiples of 1800 GiB for
+40 MB/s/TiB file systems. The values must be greater than the
+current storage capacity.</p></li>
+<li><p>For <code>SCRATCH_1</code> file systems, you cannot increase the storage
+capacity.</p></li>
+</ul>
+
+<p>For more information, see <a href='https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-storage-capacity.html'>Managing storage capacity</a>
+in the <em>Amazon FSx for Windows File Server User Guide</em> and <a href='https://docs.aws.amazon.com/fsx/latest/LustreGuide/managing-storage-capacity.html'>Managing storage and throughput capacity</a>
+in the <em>Amazon FSx for Lustre User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>WindowsConfiguration</th>
@@ -166,59 +216,50 @@ system.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>AutomaticBackupRetentionDays</p></li>
-<li><p>DailyAutomaticBackupStartTime</p></li>
-<li><p>SelfManagedActiveDirectoryConfiguration</p></li>
-<li><p>StorageCapacity</p></li>
-<li><p>ThroughputCapacity</p></li>
-<li><p>WeeklyMaintenanceStartTime</p></li>
-</ul>
-
-<p>You can update multiple properties in a single request.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_file_system</span>(
-  <span class='kw'>FileSystemId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StorageCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>WindowsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>WeeklyMaintenanceStartTime</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DailyAutomaticBackupStartTime</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>AutomaticBackupRetentionDays</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>ThroughputCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>SelfManagedActiveDirectoryConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Password</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DnsIps</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_file_system</span><span class='op'>(</span>
+  FileSystemId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  StorageCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+  WindowsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    WeeklyMaintenanceStartTime <span class='op'>=</span> <span class='st'>"string"</span>,
+    DailyAutomaticBackupStartTime <span class='op'>=</span> <span class='st'>"string"</span>,
+    AutomaticBackupRetentionDays <span class='op'>=</span> <span class='fl'>123</span>,
+    ThroughputCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+    SelfManagedActiveDirectoryConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      UserName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Password <span class='op'>=</span> <span class='st'>"string"</span>,
+      DnsIps <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>LustreConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>WeeklyMaintenanceStartTime</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DailyAutomaticBackupStartTime</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>AutomaticBackupRetentionDays</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  )
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  LustreConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    WeeklyMaintenanceStartTime <span class='op'>=</span> <span class='st'>"string"</span>,
+    DailyAutomaticBackupStartTime <span class='op'>=</span> <span class='st'>"string"</span>,
+    AutomaticBackupRetentionDays <span class='op'>=</span> <span class='fl'>123</span>,
+    AutoImportPolicy <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"NEW"</span><span class='op'>|</span><span class='st'>"NEW_CHANGED"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This operation updates an existing file system.</span>
-<span class='no'>svc</span>$<span class='fu'>update_file_system</span>(
-  <span class='kw'>FileSystemId</span> <span class='kw'>=</span> <span class='st'>"fs-0498eed5fe91001ec"</span>,
-  <span class='kw'>WindowsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AutomaticBackupRetentionDays</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-    <span class='kw'>DailyAutomaticBackupStartTime</span> <span class='kw'>=</span> <span class='st'>"06:00"</span>,
-    <span class='kw'>WeeklyMaintenanceStartTime</span> <span class='kw'>=</span> <span class='st'>"3:06:00"</span>
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_file_system</span><span class='op'>(</span>
+  FileSystemId <span class='op'>=</span> <span class='st'>"fs-0498eed5fe91001ec"</span>,
+  WindowsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AutomaticBackupRetentionDays <span class='op'>=</span> <span class='fl'>10L</span>,
+    DailyAutomaticBackupStartTime <span class='op'>=</span> <span class='st'>"06:00"</span>,
+    WeeklyMaintenanceStartTime <span class='op'>=</span> <span class='st'>"3:06:00"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -234,7 +275,7 @@ system.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

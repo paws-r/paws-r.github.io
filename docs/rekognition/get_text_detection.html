@@ -43,7 +43,30 @@ started by StartTextDetection — rekognition_get_text_detection • paws</title
 <meta property="og:title" content="Gets the text detection results of a Amazon Rekognition Video analysis
 started by StartTextDetection — rekognition_get_text_detection" />
 <meta property="og:description" content="Gets the text detection results of a Amazon Rekognition Video analysis
-started by StartTextDetection." />
+started by StartTextDetection.
+Text detection with Amazon Rekognition Video is an asynchronous
+operation. You start text detection by calling StartTextDetection which
+returns a job identifier (JobId) When the text detection operation
+finishes, Amazon Rekognition publishes a completion status to the Amazon
+Simple Notification Service topic registered in the initial call to
+StartTextDetection. To get the results of the text detection
+operation, first check that the status value published to the Amazon SNS
+topic is SUCCEEDED. if so, call GetTextDetection and pass the job
+identifier (JobId) from the initial call of StartLabelDetection.
+GetTextDetection returns an array of detected text (TextDetections)
+sorted by the time the text was detected, up to 50 words per frame of
+video.
+Each element of the array includes the detected text, the precentage
+confidence in the acuracy of the detected text, the time the text was
+detected, bounding box information for where the text was located, and
+unique identifiers for words and their lines.
+Use MaxResults parameter to limit the number of text detections
+returned. If there are more results than specified in MaxResults, the
+value of NextToken in the operation response contains a pagination
+token for getting the next set of results. To get the next page of
+results, call GetTextDetection and populate the NextToken request
+parameter with the token value returned from the previous call to
+GetTextDetection." />
 
 
 
@@ -75,7 +98,7 @@ started by StartTextDetection." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +106,7 @@ started by StartTextDetection." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +118,7 @@ started by StartTextDetection." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,9 +144,32 @@ started by StartTextDetection</h1>
     <div class="ref-description">
     <p>Gets the text detection results of a Amazon Rekognition Video analysis
 started by StartTextDetection.</p>
+<p>Text detection with Amazon Rekognition Video is an asynchronous
+operation. You start text detection by calling StartTextDetection which
+returns a job identifier (<code>JobId</code>) When the text detection operation
+finishes, Amazon Rekognition publishes a completion status to the Amazon
+Simple Notification Service topic registered in the initial call to
+<code>StartTextDetection</code>. To get the results of the text detection
+operation, first check that the status value published to the Amazon SNS
+topic is <code>SUCCEEDED</code>. if so, call <code>GetTextDetection</code> and pass the job
+identifier (<code>JobId</code>) from the initial call of <code>StartLabelDetection</code>.</p>
+<p><code>GetTextDetection</code> returns an array of detected text (<code>TextDetections</code>)
+sorted by the time the text was detected, up to 50 words per frame of
+video.</p>
+<p>Each element of the array includes the detected text, the precentage
+confidence in the acuracy of the detected text, the time the text was
+detected, bounding box information for where the text was located, and
+unique identifiers for words and their lines.</p>
+<p>Use MaxResults parameter to limit the number of text detections
+returned. If there are more results than specified in <code>MaxResults</code>, the
+value of <code>NextToken</code> in the operation response contains a pagination
+token for getting the next set of results. To get the next page of
+results, call <code>GetTextDetection</code> and populate the <code>NextToken</code> request
+parameter with the token value returned from the previous call to
+<code>GetTextDetection</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_get_text_detection</span>(<span class='no'>JobId</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_get_text_detection</span><span class='op'>(</span><span class='va'>JobId</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,39 +194,15 @@ text.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Text detection with Amazon Rekognition Video is an asynchronous
-operation. You start text detection by calling StartTextDetection which
-returns a job identifier (<code>JobId</code>) When the text detection operation
-finishes, Amazon Rekognition publishes a completion status to the Amazon
-Simple Notification Service topic registered in the initial call to
-<code>StartTextDetection</code>. To get the results of the text detection
-operation, first check that the status value published to the Amazon SNS
-topic is <code>SUCCEEDED</code>. if so, call <code>GetTextDetection</code> and pass the job
-identifier (<code>JobId</code>) from the initial call of <code>StartLabelDetection</code>.</p>
-<p><code>GetTextDetection</code> returns an array of detected text (<code>TextDetections</code>)
-sorted by the time the text was detected, up to 50 words per frame of
-video.</p>
-<p>Each element of the array includes the detected text, the precentage
-confidence in the acuracy of the detected text, the time the text was
-detected, bounding box information for where the text was located, and
-unique identifiers for words and their lines.</p>
-<p>Use MaxResults parameter to limit the number of text detections
-returned. If there are more results than specified in <code>MaxResults</code>, the
-value of <code>NextToken</code> in the operation response contains a pagination
-token for getting the next set of results. To get the next page of
-results, call <code>GetTextDetection</code> and populate the <code>NextToken</code> request
-parameter with the token value returned from the previous call to
-<code>GetTextDetection</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_text_detection</span>(
-  <span class='kw'>JobId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_text_detection</span><span class='op'>(</span>
+  JobId <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -198,7 +220,7 @@ parameter with the token value returned from the previous call to
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

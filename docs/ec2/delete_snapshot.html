@@ -40,7 +40,19 @@
 
 
 <meta property="og:title" content="Deletes the specified snapshot — ec2_delete_snapshot" />
-<meta property="og:description" content="Deletes the specified snapshot." />
+<meta property="og:description" content="Deletes the specified snapshot.
+When you make periodic snapshots of a volume, the snapshots are
+incremental, and only the blocks on the device that have changed since
+your last snapshot are saved in the new snapshot. When you delete a
+snapshot, only the data not needed for any other snapshot is removed. So
+regardless of which prior snapshots have been deleted, all active
+snapshots will have access to all the information needed to restore the
+volume.
+You cannot delete a snapshot of the root device of an EBS volume used by
+a registered AMI. You must first de-register the AMI before you can
+delete the snapshot.
+For more information, see Deleting an Amazon EBS snapshot
+in the Amazon Elastic Compute Cloud User Guide." />
 
 
 
@@ -72,7 +84,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +92,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +104,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,9 +128,21 @@
 
     <div class="ref-description">
     <p>Deletes the specified snapshot.</p>
+<p>When you make periodic snapshots of a volume, the snapshots are
+incremental, and only the blocks on the device that have changed since
+your last snapshot are saved in the new snapshot. When you delete a
+snapshot, only the data not needed for any other snapshot is removed. So
+regardless of which prior snapshots have been deleted, all active
+snapshots will have access to all the information needed to restore the
+volume.</p>
+<p>You cannot delete a snapshot of the root device of an EBS volume used by
+a registered AMI. You must first de-register the AMI before you can
+delete the snapshot.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-snapshot.html'>Deleting an Amazon EBS snapshot</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_delete_snapshot</span>(<span class='no'>SnapshotId</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_delete_snapshot</span><span class='op'>(</span><span class='va'>SnapshotId</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,38 +160,27 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you make periodic snapshots of a volume, the snapshots are
-incremental, and only the blocks on the device that have changed since
-your last snapshot are saved in the new snapshot. When you delete a
-snapshot, only the data not needed for any other snapshot is removed. So
-regardless of which prior snapshots have been deleted, all active
-snapshots will have access to all the information needed to restore the
-volume.</p>
-<p>You cannot delete a snapshot of the root device of an EBS volume used by
-a registered AMI. You must first de-register the AMI before you can
-delete the snapshot.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-snapshot.html'>Deleting an Amazon EBS Snapshot</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>delete_snapshot</span>(
-  <span class='kw'>SnapshotId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_snapshot</span><span class='op'>(</span>
+  SnapshotId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example deletes a snapshot with the snapshot ID of</span>
 <span class='co'># `snap-1234567890abcdef0`. If the command succeeds, no output is</span>
 <span class='co'># returned.</span>
-<span class='no'>svc</span>$<span class='fu'>delete_snapshot</span>(
-  <span class='kw'>SnapshotId</span> <span class='kw'>=</span> <span class='st'>"snap-1234567890abcdef0"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_snapshot</span><span class='op'>(</span>
+  SnapshotId <span class='op'>=</span> <span class='st'>"snap-1234567890abcdef0"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -183,7 +196,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

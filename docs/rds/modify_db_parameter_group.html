@@ -43,7 +43,21 @@
 <meta property="og:description" content="Modifies the parameters of a DB parameter group. To modify more than one
 parameter, submit a list of the following: ParameterName,
 ParameterValue, and ApplyMethod. A maximum of 20 parameters can be
-modified in a single request." />
+modified in a single request.
+Changes to dynamic parameters are applied immediately. Changes to static
+parameters require a reboot without failover to the DB instance
+associated with the parameter group before the change can take effect.
+After you modify a DB parameter group, you should wait at least 5
+minutes before creating your first DB instance that uses that DB
+parameter group as the default parameter group. This allows Amazon RDS
+to fully complete the modify action before the parameter group is used
+as the default for a new DB instance. This is especially important for
+parameters that are critical when creating the default database for a DB
+instance, such as the character set for the default database defined by
+the character_set_database parameter. You can use the Parameter
+Groups option of the Amazon RDS console or the DescribeDBParameters
+command to verify that your DB parameter group has been created or
+modified." />
 
 
 
@@ -75,7 +89,7 @@ modified in a single request." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +97,7 @@ modified in a single request." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +109,7 @@ modified in a single request." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,9 +136,23 @@ modified in a single request." />
 parameter, submit a list of the following: <code>ParameterName</code>,
 <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be
 modified in a single request.</p>
+<p>Changes to dynamic parameters are applied immediately. Changes to static
+parameters require a reboot without failover to the DB instance
+associated with the parameter group before the change can take effect.</p>
+<p>After you modify a DB parameter group, you should wait at least 5
+minutes before creating your first DB instance that uses that DB
+parameter group as the default parameter group. This allows Amazon RDS
+to fully complete the modify action before the parameter group is used
+as the default for a new DB instance. This is especially important for
+parameters that are critical when creating the default database for a DB
+instance, such as the character set for the default database defined by
+the <code>character_set_database</code> parameter. You can use the <em>Parameter
+Groups</em> option of the Amazon RDS console or the <em>DescribeDBParameters</em>
+command to verify that your DB parameter group has been created or
+modified.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rds_modify_db_parameter_group</span>(<span class='no'>DBParameterGroupName</span>, <span class='no'>Parameters</span>)</pre>
+    <pre class="usage"><span class='fu'>rds_modify_db_parameter_group</span><span class='op'>(</span><span class='va'>DBParameterGroupName</span>, <span class='va'>Parameters</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,45 +177,30 @@ changes are applied when you reboot the DB instance without failover.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Changes to dynamic parameters are applied immediately. Changes to static
-parameters require a reboot without failover to the DB instance
-associated with the parameter group before the change can take effect.</p>
-<p>After you modify a DB parameter group, you should wait at least 5
-minutes before creating your first DB instance that uses that DB
-parameter group as the default parameter group. This allows Amazon RDS
-to fully complete the modify action before the parameter group is used
-as the default for a new DB instance. This is especially important for
-parameters that are critical when creating the default database for a DB
-instance, such as the character set for the default database defined by
-the <code>character_set_database</code> parameter. You can use the <em>Parameter
-Groups</em> option of the <a href='https://console.aws.amazon.com/rds/'>Amazon RDS console</a> or the
-<em>DescribeDBParameters</em> command to verify that your DB parameter group
-has been created or modified.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>modify_db_parameter_group</span>(
-  <span class='kw'>DBParameterGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ParameterName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ParameterValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Source</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ApplyType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DataType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>AllowedValues</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>IsModifiable</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>MinimumEngineVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ApplyMethod</span> <span class='kw'>=</span> <span class='st'>"immediate"</span><span class='kw'>|</span><span class='st'>"pending-reboot"</span>,
-      <span class='kw'>SupportedEngineModes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>modify_db_parameter_group</span><span class='op'>(</span>
+  DBParameterGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ParameterName <span class='op'>=</span> <span class='st'>"string"</span>,
+      ParameterValue <span class='op'>=</span> <span class='st'>"string"</span>,
+      Description <span class='op'>=</span> <span class='st'>"string"</span>,
+      Source <span class='op'>=</span> <span class='st'>"string"</span>,
+      ApplyType <span class='op'>=</span> <span class='st'>"string"</span>,
+      DataType <span class='op'>=</span> <span class='st'>"string"</span>,
+      AllowedValues <span class='op'>=</span> <span class='st'>"string"</span>,
+      IsModifiable <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      MinimumEngineVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+      ApplyMethod <span class='op'>=</span> <span class='st'>"immediate"</span><span class='op'>|</span><span class='st'>"pending-reboot"</span>,
+      SupportedEngineModes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  )
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -205,7 +218,7 @@ has been created or modified.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

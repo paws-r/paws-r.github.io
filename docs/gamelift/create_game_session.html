@@ -40,10 +40,46 @@
 
 
 <meta property="og:title" content="Creates a multiplayer game session for players — gamelift_create_game_session" />
-<meta property="og:description" content="Creates a multiplayer game session for players. This action creates a
+<meta property="og:description" content="Creates a multiplayer game session for players. This operation creates a
 game session record and assigns an available server process in the
 specified fleet to host the game session. A fleet must have an ACTIVE
-status before a game session can be created in it." />
+status before a game session can be created in it.
+To create a game session, specify either fleet ID or alias ID and
+indicate a maximum number of players to allow in the game session. You
+can also provide a name and game-specific properties for this game
+session. If successful, a GameSession object is returned containing the
+game session properties and other settings you specified.
+Idempotency tokens. You can add a token that uniquely identifies
+game session requests. This is useful for ensuring that game session
+requests are idempotent. Multiple requests with the same idempotency
+token are processed only once; subsequent requests return the original
+result. All response values are the same with the exception of game
+session status, which may change.
+Resource creation limits. If you are creating a game session on a
+fleet with a resource creation limit policy in force, then you must
+specify a creator ID. Without this ID, Amazon GameLift has no way to
+evaluate the policy for this new game session request.
+Player acceptance policy. By default, newly created game sessions
+are open to new players. You can restrict new player access by using
+UpdateGameSession to change the game session's player session creation
+policy.
+Game session logs. Logs are retained for all active game sessions
+for 14 days. To access the logs, call GetGameSessionLogUrl to download
+the log files.
+Available in Amazon GameLift Local.
+CreateGameSession
+DescribeGameSessions
+DescribeGameSessionDetails
+SearchGameSessions
+UpdateGameSession
+GetGameSessionLogUrl
+Game session placements
+StartGameSessionPlacement
+DescribeGameSessionPlacement
+StopGameSessionPlacement
+
+
+" />
 
 
 
@@ -75,7 +111,7 @@ status before a game session can be created in it." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +119,7 @@ status before a game session can be created in it." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +131,7 @@ status before a game session can be created in it." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,15 +154,51 @@ status before a game session can be created in it." />
     </div>
 
     <div class="ref-description">
-    <p>Creates a multiplayer game session for players. This action creates a
+    <p>Creates a multiplayer game session for players. This operation creates a
 game session record and assigns an available server process in the
 specified fleet to host the game session. A fleet must have an <code>ACTIVE</code>
 status before a game session can be created in it.</p>
+<p>To create a game session, specify either fleet ID or alias ID and
+indicate a maximum number of players to allow in the game session. You
+can also provide a name and game-specific properties for this game
+session. If successful, a GameSession object is returned containing the
+game session properties and other settings you specified.</p>
+<p><strong>Idempotency tokens.</strong> You can add a token that uniquely identifies
+game session requests. This is useful for ensuring that game session
+requests are idempotent. Multiple requests with the same idempotency
+token are processed only once; subsequent requests return the original
+result. All response values are the same with the exception of game
+session status, which may change.</p>
+<p><strong>Resource creation limits.</strong> If you are creating a game session on a
+fleet with a resource creation limit policy in force, then you must
+specify a creator ID. Without this ID, Amazon GameLift has no way to
+evaluate the policy for this new game session request.</p>
+<p><strong>Player acceptance policy.</strong> By default, newly created game sessions
+are open to new players. You can restrict new player access by using
+UpdateGameSession to change the game session's player session creation
+policy.</p>
+<p><strong>Game session logs.</strong> Logs are retained for all active game sessions
+for 14 days. To access the logs, call GetGameSessionLogUrl to download
+the log files.</p>
+<p><em>Available in Amazon GameLift Local.</em></p><ul>
+<li><p>CreateGameSession</p></li>
+<li><p>DescribeGameSessions</p></li>
+<li><p>DescribeGameSessionDetails</p></li>
+<li><p>SearchGameSessions</p></li>
+<li><p>UpdateGameSession</p></li>
+<li><p>GetGameSessionLogUrl</p></li>
+<li><p>Game session placements</p><ul>
+<li><p>StartGameSessionPlacement</p></li>
+<li><p>DescribeGameSessionPlacement</p></li>
+<li><p>StopGameSessionPlacement</p></li>
+</ul></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_create_game_session</span>(<span class='no'>FleetId</span>, <span class='no'>AliasId</span>,
-  <span class='no'>MaximumPlayerSessionCount</span>, <span class='no'>Name</span>, <span class='no'>GameProperties</span>, <span class='no'>CreatorId</span>,
-  <span class='no'>GameSessionId</span>, <span class='no'>IdempotencyToken</span>, <span class='no'>GameSessionData</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_create_game_session</span><span class='op'>(</span><span class='va'>FleetId</span>, <span class='va'>AliasId</span>,
+  <span class='va'>MaximumPlayerSessionCount</span>, <span class='va'>Name</span>, <span class='va'>GameProperties</span>, <span class='va'>CreatorId</span>,
+  <span class='va'>GameSessionId</span>, <span class='va'>IdempotencyToken</span>, <span class='va'>GameSessionData</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,15 +244,15 @@ have.</p></td>
       <td><p><em>This parameter is no longer preferred. Please use <code>IdempotencyToken</code>
 instead.</em> Custom string that uniquely identifies a request for a new
 game session. Maximum token length is 48 characters. If provided, this
-string is included in the new game session\'s ID. (A game session ARN
-has the following format:
+string is included in the new game session's ID. (A game session ARN has
+the following format:
 <code>arn:aws:gamelift:&amp;lt;region&amp;gt;::gamesession/&amp;lt;fleet ID&amp;gt;/&amp;lt;custom ID string or idempotency token&amp;gt;</code>.)</p></td>
     </tr>
     <tr>
       <th>IdempotencyToken</th>
       <td><p>Custom string that uniquely identifies a request for a new game session.
 Maximum token length is 48 characters. If provided, this string is
-included in the new game session\'s ID. (A game session ARN has the
+included in the new game session's ID. (A game session ARN has the
 following format:
 <code>arn:aws:gamelift:&amp;lt;region&amp;gt;::gamesession/&amp;lt;fleet ID&amp;gt;/&amp;lt;custom ID string or idempotency token&amp;gt;</code>.)
 Idempotency tokens remain in use for 30 days after a game session has
@@ -195,63 +267,26 @@ object with a request to start a new game session (see <a href='https://docs.aws
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To create a game session, specify either fleet ID or alias ID and
-indicate a maximum number of players to allow in the game session. You
-can also provide a name and game-specific properties for this game
-session. If successful, a GameSession object is returned containing the
-game session properties and other settings you specified.</p>
-<p><strong>Idempotency tokens.</strong> You can add a token that uniquely identifies
-game session requests. This is useful for ensuring that game session
-requests are idempotent. Multiple requests with the same idempotency
-token are processed only once; subsequent requests return the original
-result. All response values are the same with the exception of game
-session status, which may change.</p>
-<p><strong>Resource creation limits.</strong> If you are creating a game session on a
-fleet with a resource creation limit policy in force, then you must
-specify a creator ID. Without this ID, Amazon GameLift has no way to
-evaluate the policy for this new game session request.</p>
-<p><strong>Player acceptance policy.</strong> By default, newly created game sessions
-are open to new players. You can restrict new player access by using
-UpdateGameSession to change the game session\'s player session creation
-policy.</p>
-<p><strong>Game session logs.</strong> Logs are retained for all active game sessions
-for 14 days. To access the logs, call GetGameSessionLogUrl to download
-the log files.</p>
-<p><em>Available in Amazon GameLift Local.</em></p><ul>
-<li><p>CreateGameSession</p></li>
-<li><p>DescribeGameSessions</p></li>
-<li><p>DescribeGameSessionDetails</p></li>
-<li><p>SearchGameSessions</p></li>
-<li><p>UpdateGameSession</p></li>
-<li><p>GetGameSessionLogUrl</p></li>
-<li><p>Game session placements</p><ul>
-<li><p>StartGameSessionPlacement</p></li>
-<li><p>DescribeGameSessionPlacement</p></li>
-<li><p>StopGameSessionPlacement</p></li>
-</ul></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_game_session</span>(
-  <span class='kw'>FleetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AliasId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaximumPlayerSessionCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>CreatorId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameSessionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IdempotencyToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameSessionData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_game_session</span><span class='op'>(</span>
+  FleetId <span class='op'>=</span> <span class='st'>"string"</span>,
+  AliasId <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaximumPlayerSessionCount <span class='op'>=</span> <span class='fl'>123</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  CreatorId <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameSessionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  IdempotencyToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameSessionData <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -269,7 +304,7 @@ the log files.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,25 @@
 
 
 <meta property="og:title" content="Creates a transit gateway — ec2_create_transit_gateway" />
-<meta property="og:description" content="Creates a transit gateway." />
+<meta property="og:description" content="Creates a transit gateway.
+You can use a transit gateway to interconnect your virtual private
+clouds (VPC) and on-premises networks. After the transit gateway enters
+the available state, you can attach your VPCs and VPN connections to
+the transit gateway.
+To attach your VPCs, use CreateTransitGatewayVpcAttachment.
+To attach a VPN connection, use CreateCustomerGateway to create a
+customer gateway and specify the ID of the customer gateway and the ID
+of the transit gateway in a call to CreateVpnConnection.
+When you create a transit gateway, we create a default transit gateway
+route table and use it as the default association route table and the
+default propagation route table. You can use
+CreateTransitGatewayRouteTable to create additional transit gateway
+route tables. If you disable automatic route propagation, we do not
+create a default transit gateway route table. You can use
+EnableTransitGatewayRouteTablePropagation to propagate routes from a
+resource attachment to a transit gateway route table. If you disable
+automatic associations, you can use AssociateTransitGatewayRouteTable to
+associate a resource attachment with a transit gateway route table." />
 
 
 
@@ -72,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +98,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +110,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +134,28 @@
 
     <div class="ref-description">
     <p>Creates a transit gateway.</p>
+<p>You can use a transit gateway to interconnect your virtual private
+clouds (VPC) and on-premises networks. After the transit gateway enters
+the <code>available</code> state, you can attach your VPCs and VPN connections to
+the transit gateway.</p>
+<p>To attach your VPCs, use CreateTransitGatewayVpcAttachment.</p>
+<p>To attach a VPN connection, use CreateCustomerGateway to create a
+customer gateway and specify the ID of the customer gateway and the ID
+of the transit gateway in a call to CreateVpnConnection.</p>
+<p>When you create a transit gateway, we create a default transit gateway
+route table and use it as the default association route table and the
+default propagation route table. You can use
+CreateTransitGatewayRouteTable to create additional transit gateway
+route tables. If you disable automatic route propagation, we do not
+create a default transit gateway route table. You can use
+EnableTransitGatewayRouteTablePropagation to propagate routes from a
+resource attachment to a transit gateway route table. If you disable
+automatic associations, you can use AssociateTransitGatewayRouteTable to
+associate a resource attachment with a transit gateway route table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_create_transit_gateway</span>(<span class='no'>Description</span>, <span class='no'>Options</span>, <span class='no'>TagSpecifications</span>,
-  <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_create_transit_gateway</span><span class='op'>(</span><span class='va'>Description</span>, <span class='va'>Options</span>, <span class='va'>TagSpecifications</span>,
+  <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,53 +181,37 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can use a transit gateway to interconnect your virtual private
-clouds (VPC) and on-premises networks. After the transit gateway enters
-the <code>available</code> state, you can attach your VPCs and VPN connections to
-the transit gateway.</p>
-<p>To attach your VPCs, use CreateTransitGatewayVpcAttachment.</p>
-<p>To attach a VPN connection, use CreateCustomerGateway to create a
-customer gateway and specify the ID of the customer gateway and the ID
-of the transit gateway in a call to CreateVpnConnection.</p>
-<p>When you create a transit gateway, we create a default transit gateway
-route table and use it as the default association route table and the
-default propagation route table. You can use
-CreateTransitGatewayRouteTable to create additional transit gateway
-route tables. If you disable automatic route propagation, we do not
-create a default transit gateway route table. You can use
-EnableTransitGatewayRouteTablePropagation to propagate routes from a
-resource attachment to a transit gateway route table. If you disable
-automatic associations, you can use AssociateTransitGatewayRouteTable to
-associate a resource attachment with a transit gateway route table.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_transit_gateway</span>(
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AmazonSideAsn</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>AutoAcceptSharedAttachments</span> <span class='kw'>=</span> <span class='st'>"enable"</span><span class='kw'>|</span><span class='st'>"disable"</span>,
-    <span class='kw'>DefaultRouteTableAssociation</span> <span class='kw'>=</span> <span class='st'>"enable"</span><span class='kw'>|</span><span class='st'>"disable"</span>,
-    <span class='kw'>DefaultRouteTablePropagation</span> <span class='kw'>=</span> <span class='st'>"enable"</span><span class='kw'>|</span><span class='st'>"disable"</span>,
-    <span class='kw'>VpnEcmpSupport</span> <span class='kw'>=</span> <span class='st'>"enable"</span><span class='kw'>|</span><span class='st'>"disable"</span>,
-    <span class='kw'>DnsSupport</span> <span class='kw'>=</span> <span class='st'>"enable"</span><span class='kw'>|</span><span class='st'>"disable"</span>,
-    <span class='kw'>MulticastSupport</span> <span class='kw'>=</span> <span class='st'>"enable"</span><span class='kw'>|</span><span class='st'>"disable"</span>
-  ),
-  <span class='kw'>TagSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='kw'>|</span><span class='st'>"customer-gateway"</span><span class='kw'>|</span><span class='st'>"dedicated-host"</span><span class='kw'>|</span><span class='st'>"dhcp-options"</span><span class='kw'>|</span><span class='st'>"elastic-ip"</span><span class='kw'>|</span><span class='st'>"elastic-gpu"</span><span class='kw'>|</span><span class='st'>"export-image-task"</span><span class='kw'>|</span><span class='st'>"export-instance-task"</span><span class='kw'>|</span><span class='st'>"fleet"</span><span class='kw'>|</span><span class='st'>"fpga-image"</span><span class='kw'>|</span><span class='st'>"host-reservation"</span><span class='kw'>|</span><span class='st'>"image"</span><span class='kw'>|</span><span class='st'>"import-image-task"</span><span class='kw'>|</span><span class='st'>"import-snapshot-task"</span><span class='kw'>|</span><span class='st'>"instance"</span><span class='kw'>|</span><span class='st'>"internet-gateway"</span><span class='kw'>|</span><span class='st'>"key-pair"</span><span class='kw'>|</span><span class='st'>"launch-template"</span><span class='kw'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='kw'>|</span><span class='st'>"natgateway"</span><span class='kw'>|</span><span class='st'>"network-acl"</span><span class='kw'>|</span><span class='st'>"network-interface"</span><span class='kw'>|</span><span class='st'>"placement-group"</span><span class='kw'>|</span><span class='st'>"reserved-instances"</span><span class='kw'>|</span><span class='st'>"route-table"</span><span class='kw'>|</span><span class='st'>"security-group"</span><span class='kw'>|</span><span class='st'>"snapshot"</span><span class='kw'>|</span><span class='st'>"spot-fleet-request"</span><span class='kw'>|</span><span class='st'>"spot-instances-request"</span><span class='kw'>|</span><span class='st'>"subnet"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-session"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-target"</span><span class='kw'>|</span><span class='st'>"transit-gateway"</span><span class='kw'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='kw'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='kw'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='kw'>|</span><span class='st'>"volume"</span><span class='kw'>|</span><span class='st'>"vpc"</span><span class='kw'>|</span><span class='st'>"vpc-peering-connection"</span><span class='kw'>|</span><span class='st'>"vpn-connection"</span><span class='kw'>|</span><span class='st'>"vpn-gateway"</span><span class='kw'>|</span><span class='st'>"vpc-flow-log"</span>,
-      <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_transit_gateway</span><span class='op'>(</span>
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AmazonSideAsn <span class='op'>=</span> <span class='fl'>123</span>,
+    AutoAcceptSharedAttachments <span class='op'>=</span> <span class='st'>"enable"</span><span class='op'>|</span><span class='st'>"disable"</span>,
+    DefaultRouteTableAssociation <span class='op'>=</span> <span class='st'>"enable"</span><span class='op'>|</span><span class='st'>"disable"</span>,
+    DefaultRouteTablePropagation <span class='op'>=</span> <span class='st'>"enable"</span><span class='op'>|</span><span class='st'>"disable"</span>,
+    VpnEcmpSupport <span class='op'>=</span> <span class='st'>"enable"</span><span class='op'>|</span><span class='st'>"disable"</span>,
+    DnsSupport <span class='op'>=</span> <span class='st'>"enable"</span><span class='op'>|</span><span class='st'>"disable"</span>,
+    MulticastSupport <span class='op'>=</span> <span class='st'>"enable"</span><span class='op'>|</span><span class='st'>"disable"</span>,
+    TransitGatewayCidrBlocks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TagSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ResourceType <span class='op'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='op'>|</span><span class='st'>"customer-gateway"</span><span class='op'>|</span><span class='st'>"dedicated-host"</span><span class='op'>|</span><span class='st'>"dhcp-options"</span><span class='op'>|</span><span class='st'>"egress-only-internet-gateway"</span><span class='op'>|</span><span class='st'>"elastic-ip"</span><span class='op'>|</span><span class='st'>"elastic-gpu"</span><span class='op'>|</span><span class='st'>"export-image-task"</span><span class='op'>|</span><span class='st'>"export-instance-task"</span><span class='op'>|</span><span class='st'>"fleet"</span><span class='op'>|</span><span class='st'>"fpga-image"</span><span class='op'>|</span><span class='st'>"host-reservation"</span><span class='op'>|</span><span class='st'>"image"</span><span class='op'>|</span><span class='st'>"import-image-task"</span><span class='op'>|</span><span class='st'>"import-snapshot-task"</span><span class='op'>|</span><span class='st'>"instance"</span><span class='op'>|</span><span class='st'>"internet-gateway"</span><span class='op'>|</span><span class='st'>"key-pair"</span><span class='op'>|</span><span class='st'>"launch-template"</span><span class='op'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='op'>|</span><span class='st'>"natgateway"</span><span class='op'>|</span><span class='st'>"network-acl"</span><span class='op'>|</span><span class='st'>"network-interface"</span><span class='op'>|</span><span class='st'>"network-insights-analysis"</span><span class='op'>|</span><span class='st'>"network-insights-path"</span><span class='op'>|</span><span class='st'>"placement-group"</span><span class='op'>|</span><span class='st'>"reserved-instances"</span><span class='op'>|</span><span class='st'>"route-table"</span><span class='op'>|</span><span class='st'>"security-group"</span><span class='op'>|</span><span class='st'>"snapshot"</span><span class='op'>|</span><span class='st'>"spot-fleet-request"</span><span class='op'>|</span><span class='st'>"spot-instances-request"</span><span class='op'>|</span><span class='st'>"subnet"</span><span class='op'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='op'>|</span><span class='st'>"traffic-mirror-session"</span><span class='op'>|</span><span class='st'>"traffic-mirror-target"</span><span class='op'>|</span><span class='st'>"transit-gateway"</span><span class='op'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='op'>|</span><span class='st'>"transit-gateway-connect-peer"</span><span class='op'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='op'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='op'>|</span><span class='st'>"volume"</span><span class='op'>|</span><span class='st'>"vpc"</span><span class='op'>|</span><span class='st'>"vpc-peering-connection"</span><span class='op'>|</span><span class='st'>"vpn-connection"</span><span class='op'>|</span><span class='st'>"vpn-gateway"</span><span class='op'>|</span><span class='st'>"vpc-flow-log"</span>,
+      Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Key <span class='op'>=</span> <span class='st'>"string"</span>,
+          Value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -209,7 +229,7 @@ associate a resource attachment with a transit gateway route table.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

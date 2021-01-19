@@ -41,7 +41,25 @@
 
 <meta property="og:title" content="Initiates a snapshot of a gateway from a volume recovery point — storagegateway_create_snapshot_from_volume_recovery_point" />
 <meta property="og:description" content="Initiates a snapshot of a gateway from a volume recovery point. This
-operation is only supported in the cached volume gateway type." />
+operation is only supported in the cached volume gateway type.
+A volume recovery point is a point in time at which all data of the
+volume is consistent and from which you can create a snapshot. To get a
+list of volume recovery point for cached volume gateway, use
+ListVolumeRecoveryPoints.
+In the CreateSnapshotFromVolumeRecoveryPoint request, you identify the
+volume by providing its Amazon Resource Name (ARN). You must also
+provide a description for the snapshot. When the gateway takes a
+snapshot of the specified volume, the snapshot and its description
+appear in the AWS Storage Gateway console. In response, the gateway
+returns you a snapshot ID. You can use this snapshot ID to check the
+snapshot progress or later use it when you want to create a volume from
+a snapshot.
+To list or delete a snapshot, you must use the Amazon EC2 API. For more
+information, see
+DescribeSnapshots
+or
+DeleteSnapshot
+in the Amazon Elastic Compute Cloud API Reference." />
 
 
 
@@ -73,7 +91,7 @@ operation is only supported in the cached volume gateway type." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +99,7 @@ operation is only supported in the cached volume gateway type." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +111,7 @@ operation is only supported in the cached volume gateway type." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,10 +136,28 @@ operation is only supported in the cached volume gateway type." />
     <div class="ref-description">
     <p>Initiates a snapshot of a gateway from a volume recovery point. This
 operation is only supported in the cached volume gateway type.</p>
+<p>A volume recovery point is a point in time at which all data of the
+volume is consistent and from which you can create a snapshot. To get a
+list of volume recovery point for cached volume gateway, use
+ListVolumeRecoveryPoints.</p>
+<p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the
+volume by providing its Amazon Resource Name (ARN). You must also
+provide a description for the snapshot. When the gateway takes a
+snapshot of the specified volume, the snapshot and its description
+appear in the AWS Storage Gateway console. In response, the gateway
+returns you a snapshot ID. You can use this snapshot ID to check the
+snapshot progress or later use it when you want to create a volume from
+a snapshot.</p>
+<p>To list or delete a snapshot, you must use the Amazon EC2 API. For more
+information, see
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html'>DescribeSnapshots</a>
+or
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html'>DeleteSnapshot</a>
+in the <em>Amazon Elastic Compute Cloud API Reference</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>storagegateway_create_snapshot_from_volume_recovery_point</span>(<span class='no'>VolumeARN</span>,
-  <span class='no'>SnapshotDescription</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>storagegateway_create_snapshot_from_volume_recovery_point</span><span class='op'>(</span><span class='va'>VolumeARN</span>,
+  <span class='va'>SnapshotDescription</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,54 +181,37 @@ field, and in the AWS Storage Gateway snapshot <strong>Details</strong> pane,
 a key-value pair.</p>
 <p>Valid characters for key and value are letters, spaces, and numbers
 representable in UTF-8 format, and the following special characters: + -
-= . \_ : / @. The maximum length of a tag\'s key is 128 characters, and
-the maximum length for a tag\'s value is 256.</p></td>
+= . \_ : / @. The maximum length of a tag's key is 128 characters, and
+the maximum length for a tag's value is 256.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A volume recovery point is a point in time at which all data of the
-volume is consistent and from which you can create a snapshot. To get a
-list of volume recovery point for cached volume gateway, use
-ListVolumeRecoveryPoints.</p>
-<p>In the <code>CreateSnapshotFromVolumeRecoveryPoint</code> request, you identify the
-volume by providing its Amazon Resource Name (ARN). You must also
-provide a description for the snapshot. When the gateway takes a
-snapshot of the specified volume, the snapshot and its description
-appear in the AWS Storage Gateway console. In response, the gateway
-returns you a snapshot ID. You can use this snapshot ID to check the
-snapshot progress or later use it when you want to create a volume from
-a snapshot.</p>
-<p>To list or delete a snapshot, you must use the Amazon EC2 API. For more
-information, see
-<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html'>DescribeSnapshots</a>
-or
-<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html'>DeleteSnapshot</a>
-in the <em>Amazon Elastic Compute Cloud API Reference</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_snapshot_from_volume_recovery_point</span>(
-  <span class='kw'>VolumeARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SnapshotDescription</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_snapshot_from_volume_recovery_point</span><span class='op'>(</span>
+  VolumeARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  SnapshotDescription <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Initiates a snapshot of a gateway from a volume recovery point.</span>
-<span class='no'>svc</span>$<span class='fu'>create_snapshot_from_volume_recovery_point</span>(
-  <span class='kw'>SnapshotDescription</span> <span class='kw'>=</span> <span class='st'>"My root volume snapshot as of 2017-06-30T10:10:10.000Z"</span>,
-  <span class='kw'>VolumeARN</span> <span class='kw'>=</span> <span class='st'>"arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/volume/vol..."</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_snapshot_from_volume_recovery_point</span><span class='op'>(</span>
+  SnapshotDescription <span class='op'>=</span> <span class='st'>"My root volume snapshot as of 2017-06-30T10:10:10.000Z"</span>,
+  VolumeARN <span class='op'>=</span> <span class='st'>"arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/volume/vol..."</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -208,7 +227,7 @@ in the <em>Amazon Elastic Compute Cloud API Reference</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

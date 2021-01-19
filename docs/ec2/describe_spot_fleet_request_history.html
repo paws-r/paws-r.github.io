@@ -43,7 +43,11 @@ specified time — ec2_describe_spot_fleet_request_history • paws</title>
 <meta property="og:title" content="Describes the events for the specified Spot Fleet request during the
 specified time — ec2_describe_spot_fleet_request_history" />
 <meta property="og:description" content="Describes the events for the specified Spot Fleet request during the
-specified time." />
+specified time.
+Spot Fleet events are delayed by up to 30 seconds before they can be
+described. This ensures that you can query by the last evaluated time
+and not miss a recorded event. Spot Fleet events are available for 48
+hours." />
 
 
 
@@ -75,7 +79,7 @@ specified time." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +87,7 @@ specified time." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +99,7 @@ specified time." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +125,14 @@ specified time</h1>
     <div class="ref-description">
     <p>Describes the events for the specified Spot Fleet request during the
 specified time.</p>
+<p>Spot Fleet events are delayed by up to 30 seconds before they can be
+described. This ensures that you can query by the last evaluated time
+and not miss a recorded event. Spot Fleet events are available for 48
+hours.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_describe_spot_fleet_request_history</span>(<span class='no'>DryRun</span>, <span class='no'>EventType</span>, <span class='no'>MaxResults</span>,
-  <span class='no'>NextToken</span>, <span class='no'>SpotFleetRequestId</span>, <span class='no'>StartTime</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_describe_spot_fleet_request_history</span><span class='op'>(</span><span class='va'>DryRun</span>, <span class='va'>EventType</span>, <span class='va'>MaxResults</span>,
+  <span class='va'>NextToken</span>, <span class='va'>SpotFleetRequestId</span>, <span class='va'>StartTime</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,36 +170,33 @@ value.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Spot Fleet events are delayed by up to 30 seconds before they can be
-described. This ensures that you can query by the last evaluated time
-and not miss a recorded event. Spot Fleet events are available for 48
-hours.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_spot_fleet_request_history</span>(
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>EventType</span> <span class='kw'>=</span> <span class='st'>"instanceChange"</span><span class='kw'>|</span><span class='st'>"fleetRequestChange"</span><span class='kw'>|</span><span class='st'>"error"</span><span class='kw'>|</span><span class='st'>"information"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SpotFleetRequestId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StartTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_spot_fleet_request_history</span><span class='op'>(</span>
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  EventType <span class='op'>=</span> <span class='st'>"instanceChange"</span><span class='op'>|</span><span class='st'>"fleetRequestChange"</span><span class='op'>|</span><span class='st'>"error"</span><span class='op'>|</span><span class='st'>"information"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  SpotFleetRequestId <span class='op'>=</span> <span class='st'>"string"</span>,
+  StartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example returns the history for the specified Spot fleet starting</span>
 <span class='co'># at the specified time.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_spot_fleet_request_history</span>(
-  <span class='kw'>SpotFleetRequestId</span> <span class='kw'>=</span> <span class='st'>"sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE"</span>,
-  <span class='kw'>StartTime</span> <span class='kw'>=</span> <span class='st'>"2015-05-26T00:00:00Z"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_spot_fleet_request_history</span><span class='op'>(</span>
+  SpotFleetRequestId <span class='op'>=</span> <span class='st'>"sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE"</span>,
+  StartTime <span class='op'>=</span> <span class='st'>"2015-05-26T00:00:00Z"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -207,7 +212,7 @@ hours.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

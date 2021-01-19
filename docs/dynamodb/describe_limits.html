@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Returns the current provisioned-capacity limits for your AWS account in
+<title>Returns the current provisioned-capacity quotas for your AWS account in
 a Region, both for the Region as a whole and for any one DynamoDB table
 that you create there — dynamodb_describe_limits • paws</title>
 
@@ -41,12 +41,56 @@ that you create there — dynamodb_describe_limits • paws</title>
 
 
 
-<meta property="og:title" content="Returns the current provisioned-capacity limits for your AWS account in
+<meta property="og:title" content="Returns the current provisioned-capacity quotas for your AWS account in
 a Region, both for the Region as a whole and for any one DynamoDB table
 that you create there — dynamodb_describe_limits" />
-<meta property="og:description" content="Returns the current provisioned-capacity limits for your AWS account in
+<meta property="og:description" content="Returns the current provisioned-capacity quotas for your AWS account in
 a Region, both for the Region as a whole and for any one DynamoDB table
-that you create there." />
+that you create there.
+When you establish an AWS account, the account has initial quotas on the
+maximum read capacity units and write capacity units that you can
+provision across all of your DynamoDB tables in a given Region. Also,
+there are per-table quotas that apply when you create a table there. For
+more information, see Service, Account, and Table Quotas
+page in the Amazon DynamoDB Developer Guide.
+Although you can increase these quotas by filing a case at AWS Support
+Center, obtaining the increase is not instantaneous. The
+DescribeLimits action lets you write code to compare the capacity you
+are currently using to those quotas imposed by your account so that you
+have enough time to apply for an increase before you hit a quota.
+For example, you could use one of the AWS SDKs to do the following:
+Call DescribeLimits for a particular Region to obtain your current
+account quotas on provisioned capacity there.
+Create a variable to hold the aggregate read capacity units
+provisioned for all your tables in that Region, and one to hold the
+aggregate write capacity units. Zero them both.
+Call ListTables to obtain a list of all your DynamoDB tables.
+For each table name listed by ListTables, do the following:
+Call DescribeTable with the table name.
+Use the data returned by DescribeTable to add the read
+capacity units and write capacity units provisioned for the
+table itself to your variables.
+If the table has one or more global secondary indexes (GSIs),
+loop over these GSIs and add their provisioned capacity values
+to your variables as well.
+
+Report the account quotas for that Region returned by
+DescribeLimits, along with the total current provisioned capacity
+levels you have calculated.
+
+
+This will let you see whether you are getting close to your
+account-level quotas.
+The per-table quotas apply only when you are creating a new table. They
+restrict the sum of the provisioned capacity of the new table itself and
+all its global secondary indexes.
+For existing tables and their GSIs, DynamoDB doesn't let you increase
+provisioned capacity extremely rapidly, but the only quota that applies
+is that the aggregate provisioned capacity over all your tables and GSIs
+cannot exceed either of the per-account quotas.
+DescribeLimits should only be called periodically. You can expect
+throttling errors if you call it more than once in a minute.
+The DescribeLimits Request element has no content." />
 
 
 
@@ -78,7 +122,7 @@ that you create there." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +130,7 @@ that you create there." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +142,7 @@ that you create there." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +159,7 @@ that you create there." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Returns the current provisioned-capacity limits for your AWS account in
+    <h1>Returns the current provisioned-capacity quotas for your AWS account in
 a Region, both for the Region as a whole and for any one DynamoDB table
 that you create there</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/dynamodb_operations.R'><code>R/dynamodb_operations.R</code></a></small>
@@ -123,31 +167,23 @@ that you create there</h1>
     </div>
 
     <div class="ref-description">
-    <p>Returns the current provisioned-capacity limits for your AWS account in
+    <p>Returns the current provisioned-capacity quotas for your AWS account in
 a Region, both for the Region as a whole and for any one DynamoDB table
 that you create there.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>dynamodb_describe_limits</span>()</pre>
-
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you establish an AWS account, the account has initial limits on the
+<p>When you establish an AWS account, the account has initial quotas on the
 maximum read capacity units and write capacity units that you can
 provision across all of your DynamoDB tables in a given Region. Also,
-there are per-table limits that apply when you create a table there. For
-more information, see
-<a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html'>Limits</a>
+there are per-table quotas that apply when you create a table there. For
+more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html'>Service, Account, and Table Quotas</a>
 page in the <em>Amazon DynamoDB Developer Guide</em>.</p>
-<p>Although you can increase these limits by filing a case at <a href='https://console.aws.amazon.com/support/home#/'>AWS Support Center</a>, obtaining the
-increase is not instantaneous. The <code>DescribeLimits</code> action lets you
-write code to compare the capacity you are currently using to those
-limits imposed by your account so that you have enough time to apply for
-an increase before you hit a limit.</p>
+<p>Although you can increase these quotas by filing a case at AWS Support
+Center, obtaining the increase is not instantaneous. The
+<code>DescribeLimits</code> action lets you write code to compare the capacity you
+are currently using to those quotas imposed by your account so that you
+have enough time to apply for an increase before you hit a quota.</p>
 <p>For example, you could use one of the AWS SDKs to do the following:</p><ol>
 <li><p>Call <code>DescribeLimits</code> for a particular Region to obtain your current
-account limits on provisioned capacity there.</p></li>
+account quotas on provisioned capacity there.</p></li>
 <li><p>Create a variable to hold the aggregate read capacity units
 provisioned for all your tables in that Region, and one to hold the
 aggregate write capacity units. Zero them both.</p></li>
@@ -161,35 +197,43 @@ table itself to your variables.</p></li>
 loop over these GSIs and add their provisioned capacity values
 to your variables as well.</p></li>
 </ul></li>
-<li><p>Report the account limits for that Region returned by
+<li><p>Report the account quotas for that Region returned by
 <code>DescribeLimits</code>, along with the total current provisioned capacity
 levels you have calculated.</p></li>
 </ol>
 
 <p>This will let you see whether you are getting close to your
-account-level limits.</p>
-<p>The per-table limits apply only when you are creating a new table. They
+account-level quotas.</p>
+<p>The per-table quotas apply only when you are creating a new table. They
 restrict the sum of the provisioned capacity of the new table itself and
 all its global secondary indexes.</p>
-<p>For existing tables and their GSIs, DynamoDB doesn\'t let you increase
-provisioned capacity extremely rapidly. But the only upper limit that
-applies is that the aggregate provisioned capacity over all your tables
-and GSIs cannot exceed either of the per-account limits.</p>
+<p>For existing tables and their GSIs, DynamoDB doesn't let you increase
+provisioned capacity extremely rapidly, but the only quota that applies
+is that the aggregate provisioned capacity over all your tables and GSIs
+cannot exceed either of the per-account quotas.</p>
 <p><code>DescribeLimits</code> should only be called periodically. You can expect
 throttling errors if you call it more than once in a minute.</p>
 <p>The <code>DescribeLimits</code> Request element has no content.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>dynamodb_describe_limits</span><span class='op'>(</span><span class='op'>)</span></pre>
+
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_limits</span>()</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_limits</span><span class='op'>(</span><span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example returns the maximum read and write capacity units</span>
 <span class='co'># per table, and for the AWS account, in the current AWS region.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_limits</span>()
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_limits</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -205,7 +249,7 @@ throttling errors if you call it more than once in a minute.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

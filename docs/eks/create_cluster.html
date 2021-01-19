@@ -40,7 +40,41 @@
 
 
 <meta property="og:title" content="Creates an Amazon EKS control plane — eks_create_cluster" />
-<meta property="og:description" content="Creates an Amazon EKS control plane." />
+<meta property="og:description" content="Creates an Amazon EKS control plane.
+The Amazon EKS control plane consists of control plane instances that
+run the Kubernetes software, such as etcd and the API server. The
+control plane runs in an account managed by AWS, and the Kubernetes API
+is exposed via the Amazon EKS API server endpoint. Each Amazon EKS
+cluster control plane is single-tenant and unique and runs on its own
+set of Amazon EC2 instances.
+The cluster control plane is provisioned across multiple Availability
+Zones and fronted by an Elastic Load Balancing Network Load Balancer.
+Amazon EKS also provisions elastic network interfaces in your VPC
+subnets to provide connectivity from the control plane instances to the
+worker nodes (for example, to support kubectl exec, logs, and
+proxy data flows).
+Amazon EKS worker nodes run in your AWS account and connect to your
+cluster's control plane via the Kubernetes API server endpoint and a
+certificate file that is created for your cluster.
+You can use the endpointPublicAccess and endpointPrivateAccess
+parameters to enable or disable public and private access to your
+cluster's Kubernetes API server endpoint. By default, public access is
+enabled, and private access is disabled. For more information, see
+Amazon EKS Cluster Endpoint Access Control
+in the Amazon EKS User Guide .
+You can use the logging parameter to enable or disable exporting the
+Kubernetes control plane logs for your cluster to CloudWatch Logs. By
+default, cluster control plane logs aren't exported to CloudWatch Logs.
+For more information, see Amazon EKS Cluster Control Plane Logs
+in the Amazon EKS User Guide .
+CloudWatch Logs ingestion, archive storage, and data scanning rates
+apply to exported control plane logs. For more information, see Amazon CloudWatch Pricing.
+Cluster creation typically takes between 10 and 15 minutes. After you
+create an Amazon EKS cluster, you must configure your Kubernetes tooling
+to communicate with the API server and launch worker nodes into your
+cluster. For more information, see Managing Cluster Authentication
+and Launching Amazon EKS Worker Nodes
+in the Amazon EKS User Guide." />
 
 
 
@@ -72,7 +106,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +114,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +126,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +150,45 @@
 
     <div class="ref-description">
     <p>Creates an Amazon EKS control plane.</p>
+<p>The Amazon EKS control plane consists of control plane instances that
+run the Kubernetes software, such as <code>etcd</code> and the API server. The
+control plane runs in an account managed by AWS, and the Kubernetes API
+is exposed via the Amazon EKS API server endpoint. Each Amazon EKS
+cluster control plane is single-tenant and unique and runs on its own
+set of Amazon EC2 instances.</p>
+<p>The cluster control plane is provisioned across multiple Availability
+Zones and fronted by an Elastic Load Balancing Network Load Balancer.
+Amazon EKS also provisions elastic network interfaces in your VPC
+subnets to provide connectivity from the control plane instances to the
+worker nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and
+<code>proxy</code> data flows).</p>
+<p>Amazon EKS worker nodes run in your AWS account and connect to your
+cluster's control plane via the Kubernetes API server endpoint and a
+certificate file that is created for your cluster.</p>
+<p>You can use the <code>endpointPublicAccess</code> and <code>endpointPrivateAccess</code>
+parameters to enable or disable public and private access to your
+cluster's Kubernetes API server endpoint. By default, public access is
+enabled, and private access is disabled. For more information, see
+<a href='https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html'>Amazon EKS Cluster Endpoint Access Control</a>
+in the <strong>Amazon EKS User Guide</strong> .</p>
+<p>You can use the <code>logging</code> parameter to enable or disable exporting the
+Kubernetes control plane logs for your cluster to CloudWatch Logs. By
+default, cluster control plane logs aren't exported to CloudWatch Logs.
+For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html'>Amazon EKS Cluster Control Plane Logs</a>
+in the <strong>Amazon EKS User Guide</strong> .</p>
+<p>CloudWatch Logs ingestion, archive storage, and data scanning rates
+apply to exported control plane logs. For more information, see <a href='https://aws.amazon.com/cloudwatch/pricing/'>Amazon CloudWatch Pricing</a>.</p>
+<p>Cluster creation typically takes between 10 and 15 minutes. After you
+create an Amazon EKS cluster, you must configure your Kubernetes tooling
+to communicate with the API server and launch worker nodes into your
+cluster. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html'>Managing Cluster Authentication</a>
+and <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html'>Launching Amazon EKS Worker Nodes</a>
+in the <em>Amazon EKS User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>eks_create_cluster</span>(<span class='no'>name</span>, <span class='no'>version</span>, <span class='no'>roleArn</span>, <span class='no'>resourcesVpcConfig</span>, <span class='no'>logging</span>,
-  <span class='no'>clientRequestToken</span>, <span class='no'>tags</span>, <span class='no'>encryptionConfig</span>)</pre>
+    <pre class="usage"><span class='fu'>eks_create_cluster</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>version</span>, <span class='va'>roleArn</span>, <span class='va'>resourcesVpcConfig</span>,
+  <span class='va'>kubernetesNetworkConfig</span>, <span class='va'>logging</span>, <span class='va'>clientRequestToken</span>, <span class='va'>tags</span>,
+  <span class='va'>encryptionConfig</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,14 +199,14 @@
     </tr>
     <tr>
       <th>version</th>
-      <td><p>The desired Kubernetes version for your cluster. If you don\'t specify a
+      <td><p>The desired Kubernetes version for your cluster. If you don't specify a
 value here, the latest version available in Amazon EKS is used.</p></td>
     </tr>
     <tr>
       <th>roleArn</th>
       <td><p>[required] The Amazon Resource Name (ARN) of the IAM role that provides permissions
-for Amazon EKS to make calls to other AWS API operations on your behalf.
-For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html'>Amazon EKS Service IAM Role</a>
+for the Kubernetes control plane to make calls to AWS API operations on
+your behalf. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html'>Amazon EKS Service IAM Role</a>
 in the <strong>Amazon EKS User Guide</strong> .</p></td>
     </tr>
     <tr>
@@ -151,13 +220,17 @@ You can specify up to five security groups, but we recommend that you
 use a dedicated security group for your cluster control plane.</p></td>
     </tr>
     <tr>
+      <th>kubernetesNetworkConfig</th>
+      <td><p>The Kubernetes network configuration for the cluster.</p></td>
+    </tr>
+    <tr>
       <th>logging</th>
       <td><p>Enable or disable exporting the Kubernetes control plane logs for your
 cluster to CloudWatch Logs. By default, cluster control plane logs
-aren\'t exported to CloudWatch Logs. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html'>Amazon EKS Cluster Control Plane Logs</a>
+aren't exported to CloudWatch Logs. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html'>Amazon EKS Cluster Control Plane Logs</a>
 in the <strong>Amazon EKS User Guide</strong> .</p>
 <p>CloudWatch Logs ingestion, archive storage, and data scanning rates
-apply to exported control plane logs. For more information, see <a href='http://aws.amazon.com/cloudwatch/pricing/'>Amazon CloudWatch Pricing</a>.</p></td>
+apply to exported control plane logs. For more information, see <a href='https://aws.amazon.com/cloudwatch/pricing/'>Amazon CloudWatch Pricing</a>.</p></td>
     </tr>
     <tr>
       <th>clientRequestToken</th>
@@ -176,108 +249,78 @@ which you define.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The Amazon EKS control plane consists of control plane instances that
-run the Kubernetes software, such as <code>etcd</code> and the API server. The
-control plane runs in an account managed by AWS, and the Kubernetes API
-is exposed via the Amazon EKS API server endpoint. Each Amazon EKS
-cluster control plane is single-tenant and unique and runs on its own
-set of Amazon EC2 instances.</p>
-<p>The cluster control plane is provisioned across multiple Availability
-Zones and fronted by an Elastic Load Balancing Network Load Balancer.
-Amazon EKS also provisions elastic network interfaces in your VPC
-subnets to provide connectivity from the control plane instances to the
-worker nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and
-<code>proxy</code> data flows).</p>
-<p>Amazon EKS worker nodes run in your AWS account and connect to your
-cluster\'s control plane via the Kubernetes API server endpoint and a
-certificate file that is created for your cluster.</p>
-<p>You can use the <code>endpointPublicAccess</code> and <code>endpointPrivateAccess</code>
-parameters to enable or disable public and private access to your
-cluster\'s Kubernetes API server endpoint. By default, public access is
-enabled, and private access is disabled. For more information, see
-<a href='https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html'>Amazon EKS Cluster Endpoint Access Control</a>
-in the <strong>Amazon EKS User Guide</strong> .</p>
-<p>You can use the <code>logging</code> parameter to enable or disable exporting the
-Kubernetes control plane logs for your cluster to CloudWatch Logs. By
-default, cluster control plane logs aren\'t exported to CloudWatch Logs.
-For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html'>Amazon EKS Cluster Control Plane Logs</a>
-in the <strong>Amazon EKS User Guide</strong> .</p>
-<p>CloudWatch Logs ingestion, archive storage, and data scanning rates
-apply to exported control plane logs. For more information, see <a href='http://aws.amazon.com/cloudwatch/pricing/'>Amazon CloudWatch Pricing</a>.</p>
-<p>Cluster creation typically takes between 10 and 15 minutes. After you
-create an Amazon EKS cluster, you must configure your Kubernetes tooling
-to communicate with the API server and launch worker nodes into your
-cluster. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html'>Managing Cluster Authentication</a>
-and <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html'>Launching Amazon EKS Worker Nodes</a>
-in the <em>Amazon EKS User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_cluster</span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>roleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>resourcesVpcConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>subnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_cluster</span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"string"</span>,
+  version <span class='op'>=</span> <span class='st'>"string"</span>,
+  roleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  resourcesVpcConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    subnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>securityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    securityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>endpointPublicAccess</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>endpointPrivateAccess</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>publicAccessCidrs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    endpointPublicAccess <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    endpointPrivateAccess <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    publicAccessCidrs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>logging</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>clusterLogging</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>types</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='st'>"api"</span><span class='kw'>|</span><span class='st'>"audit"</span><span class='kw'>|</span><span class='st'>"authenticator"</span><span class='kw'>|</span><span class='st'>"controllerManager"</span><span class='kw'>|</span><span class='st'>"scheduler"</span>
-        ),
-        <span class='kw'>enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-      )
-    )
-  ),
-  <span class='kw'>clientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  kubernetesNetworkConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    serviceIpv4Cidr <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  logging <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    clusterLogging <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='st'>"api"</span><span class='op'>|</span><span class='st'>"audit"</span><span class='op'>|</span><span class='st'>"authenticator"</span><span class='op'>|</span><span class='st'>"controllerManager"</span><span class='op'>|</span><span class='st'>"scheduler"</span>
+        <span class='op'>)</span>,
+        enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  clientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>encryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  encryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      resources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>provider</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>keyArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  )
-)</pre>
+      <span class='op'>)</span>,
+      provider <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        keyArn <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example creates an Amazon EKS cluster called prod.</span>
-<span class='no'>svc</span>$<span class='fu'>create_cluster</span>(
-  <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"1.10"</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"prod"</span>,
-  <span class='kw'>clientRequestToken</span> <span class='kw'>=</span> <span class='st'>"1d2129a1-3d38-460a-9756-e5b91fddb951"</span>,
-  <span class='kw'>resourcesVpcConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>securityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_cluster</span><span class='op'>(</span>
+  version <span class='op'>=</span> <span class='st'>"1.10"</span>,
+  name <span class='op'>=</span> <span class='st'>"prod"</span>,
+  clientRequestToken <span class='op'>=</span> <span class='st'>"1d2129a1-3d38-460a-9756-e5b91fddb951"</span>,
+  resourcesVpcConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    securityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"sg-6979fe18"</span>
-    ),
-    <span class='kw'>subnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    subnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"subnet-6782e71e"</span>,
       <span class='st'>"subnet-e7e761ac"</span>
-    )
-  ),
-  <span class='kw'>roleArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::012345678910:role/eks-service-role-AWSServiceRoleForAmazonEKS-J7ON..."</span>
-)
-}</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  roleArn <span class='op'>=</span> <span class='st'>"arn:aws:iam::012345678910:role/eks-service-role-AWSServiceRoleForAmazonEKS-J7ON..."</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -293,7 +336,7 @@ in the <em>Amazon EKS User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

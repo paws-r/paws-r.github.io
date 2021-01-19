@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,12 +118,13 @@
     <p>Creates the user pool client.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cognitoidentityprovider_create_user_pool_client</span>(<span class='no'>UserPoolId</span>, <span class='no'>ClientName</span>,
-  <span class='no'>GenerateSecret</span>, <span class='no'>RefreshTokenValidity</span>, <span class='no'>ReadAttributes</span>, <span class='no'>WriteAttributes</span>,
-  <span class='no'>ExplicitAuthFlows</span>, <span class='no'>SupportedIdentityProviders</span>, <span class='no'>CallbackURLs</span>, <span class='no'>LogoutURLs</span>,
-  <span class='no'>DefaultRedirectURI</span>, <span class='no'>AllowedOAuthFlows</span>, <span class='no'>AllowedOAuthScopes</span>,
-  <span class='no'>AllowedOAuthFlowsUserPoolClient</span>, <span class='no'>AnalyticsConfiguration</span>,
-  <span class='no'>PreventUserExistenceErrors</span>)</pre>
+    <pre class="usage"><span class='fu'>cognitoidentityprovider_create_user_pool_client</span><span class='op'>(</span><span class='va'>UserPoolId</span>, <span class='va'>ClientName</span>,
+  <span class='va'>GenerateSecret</span>, <span class='va'>RefreshTokenValidity</span>, <span class='va'>AccessTokenValidity</span>,
+  <span class='va'>IdTokenValidity</span>, <span class='va'>TokenValidityUnits</span>, <span class='va'>ReadAttributes</span>, <span class='va'>WriteAttributes</span>,
+  <span class='va'>ExplicitAuthFlows</span>, <span class='va'>SupportedIdentityProviders</span>, <span class='va'>CallbackURLs</span>, <span class='va'>LogoutURLs</span>,
+  <span class='va'>DefaultRedirectURI</span>, <span class='va'>AllowedOAuthFlows</span>, <span class='va'>AllowedOAuthScopes</span>,
+  <span class='va'>AllowedOAuthFlowsUserPoolClient</span>, <span class='va'>AnalyticsConfiguration</span>,
+  <span class='va'>PreventUserExistenceErrors</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,6 +147,23 @@ pool client being created.</p></td>
       <th>RefreshTokenValidity</th>
       <td><p>The time limit, in days, after which the refresh token is no longer
 valid and cannot be used.</p></td>
+    </tr>
+    <tr>
+      <th>AccessTokenValidity</th>
+      <td><p>The time limit, between 5 minutes and 1 day, after which the access
+token is no longer valid and cannot be used. This value will be
+overridden if you have entered a value in TokenValidityUnits.</p></td>
+    </tr>
+    <tr>
+      <th>IdTokenValidity</th>
+      <td><p>The time limit, between 5 minutes and 1 day, after which the ID token is
+no longer valid and cannot be used. This value will be overridden if you
+have entered a value in TokenValidityUnits.</p></td>
+    </tr>
+    <tr>
+      <th>TokenValidityUnits</th>
+      <td><p>The units in which the validity times are represented in. Default for
+RefreshToken is days, and default for ID and access tokens are hours.</p></td>
     </tr>
     <tr>
       <th>ReadAttributes</th>
@@ -249,9 +267,10 @@ interacting with Cognito user pools.</p></td>
       <th>AnalyticsConfiguration</th>
       <td><p>The Amazon Pinpoint analytics configuration for collecting metrics for
 this user pool.</p>
-<p>Cognito User Pools only supports sending events to Amazon Pinpoint
-projects in the US East (N. Virginia) us-east-1 Region, regardless of
-the region in which the user pool resides.</p></td>
+<p>In regions where Pinpoint is not available, Cognito User Pools only
+supports sending events to Amazon Pinpoint projects in us-east-1. In
+regions where Pinpoint is available, Cognito User Pools will support
+sending events to Amazon Pinpoint projects within that same region.</p></td>
     </tr>
     <tr>
       <th>PreventUserExistenceErrors</th>
@@ -270,17 +289,6 @@ exist in the user pool.</p>
 existence related errors are not prevented.</p></li>
 </ul>
 
-<p>This setting affects the behavior of following APIs:</p><ul>
-<li><p>AdminInitiateAuth</p></li>
-<li><p>AdminRespondToAuthChallenge</p></li>
-<li><p>InitiateAuth</p></li>
-<li><p>RespondToAuthChallenge</p></li>
-<li><p>ForgotPassword</p></li>
-<li><p>ConfirmForgotPassword</p></li>
-<li><p>ConfirmSignUp</p></li>
-<li><p>ResendConfirmationCode</p></li>
-</ul>
-
 <p>After February 15th 2020, the value of <code>PreventUserExistenceErrors</code> will
 default to <code>ENABLED</code> for newly created user pool clients if no value is
 provided.</p></td>
@@ -290,45 +298,54 @@ provided.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_user_pool_client</span>(
-  <span class='kw'>UserPoolId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClientName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GenerateSecret</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>RefreshTokenValidity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ReadAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_user_pool_client</span><span class='op'>(</span>
+  UserPoolId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClientName <span class='op'>=</span> <span class='st'>"string"</span>,
+  GenerateSecret <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  RefreshTokenValidity <span class='op'>=</span> <span class='fl'>123</span>,
+  AccessTokenValidity <span class='op'>=</span> <span class='fl'>123</span>,
+  IdTokenValidity <span class='op'>=</span> <span class='fl'>123</span>,
+  TokenValidityUnits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AccessToken <span class='op'>=</span> <span class='st'>"seconds"</span><span class='op'>|</span><span class='st'>"minutes"</span><span class='op'>|</span><span class='st'>"hours"</span><span class='op'>|</span><span class='st'>"days"</span>,
+    IdToken <span class='op'>=</span> <span class='st'>"seconds"</span><span class='op'>|</span><span class='st'>"minutes"</span><span class='op'>|</span><span class='st'>"hours"</span><span class='op'>|</span><span class='st'>"days"</span>,
+    RefreshToken <span class='op'>=</span> <span class='st'>"seconds"</span><span class='op'>|</span><span class='st'>"minutes"</span><span class='op'>|</span><span class='st'>"hours"</span><span class='op'>|</span><span class='st'>"days"</span>
+  <span class='op'>)</span>,
+  ReadAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>WriteAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  WriteAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ExplicitAuthFlows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"ADMIN_NO_SRP_AUTH"</span><span class='kw'>|</span><span class='st'>"CUSTOM_AUTH_FLOW_ONLY"</span><span class='kw'>|</span><span class='st'>"USER_PASSWORD_AUTH"</span><span class='kw'>|</span><span class='st'>"ALLOW_ADMIN_USER_PASSWORD_AUTH"</span><span class='kw'>|</span><span class='st'>"ALLOW_CUSTOM_AUTH"</span><span class='kw'>|</span><span class='st'>"ALLOW_USER_PASSWORD_AUTH"</span><span class='kw'>|</span><span class='st'>"ALLOW_USER_SRP_AUTH"</span><span class='kw'>|</span><span class='st'>"ALLOW_REFRESH_TOKEN_AUTH"</span>
-  ),
-  <span class='kw'>SupportedIdentityProviders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  ExplicitAuthFlows <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"ADMIN_NO_SRP_AUTH"</span><span class='op'>|</span><span class='st'>"CUSTOM_AUTH_FLOW_ONLY"</span><span class='op'>|</span><span class='st'>"USER_PASSWORD_AUTH"</span><span class='op'>|</span><span class='st'>"ALLOW_ADMIN_USER_PASSWORD_AUTH"</span><span class='op'>|</span><span class='st'>"ALLOW_CUSTOM_AUTH"</span><span class='op'>|</span><span class='st'>"ALLOW_USER_PASSWORD_AUTH"</span><span class='op'>|</span><span class='st'>"ALLOW_USER_SRP_AUTH"</span><span class='op'>|</span><span class='st'>"ALLOW_REFRESH_TOKEN_AUTH"</span>
+  <span class='op'>)</span>,
+  SupportedIdentityProviders <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>CallbackURLs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  CallbackURLs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>LogoutURLs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  LogoutURLs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DefaultRedirectURI</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AllowedOAuthFlows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"code"</span><span class='kw'>|</span><span class='st'>"implicit"</span><span class='kw'>|</span><span class='st'>"client_credentials"</span>
-  ),
-  <span class='kw'>AllowedOAuthScopes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  DefaultRedirectURI <span class='op'>=</span> <span class='st'>"string"</span>,
+  AllowedOAuthFlows <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"code"</span><span class='op'>|</span><span class='st'>"implicit"</span><span class='op'>|</span><span class='st'>"client_credentials"</span>
+  <span class='op'>)</span>,
+  AllowedOAuthScopes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AllowedOAuthFlowsUserPoolClient</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>AnalyticsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ApplicationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ExternalId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>UserDataShared</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>PreventUserExistenceErrors</span> <span class='kw'>=</span> <span class='st'>"LEGACY"</span><span class='kw'>|</span><span class='st'>"ENABLED"</span>
-)</pre>
+  <span class='op'>)</span>,
+  AllowedOAuthFlowsUserPoolClient <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  AnalyticsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ApplicationId <span class='op'>=</span> <span class='st'>"string"</span>,
+    ApplicationArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    RoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    ExternalId <span class='op'>=</span> <span class='st'>"string"</span>,
+    UserDataShared <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  PreventUserExistenceErrors <span class='op'>=</span> <span class='st'>"LEGACY"</span><span class='op'>|</span><span class='st'>"ENABLED"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -346,7 +363,7 @@ provided.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

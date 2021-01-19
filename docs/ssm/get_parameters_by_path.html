@@ -43,7 +43,14 @@ hierarchy — ssm_get_parameters_by_path • paws</title>
 <meta property="og:title" content="Retrieve information about one or more parameters in a specific
 hierarchy — ssm_get_parameters_by_path" />
 <meta property="og:description" content="Retrieve information about one or more parameters in a specific
-hierarchy." />
+hierarchy.
+Request results are returned on a best-effort basis. If you specify
+MaxResults in the request, the response includes information up to the
+limit specified. The number of items returned, however, can be between
+zero and the value of MaxResults. If the service reaches an internal
+limit while processing the results, it stops the operation and returns
+the matching values up to that point and a NextToken. You can specify
+the NextToken in a subsequent call to get the next set of results." />
 
 
 
@@ -75,7 +82,7 @@ hierarchy." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +90,7 @@ hierarchy." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +102,7 @@ hierarchy." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +128,17 @@ hierarchy</h1>
     <div class="ref-description">
     <p>Retrieve information about one or more parameters in a specific
 hierarchy.</p>
+<p>Request results are returned on a best-effort basis. If you specify
+<code>MaxResults</code> in the request, the response includes information up to the
+limit specified. The number of items returned, however, can be between
+zero and the value of <code>MaxResults</code>. If the service reaches an internal
+limit while processing the results, it stops the operation and returns
+the matching values up to that point and a <code>NextToken</code>. You can specify
+the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_get_parameters_by_path</span>(<span class='no'>Path</span>, <span class='no'>Recursive</span>, <span class='no'>ParameterFilters</span>,
-  <span class='no'>WithDecryption</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_get_parameters_by_path</span><span class='op'>(</span><span class='va'>Path</span>, <span class='va'>Recursive</span>, <span class='va'>ParameterFilters</span>,
+  <span class='va'>WithDecryption</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,7 +161,11 @@ GetParametersByPath API action recursively for <code>/a</code> and view <code>/a
     </tr>
     <tr>
       <th>ParameterFilters</th>
-      <td><p>Filters to limit the request results.</p></td>
+      <td><p>Filters to limit the request results.</p>
+<p>For <code>GetParametersByPath</code>, the following filter <code>Key</code> names are
+supported: <code>Type</code>, <code>KeyId</code>, <code>Label</code>, and <code>DataType</code>.</p>
+<p>The following <code>Key</code> values are not supported for <code>GetParametersByPath</code>:
+<code>tag</code>, <code>Name</code>, <code>Path</code>, and <code>Tier</code>.</p></td>
     </tr>
     <tr>
       <th>WithDecryption</th>
@@ -166,34 +184,26 @@ results.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Request results are returned on a best-effort basis. If you specify
-<code>MaxResults</code> in the request, the response includes information up to the
-limit specified. The number of items returned, however, can be between
-zero and the value of <code>MaxResults</code>. If the service reaches an internal
-limit while processing the results, it stops the operation and returns
-the matching values up to that point and a <code>NextToken</code>. You can specify
-the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_parameters_by_path</span>(
-  <span class='kw'>Path</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Recursive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>ParameterFilters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Option</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_parameters_by_path</span><span class='op'>(</span>
+  Path <span class='op'>=</span> <span class='st'>"string"</span>,
+  Recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  ParameterFilters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Option <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>WithDecryption</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  WithDecryption <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -211,7 +221,7 @@ the <code>NextToken</code> in a subsequent call to get the next set of results.<
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

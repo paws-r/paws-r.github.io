@@ -46,7 +46,25 @@ delete a HealthCheckCustomConfig configuration — servicediscovery_update_servi
 setting for existing DnsRecords configurations - Add, update, or delete
 HealthCheckConfig for a specified service You can't add, update, or
 delete a HealthCheckCustomConfig configuration — servicediscovery_update_service" />
-<meta property="og:description" content="Submits a request to perform the following operations:" />
+<meta property="og:description" content="Submits a request to perform the following operations:
+Update the TTL setting for existing DnsRecords configurations
+Add, update, or delete HealthCheckConfig for a specified service
+You can't add, update, or delete a HealthCheckCustomConfig
+configuration.
+
+
+For public and private DNS namespaces, note the following:
+If you omit any existing DnsRecords or HealthCheckConfig
+configurations from an UpdateService request, the configurations
+are deleted from the service.
+If you omit an existing HealthCheckCustomConfig configuration from
+an UpdateService request, the configuration is not deleted from
+the service.
+
+
+When you update settings for a service, AWS Cloud Map also updates the
+corresponding settings in all the records and health checks that were
+created by using the specified service." />
 
 
 
@@ -78,7 +96,7 @@ delete a HealthCheckCustomConfig configuration — servicediscovery_update_servi
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +104,7 @@ delete a HealthCheckCustomConfig configuration — servicediscovery_update_servi
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +116,7 @@ delete a HealthCheckCustomConfig configuration — servicediscovery_update_servi
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,31 +142,10 @@ delete a HealthCheckCustomConfig configuration</h1>
     </div>
 
     <div class="ref-description">
-    <p>Submits a request to perform the following operations:</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>servicediscovery_update_service</span>(<span class='no'>Id</span>, <span class='no'>Service</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Id</th>
-      <td><p>[required] The ID of the service that you want to update.</p></td>
-    </tr>
-    <tr>
-      <th>Service</th>
-      <td><p>[required] A complex type that contains the new settings for the service.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
+    <p>Submits a request to perform the following operations:</p><ul>
 <li><p>Update the TTL setting for existing <code>DnsRecords</code> configurations</p></li>
 <li><p>Add, update, or delete <code>HealthCheckConfig</code> for a specified service</p>
-<p>You can\'t add, update, or delete a <code>HealthCheckCustomConfig</code>
+<p>You can't add, update, or delete a <code>HealthCheckCustomConfig</code>
 configuration.</p></li>
 </ul>
 
@@ -164,53 +161,73 @@ the service.</p></li>
 <p>When you update settings for a service, AWS Cloud Map also updates the
 corresponding settings in all the records and health checks that were
 created by using the specified service.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>servicediscovery_update_service</span><span class='op'>(</span><span class='va'>Id</span>, <span class='va'>Service</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Id</th>
+      <td><p>[required] The ID of the service that you want to update.</p></td>
+    </tr>
+    <tr>
+      <th>Service</th>
+      <td><p>[required] A complex type that contains the new settings for the service.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_service</span>(
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Service</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DnsConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DnsRecords</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"SRV"</span><span class='kw'>|</span><span class='st'>"A"</span><span class='kw'>|</span><span class='st'>"AAAA"</span><span class='kw'>|</span><span class='st'>"CNAME"</span>,
-          <span class='kw'>TTL</span> <span class='kw'>=</span> <span class='fl'>123</span>
-        )
-      )
-    ),
-    <span class='kw'>HealthCheckConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"HTTP"</span><span class='kw'>|</span><span class='st'>"HTTPS"</span><span class='kw'>|</span><span class='st'>"TCP"</span>,
-      <span class='kw'>ResourcePath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>FailureThreshold</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_service</span><span class='op'>(</span>
+  Id <span class='op'>=</span> <span class='st'>"string"</span>,
+  Service <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Description <span class='op'>=</span> <span class='st'>"string"</span>,
+    DnsConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DnsRecords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Type <span class='op'>=</span> <span class='st'>"SRV"</span><span class='op'>|</span><span class='st'>"A"</span><span class='op'>|</span><span class='st'>"AAAA"</span><span class='op'>|</span><span class='st'>"CNAME"</span>,
+          TTL <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    HealthCheckConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"HTTP"</span><span class='op'>|</span><span class='st'>"HTTPS"</span><span class='op'>|</span><span class='st'>"TCP"</span>,
+      ResourcePath <span class='op'>=</span> <span class='st'>"string"</span>,
+      FailureThreshold <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example submits a request to replace the DnsConfig and</span>
 <span class='co'># HealthCheckConfig settings of a specified service.</span>
-<span class='no'>svc</span>$<span class='fu'>update_service</span>(
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"srv-e4anhexample0004"</span>,
-  <span class='kw'>Service</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DnsConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DnsRecords</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>TTL</span> <span class='kw'>=</span> <span class='fl'>60L</span>,
-          <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"A"</span>
-        )
-      )
-    ),
-    <span class='kw'>HealthCheckConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>FailureThreshold</span> <span class='kw'>=</span> <span class='fl'>2L</span>,
-      <span class='kw'>ResourcePath</span> <span class='kw'>=</span> <span class='st'>"/"</span>,
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"HTTP"</span>
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_service</span><span class='op'>(</span>
+  Id <span class='op'>=</span> <span class='st'>"srv-e4anhexample0004"</span>,
+  Service <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DnsConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DnsRecords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          TTL <span class='op'>=</span> <span class='fl'>60L</span>,
+          Type <span class='op'>=</span> <span class='st'>"A"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    HealthCheckConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      FailureThreshold <span class='op'>=</span> <span class='fl'>2L</span>,
+      ResourcePath <span class='op'>=</span> <span class='st'>"/"</span>,
+      Type <span class='op'>=</span> <span class='st'>"HTTP"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -226,7 +243,7 @@ created by using the specified service.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

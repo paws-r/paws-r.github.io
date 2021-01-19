@@ -47,7 +47,15 @@ state, you can delete it. If a table is in CREATING or UPDATING
 states, then DynamoDB returns a ResourceInUseException. If the
 specified table does not exist, DynamoDB returns a
 ResourceNotFoundException. If table is already in the DELETING
-state, no error is returned." />
+state, no error is returned.
+DynamoDB might continue to accept data read and write operations, such
+as GetItem and PutItem, on a table in the DELETING state until the
+table deletion is complete.
+When you delete a table, any indexes on that table are also deleted.
+If you have DynamoDB Streams enabled on the table, then the
+corresponding stream on that table goes into the DISABLED state, and
+the stream is automatically deleted after 24 hours.
+Use the DescribeTable action to check the status of the table." />
 
 
 
@@ -79,7 +87,7 @@ state, no error is returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +95,7 @@ state, no error is returned." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +107,7 @@ state, no error is returned." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -130,9 +138,17 @@ states, then DynamoDB returns a <code>ResourceInUseException</code>. If the
 specified table does not exist, DynamoDB returns a
 <code>ResourceNotFoundException</code>. If table is already in the <code>DELETING</code>
 state, no error is returned.</p>
+<p>DynamoDB might continue to accept data read and write operations, such
+as <code>GetItem</code> and <code>PutItem</code>, on a table in the <code>DELETING</code> state until the
+table deletion is complete.</p>
+<p>When you delete a table, any indexes on that table are also deleted.</p>
+<p>If you have DynamoDB Streams enabled on the table, then the
+corresponding stream on that table goes into the <code>DISABLED</code> state, and
+the stream is automatically deleted after 24 hours.</p>
+<p>Use the <code>DescribeTable</code> action to check the status of the table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dynamodb_delete_table</span>(<span class='no'>TableName</span>)</pre>
+    <pre class="usage"><span class='fu'>dynamodb_delete_table</span><span class='op'>(</span><span class='va'>TableName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,31 +159,24 @@ state, no error is returned.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>DynamoDB might continue to accept data read and write operations, such
-as <code>GetItem</code> and <code>PutItem</code>, on a table in the <code>DELETING</code> state until the
-table deletion is complete.</p>
-<p>When you delete a table, any indexes on that table are also deleted.</p>
-<p>If you have DynamoDB Streams enabled on the table, then the
-corresponding stream on that table goes into the <code>DISABLED</code> state, and
-the stream is automatically deleted after 24 hours.</p>
-<p>Use the <code>DescribeTable</code> action to check the status of the table.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>delete_table</span>(
-  <span class='kw'>TableName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_table</span><span class='op'>(</span>
+  TableName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example deletes the Music table.</span>
-<span class='no'>svc</span>$<span class='fu'>delete_table</span>(
-  <span class='kw'>TableName</span> <span class='kw'>=</span> <span class='st'>"Music"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_table</span><span class='op'>(</span>
+  TableName <span class='op'>=</span> <span class='st'>"Music"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -183,7 +192,7 @@ the stream is automatically deleted after 24 hours.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

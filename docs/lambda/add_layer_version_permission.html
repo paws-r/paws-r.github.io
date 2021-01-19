@@ -45,7 +45,9 @@ Lambda layer — lambda_add_layer_version_permission" />
 <meta property="og:description" content="Adds permissions to the resource-based policy of a version of an AWS Lambda layer.
 Use this action to grant layer usage permission to other accounts. You
 can grant permission to a single account, all AWS accounts, or all
-accounts in an organization." />
+accounts in an organization.
+To revoke permission, call RemoveLayerVersionPermission with the
+statement ID that you specified when you added it." />
 
 
 
@@ -77,7 +79,7 @@ accounts in an organization." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +87,7 @@ accounts in an organization." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +99,7 @@ accounts in an organization." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,10 +127,12 @@ Lambda layer</h1>
 Use this action to grant layer usage permission to other accounts. You
 can grant permission to a single account, all AWS accounts, or all
 accounts in an organization.</p>
+<p>To revoke permission, call RemoveLayerVersionPermission with the
+statement ID that you specified when you added it.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lambda_add_layer_version_permission</span>(<span class='no'>LayerName</span>, <span class='no'>VersionNumber</span>,
-  <span class='no'>StatementId</span>, <span class='no'>Action</span>, <span class='no'>Principal</span>, <span class='no'>OrganizationId</span>, <span class='no'>RevisionId</span>)</pre>
+    <pre class="usage"><span class='fu'>lambda_add_layer_version_permission</span><span class='op'>(</span><span class='va'>LayerName</span>, <span class='va'>VersionNumber</span>,
+  <span class='va'>StatementId</span>, <span class='va'>Action</span>, <span class='va'>Principal</span>, <span class='va'>OrganizationId</span>, <span class='va'>RevisionId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,11 +157,11 @@ layer version.</p></td>
     </tr>
     <tr>
       <th>Principal</th>
-      <td><p>[required] An account ID, or <code>*</code> to grant permission to all AWS accounts.</p></td>
+      <td><p>[required] An account ID, or <code><a href='https://rdrr.io/r/base/Arithmetic.html'>*</a></code> to grant permission to all AWS accounts.</p></td>
     </tr>
     <tr>
       <th>OrganizationId</th>
-      <td><p>With the principal set to <code>*</code>, grant permission to all accounts in the
+      <td><p>With the principal set to <code><a href='https://rdrr.io/r/base/Arithmetic.html'>*</a></code>, grant permission to all accounts in the
 specified organization.</p></td>
     </tr>
     <tr>
@@ -168,36 +172,35 @@ read it.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To revoke permission, call RemoveLayerVersionPermission with the
-statement ID that you specified when you added it.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>add_layer_version_permission</span>(
-  <span class='kw'>LayerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VersionNumber</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>StatementId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Action</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Principal</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OrganizationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RevisionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>add_layer_version_permission</span><span class='op'>(</span>
+  LayerName <span class='op'>=</span> <span class='st'>"string"</span>,
+  VersionNumber <span class='op'>=</span> <span class='fl'>123</span>,
+  StatementId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Action <span class='op'>=</span> <span class='st'>"string"</span>,
+  Principal <span class='op'>=</span> <span class='st'>"string"</span>,
+  OrganizationId <span class='op'>=</span> <span class='st'>"string"</span>,
+  RevisionId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example grants permission for the account 223456789012 to</span>
 <span class='co'># use version 1 of a layer named my-layer.</span>
-<span class='no'>svc</span>$<span class='fu'>add_layer_version_permission</span>(
-  <span class='kw'>Action</span> <span class='kw'>=</span> <span class='st'>"lambda:GetLayerVersion"</span>,
-  <span class='kw'>LayerName</span> <span class='kw'>=</span> <span class='st'>"my-layer"</span>,
-  <span class='kw'>Principal</span> <span class='kw'>=</span> <span class='st'>"223456789012"</span>,
-  <span class='kw'>StatementId</span> <span class='kw'>=</span> <span class='st'>"xaccount"</span>,
-  <span class='kw'>VersionNumber</span> <span class='kw'>=</span> <span class='fl'>1L</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>add_layer_version_permission</span><span class='op'>(</span>
+  Action <span class='op'>=</span> <span class='st'>"lambda:GetLayerVersion"</span>,
+  LayerName <span class='op'>=</span> <span class='st'>"my-layer"</span>,
+  Principal <span class='op'>=</span> <span class='st'>"223456789012"</span>,
+  StatementId <span class='op'>=</span> <span class='st'>"xaccount"</span>,
+  VersionNumber <span class='op'>=</span> <span class='fl'>1L</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -213,7 +216,7 @@ statement ID that you specified when you added it.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

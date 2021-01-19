@@ -43,6 +43,10 @@
 <meta property="og:description" content="Creates a new OpsItem. You must have permission in AWS Identity and
 Access Management (IAM) to create a new OpsItem. For more information,
 see Getting started with OpsCenter
+in the AWS Systems Manager User Guide.
+Operations engineers and IT professionals use OpsCenter to view,
+investigate, and remediate operational issues impacting the performance
+and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter
 in the AWS Systems Manager User Guide." />
 
 
@@ -75,7 +79,7 @@ in the AWS Systems Manager User Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +87,7 @@ in the AWS Systems Manager User Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +99,7 @@ in the AWS Systems Manager User Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +126,16 @@ in the AWS Systems Manager User Guide." />
 Access Management (IAM) to create a new OpsItem. For more information,
 see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html'>Getting started with OpsCenter</a>
 in the <em>AWS Systems Manager User Guide</em>.</p>
+<p>Operations engineers and IT professionals use OpsCenter to view,
+investigate, and remediate operational issues impacting the performance
+and health of their AWS resources. For more information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html'>AWS Systems Manager OpsCenter</a>
+in the <em>AWS Systems Manager User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_create_ops_item</span>(<span class='no'>Description</span>, <span class='no'>OperationalData</span>, <span class='no'>Notifications</span>,
-  <span class='no'>Priority</span>, <span class='no'>RelatedOpsItems</span>, <span class='no'>Source</span>, <span class='no'>Title</span>, <span class='no'>Tags</span>, <span class='no'>Category</span>, <span class='no'>Severity</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_create_ops_item</span><span class='op'>(</span><span class='va'>Description</span>, <span class='va'>OpsItemType</span>, <span class='va'>OperationalData</span>,
+  <span class='va'>Notifications</span>, <span class='va'>Priority</span>, <span class='va'>RelatedOpsItems</span>, <span class='va'>Source</span>, <span class='va'>Title</span>, <span class='va'>Tags</span>, <span class='va'>Category</span>,
+  <span class='va'>Severity</span>, <span class='va'>ActualStartTime</span>, <span class='va'>ActualEndTime</span>, <span class='va'>PlannedStartTime</span>,
+  <span class='va'>PlannedEndTime</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,13 +145,18 @@ in the <em>AWS Systems Manager User Guide</em>.</p>
       <td><p>[required] Information about the OpsItem.</p></td>
     </tr>
     <tr>
+      <th>OpsItemType</th>
+      <td><p>The type of OpsItem to create. Currently, the only valid values are
+<code>/aws/changerequest</code> and <code>/aws/issue</code>.</p></td>
+    </tr>
+    <tr>
       <th>OperationalData</th>
       <td><p>Operational data is custom data that provides useful reference details
 about the OpsItem. For example, you can specify log files, error
 strings, license keys, troubleshooting tips, or other relevant data. You
 enter operational data as key-value pairs. The key has a maximum length
 of 128 characters. The value has a maximum size of 20 KB.</p>
-<p>Operational data keys <em>can\'t</em> begin with the following: amazon, aws,
+<p>Operational data keys <em>can't</em> begin with the following: amazon, aws,
 amzn, ssm, /amazon, /aws, /amzn, /ssm.</p>
 <p>You can choose to make the data searchable by other users in the account
 or you can restrict search access. Searchable data means that all users
@@ -175,7 +190,7 @@ resource.</p></td>
     <tr>
       <th>Source</th>
       <td><p>[required] The origin of the OpsItem, such as Amazon EC2 or Systems Manager.</p>
-<p>The source name can\'t contain the following strings: aws, amazon, and
+<p>The source name can't contain the following strings: aws, amazon, and
 amzn.</p></td>
     </tr>
     <tr>
@@ -201,47 +216,75 @@ in the <em>AWS Systems Manager User Guide</em>.</p>
       <th>Severity</th>
       <td><p>Specify a severity to assign to an OpsItem.</p></td>
     </tr>
+    <tr>
+      <th>ActualStartTime</th>
+      <td><p>The time a runbook workflow started. Currently reported only for the
+OpsItem type <code>/aws/changerequest</code>.</p></td>
+    </tr>
+    <tr>
+      <th>ActualEndTime</th>
+      <td><p>The time a runbook workflow ended. Currently reported only for the
+OpsItem type <code>/aws/changerequest</code>.</p></td>
+    </tr>
+    <tr>
+      <th>PlannedStartTime</th>
+      <td><p>The time specified in a change request for a runbook workflow to start.
+Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p></td>
+    </tr>
+    <tr>
+      <th>PlannedEndTime</th>
+      <td><p>The time specified in a change request for a runbook workflow to end.
+Currently supported only for the OpsItem type <code>/aws/changerequest</code>.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Operations engineers and IT professionals use OpsCenter to view,
-investigate, and remediate operational issues impacting the performance
-and health of their AWS resources. For more information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html'>AWS Systems Manager OpsCenter</a>
-in the <em>AWS Systems Manager User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_ops_item</span>(
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OperationalData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"SearchableString"</span><span class='kw'>|</span><span class='st'>"String"</span>
-    )
-  ),
-  <span class='kw'>Notifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Arn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Priority</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>RelatedOpsItems</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>OpsItemId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Source</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Title</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Category</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Severity</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_ops_item</span><span class='op'>(</span>
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  OpsItemType <span class='op'>=</span> <span class='st'>"string"</span>,
+  OperationalData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Value <span class='op'>=</span> <span class='st'>"string"</span>,
+      Type <span class='op'>=</span> <span class='st'>"SearchableString"</span><span class='op'>|</span><span class='st'>"String"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Notifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Arn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Priority <span class='op'>=</span> <span class='fl'>123</span>,
+  RelatedOpsItems <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      OpsItemId <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Source <span class='op'>=</span> <span class='st'>"string"</span>,
+  Title <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Category <span class='op'>=</span> <span class='st'>"string"</span>,
+  Severity <span class='op'>=</span> <span class='st'>"string"</span>,
+  ActualStartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
+    <span class='st'>"2015-01-01"</span>
+  <span class='op'>)</span>,
+  ActualEndTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
+    <span class='st'>"2015-01-01"</span>
+  <span class='op'>)</span>,
+  PlannedStartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
+    <span class='st'>"2015-01-01"</span>
+  <span class='op'>)</span>,
+  PlannedEndTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
+    <span class='st'>"2015-01-01"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -259,7 +302,7 @@ in the <em>AWS Systems Manager User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

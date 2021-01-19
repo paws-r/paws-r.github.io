@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates a listener for the specified Application Load Balancer or
-Network Load Balancer — elbv2_create_listener • paws</title>
+<title>Creates a listener for the specified Application Load Balancer, Network
+Load Balancer — elbv2_create_listener • paws</title>
 
 
 <!-- jquery -->
@@ -40,10 +40,19 @@ Network Load Balancer — elbv2_create_listener • paws</title>
 
 
 
-<meta property="og:title" content="Creates a listener for the specified Application Load Balancer or
-Network Load Balancer — elbv2_create_listener" />
-<meta property="og:description" content="Creates a listener for the specified Application Load Balancer or
-Network Load Balancer." />
+<meta property="og:title" content="Creates a listener for the specified Application Load Balancer, Network
+Load Balancer — elbv2_create_listener" />
+<meta property="og:description" content="Creates a listener for the specified Application Load Balancer, Network
+Load Balancer. or Gateway Load Balancer.
+For more information, see the following:
+Listeners for your Application Load Balancers
+Listeners for your Network Load Balancers
+Listeners for your Gateway Load Balancers
+
+
+This operation is idempotent, which means that it completes at most one
+time. If you attempt to create multiple listeners with the same
+settings, each call succeeds." />
 
 
 
@@ -75,7 +84,7 @@ Network Load Balancer." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +92,7 @@ Network Load Balancer." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +104,7 @@ Network Load Balancer." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,19 +121,28 @@ Network Load Balancer." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Creates a listener for the specified Application Load Balancer or
-Network Load Balancer</h1>
+    <h1>Creates a listener for the specified Application Load Balancer, Network
+Load Balancer</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/elbv2_operations.R'><code>R/elbv2_operations.R</code></a></small>
     <div class="hidden name"><code>elbv2_create_listener.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates a listener for the specified Application Load Balancer or
-Network Load Balancer.</p>
+    <p>Creates a listener for the specified Application Load Balancer, Network
+Load Balancer. or Gateway Load Balancer.</p>
+<p>For more information, see the following:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html'>Listeners for your Application Load Balancers</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html'>Listeners for your Network Load Balancers</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/gateway-listeners.html'>Listeners for your Gateway Load Balancers</a></p></li>
+</ul>
+
+<p>This operation is idempotent, which means that it completes at most one
+time. If you attempt to create multiple listeners with the same
+settings, each call succeeds.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>elbv2_create_listener</span>(<span class='no'>LoadBalancerArn</span>, <span class='no'>Protocol</span>, <span class='no'>Port</span>, <span class='no'>SslPolicy</span>,
-  <span class='no'>Certificates</span>, <span class='no'>DefaultActions</span>, <span class='no'>AlpnPolicy</span>)</pre>
+    <pre class="usage"><span class='fu'>elbv2_create_listener</span><span class='op'>(</span><span class='va'>LoadBalancerArn</span>, <span class='va'>Protocol</span>, <span class='va'>Port</span>, <span class='va'>SslPolicy</span>,
+  <span class='va'>Certificates</span>, <span class='va'>DefaultActions</span>, <span class='va'>AlpnPolicy</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,60 +153,35 @@ Network Load Balancer.</p>
     </tr>
     <tr>
       <th>Protocol</th>
-      <td><p>[required] The protocol for connections from clients to the load balancer. For
+      <td><p>The protocol for connections from clients to the load balancer. For
 Application Load Balancers, the supported protocols are HTTP and HTTPS.
 For Network Load Balancers, the supported protocols are TCP, TLS, UDP,
-and TCP\_UDP.</p></td>
+and TCP\_UDP. You can’t specify the UDP or TCP\_UDP protocol if
+dual-stack mode is enabled. You cannot specify a protocol for a Gateway
+Load Balancer.</p></td>
     </tr>
     <tr>
       <th>Port</th>
-      <td><p>[required] The port on which the load balancer is listening.</p></td>
+      <td><p>The port on which the load balancer is listening. You cannot specify a
+port for a Gateway Load Balancer.</p></td>
     </tr>
     <tr>
       <th>SslPolicy</th>
       <td><p>[HTTPS and TLS listeners] The security policy that defines which
-protocols and ciphers are supported. The following are the possible
-values:</p><ul>
-<li><p><code>ELBSecurityPolicy-2016-08</code></p></li>
-<li><p><code>ELBSecurityPolicy-TLS-1-0-2015-04</code></p></li>
-<li><p><code>ELBSecurityPolicy-TLS-1-1-2017-01</code></p></li>
-<li><p><code>ELBSecurityPolicy-TLS-1-2-2017-01</code></p></li>
-<li><p><code>ELBSecurityPolicy-TLS-1-2-Ext-2018-06</code></p></li>
-<li><p><code>ELBSecurityPolicy-FS-2018-06</code></p></li>
-<li><p><code>ELBSecurityPolicy-FS-1-1-2019-08</code></p></li>
-<li><p><code>ELBSecurityPolicy-FS-1-2-2019-08</code></p></li>
-<li><p><code>ELBSecurityPolicy-FS-1-2-Res-2019-08</code></p></li>
-</ul>
-
-<p>For more information, see <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies'>Security Policies</a>
-in the <em>Application Load Balancers Guide</em> and <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies'>Security Policies</a>
+protocols and ciphers are supported.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies'>Security policies</a>
+in the <em>Application Load Balancers Guide</em> and <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#describe-ssl-policies'>Security policies</a>
 in the <em>Network Load Balancers Guide</em>.</p></td>
     </tr>
     <tr>
       <th>Certificates</th>
       <td><p>[HTTPS and TLS listeners] The default certificate for the listener.
 You must provide exactly one certificate. Set <code>CertificateArn</code> to the
-certificate ARN but do not set <code>IsDefault</code>.</p>
-<p>To create a certificate list for the listener, use
-AddListenerCertificates.</p></td>
+certificate ARN but do not set <code>IsDefault</code>.</p></td>
     </tr>
     <tr>
       <th>DefaultActions</th>
-      <td><p>[required] The actions for the default rule. The rule must include one forward
-action or one or more fixed-response actions.</p>
-<p>If the action type is <code>forward</code>, you specify one or more target groups.
-The protocol of the target group must be HTTP or HTTPS for an
-Application Load Balancer. The protocol of the target group must be TCP,
-TLS, UDP, or TCP\_UDP for a Network Load Balancer.</p>
-<p>[HTTPS listeners] If the action type is <code>authenticate-oidc</code>, you
-authenticate users through an identity provider that is OpenID Connect
-(OIDC) compliant.</p>
-<p>[HTTPS listeners] If the action type is <code>authenticate-cognito</code>, you
-authenticate users through the user pools supported by Amazon Cognito.</p>
-<p>[Application Load Balancer] If the action type is <code>redirect</code>, you
-redirect specified client requests from one URL to another.</p>
-<p>[Application Load Balancer] If the action type is <code>fixed-response</code>,
-you drop specified client requests and return a custom HTTP response.</p></td>
+      <td><p>[required] The actions for the default rule.</p></td>
     </tr>
     <tr>
       <th>AlpnPolicy</th>
@@ -202,118 +195,117 @@ possible values:</p><ul>
 <li><p><code>None</code></p></li>
 </ul>
 
-<p>For more information, see <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#alpn-policies'>ALPN Policies</a>
+<p>For more information, see <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-tls-listener.html#alpn-policies'>ALPN policies</a>
 in the <em>Network Load Balancers Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>Tags</th>
+      <td><p>The tags to assign to the listener.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To update a listener, use ModifyListener. When you are finished with a
-listener, you can delete it using DeleteListener. If you are finished
-with both the listener and the load balancer, you can delete them both
-using DeleteLoadBalancer.</p>
-<p>This operation is idempotent, which means that it completes at most one
-time. If you attempt to create multiple listeners with the same
-settings, each call succeeds.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html'>Listeners for Your Application Load Balancers</a>
-in the <em>Application Load Balancers Guide</em> and <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html'>Listeners for Your Network Load Balancers</a>
-in the <em>Network Load Balancers Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_listener</span>(
-  <span class='kw'>LoadBalancerArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Protocol</span> <span class='kw'>=</span> <span class='st'>"HTTP"</span><span class='kw'>|</span><span class='st'>"HTTPS"</span><span class='kw'>|</span><span class='st'>"TCP"</span><span class='kw'>|</span><span class='st'>"TLS"</span><span class='kw'>|</span><span class='st'>"UDP"</span><span class='kw'>|</span><span class='st'>"TCP_UDP"</span>,
-  <span class='kw'>Port</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>SslPolicy</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Certificates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CertificateArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>IsDefault</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-    )
-  ),
-  <span class='kw'>DefaultActions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"forward"</span><span class='kw'>|</span><span class='st'>"authenticate-oidc"</span><span class='kw'>|</span><span class='st'>"authenticate-cognito"</span><span class='kw'>|</span><span class='st'>"redirect"</span><span class='kw'>|</span><span class='st'>"fixed-response"</span>,
-      <span class='kw'>TargetGroupArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>AuthenticateOidcConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Issuer</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>AuthorizationEndpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>TokenEndpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>UserInfoEndpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>ClientId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>ClientSecret</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>SessionCookieName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Scope</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>SessionTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>AuthenticationRequestExtraParams</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_listener</span><span class='op'>(</span>
+  LoadBalancerArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Protocol <span class='op'>=</span> <span class='st'>"HTTP"</span><span class='op'>|</span><span class='st'>"HTTPS"</span><span class='op'>|</span><span class='st'>"TCP"</span><span class='op'>|</span><span class='st'>"TLS"</span><span class='op'>|</span><span class='st'>"UDP"</span><span class='op'>|</span><span class='st'>"TCP_UDP"</span><span class='op'>|</span><span class='st'>"GENEVE"</span>,
+  Port <span class='op'>=</span> <span class='fl'>123</span>,
+  SslPolicy <span class='op'>=</span> <span class='st'>"string"</span>,
+  Certificates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CertificateArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      IsDefault <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DefaultActions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"forward"</span><span class='op'>|</span><span class='st'>"authenticate-oidc"</span><span class='op'>|</span><span class='st'>"authenticate-cognito"</span><span class='op'>|</span><span class='st'>"redirect"</span><span class='op'>|</span><span class='st'>"fixed-response"</span>,
+      TargetGroupArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      AuthenticateOidcConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Issuer <span class='op'>=</span> <span class='st'>"string"</span>,
+        AuthorizationEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+        TokenEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+        UserInfoEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+        ClientId <span class='op'>=</span> <span class='st'>"string"</span>,
+        ClientSecret <span class='op'>=</span> <span class='st'>"string"</span>,
+        SessionCookieName <span class='op'>=</span> <span class='st'>"string"</span>,
+        Scope <span class='op'>=</span> <span class='st'>"string"</span>,
+        SessionTimeout <span class='op'>=</span> <span class='fl'>123</span>,
+        AuthenticationRequestExtraParams <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>OnUnauthenticatedRequest</span> <span class='kw'>=</span> <span class='st'>"deny"</span><span class='kw'>|</span><span class='st'>"allow"</span><span class='kw'>|</span><span class='st'>"authenticate"</span>,
-        <span class='kw'>UseExistingClientSecret</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-      ),
-      <span class='kw'>AuthenticateCognitoConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>UserPoolArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>UserPoolClientId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>UserPoolDomain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>SessionCookieName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Scope</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>SessionTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>AuthenticationRequestExtraParams</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        OnUnauthenticatedRequest <span class='op'>=</span> <span class='st'>"deny"</span><span class='op'>|</span><span class='st'>"allow"</span><span class='op'>|</span><span class='st'>"authenticate"</span>,
+        UseExistingClientSecret <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+      <span class='op'>)</span>,
+      AuthenticateCognitoConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        UserPoolArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        UserPoolClientId <span class='op'>=</span> <span class='st'>"string"</span>,
+        UserPoolDomain <span class='op'>=</span> <span class='st'>"string"</span>,
+        SessionCookieName <span class='op'>=</span> <span class='st'>"string"</span>,
+        Scope <span class='op'>=</span> <span class='st'>"string"</span>,
+        SessionTimeout <span class='op'>=</span> <span class='fl'>123</span>,
+        AuthenticationRequestExtraParams <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>OnUnauthenticatedRequest</span> <span class='kw'>=</span> <span class='st'>"deny"</span><span class='kw'>|</span><span class='st'>"allow"</span><span class='kw'>|</span><span class='st'>"authenticate"</span>
-      ),
-      <span class='kw'>Order</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>RedirectConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Protocol</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Port</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Host</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Path</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Query</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StatusCode</span> <span class='kw'>=</span> <span class='st'>"HTTP_301"</span><span class='kw'>|</span><span class='st'>"HTTP_302"</span>
-      ),
-      <span class='kw'>FixedResponseConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>MessageBody</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StatusCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>ContentType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>ForwardConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>TargetGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>TargetGroupArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Weight</span> <span class='kw'>=</span> <span class='fl'>123</span>
-          )
-        ),
-        <span class='kw'>TargetGroupStickinessConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-          <span class='kw'>DurationSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>AlpnPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        OnUnauthenticatedRequest <span class='op'>=</span> <span class='st'>"deny"</span><span class='op'>|</span><span class='st'>"allow"</span><span class='op'>|</span><span class='st'>"authenticate"</span>
+      <span class='op'>)</span>,
+      Order <span class='op'>=</span> <span class='fl'>123</span>,
+      RedirectConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Protocol <span class='op'>=</span> <span class='st'>"string"</span>,
+        Port <span class='op'>=</span> <span class='st'>"string"</span>,
+        Host <span class='op'>=</span> <span class='st'>"string"</span>,
+        Path <span class='op'>=</span> <span class='st'>"string"</span>,
+        Query <span class='op'>=</span> <span class='st'>"string"</span>,
+        StatusCode <span class='op'>=</span> <span class='st'>"HTTP_301"</span><span class='op'>|</span><span class='st'>"HTTP_302"</span>
+      <span class='op'>)</span>,
+      FixedResponseConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        MessageBody <span class='op'>=</span> <span class='st'>"string"</span>,
+        StatusCode <span class='op'>=</span> <span class='st'>"string"</span>,
+        ContentType <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      ForwardConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        TargetGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            TargetGroupArn <span class='op'>=</span> <span class='st'>"string"</span>,
+            Weight <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        TargetGroupStickinessConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+          DurationSeconds <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  AlpnPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example creates an HTTP listener for the specified load balancer</span>
 <span class='co'># that forwards requests to the specified target group.</span>
-<span class='no'>svc</span>$<span class='fu'>create_listener</span>(
-  <span class='kw'>DefaultActions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>TargetGroupArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-t..."</span>,
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"forward"</span>
-    )
-  ),
-  <span class='kw'>LoadBalancerArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my..."</span>,
-  <span class='kw'>Port</span> <span class='kw'>=</span> <span class='fl'>80L</span>,
-  <span class='kw'>Protocol</span> <span class='kw'>=</span> <span class='st'>"HTTP"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_listener</span><span class='op'>(</span>
+  DefaultActions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      TargetGroupArn <span class='op'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-t..."</span>,
+      Type <span class='op'>=</span> <span class='st'>"forward"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  LoadBalancerArn <span class='op'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my..."</span>,
+  Port <span class='op'>=</span> <span class='fl'>80L</span>,
+  Protocol <span class='op'>=</span> <span class='st'>"HTTP"</span>
+<span class='op'>)</span>
 
 <span class='co'># This example creates an HTTPS listener for the specified load balancer</span>
 <span class='co'># that forwards requests to the specified target group. Note that you must</span>
@@ -322,24 +314,26 @@ in the <em>Network Load Balancers Guide</em>.</p>
 <span class='co'># you can create a certificate using SSL/TLS tools, get the certificate</span>
 <span class='co'># signed by a certificate authority (CA), and upload the certificate to</span>
 <span class='co'># AWS Identity and Access Management (IAM).</span>
-<span class='no'>svc</span>$<span class='fu'>create_listener</span>(
-  <span class='kw'>Certificates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CertificateArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::123456789012:server-certificate/my-server-cert"</span>
-    )
-  ),
-  <span class='kw'>DefaultActions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>TargetGroupArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-t..."</span>,
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"forward"</span>
-    )
-  ),
-  <span class='kw'>LoadBalancerArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my..."</span>,
-  <span class='kw'>Port</span> <span class='kw'>=</span> <span class='fl'>443L</span>,
-  <span class='kw'>Protocol</span> <span class='kw'>=</span> <span class='st'>"HTTPS"</span>,
-  <span class='kw'>SslPolicy</span> <span class='kw'>=</span> <span class='st'>"ELBSecurityPolicy-2015-05"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_listener</span><span class='op'>(</span>
+  Certificates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CertificateArn <span class='op'>=</span> <span class='st'>"arn:aws:iam::123456789012:server-certificate/my-server-cert"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DefaultActions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      TargetGroupArn <span class='op'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-t..."</span>,
+      Type <span class='op'>=</span> <span class='st'>"forward"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  LoadBalancerArn <span class='op'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my..."</span>,
+  Port <span class='op'>=</span> <span class='fl'>443L</span>,
+  Protocol <span class='op'>=</span> <span class='st'>"HTTPS"</span>,
+  SslPolicy <span class='op'>=</span> <span class='st'>"ELBSecurityPolicy-2015-05"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -355,7 +349,7 @@ in the <em>Network Load Balancers Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

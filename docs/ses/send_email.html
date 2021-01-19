@@ -42,7 +42,35 @@
 <meta property="og:title" content="Composes an email message and immediately queues it for sending — ses_send_email" />
 <meta property="og:description" content="Composes an email message and immediately queues it for sending. In
 order to send email using the SendEmail operation, your message must
-meet the following requirements:" />
+meet the following requirements:
+The message must be sent from a verified email address or domain. If
+you attempt to send email using a non-verified address or domain,
+the operation will result in an &quot;Email address not verified&quot; error.
+If your account is still in the Amazon SES sandbox, you may only
+send to verified addresses or domains, or to email addresses
+associated with the Amazon SES Mailbox Simulator. For more
+information, see Verifying Email Addresses and Domains
+in the Amazon SES Developer Guide.
+The maximum message size is 10 MB.
+The message must include at least one recipient email address. The
+recipient address can be a To: address, a CC: address, or a BCC:
+address. If a recipient email address is invalid (that is, it is not
+in the format UserName@[SubDomain.]Domain.TopLevelDomain), the
+entire message will be rejected, even if the message contains other
+recipients that are valid.
+The message may not include more than 50 recipients, across the To:,
+CC: and BCC: fields. If you need to send an email message to a
+larger audience, you can divide your recipient list into groups of
+50 or fewer, and then call the SendEmail operation several times
+to send the message to each group.
+
+
+For every message that you send, the total number of recipients
+(including each recipient in the To:, CC: and BCC: fields) is counted
+against the maximum number of emails you can send in a 24-hour period
+(your sending quota). For more information about sending quotas in
+Amazon SES, see Managing Your Amazon SES Sending Limits
+in the Amazon SES Developer Guide." />
 
 
 
@@ -74,7 +102,7 @@ meet the following requirements:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +110,7 @@ meet the following requirements:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +122,7 @@ meet the following requirements:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,11 +147,39 @@ meet the following requirements:" />
     <div class="ref-description">
     <p>Composes an email message and immediately queues it for sending. In
 order to send email using the <code>SendEmail</code> operation, your message must
-meet the following requirements:</p>
+meet the following requirements:</p><ul>
+<li><p>The message must be sent from a verified email address or domain. If
+you attempt to send email using a non-verified address or domain,
+the operation will result in an "Email address not verified" error.</p></li>
+<li><p>If your account is still in the Amazon SES sandbox, you may only
+send to verified addresses or domains, or to email addresses
+associated with the Amazon SES Mailbox Simulator. For more
+information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html'>Verifying Email Addresses and Domains</a>
+in the <em>Amazon SES Developer Guide.</em></p></li>
+<li><p>The maximum message size is 10 MB.</p></li>
+<li><p>The message must include at least one recipient email address. The
+recipient address can be a To: address, a CC: address, or a BCC:
+address. If a recipient email address is invalid (that is, it is not
+in the format <em>UserName@[SubDomain.]Domain.TopLevelDomain</em>), the
+entire message will be rejected, even if the message contains other
+recipients that are valid.</p></li>
+<li><p>The message may not include more than 50 recipients, across the To:,
+CC: and BCC: fields. If you need to send an email message to a
+larger audience, you can divide your recipient list into groups of
+50 or fewer, and then call the <code>SendEmail</code> operation several times
+to send the message to each group.</p></li>
+</ul>
+
+<p>For every message that you send, the total number of recipients
+(including each recipient in the To:, CC: and BCC: fields) is counted
+against the maximum number of emails you can send in a 24-hour period
+(your <em>sending quota</em>). For more information about sending quotas in
+Amazon SES, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-quotas.html'>Managing Your Amazon SES Sending Limits</a>
+in the <em>Amazon SES Developer Guide.</em></p>
     </div>
 
-    <pre class="usage"><span class='fu'>ses_send_email</span>(<span class='no'>Source</span>, <span class='no'>Destination</span>, <span class='no'>Message</span>, <span class='no'>ReplyToAddresses</span>,
-  <span class='no'>ReturnPath</span>, <span class='no'>SourceArn</span>, <span class='no'>ReturnPathArn</span>, <span class='no'>Tags</span>, <span class='no'>ConfigurationSetName</span>)</pre>
+    <pre class="usage"><span class='fu'>ses_send_email</span><span class='op'>(</span><span class='va'>Source</span>, <span class='va'>Destination</span>, <span class='va'>Message</span>, <span class='va'>ReplyToAddresses</span>,
+  <span class='va'>ReturnPath</span>, <span class='va'>SourceArn</span>, <span class='va'>ReturnPathArn</span>, <span class='va'>Tags</span>, <span class='va'>ConfigurationSetName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,7 +225,7 @@ to the message, each reply-to address will receive the reply.</p></td>
       <td><p>The email address that bounces and complaints will be forwarded to when
 feedback forwarding is enabled. If the message cannot be delivered to
 the recipient, then an error message will be returned from the
-recipient\'s ISP; this message will then be forwarded to the email
+recipient's ISP; this message will then be forwarded to the email
 address specified by the <code>ReturnPath</code> parameter. The <code>ReturnPath</code>
 parameter is never overwritten. This email address must be either
 individually verified with Amazon SES, or from a domain that has been
@@ -216,124 +272,94 @@ the email that you define, so that you can publish email sending events.</p></td
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>The message must be sent from a verified email address or domain. If
-you attempt to send email using a non-verified address or domain,
-the operation will result in an \"Email address not verified\"
-error.</p></li>
-<li><p>If your account is still in the Amazon SES sandbox, you may only
-send to verified addresses or domains, or to email addresses
-associated with the Amazon SES Mailbox Simulator. For more
-information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html'>Verifying Email Addresses and Domains</a>
-in the <em>Amazon SES Developer Guide.</em></p></li>
-<li><p>The maximum message size is 10 MB.</p></li>
-<li><p>The message must include at least one recipient email address. The
-recipient address can be a To: address, a CC: address, or a BCC:
-address. If a recipient email address is invalid (that is, it is not
-in the format <em>UserName@[SubDomain.]Domain.TopLevelDomain</em>), the
-entire message will be rejected, even if the message contains other
-recipients that are valid.</p></li>
-<li><p>The message may not include more than 50 recipients, across the To:,
-CC: and BCC: fields. If you need to send an email message to a
-larger audience, you can divide your recipient list into groups of
-50 or fewer, and then call the <code>SendEmail</code> operation several times
-to send the message to each group.</p></li>
-</ul>
-
-<p>For every message that you send, the total number of recipients
-(including each recipient in the To:, CC: and BCC: fields) is counted
-against the maximum number of emails you can send in a 24-hour period
-(your <em>sending quota</em>). For more information about sending quotas in
-Amazon SES, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html'>Managing Your Amazon SES Sending Limits</a>
-in the <em>Amazon SES Developer Guide.</em></p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>send_email</span>(
-  <span class='kw'>Source</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ToAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_email</span><span class='op'>(</span>
+  Source <span class='op'>=</span> <span class='st'>"string"</span>,
+  Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ToAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>CcAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    CcAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>BccAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    BccAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Message</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Subject</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>Body</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Text</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>Html</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>ReplyToAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Message <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Subject <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Data <span class='op'>=</span> <span class='st'>"string"</span>,
+      Charset <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    Body <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Data <span class='op'>=</span> <span class='st'>"string"</span>,
+        Charset <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      Html <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Data <span class='op'>=</span> <span class='st'>"string"</span>,
+        Charset <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ReplyToAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ReturnPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReturnPathArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ConfigurationSetName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  ReturnPath <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReturnPathArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ConfigurationSetName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example sends a formatted email:</span>
-<span class='no'>svc</span>$<span class='fu'>send_email</span>(
-  <span class='kw'>Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>BccAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>CcAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_email</span><span class='op'>(</span>
+  Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    BccAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    CcAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"recipient3@example.com"</span>
-    ),
-    <span class='kw'>ToAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    ToAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"recipient1@example.com"</span>,
       <span class='st'>"recipient2@example.com"</span>
-    )
-  ),
-  <span class='kw'>Message</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Body</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Html</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"UTF-8"</span>,
-        <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"This message body contains HTML formatting. It can, for example, contain lin..."</span>
-      ),
-      <span class='kw'>Text</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"UTF-8"</span>,
-        <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"This is the message body in text format."</span>
-      )
-    ),
-    <span class='kw'>Subject</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"UTF-8"</span>,
-      <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"Test email"</span>
-    )
-  ),
-  <span class='kw'>ReplyToAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>ReturnPath</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>ReturnPathArn</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>Source</span> <span class='kw'>=</span> <span class='st'>"sender@example.com"</span>,
-  <span class='kw'>SourceArn</span> <span class='kw'>=</span> <span class='st'>""</span>
-)
-}</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Message <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Body <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Html <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Charset <span class='op'>=</span> <span class='st'>"UTF-8"</span>,
+        Data <span class='op'>=</span> <span class='st'>"This message body contains HTML formatting. It can, for example, contain lin..."</span>
+      <span class='op'>)</span>,
+      Text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Charset <span class='op'>=</span> <span class='st'>"UTF-8"</span>,
+        Data <span class='op'>=</span> <span class='st'>"This is the message body in text format."</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Subject <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Charset <span class='op'>=</span> <span class='st'>"UTF-8"</span>,
+      Data <span class='op'>=</span> <span class='st'>"Test email"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ReplyToAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  ReturnPath <span class='op'>=</span> <span class='st'>""</span>,
+  ReturnPathArn <span class='op'>=</span> <span class='st'>""</span>,
+  Source <span class='op'>=</span> <span class='st'>"sender@example.com"</span>,
+  SourceArn <span class='op'>=</span> <span class='st'>""</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -349,7 +375,7 @@ in the <em>Amazon SES Developer Guide.</em></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

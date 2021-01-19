@@ -42,8 +42,11 @@
 <meta property="og:title" content="Subscribes an endpoint to an Amazon SNS topic — sns_subscribe" />
 <meta property="og:description" content="Subscribes an endpoint to an Amazon SNS topic. If the endpoint type is
 HTTP/S or email, or if the endpoint and the topic are not in the same
-AWS account, the endpoint owner must the ConfirmSubscription action to
-confirm the subscription." />
+AWS account, the endpoint owner must run the ConfirmSubscription
+action to confirm the subscription.
+You call the ConfirmSubscription action with the token from the
+subscription response. Confirmation tokens are valid for three days.
+This action is throttled at 100 transactions per second (TPS)." />
 
 
 
@@ -75,7 +78,7 @@ confirm the subscription." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +86,7 @@ confirm the subscription." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +98,7 @@ confirm the subscription." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,12 +123,15 @@ confirm the subscription." />
     <div class="ref-description">
     <p>Subscribes an endpoint to an Amazon SNS topic. If the endpoint type is
 HTTP/S or email, or if the endpoint and the topic are not in the same
-AWS account, the endpoint owner must the <code>ConfirmSubscription</code> action to
-confirm the subscription.</p>
+AWS account, the endpoint owner must run the <code>ConfirmSubscription</code>
+action to confirm the subscription.</p>
+<p>You call the <code>ConfirmSubscription</code> action with the token from the
+subscription response. Confirmation tokens are valid for three days.</p>
+<p>This action is throttled at 100 transactions per second (TPS).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sns_subscribe</span>(<span class='no'>TopicArn</span>, <span class='no'>Protocol</span>, <span class='no'>Endpoint</span>, <span class='no'>Attributes</span>,
-  <span class='no'>ReturnSubscriptionArn</span>)</pre>
+    <pre class="usage"><span class='fu'>sns_subscribe</span><span class='op'>(</span><span class='va'>TopicArn</span>, <span class='va'>Protocol</span>, <span class='va'>Endpoint</span>, <span class='va'>Attributes</span>,
+  <span class='va'>ReturnSubscriptionArn</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,15 +143,15 @@ confirm the subscription.</p>
     <tr>
       <th>Protocol</th>
       <td><p>[required] The protocol you want to use. Supported protocols include:</p><ul>
-<li><p><code>http</code> -- delivery of JSON-encoded message via HTTP POST</p></li>
-<li><p><code>https</code> -- delivery of JSON-encoded message via HTTPS POST</p></li>
-<li><p><code>email</code> -- delivery of message via SMTP</p></li>
-<li><p><code>email-json</code> -- delivery of JSON-encoded message via SMTP</p></li>
-<li><p><code>sms</code> -- delivery of message via SMS</p></li>
-<li><p><code>sqs</code> -- delivery of JSON-encoded message to an Amazon SQS queue</p></li>
-<li><p><code>application</code> -- delivery of JSON-encoded message to an EndpointArn
+<li><p><code>http</code> – delivery of JSON-encoded message via HTTP POST</p></li>
+<li><p><code>https</code> – delivery of JSON-encoded message via HTTPS POST</p></li>
+<li><p><code>email</code> – delivery of message via SMTP</p></li>
+<li><p><code>email-json</code> – delivery of JSON-encoded message via SMTP</p></li>
+<li><p><code>sms</code> – delivery of message via SMS</p></li>
+<li><p><code>sqs</code> – delivery of JSON-encoded message to an Amazon SQS queue</p></li>
+<li><p><code>application</code> – delivery of JSON-encoded message to an EndpointArn
 for a mobile app and device.</p></li>
-<li><p><code>lambda</code> -- delivery of JSON-encoded message to an Amazon Lambda
+<li><p><code>lambda</code> – delivery of JSON-encoded message to an Amazon Lambda
 function.</p></li>
 </ul></td>
     </tr>
@@ -174,17 +180,17 @@ Lambda function.</p></li>
       <td><p>A map of attributes with their corresponding values.</p>
 <p>The following lists the names, descriptions, and values of the special
 request parameters that the <code>SetTopicAttributes</code> action uses:</p><ul>
-<li><p><code>DeliveryPolicy</code> -- The policy that defines how Amazon SNS retries
+<li><p><code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries
 failed deliveries to HTTP/S endpoints.</p></li>
-<li><p><code>FilterPolicy</code> -- The simple JSON object that lets your subscriber
+<li><p><code>FilterPolicy</code> – The simple JSON object that lets your subscriber
 receive only a subset of messages, rather than receiving every
 message published to the topic.</p></li>
-<li><p><code>RawMessageDelivery</code> -- When set to <code>true</code>, enables raw message
+<li><p><code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message
 delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need
 for the endpoints to process JSON formatting, which is otherwise
 created for Amazon SNS metadata.</p></li>
-<li><p><code>RedrivePolicy</code> -- When specified, sends undeliverable messages to
-the specified Amazon SQS dead-letter queue. Messages that can\'t be
+<li><p><code>RedrivePolicy</code> – When specified, sends undeliverable messages to
+the specified Amazon SQS dead-letter queue. Messages that can't be
 delivered due to client errors (for example, when the subscribed
 endpoint is unreachable) or server errors (for example, when the
 service that powers the subscribed endpoint becomes unavailable) are
@@ -194,37 +200,30 @@ held in the dead-letter queue for further analysis or reprocessing.</p></li>
     <tr>
       <th>ReturnSubscriptionArn</th>
       <td><p>Sets whether the response from the <code>Subscribe</code> request includes the
-subscription ARN, even if the subscription is not yet confirmed.</p><ul>
-<li><p>If you set this parameter to <code>true</code>, the response includes the ARN
-in all cases, even if the subscription is not yet confirmed. In
-addition to the ARN for confirmed subscriptions, the response also
-includes the <code>pending subscription</code> ARN value for subscriptions that
-aren\'t yet confirmed. A subscription becomes confirmed when the
-subscriber calls the <code>ConfirmSubscription</code> action with a
-confirmation token.</p></li>
-</ul>
-
+subscription ARN, even if the subscription is not yet confirmed.</p>
+<p>If you set this parameter to <code>true</code>, the response includes the ARN in
+all cases, even if the subscription is not yet confirmed. In addition to
+the ARN for confirmed subscriptions, the response also includes the
+<code>pending subscription</code> ARN value for subscriptions that aren't yet
+confirmed. A subscription becomes confirmed when the subscriber calls
+the <code>ConfirmSubscription</code> action with a confirmation token.</p>
 <p>The default value is <code>false</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You call the <code>ConfirmSubscription</code> action with the token from the
-subscription response. Confirmation tokens are valid for three days.</p>
-<p>This action is throttled at 100 transactions per second (TPS).</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>subscribe</span>(
-  <span class='kw'>TopicArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Protocol</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Attributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>subscribe</span><span class='op'>(</span>
+  TopicArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Protocol <span class='op'>=</span> <span class='st'>"string"</span>,
+  Endpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+  Attributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ReturnSubscriptionArn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+  <span class='op'>)</span>,
+  ReturnSubscriptionArn <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -242,7 +241,7 @@ subscription response. Confirmation tokens are valid for three days.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

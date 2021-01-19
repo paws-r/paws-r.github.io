@@ -43,7 +43,50 @@
 <meta property="og:description" content="Sends user input (text or speech) to Amazon Lex. Clients use this API to
 send text and audio requests to Amazon Lex at runtime. Amazon Lex
 interprets the user input using the machine learning model that it built
-for the bot." />
+for the bot.
+The PostContent operation supports audio input at 8kHz and 16kHz. You
+can use 8kHz audio to achieve higher speech recognition accuracy in
+telephone audio applications.
+In response, Amazon Lex returns the next message to convey to the user.
+Consider the following example messages:
+For a user input &quot;I would like a pizza,&quot; Amazon Lex might return a
+response with a message eliciting slot data (for example,
+PizzaSize): &quot;What size pizza would you like?&quot;.
+After the user provides all of the pizza order information, Amazon
+Lex might return a response with a message to get user confirmation:
+&quot;Order the pizza?&quot;.
+After the user replies &quot;Yes&quot; to the confirmation prompt, Amazon Lex
+might return a conclusion statement: &quot;Thank you, your cheese pizza
+has been ordered.&quot;.
+
+
+Not all Amazon Lex messages require a response from the user. For
+example, conclusion statements do not require a response. Some messages
+require only a yes or no response. In addition to the message, Amazon
+Lex provides additional context about the message in the response that
+you can use to enhance client behavior, such as displaying the
+appropriate client user interface. Consider the following examples:
+If the message is to elicit slot data, Amazon Lex returns the
+following context information:
+x-amz-lex-dialog-state header set to ElicitSlot
+x-amz-lex-intent-name header set to the intent name in the
+current context
+x-amz-lex-slot-to-elicit header set to the slot name for which
+the message is eliciting information
+x-amz-lex-slots header set to a map of slots configured for
+the intent with their current values
+
+If the message is a confirmation prompt, the
+x-amz-lex-dialog-state header is set to Confirmation and the
+x-amz-lex-slot-to-elicit header is omitted.
+If the message is a clarification prompt configured for the intent,
+indicating that the user intent is not understood, the
+x-amz-dialog-state header is set to ElicitIntent and the
+x-amz-slot-to-elicit header is omitted.
+
+
+In addition, Amazon Lex also returns your application-specific
+sessionAttributes. For more information, see Managing Conversation Context." />
 
 
 
@@ -75,7 +118,7 @@ for the bot." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +126,7 @@ for the bot." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +138,7 @@ for the bot." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +165,54 @@ for the bot." />
 send text and audio requests to Amazon Lex at runtime. Amazon Lex
 interprets the user input using the machine learning model that it built
 for the bot.</p>
+<p>The <code>PostContent</code> operation supports audio input at 8kHz and 16kHz. You
+can use 8kHz audio to achieve higher speech recognition accuracy in
+telephone audio applications.</p>
+<p>In response, Amazon Lex returns the next message to convey to the user.
+Consider the following example messages:</p><ul>
+<li><p>For a user input "I would like a pizza," Amazon Lex might return a
+response with a message eliciting slot data (for example,
+<code>PizzaSize</code>): "What size pizza would you like?".</p></li>
+<li><p>After the user provides all of the pizza order information, Amazon
+Lex might return a response with a message to get user confirmation:
+"Order the pizza?".</p></li>
+<li><p>After the user replies "Yes" to the confirmation prompt, Amazon Lex
+might return a conclusion statement: "Thank you, your cheese pizza
+has been ordered.".</p></li>
+</ul>
+
+<p>Not all Amazon Lex messages require a response from the user. For
+example, conclusion statements do not require a response. Some messages
+require only a yes or no response. In addition to the <code>message</code>, Amazon
+Lex provides additional context about the message in the response that
+you can use to enhance client behavior, such as displaying the
+appropriate client user interface. Consider the following examples:</p><ul>
+<li><p>If the message is to elicit slot data, Amazon Lex returns the
+following context information:</p><ul>
+<li><p><code>x-amz-lex-dialog-state</code> header set to <code>ElicitSlot</code></p></li>
+<li><p><code>x-amz-lex-intent-name</code> header set to the intent name in the
+current context</p></li>
+<li><p><code>x-amz-lex-slot-to-elicit</code> header set to the slot name for which
+the <code>message</code> is eliciting information</p></li>
+<li><p><code>x-amz-lex-slots</code> header set to a map of slots configured for
+the intent with their current values</p></li>
+</ul></li>
+<li><p>If the message is a confirmation prompt, the
+<code>x-amz-lex-dialog-state</code> header is set to <code>Confirmation</code> and the
+<code>x-amz-lex-slot-to-elicit</code> header is omitted.</p></li>
+<li><p>If the message is a clarification prompt configured for the intent,
+indicating that the user intent is not understood, the
+<code>x-amz-dialog-state</code> header is set to <code>ElicitIntent</code> and the
+<code>x-amz-slot-to-elicit</code> header is omitted.</p></li>
+</ul>
+
+<p>In addition, Amazon Lex also returns your application-specific
+<code>sessionAttributes</code>. For more information, see <a href='https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html'>Managing Conversation Context</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lexruntimeservice_post_content</span>(<span class='no'>botName</span>, <span class='no'>botAlias</span>, <span class='no'>userId</span>,
-  <span class='no'>sessionAttributes</span>, <span class='no'>requestAttributes</span>, <span class='no'>contentType</span>, <span class='no'>accept</span>, <span class='no'>inputStream</span>)</pre>
+    <pre class="usage"><span class='fu'>lexruntimeservice_post_content</span><span class='op'>(</span><span class='va'>botName</span>, <span class='va'>botAlias</span>, <span class='va'>userId</span>,
+  <span class='va'>sessionAttributes</span>, <span class='va'>requestAttributes</span>, <span class='va'>contentType</span>, <span class='va'>accept</span>, <span class='va'>inputStream</span>,
+  <span class='va'>activeContexts</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,7 +228,7 @@ for the bot.</p>
     <tr>
       <th>userId</th>
       <td><p>[required] The ID of the client application user. Amazon Lex uses this to identify
-a user\'s conversation with your bot. At runtime, each request must
+a user's conversation with your bot. At runtime, each request must
 contain the <code>userID</code> field.</p>
 <p>To decide the user ID to use for your application, consider the
 following factors.</p><ul>
@@ -153,8 +240,8 @@ continue on another device, use a user-specific identifier.</p></li>
 <li><p>If you want the same user to be able to have two independent
 conversations on two different devices, choose a device-specific
 identifier.</p></li>
-<li><p>A user can\'t have two independent conversations with two different
-versions of the same bot. For example, a user can\'t have a
+<li><p>A user can't have two independent conversations with two different
+versions of the same bot. For example, a user can't have a
 conversation with the PROD and BETA versions of the same bot. If you
 anticipate that a user will need to have conversation with two
 different versions, for example, while testing, include the bot
@@ -177,7 +264,7 @@ and <code>requestAttributes</code> headers is limited to 12 KB.</p>
 application. The value must be a JSON serialized and base64 encoded map
 with string keys and values. The total size of the <code>requestAttributes</code>
 and <code>sessionAttributes</code> headers is limited to 12 KB.</p>
-<p>The namespace <code>x-amz-lex:</code> is reserved for special attributes. Don\'t
+<p>The namespace <code>x-amz-lex:</code> is reserved for special attributes. Don't
 create any request attributes with the prefix <code>x-amz-lex:</code>.</p>
 <p>For more information, see <a href='https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html#context-mgmt-request-attribs'>Setting Request Attributes</a>.</p></td>
     </tr>
@@ -233,66 +320,32 @@ that captures all of the audio data before sending. In general, you get
 better performance if you stream audio data rather than buffering the
 data locally.</p></td>
     </tr>
+    <tr>
+      <th>activeContexts</th>
+      <td><p>A list of contexts active for the request. A context can be activated
+when a previous intent is fulfilled, or by including the context in the
+request,</p>
+<p>If you don't specify a list of contexts, Amazon Lex will use the current
+list of contexts for the session. If you specify an empty list, all
+contexts for the session are cleared.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The <code>PostContent</code> operation supports audio input at 8kHz and 16kHz. You
-can use 8kHz audio to achieve higher speech recognition accuracy in
-telephone audio applications.</p>
-<p>In response, Amazon Lex returns the next message to convey to the user.
-Consider the following example messages:</p><ul>
-<li><p>For a user input \"I would like a pizza,\" Amazon Lex might return a
-response with a message eliciting slot data (for example,
-<code>PizzaSize</code>): \"What size pizza would you like?\".</p></li>
-<li><p>After the user provides all of the pizza order information, Amazon
-Lex might return a response with a message to get user confirmation:
-\"Order the pizza?\".</p></li>
-<li><p>After the user replies \"Yes\" to the confirmation prompt, Amazon
-Lex might return a conclusion statement: \"Thank you, your cheese
-pizza has been ordered.\".</p></li>
-</ul>
-
-<p>Not all Amazon Lex messages require a response from the user. For
-example, conclusion statements do not require a response. Some messages
-require only a yes or no response. In addition to the <code>message</code>, Amazon
-Lex provides additional context about the message in the response that
-you can use to enhance client behavior, such as displaying the
-appropriate client user interface. Consider the following examples:</p><ul>
-<li><p>If the message is to elicit slot data, Amazon Lex returns the
-following context information:</p><ul>
-<li><p><code>x-amz-lex-dialog-state</code> header set to <code>ElicitSlot</code></p></li>
-<li><p><code>x-amz-lex-intent-name</code> header set to the intent name in the
-current context</p></li>
-<li><p><code>x-amz-lex-slot-to-elicit</code> header set to the slot name for which
-the <code>message</code> is eliciting information</p></li>
-<li><p><code>x-amz-lex-slots</code> header set to a map of slots configured for
-the intent with their current values</p></li>
-</ul></li>
-<li><p>If the message is a confirmation prompt, the
-<code>x-amz-lex-dialog-state</code> header is set to <code>Confirmation</code> and the
-<code>x-amz-lex-slot-to-elicit</code> header is omitted.</p></li>
-<li><p>If the message is a clarification prompt configured for the intent,
-indicating that the user intent is not understood, the
-<code>x-amz-dialog-state</code> header is set to <code>ElicitIntent</code> and the
-<code>x-amz-slot-to-elicit</code> header is omitted.</p></li>
-</ul>
-
-<p>In addition, Amazon Lex also returns your application-specific
-<code>sessionAttributes</code>. For more information, see <a href='https://docs.aws.amazon.com/lex/latest/dg/context-mgmt.html'>Managing Conversation Context</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>post_content</span>(
-  <span class='kw'>botName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>botAlias</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>userId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>sessionAttributes</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>requestAttributes</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>contentType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>accept</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>inputStream</span> <span class='kw'>=</span> <span class='no'>raw</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>post_content</span><span class='op'>(</span>
+  botName <span class='op'>=</span> <span class='st'>"string"</span>,
+  botAlias <span class='op'>=</span> <span class='st'>"string"</span>,
+  userId <span class='op'>=</span> <span class='st'>"string"</span>,
+  sessionAttributes <span class='op'>=</span> <span class='st'>"string"</span>,
+  requestAttributes <span class='op'>=</span> <span class='st'>"string"</span>,
+  contentType <span class='op'>=</span> <span class='st'>"string"</span>,
+  accept <span class='op'>=</span> <span class='st'>"string"</span>,
+  inputStream <span class='op'>=</span> <span class='va'>raw</span>,
+  activeContexts <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -310,7 +363,7 @@ indicating that the user intent is not understood, the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -42,7 +42,26 @@
 <meta property="og:title" content="Uploads a server certificate entity for the AWS account — iam_upload_server_certificate" />
 <meta property="og:description" content="Uploads a server certificate entity for the AWS account. The server
 certificate entity includes a public key certificate, a private key, and
-an optional certificate chain, which should all be PEM-encoded." />
+an optional certificate chain, which should all be PEM-encoded.
+We recommend that you use AWS Certificate Manager to provision, manage, and
+deploy your server certificates. With ACM you can request a certificate,
+deploy it to AWS resources, and let ACM handle certificate renewals for
+you. Certificates provided by ACM are free. For more information about
+using ACM, see the AWS Certificate Manager User Guide.
+For more information about working with server certificates, see
+Working with Server Certificates
+in the IAM User Guide. This topic includes a list of AWS services that
+can use the server certificates that you manage with IAM.
+For information about the number of server certificates you can upload,
+see Limitations on IAM Entities and Objects
+in the IAM User Guide.
+Because the body of the public key certificate, private key, and the
+certificate chain can be large, you should use POST rather than GET when
+calling UploadServerCertificate. For information about setting up
+signatures and authorization through the API, go to Signing AWS API Requests
+in the AWS General Reference. For general information about using the
+Query API with IAM, go to Calling the API by Making HTTP Query Requests
+in the IAM User Guide." />
 
 
 
@@ -74,7 +93,7 @@ an optional certificate chain, which should all be PEM-encoded." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +101,7 @@ an optional certificate chain, which should all be PEM-encoded." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +113,7 @@ an optional certificate chain, which should all be PEM-encoded." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +139,29 @@ an optional certificate chain, which should all be PEM-encoded." />
     <p>Uploads a server certificate entity for the AWS account. The server
 certificate entity includes a public key certificate, a private key, and
 an optional certificate chain, which should all be PEM-encoded.</p>
+<p>We recommend that you use <a href='https://docs.aws.amazon.com/acm/'>AWS Certificate Manager</a> to provision, manage, and
+deploy your server certificates. With ACM you can request a certificate,
+deploy it to AWS resources, and let ACM handle certificate renewals for
+you. Certificates provided by ACM are free. For more information about
+using ACM, see the <a href='https://docs.aws.amazon.com/acm/latest/userguide/'>AWS Certificate Manager User Guide</a>.</p>
+<p>For more information about working with server certificates, see
+<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html'>Working with Server Certificates</a>
+in the <em>IAM User Guide</em>. This topic includes a list of AWS services that
+can use the server certificates that you manage with IAM.</p>
+<p>For information about the number of server certificates you can upload,
+see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html'>Limitations on IAM Entities and Objects</a>
+in the <em>IAM User Guide</em>.</p>
+<p>Because the body of the public key certificate, private key, and the
+certificate chain can be large, you should use POST rather than GET when
+calling <code>UploadServerCertificate</code>. For information about setting up
+signatures and authorization through the API, go to <a href='https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html'>Signing AWS API Requests</a>
+in the <em>AWS General Reference</em>. For general information about using the
+Query API with IAM, go to <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html'>Calling the API by Making HTTP Query Requests</a>
+in the <em>IAM User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iam_upload_server_certificate</span>(<span class='no'>Path</span>, <span class='no'>ServerCertificateName</span>,
-  <span class='no'>CertificateBody</span>, <span class='no'>PrivateKey</span>, <span class='no'>CertificateChain</span>)</pre>
+    <pre class="usage"><span class='fu'>iam_upload_server_certificate</span><span class='op'>(</span><span class='va'>Path</span>, <span class='va'>ServerCertificateName</span>,
+  <span class='va'>CertificateBody</span>, <span class='va'>PrivateKey</span>, <span class='va'>CertificateChain</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -131,10 +169,10 @@ an optional certificate chain, which should all be PEM-encoded.</p>
     <tr>
       <th>Path</th>
       <td><p>The path for the server certificate. For more information about paths,
-see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html'>IAM Identifiers</a>
+see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html'>IAM Identifiers</a>
 in the <em>IAM User Guide</em>.</p>
 <p>This parameter is optional. If it is not included, it defaults to a
-slash (/). This parameter allows (through its <a href='http://wikipedia.org/wiki/regex'>regex pattern</a>) a string of characters
+slash (/). This parameter allows (through its <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a>) a string of characters
 consisting of either a forward slash (/) by itself or a string that must
 begin and end with forward slashes. In addition, it can contain any
 ASCII character from the ! (<code>U+0021</code>) through the DEL character
@@ -149,15 +187,16 @@ include a trailing slash (for example, <code>/cloudfront/test/</code>).</p></td>
       <th>ServerCertificateName</th>
       <td><p>[required] The name for the server certificate. Do not include the path in this
 value. The name of the certificate cannot contain any spaces.</p>
-<p>This parameter allows (through its <a href='http://wikipedia.org/wiki/regex'>regex pattern</a>) a string of characters
+<p>This parameter allows (through its <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a>) a string of characters
 consisting of upper and lowercase alphanumeric characters with no
 spaces. You can also include any of the following characters: \_+=,.@-</p></td>
     </tr>
     <tr>
       <th>CertificateBody</th>
       <td><p>[required] The contents of the public key certificate in PEM-encoded format.</p>
-<p>The <a href='http://wikipedia.org/wiki/regex'>regex pattern</a> used to validate
-this parameter is a string of characters consisting of the following:</p><ul>
+<p>The <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a> used to
+validate this parameter is a string of characters consisting of the
+following:</p><ul>
 <li><p>Any printable ASCII character ranging from the space character
 (<code>U+0020</code>) through the end of the ASCII character range</p></li>
 <li><p>The printable characters in the Basic Latin and Latin-1 Supplement
@@ -169,8 +208,9 @@ carriage return (<code>U+000D</code>)</p></li>
     <tr>
       <th>PrivateKey</th>
       <td><p>[required] The contents of the private key in PEM-encoded format.</p>
-<p>The <a href='http://wikipedia.org/wiki/regex'>regex pattern</a> used to validate
-this parameter is a string of characters consisting of the following:</p><ul>
+<p>The <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a> used to
+validate this parameter is a string of characters consisting of the
+following:</p><ul>
 <li><p>Any printable ASCII character ranging from the space character
 (<code>U+0020</code>) through the end of the ASCII character range</p></li>
 <li><p>The printable characters in the Basic Latin and Latin-1 Supplement
@@ -183,8 +223,9 @@ carriage return (<code>U+000D</code>)</p></li>
       <th>CertificateChain</th>
       <td><p>The contents of the certificate chain. This is typically a concatenation
 of the PEM-encoded public key certificates of the chain.</p>
-<p>The <a href='http://wikipedia.org/wiki/regex'>regex pattern</a> used to validate
-this parameter is a string of characters consisting of the following:</p><ul>
+<p>The <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a> used to
+validate this parameter is a string of characters consisting of the
+following:</p><ul>
 <li><p>Any printable ASCII character ranging from the space character
 (<code>U+0020</code>) through the end of the ASCII character range</p></li>
 <li><p>The printable characters in the Basic Latin and Latin-1 Supplement
@@ -195,50 +236,32 @@ carriage return (<code>U+000D</code>)</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>We recommend that you use <a href='https://docs.aws.amazon.com/acm/'>AWS Certificate Manager</a> to provision, manage, and
-deploy your server certificates. With ACM you can request a certificate,
-deploy it to AWS resources, and let ACM handle certificate renewals for
-you. Certificates provided by ACM are free. For more information about
-using ACM, see the <a href='https://docs.aws.amazon.com/acm/latest/userguide/'>AWS Certificate Manager User Guide</a>.</p>
-<p>For more information about working with server certificates, see
-<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html'>Working with Server Certificates</a>
-in the <em>IAM User Guide</em>. This topic includes a list of AWS services that
-can use the server certificates that you manage with IAM.</p>
-<p>For information about the number of server certificates you can upload,
-see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html'>Limitations on IAM Entities and Objects</a>
-in the <em>IAM User Guide</em>.</p>
-<p>Because the body of the public key certificate, private key, and the
-certificate chain can be large, you should use POST rather than GET when
-calling <code>UploadServerCertificate</code>. For information about setting up
-signatures and authorization through the API, go to <a href='https://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html'>Signing AWS API Requests</a>
-in the <em>AWS General Reference</em>. For general information about using the
-Query API with IAM, go to <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html'>Calling the API by Making HTTP Query Requests</a>
-in the <em>IAM User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>upload_server_certificate</span>(
-  <span class='kw'>Path</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServerCertificateName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CertificateBody</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PrivateKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CertificateChain</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>upload_server_certificate</span><span class='op'>(</span>
+  Path <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServerCertificateName <span class='op'>=</span> <span class='st'>"string"</span>,
+  CertificateBody <span class='op'>=</span> <span class='st'>"string"</span>,
+  PrivateKey <span class='op'>=</span> <span class='st'>"string"</span>,
+  CertificateChain <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following upload-server-certificate command uploads a server</span>
 <span class='co'># certificate to your AWS account:</span>
-<span class='no'>svc</span>$<span class='fu'>upload_server_certificate</span>(
-  <span class='kw'>CertificateBody</span> <span class='kw'>=</span> <span class='st'>"-----BEGIN CERTIFICATE-----&lt;a very long certificate text string&gt;-----EN..."</span>,
-  <span class='kw'>Path</span> <span class='kw'>=</span> <span class='st'>"/company/servercerts/"</span>,
-  <span class='kw'>PrivateKey</span> <span class='kw'>=</span> <span class='st'>"-----BEGIN DSA PRIVATE KEY-----&lt;a very long private key string&gt;-----END DSA ..."</span>,
-  <span class='kw'>ServerCertificateName</span> <span class='kw'>=</span> <span class='st'>"ProdServerCert"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>upload_server_certificate</span><span class='op'>(</span>
+  CertificateBody <span class='op'>=</span> <span class='st'>"-----BEGIN CERTIFICATE-----&lt;a very long certificate text string&gt;-----EN..."</span>,
+  Path <span class='op'>=</span> <span class='st'>"/company/servercerts/"</span>,
+  PrivateKey <span class='op'>=</span> <span class='st'>"-----BEGIN DSA PRIVATE KEY-----&lt;a very long private key string&gt;-----END DSA ..."</span>,
+  ServerCertificateName <span class='op'>=</span> <span class='st'>"ProdServerCert"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -254,7 +277,7 @@ in the <em>IAM User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

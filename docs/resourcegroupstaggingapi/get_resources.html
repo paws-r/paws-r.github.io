@@ -43,7 +43,21 @@ in the specified Region for the AWS account — resourcegroupstaggingapi_get_res
 <meta property="og:title" content="Returns all the tagged or previously tagged resources that are located
 in the specified Region for the AWS account — resourcegroupstaggingapi_get_resources" />
 <meta property="og:description" content="Returns all the tagged or previously tagged resources that are located
-in the specified Region for the AWS account." />
+in the specified Region for the AWS account.
+Depending on what information you want returned, you can also specify
+the following:
+Filters that specify what tags and resource types you want
+returned. The response includes all tags that are associated with
+the requested resources.
+Information about compliance with the account's effective tag
+policy. For more information on tag policies, see Tag Policies
+in the AWS Organizations User Guide.
+
+
+You can check the PaginationToken response parameter to determine if a
+query is complete. Queries occasionally return fewer results on a page
+than allowed. The PaginationToken response parameter value is null
+only when there are no more results to display." />
 
 
 
@@ -75,7 +89,7 @@ in the specified Region for the AWS account." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +97,7 @@ in the specified Region for the AWS account." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +109,7 @@ in the specified Region for the AWS account." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,11 +135,25 @@ in the specified Region for the AWS account</h1>
     <div class="ref-description">
     <p>Returns all the tagged or previously tagged resources that are located
 in the specified Region for the AWS account.</p>
+<p>Depending on what information you want returned, you can also specify
+the following:</p><ul>
+<li><p><em>Filters</em> that specify what tags and resource types you want
+returned. The response includes all tags that are associated with
+the requested resources.</p></li>
+<li><p>Information about compliance with the account's effective tag
+policy. For more information on tag policies, see <a href='https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html'>Tag Policies</a>
+in the <em>AWS Organizations User Guide.</em></p></li>
+</ul>
+
+<p>You can check the <code>PaginationToken</code> response parameter to determine if a
+query is complete. Queries occasionally return fewer results on a page
+than allowed. The <code>PaginationToken</code> response parameter value is <code>null</code>
+<em>only</em> when there are no more results to display.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>resourcegroupstaggingapi_get_resources</span>(<span class='no'>PaginationToken</span>, <span class='no'>TagFilters</span>,
-  <span class='no'>ResourcesPerPage</span>, <span class='no'>TagsPerPage</span>, <span class='no'>ResourceTypeFilters</span>,
-  <span class='no'>IncludeComplianceDetails</span>, <span class='no'>ExcludeCompliantResources</span>)</pre>
+    <pre class="usage"><span class='fu'>resourcegroupstaggingapi_get_resources</span><span class='op'>(</span><span class='va'>PaginationToken</span>, <span class='va'>TagFilters</span>,
+  <span class='va'>ResourcesPerPage</span>, <span class='va'>TagsPerPage</span>, <span class='va'>ResourceTypeFilters</span>,
+  <span class='va'>IncludeComplianceDetails</span>, <span class='va'>ExcludeCompliantResources</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,9 +173,9 @@ keys, and each key can include up to 20 values.</p>
 <p>Note the following when deciding how to use TagFilters:</p><ul>
 <li><p>If you <em>do</em> specify a TagFilter, the response returns only those
 resources that are currently associated with the specified tag.</p></li>
-<li><p>If you <em>don\'t</em> specify a TagFilter, the response includes all
+<li><p>If you <em>don't</em> specify a TagFilter, the response includes all
 resources that were ever associated with tags. Resources that
-currently don\'t have associated tags are shown with an empty tag
+currently don't have associated tags are shown with an empty tag
 set, like this: <code>"Tags": \\[\\]</code>.</p></li>
 <li><p>If you specify more than one filter in a single request, the
 response returns only those resources that satisfy all specified
@@ -155,7 +183,7 @@ filters.</p></li>
 <li><p>If you specify a filter that contains more than one value for a key,
 the response returns resources that match any of the specified
 values for that key.</p></li>
-<li><p>If you don\'t specify any values for a key, the response returns
+<li><p>If you don't specify any values for a key, the response returns
 resources that are tagged with that key irrespective of the value.</p>
 <p>For example, for filters: filter1 = {key1, {value1}}, filter2 =
 {key2, {value2,value3,value4}} , filter3 = {key3}:</p><ul>
@@ -204,11 +232,11 @@ specifying a resource type of <code>ec2</code> returns all Amazon EC2 resources
 (which includes EC2 instances). Specifying a resource type of
 <code>ec2:instance</code> returns only EC2 instances.</p>
 <p>The string for each service name and resource type is the same as that
-embedded in a resource\'s Amazon Resource Name (ARN). Consult the <em>AWS
+embedded in a resource's Amazon Resource Name (ARN). Consult the <em>AWS
 General Reference</em> for the following:</p><ul>
-<li><p>For a list of service name strings, see <a href='http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces'>AWS Service Namespaces</a>.</p></li>
-<li><p>For resource type strings, see <a href='http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arns-syntax'>Example ARNs</a>.</p></li>
-<li><p>For more information about ARNs, see <a href='http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html'>Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p></li>
+<li><p>For a list of service name strings, see <a href='https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces'>AWS Service Namespaces</a>.</p></li>
+<li><p>For resource type strings, see <a href='https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arns-syntax'>Example ARNs</a>.</p></li>
+<li><p>For more information about ARNs, see <a href='https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html'>Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p></li>
 </ul>
 
 <p>You can specify multiple resource types by using an array. The array can
@@ -231,43 +259,28 @@ parameter is also set to <code>true</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Depending on what information you want returned, you can also specify
-the following:</p><ul>
-<li><p><em>Filters</em> that specify what tags and resource types you want
-returned. The response includes all tags that are associated with
-the requested resources.</p></li>
-<li><p>Information about compliance with the account\'s effective tag
-policy. For more information on tag policies, see <a href='http://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html'>Tag Policies</a>
-in the <em>AWS Organizations User Guide.</em></p></li>
-</ul>
-
-<p>You can check the <code>PaginationToken</code> response parameter to determine if a
-query is complete. Queries occasionally return fewer results on a page
-than allowed. The <code>PaginationToken</code> response parameter value is <code>null</code>
-<em>only</em> when there are no more results to display.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_resources</span>(
-  <span class='kw'>PaginationToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TagFilters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_resources</span><span class='op'>(</span>
+  PaginationToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  TagFilters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>ResourcesPerPage</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>TagsPerPage</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ResourceTypeFilters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ResourcesPerPage <span class='op'>=</span> <span class='fl'>123</span>,
+  TagsPerPage <span class='op'>=</span> <span class='fl'>123</span>,
+  ResourceTypeFilters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>IncludeComplianceDetails</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>ExcludeCompliantResources</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+  <span class='op'>)</span>,
+  IncludeComplianceDetails <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  ExcludeCompliantResources <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -285,7 +298,7 @@ than allowed. The <code>PaginationToken</code> response parameter value is <code
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

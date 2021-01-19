@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Enables the Availability Zones for the specified public subnets for the
-specified load balancer — elbv2_set_subnets • paws</title>
+specified Application Load Balancer or Network Load Balancer — elbv2_set_subnets • paws</title>
 
 
 <!-- jquery -->
@@ -41,10 +41,13 @@ specified load balancer — elbv2_set_subnets • paws</title>
 
 
 <meta property="og:title" content="Enables the Availability Zones for the specified public subnets for the
-specified load balancer — elbv2_set_subnets" />
+specified Application Load Balancer or Network Load Balancer — elbv2_set_subnets" />
 <meta property="og:description" content="Enables the Availability Zones for the specified public subnets for the
-specified load balancer. The specified subnets replace the previously
-enabled subnets." />
+specified Application Load Balancer or Network Load Balancer. The
+specified subnets replace the previously enabled subnets.
+When you specify subnets for a Network Load Balancer, you must include
+all subnets that were enabled previously, with their existing
+configurations, plus any additional subnets." />
 
 
 
@@ -76,7 +79,7 @@ enabled subnets." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +87,7 @@ enabled subnets." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +99,7 @@ enabled subnets." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -114,18 +117,22 @@ enabled subnets." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Enables the Availability Zones for the specified public subnets for the
-specified load balancer</h1>
+specified Application Load Balancer or Network Load Balancer</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/elbv2_operations.R'><code>R/elbv2_operations.R</code></a></small>
     <div class="hidden name"><code>elbv2_set_subnets.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Enables the Availability Zones for the specified public subnets for the
-specified load balancer. The specified subnets replace the previously
-enabled subnets.</p>
+specified Application Load Balancer or Network Load Balancer. The
+specified subnets replace the previously enabled subnets.</p>
+<p>When you specify subnets for a Network Load Balancer, you must include
+all subnets that were enabled previously, with their existing
+configurations, plus any additional subnets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>elbv2_set_subnets</span>(<span class='no'>LoadBalancerArn</span>, <span class='no'>Subnets</span>, <span class='no'>SubnetMappings</span>)</pre>
+    <pre class="usage"><span class='fu'>elbv2_set_subnets</span><span class='op'>(</span><span class='va'>LoadBalancerArn</span>, <span class='va'>Subnets</span>, <span class='va'>SubnetMappings</span>,
+  <span class='va'>IpAddressType</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,9 +143,16 @@ enabled subnets.</p>
     </tr>
     <tr>
       <th>Subnets</th>
-      <td><p>The IDs of the public subnets. You must specify subnets from at least
-two Availability Zones. You can specify only one subnet per Availability
-Zone. You must specify either subnets or subnet mappings.</p></td>
+      <td><p>The IDs of the public subnets. You can specify only one subnet per
+Availability Zone. You must specify either subnets or subnet mappings.</p>
+<p>[Application Load Balancers] You must specify subnets from at least
+two Availability Zones.</p>
+<p>[Application Load Balancers on Outposts] You must specify one Outpost
+subnet.</p>
+<p>[Application Load Balancers on Local Zones] You can specify subnets
+from one or more Local Zones.</p>
+<p>[Network Load Balancers] You can specify subnets from one or more
+Availability Zones.</p></td>
     </tr>
     <tr>
       <th>SubnetMappings</th>
@@ -147,49 +161,62 @@ Availability Zone. You must specify either subnets or subnet mappings.</p>
 <p>[Application Load Balancers] You must specify subnets from at least
 two Availability Zones. You cannot specify Elastic IP addresses for your
 subnets.</p>
+<p>[Application Load Balancers on Outposts] You must specify one Outpost
+subnet.</p>
+<p>[Application Load Balancers on Local Zones] You can specify subnets
+from one or more Local Zones.</p>
 <p>[Network Load Balancers] You can specify subnets from one or more
-Availability Zones. If you need static IP addresses for your
-internet-facing load balancer, you can specify one Elastic IP address
-per subnet. For internal load balancers, you can specify one private IP
-address per subnet from the IPv4 range of the subnet.</p></td>
+Availability Zones. You can specify one Elastic IP address per subnet if
+you need static IP addresses for your internet-facing load balancer. For
+internal load balancers, you can specify one private IP address per
+subnet from the IPv4 range of the subnet. For internet-facing load
+balancer, you can specify one IPv6 address per subnet.</p></td>
+    </tr>
+    <tr>
+      <th>IpAddressType</th>
+      <td><p>[Network Load Balancers] The type of IP addresses used by the subnets
+for your load balancer. The possible values are <code>ipv4</code> (for IPv4
+addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). You can’t
+specify <code>dualstack</code> for a load balancer with a UDP or TCP\_UDP listener.
+Internal load balancers must use <code>ipv4</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you specify subnets for a Network Load Balancer, you must include
-all subnets that were enabled previously, with their existing
-configurations, plus any additional subnets.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>set_subnets</span>(
-  <span class='kw'>LoadBalancerArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Subnets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>set_subnets</span><span class='op'>(</span>
+  LoadBalancerArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Subnets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SubnetMappings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>SubnetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>AllocationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>PrivateIPv4Address</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  SubnetMappings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      SubnetId <span class='op'>=</span> <span class='st'>"string"</span>,
+      AllocationId <span class='op'>=</span> <span class='st'>"string"</span>,
+      PrivateIPv4Address <span class='op'>=</span> <span class='st'>"string"</span>,
+      IPv6Address <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  IpAddressType <span class='op'>=</span> <span class='st'>"ipv4"</span><span class='op'>|</span><span class='st'>"dualstack"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example enables the Availability Zones for the specified subnets</span>
 <span class='co'># for the specified load balancer.</span>
-<span class='no'>svc</span>$<span class='fu'>set_subnets</span>(
-  <span class='kw'>LoadBalancerArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my..."</span>,
-  <span class='kw'>Subnets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>set_subnets</span><span class='op'>(</span>
+  LoadBalancerArn <span class='op'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my..."</span>,
+  Subnets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"subnet-8360a9e7"</span>,
     <span class='st'>"subnet-b7d581c0"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -205,7 +232,7 @@ configurations, plus any additional subnets.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

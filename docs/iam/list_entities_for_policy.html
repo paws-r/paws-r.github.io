@@ -43,7 +43,13 @@ is attached to — iam_list_entities_for_policy • paws</title>
 <meta property="og:title" content="Lists all IAM users, groups, and roles that the specified managed policy
 is attached to — iam_list_entities_for_policy" />
 <meta property="og:description" content="Lists all IAM users, groups, and roles that the specified managed policy
-is attached to." />
+is attached to.
+You can use the optional EntityFilter parameter to limit the results
+to a particular type of entity (users, groups, or roles). For example,
+to list only the roles that are attached to the specified policy, set
+EntityFilter to Role.
+You can paginate the results using the MaxItems and Marker
+parameters." />
 
 
 
@@ -75,7 +81,7 @@ is attached to." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +89,7 @@ is attached to." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +101,7 @@ is attached to." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +127,16 @@ is attached to</h1>
     <div class="ref-description">
     <p>Lists all IAM users, groups, and roles that the specified managed policy
 is attached to.</p>
+<p>You can use the optional <code>EntityFilter</code> parameter to limit the results
+to a particular type of entity (users, groups, or roles). For example,
+to list only the roles that are attached to the specified policy, set
+<code>EntityFilter</code> to <code>Role</code>.</p>
+<p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code>
+parameters.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iam_list_entities_for_policy</span>(<span class='no'>PolicyArn</span>, <span class='no'>EntityFilter</span>, <span class='no'>PathPrefix</span>,
-  <span class='no'>PolicyUsageFilter</span>, <span class='no'>Marker</span>, <span class='no'>MaxItems</span>)</pre>
+    <pre class="usage"><span class='fu'>iam_list_entities_for_policy</span><span class='op'>(</span><span class='va'>PolicyArn</span>, <span class='va'>EntityFilter</span>, <span class='va'>PathPrefix</span>,
+  <span class='va'>PolicyUsageFilter</span>, <span class='va'>Marker</span>, <span class='va'>MaxItems</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,7 +161,7 @@ the valid values listed below.</p></td>
       <th>PathPrefix</th>
       <td><p>The path prefix for filtering the results. This parameter is optional.
 If it is not included, it defaults to a slash (/), listing all entities.</p>
-<p>This parameter allows (through its <a href='http://wikipedia.org/wiki/regex'>regex pattern</a>) a string of characters
+<p>This parameter allows (through its <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a>) a string of characters
 consisting of either a forward slash (/) by itself or a string that must
 begin and end with forward slashes. In addition, it can contain any
 ASCII character from the ! (<code>U+0021</code>) through the DEL character
@@ -160,9 +172,9 @@ lowercased letters.</p></td>
       <th>PolicyUsageFilter</th>
       <td><p>The policy usage method to use for filtering the results.</p>
 <p>To list only permissions policies,
-setÂ <code>PolicyUsageFilter</code>Â toÂ <code>PermissionsPolicy</code>. To list only the
-policies used to set permissions boundaries, setÂ the value
-toÂ <code>PermissionsBoundary</code>.</p>
+set <code>PolicyUsageFilter</code> to <code>PermissionsPolicy</code>. To list only the
+policies used to set permissions boundaries, set the value
+to <code>PermissionsBoundary</code>.</p>
 <p>This parameter is optional. If it is not included, all policies are
 returned.</p></td>
     </tr>
@@ -186,25 +198,18 @@ subsequent call that tells the service where to continue from.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can use the optional <code>EntityFilter</code> parameter to limit the results
-to a particular type of entity (users, groups, or roles). For example,
-to list only the roles that are attached to the specified policy, set
-<code>EntityFilter</code> to <code>Role</code>.</p>
-<p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code>
-parameters.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_entities_for_policy</span>(
-  <span class='kw'>PolicyArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EntityFilter</span> <span class='kw'>=</span> <span class='st'>"User"</span><span class='kw'>|</span><span class='st'>"Role"</span><span class='kw'>|</span><span class='st'>"Group"</span><span class='kw'>|</span><span class='st'>"LocalManagedPolicy"</span><span class='kw'>|</span><span class='st'>"AWSManagedPolicy"</span>,
-  <span class='kw'>PathPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PolicyUsageFilter</span> <span class='kw'>=</span> <span class='st'>"PermissionsPolicy"</span><span class='kw'>|</span><span class='st'>"PermissionsBoundary"</span>,
-  <span class='kw'>Marker</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxItems</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_entities_for_policy</span><span class='op'>(</span>
+  PolicyArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  EntityFilter <span class='op'>=</span> <span class='st'>"User"</span><span class='op'>|</span><span class='st'>"Role"</span><span class='op'>|</span><span class='st'>"Group"</span><span class='op'>|</span><span class='st'>"LocalManagedPolicy"</span><span class='op'>|</span><span class='st'>"AWSManagedPolicy"</span>,
+  PathPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+  PolicyUsageFilter <span class='op'>=</span> <span class='st'>"PermissionsPolicy"</span><span class='op'>|</span><span class='st'>"PermissionsBoundary"</span>,
+  Marker <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxItems <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -222,7 +227,7 @@ parameters.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -49,8 +49,104 @@ https://aws — ecs_update_service" />
 <meta property="og:description" content="Updating the task placement strategies and constraints on an Amazon ECS
 service remains in preview and is a Beta Service as defined by and
 subject to the Beta Service Participation Service Terms located at
-https://aws.amazon.com/service-terms (\&quot;Beta Terms\&quot;). These Beta
-Terms apply to your participation in this preview." />
+https://aws.amazon.com/service-terms
+(&quot;Beta Terms&quot;). These Beta Terms apply to your participation in this
+preview.
+Modifies the parameters of a service.
+For services using the rolling update (ECS) deployment controller, the
+desired count, deployment configuration, network configuration, task
+placement constraints and strategies, or task definition used can be
+updated.
+For services using the blue/green (CODE_DEPLOY) deployment controller,
+only the desired count, deployment configuration, task placement
+constraints and strategies, and health check grace period can be updated
+using this API. If the network configuration, platform version, or task
+definition need to be updated, a new AWS CodeDeploy deployment should be
+created. For more information, see
+CreateDeployment
+in the AWS CodeDeploy API Reference.
+For services using an external deployment controller, you can update
+only the desired count, task placement constraints and strategies, and
+health check grace period using this API. If the launch type, load
+balancer, network configuration, platform version, or task definition
+need to be updated, you should create a new task set. For more
+information, see CreateTaskSet.
+You can add to or subtract from the number of instantiations of a task
+definition in a service by specifying the cluster that the service is
+running in and a new desiredCount parameter.
+If you have updated the Docker image of your application, you can create
+a new task definition with that image and deploy it to your service. The
+service scheduler uses the minimum healthy percent and maximum percent
+parameters (in the service's deployment configuration) to determine the
+deployment strategy.
+If your updated Docker image uses the same tag as what is in the
+existing task definition for your service (for example,
+my_image:latest), you do not need to create a new revision of your
+task definition. You can update the service using the
+forceNewDeployment option. The new tasks launched by the deployment
+pull the current image/tag combination from your repository when they
+start.
+You can also update the deployment configuration of a service. When a
+deployment is triggered by updating the task definition of a service,
+the service scheduler uses the deployment configuration parameters,
+minimumHealthyPercent and maximumPercent, to determine the
+deployment strategy.
+If minimumHealthyPercent is below 100%, the scheduler can ignore
+desiredCount temporarily during a deployment. For example, if
+desiredCount is four tasks, a minimum of 50% allows the scheduler
+to stop two existing tasks before starting two new tasks. Tasks for
+services that do not use a load balancer are considered healthy if
+they are in the RUNNING state. Tasks for services that use a load
+balancer are considered healthy if they are in the RUNNING state
+and the container instance they are hosted on is reported as healthy
+by the load balancer.
+The maximumPercent parameter represents an upper limit on the
+number of running tasks during a deployment, which enables you to
+define the deployment batch size. For example, if desiredCount is
+four tasks, a maximum of 200% starts four new tasks before stopping
+the four older tasks (provided that the cluster resources required
+to do this are available).
+
+
+When UpdateService stops a task during a deployment, the equivalent of
+docker stop is issued to the containers running in the task. This
+results in a SIGTERM and a 30-second timeout, after which SIGKILL is
+sent and the containers are forcibly stopped. If the container handles
+the SIGTERM gracefully and exits within 30 seconds from receiving it,
+no SIGKILL is sent.
+When the service scheduler launches new tasks, it determines task
+placement in your cluster with the following logic:
+Determine which of the container instances in your cluster can
+support your service's task definition (for example, they have the
+required CPU, memory, ports, and container instance attributes).
+By default, the service scheduler attempts to balance tasks across
+Availability Zones in this manner (although you can choose a
+different placement strategy):
+Sort the valid container instances by the fewest number of
+running tasks for this service in the same Availability Zone as
+the instance. For example, if zone A has one running service
+task and zones B and C each have zero, valid container instances
+in either zone B or C are considered optimal for placement.
+Place the new service task on a valid container instance in an
+optimal Availability Zone (based on the previous steps),
+favoring container instances with the fewest number of running
+tasks for this service.
+
+
+
+When the service scheduler stops running tasks, it attempts to maintain
+balance across the Availability Zones in your cluster using the
+following logic:
+Sort the container instances by the largest number of running tasks
+for this service in the same Availability Zone as the instance. For
+example, if zone A has one running service task and zones B and C
+each have two, container instances in either zone B or C are
+considered optimal for termination.
+Stop the task on a container instance in an optimal Availability
+Zone (based on the previous steps), favoring container instances
+with the largest number of running tasks for this service.
+
+" />
 
 
 
@@ -82,7 +178,7 @@ Terms apply to your participation in this preview." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -90,7 +186,7 @@ Terms apply to your participation in this preview." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -102,7 +198,7 @@ Terms apply to your participation in this preview." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -131,14 +227,110 @@ https://aws</h1>
     <p>Updating the task placement strategies and constraints on an Amazon ECS
 service remains in preview and is a Beta Service as defined by and
 subject to the Beta Service Participation Service Terms located at
-<a href='https://aws.amazon.com/service-terms'>https://aws.amazon.com/service-terms</a> (\"Beta Terms\"). These Beta
-Terms apply to your participation in this preview.</p>
+<a href='https://aws.amazon.com/service-terms/'>https://aws.amazon.com/service-terms</a>
+("Beta Terms"). These Beta Terms apply to your participation in this
+preview.</p>
+<p>Modifies the parameters of a service.</p>
+<p>For services using the rolling update (<code>ECS</code>) deployment controller, the
+desired count, deployment configuration, network configuration, task
+placement constraints and strategies, or task definition used can be
+updated.</p>
+<p>For services using the blue/green (<code>CODE_DEPLOY</code>) deployment controller,
+only the desired count, deployment configuration, task placement
+constraints and strategies, and health check grace period can be updated
+using this API. If the network configuration, platform version, or task
+definition need to be updated, a new AWS CodeDeploy deployment should be
+created. For more information, see
+<a href='https://docs.aws.amazon.com/codedeploy/latest/APIReference/API_CreateDeployment.html'>CreateDeployment</a>
+in the <em>AWS CodeDeploy API Reference</em>.</p>
+<p>For services using an external deployment controller, you can update
+only the desired count, task placement constraints and strategies, and
+health check grace period using this API. If the launch type, load
+balancer, network configuration, platform version, or task definition
+need to be updated, you should create a new task set. For more
+information, see CreateTaskSet.</p>
+<p>You can add to or subtract from the number of instantiations of a task
+definition in a service by specifying the cluster that the service is
+running in and a new <code>desiredCount</code> parameter.</p>
+<p>If you have updated the Docker image of your application, you can create
+a new task definition with that image and deploy it to your service. The
+service scheduler uses the minimum healthy percent and maximum percent
+parameters (in the service's deployment configuration) to determine the
+deployment strategy.</p>
+<p>If your updated Docker image uses the same tag as what is in the
+existing task definition for your service (for example,
+<code>my_image:latest</code>), you do not need to create a new revision of your
+task definition. You can update the service using the
+<code>forceNewDeployment</code> option. The new tasks launched by the deployment
+pull the current image/tag combination from your repository when they
+start.</p>
+<p>You can also update the deployment configuration of a service. When a
+deployment is triggered by updating the task definition of a service,
+the service scheduler uses the deployment configuration parameters,
+<code>minimumHealthyPercent</code> and <code>maximumPercent</code>, to determine the
+deployment strategy.</p><ul>
+<li><p>If <code>minimumHealthyPercent</code> is below 100%, the scheduler can ignore
+<code>desiredCount</code> temporarily during a deployment. For example, if
+<code>desiredCount</code> is four tasks, a minimum of 50% allows the scheduler
+to stop two existing tasks before starting two new tasks. Tasks for
+services that do not use a load balancer are considered healthy if
+they are in the <code>RUNNING</code> state. Tasks for services that use a load
+balancer are considered healthy if they are in the <code>RUNNING</code> state
+and the container instance they are hosted on is reported as healthy
+by the load balancer.</p></li>
+<li><p>The <code>maximumPercent</code> parameter represents an upper limit on the
+number of running tasks during a deployment, which enables you to
+define the deployment batch size. For example, if <code>desiredCount</code> is
+four tasks, a maximum of 200% starts four new tasks before stopping
+the four older tasks (provided that the cluster resources required
+to do this are available).</p></li>
+</ul>
+
+<p>When UpdateService stops a task during a deployment, the equivalent of
+<code>docker stop</code> is issued to the containers running in the task. This
+results in a <code>SIGTERM</code> and a 30-second timeout, after which <code>SIGKILL</code> is
+sent and the containers are forcibly stopped. If the container handles
+the <code>SIGTERM</code> gracefully and exits within 30 seconds from receiving it,
+no <code>SIGKILL</code> is sent.</p>
+<p>When the service scheduler launches new tasks, it determines task
+placement in your cluster with the following logic:</p><ul>
+<li><p>Determine which of the container instances in your cluster can
+support your service's task definition (for example, they have the
+required CPU, memory, ports, and container instance attributes).</p></li>
+<li><p>By default, the service scheduler attempts to balance tasks across
+Availability Zones in this manner (although you can choose a
+different placement strategy):</p><ul>
+<li><p>Sort the valid container instances by the fewest number of
+running tasks for this service in the same Availability Zone as
+the instance. For example, if zone A has one running service
+task and zones B and C each have zero, valid container instances
+in either zone B or C are considered optimal for placement.</p></li>
+<li><p>Place the new service task on a valid container instance in an
+optimal Availability Zone (based on the previous steps),
+favoring container instances with the fewest number of running
+tasks for this service.</p></li>
+</ul></li>
+</ul>
+
+<p>When the service scheduler stops running tasks, it attempts to maintain
+balance across the Availability Zones in your cluster using the
+following logic:</p><ul>
+<li><p>Sort the container instances by the largest number of running tasks
+for this service in the same Availability Zone as the instance. For
+example, if zone A has one running service task and zones B and C
+each have two, container instances in either zone B or C are
+considered optimal for termination.</p></li>
+<li><p>Stop the task on a container instance in an optimal Availability
+Zone (based on the previous steps), favoring container instances
+with the largest number of running tasks for this service.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>ecs_update_service</span>(<span class='no'>cluster</span>, <span class='no'>service</span>, <span class='no'>desiredCount</span>, <span class='no'>taskDefinition</span>,
-  <span class='no'>capacityProviderStrategy</span>, <span class='no'>deploymentConfiguration</span>, <span class='no'>networkConfiguration</span>,
-  <span class='no'>placementConstraints</span>, <span class='no'>placementStrategy</span>, <span class='no'>platformVersion</span>,
-  <span class='no'>forceNewDeployment</span>, <span class='no'>healthCheckGracePeriodSeconds</span>)</pre>
+    <pre class="usage"><span class='fu'>ecs_update_service</span><span class='op'>(</span><span class='va'>cluster</span>, <span class='va'>service</span>, <span class='va'>desiredCount</span>, <span class='va'>taskDefinition</span>,
+  <span class='va'>capacityProviderStrategy</span>, <span class='va'>deploymentConfiguration</span>, <span class='va'>networkConfiguration</span>,
+  <span class='va'>placementConstraints</span>, <span class='va'>placementStrategy</span>, <span class='va'>platformVersion</span>,
+  <span class='va'>forceNewDeployment</span>, <span class='va'>healthCheckGracePeriodSeconds</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,7 +367,7 @@ cluster, the service can be updated to use one or more capacity
 providers as opposed to the default capacity provider strategy. However,
 when a service is using a capacity provider strategy that is not the
 default capacity provider strategy, the service cannot be updated to use
-the cluster\'s default capacity provider strategy.</p>
+the cluster's default capacity provider strategy.</p>
 <p>A capacity provider strategy consists of one or more capacity providers
 along with the <code>base</code> and <code>weight</code> to assign to them. A capacity
 provider must be associated with the cluster to be used in a capacity
@@ -235,7 +427,7 @@ in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></td>
       <td><p>Whether to force a new deployment of the service. Deployments are not
 forced by default. You can use this option to trigger a new deployment
 with no service definition changes. For example, you can update a
-service\'s tasks to use a newer Docker image with the same image/tag
+service's tasks to use a newer Docker image with the same image/tag
 combination (<code>my_image:latest</code>) or to roll Fargate tasks onto a newer
 platform version.</p></td>
     </tr>
@@ -244,7 +436,7 @@ platform version.</p></td>
       <td><p>The period of time, in seconds, that the Amazon ECS service scheduler
 should ignore unhealthy Elastic Load Balancing target health checks
 after a task has first started. This is only valid if your service is
-configured to use a load balancer. If your service\'s tasks take a while
+configured to use a load balancer. If your service's tasks take a while
 to start and respond to Elastic Load Balancing health checks, you can
 specify a health check grace period of up to 2,147,483,647 seconds.
 During that time, the Amazon ECS service scheduler ignores the Elastic
@@ -254,167 +446,77 @@ before they have time to come up.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Modifies the parameters of a service.</p>
-<p>For services using the rolling update (<code>ECS</code>) deployment controller, the
-desired count, deployment configuration, network configuration, task
-placement constraints and strategies, or task definition used can be
-updated.</p>
-<p>For services using the blue/green (<code>CODE_DEPLOY</code>) deployment controller,
-only the desired count, deployment configuration, task placement
-constraints and strategies, and health check grace period can be updated
-using this API. If the network configuration, platform version, or task
-definition need to be updated, a new AWS CodeDeploy deployment should be
-created. For more information, see
-<a href='https://docs.aws.amazon.com/codedeploy/latest/APIReference/API_CreateDeployment.html'>CreateDeployment</a>
-in the <em>AWS CodeDeploy API Reference</em>.</p>
-<p>For services using an external deployment controller, you can update
-only the desired count, task placement constraints and strategies, and
-health check grace period using this API. If the launch type, load
-balancer, network configuration, platform version, or task definition
-need to be updated, you should create a new task set. For more
-information, see CreateTaskSet.</p>
-<p>You can add to or subtract from the number of instantiations of a task
-definition in a service by specifying the cluster that the service is
-running in and a new <code>desiredCount</code> parameter.</p>
-<p>If you have updated the Docker image of your application, you can create
-a new task definition with that image and deploy it to your service. The
-service scheduler uses the minimum healthy percent and maximum percent
-parameters (in the service\'s deployment configuration) to determine the
-deployment strategy.</p>
-<p>If your updated Docker image uses the same tag as what is in the
-existing task definition for your service (for example,
-<code>my_image:latest</code>), you do not need to create a new revision of your
-task definition. You can update the service using the
-<code>forceNewDeployment</code> option. The new tasks launched by the deployment
-pull the current image/tag combination from your repository when they
-start.</p>
-<p>You can also update the deployment configuration of a service. When a
-deployment is triggered by updating the task definition of a service,
-the service scheduler uses the deployment configuration parameters,
-<code>minimumHealthyPercent</code> and <code>maximumPercent</code>, to determine the
-deployment strategy.</p><ul>
-<li><p>If <code>minimumHealthyPercent</code> is below 100%, the scheduler can ignore
-<code>desiredCount</code> temporarily during a deployment. For example, if
-<code>desiredCount</code> is four tasks, a minimum of 50% allows the scheduler
-to stop two existing tasks before starting two new tasks. Tasks for
-services that do not use a load balancer are considered healthy if
-they are in the <code>RUNNING</code> state. Tasks for services that use a load
-balancer are considered healthy if they are in the <code>RUNNING</code> state
-and the container instance they are hosted on is reported as healthy
-by the load balancer.</p></li>
-<li><p>The <code>maximumPercent</code> parameter represents an upper limit on the
-number of running tasks during a deployment, which enables you to
-define the deployment batch size. For example, if <code>desiredCount</code> is
-four tasks, a maximum of 200% starts four new tasks before stopping
-the four older tasks (provided that the cluster resources required
-to do this are available).</p></li>
-</ul>
-
-<p>When UpdateService stops a task during a deployment, the equivalent of
-<code>docker stop</code> is issued to the containers running in the task. This
-results in a <code>SIGTERM</code> and a 30-second timeout, after which <code>SIGKILL</code> is
-sent and the containers are forcibly stopped. If the container handles
-the <code>SIGTERM</code> gracefully and exits within 30 seconds from receiving it,
-no <code>SIGKILL</code> is sent.</p>
-<p>When the service scheduler launches new tasks, it determines task
-placement in your cluster with the following logic:</p><ul>
-<li><p>Determine which of the container instances in your cluster can
-support your service\'s task definition (for example, they have the
-required CPU, memory, ports, and container instance attributes).</p></li>
-<li><p>By default, the service scheduler attempts to balance tasks across
-Availability Zones in this manner (although you can choose a
-different placement strategy):</p><ul>
-<li><p>Sort the valid container instances by the fewest number of
-running tasks for this service in the same Availability Zone as
-the instance. For example, if zone A has one running service
-task and zones B and C each have zero, valid container instances
-in either zone B or C are considered optimal for placement.</p></li>
-<li><p>Place the new service task on a valid container instance in an
-optimal Availability Zone (based on the previous steps),
-favoring container instances with the fewest number of running
-tasks for this service.</p></li>
-</ul></li>
-</ul>
-
-<p>When the service scheduler stops running tasks, it attempts to maintain
-balance across the Availability Zones in your cluster using the
-following logic:</p><ul>
-<li><p>Sort the container instances by the largest number of running tasks
-for this service in the same Availability Zone as the instance. For
-example, if zone A has one running service task and zones B and C
-each have two, container instances in either zone B or C are
-considered optimal for termination.</p></li>
-<li><p>Stop the task on a container instance in an optimal Availability
-Zone (based on the previous steps), favoring container instances
-with the largest number of running tasks for this service.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_service</span>(
-  <span class='kw'>cluster</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>desiredCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>taskDefinition</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>capacityProviderStrategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>capacityProvider</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>weight</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  ),
-  <span class='kw'>deploymentConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>maximumPercent</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>minimumHealthyPercent</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>networkConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>awsvpcConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>subnets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_service</span><span class='op'>(</span>
+  cluster <span class='op'>=</span> <span class='st'>"string"</span>,
+  service <span class='op'>=</span> <span class='st'>"string"</span>,
+  desiredCount <span class='op'>=</span> <span class='fl'>123</span>,
+  taskDefinition <span class='op'>=</span> <span class='st'>"string"</span>,
+  capacityProviderStrategy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      capacityProvider <span class='op'>=</span> <span class='st'>"string"</span>,
+      weight <span class='op'>=</span> <span class='fl'>123</span>,
+      base <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  deploymentConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    deploymentCircuitBreaker <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      enable <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      rollback <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+    <span class='op'>)</span>,
+    maximumPercent <span class='op'>=</span> <span class='fl'>123</span>,
+    minimumHealthyPercent <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  networkConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    awsvpcConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      subnets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>securityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      securityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>assignPublicIp</span> <span class='kw'>=</span> <span class='st'>"ENABLED"</span><span class='kw'>|</span><span class='st'>"DISABLED"</span>
-    )
-  ),
-  <span class='kw'>placementConstraints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"distinctInstance"</span><span class='kw'>|</span><span class='st'>"memberOf"</span>,
-      <span class='kw'>expression</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>placementStrategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"random"</span><span class='kw'>|</span><span class='st'>"spread"</span><span class='kw'>|</span><span class='st'>"binpack"</span>,
-      <span class='kw'>field</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>platformVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>forceNewDeployment</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>healthCheckGracePeriodSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+      <span class='op'>)</span>,
+      assignPublicIp <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  placementConstraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      type <span class='op'>=</span> <span class='st'>"distinctInstance"</span><span class='op'>|</span><span class='st'>"memberOf"</span>,
+      expression <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  placementStrategy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      type <span class='op'>=</span> <span class='st'>"random"</span><span class='op'>|</span><span class='st'>"spread"</span><span class='op'>|</span><span class='st'>"binpack"</span>,
+      field <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  platformVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  forceNewDeployment <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  healthCheckGracePeriodSeconds <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example updates the my-http-service service to use the</span>
 <span class='co'># amazon-ecs-sample task definition.</span>
-<span class='no'>svc</span>$<span class='fu'>update_service</span>(
-  <span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"my-http-service"</span>,
-  <span class='kw'>taskDefinition</span> <span class='kw'>=</span> <span class='st'>"amazon-ecs-sample"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_service</span><span class='op'>(</span>
+  service <span class='op'>=</span> <span class='st'>"my-http-service"</span>,
+  taskDefinition <span class='op'>=</span> <span class='st'>"amazon-ecs-sample"</span>
+<span class='op'>)</span>
 
 <span class='co'># This example updates the desired count of the my-http-service service to</span>
 <span class='co'># 10.</span>
-<span class='no'>svc</span>$<span class='fu'>update_service</span>(
-  <span class='kw'>desiredCount</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-  <span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"my-http-service"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_service</span><span class='op'>(</span>
+  desiredCount <span class='op'>=</span> <span class='fl'>10L</span>,
+  service <span class='op'>=</span> <span class='st'>"my-http-service"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -430,7 +532,7 @@ with the largest number of running tasks for this service.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

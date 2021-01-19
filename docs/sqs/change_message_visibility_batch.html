@@ -44,7 +44,15 @@
 version of  &amp;lt;a&amp;gt;ChangeMessageVisibility&amp;lt;/a&amp;gt;. The result of the action
 on each message is reported individually in the response. You can send
 up to 10 &amp;lt;a&amp;gt;ChangeMessageVisibility&amp;lt;/a&amp;gt; requests with each
-ChangeMessageVisibilityBatch action." />
+ChangeMessageVisibilityBatch action.
+Because the batch request can result in a combination of successful and
+unsuccessful actions, you should check for batch errors even when the
+call returns an HTTP status code of 200.
+Some actions take lists of parameters. These lists are specified using
+the param.n notation. Values of n are integers starting from 1. For
+example, a parameter list with two elements looks like this:
+&amp;amp;amp;AttributeName.1=first
+&amp;amp;amp;AttributeName.2=second" />
 
 
 
@@ -76,7 +84,7 @@ ChangeMessageVisibilityBatch action." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +92,7 @@ ChangeMessageVisibilityBatch action." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +104,7 @@ ChangeMessageVisibilityBatch action." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,16 +132,24 @@ version of <code> &lt;a&gt;ChangeMessageVisibility&lt;/a&gt;.</code> The result 
 on each message is reported individually in the response. You can send
 up to 10 <code>&lt;a&gt;ChangeMessageVisibility&lt;/a&gt;</code> requests with each
 <code>ChangeMessageVisibilityBatch</code> action.</p>
+<p>Because the batch request can result in a combination of successful and
+unsuccessful actions, you should check for batch errors even when the
+call returns an HTTP status code of <code>200</code>.</p>
+<p>Some actions take lists of parameters. These lists are specified using
+the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For
+example, a parameter list with two elements looks like this:</p>
+<p><code>&amp;amp;AttributeName.1=first</code></p>
+<p><code>&amp;amp;AttributeName.2=second</code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>sqs_change_message_visibility_batch</span>(<span class='no'>QueueUrl</span>, <span class='no'>Entries</span>)</pre>
+    <pre class="usage"><span class='fu'>sqs_change_message_visibility_batch</span><span class='op'>(</span><span class='va'>QueueUrl</span>, <span class='va'>Entries</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>QueueUrl</th>
-      <td><p>[required] The URL of the Amazon SQS queue whose messages\' visibility is changed.</p>
+      <td><p>[required] The URL of the Amazon SQS queue whose messages' visibility is changed.</p>
 <p>Queue URLs and names are case-sensitive.</p></td>
     </tr>
     <tr>
@@ -143,29 +159,20 @@ timeout must be changed.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Because the batch request can result in a combination of successful and
-unsuccessful actions, you should check for batch errors even when the
-call returns an HTTP status code of <code>200</code>.</p>
-<p>Some actions take lists of parameters. These lists are specified using
-the <code>param.n</code> notation. Values of <code>n</code> are integers starting from 1. For
-example, a parameter list with two elements looks like this:</p>
-<p><code>&amp;amp;AttributeName.1=first</code></p>
-<p><code>&amp;amp;AttributeName.2=second</code></p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>change_message_visibility_batch</span>(
-  <span class='kw'>QueueUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Entries</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ReceiptHandle</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>VisibilityTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>change_message_visibility_batch</span><span class='op'>(</span>
+  QueueUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  Entries <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Id <span class='op'>=</span> <span class='st'>"string"</span>,
+      ReceiptHandle <span class='op'>=</span> <span class='st'>"string"</span>,
+      VisibilityTimeout <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -183,7 +190,7 @@ example, a parameter list with two elements looks like this:</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

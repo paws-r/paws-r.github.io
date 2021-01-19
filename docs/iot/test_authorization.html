@@ -77,7 +77,7 @@ gateway." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@ gateway." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +97,7 @@ gateway." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,15 +127,18 @@ authorization behavior of devices that connect to the AWS IoT device
 gateway.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iot_test_authorization</span>(<span class='no'>principal</span>, <span class='no'>cognitoIdentityPoolId</span>, <span class='no'>authInfos</span>,
-  <span class='no'>clientId</span>, <span class='no'>policyNamesToAdd</span>, <span class='no'>policyNamesToSkip</span>)</pre>
+    <pre class="usage"><span class='fu'>iot_test_authorization</span><span class='op'>(</span><span class='va'>principal</span>, <span class='va'>cognitoIdentityPoolId</span>, <span class='va'>authInfos</span>,
+  <span class='va'>clientId</span>, <span class='va'>policyNamesToAdd</span>, <span class='va'>policyNamesToSkip</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>principal</th>
-      <td><p>The principal.</p></td>
+      <td><p>The principal. Valid principals are CertificateArn
+(arn:aws:iot:<em>region</em>:<em>accountId</em>:cert/<em>certificateId</em>), thingGroupArn
+(arn:aws:iot:<em>region</em>:<em>accountId</em>:thinggroup/<em>groupName</em>) and CognitoId
+(<em>region</em>:<em>id</em>).</p></td>
     </tr>
     <tr>
       <th>cognitoIdentityPoolId</th>
@@ -165,25 +168,26 @@ treated as if they are not attached to the principal being authorized.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>test_authorization</span>(
-  <span class='kw'>principal</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>cognitoIdentityPoolId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>authInfos</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>actionType</span> <span class='kw'>=</span> <span class='st'>"PUBLISH"</span><span class='kw'>|</span><span class='st'>"SUBSCRIBE"</span><span class='kw'>|</span><span class='st'>"RECEIVE"</span><span class='kw'>|</span><span class='st'>"CONNECT"</span>,
-      <span class='kw'>resources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>test_authorization</span><span class='op'>(</span>
+  principal <span class='op'>=</span> <span class='st'>"string"</span>,
+  cognitoIdentityPoolId <span class='op'>=</span> <span class='st'>"string"</span>,
+  authInfos <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      actionType <span class='op'>=</span> <span class='st'>"PUBLISH"</span><span class='op'>|</span><span class='st'>"SUBSCRIBE"</span><span class='op'>|</span><span class='st'>"RECEIVE"</span><span class='op'>|</span><span class='st'>"CONNECT"</span>,
+      resources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>clientId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>policyNamesToAdd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  clientId <span class='op'>=</span> <span class='st'>"string"</span>,
+  policyNamesToAdd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>policyNamesToSkip</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  policyNamesToSkip <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -201,7 +205,7 @@ treated as if they are not attached to the principal being authorized.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

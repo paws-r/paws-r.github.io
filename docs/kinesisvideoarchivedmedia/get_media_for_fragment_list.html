@@ -43,7 +43,35 @@ the archived data in an Amazon Kinesis video stream — kinesisvideoarchivedmedi
 <meta property="og:title" content="Gets media for a list of fragments (specified by fragment number) from
 the archived data in an Amazon Kinesis video stream — kinesisvideoarchivedmedia_get_media_for_fragment_list" />
 <meta property="og:description" content="Gets media for a list of fragments (specified by fragment number) from
-the archived data in an Amazon Kinesis video stream." />
+the archived data in an Amazon Kinesis video stream.
+You must first call the GetDataEndpoint API to get an endpoint. Then
+send the GetMediaForFragmentList requests to this endpoint using the
+--endpoint-url parameter.
+The following limits apply when using the GetMediaForFragmentList API:
+A client can call GetMediaForFragmentList up to five times per
+second per stream.
+Kinesis Video Streams sends media data at a rate of up to 25
+megabytes per second (or 200 megabits per second) during a
+GetMediaForFragmentList session.
+
+
+If an error is thrown after invoking a Kinesis Video Streams archived
+media API, in addition to the HTTP status code and the response body, it
+includes the following pieces of information:
+x-amz-ErrorType HTTP header – contains a more specific error type
+in addition to what the HTTP status code provides.
+x-amz-RequestId HTTP header – if you want to report an issue to
+AWS, the support team can better diagnose the problem if given the
+Request Id.
+
+
+Both the HTTP status code and the ErrorType header can be utilized to
+make programmatic decisions about whether errors are retry-able and
+under what conditions, as well as provide information on what actions
+the client programmer might need to take in order to successfully try
+again.
+For more information, see the Errors section at the bottom of this
+topic, as well as Common Errors." />
 
 
 
@@ -75,7 +103,7 @@ the archived data in an Amazon Kinesis video stream." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +111,7 @@ the archived data in an Amazon Kinesis video stream." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +123,7 @@ the archived data in an Amazon Kinesis video stream." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +149,38 @@ the archived data in an Amazon Kinesis video stream</h1>
     <div class="ref-description">
     <p>Gets media for a list of fragments (specified by fragment number) from
 the archived data in an Amazon Kinesis video stream.</p>
+<p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then
+send the <code>GetMediaForFragmentList</code> requests to this endpoint using the
+<a href='https://docs.aws.amazon.com/cli/latest/reference/'>--endpoint-url parameter</a>.</p>
+<p>The following limits apply when using the <code>GetMediaForFragmentList</code> API:</p><ul>
+<li><p>A client can call <code>GetMediaForFragmentList</code> up to five times per
+second per stream.</p></li>
+<li><p>Kinesis Video Streams sends media data at a rate of up to 25
+megabytes per second (or 200 megabits per second) during a
+<code>GetMediaForFragmentList</code> session.</p></li>
+</ul>
+
+<p>If an error is thrown after invoking a Kinesis Video Streams archived
+media API, in addition to the HTTP status code and the response body, it
+includes the following pieces of information:</p><ul>
+<li><p><code>x-amz-ErrorType</code> HTTP header – contains a more specific error type
+in addition to what the HTTP status code provides.</p></li>
+<li><p><code>x-amz-RequestId</code> HTTP header – if you want to report an issue to
+AWS, the support team can better diagnose the problem if given the
+Request Id.</p></li>
+</ul>
+
+<p>Both the HTTP status code and the ErrorType header can be utilized to
+make programmatic decisions about whether errors are retry-able and
+under what conditions, as well as provide information on what actions
+the client programmer might need to take in order to successfully try
+again.</p>
+<p>For more information, see the <strong>Errors</strong> section at the bottom of this
+topic, as well as <a href='https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/CommonErrors.html'>Common Errors</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kinesisvideoarchivedmedia_get_media_for_fragment_list</span>(<span class='no'>StreamName</span>,
-  <span class='no'>Fragments</span>)</pre>
+    <pre class="usage"><span class='fu'>kinesisvideoarchivedmedia_get_media_for_fragment_list</span><span class='op'>(</span><span class='va'>StreamName</span>,
+  <span class='va'>Fragments</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,45 +196,16 @@ retrieve these values with ListFragments.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then
-send the <code>GetMediaForFragmentList</code> requests to this endpoint using the
-<a href='https://docs.aws.amazon.com/cli/latest/reference/'>\--endpoint-url parameter</a>.</p>
-<p>The following limits apply when using the <code>GetMediaForFragmentList</code> API:</p><ul>
-<li><p>A client can call <code>GetMediaForFragmentList</code> up to five times per
-second per stream.</p></li>
-<li><p>Kinesis Video Streams sends media data at a rate of up to 25
-megabytes per second (or 200 megabits per second) during a
-<code>GetMediaForFragmentList</code> session.</p></li>
-</ul>
-
-<p>If an error is thrown after invoking a Kinesis Video Streams archived
-media API, in addition to the HTTP status code and the response body, it
-includes the following pieces of information:</p><ul>
-<li><p><code>x-amz-ErrorType</code> HTTP header -- contains a more specific error type
-in addition to what the HTTP status code provides.</p></li>
-<li><p><code>x-amz-RequestId</code> HTTP header -- if you want to report an issue to
-AWS, the support team can better diagnose the problem if given the
-Request Id.</p></li>
-</ul>
-
-<p>Both the HTTP status code and the ErrorType header can be utilized to
-make programmatic decisions about whether errors are retry-able and
-under what conditions, as well as provide information on what actions
-the client programmer might need to take in order to successfully try
-again.</p>
-<p>For more information, see the <strong>Errors</strong> section at the bottom of this
-topic, as well as <a href='https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/CommonErrors.html'>Common Errors</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_media_for_fragment_list</span>(
-  <span class='kw'>StreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Fragments</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_media_for_fragment_list</span><span class='op'>(</span>
+  StreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Fragments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -196,7 +223,7 @@ topic, as well as <a href='https://docs.aws.amazon.com/kinesisvideostreams/lates
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

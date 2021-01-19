@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compares a face in the <em>source</em> input image with each of the 100 largest
-faces detected in the <em>target</em> input image — rekognition_compare_faces • paws</title>
+<title>Compares a face in the source input image with each of the 100 largest
+faces detected in the target input image — rekognition_compare_faces • paws</title>
 
 
 <!-- jquery -->
@@ -40,10 +40,48 @@ faces detected in the <em>target</em> input image — rekognition_compare_faces 
 
 
 
-<meta property="og:title" content="Compares a face in the <em>source</em> input image with each of the 100 largest
-faces detected in the <em>target</em> input image — rekognition_compare_faces" />
+<meta property="og:title" content="Compares a face in the source input image with each of the 100 largest
+faces detected in the target input image — rekognition_compare_faces" />
 <meta property="og:description" content="Compares a face in the source input image with each of the 100 largest
-faces detected in the target input image." />
+faces detected in the target input image.
+If the source image contains multiple faces, the service detects the
+largest face and compares it with each face detected in the target
+image.
+You pass the input and target images either as base64-encoded image
+bytes or as references to images in an Amazon S3 bucket. If you use the
+AWS CLI to call Amazon Rekognition operations, passing image bytes isn't
+supported. The image must be formatted as a PNG or JPEG file.
+In response, the operation returns an array of face matches ordered by
+similarity score in descending order. For each face match, the response
+provides a bounding box of the face, facial landmarks, pose details
+(pitch, role, and yaw), quality (brightness and sharpness), and
+confidence value (indicating the level of confidence that the bounding
+box contains a face). The response also provides a similarity score,
+which indicates how closely the faces match.
+By default, only faces with a similarity score of greater than or equal
+to 80% are returned in the response. You can change this value by
+specifying the SimilarityThreshold parameter.
+CompareFaces also returns an array of faces that don't match the
+source image. For each face, it returns a bounding box, confidence
+value, landmarks, pose details, and quality. The response also returns
+information about the face in the source image, including the bounding
+box of the face and confidence value.
+The QualityFilter input parameter allows you to filter out detected
+faces that don’t meet a required quality bar. The quality bar is based
+on a variety of common use cases. Use QualityFilter to set the quality
+bar by specifying LOW, MEDIUM, or HIGH. If you do not want to
+filter detected faces, specify NONE. The default value is NONE.
+If the image doesn't contain Exif metadata, CompareFaces returns
+orientation information for the source and target images. Use these
+values to display the images with the correct image orientation.
+If no faces are detected in the source or target images, CompareFaces
+returns an InvalidParameterException error.
+This is a stateless API operation. That is, data returned by this
+operation doesn't persist.
+For an example, see Comparing Faces in Images in the Amazon Rekognition
+Developer Guide.
+This operation requires permissions to perform the
+rekognition:CompareFaces action." />
 
 
 
@@ -75,7 +113,7 @@ faces detected in the target input image." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +121,7 @@ faces detected in the target input image." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +133,7 @@ faces detected in the target input image." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,8 +150,8 @@ faces detected in the target input image." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compares a face in the <em>source</em> input image with each of the 100 largest
-faces detected in the <em>target</em> input image</h1>
+    <h1>Compares a face in the source input image with each of the 100 largest
+faces detected in the target input image</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/rekognition_operations.R'><code>R/rekognition_operations.R</code></a></small>
     <div class="hidden name"><code>rekognition_compare_faces.Rd</code></div>
     </div>
@@ -121,10 +159,48 @@ faces detected in the <em>target</em> input image</h1>
     <div class="ref-description">
     <p>Compares a face in the <em>source</em> input image with each of the 100 largest
 faces detected in the <em>target</em> input image.</p>
+<p>If the source image contains multiple faces, the service detects the
+largest face and compares it with each face detected in the target
+image.</p>
+<p>You pass the input and target images either as base64-encoded image
+bytes or as references to images in an Amazon S3 bucket. If you use the
+AWS CLI to call Amazon Rekognition operations, passing image bytes isn't
+supported. The image must be formatted as a PNG or JPEG file.</p>
+<p>In response, the operation returns an array of face matches ordered by
+similarity score in descending order. For each face match, the response
+provides a bounding box of the face, facial landmarks, pose details
+(pitch, role, and yaw), quality (brightness and sharpness), and
+confidence value (indicating the level of confidence that the bounding
+box contains a face). The response also provides a similarity score,
+which indicates how closely the faces match.</p>
+<p>By default, only faces with a similarity score of greater than or equal
+to 80% are returned in the response. You can change this value by
+specifying the <code>SimilarityThreshold</code> parameter.</p>
+<p><code>CompareFaces</code> also returns an array of faces that don't match the
+source image. For each face, it returns a bounding box, confidence
+value, landmarks, pose details, and quality. The response also returns
+information about the face in the source image, including the bounding
+box of the face and confidence value.</p>
+<p>The <code>QualityFilter</code> input parameter allows you to filter out detected
+faces that don’t meet a required quality bar. The quality bar is based
+on a variety of common use cases. Use <code>QualityFilter</code> to set the quality
+bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to
+filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>.</p>
+<p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns
+orientation information for the source and target images. Use these
+values to display the images with the correct image orientation.</p>
+<p>If no faces are detected in the source or target images, <code>CompareFaces</code>
+returns an <code>InvalidParameterException</code> error.</p>
+<p>This is a stateless API operation. That is, data returned by this
+operation doesn't persist.</p>
+<p>For an example, see Comparing Faces in Images in the Amazon Rekognition
+Developer Guide.</p>
+<p>This operation requires permissions to perform the
+<code>rekognition:CompareFaces</code> action.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_compare_faces</span>(<span class='no'>SourceImage</span>, <span class='no'>TargetImage</span>, <span class='no'>SimilarityThreshold</span>,
-  <span class='no'>QualityFilter</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_compare_faces</span><span class='op'>(</span><span class='va'>SourceImage</span>, <span class='va'>TargetImage</span>, <span class='va'>SimilarityThreshold</span>,
+  <span class='va'>QualityFilter</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,107 +231,67 @@ meet to be included in the <code>FaceMatches</code> array.</p></td>
     <tr>
       <th>QualityFilter</th>
       <td><p>A filter that specifies a quality bar for how much filtering is done to
-identify faces. Filtered faces aren\'t compared. If you specify <code>AUTO</code>,
+identify faces. Filtered faces aren't compared. If you specify <code>AUTO</code>,
 Amazon Rekognition chooses the quality bar. If you specify <code>LOW</code>,
-<code>MEDIUM</code>, or <code>HIGH</code>, filtering removes all faces that don't meet the
+<code>MEDIUM</code>, or <code>HIGH</code>, filtering removes all faces that don’t meet the
 chosen quality bar. The quality bar is based on a variety of common use
 cases. Low-quality detections can occur for a number of reasons. Some
-examples are an object that\'s misidentified as a face, a face that\'s
-too blurry, or a face with a pose that\'s too extreme to use. If you
-specify <code>NONE</code>, no filtering is performed. The default value is <code>NONE</code>.</p>
+examples are an object that's misidentified as a face, a face that's too
+blurry, or a face with a pose that's too extreme to use. If you specify
+<code>NONE</code>, no filtering is performed. The default value is <code>NONE</code>.</p>
 <p>To use quality filtering, the collection you are using must be
 associated with version 3 of the face model or higher.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If the source image contains multiple faces, the service detects the
-largest face and compares it with each face detected in the target
-image.</p>
-<p>You pass the input and target images either as base64-encoded image
-bytes or as references to images in an Amazon S3 bucket. If you use the
-AWS CLI to call Amazon Rekognition operations, passing image bytes
-isn\'t supported. The image must be formatted as a PNG or JPEG file.</p>
-<p>In response, the operation returns an array of face matches ordered by
-similarity score in descending order. For each face match, the response
-provides a bounding box of the face, facial landmarks, pose details
-(pitch, role, and yaw), quality (brightness and sharpness), and
-confidence value (indicating the level of confidence that the bounding
-box contains a face). The response also provides a similarity score,
-which indicates how closely the faces match.</p>
-<p>By default, only faces with a similarity score of greater than or equal
-to 80% are returned in the response. You can change this value by
-specifying the <code>SimilarityThreshold</code> parameter.</p>
-<p><code>CompareFaces</code> also returns an array of faces that don\'t match the
-source image. For each face, it returns a bounding box, confidence
-value, landmarks, pose details, and quality. The response also returns
-information about the face in the source image, including the bounding
-box of the face and confidence value.</p>
-<p>The <code>QualityFilter</code> input parameter allows you to filter out detected
-faces that don't meet a required quality bar. The quality bar is based
-on a variety of common use cases. Use <code>QualityFilter</code> to set the quality
-bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to
-filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>.</p>
-<p>To use quality filtering, you need a collection associated with version
-3 of the face model or higher. To get the version of the face model
-associated with a collection, call DescribeCollection.</p>
-<p>If the image doesn\'t contain Exif metadata, <code>CompareFaces</code> returns
-orientation information for the source and target images. Use these
-values to display the images with the correct image orientation.</p>
-<p>If no faces are detected in the source or target images, <code>CompareFaces</code>
-returns an <code>InvalidParameterException</code> error.</p>
-<p>This is a stateless API operation. That is, data returned by this
-operation doesn\'t persist.</p>
-<p>For an example, see Comparing Faces in Images in the Amazon Rekognition
-Developer Guide.</p>
-<p>This operation requires permissions to perform the
-<code>rekognition:CompareFaces</code> action.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>compare_faces</span>(
-  <span class='kw'>SourceImage</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Bytes</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-    <span class='kw'>S3Object</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>TargetImage</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Bytes</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-    <span class='kw'>S3Object</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>SimilarityThreshold</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-  <span class='kw'>QualityFilter</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"AUTO"</span><span class='kw'>|</span><span class='st'>"LOW"</span><span class='kw'>|</span><span class='st'>"MEDIUM"</span><span class='kw'>|</span><span class='st'>"HIGH"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>compare_faces</span><span class='op'>(</span>
+  SourceImage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Bytes <span class='op'>=</span> <span class='va'>raw</span>,
+    S3Object <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Version <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TargetImage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Bytes <span class='op'>=</span> <span class='va'>raw</span>,
+    S3Object <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Version <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  SimilarityThreshold <span class='op'>=</span> <span class='fl'>123.0</span>,
+  QualityFilter <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"AUTO"</span><span class='op'>|</span><span class='st'>"LOW"</span><span class='op'>|</span><span class='st'>"MEDIUM"</span><span class='op'>|</span><span class='st'>"HIGH"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This operation compares the largest face detected in the source image</span>
 <span class='co'># with each face detected in the target image.</span>
-<span class='no'>svc</span>$<span class='fu'>compare_faces</span>(
-  <span class='kw'>SimilarityThreshold</span> <span class='kw'>=</span> <span class='fl'>90L</span>,
-  <span class='kw'>SourceImage</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Object</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"mybucket"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"mysourceimage"</span>
-    )
-  ),
-  <span class='kw'>TargetImage</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Object</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"mybucket"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"mytargetimage"</span>
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>compare_faces</span><span class='op'>(</span>
+  SimilarityThreshold <span class='op'>=</span> <span class='fl'>90L</span>,
+  SourceImage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Object <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Bucket <span class='op'>=</span> <span class='st'>"mybucket"</span>,
+      Name <span class='op'>=</span> <span class='st'>"mysourceimage"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TargetImage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Object <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Bucket <span class='op'>=</span> <span class='st'>"mybucket"</span>,
+      Name <span class='op'>=</span> <span class='st'>"mytargetimage"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -271,7 +307,7 @@ Developer Guide.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

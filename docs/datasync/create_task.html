@@ -42,8 +42,20 @@
 <meta property="og:title" content="Creates a task — datasync_create_task" />
 <meta property="og:description" content="Creates a task. A task is a set of two locations (source and
 destination) and a set of Options that you use to control the behavior
-of a task. If you don\'t specify Options when you create a task, AWS
-DataSync populates them with service defaults." />
+of a task. If you don't specify Options when you create a task, AWS
+DataSync populates them with service defaults.
+When you create a task, it first enters the CREATING state. During
+CREATING AWS DataSync attempts to mount the on-premises Network File
+System (NFS) location. The task transitions to the AVAILABLE state
+without waiting for the AWS location to become mounted. If required, AWS
+DataSync mounts the AWS location before each task execution.
+If an agent that is associated with a source (NFS) location goes
+offline, the task transitions to the UNAVAILABLE status. If the status
+of the task remains in the CREATING status for more than a few minutes,
+it means that your agent might be having trouble mounting the source NFS
+file system. Check the task's ErrorCode and ErrorDetail. Mount issues
+are often caused by either a misconfigured firewall or a mistyped NFS
+server hostname." />
 
 
 
@@ -75,7 +87,7 @@ DataSync populates them with service defaults." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +95,7 @@ DataSync populates them with service defaults." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +107,7 @@ DataSync populates them with service defaults." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,12 +132,24 @@ DataSync populates them with service defaults." />
     <div class="ref-description">
     <p>Creates a task. A task is a set of two locations (source and
 destination) and a set of Options that you use to control the behavior
-of a task. If you don\'t specify Options when you create a task, AWS
+of a task. If you don't specify Options when you create a task, AWS
 DataSync populates them with service defaults.</p>
+<p>When you create a task, it first enters the CREATING state. During
+CREATING AWS DataSync attempts to mount the on-premises Network File
+System (NFS) location. The task transitions to the AVAILABLE state
+without waiting for the AWS location to become mounted. If required, AWS
+DataSync mounts the AWS location before each task execution.</p>
+<p>If an agent that is associated with a source (NFS) location goes
+offline, the task transitions to the UNAVAILABLE status. If the status
+of the task remains in the CREATING status for more than a few minutes,
+it means that your agent might be having trouble mounting the source NFS
+file system. Check the task's ErrorCode and ErrorDetail. Mount issues
+are often caused by either a misconfigured firewall or a mistyped NFS
+server hostname.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datasync_create_task</span>(<span class='no'>SourceLocationArn</span>, <span class='no'>DestinationLocationArn</span>,
-  <span class='no'>CloudWatchLogGroupArn</span>, <span class='no'>Name</span>, <span class='no'>Options</span>, <span class='no'>Excludes</span>, <span class='no'>Schedule</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>datasync_create_task</span><span class='op'>(</span><span class='va'>SourceLocationArn</span>, <span class='va'>DestinationLocationArn</span>,
+  <span class='va'>CloudWatchLogGroupArn</span>, <span class='va'>Name</span>, <span class='va'>Options</span>, <span class='va'>Excludes</span>, <span class='va'>Schedule</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,16 +160,12 @@ DataSync populates them with service defaults.</p>
     </tr>
     <tr>
       <th>DestinationLocationArn</th>
-      <td><p>[required] The Amazon Resource Name (ARN) of an AWS storage resource\'s location.</p></td>
+      <td><p>[required] The Amazon Resource Name (ARN) of an AWS storage resource's location.</p></td>
     </tr>
     <tr>
       <th>CloudWatchLogGroupArn</th>
       <td><p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that
-is used to monitor and log events in the task.</p>
-<p>For more information on these groups, see Working with Log Groups and
-Log Streams in the <em>Amazon CloudWatch User Guide.</em></p>
-<p>For more information about how to use CloudWatch Logs with DataSync, see
-Monitoring Your Task in the <em>AWS DataSync User Guide.</em></p></td>
+is used to monitor and log events in the task.</p></td>
     </tr>
     <tr>
       <th>Name</th>
@@ -160,15 +180,15 @@ You can configure these options to preserve metadata such as user ID
 (UID) and group ID (GID), file permissions, data integrity verification,
 and so on.</p>
 <p>For each individual task execution, you can override these options by
-specifying the <code>OverrideOptions</code> before starting a the task execution.
-For more information, see the operation.</p></td>
+specifying the <code>OverrideOptions</code> before starting the task execution. For
+more information, see the operation.</p></td>
     </tr>
     <tr>
       <th>Excludes</th>
       <td><p>A list of filter rules that determines which files to exclude from a
 task. The list should contain a single filter string that consists of
-the patterns to exclude. The patterns are delimited by \"\|\" (that is,
-a pipe), for example, <code>"/folder1|/folder2"</code></p></td>
+the patterns to exclude. The patterns are delimited by "|" (that is, a
+pipe), for example, <code>"/folder1|/folder2"</code>.</p></td>
     </tr>
     <tr>
       <th>Schedule</th>
@@ -183,58 +203,46 @@ resource. The value can be an empty string.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you create a task, it first enters the CREATING state. During
-CREATING AWS DataSync attempts to mount the on-premises Network File
-System (NFS) location. The task transitions to the AVAILABLE state
-without waiting for the AWS location to become mounted. If required, AWS
-DataSync mounts the AWS location before each task execution.</p>
-<p>If an agent that is associated with a source (NFS) location goes
-offline, the task transitions to the UNAVAILABLE status. If the status
-of the task remains in the CREATING status for more than a few minutes,
-it means that your agent might be having trouble mounting the source NFS
-file system. Check the task\'s ErrorCode and ErrorDetail. Mount issues
-are often caused by either a misconfigured firewall or a mistyped NFS
-server host name.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_task</span>(
-  <span class='kw'>SourceLocationArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DestinationLocationArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CloudWatchLogGroupArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>VerifyMode</span> <span class='kw'>=</span> <span class='st'>"POINT_IN_TIME_CONSISTENT"</span><span class='kw'>|</span><span class='st'>"ONLY_FILES_TRANSFERRED"</span><span class='kw'>|</span><span class='st'>"NONE"</span>,
-    <span class='kw'>OverwriteMode</span> <span class='kw'>=</span> <span class='st'>"ALWAYS"</span><span class='kw'>|</span><span class='st'>"NEVER"</span>,
-    <span class='kw'>Atime</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"BEST_EFFORT"</span>,
-    <span class='kw'>Mtime</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"PRESERVE"</span>,
-    <span class='kw'>Uid</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"INT_VALUE"</span><span class='kw'>|</span><span class='st'>"NAME"</span><span class='kw'>|</span><span class='st'>"BOTH"</span>,
-    <span class='kw'>Gid</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"INT_VALUE"</span><span class='kw'>|</span><span class='st'>"NAME"</span><span class='kw'>|</span><span class='st'>"BOTH"</span>,
-    <span class='kw'>PreserveDeletedFiles</span> <span class='kw'>=</span> <span class='st'>"PRESERVE"</span><span class='kw'>|</span><span class='st'>"REMOVE"</span>,
-    <span class='kw'>PreserveDevices</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"PRESERVE"</span>,
-    <span class='kw'>PosixPermissions</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"PRESERVE"</span>,
-    <span class='kw'>BytesPerSecond</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>TaskQueueing</span> <span class='kw'>=</span> <span class='st'>"ENABLED"</span><span class='kw'>|</span><span class='st'>"DISABLED"</span>,
-    <span class='kw'>LogLevel</span> <span class='kw'>=</span> <span class='st'>"OFF"</span><span class='kw'>|</span><span class='st'>"BASIC"</span><span class='kw'>|</span><span class='st'>"TRANSFER"</span>
-  ),
-  <span class='kw'>Excludes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>FilterType</span> <span class='kw'>=</span> <span class='st'>"SIMPLE_PATTERN"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Schedule</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ScheduleExpression</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_task</span><span class='op'>(</span>
+  SourceLocationArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  DestinationLocationArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  CloudWatchLogGroupArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    VerifyMode <span class='op'>=</span> <span class='st'>"POINT_IN_TIME_CONSISTENT"</span><span class='op'>|</span><span class='st'>"ONLY_FILES_TRANSFERRED"</span><span class='op'>|</span><span class='st'>"NONE"</span>,
+    OverwriteMode <span class='op'>=</span> <span class='st'>"ALWAYS"</span><span class='op'>|</span><span class='st'>"NEVER"</span>,
+    Atime <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"BEST_EFFORT"</span>,
+    Mtime <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"PRESERVE"</span>,
+    Uid <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"INT_VALUE"</span><span class='op'>|</span><span class='st'>"NAME"</span><span class='op'>|</span><span class='st'>"BOTH"</span>,
+    Gid <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"INT_VALUE"</span><span class='op'>|</span><span class='st'>"NAME"</span><span class='op'>|</span><span class='st'>"BOTH"</span>,
+    PreserveDeletedFiles <span class='op'>=</span> <span class='st'>"PRESERVE"</span><span class='op'>|</span><span class='st'>"REMOVE"</span>,
+    PreserveDevices <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"PRESERVE"</span>,
+    PosixPermissions <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"PRESERVE"</span>,
+    BytesPerSecond <span class='op'>=</span> <span class='fl'>123</span>,
+    TaskQueueing <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>,
+    LogLevel <span class='op'>=</span> <span class='st'>"OFF"</span><span class='op'>|</span><span class='st'>"BASIC"</span><span class='op'>|</span><span class='st'>"TRANSFER"</span>,
+    TransferMode <span class='op'>=</span> <span class='st'>"CHANGED"</span><span class='op'>|</span><span class='st'>"ALL"</span>
+  <span class='op'>)</span>,
+  Excludes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      FilterType <span class='op'>=</span> <span class='st'>"SIMPLE_PATTERN"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Schedule <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ScheduleExpression <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -252,7 +260,7 @@ server host name.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

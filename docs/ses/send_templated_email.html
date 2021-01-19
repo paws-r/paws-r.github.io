@@ -43,7 +43,42 @@ it for sending — ses_send_templated_email • paws</title>
 <meta property="og:title" content="Composes an email message using an email template and immediately queues
 it for sending — ses_send_templated_email" />
 <meta property="og:description" content="Composes an email message using an email template and immediately queues
-it for sending." />
+it for sending.
+In order to send email using the SendTemplatedEmail operation, your
+call to the API must meet the following requirements:
+The call must refer to an existing email template. You can create
+email templates using the CreateTemplate operation.
+The message must be sent from a verified email address or domain.
+If your account is still in the Amazon SES sandbox, you may only
+send to verified addresses or domains, or to email addresses
+associated with the Amazon SES Mailbox Simulator. For more
+information, see Verifying Email Addresses and Domains
+in the Amazon SES Developer Guide.
+The maximum message size is 10 MB.
+Calls to the SendTemplatedEmail operation may only include one
+Destination parameter. A destination is a set of recipients who
+will receive the same version of the email. The Destination
+parameter can include up to 50 recipients, across the To:, CC: and
+BCC: fields.
+The Destination parameter must include at least one recipient
+email address. The recipient address can be a To: address, a CC:
+address, or a BCC: address. If a recipient email address is invalid
+(that is, it is not in the format
+UserName@[SubDomain.]Domain.TopLevelDomain), the entire message
+will be rejected, even if the message contains other recipients that
+are valid.
+
+
+If your call to the SendTemplatedEmail operation includes all of the
+required parameters, Amazon SES accepts it and returns a Message ID.
+However, if Amazon SES can't render the email because the template
+contains errors, it doesn't send the email. Additionally, because it
+already accepted the message, Amazon SES doesn't return a message
+stating that it was unable to send the email.
+For these reasons, we highly recommend that you set up Amazon SES to
+send you notifications when Rendering Failure events occur. For more
+information, see Sending Personalized Email Using the Amazon SES API
+in the Amazon Simple Email Service Developer Guide." />
 
 
 
@@ -75,7 +110,7 @@ it for sending." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +118,7 @@ it for sending." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +130,7 @@ it for sending." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,11 +156,46 @@ it for sending</h1>
     <div class="ref-description">
     <p>Composes an email message using an email template and immediately queues
 it for sending.</p>
+<p>In order to send email using the <code>SendTemplatedEmail</code> operation, your
+call to the API must meet the following requirements:</p><ul>
+<li><p>The call must refer to an existing email template. You can create
+email templates using the CreateTemplate operation.</p></li>
+<li><p>The message must be sent from a verified email address or domain.</p></li>
+<li><p>If your account is still in the Amazon SES sandbox, you may only
+send to verified addresses or domains, or to email addresses
+associated with the Amazon SES Mailbox Simulator. For more
+information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html'>Verifying Email Addresses and Domains</a>
+in the <em>Amazon SES Developer Guide.</em></p></li>
+<li><p>The maximum message size is 10 MB.</p></li>
+<li><p>Calls to the <code>SendTemplatedEmail</code> operation may only include one
+<code>Destination</code> parameter. A destination is a set of recipients who
+will receive the same version of the email. The <code>Destination</code>
+parameter can include up to 50 recipients, across the To:, CC: and
+BCC: fields.</p></li>
+<li><p>The <code>Destination</code> parameter must include at least one recipient
+email address. The recipient address can be a To: address, a CC:
+address, or a BCC: address. If a recipient email address is invalid
+(that is, it is not in the format
+<em>UserName@[SubDomain.]Domain.TopLevelDomain</em>), the entire message
+will be rejected, even if the message contains other recipients that
+are valid.</p></li>
+</ul>
+
+<p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the
+required parameters, Amazon SES accepts it and returns a Message ID.
+However, if Amazon SES can't render the email because the template
+contains errors, it doesn't send the email. Additionally, because it
+already accepted the message, Amazon SES doesn't return a message
+stating that it was unable to send the email.</p>
+<p>For these reasons, we highly recommend that you set up Amazon SES to
+send you notifications when Rendering Failure events occur. For more
+information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html'>Sending Personalized Email Using the Amazon SES API</a>
+in the <em>Amazon Simple Email Service Developer Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ses_send_templated_email</span>(<span class='no'>Source</span>, <span class='no'>Destination</span>, <span class='no'>ReplyToAddresses</span>,
-  <span class='no'>ReturnPath</span>, <span class='no'>SourceArn</span>, <span class='no'>ReturnPathArn</span>, <span class='no'>Tags</span>, <span class='no'>ConfigurationSetName</span>,
-  <span class='no'>Template</span>, <span class='no'>TemplateArn</span>, <span class='no'>TemplateData</span>)</pre>
+    <pre class="usage"><span class='fu'>ses_send_templated_email</span><span class='op'>(</span><span class='va'>Source</span>, <span class='va'>Destination</span>, <span class='va'>ReplyToAddresses</span>,
+  <span class='va'>ReturnPath</span>, <span class='va'>SourceArn</span>, <span class='va'>ReturnPathArn</span>, <span class='va'>Tags</span>, <span class='va'>ConfigurationSetName</span>,
+  <span class='va'>Template</span>, <span class='va'>TemplateArn</span>, <span class='va'>TemplateData</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,7 +238,7 @@ to the message, each reply-to address will receive the reply.</p></td>
       <td><p>The email address that bounces and complaints will be forwarded to when
 feedback forwarding is enabled. If the message cannot be delivered to
 the recipient, then an error message will be returned from the
-recipient\'s ISP; this message will then be forwarded to the email
+recipient's ISP; this message will then be forwarded to the email
 address specified by the <code>ReturnPath</code> parameter. The <code>ReturnPath</code>
 parameter is never overwritten. This email address must be either
 individually verified with Amazon SES, or from a domain that has been
@@ -230,76 +300,40 @@ correspond to replacement tags in the email template.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your
-call to the API must meet the following requirements:</p><ul>
-<li><p>The call must refer to an existing email template. You can create
-email templates using the CreateTemplate operation.</p></li>
-<li><p>The message must be sent from a verified email address or domain.</p></li>
-<li><p>If your account is still in the Amazon SES sandbox, you may only
-send to verified addresses or domains, or to email addresses
-associated with the Amazon SES Mailbox Simulator. For more
-information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html'>Verifying Email Addresses and Domains</a>
-in the <em>Amazon SES Developer Guide.</em></p></li>
-<li><p>The maximum message size is 10 MB.</p></li>
-<li><p>Calls to the <code>SendTemplatedEmail</code> operation may only include one
-<code>Destination</code> parameter. A destination is a set of recipients who
-will receive the same version of the email. The <code>Destination</code>
-parameter can include up to 50 recipients, across the To:, CC: and
-BCC: fields.</p></li>
-<li><p>The <code>Destination</code> parameter must include at least one recipient
-email address. The recipient address can be a To: address, a CC:
-address, or a BCC: address. If a recipient email address is invalid
-(that is, it is not in the format
-<em>UserName@[SubDomain.]Domain.TopLevelDomain</em>), the entire message
-will be rejected, even if the message contains other recipients that
-are valid.</p></li>
-</ul>
-
-<p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the
-required parameters, Amazon SES accepts it and returns a Message ID.
-However, if Amazon SES can\'t render the email because the template
-contains errors, it doesn\'t send the email. Additionally, because it
-already accepted the message, Amazon SES doesn\'t return a message
-stating that it was unable to send the email.</p>
-<p>For these reasons, we highly recommend that you set up Amazon SES to
-send you notifications when Rendering Failure events occur. For more
-information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html'>Sending Personalized Email Using the Amazon SES API</a>
-in the <em>Amazon Simple Email Service Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>send_templated_email</span>(
-  <span class='kw'>Source</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ToAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_templated_email</span><span class='op'>(</span>
+  Source <span class='op'>=</span> <span class='st'>"string"</span>,
+  Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ToAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>CcAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    CcAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>BccAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    BccAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ReplyToAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ReplyToAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ReturnPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReturnPathArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ConfigurationSetName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Template</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TemplateArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TemplateData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  ReturnPath <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReturnPathArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ConfigurationSetName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Template <span class='op'>=</span> <span class='st'>"string"</span>,
+  TemplateArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  TemplateData <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -317,7 +351,7 @@ in the <em>Amazon Simple Email Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

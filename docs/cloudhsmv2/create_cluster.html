@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,19 +118,15 @@
     <p>Creates a new AWS CloudHSM cluster.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloudhsmv2_create_cluster</span>(<span class='no'>SubnetIds</span>, <span class='no'>HsmType</span>, <span class='no'>SourceBackupId</span>, <span class='no'>TagList</span>)</pre>
+    <pre class="usage"><span class='fu'>cloudhsmv2_create_cluster</span><span class='op'>(</span><span class='va'>BackupRetentionPolicy</span>, <span class='va'>HsmType</span>,
+  <span class='va'>SourceBackupId</span>, <span class='va'>SubnetIds</span>, <span class='va'>TagList</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>SubnetIds</th>
-      <td><p>[required] The identifiers (IDs) of the subnets where you are creating the cluster.
-You must specify at least one subnet. If you specify multiple subnets,
-they must meet the following criteria:</p><ul>
-<li><p>All subnets must be in the same virtual private cloud (VPC).</p></li>
-<li><p>You can specify only one subnet per Availability Zone.</p></li>
-</ul></td>
+      <th>BackupRetentionPolicy</th>
+      <td><p>A policy that defines how the service retains backups.</p></td>
     </tr>
     <tr>
       <th>HsmType</th>
@@ -144,6 +140,15 @@ restore the cluster from a backup instead of creating a new cluster. To
 find the backup ID, use DescribeBackups.</p></td>
     </tr>
     <tr>
+      <th>SubnetIds</th>
+      <td><p>[required] The identifiers (IDs) of the subnets where you are creating the cluster.
+You must specify at least one subnet. If you specify multiple subnets,
+they must meet the following criteria:</p><ul>
+<li><p>All subnets must be in the same virtual private cloud (VPC).</p></li>
+<li><p>You can specify only one subnet per Availability Zone.</p></li>
+</ul></td>
+    </tr>
+    <tr>
       <th>TagList</th>
       <td><p>Tags to apply to the CloudHSM cluster during creation.</p></td>
     </tr>
@@ -152,19 +157,24 @@ find the backup ID, use DescribeBackups.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_cluster</span>(
-  <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_cluster</span><span class='op'>(</span>
+  BackupRetentionPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Type <span class='op'>=</span> <span class='st'>"DAYS"</span>,
+    Value <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  HsmType <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceBackupId <span class='op'>=</span> <span class='st'>"string"</span>,
+  SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>HsmType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceBackupId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TagList</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  TagList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -182,7 +192,7 @@ find the backup ID, use DescribeBackups.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

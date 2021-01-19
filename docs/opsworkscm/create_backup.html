@@ -42,7 +42,17 @@
 <meta property="og:title" content="Creates an application-level backup of a server — opsworkscm_create_backup" />
 <meta property="og:description" content="Creates an application-level backup of a server. While the server is in
 the BACKING_UP state, the server cannot be changed, and no additional
-backup can be created." />
+backup can be created.
+Backups can be created for servers in RUNNING, HEALTHY, and
+UNHEALTHY states. By default, you can create a maximum of 50 manual
+backups.
+This operation is asynchronous.
+A LimitExceededException is thrown when the maximum number of manual
+backups is reached. An InvalidStateException is thrown when the server
+is not in any of the following states: RUNNING, HEALTHY, or UNHEALTHY. A
+ResourceNotFoundException is thrown when the server is not found. A
+ValidationException is thrown when parameters of the request are not
+valid." />
 
 
 
@@ -74,7 +84,7 @@ backup can be created." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +92,7 @@ backup can be created." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +104,7 @@ backup can be created." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,9 +130,19 @@ backup can be created." />
     <p>Creates an application-level backup of a server. While the server is in
 the <code>BACKING_UP</code> state, the server cannot be changed, and no additional
 backup can be created.</p>
+<p>Backups can be created for servers in <code>RUNNING</code>, <code>HEALTHY</code>, and
+<code>UNHEALTHY</code> states. By default, you can create a maximum of 50 manual
+backups.</p>
+<p>This operation is asynchronous.</p>
+<p>A <code>LimitExceededException</code> is thrown when the maximum number of manual
+backups is reached. An <code>InvalidStateException</code> is thrown when the server
+is not in any of the following states: RUNNING, HEALTHY, or UNHEALTHY. A
+<code>ResourceNotFoundException</code> is thrown when the server is not found. A
+<code>ValidationException</code> is thrown when parameters of the request are not
+valid.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>opsworkscm_create_backup</span>(<span class='no'>ServerName</span>, <span class='no'>Description</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>opsworkscm_create_backup</span><span class='op'>(</span><span class='va'>ServerName</span>, <span class='va'>Description</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,31 +174,20 @@ OpsWorks-CM resources.</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Backups can be created for servers in <code>RUNNING</code>, <code>HEALTHY</code>, and
-<code>UNHEALTHY</code> states. By default, you can create a maximum of 50 manual
-backups.</p>
-<p>This operation is asynchronous.</p>
-<p>A <code>LimitExceededException</code> is thrown when the maximum number of manual
-backups is reached. An <code>InvalidStateException</code> is thrown when the server
-is not in any of the following states: RUNNING, HEALTHY, or UNHEALTHY. A
-<code>ResourceNotFoundException</code> is thrown when the server is not found. A
-<code>ValidationException</code> is thrown when parameters of the request are not
-valid.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_backup</span>(
-  <span class='kw'>ServerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_backup</span><span class='op'>(</span>
+  ServerName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -196,7 +205,7 @@ valid.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

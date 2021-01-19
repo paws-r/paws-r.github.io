@@ -43,7 +43,95 @@
 <meta property="og:description" content="Uploads a part by copying data from an existing object as data source.
 You specify the data source by adding the request header
 x-amz-copy-source in your request and a byte range by adding the
-request header x-amz-copy-source-range in your request." />
+request header x-amz-copy-source-range in your request.
+The minimum allowable part size for a multipart upload is 5 MB. For more
+information about multipart upload limits, go to Quick Facts in
+the Amazon Simple Storage Service Developer Guide.
+Instead of using an existing object as part data, you might use the
+UploadPart
+operation and provide data in your request.
+You must initiate a multipart upload before you can upload any part. In
+response to your initiate request. Amazon S3 returns a unique
+identifier, the upload ID, that you must include in your upload part
+request.
+For more information about using the UploadPartCopy operation, see the
+following:
+For conceptual information about multipart uploads, see Uploading Objects Using Multipart Upload
+in the Amazon Simple Storage Service Developer Guide.
+For information about permissions required to use the multipart
+upload API, see Multipart Upload API and Permissions
+in the Amazon Simple Storage Service Developer Guide.
+For information about copying objects using a single atomic
+operation vs. the multipart upload, see Operations on Objects
+in the Amazon Simple Storage Service Developer Guide.
+For information about using server-side encryption with
+customer-provided encryption keys with the UploadPartCopy operation,
+see
+CopyObject
+and
+UploadPart.
+
+
+Note the following additional considerations about the request headers
+x-amz-copy-source-if-match, x-amz-copy-source-if-none-match,
+x-amz-copy-source-if-unmodified-since, and
+x-amz-copy-source-if-modified-since:
+Consideration 1 - If both of the x-amz-copy-source-if-match
+and x-amz-copy-source-if-unmodified-since headers are present in
+the request as follows:
+x-amz-copy-source-if-match condition evaluates to true, and;
+x-amz-copy-source-if-unmodified-since condition evaluates to
+false;
+Amazon S3 returns 200 OK and copies the data.
+Consideration 2 - If both of the
+x-amz-copy-source-if-none-match and
+x-amz-copy-source-if-modified-since headers are present in the
+request as follows:
+x-amz-copy-source-if-none-match condition evaluates to false,
+and;
+x-amz-copy-source-if-modified-since condition evaluates to true;
+Amazon S3 returns 412 Precondition Failed response code.
+
+
+Versioning
+If your bucket has versioning enabled, you could have multiple versions
+of the same object. By default, x-amz-copy-source identifies the
+current version of the object to copy. If the current version is a
+delete marker and you don't specify a versionId in the
+x-amz-copy-source, Amazon S3 returns a 404 error, because the object
+does not exist. If you specify versionId in the x-amz-copy-source and
+the versionId is a delete marker, Amazon S3 returns an HTTP 400 error,
+because you are not allowed to specify a delete marker as a version for
+the x-amz-copy-source.
+You can optionally specify a specific version of the source object to
+copy by adding the versionId subresource as shown in the following
+example:
+x-amz-copy-source: /bucket/object?versionId=version id
+Special Errors
+
+Code: NoSuchUpload
+Cause: The specified multipart upload does not exist. The
+upload ID might be invalid, or the multipart upload might have
+been aborted or completed.
+HTTP Status Code: 404 Not Found
+
+
+Code: InvalidRequest
+Cause: The specified copy source is not supported as a
+byte-range copy source.
+HTTP Status Code: 400 Bad Request
+
+
+
+Related Resources
+CreateMultipartUpload
+UploadPart
+CompleteMultipartUpload
+AbortMultipartUpload
+ListParts
+ListMultipartUploads
+
+" />
 
 
 
@@ -75,7 +163,7 @@ request header x-amz-copy-source-range in your request." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +171,7 @@ request header x-amz-copy-source-range in your request." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +183,7 @@ request header x-amz-copy-source-range in your request." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,26 +210,163 @@ request header x-amz-copy-source-range in your request." />
 You specify the data source by adding the request header
 <code>x-amz-copy-source</code> in your request and a byte range by adding the
 request header <code>x-amz-copy-source-range</code> in your request.</p>
+<p>The minimum allowable part size for a multipart upload is 5 MB. For more
+information about multipart upload limits, go to <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/qfacts.html'>Quick Facts</a> in
+the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>Instead of using an existing object as part data, you might use the
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html'>UploadPart</a>
+operation and provide data in your request.</p>
+<p>You must initiate a multipart upload before you can upload any part. In
+response to your initiate request. Amazon S3 returns a unique
+identifier, the upload ID, that you must include in your upload part
+request.</p>
+<p>For more information about using the <code>UploadPartCopy</code> operation, see the
+following:</p><ul>
+<li><p>For conceptual information about multipart uploads, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html'>Uploading Objects Using Multipart Upload</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
+<li><p>For information about permissions required to use the multipart
+upload API, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html'>Multipart Upload API and Permissions</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
+<li><p>For information about copying objects using a single atomic
+operation vs. the multipart upload, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectOperations.html'>Operations on Objects</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
+<li><p>For information about using server-side encryption with
+customer-provided encryption keys with the UploadPartCopy operation,
+see
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html'>CopyObject</a>
+and
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html'>UploadPart</a>.</p></li>
+</ul>
+
+<p>Note the following additional considerations about the request headers
+<code>x-amz-copy-source-if-match</code>, <code>x-amz-copy-source-if-none-match</code>,
+<code>x-amz-copy-source-if-unmodified-since</code>, and
+<code>x-amz-copy-source-if-modified-since</code>:</p><ul>
+<li><p><strong>Consideration 1</strong> - If both of the <code>x-amz-copy-source-if-match</code>
+and <code>x-amz-copy-source-if-unmodified-since</code> headers are present in
+the request as follows:</p>
+<p><code>x-amz-copy-source-if-match</code> condition evaluates to <code>true</code>, and;</p>
+<p><code>x-amz-copy-source-if-unmodified-since</code> condition evaluates to
+<code>false</code>;</p>
+<p>Amazon S3 returns <code>200 OK</code> and copies the data.</p></li>
+<li><p><strong>Consideration 2</strong> - If both of the
+<code>x-amz-copy-source-if-none-match</code> and
+<code>x-amz-copy-source-if-modified-since</code> headers are present in the
+request as follows:</p>
+<p><code>x-amz-copy-source-if-none-match</code> condition evaluates to <code>false</code>,
+and;</p>
+<p><code>x-amz-copy-source-if-modified-since</code> condition evaluates to <code>true</code>;</p>
+<p>Amazon S3 returns <code>412 Precondition Failed</code> response code.</p></li>
+</ul>
+
+<p><strong>Versioning</strong></p>
+<p>If your bucket has versioning enabled, you could have multiple versions
+of the same object. By default, <code>x-amz-copy-source</code> identifies the
+current version of the object to copy. If the current version is a
+delete marker and you don't specify a versionId in the
+<code>x-amz-copy-source</code>, Amazon S3 returns a 404 error, because the object
+does not exist. If you specify versionId in the <code>x-amz-copy-source</code> and
+the versionId is a delete marker, Amazon S3 returns an HTTP 400 error,
+because you are not allowed to specify a delete marker as a version for
+the <code>x-amz-copy-source</code>.</p>
+<p>You can optionally specify a specific version of the source object to
+copy by adding the <code>versionId</code> subresource as shown in the following
+example:</p>
+<p><code>x-amz-copy-source: /bucket/object?versionId=version id</code></p>
+<p><strong>Special Errors</strong></p><ul>
+<li><p></p><ul>
+<li><p><em>Code: NoSuchUpload</em></p></li>
+<li><p><em>Cause: The specified multipart upload does not exist. The
+upload ID might be invalid, or the multipart upload might have
+been aborted or completed.</em></p></li>
+<li><p><em>HTTP Status Code: 404 Not Found</em></p></li>
+</ul></li>
+<li><p></p><ul>
+<li><p><em>Code: InvalidRequest</em></p></li>
+<li><p><em>Cause: The specified copy source is not supported as a
+byte-range copy source.</em></p></li>
+<li><p><em>HTTP Status Code: 400 Bad Request</em></p></li>
+</ul></li>
+</ul>
+
+<p><strong>Related Resources</strong></p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html'>CreateMultipartUpload</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html'>UploadPart</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html'>CompleteMultipartUpload</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html'>AbortMultipartUpload</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html'>ListParts</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html'>ListMultipartUploads</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_upload_part_copy</span>(<span class='no'>Bucket</span>, <span class='no'>CopySource</span>, <span class='no'>CopySourceIfMatch</span>,
-  <span class='no'>CopySourceIfModifiedSince</span>, <span class='no'>CopySourceIfNoneMatch</span>,
-  <span class='no'>CopySourceIfUnmodifiedSince</span>, <span class='no'>CopySourceRange</span>, <span class='no'>Key</span>, <span class='no'>PartNumber</span>, <span class='no'>UploadId</span>,
-  <span class='no'>SSECustomerAlgorithm</span>, <span class='no'>SSECustomerKey</span>, <span class='no'>SSECustomerKeyMD5</span>,
-  <span class='no'>CopySourceSSECustomerAlgorithm</span>, <span class='no'>CopySourceSSECustomerKey</span>,
-  <span class='no'>CopySourceSSECustomerKeyMD5</span>, <span class='no'>RequestPayer</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_upload_part_copy</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>CopySource</span>, <span class='va'>CopySourceIfMatch</span>,
+  <span class='va'>CopySourceIfModifiedSince</span>, <span class='va'>CopySourceIfNoneMatch</span>,
+  <span class='va'>CopySourceIfUnmodifiedSince</span>, <span class='va'>CopySourceRange</span>, <span class='va'>Key</span>, <span class='va'>PartNumber</span>, <span class='va'>UploadId</span>,
+  <span class='va'>SSECustomerAlgorithm</span>, <span class='va'>SSECustomerKey</span>, <span class='va'>SSECustomerKeyMD5</span>,
+  <span class='va'>CopySourceSSECustomerAlgorithm</span>, <span class='va'>CopySourceSSECustomerKey</span>,
+  <span class='va'>CopySourceSSECustomerKeyMD5</span>, <span class='va'>RequestPayer</span>, <span class='va'>ExpectedBucketOwner</span>,
+  <span class='va'>ExpectedSourceBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Bucket</th>
-      <td><p>[required] The bucket name.</p></td>
+      <td><p>[required] The bucket name.</p>
+<p>When using this API with an access point, you must direct requests to
+the access point hostname. The access point hostname takes the form
+<em>AccessPointName</em>-<em>AccountId</em>.s3-accesspoint.<em>Region</em>.amazonaws.com.
+When using this operation with an access point through the AWS SDKs, you
+provide the access point ARN in place of the bucket name. For more
+information about access point ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html'>Using Access Points</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>When using this API with Amazon S3 on Outposts, you must direct requests
+to the S3 on Outposts hostname. The S3 on Outposts hostname takes the
+form
+<em>AccessPointName</em>-<em>AccountId</em>.<em>outpostID</em>.s3-outposts.<em>Region</em>.amazonaws.com.
+When using this operation using S3 on Outposts through the AWS SDKs, you
+provide the Outposts bucket ARN in place of the bucket name. For more
+information about S3 on Outposts ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html'>Using S3 on Outposts</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
       <th>CopySource</th>
-      <td><p>[required] The name of the source bucket and key name of the source object,
-separated by a slash (/). Must be URL-encoded.</p></td>
+      <td><p>[required] Specifies the source object for the copy operation. You specify the
+value in one of two formats, depending on whether you want to access the
+source object through an <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/access-points.html'>access point</a>:</p><ul>
+<li><p>For objects not accessed through an access point, specify the name
+of the source bucket and key of the source object, separated by a
+slash (/). For example, to copy the object <code>reports/january.pdf</code>
+from the bucket <code>awsexamplebucket</code>, use
+<code>awsexamplebucket/reports/january.pdf</code>. The value must be URL
+encoded.</p></li>
+<li><p>For objects accessed through access points, specify the Amazon
+Resource Name (ARN) of the object as accessed through the access
+point, in the format
+<code>arn:aws:s3:&amp;lt;Region&amp;gt;:&amp;lt;account-id&amp;gt;:accesspoint/&amp;lt;access-point-name&amp;gt;/object/&amp;lt;key&amp;gt;</code>.
+For example, to copy the object <code>reports/january.pdf</code> through access
+point <code>my-access-point</code> owned by account <code>123456789012</code> in Region
+<code>us-west-2</code>, use the URL encoding of
+<code>arn:aws:s3:us-west-2:123456789012:accesspoint/my-access-point/object/reports/january.pdf</code>.
+The value must be URL encoded.</p>
+<p>Amazon S3 supports copy operations using access points only when the
+source and destination buckets are in the same AWS Region.</p>
+<p>Alternatively, for objects accessed through Amazon S3 on Outposts,
+specify the ARN of the object as accessed in the format
+<code>arn:aws:s3-outposts:&amp;lt;Region&amp;gt;:&amp;lt;account-id&amp;gt;:outpost/&amp;lt;outpost-id&amp;gt;/object/&amp;lt;key&amp;gt;</code>.
+For example, to copy the object <code>reports/january.pdf</code> through
+outpost <code>my-outpost</code> owned by account <code>123456789012</code> in Region
+<code>us-west-2</code>, use the URL encoding of
+<code>arn:aws:s3-outposts:us-west-2:123456789012:outpost/my-outpost/object/reports/january.pdf</code>.
+The value must be URL encoded.</p></li>
+</ul>
+
+<p>To copy a specific version of an object, append
+<code>?versionId=&amp;lt;version-id&amp;gt;</code> to the value (for example,
+<code>awsexamplebucket/reports/january.pdf?versionId=QUpfdndhfd8438MNFDN93jdnJFkdmqnh893</code>).
+If you don't specify a version ID, Amazon S3 copies the latest version
+of the source object.</p></td>
     </tr>
     <tr>
       <th>CopySourceIfMatch</th>
@@ -158,7 +383,7 @@ specified ETag.</p></td>
     </tr>
     <tr>
       <th>CopySourceIfUnmodifiedSince</th>
-      <td><p>Copies the object if it hasn\'t been modified since the specified time.</p></td>
+      <td><p>Copies the object if it hasn't been modified since the specified time.</p></td>
     </tr>
     <tr>
       <th>CopySourceRange</th>
@@ -192,7 +417,7 @@ example, AES256).</p></td>
 encrypting data. This value is used to store the object and then it is
 discarded; Amazon S3 does not store the encryption key. The key must be
 appropriate for use with the algorithm specified in the
-<code>x-amz-server-sideâ€‹-encryptionâ€‹-customer-algorithm</code> header. This must be
+<code>x-amz-server-side-encryption-customer-algorithm</code> header. This must be
 the same encryption key specified in the initiate multipart upload
 request.</p></td>
     </tr>
@@ -223,149 +448,76 @@ that the encryption key was transmitted without error.</p></td>
       <th>RequestPayer</th>
       <td></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected destination bucket owner. If the
+destination bucket is owned by a different account, the request will
+fail with an HTTP <code>403 (Access Denied)</code> error.</p></td>
+    </tr>
+    <tr>
+      <th>ExpectedSourceBucketOwner</th>
+      <td><p>The account id of the expected source bucket owner. If the source bucket
+is owned by a different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The minimum allowable part size for a multipart upload is 5 MB. For more
-information about multipart upload limits, go to <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/qfacts.html'>Quick Facts</a> in
-the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
-<p>Instead of using an existing object as part data, you might use the
-UploadPart operation and provide data in your request.</p>
-<p>You must initiate a multipart upload before you can upload any part. In
-response to your initiate request. Amazon S3 returns a unique
-identifier, the upload ID, that you must include in your upload part
-request.</p>
-<p>For more information about using the <code>UploadPartCopy</code> operation, see the
-following:</p><ul>
-<li><p>For conceptual information about multipart uploads, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html'>Uploading Objects Using Multipart Upload</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
-<li><p>For information about permissions required to use the multipart
-upload API, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html'>Multipart Upload API and Permissions</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
-<li><p>For information about copying objects using a single atomic
-operation vs. the multipart upload, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectOperations.html'>Operations on Objects</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
-<li><p>For information about using server-side encryption with
-customer-provided encryption keys with the UploadPartCopy operation,
-see CopyObject and UploadPart.</p></li>
-</ul>
-
-<p>Note the following additional considerations about the request headers
-<code>x-amz-copy-source-if-match</code>, <code>x-amz-copy-source-if-none-match</code>,
-<code>x-amz-copy-source-if-unmodified-since</code>, and
-<code>x-amz-copy-source-if-modified-since</code>:</p><ul>
-<li><p><strong>Consideration 1</strong> - If both of the <code>x-amz-copy-source-if-match</code>
-and <code>x-amz-copy-source-if-unmodified-since</code> headers are present in
-the request as follows:</p>
-<p><code>x-amz-copy-source-if-match</code> condition evaluates to <code>true</code>, and;</p>
-<p><code>x-amz-copy-source-if-unmodified-since</code> condition evaluates to
-<code>false</code>;</p>
-<p>Amazon S3 returns <code>200 OK</code> and copies the data.</p></li>
-<li><p><strong>Consideration 2</strong> - If both of the
-<code>x-amz-copy-source-if-none-match</code> and
-<code>x-amz-copy-source-if-modified-since</code> headers are present in the
-request as follows:</p>
-<p><code>x-amz-copy-source-if-none-match</code> condition evaluates to <code>false</code>,
-and;</p>
-<p><code>x-amz-copy-source-if-modified-since</code> condition evaluates to <code>true</code>;</p>
-<p>Amazon S3 returns <code>412 Precondition Failed</code> response code.</p></li>
-</ul>
-
-<p><strong>Versioning</strong></p>
-<p>If your bucket has versioning enabled, you could have multiple versions
-of the same object. By default, <code>x-amz-copy-source</code> identifies the
-current version of the object to copy. If the current version is a
-delete marker and you don\'t specify a versionId in the
-<code>x-amz-copy-source</code>, Amazon S3 returns a 404 error, because the object
-does not exist. If you specify versionId in the <code>x-amz-copy-source</code> and
-the versionId is a delete marker, Amazon S3 returns an HTTP 400 error,
-because you are not allowed to specify a delete marker as a version for
-the <code>x-amz-copy-source</code>.</p>
-<p>You can optionally specify a specific version of the source object to
-copy by adding the <code>versionId</code> subresource as shown in the following
-example:</p>
-<p><code>x-amz-copy-source: /bucket/object?versionId=version id</code></p>
-<p><strong>Special Errors</strong></p><ul>
-<li><p></p></li>
-</ul><pre>-   *Code: NoSuchUpload*
-
--   *Cause: The specified multipart upload does not exist. The
-    upload ID might be invalid, or the multipart upload might have
-    been aborted or completed.*
-
--   *HTTP Status Code: 404 Not Found*
-</pre>
-<ul>
-<li><p></p></li>
-</ul><pre>-   *Code: InvalidRequest*
-
--   *Cause: The specified copy source is not supported as a
-    byte-range copy source.*
-
--   *HTTP Status Code: 400 Bad Request*
-</pre>
-
-<p><strong>Related Resources</strong></p><ul>
-<li><p>CreateMultipartUpload</p></li>
-<li><p>UploadPart</p></li>
-<li><p>CompleteMultipartUpload</p></li>
-<li><p>AbortMultipartUpload</p></li>
-<li><p>ListParts</p></li>
-<li><p>ListMultipartUploads</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>upload_part_copy</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CopySource</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CopySourceIfMatch</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CopySourceIfModifiedSince</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>upload_part_copy</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  CopySource <span class='op'>=</span> <span class='st'>"string"</span>,
+  CopySourceIfMatch <span class='op'>=</span> <span class='st'>"string"</span>,
+  CopySourceIfModifiedSince <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>CopySourceIfNoneMatch</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CopySourceIfUnmodifiedSince</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+  <span class='op'>)</span>,
+  CopySourceIfNoneMatch <span class='op'>=</span> <span class='st'>"string"</span>,
+  CopySourceIfUnmodifiedSince <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>CopySourceRange</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PartNumber</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>UploadId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SSECustomerAlgorithm</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SSECustomerKey</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-  <span class='kw'>SSECustomerKeyMD5</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CopySourceSSECustomerAlgorithm</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CopySourceSSECustomerKey</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-  <span class='kw'>CopySourceSSECustomerKeyMD5</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RequestPayer</span> <span class='kw'>=</span> <span class='st'>"requester"</span>
-)</pre>
+  <span class='op'>)</span>,
+  CopySourceRange <span class='op'>=</span> <span class='st'>"string"</span>,
+  Key <span class='op'>=</span> <span class='st'>"string"</span>,
+  PartNumber <span class='op'>=</span> <span class='fl'>123</span>,
+  UploadId <span class='op'>=</span> <span class='st'>"string"</span>,
+  SSECustomerAlgorithm <span class='op'>=</span> <span class='st'>"string"</span>,
+  SSECustomerKey <span class='op'>=</span> <span class='va'>raw</span>,
+  SSECustomerKeyMD5 <span class='op'>=</span> <span class='st'>"string"</span>,
+  CopySourceSSECustomerAlgorithm <span class='op'>=</span> <span class='st'>"string"</span>,
+  CopySourceSSECustomerKey <span class='op'>=</span> <span class='va'>raw</span>,
+  CopySourceSSECustomerKeyMD5 <span class='op'>=</span> <span class='st'>"string"</span>,
+  RequestPayer <span class='op'>=</span> <span class='st'>"requester"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpectedSourceBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example uploads a part of a multipart upload by copying</span>
 <span class='co'># data from an existing object as data source.</span>
-<span class='no'>svc</span>$<span class='fu'>upload_part_copy</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>CopySource</span> <span class='kw'>=</span> <span class='st'>"/bucketname/sourceobjectkey"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"examplelargeobject"</span>,
-  <span class='kw'>PartNumber</span> <span class='kw'>=</span> <span class='st'>"1"</span>,
-  <span class='kw'>UploadId</span> <span class='kw'>=</span> <span class='st'>"exampleuoh_10OhKhT7YukE9bjzTPRiuaCotmZM_pFngJFir9OZNrSr5cWa3cq3LZSUsfjI4FI7PkP..."</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>upload_part_copy</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  CopySource <span class='op'>=</span> <span class='st'>"/bucketname/sourceobjectkey"</span>,
+  Key <span class='op'>=</span> <span class='st'>"examplelargeobject"</span>,
+  PartNumber <span class='op'>=</span> <span class='st'>"1"</span>,
+  UploadId <span class='op'>=</span> <span class='st'>"exampleuoh_10OhKhT7YukE9bjzTPRiuaCotmZM_pFngJFir9OZNrSr5cWa3cq3LZSUsfjI4FI7PkP..."</span>
+<span class='op'>)</span>
 
 <span class='co'># The following example uploads a part of a multipart upload by copying a</span>
 <span class='co'># specified byte range from an existing object as data source.</span>
-<span class='no'>svc</span>$<span class='fu'>upload_part_copy</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>CopySource</span> <span class='kw'>=</span> <span class='st'>"/bucketname/sourceobjectkey"</span>,
-  <span class='kw'>CopySourceRange</span> <span class='kw'>=</span> <span class='st'>"bytes=1-100000"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"examplelargeobject"</span>,
-  <span class='kw'>PartNumber</span> <span class='kw'>=</span> <span class='st'>"2"</span>,
-  <span class='kw'>UploadId</span> <span class='kw'>=</span> <span class='st'>"exampleuoh_10OhKhT7YukE9bjzTPRiuaCotmZM_pFngJFir9OZNrSr5cWa3cq3LZSUsfjI4FI7PkP..."</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>upload_part_copy</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  CopySource <span class='op'>=</span> <span class='st'>"/bucketname/sourceobjectkey"</span>,
+  CopySourceRange <span class='op'>=</span> <span class='st'>"bytes=1-100000"</span>,
+  Key <span class='op'>=</span> <span class='st'>"examplelargeobject"</span>,
+  PartNumber <span class='op'>=</span> <span class='st'>"2"</span>,
+  UploadId <span class='op'>=</span> <span class='st'>"exampleuoh_10OhKhT7YukE9bjzTPRiuaCotmZM_pFngJFir9OZNrSr5cWa3cq3LZSUsfjI4FI7PkP..."</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -381,7 +533,7 @@ example:</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

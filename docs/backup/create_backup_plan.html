@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Backup plans are documents that contain information that AWS Backup uses
-to schedule tasks that create recovery points of resources — backup_create_backup_plan • paws</title>
+<title>Creates a backup plan using a backup plan name and backup rules — backup_create_backup_plan • paws</title>
 
 
 <!-- jquery -->
@@ -40,10 +39,12 @@ to schedule tasks that create recovery points of resources — backup_create_bac
 
 
 
-<meta property="og:title" content="Backup plans are documents that contain information that AWS Backup uses
-to schedule tasks that create recovery points of resources — backup_create_backup_plan" />
-<meta property="og:description" content="Backup plans are documents that contain information that AWS Backup uses
-to schedule tasks that create recovery points of resources." />
+<meta property="og:title" content="Creates a backup plan using a backup plan name and backup rules — backup_create_backup_plan" />
+<meta property="og:description" content="Creates a backup plan using a backup plan name and backup rules. A
+backup plan is a document that contains information that AWS Backup uses
+to schedule tasks that create recovery points for resources.
+If you call CreateBackupPlan with a plan that already exists, an
+AlreadyExistsException is returned." />
 
 
 
@@ -75,7 +76,7 @@ to schedule tasks that create recovery points of resources." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +84,7 @@ to schedule tasks that create recovery points of resources." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +96,7 @@ to schedule tasks that create recovery points of resources." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,18 +113,20 @@ to schedule tasks that create recovery points of resources." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Backup plans are documents that contain information that AWS Backup uses
-to schedule tasks that create recovery points of resources</h1>
+    <h1>Creates a backup plan using a backup plan name and backup rules</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/backup_operations.R'><code>R/backup_operations.R</code></a></small>
     <div class="hidden name"><code>backup_create_backup_plan.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Backup plans are documents that contain information that AWS Backup uses
-to schedule tasks that create recovery points of resources.</p>
+    <p>Creates a backup plan using a backup plan name and backup rules. A
+backup plan is a document that contains information that AWS Backup uses
+to schedule tasks that create recovery points for resources.</p>
+<p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an
+<code>AlreadyExistsException</code> is returned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>backup_create_backup_plan</span>(<span class='no'>BackupPlan</span>, <span class='no'>BackupPlanTags</span>, <span class='no'>CreatorRequestId</span>)</pre>
+    <pre class="usage"><span class='fu'>backup_create_backup_plan</span><span class='op'>(</span><span class='va'>BackupPlan</span>, <span class='va'>BackupPlanTags</span>, <span class='va'>CreatorRequestId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,53 +145,58 @@ tags are assigned to all backups created with this plan.</p></td>
     <tr>
       <th>CreatorRequestId</th>
       <td><p>Identifies the request and allows failed requests to be retried without
-the risk of executing the operation twice. If the request includes a
+the risk of running the operation twice. If the request includes a
 <code>CreatorRequestId</code> that matches an existing backup plan, that plan is
 returned. This parameter is optional.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an
-<code>AlreadyExistsException</code> is returned.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_backup_plan</span>(
-  <span class='kw'>BackupPlan</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>BackupPlanName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Rules</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>RuleName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>TargetBackupVaultName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>ScheduleExpression</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StartWindowMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>CompletionWindowMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Lifecycle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>MoveToColdStorageAfterDays</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>DeleteAfterDays</span> <span class='kw'>=</span> <span class='fl'>123</span>
-        ),
-        <span class='kw'>RecoveryPointTags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_backup_plan</span><span class='op'>(</span>
+  BackupPlan <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    BackupPlanName <span class='op'>=</span> <span class='st'>"string"</span>,
+    Rules <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        RuleName <span class='op'>=</span> <span class='st'>"string"</span>,
+        TargetBackupVaultName <span class='op'>=</span> <span class='st'>"string"</span>,
+        ScheduleExpression <span class='op'>=</span> <span class='st'>"string"</span>,
+        StartWindowMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+        CompletionWindowMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+        Lifecycle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          MoveToColdStorageAfterDays <span class='op'>=</span> <span class='fl'>123</span>,
+          DeleteAfterDays <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>,
+        RecoveryPointTags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>CopyActions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Lifecycle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>MoveToColdStorageAfterDays</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-              <span class='kw'>DeleteAfterDays</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            ),
-            <span class='kw'>DestinationBackupVaultArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>BackupPlanTags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        CopyActions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Lifecycle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              MoveToColdStorageAfterDays <span class='op'>=</span> <span class='fl'>123</span>,
+              DeleteAfterDays <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>,
+            DestinationBackupVaultArn <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    AdvancedBackupSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ResourceType <span class='op'>=</span> <span class='st'>"string"</span>,
+        BackupOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  BackupPlanTags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>CreatorRequestId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  CreatorRequestId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -206,7 +214,7 @@ returned. This parameter is optional.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

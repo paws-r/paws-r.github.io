@@ -40,8 +40,32 @@
 
 
 <meta property="og:title" content="Deletes the specified alias — kms_delete_alias" />
-<meta property="og:description" content="Deletes the specified alias. You cannot perform this operation on an
-alias in a different AWS account." />
+<meta property="og:description" content="Deletes the specified alias.
+Because an alias is not a property of a CMK, you can delete and change
+the aliases of a CMK without affecting the CMK. Also, aliases do not
+appear in the response from the DescribeKey operation. To get the
+aliases of all CMKs, use the ListAliases operation.
+Each CMK can have multiple aliases. To change the alias of a CMK, use
+DeleteAlias to delete the current alias and CreateAlias to create a new
+alias. To associate an existing alias with a different customer master
+key (CMK), call UpdateAlias.
+Cross-account use: No. You cannot perform this operation on an alias
+in a different AWS account.
+Required permissions
+kms:DeleteAlias
+on the alias (IAM policy).
+kms:DeleteAlias
+on the CMK (key policy).
+
+
+For details, see Controlling access to aliases
+in the AWS Key Management Service Developer Guide.
+Related operations:
+CreateAlias
+ListAliases
+UpdateAlias
+
+" />
 
 
 
@@ -73,7 +97,7 @@ alias in a different AWS account." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +105,7 @@ alias in a different AWS account." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +117,7 @@ alias in a different AWS account." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +140,35 @@ alias in a different AWS account." />
     </div>
 
     <div class="ref-description">
-    <p>Deletes the specified alias. You cannot perform this operation on an
-alias in a different AWS account.</p>
+    <p>Deletes the specified alias.</p>
+<p>Because an alias is not a property of a CMK, you can delete and change
+the aliases of a CMK without affecting the CMK. Also, aliases do not
+appear in the response from the DescribeKey operation. To get the
+aliases of all CMKs, use the ListAliases operation.</p>
+<p>Each CMK can have multiple aliases. To change the alias of a CMK, use
+DeleteAlias to delete the current alias and CreateAlias to create a new
+alias. To associate an existing alias with a different customer master
+key (CMK), call UpdateAlias.</p>
+<p><strong>Cross-account use</strong>: No. You cannot perform this operation on an alias
+in a different AWS account.</p>
+<p><strong>Required permissions</strong></p><ul>
+<li><p><a href='https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html'>kms:DeleteAlias</a>
+on the alias (IAM policy).</p></li>
+<li><p><a href='https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html'>kms:DeleteAlias</a>
+on the CMK (key policy).</p></li>
+</ul>
+
+<p>For details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/kms-alias.html#alias-access'>Controlling access to aliases</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p><strong>Related operations:</strong></p><ul>
+<li><p>CreateAlias</p></li>
+<li><p>ListAliases</p></li>
+<li><p>UpdateAlias</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>kms_delete_alias</span>(<span class='no'>AliasName</span>)</pre>
+    <pre class="usage"><span class='fu'>kms_delete_alias</span><span class='op'>(</span><span class='va'>AliasName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,31 +180,24 @@ followed by the alias name, such as <code>alias/ExampleAlias</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Because an alias is not a property of a CMK, you can delete and change
-the aliases of a CMK without affecting the CMK. Also, aliases do not
-appear in the response from the DescribeKey operation. To get the
-aliases of all CMKs, use the ListAliases operation.</p>
-<p>Each CMK can have multiple aliases. To change the alias of a CMK, use
-DeleteAlias to delete the current alias and CreateAlias to create a new
-alias. To associate an existing alias with a different customer master
-key (CMK), call UpdateAlias.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>delete_alias</span>(
-  <span class='kw'>AliasName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_alias</span><span class='op'>(</span>
+  AliasName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example deletes the specified alias.</span>
-<span class='no'>svc</span>$<span class='fu'>delete_alias</span>(
-  <span class='kw'>AliasName</span> <span class='kw'>=</span> <span class='st'>"alias/ExampleAlias"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_alias</span><span class='op'>(</span>
+  AliasName <span class='op'>=</span> <span class='st'>"alias/ExampleAlias"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -172,7 +213,7 @@ key (CMK), call UpdateAlias.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

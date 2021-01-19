@@ -43,7 +43,23 @@
 <meta property="og:description" content="Initiates a contact flow to start a new chat for the customer. Response
 of this API provides a token required to obtain credentials from the
 CreateParticipantConnection
-API in the Amazon Connect Participant Service." />
+API in the Amazon Connect Participant Service.
+When a new chat contact is successfully created, clients need to
+subscribe to the participant’s connection for the created chat within 5
+minutes. This is achieved by invoking
+CreateParticipantConnection
+with WEBSOCKET and CONNECTION\_CREDENTIALS.
+A 429 error occurs in two situations:
+API rate limit is exceeded. API TPS throttling returns a
+TooManyRequests exception from the API Gateway.
+The quota for concurrent active chats
+is exceeded. Active chat throttling returns a
+LimitExceededException.
+
+
+For more information about how chat works, see
+Chat
+in the Amazon Connect Administrator Guide." />
 
 
 
@@ -75,7 +91,7 @@ API in the Amazon Connect Participant Service." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +99,7 @@ API in the Amazon Connect Participant Service." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +111,7 @@ API in the Amazon Connect Participant Service." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +138,26 @@ API in the Amazon Connect Participant Service." />
 of this API provides a token required to obtain credentials from the
 <a href='https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html'>CreateParticipantConnection</a>
 API in the Amazon Connect Participant Service.</p>
+<p>When a new chat contact is successfully created, clients need to
+subscribe to the participant’s connection for the created chat within 5
+minutes. This is achieved by invoking
+<a href='https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html'>CreateParticipantConnection</a>
+with WEBSOCKET and CONNECTION\_CREDENTIALS.</p>
+<p>A 429 error occurs in two situations:</p><ul>
+<li><p>API rate limit is exceeded. API TPS throttling returns a
+<code>TooManyRequests</code> exception from the API Gateway.</p></li>
+<li><p>The <a href='https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html'>quota for concurrent active chats</a>
+is exceeded. Active chat throttling returns a
+<code>LimitExceededException</code>.</p></li>
+</ul>
+
+<p>For more information about how chat works, see
+<a href='https://docs.aws.amazon.com/connect/latest/adminguide/chat.html'>Chat</a>
+in the <em>Amazon Connect Administrator Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>connect_start_chat_contact</span>(<span class='no'>InstanceId</span>, <span class='no'>ContactFlowId</span>, <span class='no'>Attributes</span>,
-  <span class='no'>ParticipantDetails</span>, <span class='no'>InitialMessage</span>, <span class='no'>ClientToken</span>)</pre>
+    <pre class="usage"><span class='fu'>connect_start_chat_contact</span><span class='op'>(</span><span class='va'>InstanceId</span>, <span class='va'>ContactFlowId</span>, <span class='va'>Attributes</span>,
+  <span class='va'>ParticipantDetails</span>, <span class='va'>InitialMessage</span>, <span class='va'>ClientToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,7 +168,13 @@ API in the Amazon Connect Participant Service.</p>
     </tr>
     <tr>
       <th>ContactFlowId</th>
-      <td><p>[required] The identifier of the contact flow for the chat.</p></td>
+      <td><p>[required] The identifier of the contact flow for initiating the chat. To see the
+ContactFlowId in the Amazon Connect console user interface, on the
+navigation menu go to <strong>Routing</strong>, <strong>Contact Flows</strong>. Choose the contact
+flow. On the contact flow page, under the name of the contact flow,
+choose <strong>Show additional flow information</strong>. The ContactFlowId is the
+last part of the ARN, shown here in bold:</p>
+<p>arn:aws:connect:us-west-2:xxxxxxxxxxxx:instance/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/contact-flow/<strong>846ec553-a005-41c0-8341-xxxxxxxxxxxx</strong></p></td>
     </tr>
     <tr>
       <th>Attributes</th>
@@ -162,31 +200,25 @@ idempotency of the request.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When a new chat contact is successfully created, clients need to
-subscribe to the participant's connection for the created chat within 5
-minutes. This is achieved by invoking
-<a href='https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html'>CreateParticipantConnection</a>
-with WEBSOCKET and CONNECTION\_CREDENTIALS.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>start_chat_contact</span>(
-  <span class='kw'>InstanceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ContactFlowId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Attributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>start_chat_contact</span><span class='op'>(</span>
+  InstanceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ContactFlowId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Attributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ParticipantDetails</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DisplayName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>InitialMessage</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ContentType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Content</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  ParticipantDetails <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DisplayName <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  InitialMessage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ContentType <span class='op'>=</span> <span class='st'>"string"</span>,
+    Content <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -204,7 +236,7 @@ with WEBSOCKET and CONNECTION\_CREDENTIALS.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

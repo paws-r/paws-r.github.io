@@ -45,10 +45,21 @@ AWS CodeStar Connections with Amazon CodeGuru Reviewer — codegurureviewer_asso
 <meta property="og:description" content="Use to associate an AWS CodeCommit repository or a repostory managed by
 AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you
 associate a repository, CodeGuru Reviewer reviews source code changes in
-the repository\'s pull requests and provides automatic recommendations.
+the repository's pull requests and provides automatic recommendations.
 You can view recommendations using the CodeGuru Reviewer console. For
 more information, see Recommendations in Amazon CodeGuru Reviewer
-in the Amazon CodeGuru Reviewer User Guide." />
+in the Amazon CodeGuru Reviewer User Guide.
+If you associate a CodeCommit repository, it must be in the same AWS
+Region and AWS account where its CodeGuru Reviewer code reviews are
+configured.
+Bitbucket and GitHub Enterprise Server repositories are managed by AWS
+CodeStar Connections to connect to CodeGuru Reviewer. For more
+information, see Connect to a repository source provider in the Amazon
+CodeGuru Reviewer User Guide.
+You cannot use the CodeGuru Reviewer SDK or the AWS CLI to associate a
+GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub
+repository, use the console. For more information, see Getting started with CodeGuru Reviewer
+in the CodeGuru Reviewer User Guide." />
 
 
 
@@ -80,7 +91,7 @@ in the Amazon CodeGuru Reviewer User Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +99,7 @@ in the Amazon CodeGuru Reviewer User Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +111,7 @@ in the Amazon CodeGuru Reviewer User Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,47 +138,11 @@ AWS CodeStar Connections with Amazon CodeGuru Reviewer</h1>
     <p>Use to associate an AWS CodeCommit repository or a repostory managed by
 AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you
 associate a repository, CodeGuru Reviewer reviews source code changes in
-the repository\'s pull requests and provides automatic recommendations.
+the repository's pull requests and provides automatic recommendations.
 You can view recommendations using the CodeGuru Reviewer console. For
 more information, see <a href='https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/recommendations.html'>Recommendations in Amazon CodeGuru Reviewer</a>
 in the <em>Amazon CodeGuru Reviewer User Guide.</em></p>
-    </div>
-
-    <pre class="usage"><span class='fu'>codegurureviewer_associate_repository</span>(<span class='no'>Repository</span>, <span class='no'>ClientRequestToken</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Repository</th>
-      <td><p>[required] The repository to associate.</p></td>
-    </tr>
-    <tr>
-      <th>ClientRequestToken</th>
-      <td><p>Unique, case-sensitive identifier that you provide to ensure the
-idempotency of the request.</p>
-<p>To add a new repository association, this parameter specifies a unique
-identifier for the new repository association that helps ensure
-idempotency.</p>
-<p>If you use the AWS CLI or one of the AWS SDKs to call this operation,
-you can leave this parameter empty. The CLI or SDK generates a random
-UUID for you and includes that in the request. If you don\'t use the SDK
-and instead generate a raw HTTP request to the Secrets Manager service
-endpoint, you must generate a ClientRequestToken yourself for new
-versions and include that value in the request.</p>
-<p>You typically interact with this value if you implement your own retry
-logic and want to ensure that a given repository association is not
-created twice. We recommend that you generate a UUID-type value to
-ensure uniqueness within the specified repository association.</p>
-<p>Amazon CodeGuru Reviewer uses this value to prevent the accidental
-creation of duplicate repository associations if there are failures and
-retries.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you associate a CodeCommit repository, it must be in the same AWS
+<p>If you associate a CodeCommit repository, it must be in the same AWS
 Region and AWS account where its CodeGuru Reviewer code reviews are
 configured.</p>
 <p>Bitbucket and GitHub Enterprise Server repositories are managed by AWS
@@ -178,27 +153,63 @@ CodeGuru Reviewer User Guide.</em></p>
 GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub
 repository, use the console. For more information, see <a href='https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-with-guru.html'>Getting started with CodeGuru Reviewer</a>
 in the <em>CodeGuru Reviewer User Guide.</em></p>
+    </div>
+
+    <pre class="usage"><span class='fu'>codegurureviewer_associate_repository</span><span class='op'>(</span><span class='va'>Repository</span>, <span class='va'>ClientRequestToken</span>,
+  <span class='va'>Tags</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Repository</th>
+      <td><p>[required] The repository to associate.</p></td>
+    </tr>
+    <tr>
+      <th>ClientRequestToken</th>
+      <td><p>Amazon CodeGuru Reviewer uses this value to prevent the accidental
+creation of duplicate repository associations if there are failures and
+retries.</p></td>
+    </tr>
+    <tr>
+      <th>Tags</th>
+      <td><p>An array of key-value pairs used to tag an associated repository. A tag
+is a custom attribute label with two parts:</p><ul>
+<li><p>A <em>tag key</em> (for example, <code>CostCenter</code>, <code>Environment</code>, <code>Project</code>, or
+<code>Secret</code>). Tag keys are case sensitive.</p></li>
+<li><p>An optional field known as a <em>tag value</em> (for example,
+<code>111122223333</code>, <code>Production</code>, or a team name). Omitting the tag
+value is the same as using an empty string. Like tag keys, tag
+values are case sensitive.</p></li>
+</ul></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>associate_repository</span>(
-  <span class='kw'>Repository</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CodeCommit</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>Bitbucket</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ConnectionArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Owner</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>GitHubEnterpriseServer</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ConnectionArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Owner</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ClientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>associate_repository</span><span class='op'>(</span>
+  Repository <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CodeCommit <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    Bitbucket <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      ConnectionArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      Owner <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    GitHubEnterpriseServer <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      ConnectionArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      Owner <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ClientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -216,7 +227,7 @@ in the <em>CodeGuru Reviewer User Guide.</em></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

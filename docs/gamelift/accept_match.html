@@ -42,10 +42,38 @@ match — gamelift_accept_match • paws</title>
 
 <meta property="og:title" content="Registers a player's acceptance or rejection of a proposed FlexMatch
 match — gamelift_accept_match" />
-<meta property="og:description" content="Registers a player\'s acceptance or rejection of a proposed FlexMatch
+<meta property="og:description" content="Registers a player's acceptance or rejection of a proposed FlexMatch
 match. A matchmaking configuration may require player acceptance; if so,
 then matches built with that configuration cannot be completed unless
-all players accept the proposed match within a specified time limit." />
+all players accept the proposed match within a specified time limit.
+When FlexMatch builds a match, all the matchmaking tickets involved in
+the proposed match are placed into status REQUIRES_ACCEPTANCE. This is
+a trigger for your game to get acceptance from all players in the
+ticket. Acceptances are only valid for tickets when they are in this
+status; all other acceptances result in an error.
+To register acceptance, specify the ticket ID, a response, and one or
+more players. Once all players have registered acceptance, the
+matchmaking tickets advance to status PLACING, where a new game
+session is created for the match.
+If any player rejects the match, or if acceptances are not received
+before a specified timeout, the proposed match is dropped. The
+matchmaking tickets are then handled in one of two ways: For tickets
+where one or more players rejected the match, the ticket status is
+returned to SEARCHING to find a new match. For tickets where one or
+more players failed to respond, the ticket status is set to CANCELLED,
+and processing is terminated. A new matchmaking request for these
+players can be submitted as needed.
+Learn more
+Add FlexMatch to a Game Client
+FlexMatch Events Reference
+Related operations
+StartMatchmaking
+DescribeMatchmaking
+StopMatchmaking
+AcceptMatch
+StartMatchBackfill
+
+" />
 
 
 
@@ -77,7 +105,7 @@ all players accept the proposed match within a specified time limit." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +113,7 @@ all players accept the proposed match within a specified time limit." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +125,7 @@ all players accept the proposed match within a specified time limit." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,13 +149,41 @@ match</h1>
     </div>
 
     <div class="ref-description">
-    <p>Registers a player\'s acceptance or rejection of a proposed FlexMatch
+    <p>Registers a player's acceptance or rejection of a proposed FlexMatch
 match. A matchmaking configuration may require player acceptance; if so,
 then matches built with that configuration cannot be completed unless
 all players accept the proposed match within a specified time limit.</p>
+<p>When FlexMatch builds a match, all the matchmaking tickets involved in
+the proposed match are placed into status <code>REQUIRES_ACCEPTANCE</code>. This is
+a trigger for your game to get acceptance from all players in the
+ticket. Acceptances are only valid for tickets when they are in this
+status; all other acceptances result in an error.</p>
+<p>To register acceptance, specify the ticket ID, a response, and one or
+more players. Once all players have registered acceptance, the
+matchmaking tickets advance to status <code>PLACING</code>, where a new game
+session is created for the match.</p>
+<p>If any player rejects the match, or if acceptances are not received
+before a specified timeout, the proposed match is dropped. The
+matchmaking tickets are then handled in one of two ways: For tickets
+where one or more players rejected the match, the ticket status is
+returned to <code>SEARCHING</code> to find a new match. For tickets where one or
+more players failed to respond, the ticket status is set to <code>CANCELLED</code>,
+and processing is terminated. A new matchmaking request for these
+players can be submitted as needed.</p>
+<p><strong>Learn more</strong></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-client.html'>Add FlexMatch to a Game Client</a></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-events.html'>FlexMatch Events Reference</a></p>
+<p><strong>Related operations</strong></p><ul>
+<li><p>StartMatchmaking</p></li>
+<li><p>DescribeMatchmaking</p></li>
+<li><p>StopMatchmaking</p></li>
+<li><p>AcceptMatch</p></li>
+<li><p>StartMatchBackfill</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_accept_match</span>(<span class='no'>TicketId</span>, <span class='no'>PlayerIds</span>, <span class='no'>AcceptanceType</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_accept_match</span><span class='op'>(</span><span class='va'>TicketId</span>, <span class='va'>PlayerIds</span>, <span class='va'>AcceptanceType</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,46 +204,17 @@ can include one or multiple player IDs.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When FlexMatch builds a match, all the matchmaking tickets involved in
-the proposed match are placed into status <code>REQUIRES_ACCEPTANCE</code>. This is
-a trigger for your game to get acceptance from all players in the
-ticket. Acceptances are only valid for tickets when they are in this
-status; all other acceptances result in an error.</p>
-<p>To register acceptance, specify the ticket ID, a response, and one or
-more players. Once all players have registered acceptance, the
-matchmaking tickets advance to status <code>PLACING</code>, where a new game
-session is created for the match.</p>
-<p>If any player rejects the match, or if acceptances are not received
-before a specified timeout, the proposed match is dropped. The
-matchmaking tickets are then handled in one of two ways: For tickets
-where one or more players rejected the match, the ticket status is
-returned to <code>SEARCHING</code> to find a new match. For tickets where one or
-more players failed to respond, the ticket status is set to <code>CANCELLED</code>,
-and processing is terminated. A new matchmaking request for these
-players can be submitted as needed.</p>
-<p><strong>Learn more</strong></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/match-client.html'>Add FlexMatch to a Game Client</a></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/match-events.html'>FlexMatch Events Reference</a></p>
-<p><strong>Related operations</strong></p><ul>
-<li><p>StartMatchmaking</p></li>
-<li><p>DescribeMatchmaking</p></li>
-<li><p>StopMatchmaking</p></li>
-<li><p>AcceptMatch</p></li>
-<li><p>StartMatchBackfill</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>accept_match</span>(
-  <span class='kw'>TicketId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PlayerIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>accept_match</span><span class='op'>(</span>
+  TicketId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PlayerIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AcceptanceType</span> <span class='kw'>=</span> <span class='st'>"ACCEPT"</span><span class='kw'>|</span><span class='st'>"REJECT"</span>
-)</pre>
+  <span class='op'>)</span>,
+  AcceptanceType <span class='op'>=</span> <span class='st'>"ACCEPT"</span><span class='op'>|</span><span class='st'>"REJECT"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -205,7 +232,7 @@ players can be submitted as needed.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

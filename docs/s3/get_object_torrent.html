@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return torrent files from a bucket — s3_get_object_torrent • paws</title>
+<title>Returns torrent files from a bucket — s3_get_object_torrent • paws</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,19 @@
 
 
 
-<meta property="og:title" content="Return torrent files from a bucket — s3_get_object_torrent" />
-<meta property="og:description" content="Return torrent files from a bucket. BitTorrent can save you bandwidth
-when you\'re distributing large files. For more information about
-BitTorrent, see Amazon S3 Torrent." />
+<meta property="og:title" content="Returns torrent files from a bucket — s3_get_object_torrent" />
+<meta property="og:description" content="Returns torrent files from a bucket. BitTorrent can save you bandwidth
+when you're distributing large files. For more information about
+BitTorrent, see Using BitTorrent with Amazon S3.
+You can get torrent only for objects that are less than 5 GB in size,
+and that are not encrypted using server-side encryption with a
+customer-provided encryption key.
+To use GET, you must have READ access to the object.
+This action is not supported by Amazon S3 on Outposts.
+The following operation is related to GetObjectTorrent:
+GetObject
+
+" />
 
 
 
@@ -74,7 +83,7 @@ BitTorrent, see Amazon S3 Torrent." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +91,7 @@ BitTorrent, see Amazon S3 Torrent." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +103,7 @@ BitTorrent, see Amazon S3 Torrent." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,18 +120,27 @@ BitTorrent, see Amazon S3 Torrent." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return torrent files from a bucket</h1>
+    <h1>Returns torrent files from a bucket</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/s3_operations.R'><code>R/s3_operations.R</code></a></small>
     <div class="hidden name"><code>s3_get_object_torrent.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Return torrent files from a bucket. BitTorrent can save you bandwidth
-when you\'re distributing large files. For more information about
-BitTorrent, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/S3Torrent.html'>Amazon S3 Torrent</a>.</p>
+    <p>Returns torrent files from a bucket. BitTorrent can save you bandwidth
+when you're distributing large files. For more information about
+BitTorrent, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/S3Torrent.html'>Using BitTorrent with Amazon S3</a>.</p>
+<p>You can get torrent only for objects that are less than 5 GB in size,
+and that are not encrypted using server-side encryption with a
+customer-provided encryption key.</p>
+<p>To use GET, you must have READ access to the object.</p>
+<p>This action is not supported by Amazon S3 on Outposts.</p>
+<p>The following operation is related to <code>GetObjectTorrent</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html'>GetObject</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_get_object_torrent</span>(<span class='no'>Bucket</span>, <span class='no'>Key</span>, <span class='no'>RequestPayer</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_get_object_torrent</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Key</span>, <span class='va'>RequestPayer</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,36 +158,36 @@ torrent files.</p></td>
       <th>RequestPayer</th>
       <td></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can get torrent only for objects that are less than 5 GB in size and
-that are not encrypted using server-side encryption with
-customer-provided encryption key.</p>
-<p>To use GET, you must have READ access to the object.</p>
-<p>The following operation is related to <code>GetObjectTorrent</code>:</p><ul>
-<li><p>GetObject</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_object_torrent</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RequestPayer</span> <span class='kw'>=</span> <span class='st'>"requester"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_object_torrent</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Key <span class='op'>=</span> <span class='st'>"string"</span>,
+  RequestPayer <span class='op'>=</span> <span class='st'>"requester"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example retrieves torrent files of an object.</span>
-<span class='no'>svc</span>$<span class='fu'>get_object_torrent</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"HappyFace.jpg"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_object_torrent</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  Key <span class='op'>=</span> <span class='st'>"HappyFace.jpg"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -185,7 +203,7 @@ customer-provided encryption key.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

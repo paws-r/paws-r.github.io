@@ -40,7 +40,62 @@
 
 
 <meta property="og:title" content="Updates the configuration for a web distribution — cloudfront_update_distribution" />
-<meta property="og:description" content="Updates the configuration for a web distribution." />
+<meta property="og:description" content="Updates the configuration for a web distribution.
+When you update a distribution, there are more required fields than when
+you create a distribution. When you update your distribution by using
+this API action, follow the steps here to get the current configuration
+and then make your updates, to make sure that you include all of the
+required fields. To view a summary, see Required Fields for Create Distribution and Update Distribution
+in the Amazon CloudFront Developer Guide.
+The update process includes getting the current distribution
+configuration, updating the XML document that is returned to make your
+changes, and then submitting an UpdateDistribution request to make the
+updates.
+For information about updating a distribution using the CloudFront
+console instead, see Creating a Distribution
+in the Amazon CloudFront Developer Guide.
+To update a web distribution using the CloudFront API
+Submit a
+GetDistributionConfig
+request to get the current configuration and an Etag header for
+the distribution.
+If you update the distribution again, you must get a new Etag
+header.
+Update the XML document that was returned in the response to your
+GetDistributionConfig request to include your changes.
+When you edit the XML file, be aware of the following:
+You must strip out the ETag parameter that is returned.
+Additional fields are required when you update a distribution.
+There may be fields included in the XML file for features that
+you haven't configured for your distribution. This is expected
+and required to successfully update the distribution.
+You can't change the value of CallerReference. If you try to
+change this value, CloudFront returns an IllegalUpdate error.
+The new configuration replaces the existing configuration; the
+values that you specify in an UpdateDistribution request are
+not merged into your existing configuration. When you add,
+delete, or replace values in an element that allows multiple
+values (for example, CNAME), you must specify all of the
+values that you want to appear in the updated distribution. In
+addition, you must update the corresponding Quantity element.
+
+Submit an UpdateDistribution request to update the configuration
+for your distribution:
+In the request body, include the XML document that you updated
+in Step 2. The request body must include an XML document with a
+DistributionConfig element.
+Set the value of the HTTP If-Match header to the value of the
+ETag header that CloudFront returned when you submitted the
+GetDistributionConfig request in Step 1.
+
+Review the response to the UpdateDistribution request to confirm
+that the configuration was successfully updated.
+Optional: Submit a
+GetDistribution
+request to confirm that your changes have propagated. When
+propagation is complete, the value of Status is Deployed.
+
+" />
 
 
 
@@ -72,7 +127,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +135,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +147,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,31 +171,7 @@
 
     <div class="ref-description">
     <p>Updates the configuration for a web distribution.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>cloudfront_update_distribution</span>(<span class='no'>DistributionConfig</span>, <span class='no'>Id</span>, <span class='no'>IfMatch</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>DistributionConfig</th>
-      <td><p>[required] The distribution\'s configuration information.</p></td>
-    </tr>
-    <tr>
-      <th>Id</th>
-      <td><p>[required] The distribution\'s id.</p></td>
-    </tr>
-    <tr>
-      <th>IfMatch</th>
-      <td><p>The value of the <code>ETag</code> header that you received when retrieving the
-distribution\'s configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you update a distribution, there are more required fields than when
+<p>When you update a distribution, there are more required fields than when
 you create a distribution. When you update your distribution by using
 this API action, follow the steps here to get the current configuration
 and then make your updates, to make sure that you include all of the
@@ -166,9 +197,9 @@ header.</p></li>
 <li><p>You must strip out the ETag parameter that is returned.</p></li>
 <li><p>Additional fields are required when you update a distribution.
 There may be fields included in the XML file for features that
-you haven\'t configured for your distribution. This is expected
+you haven't configured for your distribution. This is expected
 and required to successfully update the distribution.</p></li>
-<li><p>You can\'t change the value of <code>CallerReference</code>. If you try to
+<li><p>You can't change the value of <code>CallerReference</code>. If you try to
 change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p></li>
 <li><p>The new configuration replaces the existing configuration; the
 values that you specify in an <code>UpdateDistribution</code> request are
@@ -195,257 +226,304 @@ request to confirm that your changes have propagated. When
 propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p></li>
 </ol>
 
+    </div>
+
+    <pre class="usage"><span class='fu'>cloudfront_update_distribution</span><span class='op'>(</span><span class='va'>DistributionConfig</span>, <span class='va'>Id</span>, <span class='va'>IfMatch</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>DistributionConfig</th>
+      <td><p>[required] The distribution's configuration information.</p></td>
+    </tr>
+    <tr>
+      <th>Id</th>
+      <td><p>[required] The distribution's id.</p></td>
+    </tr>
+    <tr>
+      <th>IfMatch</th>
+      <td><p>The value of the <code>ETag</code> header that you received when retrieving the
+distribution's configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_distribution</span>(
-  <span class='kw'>DistributionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CallerReference</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Aliases</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_distribution</span><span class='op'>(</span>
+  DistributionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CallerReference <span class='op'>=</span> <span class='st'>"string"</span>,
+    Aliases <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+      Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>DefaultRootObject</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Origins</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>DomainName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>OriginPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>CustomHeaders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>HeaderName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>HeaderValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-              )
-            )
-          ),
-          <span class='kw'>S3OriginConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>OriginAccessIdentity</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          ),
-          <span class='kw'>CustomOriginConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>HTTPPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>HTTPSPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>OriginProtocolPolicy</span> <span class='kw'>=</span> <span class='st'>"http-only"</span><span class='kw'>|</span><span class='st'>"match-viewer"</span><span class='kw'>|</span><span class='st'>"https-only"</span>,
-            <span class='kw'>OriginSslProtocols</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-              <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='st'>"SSLv3"</span><span class='kw'>|</span><span class='st'>"TLSv1"</span><span class='kw'>|</span><span class='st'>"TLSv1.1"</span><span class='kw'>|</span><span class='st'>"TLSv1.2"</span>
-              )
-            ),
-            <span class='kw'>OriginReadTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>OriginKeepaliveTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>
-          ),
-          <span class='kw'>ConnectionAttempts</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>ConnectionTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>
-        )
-      )
-    ),
-    <span class='kw'>OriginGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>FailoverCriteria</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>StatusCodes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-              <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    DefaultRootObject <span class='op'>=</span> <span class='st'>"string"</span>,
+    Origins <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+      Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Id <span class='op'>=</span> <span class='st'>"string"</span>,
+          DomainName <span class='op'>=</span> <span class='st'>"string"</span>,
+          OriginPath <span class='op'>=</span> <span class='st'>"string"</span>,
+          CustomHeaders <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+            Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                HeaderName <span class='op'>=</span> <span class='st'>"string"</span>,
+                HeaderValue <span class='op'>=</span> <span class='st'>"string"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          S3OriginConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            OriginAccessIdentity <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          CustomOriginConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            HTTPPort <span class='op'>=</span> <span class='fl'>123</span>,
+            HTTPSPort <span class='op'>=</span> <span class='fl'>123</span>,
+            OriginProtocolPolicy <span class='op'>=</span> <span class='st'>"http-only"</span><span class='op'>|</span><span class='st'>"match-viewer"</span><span class='op'>|</span><span class='st'>"https-only"</span>,
+            OriginSslProtocols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+              Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                <span class='st'>"SSLv3"</span><span class='op'>|</span><span class='st'>"TLSv1"</span><span class='op'>|</span><span class='st'>"TLSv1.1"</span><span class='op'>|</span><span class='st'>"TLSv1.2"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>,
+            OriginReadTimeout <span class='op'>=</span> <span class='fl'>123</span>,
+            OriginKeepaliveTimeout <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>,
+          ConnectionAttempts <span class='op'>=</span> <span class='fl'>123</span>,
+          ConnectionTimeout <span class='op'>=</span> <span class='fl'>123</span>,
+          OriginShield <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            OriginShieldRegion <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    OriginGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+      Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Id <span class='op'>=</span> <span class='st'>"string"</span>,
+          FailoverCriteria <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            StatusCodes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+              Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                 <span class='fl'>123</span>
-              )
-            )
-          ),
-          <span class='kw'>Members</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>OriginId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-              )
-            )
-          )
-        )
-      )
-    ),
-    <span class='kw'>DefaultCacheBehavior</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>TargetOriginId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ForwardedValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>QueryString</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>Cookies</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Forward</span> <span class='kw'>=</span> <span class='st'>"none"</span><span class='kw'>|</span><span class='st'>"whitelist"</span><span class='kw'>|</span><span class='st'>"all"</span>,
-          <span class='kw'>WhitelistedNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='st'>"string"</span>
-            )
-          )
-        ),
-        <span class='kw'>Headers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='st'>"string"</span>
-          )
-        ),
-        <span class='kw'>QueryStringCacheKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='st'>"string"</span>
-          )
-        )
-      ),
-      <span class='kw'>TrustedSigners</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          Members <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+            Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                OriginId <span class='op'>=</span> <span class='st'>"string"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    DefaultCacheBehavior <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      TargetOriginId <span class='op'>=</span> <span class='st'>"string"</span>,
+      TrustedSigners <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+        Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>ViewerProtocolPolicy</span> <span class='kw'>=</span> <span class='st'>"allow-all"</span><span class='kw'>|</span><span class='st'>"https-only"</span><span class='kw'>|</span><span class='st'>"redirect-to-https"</span>,
-      <span class='kw'>MinTTL</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>AllowedMethods</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='st'>"GET"</span><span class='kw'>|</span><span class='st'>"HEAD"</span><span class='kw'>|</span><span class='st'>"POST"</span><span class='kw'>|</span><span class='st'>"PUT"</span><span class='kw'>|</span><span class='st'>"PATCH"</span><span class='kw'>|</span><span class='st'>"OPTIONS"</span><span class='kw'>|</span><span class='st'>"DELETE"</span>
-        ),
-        <span class='kw'>CachedMethods</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='st'>"GET"</span><span class='kw'>|</span><span class='st'>"HEAD"</span><span class='kw'>|</span><span class='st'>"POST"</span><span class='kw'>|</span><span class='st'>"PUT"</span><span class='kw'>|</span><span class='st'>"PATCH"</span><span class='kw'>|</span><span class='st'>"OPTIONS"</span><span class='kw'>|</span><span class='st'>"DELETE"</span>
-          )
-        )
-      ),
-      <span class='kw'>SmoothStreaming</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>DefaultTTL</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>MaxTTL</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>Compress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>LambdaFunctionAssociations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>LambdaFunctionARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>EventType</span> <span class='kw'>=</span> <span class='st'>"viewer-request"</span><span class='kw'>|</span><span class='st'>"viewer-response"</span><span class='kw'>|</span><span class='st'>"origin-request"</span><span class='kw'>|</span><span class='st'>"origin-response"</span>,
-            <span class='kw'>IncludeBody</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-          )
-        )
-      ),
-      <span class='kw'>FieldLevelEncryptionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>CacheBehaviors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>PathPattern</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>TargetOriginId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>ForwardedValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>QueryString</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-            <span class='kw'>Cookies</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Forward</span> <span class='kw'>=</span> <span class='st'>"none"</span><span class='kw'>|</span><span class='st'>"whitelist"</span><span class='kw'>|</span><span class='st'>"all"</span>,
-              <span class='kw'>WhitelistedNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-                <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      TrustedKeyGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+        Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      ViewerProtocolPolicy <span class='op'>=</span> <span class='st'>"allow-all"</span><span class='op'>|</span><span class='st'>"https-only"</span><span class='op'>|</span><span class='st'>"redirect-to-https"</span>,
+      AllowedMethods <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+        Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='st'>"GET"</span><span class='op'>|</span><span class='st'>"HEAD"</span><span class='op'>|</span><span class='st'>"POST"</span><span class='op'>|</span><span class='st'>"PUT"</span><span class='op'>|</span><span class='st'>"PATCH"</span><span class='op'>|</span><span class='st'>"OPTIONS"</span><span class='op'>|</span><span class='st'>"DELETE"</span>
+        <span class='op'>)</span>,
+        CachedMethods <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+          Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='st'>"GET"</span><span class='op'>|</span><span class='st'>"HEAD"</span><span class='op'>|</span><span class='st'>"POST"</span><span class='op'>|</span><span class='st'>"PUT"</span><span class='op'>|</span><span class='st'>"PATCH"</span><span class='op'>|</span><span class='st'>"OPTIONS"</span><span class='op'>|</span><span class='st'>"DELETE"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      SmoothStreaming <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Compress <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      LambdaFunctionAssociations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+        Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            LambdaFunctionARN <span class='op'>=</span> <span class='st'>"string"</span>,
+            EventType <span class='op'>=</span> <span class='st'>"viewer-request"</span><span class='op'>|</span><span class='st'>"viewer-response"</span><span class='op'>|</span><span class='st'>"origin-request"</span><span class='op'>|</span><span class='st'>"origin-response"</span>,
+            IncludeBody <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      FieldLevelEncryptionId <span class='op'>=</span> <span class='st'>"string"</span>,
+      RealtimeLogConfigArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      CachePolicyId <span class='op'>=</span> <span class='st'>"string"</span>,
+      OriginRequestPolicyId <span class='op'>=</span> <span class='st'>"string"</span>,
+      ForwardedValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        QueryString <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        Cookies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Forward <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>|</span><span class='st'>"whitelist"</span><span class='op'>|</span><span class='st'>"all"</span>,
+          WhitelistedNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+            Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        Headers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+          Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        QueryStringCacheKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+          Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      MinTTL <span class='op'>=</span> <span class='fl'>123</span>,
+      DefaultTTL <span class='op'>=</span> <span class='fl'>123</span>,
+      MaxTTL <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    CacheBehaviors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+      Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          PathPattern <span class='op'>=</span> <span class='st'>"string"</span>,
+          TargetOriginId <span class='op'>=</span> <span class='st'>"string"</span>,
+          TrustedSigners <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+            Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          TrustedKeyGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+            Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          ViewerProtocolPolicy <span class='op'>=</span> <span class='st'>"allow-all"</span><span class='op'>|</span><span class='st'>"https-only"</span><span class='op'>|</span><span class='st'>"redirect-to-https"</span>,
+          AllowedMethods <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+            Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='st'>"GET"</span><span class='op'>|</span><span class='st'>"HEAD"</span><span class='op'>|</span><span class='st'>"POST"</span><span class='op'>|</span><span class='st'>"PUT"</span><span class='op'>|</span><span class='st'>"PATCH"</span><span class='op'>|</span><span class='st'>"OPTIONS"</span><span class='op'>|</span><span class='st'>"DELETE"</span>
+            <span class='op'>)</span>,
+            CachedMethods <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+              Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                <span class='st'>"GET"</span><span class='op'>|</span><span class='st'>"HEAD"</span><span class='op'>|</span><span class='st'>"POST"</span><span class='op'>|</span><span class='st'>"PUT"</span><span class='op'>|</span><span class='st'>"PATCH"</span><span class='op'>|</span><span class='st'>"OPTIONS"</span><span class='op'>|</span><span class='st'>"DELETE"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          SmoothStreaming <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+          Compress <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+          LambdaFunctionAssociations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+            Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                LambdaFunctionARN <span class='op'>=</span> <span class='st'>"string"</span>,
+                EventType <span class='op'>=</span> <span class='st'>"viewer-request"</span><span class='op'>|</span><span class='st'>"viewer-response"</span><span class='op'>|</span><span class='st'>"origin-request"</span><span class='op'>|</span><span class='st'>"origin-response"</span>,
+                IncludeBody <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          FieldLevelEncryptionId <span class='op'>=</span> <span class='st'>"string"</span>,
+          RealtimeLogConfigArn <span class='op'>=</span> <span class='st'>"string"</span>,
+          CachePolicyId <span class='op'>=</span> <span class='st'>"string"</span>,
+          OriginRequestPolicyId <span class='op'>=</span> <span class='st'>"string"</span>,
+          ForwardedValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            QueryString <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            Cookies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Forward <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>|</span><span class='st'>"whitelist"</span><span class='op'>|</span><span class='st'>"all"</span>,
+              WhitelistedNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+                Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                   <span class='st'>"string"</span>
-                )
-              )
-            ),
-            <span class='kw'>Headers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-              <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+                <span class='op'>)</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>,
+            Headers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+              Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                 <span class='st'>"string"</span>
-              )
-            ),
-            <span class='kw'>QueryStringCacheKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-              <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+              <span class='op'>)</span>
+            <span class='op'>)</span>,
+            QueryStringCacheKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+              Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                 <span class='st'>"string"</span>
-              )
-            )
-          ),
-          <span class='kw'>TrustedSigners</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-            <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='st'>"string"</span>
-            )
-          ),
-          <span class='kw'>ViewerProtocolPolicy</span> <span class='kw'>=</span> <span class='st'>"allow-all"</span><span class='kw'>|</span><span class='st'>"https-only"</span><span class='kw'>|</span><span class='st'>"redirect-to-https"</span>,
-          <span class='kw'>MinTTL</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>AllowedMethods</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='st'>"GET"</span><span class='kw'>|</span><span class='st'>"HEAD"</span><span class='kw'>|</span><span class='st'>"POST"</span><span class='kw'>|</span><span class='st'>"PUT"</span><span class='kw'>|</span><span class='st'>"PATCH"</span><span class='kw'>|</span><span class='st'>"OPTIONS"</span><span class='kw'>|</span><span class='st'>"DELETE"</span>
-            ),
-            <span class='kw'>CachedMethods</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-              <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='st'>"GET"</span><span class='kw'>|</span><span class='st'>"HEAD"</span><span class='kw'>|</span><span class='st'>"POST"</span><span class='kw'>|</span><span class='st'>"PUT"</span><span class='kw'>|</span><span class='st'>"PATCH"</span><span class='kw'>|</span><span class='st'>"OPTIONS"</span><span class='kw'>|</span><span class='st'>"DELETE"</span>
-              )
-            )
-          ),
-          <span class='kw'>SmoothStreaming</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-          <span class='kw'>DefaultTTL</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>MaxTTL</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>Compress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-          <span class='kw'>LambdaFunctionAssociations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>LambdaFunctionARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>EventType</span> <span class='kw'>=</span> <span class='st'>"viewer-request"</span><span class='kw'>|</span><span class='st'>"viewer-response"</span><span class='kw'>|</span><span class='st'>"origin-request"</span><span class='kw'>|</span><span class='st'>"origin-response"</span>,
-                <span class='kw'>IncludeBody</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-              )
-            )
-          ),
-          <span class='kw'>FieldLevelEncryptionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>CustomErrorResponses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>ErrorCode</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>ResponsePagePath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>ResponseCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>ErrorCachingMinTTL</span> <span class='kw'>=</span> <span class='fl'>123</span>
-        )
-      )
-    ),
-    <span class='kw'>Comment</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Logging</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>IncludeCookies</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>PriceClass</span> <span class='kw'>=</span> <span class='st'>"PriceClass_100"</span><span class='kw'>|</span><span class='st'>"PriceClass_200"</span><span class='kw'>|</span><span class='st'>"PriceClass_All"</span>,
-    <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>ViewerCertificate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CloudFrontDefaultCertificate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>IAMCertificateId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ACMCertificateArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>SSLSupportMethod</span> <span class='kw'>=</span> <span class='st'>"sni-only"</span><span class='kw'>|</span><span class='st'>"vip"</span>,
-      <span class='kw'>MinimumProtocolVersion</span> <span class='kw'>=</span> <span class='st'>"SSLv3"</span><span class='kw'>|</span><span class='st'>"TLSv1"</span><span class='kw'>|</span><span class='st'>"TLSv1_2016"</span><span class='kw'>|</span><span class='st'>"TLSv1.1_2016"</span><span class='kw'>|</span><span class='st'>"TLSv1.2_2018"</span><span class='kw'>|</span><span class='st'>"TLSv1.2_2019"</span>,
-      <span class='kw'>Certificate</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>CertificateSource</span> <span class='kw'>=</span> <span class='st'>"cloudfront"</span><span class='kw'>|</span><span class='st'>"iam"</span><span class='kw'>|</span><span class='st'>"acm"</span>
-    ),
-    <span class='kw'>Restrictions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>GeoRestriction</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>RestrictionType</span> <span class='kw'>=</span> <span class='st'>"blacklist"</span><span class='kw'>|</span><span class='st'>"whitelist"</span><span class='kw'>|</span><span class='st'>"none"</span>,
-        <span class='kw'>Quantity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Items</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          MinTTL <span class='op'>=</span> <span class='fl'>123</span>,
+          DefaultTTL <span class='op'>=</span> <span class='fl'>123</span>,
+          MaxTTL <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    CustomErrorResponses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+      Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          ErrorCode <span class='op'>=</span> <span class='fl'>123</span>,
+          ResponsePagePath <span class='op'>=</span> <span class='st'>"string"</span>,
+          ResponseCode <span class='op'>=</span> <span class='st'>"string"</span>,
+          ErrorCachingMinTTL <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Comment <span class='op'>=</span> <span class='st'>"string"</span>,
+    Logging <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      IncludeCookies <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    PriceClass <span class='op'>=</span> <span class='st'>"PriceClass_100"</span><span class='op'>|</span><span class='st'>"PriceClass_200"</span><span class='op'>|</span><span class='st'>"PriceClass_All"</span>,
+    Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    ViewerCertificate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CloudFrontDefaultCertificate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      IAMCertificateId <span class='op'>=</span> <span class='st'>"string"</span>,
+      ACMCertificateArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      SSLSupportMethod <span class='op'>=</span> <span class='st'>"sni-only"</span><span class='op'>|</span><span class='st'>"vip"</span><span class='op'>|</span><span class='st'>"static-ip"</span>,
+      MinimumProtocolVersion <span class='op'>=</span> <span class='st'>"SSLv3"</span><span class='op'>|</span><span class='st'>"TLSv1"</span><span class='op'>|</span><span class='st'>"TLSv1_2016"</span><span class='op'>|</span><span class='st'>"TLSv1.1_2016"</span><span class='op'>|</span><span class='st'>"TLSv1.2_2018"</span><span class='op'>|</span><span class='st'>"TLSv1.2_2019"</span>,
+      Certificate <span class='op'>=</span> <span class='st'>"string"</span>,
+      CertificateSource <span class='op'>=</span> <span class='st'>"cloudfront"</span><span class='op'>|</span><span class='st'>"iam"</span><span class='op'>|</span><span class='st'>"acm"</span>
+    <span class='op'>)</span>,
+    Restrictions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      GeoRestriction <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        RestrictionType <span class='op'>=</span> <span class='st'>"blacklist"</span><span class='op'>|</span><span class='st'>"whitelist"</span><span class='op'>|</span><span class='st'>"none"</span>,
+        Quantity <span class='op'>=</span> <span class='fl'>123</span>,
+        Items <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>WebACLId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>HttpVersion</span> <span class='kw'>=</span> <span class='st'>"http1.1"</span><span class='kw'>|</span><span class='st'>"http2"</span>,
-    <span class='kw'>IsIPV6Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IfMatch</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    WebACLId <span class='op'>=</span> <span class='st'>"string"</span>,
+    HttpVersion <span class='op'>=</span> <span class='st'>"http1.1"</span><span class='op'>|</span><span class='st'>"http2"</span>,
+    IsIPV6Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  Id <span class='op'>=</span> <span class='st'>"string"</span>,
+  IfMatch <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -463,7 +541,7 @@ propagation is complete, the value of <code>Status</code> is <code>Deployed</cod
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -33,7 +33,7 @@ build_site <- function (src, dst) {
   cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
   cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
   init_site(pkg)
-  build_reference(pkg, lazy = FALSE, document = FALSE, examples = FALSE, 
+  build_reference(pkg, lazy = FALSE, devel = FALSE, examples = FALSE, 
                   run_dont_run = FALSE, seed = 1014, override = list(), 
                   preview = FALSE)
   detach("pkgdown_all")

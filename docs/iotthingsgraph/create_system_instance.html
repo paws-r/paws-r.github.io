@@ -40,7 +40,23 @@
 
 
 <meta property="og:title" content="Creates a system instance — iotthingsgraph_create_system_instance" />
-<meta property="og:description" content="Creates a system instance." />
+<meta property="og:description" content="Creates a system instance.
+This action validates the system instance, prepares the
+deployment-related resources. For Greengrass deployments, it updates the
+Greengrass group that is specified by the greengrassGroupName
+parameter. It also adds a file to the S3 bucket specified by the
+s3BucketName parameter. You need to call DeploySystemInstance after
+running this action.
+For Greengrass deployments, since this action modifies and adds
+resources to a Greengrass group and an S3 bucket on the caller's behalf,
+the calling identity must have write permissions to both the specified
+Greengrass group and S3 bucket. Otherwise, the call will fail with an
+authorization error.
+For cloud deployments, this action requires a flowActionsRoleArn
+value. This is an IAM role that has permissions to access AWS services,
+such as AWS Lambda and AWS IoT, that the flow uses when it executes.
+If the definition document doesn't specify a version of the user's
+namespace, the latest version will be used by default." />
 
 
 
@@ -72,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +96,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +108,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +132,27 @@
 
     <div class="ref-description">
     <p>Creates a system instance.</p>
+<p>This action validates the system instance, prepares the
+deployment-related resources. For Greengrass deployments, it updates the
+Greengrass group that is specified by the <code>greengrassGroupName</code>
+parameter. It also adds a file to the S3 bucket specified by the
+<code>s3BucketName</code> parameter. You need to call <code>DeploySystemInstance</code> after
+running this action.</p>
+<p>For Greengrass deployments, since this action modifies and adds
+resources to a Greengrass group and an S3 bucket on the caller's behalf,
+the calling identity must have write permissions to both the specified
+Greengrass group and S3 bucket. Otherwise, the call will fail with an
+authorization error.</p>
+<p>For cloud deployments, this action requires a <code>flowActionsRoleArn</code>
+value. This is an IAM role that has permissions to access AWS services,
+such as AWS Lambda and AWS IoT, that the flow uses when it executes.</p>
+<p>If the definition document doesn't specify a version of the user's
+namespace, the latest version will be used by default.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iotthingsgraph_create_system_instance</span>(<span class='no'>tags</span>, <span class='no'>definition</span>, <span class='no'>target</span>,
-  <span class='no'>greengrassGroupName</span>, <span class='no'>s3BucketName</span>, <span class='no'>metricsConfiguration</span>,
-  <span class='no'>flowActionsRoleArn</span>)</pre>
+    <pre class="usage"><span class='fu'>iotthingsgraph_create_system_instance</span><span class='op'>(</span><span class='va'>tags</span>, <span class='va'>definition</span>, <span class='va'>target</span>,
+  <span class='va'>greengrassGroupName</span>, <span class='va'>s3BucketName</span>, <span class='va'>metricsConfiguration</span>,
+  <span class='va'>flowActionsRoleArn</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,7 +180,7 @@ is <code>GREENGRASS</code>.</p></td>
     <tr>
       <th>s3BucketName</th>
       <td><p>The name of the Amazon Simple Storage Service bucket that will be used
-to store and deploy the system instance\'s resource file. This value is
+to store and deploy the system instance's resource file. This value is
 required if the value of the <code>target</code> parameter is <code>GREENGRASS</code>.</p></td>
     </tr>
     <tr>
@@ -165,47 +197,30 @@ is <code>CLOUD</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This action validates the system instance, prepares the
-deployment-related resources. For Greengrass deployments, it updates the
-Greengrass group that is specified by the <code>greengrassGroupName</code>
-parameter. It also adds a file to the S3 bucket specified by the
-<code>s3BucketName</code> parameter. You need to call <code>DeploySystemInstance</code> after
-running this action.</p>
-<p>For Greengrass deployments, since this action modifies and adds
-resources to a Greengrass group and an S3 bucket on the caller\'s
-behalf, the calling identity must have write permissions to both the
-specified Greengrass group and S3 bucket. Otherwise, the call will fail
-with an authorization error.</p>
-<p>For cloud deployments, this action requires a <code>flowActionsRoleArn</code>
-value. This is an IAM role that has permissions to access AWS services,
-such as AWS Lambda and AWS IoT, that the flow uses when it executes.</p>
-<p>If the definition document doesn\'t specify a version of the user\'s
-namespace, the latest version will be used by default.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_system_instance</span>(
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>definition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>language</span> <span class='kw'>=</span> <span class='st'>"GRAPHQL"</span>,
-    <span class='kw'>text</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"GREENGRASS"</span><span class='kw'>|</span><span class='st'>"CLOUD"</span>,
-  <span class='kw'>greengrassGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>s3BucketName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>metricsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>cloudMetricEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>metricRuleRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>flowActionsRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_system_instance</span><span class='op'>(</span>
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  definition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    language <span class='op'>=</span> <span class='st'>"GRAPHQL"</span>,
+    text <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  target <span class='op'>=</span> <span class='st'>"GREENGRASS"</span><span class='op'>|</span><span class='st'>"CLOUD"</span>,
+  greengrassGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  s3BucketName <span class='op'>=</span> <span class='st'>"string"</span>,
+  metricsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    cloudMetricEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    metricRuleRoleArn <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  flowActionsRoleArn <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -223,7 +238,7 @@ namespace, the latest version will be used by default.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

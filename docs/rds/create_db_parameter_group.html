@@ -40,7 +40,26 @@
 
 
 <meta property="og:title" content="Creates a new DB parameter group — rds_create_db_parameter_group" />
-<meta property="og:description" content="Creates a new DB parameter group." />
+<meta property="og:description" content="Creates a new DB parameter group.
+A DB parameter group is initially created with the default parameters
+for the database engine used by the DB instance. To provide custom
+values for any of the parameters, you must modify the group after
+creating it using ModifyDBParameterGroup. Once you've created a DB
+parameter group, you need to associate it with your DB instance using
+ModifyDBInstance. When you associate a new DB parameter group with a
+running DB instance, you need to reboot the DB instance without failover
+for the new DB parameter group and associated settings to take effect.
+After you create a DB parameter group, you should wait at least 5
+minutes before creating your first DB instance that uses that DB
+parameter group as the default parameter group. This allows Amazon RDS
+to fully complete the create action before the parameter group is used
+as the default for a new DB instance. This is especially important for
+parameters that are critical when creating the default database for a DB
+instance, such as the character set for the default database defined by
+the character_set_database parameter. You can use the Parameter
+Groups option of the Amazon RDS console or the DescribeDBParameters
+command to verify that your DB parameter group has been created or
+modified." />
 
 
 
@@ -72,7 +91,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +99,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +111,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +135,29 @@
 
     <div class="ref-description">
     <p>Creates a new DB parameter group.</p>
+<p>A DB parameter group is initially created with the default parameters
+for the database engine used by the DB instance. To provide custom
+values for any of the parameters, you must modify the group after
+creating it using <em>ModifyDBParameterGroup</em>. Once you've created a DB
+parameter group, you need to associate it with your DB instance using
+<em>ModifyDBInstance</em>. When you associate a new DB parameter group with a
+running DB instance, you need to reboot the DB instance without failover
+for the new DB parameter group and associated settings to take effect.</p>
+<p>After you create a DB parameter group, you should wait at least 5
+minutes before creating your first DB instance that uses that DB
+parameter group as the default parameter group. This allows Amazon RDS
+to fully complete the create action before the parameter group is used
+as the default for a new DB instance. This is especially important for
+parameters that are critical when creating the default database for a DB
+instance, such as the character set for the default database defined by
+the <code>character_set_database</code> parameter. You can use the <em>Parameter
+Groups</em> option of the Amazon RDS console or the <em>DescribeDBParameters</em>
+command to verify that your DB parameter group has been created or
+modified.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rds_create_db_parameter_group</span>(<span class='no'>DBParameterGroupName</span>,
-  <span class='no'>DBParameterGroupFamily</span>, <span class='no'>Description</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>rds_create_db_parameter_group</span><span class='op'>(</span><span class='va'>DBParameterGroupName</span>,
+  <span class='va'>DBParameterGroupFamily</span>, <span class='va'>Description</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,7 +168,7 @@
 <p>Constraints:</p><ul>
 <li><p>Must be 1 to 255 letters, numbers, or hyphens.</p></li>
 <li><p>First character must be a letter</p></li>
-<li><p>Can\'t end with a hyphen or contain two consecutive hyphens</p></li>
+<li><p>Can't end with a hyphen or contain two consecutive hyphens</p></li>
 </ul>
 
 <p>This value is stored as a lowercase string.</p></td>
@@ -156,41 +194,21 @@ command:</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A DB parameter group is initially created with the default parameters
-for the database engine used by the DB instance. To provide custom
-values for any of the parameters, you must modify the group after
-creating it using <em>ModifyDBParameterGroup</em>. Once you\'ve created a DB
-parameter group, you need to associate it with your DB instance using
-<em>ModifyDBInstance</em>. When you associate a new DB parameter group with a
-running DB instance, you need to reboot the DB instance without failover
-for the new DB parameter group and associated settings to take effect.</p>
-<p>After you create a DB parameter group, you should wait at least 5
-minutes before creating your first DB instance that uses that DB
-parameter group as the default parameter group. This allows Amazon RDS
-to fully complete the create action before the parameter group is used
-as the default for a new DB instance. This is especially important for
-parameters that are critical when creating the default database for a DB
-instance, such as the character set for the default database defined by
-the <code>character_set_database</code> parameter. You can use the <em>Parameter
-Groups</em> option of the <a href='https://console.aws.amazon.com/rds/'>Amazon RDS console</a> or the
-<em>DescribeDBParameters</em> command to verify that your DB parameter group
-has been created or modified.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_db_parameter_group</span>(
-  <span class='kw'>DBParameterGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DBParameterGroupFamily</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_db_parameter_group</span><span class='op'>(</span>
+  DBParameterGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  DBParameterGroupFamily <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -208,7 +226,7 @@ has been created or modified.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

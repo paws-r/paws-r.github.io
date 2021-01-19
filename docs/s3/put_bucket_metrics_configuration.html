@@ -44,9 +44,30 @@ for the bucket — s3_put_bucket_metrics_configuration • paws</title>
 for the bucket — s3_put_bucket_metrics_configuration" />
 <meta property="og:description" content="Sets a metrics configuration (specified by the metrics configuration ID)
 for the bucket. You can have up to 1,000 metrics configurations per
-bucket. If you\'re updating an existing metrics configuration, note that
+bucket. If you're updating an existing metrics configuration, note that
 this is a full replacement of the existing metrics configuration. If you
-don\'t include the elements you want to keep, they are erased." />
+don't include the elements you want to keep, they are erased.
+To use this operation, you must have permissions to perform the
+s3:PutMetricsConfiguration action. The bucket owner has this
+permission by default. The bucket owner can grant this permission to
+others. For more information about permissions, see Permissions Related to Bucket Subresource Operations
+and Managing Access Permissions to Your Amazon S3 Resources.
+For information about CloudWatch request metrics for Amazon S3, see
+Monitoring Metrics with Amazon CloudWatch.
+The following operations are related to PutBucketMetricsConfiguration:
+DeleteBucketMetricsConfiguration
+PutBucketMetricsConfiguration
+ListBucketMetricsConfigurations
+
+
+GetBucketLifecycle has the following special error:
+Error code: TooManyConfigurations
+Description: You are attempting to create a new configuration
+but have already reached the 1,000-configuration limit.
+HTTP Status Code: HTTP 400 Bad Request
+
+
+" />
 
 
 
@@ -78,7 +99,7 @@ don\'t include the elements you want to keep, they are erased." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +107,7 @@ don\'t include the elements you want to keep, they are erased." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +119,7 @@ don\'t include the elements you want to keep, they are erased." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,12 +145,34 @@ for the bucket</h1>
     <div class="ref-description">
     <p>Sets a metrics configuration (specified by the metrics configuration ID)
 for the bucket. You can have up to 1,000 metrics configurations per
-bucket. If you\'re updating an existing metrics configuration, note that
+bucket. If you're updating an existing metrics configuration, note that
 this is a full replacement of the existing metrics configuration. If you
-don\'t include the elements you want to keep, they are erased.</p>
+don't include the elements you want to keep, they are erased.</p>
+<p>To use this operation, you must have permissions to perform the
+<code>s3:PutMetricsConfiguration</code> action. The bucket owner has this
+permission by default. The bucket owner can grant this permission to
+others. For more information about permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources'>Permissions Related to Bucket Subresource Operations</a>
+and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html'>Managing Access Permissions to Your Amazon S3 Resources</a>.</p>
+<p>For information about CloudWatch request metrics for Amazon S3, see
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html'>Monitoring Metrics with Amazon CloudWatch</a>.</p>
+<p>The following operations are related to <code>PutBucketMetricsConfiguration</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html'>DeleteBucketMetricsConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html'>PutBucketMetricsConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketMetricsConfigurations.html'>ListBucketMetricsConfigurations</a></p></li>
+</ul>
+
+<p><code>GetBucketLifecycle</code> has the following special error:</p><ul>
+<li><p>Error code: <code>TooManyConfigurations</code></p><ul>
+<li><p>Description: You are attempting to create a new configuration
+but have already reached the 1,000-configuration limit.</p></li>
+<li><p>HTTP Status Code: HTTP 400 Bad Request</p></li>
+</ul></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_put_bucket_metrics_configuration</span>(<span class='no'>Bucket</span>, <span class='no'>Id</span>, <span class='no'>MetricsConfiguration</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_put_bucket_metrics_configuration</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Id</span>, <span class='va'>MetricsConfiguration</span>,
+  <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,57 +189,42 @@ don\'t include the elements you want to keep, they are erased.</p>
       <th>MetricsConfiguration</th>
       <td><p>[required] Specifies the metrics configuration.</p></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To use this operation, you must have permissions to perform the
-<code>s3:PutMetricsConfiguration</code> action. The bucket owner has this
-permission by default. The bucket owner can grant this permission to
-others. For more information about permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources'>Permissions Related to Bucket Subresource Operations</a>
-and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html'>Managing Access Permissions to Your Amazon S3 Resources</a>.</p>
-<p>For information about CloudWatch request metrics for Amazon S3, see
-<a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html'>Monitoring Metrics with Amazon CloudWatch</a>.</p>
-<p>The following operations are related to <code>PutBucketMetricsConfiguration</code>:</p><ul>
-<li><p>DeleteBucketMetricsConfiguration</p></li>
-<li><p>PutBucketMetricsConfiguration</p></li>
-<li><p>ListBucketMetricsConfigurations</p></li>
-</ul>
-
-<p><code>GetBucketLifecycle</code> has the following special error:</p><ul>
-<li><p>Error code: <code>TooManyConfigurations</code></p><ul>
-<li><p>Description: You are attempting to create a new configuration
-but have already reached the 1,000-configuration limit.</p></li>
-<li><p>HTTP Status Code: HTTP 400 Bad Request</p></li>
-</ul></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_bucket_metrics_configuration</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MetricsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Tag</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>And</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_metrics_configuration</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Id <span class='op'>=</span> <span class='st'>"string"</span>,
+  MetricsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Id <span class='op'>=</span> <span class='st'>"string"</span>,
+    Filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      Tag <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Key <span class='op'>=</span> <span class='st'>"string"</span>,
+        Value <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      And <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+        Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Key <span class='op'>=</span> <span class='st'>"string"</span>,
+            Value <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -214,7 +242,7 @@ but have already reached the 1,000-configuration limit.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

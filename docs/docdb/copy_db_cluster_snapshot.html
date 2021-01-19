@@ -40,7 +40,14 @@
 
 
 <meta property="og:title" content="Copies a snapshot of a cluster — docdb_copy_db_cluster_snapshot" />
-<meta property="og:description" content="Copies a snapshot of a cluster." />
+<meta property="og:description" content="Copies a snapshot of a cluster.
+To copy a cluster snapshot from a shared manual cluster snapshot,
+SourceDBClusterSnapshotIdentifier must be the Amazon Resource Name
+(ARN) of the shared cluster snapshot. You can only copy a shared DB
+cluster snapshot, whether encrypted or not, in the same AWS Region.
+To cancel the copy operation after it is in progress, delete the target
+cluster snapshot identified by TargetDBClusterSnapshotIdentifier while
+that cluster snapshot is in the copying status." />
 
 
 
@@ -72,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +99,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +123,18 @@
 
     <div class="ref-description">
     <p>Copies a snapshot of a cluster.</p>
+<p>To copy a cluster snapshot from a shared manual cluster snapshot,
+<code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name
+(ARN) of the shared cluster snapshot. You can only copy a shared DB
+cluster snapshot, whether encrypted or not, in the same AWS Region.</p>
+<p>To cancel the copy operation after it is in progress, delete the target
+cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while
+that cluster snapshot is in the <em>copying</em> status.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>docdb_copy_db_cluster_snapshot</span>(<span class='no'>SourceDBClusterSnapshotIdentifier</span>,
-  <span class='no'>TargetDBClusterSnapshotIdentifier</span>, <span class='no'>KmsKeyId</span>, <span class='no'>PreSignedUrl</span>, <span class='no'>CopyTags</span>,
-  <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>docdb_copy_db_cluster_snapshot</span><span class='op'>(</span><span class='va'>SourceDBClusterSnapshotIdentifier</span>,
+  <span class='va'>TargetDBClusterSnapshotIdentifier</span>, <span class='va'>KmsKeyId</span>, <span class='va'>PreSignedUrl</span>, <span class='va'>CopyTags</span>,
+  <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,10 +143,8 @@
       <th>SourceDBClusterSnapshotIdentifier</th>
       <td><p>[required] The identifier of the cluster snapshot to copy. This parameter is not
 case sensitive.</p>
-<p>You can\'t copy an encrypted, shared cluster snapshot from one AWS
-Region to another.</p>
 <p>Constraints:</p><ul>
-<li><p>Must specify a valid system snapshot in the \"available\" state.</p></li>
+<li><p>Must specify a valid system snapshot in the <em>available</em> state.</p></li>
 <li><p>If the source snapshot is in the same AWS Region as the copy,
 specify a valid snapshot identifier.</p></li>
 <li><p>If the source snapshot is in a different AWS Region than the copy,
@@ -160,7 +172,7 @@ is the Amazon Resource Name (ARN), AWS KMS key identifier, or the AWS
 KMS key alias for the AWS KMS encryption key.</p>
 <p>If you copy an encrypted cluster snapshot from your AWS account, you can
 specify a value for <code>KmsKeyId</code> to encrypt the copy with a new AWS KMS
-encryption key. If you don\'t specify a value for <code>KmsKeyId</code>, then the
+encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the
 copy of the cluster snapshot is encrypted with the same AWS KMS key as
 the source cluster snapshot.</p>
 <p>If you copy an encrypted cluster snapshot that is shared from another
@@ -169,7 +181,8 @@ AWS account, then you must specify a value for <code>KmsKeyId</code>.</p>
 <code>KmsKeyId</code> to the AWS KMS key ID that you want to use to encrypt the
 copy of the cluster snapshot in the destination Region. AWS KMS
 encryption keys are specific to the AWS Region that they are created in,
-and you can\'t use encryption keys from one Region in another Region.</p>
+and you can't use encryption keys from one AWS Region in another AWS
+Region.</p>
 <p>If you copy an unencrypted cluster snapshot and specify a value for the
 <code>KmsKeyId</code> parameter, an error is returned.</p></td>
     </tr>
@@ -178,27 +191,27 @@ and you can\'t use encryption keys from one Region in another Region.</p>
       <td><p>The URL that contains a Signature Version 4 signed request for the
 <code>CopyDBClusterSnapshot</code> API action in the AWS Region that contains the
 source cluster snapshot to copy. You must use the <code>PreSignedUrl</code>
-parameter when copying an encrypted cluster snapshot from another AWS
-Region.</p>
+parameter when copying a cluster snapshot from another AWS Region.</p>
+<p>If you are using an AWS SDK tool or the AWS CLI, you can specify
+<code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of
+specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code>
+autogenerates a pre-signed URL that is a valid request for the operation
+that can be executed in the source AWS Region.</p>
 <p>The presigned URL must be a valid request for the
-<code>CopyDBSClusterSnapshot</code> API action that can be executed in the source
-AWS Region that contains the encrypted DB cluster snapshot to be copied.
-The presigned URL request must contain the following parameter values:</p><ul>
-<li><p><code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to
-encrypt the copy of the cluster snapshot in the destination AWS
-Region. This is the same identifier for both the
-<code>CopyDBClusterSnapshot</code> action that is called in the destination AWS
-Region, and the action contained in the presigned URL.</p></li>
-<li><p><code>DestinationRegion</code> - The name of the AWS Region that the DB cluster
-snapshot will be created in.</p></li>
-<li><p><code>SourceDBClusterSnapshotIdentifier</code> - The cluster snapshot
-identifier for the encrypted cluster snapshot to be copied. This
-identifier must be in the Amazon Resource Name (ARN) format for the
-source AWS Region. For example, if you are copying an encrypted
-cluster snapshot from the us-west-2 AWS Region, then your
-<code>SourceDBClusterSnapshotIdentifier</code> looks like the following
-example:
-<code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:my-cluster-snapshot-20161115</code>.</p></li>
+<code>CopyDBClusterSnapshot</code> API action that can be executed in the source
+AWS Region that contains the cluster snapshot to be copied. The
+presigned URL request must contain the following parameter values:</p><ul>
+<li><p><code>SourceRegion</code> - The ID of the region that contains the snapshot to
+be copied.</p></li>
+<li><p><code>SourceDBClusterSnapshotIdentifier</code> - The identifier for the the
+encrypted cluster snapshot to be copied. This identifier must be in
+the Amazon Resource Name (ARN) format for the source AWS Region. For
+example, if you are copying an encrypted cluster snapshot from the
+us-east-1 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code>
+looks something like the following:
+<code>arn:aws:rds:us-east-1:12345678012:sample-cluster:sample-cluster-snapshot</code>.</p></li>
+<li><p><code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new
+cluster snapshot to be created. This parameter isn't case sensitive.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -212,30 +225,23 @@ target cluster snapshot, and otherwise <code>false</code>. The default is <code>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To copy a cluster snapshot from a shared manual cluster snapshot,
-<code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name
-(ARN) of the shared cluster snapshot.</p>
-<p>To cancel the copy operation after it is in progress, delete the target
-cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while
-that DB cluster snapshot is in the <em>copying</em> status.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>copy_db_cluster_snapshot</span>(
-  <span class='kw'>SourceDBClusterSnapshotIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TargetDBClusterSnapshotIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PreSignedUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CopyTags</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>copy_db_cluster_snapshot</span><span class='op'>(</span>
+  SourceDBClusterSnapshotIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  TargetDBClusterSnapshotIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PreSignedUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  CopyTags <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -253,7 +259,7 @@ that DB cluster snapshot is in the <em>copying</em> status.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

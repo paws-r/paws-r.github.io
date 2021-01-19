@@ -43,7 +43,33 @@
 <meta property="og:description" content="Detect drift on a stack set. When CloudFormation performs drift
 detection on a stack set, it performs drift detection on the stack
 associated with each stack instance in the stack set. For more
-information, see How CloudFormation Performs Drift Detection on a Stack Set." />
+information, see How CloudFormation Performs Drift Detection on a Stack Set.
+DetectStackSetDrift returns the OperationId of the stack set drift
+detection operation. Use this operation id with
+&amp;lt;a&amp;gt;DescribeStackSetOperation&amp;lt;/a&amp;gt; to monitor the progress of the
+drift detection operation. The drift detection operation may take some
+time, depending on the number of stack instances included in the stack
+set, as well as the number of resources included in each stack.
+Once the operation has completed, use the following actions to return
+drift information:
+Use &amp;lt;a&amp;gt;DescribeStackSet&amp;lt;/a&amp;gt; to return detailed informaiton about
+the stack set, including detailed information about the last
+completed drift operation performed on the stack set. (Information
+about drift operations that are in progress is not included.)
+Use &amp;lt;a&amp;gt;ListStackInstances&amp;lt;/a&amp;gt; to return a list of stack
+instances belonging to the stack set, including the drift status and
+last drift time checked of each instance.
+Use &amp;lt;a&amp;gt;DescribeStackInstance&amp;lt;/a&amp;gt; to return detailed information
+about a specific stack instance, including its drift status and last
+drift time checked.
+
+
+For more information on performing a drift detection operation on a
+stack set, see Detecting Unmanaged Changes in Stack Sets.
+You can only run a single drift detection operation on a given stack set
+at one time.
+To stop a drift detection stack set operation, use
+&amp;lt;a&amp;gt;StopStackSetOperation&amp;lt;/a&amp;gt;." />
 
 
 
@@ -75,7 +101,7 @@ information, see How CloudFormation Performs Drift Detection on a Stack Set." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +109,7 @@ information, see How CloudFormation Performs Drift Detection on a Stack Set." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +121,7 @@ information, see How CloudFormation Performs Drift Detection on a Stack Set." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,32 +148,7 @@ information, see How CloudFormation Performs Drift Detection on a Stack Set." />
 detection on a stack set, it performs drift detection on the stack
 associated with each stack instance in the stack set. For more
 information, see <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-drift.html'>How CloudFormation Performs Drift Detection on a Stack Set</a>.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>cloudformation_detect_stack_set_drift</span>(<span class='no'>StackSetName</span>,
-  <span class='no'>OperationPreferences</span>, <span class='no'>OperationId</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>StackSetName</th>
-      <td><p>[required] The name of the stack set on which to perform the drift detection
-operation.</p></td>
-    </tr>
-    <tr>
-      <th>OperationPreferences</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th>OperationId</th>
-      <td><p><em>The ID of the stack set operation.</em></p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>DetectStackSetDrift</code> returns the <code>OperationId</code> of the stack set drift
+<p><code>DetectStackSetDrift</code> returns the <code>OperationId</code> of the stack set drift
 detection operation. Use this operation id with
 <code>&lt;a&gt;DescribeStackSetOperation&lt;/a&gt;</code> to monitor the progress of the
 drift detection operation. The drift detection operation may take some
@@ -173,22 +174,46 @@ stack set, see <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/Use
 at one time.</p>
 <p>To stop a drift detection stack set operation, use
 <code>&lt;a&gt;StopStackSetOperation&lt;/a&gt;</code>.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>cloudformation_detect_stack_set_drift</span><span class='op'>(</span><span class='va'>StackSetName</span>,
+  <span class='va'>OperationPreferences</span>, <span class='va'>OperationId</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>StackSetName</th>
+      <td><p>[required] The name of the stack set on which to perform the drift detection
+operation.</p></td>
+    </tr>
+    <tr>
+      <th>OperationPreferences</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>OperationId</th>
+      <td><p><em>The ID of the stack set operation.</em></p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>detect_stack_set_drift</span>(
-  <span class='kw'>StackSetName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OperationPreferences</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RegionOrder</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>detect_stack_set_drift</span><span class='op'>(</span>
+  StackSetName <span class='op'>=</span> <span class='st'>"string"</span>,
+  OperationPreferences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RegionOrder <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>FailureToleranceCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>FailureTolerancePercentage</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>MaxConcurrentCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>MaxConcurrentPercentage</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>OperationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+    <span class='op'>)</span>,
+    FailureToleranceCount <span class='op'>=</span> <span class='fl'>123</span>,
+    FailureTolerancePercentage <span class='op'>=</span> <span class='fl'>123</span>,
+    MaxConcurrentCount <span class='op'>=</span> <span class='fl'>123</span>,
+    MaxConcurrentPercentage <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  OperationId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -206,7 +231,7 @@ at one time.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

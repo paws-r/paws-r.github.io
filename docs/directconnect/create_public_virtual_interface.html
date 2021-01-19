@@ -42,7 +42,10 @@
 <meta property="og:title" content="Creates a public virtual interface — directconnect_create_public_virtual_interface" />
 <meta property="og:description" content="Creates a public virtual interface. A virtual interface is the VLAN that
 transports AWS Direct Connect traffic. A public virtual interface
-supports sending traffic to public services of AWS such as Amazon S3." />
+supports sending traffic to public services of AWS such as Amazon S3.
+When creating an IPv6 public virtual interface (addressFamily is
+ipv6), leave the customer and amazon address fields blank to use
+auto-assigned IPv6 space. Custom IPv6 addresses are not supported." />
 
 
 
@@ -74,7 +77,7 @@ supports sending traffic to public services of AWS such as Amazon S3." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +85,7 @@ supports sending traffic to public services of AWS such as Amazon S3." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +97,7 @@ supports sending traffic to public services of AWS such as Amazon S3." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +123,13 @@ supports sending traffic to public services of AWS such as Amazon S3." />
     <p>Creates a public virtual interface. A virtual interface is the VLAN that
 transports AWS Direct Connect traffic. A public virtual interface
 supports sending traffic to public services of AWS such as Amazon S3.</p>
+<p>When creating an IPv6 public virtual interface (<code>addressFamily</code> is
+<code>ipv6</code>), leave the <code>customer</code> and <code>amazon</code> address fields blank to use
+auto-assigned IPv6 space. Custom IPv6 addresses are not supported.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>directconnect_create_public_virtual_interface</span>(<span class='no'>connectionId</span>,
-  <span class='no'>newPublicVirtualInterface</span>)</pre>
+    <pre class="usage"><span class='fu'>directconnect_create_public_virtual_interface</span><span class='op'>(</span><span class='va'>connectionId</span>,
+  <span class='va'>newPublicVirtualInterface</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,37 +144,33 @@ supports sending traffic to public services of AWS such as Amazon S3.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When creating an IPv6 public virtual interface (<code>addressFamily</code> is
-<code>ipv6</code>), leave the <code>customer</code> and <code>amazon</code> address fields blank to use
-auto-assigned IPv6 space. Custom IPv6 addresses are not supported.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_public_virtual_interface</span>(
-  <span class='kw'>connectionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>newPublicVirtualInterface</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>virtualInterfaceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>vlan</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>asn</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>authKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>amazonAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>customerAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>addressFamily</span> <span class='kw'>=</span> <span class='st'>"ipv4"</span><span class='kw'>|</span><span class='st'>"ipv6"</span>,
-    <span class='kw'>routeFilterPrefixes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>cidr</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_public_virtual_interface</span><span class='op'>(</span>
+  connectionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  newPublicVirtualInterface <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    virtualInterfaceName <span class='op'>=</span> <span class='st'>"string"</span>,
+    vlan <span class='op'>=</span> <span class='fl'>123</span>,
+    asn <span class='op'>=</span> <span class='fl'>123</span>,
+    authKey <span class='op'>=</span> <span class='st'>"string"</span>,
+    amazonAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+    customerAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+    addressFamily <span class='op'>=</span> <span class='st'>"ipv4"</span><span class='op'>|</span><span class='st'>"ipv6"</span>,
+    routeFilterPrefixes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        cidr <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        key <span class='op'>=</span> <span class='st'>"string"</span>,
+        value <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -186,7 +188,7 @@ auto-assigned IPv6 space. Custom IPv6 addresses are not supported.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

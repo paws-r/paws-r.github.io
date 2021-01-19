@@ -40,7 +40,23 @@
 
 
 <meta property="og:title" content="Describes the specified Spot Instance requests — ec2_describe_spot_instance_requests" />
-<meta property="og:description" content="Describes the specified Spot Instance requests." />
+<meta property="og:description" content="Describes the specified Spot Instance requests.
+You can use DescribeSpotInstanceRequests to find a running Spot
+Instance by examining the response. If the status of the Spot Instance
+is fulfilled, the instance ID appears in the response and contains the
+identifier of the instance. Alternatively, you can use
+DescribeInstances
+with a filter to look for instances where the instance lifecycle is
+spot.
+We recommend that you set MaxResults to a value between 5 and 1000 to
+limit the number of results returned. This paginates the output, which
+makes the list more manageable and returns the results faster. If the
+list of results exceeds your MaxResults value, then that number of
+results is returned along with a NextToken value that can be passed to
+a subsequent DescribeSpotInstanceRequests request to retrieve the
+remaining results.
+Spot Instance requests are deleted four hours after they are canceled
+and their instances are terminated." />
 
 
 
@@ -72,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +96,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +108,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +132,26 @@
 
     <div class="ref-description">
     <p>Describes the specified Spot Instance requests.</p>
+<p>You can use <code>DescribeSpotInstanceRequests</code> to find a running Spot
+Instance by examining the response. If the status of the Spot Instance
+is <code>fulfilled</code>, the instance ID appears in the response and contains the
+identifier of the instance. Alternatively, you can use
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html'>DescribeInstances</a>
+with a filter to look for instances where the instance lifecycle is
+<code>spot</code>.</p>
+<p>We recommend that you set <code>MaxResults</code> to a value between 5 and 1000 to
+limit the number of results returned. This paginates the output, which
+makes the list more manageable and returns the results faster. If the
+list of results exceeds your <code>MaxResults</code> value, then that number of
+results is returned along with a <code>NextToken</code> value that can be passed to
+a subsequent <code>DescribeSpotInstanceRequests</code> request to retrieve the
+remaining results.</p>
+<p>Spot Instance requests are deleted four hours after they are canceled
+and their instances are terminated.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_describe_spot_instance_requests</span>(<span class='no'>Filters</span>, <span class='no'>DryRun</span>,
-  <span class='no'>SpotInstanceRequestIds</span>, <span class='no'>NextToken</span>, <span class='no'>MaxResults</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_describe_spot_instance_requests</span><span class='op'>(</span><span class='va'>Filters</span>, <span class='va'>DryRun</span>,
+  <span class='va'>SpotInstanceRequestIds</span>, <span class='va'>NextToken</span>, <span class='va'>MaxResults</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,9 +176,9 @@ for the EBS volume.</p></li>
 <li><p><code>launch.block-device-mapping.volume-size</code> - The size of the EBS
 volume, in GiB.</p></li>
 <li><p><code>launch.block-device-mapping.volume-type</code> - The type of EBS volume:
-<code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code>
-for Throughput Optimized HDD, <code>sc1</code>for Cold HDD, or <code>standard</code> for
-Magnetic.</p></li>
+<code>gp2</code> for General Purpose SSD, <code>io1</code> or <code>io2</code> for Provisioned IOPS
+SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code>for Cold HDD, or
+<code>standard</code> for Magnetic.</p></li>
 <li><p><code>launch.group-id</code> - The ID of the security group for the instance.</p></li>
 <li><p><code>launch.group-name</code> - The name of the security group for the
 instance.</p></li>
@@ -178,28 +210,28 @@ address of the network interface.</p></li>
 <li><p><code>network-interface.subnet-id</code> - The ID of the subnet for the
 instance.</p></li>
 <li><p><code>product-description</code> - The product description associated with the
-instance (<code>Linux/UNIX</code> \| <code>Windows</code>).</p></li>
+instance (<code>Linux/UNIX</code> | <code>Windows</code>).</p></li>
 <li><p><code>spot-instance-request-id</code> - The Spot Instance request ID.</p></li>
 <li><p><code>spot-price</code> - The maximum hourly price for any Spot Instance
 launched to fulfill the request.</p></li>
-<li><p><code>state</code> - The state of the Spot Instance request (<code>open</code> \| <code>active</code>
-\| <code>closed</code> \| <code>cancelled</code> \| <code>failed</code>). Spot request status
+<li><p><code>state</code> - The state of the Spot Instance request (<code>open</code> | <code>active</code>
+| <code>closed</code> | <code>cancelled</code> | <code>failed</code>). Spot request status
 information can help you track your Amazon EC2 Spot Instance
-requests. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html'>Spot request status</a>
+requests. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-request-status.html'>Spot request status</a>
 in the <em>Amazon EC2 User Guide for Linux Instances</em>.</p></li>
 <li><p><code>status-code</code> - The short code describing the most recent evaluation
 of your Spot Instance request.</p></li>
 <li><p><code>status-message</code> - The message explaining the status of the Spot
 Instance request.</p></li>
-<li><p><code>tag</code>:\&lt;key\&gt; - The key/value combination of a tag assigned to the
-resource. Use the tag key in the filter name and the tag value as
-the filter value. For example, to find all resources that have a tag
-with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for
-the filter name and <code>TeamA</code> for the filter value.</p></li>
+<li><p><code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to
+the resource. Use the tag key in the filter name and the tag value
+as the filter value. For example, to find all resources that have a
+tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code>
+for the filter name and <code>TeamA</code> for the filter value.</p></li>
 <li><p><code>tag-key</code> - The key of a tag assigned to the resource. Use this
 filter to find all resources assigned a tag with a specific key,
 regardless of the tag value.</p></li>
-<li><p><code>type</code> - The type of Spot Instance request (<code>one-time</code> \|
+<li><p><code>type</code> - The type of Spot Instance request (<code>one-time</code> |
 <code>persistent</code>).</p></li>
 <li><p><code>valid-from</code> - The start date of the request.</p></li>
 <li><p><code>valid-until</code> - The end date of the request.</p></li>
@@ -229,54 +261,39 @@ another call with the returned <code>NextToken</code> value.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can use <code>DescribeSpotInstanceRequests</code> to find a running Spot
-Instance by examining the response. If the status of the Spot Instance
-is <code>fulfilled</code>, the instance ID appears in the response and contains the
-identifier of the instance. Alternatively, you can use
-<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances'>DescribeInstances</a>
-with a filter to look for instances where the instance lifecycle is
-<code>spot</code>.</p>
-<p>We recommend that you set <code>MaxResults</code> to a value between 5 and 1000 to
-limit the number of results returned. This paginates the output, which
-makes the list more manageable and returns the results faster. If the
-list of results exceeds your <code>MaxResults</code> value, then that number of
-results is returned along with a <code>NextToken</code> value that can be passed to
-a subsequent <code>DescribeSpotInstanceRequests</code> request to retrieve the
-remaining results.</p>
-<p>Spot Instance requests are deleted four hours after they are canceled
-and their instances are terminated.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_spot_instance_requests</span>(
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_spot_instance_requests</span><span class='op'>(</span>
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>SpotInstanceRequestIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  SpotInstanceRequestIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+  <span class='op'>)</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example describes the specified Spot Instance request.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_spot_instance_requests</span>(
-  <span class='kw'>SpotInstanceRequestIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_spot_instance_requests</span><span class='op'>(</span>
+  SpotInstanceRequestIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"sir-08b93456"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -292,7 +309,7 @@ and their instances are terminated.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

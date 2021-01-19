@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates a Domain used by SageMaker Studio — sagemaker_create_domain • paws</title>
+<title>Creates a Domain used by Amazon SageMaker Studio — sagemaker_create_domain • paws</title>
 
 
 <!-- jquery -->
@@ -39,13 +39,40 @@
 
 
 
-<meta property="og:title" content="Creates a Domain used by SageMaker Studio — sagemaker_create_domain" />
-<meta property="og:description" content="Creates a Domain used by SageMaker Studio. A domain consists of an
-associated directory, a list of authorized users, and a variety of
-security, application, policy, and Amazon Virtual Private Cloud (VPC)
-configurations. An AWS account is limited to one domain per region.
-Users within a domain can share notebook files and other artifacts with
-each other." />
+<meta property="og:title" content="Creates a Domain used by Amazon SageMaker Studio — sagemaker_create_domain" />
+<meta property="og:description" content="Creates a Domain used by Amazon SageMaker Studio. A domain consists of
+an associated Amazon Elastic File System (EFS) volume, a list of
+authorized users, and a variety of security, application, policy, and
+Amazon Virtual Private Cloud (VPC) configurations. An AWS account is
+limited to one domain per region. Users within a domain can share
+notebook files and other artifacts with each other.
+EFS storage
+When a domain is created, an EFS volume is created for use by all of the
+users within the domain. Each user receives a private home directory
+within the EFS volume for notebooks, Git repositories, and data files.
+SageMaker uses the AWS Key Management Service (AWS KMS) to encrypt the
+EFS volume attached to the domain with an AWS managed customer master
+key (CMK) by default. For more control, you can specify a customer
+managed CMK. For more information, see Protect Data at Rest Using Encryption.
+VPC configuration
+All SageMaker Studio traffic between the domain and the EFS volume is
+through the specified VPC and subnets. For other Studio traffic, you can
+specify the AppNetworkAccessType parameter. AppNetworkAccessType
+corresponds to the network access type that you choose when you onboard
+to Studio. The following options are available:
+PublicInternetOnly - Non-EFS traffic goes through a VPC managed by
+Amazon SageMaker, which allows internet access. This is the default
+value.
+VpcOnly - All Studio traffic is through the specified VPC and
+subnets. Internet access is disabled by default. To allow internet
+access, you must specify a NAT gateway.
+When internet access is disabled, you won't be able to run a Studio
+notebook or to train or host models unless your VPC has an interface
+endpoint to the SageMaker API and runtime or a NAT gateway and your
+security groups allow outbound connections.
+
+
+For more information, see Connect SageMaker Studio Notebooks to Resources in a VPC." />
 
 
 
@@ -77,7 +104,7 @@ each other." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +112,7 @@ each other." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +124,7 @@ each other." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -114,22 +141,50 @@ each other." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Creates a Domain used by SageMaker Studio</h1>
+    <h1>Creates a Domain used by Amazon SageMaker Studio</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/sagemaker_operations.R'><code>R/sagemaker_operations.R</code></a></small>
     <div class="hidden name"><code>sagemaker_create_domain.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates a <code>Domain</code> used by SageMaker Studio. A domain consists of an
-associated directory, a list of authorized users, and a variety of
-security, application, policy, and Amazon Virtual Private Cloud (VPC)
-configurations. An AWS account is limited to one domain per region.
-Users within a domain can share notebook files and other artifacts with
-each other.</p>
+    <p>Creates a <code>Domain</code> used by Amazon SageMaker Studio. A domain consists of
+an associated Amazon Elastic File System (EFS) volume, a list of
+authorized users, and a variety of security, application, policy, and
+Amazon Virtual Private Cloud (VPC) configurations. An AWS account is
+limited to one domain per region. Users within a domain can share
+notebook files and other artifacts with each other.</p>
+<p><strong>EFS storage</strong></p>
+<p>When a domain is created, an EFS volume is created for use by all of the
+users within the domain. Each user receives a private home directory
+within the EFS volume for notebooks, Git repositories, and data files.</p>
+<p>SageMaker uses the AWS Key Management Service (AWS KMS) to encrypt the
+EFS volume attached to the domain with an AWS managed customer master
+key (CMK) by default. For more control, you can specify a customer
+managed CMK. For more information, see <a href='https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest.html'>Protect Data at Rest Using Encryption</a>.</p>
+<p><strong>VPC configuration</strong></p>
+<p>All SageMaker Studio traffic between the domain and the EFS volume is
+through the specified VPC and subnets. For other Studio traffic, you can
+specify the <code>AppNetworkAccessType</code> parameter. <code>AppNetworkAccessType</code>
+corresponds to the network access type that you choose when you onboard
+to Studio. The following options are available:</p><ul>
+<li><p><code>PublicInternetOnly</code> - Non-EFS traffic goes through a VPC managed by
+Amazon SageMaker, which allows internet access. This is the default
+value.</p></li>
+<li><p><code>VpcOnly</code> - All Studio traffic is through the specified VPC and
+subnets. Internet access is disabled by default. To allow internet
+access, you must specify a NAT gateway.</p>
+<p>When internet access is disabled, you won't be able to run a Studio
+notebook or to train or host models unless your VPC has an interface
+endpoint to the SageMaker API and runtime or a NAT gateway and your
+security groups allow outbound connections.</p></li>
+</ul>
+
+<p>For more information, see <a href='https://docs.aws.amazon.com/sagemaker/latest/dg/studio-notebooks-and-internet-access.html'>Connect SageMaker Studio Notebooks to Resources in a VPC</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sagemaker_create_domain</span>(<span class='no'>DomainName</span>, <span class='no'>AuthMode</span>, <span class='no'>DefaultUserSettings</span>,
-  <span class='no'>SubnetIds</span>, <span class='no'>VpcId</span>, <span class='no'>Tags</span>, <span class='no'>HomeEfsFileSystemKmsKeyId</span>)</pre>
+    <pre class="usage"><span class='fu'>sagemaker_create_domain</span><span class='op'>(</span><span class='va'>DomainName</span>, <span class='va'>AuthMode</span>, <span class='va'>DefaultUserSettings</span>,
+  <span class='va'>SubnetIds</span>, <span class='va'>VpcId</span>, <span class='va'>Tags</span>, <span class='va'>AppNetworkAccessType</span>, <span class='va'>HomeEfsFileSystemKmsKeyId</span>,
+  <span class='va'>KmsKeyId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,12 +203,12 @@ each other.</p>
     </tr>
     <tr>
       <th>SubnetIds</th>
-      <td><p>[required] The VPC subnets to use for communication with the EFS volume.</p></td>
+      <td><p>[required] The VPC subnets that Studio uses for communication.</p></td>
     </tr>
     <tr>
       <th>VpcId</th>
-      <td><p>[required] The ID of the Amazon Virtual Private Cloud (VPC) to use for
-communication with the EFS volume.</p></td>
+      <td><p>[required] The ID of the Amazon Virtual Private Cloud (VPC) that Studio uses for
+communication.</p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -162,72 +217,87 @@ optional value. Tag keys must be unique per resource. Tags are
 searchable using the Search API.</p></td>
     </tr>
     <tr>
+      <th>AppNetworkAccessType</th>
+      <td><p>Specifies the VPC used for non-EFS traffic. The default value is
+<code>PublicInternetOnly</code>.</p><ul>
+<li><p><code>PublicInternetOnly</code> - Non-EFS traffic is through a VPC managed by
+Amazon SageMaker, which allows direct internet access</p></li>
+<li><p><code>VpcOnly</code> - All Studio traffic is through the specified VPC and
+subnets</p></li>
+</ul></td>
+    </tr>
+    <tr>
       <th>HomeEfsFileSystemKmsKeyId</th>
-      <td><p>The AWS Key Management Service (KMS) encryption key ID. Encryption with
-a customer master key (CMK) is not supported.</p></td>
+      <td><p>This member is deprecated and replaced with <code>KmsKeyId</code>.</p></td>
+    </tr>
+    <tr>
+      <th>KmsKeyId</th>
+      <td><p>SageMaker uses AWS KMS to encrypt the EFS volume attached to the domain
+with an AWS managed customer master key (CMK) by default. For more
+control, specify a customer managed CMK.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When a domain is created, an Amazon Elastic File System (EFS) volume is
-also created for use by all of the users within the domain. Each user
-receives a private home directory within the EFS for notebooks, Git
-repositories, and data files.</p>
-<p>All traffic between the domain and the EFS volume is communicated
-through the specified subnet IDs. All other traffic goes over the
-Internet through an Amazon SageMaker system VPC. The EFS traffic uses
-the NFS/TCP protocol over port 2049.</p>
-<p>NFS traffic over TCP on port 2049 needs to be allowed in both inbound
-and outbound rules in order to launch a SageMaker Studio app
-successfully.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_domain</span>(
-  <span class='kw'>DomainName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AuthMode</span> <span class='kw'>=</span> <span class='st'>"SSO"</span><span class='kw'>|</span><span class='st'>"IAM"</span>,
-  <span class='kw'>DefaultUserSettings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ExecutionRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SecurityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_domain</span><span class='op'>(</span>
+  DomainName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AuthMode <span class='op'>=</span> <span class='st'>"SSO"</span><span class='op'>|</span><span class='st'>"IAM"</span>,
+  DefaultUserSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ExecutionRole <span class='op'>=</span> <span class='st'>"string"</span>,
+    SecurityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>SharingSettings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>NotebookOutputOption</span> <span class='kw'>=</span> <span class='st'>"Allowed"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>,
-      <span class='kw'>S3OutputPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>S3KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>JupyterServerAppSettings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DefaultResourceSpec</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SageMakerImageArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"system"</span><span class='kw'>|</span><span class='st'>"ml.t3.micro"</span><span class='kw'>|</span><span class='st'>"ml.t3.small"</span><span class='kw'>|</span><span class='st'>"ml.t3.medium"</span><span class='kw'>|</span><span class='st'>"ml.t3.large"</span><span class='kw'>|</span><span class='st'>"ml.t3.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.t3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.large"</span><span class='kw'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.large"</span><span class='kw'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.16xlarge"</span>
-      )
-    ),
-    <span class='kw'>KernelGatewayAppSettings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DefaultResourceSpec</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SageMakerImageArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"system"</span><span class='kw'>|</span><span class='st'>"ml.t3.micro"</span><span class='kw'>|</span><span class='st'>"ml.t3.small"</span><span class='kw'>|</span><span class='st'>"ml.t3.medium"</span><span class='kw'>|</span><span class='st'>"ml.t3.large"</span><span class='kw'>|</span><span class='st'>"ml.t3.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.t3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.large"</span><span class='kw'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.large"</span><span class='kw'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.16xlarge"</span>
-      )
-    ),
-    <span class='kw'>TensorBoardAppSettings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DefaultResourceSpec</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SageMakerImageArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"system"</span><span class='kw'>|</span><span class='st'>"ml.t3.micro"</span><span class='kw'>|</span><span class='st'>"ml.t3.small"</span><span class='kw'>|</span><span class='st'>"ml.t3.medium"</span><span class='kw'>|</span><span class='st'>"ml.t3.large"</span><span class='kw'>|</span><span class='st'>"ml.t3.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.t3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.large"</span><span class='kw'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.large"</span><span class='kw'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.16xlarge"</span>
-      )
-    )
-  ),
-  <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    SharingSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      NotebookOutputOption <span class='op'>=</span> <span class='st'>"Allowed"</span><span class='op'>|</span><span class='st'>"Disabled"</span>,
+      S3OutputPath <span class='op'>=</span> <span class='st'>"string"</span>,
+      S3KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    JupyterServerAppSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DefaultResourceSpec <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SageMakerImageArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        SageMakerImageVersionArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        InstanceType <span class='op'>=</span> <span class='st'>"system"</span><span class='op'>|</span><span class='st'>"ml.t3.micro"</span><span class='op'>|</span><span class='st'>"ml.t3.small"</span><span class='op'>|</span><span class='st'>"ml.t3.medium"</span><span class='op'>|</span><span class='st'>"ml.t3.large"</span><span class='op'>|</span><span class='st'>"ml.t3.xlarge"</span><span class='op'>|</span><span class='st'>"ml.t3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.large"</span><span class='op'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.large"</span><span class='op'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.16xlarge"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    KernelGatewayAppSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DefaultResourceSpec <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SageMakerImageArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        SageMakerImageVersionArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        InstanceType <span class='op'>=</span> <span class='st'>"system"</span><span class='op'>|</span><span class='st'>"ml.t3.micro"</span><span class='op'>|</span><span class='st'>"ml.t3.small"</span><span class='op'>|</span><span class='st'>"ml.t3.medium"</span><span class='op'>|</span><span class='st'>"ml.t3.large"</span><span class='op'>|</span><span class='st'>"ml.t3.xlarge"</span><span class='op'>|</span><span class='st'>"ml.t3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.large"</span><span class='op'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.large"</span><span class='op'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.16xlarge"</span>
+      <span class='op'>)</span>,
+      CustomImages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          ImageName <span class='op'>=</span> <span class='st'>"string"</span>,
+          ImageVersionNumber <span class='op'>=</span> <span class='fl'>123</span>,
+          AppImageConfigName <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    TensorBoardAppSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DefaultResourceSpec <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SageMakerImageArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        SageMakerImageVersionArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        InstanceType <span class='op'>=</span> <span class='st'>"system"</span><span class='op'>|</span><span class='st'>"ml.t3.micro"</span><span class='op'>|</span><span class='st'>"ml.t3.small"</span><span class='op'>|</span><span class='st'>"ml.t3.medium"</span><span class='op'>|</span><span class='st'>"ml.t3.large"</span><span class='op'>|</span><span class='st'>"ml.t3.xlarge"</span><span class='op'>|</span><span class='st'>"ml.t3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.large"</span><span class='op'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.large"</span><span class='op'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.16xlarge"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>VpcId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>HomeEfsFileSystemKmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  VpcId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  AppNetworkAccessType <span class='op'>=</span> <span class='st'>"PublicInternetOnly"</span><span class='op'>|</span><span class='st'>"VpcOnly"</span>,
+  HomeEfsFileSystemKmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -245,7 +315,7 @@ successfully.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -44,7 +44,19 @@
 if you have no running tasks in it and the desired task count is zero.
 If the service is actively maintaining tasks, you cannot delete it, and
 you must update the service to a desired task count of zero. For more
-information, see UpdateService." />
+information, see UpdateService.
+When you delete a service, if there are still running tasks that require
+cleanup, the service status moves from ACTIVE to DRAINING, and the
+service is no longer visible in the console or in the ListServices API
+operation. After all tasks have transitioned to either STOPPING or
+STOPPED status, the service status moves from DRAINING to
+INACTIVE. Services in the DRAINING or INACTIVE status can still be
+viewed with the DescribeServices API operation. However, in the future,
+INACTIVE services may be cleaned up and purged from Amazon ECS record
+keeping, and DescribeServices calls on those services return a
+ServiceNotFoundException error.
+If you attempt to create a new service with the same name as an existing
+service in either ACTIVE or DRAINING status, you receive an error." />
 
 
 
@@ -76,7 +88,7 @@ information, see UpdateService." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +96,7 @@ information, see UpdateService." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +108,7 @@ information, see UpdateService." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,9 +136,21 @@ if you have no running tasks in it and the desired task count is zero.
 If the service is actively maintaining tasks, you cannot delete it, and
 you must update the service to a desired task count of zero. For more
 information, see UpdateService.</p>
+<p>When you delete a service, if there are still running tasks that require
+cleanup, the service status moves from <code>ACTIVE</code> to <code>DRAINING</code>, and the
+service is no longer visible in the console or in the ListServices API
+operation. After all tasks have transitioned to either <code>STOPPING</code> or
+<code>STOPPED</code> status, the service status moves from <code>DRAINING</code> to
+<code>INACTIVE</code>. Services in the <code>DRAINING</code> or <code>INACTIVE</code> status can still be
+viewed with the DescribeServices API operation. However, in the future,
+<code>INACTIVE</code> services may be cleaned up and purged from Amazon ECS record
+keeping, and DescribeServices calls on those services return a
+<code>ServiceNotFoundException</code> error.</p>
+<p>If you attempt to create a new service with the same name as an existing
+service in either <code>ACTIVE</code> or <code>DRAINING</code> status, you receive an error.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ecs_delete_service</span>(<span class='no'>cluster</span>, <span class='no'>service</span>, <span class='no'>force</span>)</pre>
+    <pre class="usage"><span class='fu'>ecs_delete_service</span><span class='op'>(</span><span class='va'>cluster</span>, <span class='va'>service</span>, <span class='va'>force</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,38 +173,27 @@ using the <code>REPLICA</code> scheduling strategy.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you delete a service, if there are still running tasks that require
-cleanup, the service status moves from <code>ACTIVE</code> to <code>DRAINING</code>, and the
-service is no longer visible in the console or in the ListServices API
-operation. After all tasks have transitioned to either <code>STOPPING</code> or
-<code>STOPPED</code> status, the service status moves from <code>DRAINING</code> to
-<code>INACTIVE</code>. Services in the <code>DRAINING</code> or <code>INACTIVE</code> status can still be
-viewed with the DescribeServices API operation. However, in the future,
-<code>INACTIVE</code> services may be cleaned up and purged from Amazon ECS record
-keeping, and DescribeServices calls on those services return a
-<code>ServiceNotFoundException</code> error.</p>
-<p>If you attempt to create a new service with the same name as an existing
-service in either <code>ACTIVE</code> or <code>DRAINING</code> status, you receive an error.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>delete_service</span>(
-  <span class='kw'>cluster</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>force</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_service</span><span class='op'>(</span>
+  cluster <span class='op'>=</span> <span class='st'>"string"</span>,
+  service <span class='op'>=</span> <span class='st'>"string"</span>,
+  force <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example deletes the my-http-service service. The service must have</span>
 <span class='co'># a desired count and running count of 0 before you can delete it.</span>
-<span class='no'>svc</span>$<span class='fu'>delete_service</span>(
-  <span class='kw'>service</span> <span class='kw'>=</span> <span class='st'>"my-http-service"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_service</span><span class='op'>(</span>
+  service <span class='op'>=</span> <span class='st'>"my-http-service"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -196,7 +209,7 @@ service in either <code>ACTIVE</code> or <code>DRAINING</code> status, you recei
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

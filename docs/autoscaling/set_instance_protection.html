@@ -40,7 +40,12 @@
 
 
 <meta property="og:title" content="Updates the instance protection settings of the specified instances — autoscaling_set_instance_protection" />
-<meta property="og:description" content="Updates the instance protection settings of the specified instances." />
+<meta property="og:description" content="Updates the instance protection settings of the specified instances.
+For more information about preventing instances that are part of an Auto
+Scaling group from terminating on scale in, see Instance scale-in protection
+in the Amazon EC2 Auto Scaling User Guide.
+If you exceed your maximum limit of instance IDs, which is 50 per Auto
+Scaling group, the call fails." />
 
 
 
@@ -72,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +85,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +97,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,17 +121,22 @@
 
     <div class="ref-description">
     <p>Updates the instance protection settings of the specified instances.</p>
+<p>For more information about preventing instances that are part of an Auto
+Scaling group from terminating on scale in, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection'>Instance scale-in protection</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p>
+<p>If you exceed your maximum limit of instance IDs, which is 50 per Auto
+Scaling group, the call fails.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>autoscaling_set_instance_protection</span>(<span class='no'>InstanceIds</span>, <span class='no'>AutoScalingGroupName</span>,
-  <span class='no'>ProtectedFromScaleIn</span>)</pre>
+    <pre class="usage"><span class='fu'>autoscaling_set_instance_protection</span><span class='op'>(</span><span class='va'>InstanceIds</span>, <span class='va'>AutoScalingGroupName</span>,
+  <span class='va'>ProtectedFromScaleIn</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>InstanceIds</th>
-      <td><p>[required] One or more instance IDs.</p></td>
+      <td><p>[required] One or more instance IDs. You can specify up to 50 instances.</p></td>
     </tr>
     <tr>
       <th>AutoScalingGroupName</th>
@@ -139,43 +149,41 @@ EC2 Auto Scaling when scaling in.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For more information about preventing instances that are part of an Auto
-Scaling group from terminating on scale in, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection'>Instance Protection</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>set_instance_protection</span>(
-  <span class='kw'>InstanceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>set_instance_protection</span><span class='op'>(</span>
+  InstanceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProtectedFromScaleIn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+  <span class='op'>)</span>,
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProtectedFromScaleIn <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example enables instance protection for the specified instance.</span>
-<span class='no'>svc</span>$<span class='fu'>set_instance_protection</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
-  <span class='kw'>InstanceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>set_instance_protection</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
+  InstanceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"i-93633f9b"</span>
-  ),
-  <span class='kw'>ProtectedFromScaleIn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)
+  <span class='op'>)</span>,
+  ProtectedFromScaleIn <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
 <span class='co'># This example disables instance protection for the specified instance.</span>
-<span class='no'>svc</span>$<span class='fu'>set_instance_protection</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
-  <span class='kw'>InstanceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>set_instance_protection</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
+  InstanceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"i-93633f9b"</span>
-  ),
-  <span class='kw'>ProtectedFromScaleIn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-}</pre>
+  <span class='op'>)</span>,
+  ProtectedFromScaleIn <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -191,7 +199,7 @@ in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -43,7 +43,29 @@
 <meta property="og:description" content="Lists the metrics configurations for the bucket. The metrics
 configurations are only for the request metrics of the bucket and do not
 provide information on daily storage metrics. You can have up to 1,000
-configurations per bucket." />
+configurations per bucket.
+This operation supports list pagination and does not return more than
+100 configurations at a time. Always check the IsTruncated element in
+the response. If there are no more configurations to list, IsTruncated
+is set to false. If there are more configurations to list, IsTruncated
+is set to true, and there is a value in NextContinuationToken. You use
+the NextContinuationToken value to continue the pagination of the list
+by passing the value in continuation-token in the request to GET the
+next page.
+To use this operation, you must have permissions to perform the
+s3:GetMetricsConfiguration action. The bucket owner has this
+permission by default. The bucket owner can grant this permission to
+others. For more information about permissions, see Permissions Related to Bucket Subresource Operations
+and Managing Access Permissions to Your Amazon S3 Resources.
+For more information about metrics configurations and CloudWatch request
+metrics, see Monitoring Metrics with Amazon CloudWatch.
+The following operations are related to
+ListBucketMetricsConfigurations:
+PutBucketMetricsConfiguration
+GetBucketMetricsConfiguration
+DeleteBucketMetricsConfiguration
+
+" />
 
 
 
@@ -75,7 +97,7 @@ configurations per bucket." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +105,7 @@ configurations per bucket." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +117,7 @@ configurations per bucket." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,30 +144,7 @@ configurations per bucket." />
 configurations are only for the request metrics of the bucket and do not
 provide information on daily storage metrics. You can have up to 1,000
 configurations per bucket.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>s3_list_bucket_metrics_configurations</span>(<span class='no'>Bucket</span>, <span class='no'>ContinuationToken</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Bucket</th>
-      <td><p>[required] The name of the bucket containing the metrics configurations to
-retrieve.</p></td>
-    </tr>
-    <tr>
-      <th>ContinuationToken</th>
-      <td><p>The marker that is used to continue a metrics configuration listing that
-has been truncated. Use the NextContinuationToken from a previously
-truncated list response to continue the listing. The continuation token
-is an opaque value that Amazon S3 understands.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation supports list pagination and does not return more than
+<p>This operation supports list pagination and does not return more than
 100 configurations at a time. Always check the <code>IsTruncated</code> element in
 the response. If there are no more configurations to list, <code>IsTruncated</code>
 is set to false. If there are more configurations to list, <code>IsTruncated</code>
@@ -162,18 +161,48 @@ and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.h
 metrics, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html'>Monitoring Metrics with Amazon CloudWatch</a>.</p>
 <p>The following operations are related to
 <code>ListBucketMetricsConfigurations</code>:</p><ul>
-<li><p>PutBucketMetricsConfiguration</p></li>
-<li><p>GetBucketMetricsConfiguration</p></li>
-<li><p>DeleteBucketMetricsConfiguration</p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html'>PutBucketMetricsConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketMetricsConfiguration.html'>GetBucketMetricsConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketMetricsConfiguration.html'>DeleteBucketMetricsConfiguration</a></p></li>
 </ul>
+
+    </div>
+
+    <pre class="usage"><span class='fu'>s3_list_bucket_metrics_configurations</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>ContinuationToken</span>,
+  <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Bucket</th>
+      <td><p>[required] The name of the bucket containing the metrics configurations to
+retrieve.</p></td>
+    </tr>
+    <tr>
+      <th>ContinuationToken</th>
+      <td><p>The marker that is used to continue a metrics configuration listing that
+has been truncated. Use the NextContinuationToken from a previously
+truncated list response to continue the listing. The continuation token
+is an opaque value that Amazon S3 understands.</p></td>
+    </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_bucket_metrics_configurations</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ContinuationToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_bucket_metrics_configurations</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  ContinuationToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -191,7 +220,7 @@ metrics, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

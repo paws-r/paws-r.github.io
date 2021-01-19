@@ -46,7 +46,104 @@ definition — ecs_create_service" />
 definition. If the number of tasks running in a service drops below the
 desiredCount, Amazon ECS runs another copy of the task in the
 specified cluster. To update an existing service, see the UpdateService
-action." />
+action.
+In addition to maintaining the desired count of tasks in your service,
+you can optionally run your service behind one or more load balancers.
+The load balancers distribute traffic across the tasks that are
+associated with the service. For more information, see Service Load Balancing
+in the Amazon Elastic Container Service Developer Guide.
+Tasks for services that do not use a load balancer are considered
+healthy if they're in the RUNNING state. Tasks for services that do
+use a load balancer are considered healthy if they're in the RUNNING
+state and the container instance that they're hosted on is reported as
+healthy by the load balancer.
+There are two service scheduler strategies available:
+REPLICA - The replica scheduling strategy places and maintains the
+desired number of tasks across your cluster. By default, the service
+scheduler spreads tasks across Availability Zones. You can use task
+placement strategies and constraints to customize task placement
+decisions. For more information, see Service Scheduler Concepts
+in the Amazon Elastic Container Service Developer Guide.
+DAEMON - The daemon scheduling strategy deploys exactly one task
+on each active container instance that meets all of the task
+placement constraints that you specify in your cluster. The service
+scheduler also evaluates the task placement constraints for running
+tasks and will stop tasks that do not meet the placement
+constraints. When using this strategy, you don't need to specify a
+desired number of tasks, a task placement strategy, or use Service
+Auto Scaling policies. For more information, see Service Scheduler Concepts
+in the Amazon Elastic Container Service Developer Guide.
+
+
+You can optionally specify a deployment configuration for your service.
+The deployment is triggered by changing properties, such as the task
+definition or the desired count of a service, with an UpdateService
+operation. The default value for a replica service for
+minimumHealthyPercent is 100%. The default value for a daemon service
+for minimumHealthyPercent is 0%.
+If a service is using the ECS deployment controller, the minimum
+healthy percent represents a lower limit on the number of tasks in a
+service that must remain in the RUNNING state during a deployment, as
+a percentage of the desired number of tasks (rounded up to the nearest
+integer), and while any container instances are in the DRAINING state
+if the service contains tasks using the EC2 launch type. This parameter
+enables you to deploy without using additional cluster capacity. For
+example, if your service has a desired number of four tasks and a
+minimum healthy percent of 50%, the scheduler might stop two existing
+tasks to free up cluster capacity before starting two new tasks. Tasks
+for services that do not use a load balancer are considered healthy if
+they're in the RUNNING state. Tasks for services that do use a load
+balancer are considered healthy if they're in the RUNNING state and
+they're reported as healthy by the load balancer. The default value for
+minimum healthy percent is 100%.
+If a service is using the ECS deployment controller, the maximum
+percent parameter represents an upper limit on the number of tasks in
+a service that are allowed in the RUNNING or PENDING state during a
+deployment, as a percentage of the desired number of tasks (rounded down
+to the nearest integer), and while any container instances are in the
+DRAINING state if the service contains tasks using the EC2 launch
+type. This parameter enables you to define the deployment batch size.
+For example, if your service has a desired number of four tasks and a
+maximum percent value of 200%, the scheduler may start four new tasks
+before stopping the four older tasks (provided that the cluster
+resources required to do this are available). The default value for
+maximum percent is 200%.
+If a service is using either the CODE_DEPLOY or EXTERNAL deployment
+controller types and tasks that use the EC2 launch type, the minimum
+healthy percent and maximum percent values are used only to define
+the lower and upper limit on the number of the tasks in the service that
+remain in the RUNNING state while the container instances are in the
+DRAINING state. If the tasks in the service use the Fargate launch
+type, the minimum healthy percent and maximum percent values aren't
+used, although they're currently visible when describing your service.
+When creating a service that uses the EXTERNAL deployment controller,
+you can specify only parameters that aren't controlled at the task set
+level. The only required parameter is the service name. You control your
+services using the CreateTaskSet operation. For more information, see
+Amazon ECS Deployment Types
+in the Amazon Elastic Container Service Developer Guide.
+When the service scheduler launches new tasks, it determines task
+placement in your cluster using the following logic:
+Determine which of the container instances in your cluster can
+support your service's task definition (for example, they have the
+required CPU, memory, ports, and container instance attributes).
+By default, the service scheduler attempts to balance tasks across
+Availability Zones in this manner (although you can choose a
+different placement strategy) with the placementStrategy
+parameter):
+Sort the valid container instances, giving priority to instances
+that have the fewest number of running tasks for this service in
+their respective Availability Zone. For example, if zone A has
+one running service task and zones B and C each have zero, valid
+container instances in either zone B or C are considered optimal
+for placement.
+Place the new service task on a valid container instance in an
+optimal Availability Zone (based on the previous steps),
+favoring container instances with the fewest number of running
+tasks for this service.
+
+
+" />
 
 
 
@@ -78,7 +175,7 @@ action." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +183,7 @@ action." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +195,7 @@ action." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,14 +224,111 @@ definition. If the number of tasks running in a service drops below the
 <code>desiredCount</code>, Amazon ECS runs another copy of the task in the
 specified cluster. To update an existing service, see the UpdateService
 action.</p>
+<p>In addition to maintaining the desired count of tasks in your service,
+you can optionally run your service behind one or more load balancers.
+The load balancers distribute traffic across the tasks that are
+associated with the service. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html'>Service Load Balancing</a>
+in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
+<p>Tasks for services that <em>do not</em> use a load balancer are considered
+healthy if they're in the <code>RUNNING</code> state. Tasks for services that <em>do</em>
+use a load balancer are considered healthy if they're in the <code>RUNNING</code>
+state and the container instance that they're hosted on is reported as
+healthy by the load balancer.</p>
+<p>There are two service scheduler strategies available:</p><ul>
+<li><p><code>REPLICA</code> - The replica scheduling strategy places and maintains the
+desired number of tasks across your cluster. By default, the service
+scheduler spreads tasks across Availability Zones. You can use task
+placement strategies and constraints to customize task placement
+decisions. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html'>Service Scheduler Concepts</a>
+in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></li>
+<li><p><code>DAEMON</code> - The daemon scheduling strategy deploys exactly one task
+on each active container instance that meets all of the task
+placement constraints that you specify in your cluster. The service
+scheduler also evaluates the task placement constraints for running
+tasks and will stop tasks that do not meet the placement
+constraints. When using this strategy, you don't need to specify a
+desired number of tasks, a task placement strategy, or use Service
+Auto Scaling policies. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html'>Service Scheduler Concepts</a>
+in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></li>
+</ul>
+
+<p>You can optionally specify a deployment configuration for your service.
+The deployment is triggered by changing properties, such as the task
+definition or the desired count of a service, with an UpdateService
+operation. The default value for a replica service for
+<code>minimumHealthyPercent</code> is 100%. The default value for a daemon service
+for <code>minimumHealthyPercent</code> is 0%.</p>
+<p>If a service is using the <code>ECS</code> deployment controller, the minimum
+healthy percent represents a lower limit on the number of tasks in a
+service that must remain in the <code>RUNNING</code> state during a deployment, as
+a percentage of the desired number of tasks (rounded up to the nearest
+integer), and while any container instances are in the <code>DRAINING</code> state
+if the service contains tasks using the EC2 launch type. This parameter
+enables you to deploy without using additional cluster capacity. For
+example, if your service has a desired number of four tasks and a
+minimum healthy percent of 50%, the scheduler might stop two existing
+tasks to free up cluster capacity before starting two new tasks. Tasks
+for services that <em>do not</em> use a load balancer are considered healthy if
+they're in the <code>RUNNING</code> state. Tasks for services that <em>do</em> use a load
+balancer are considered healthy if they're in the <code>RUNNING</code> state and
+they're reported as healthy by the load balancer. The default value for
+minimum healthy percent is 100%.</p>
+<p>If a service is using the <code>ECS</code> deployment controller, the <strong>maximum
+percent</strong> parameter represents an upper limit on the number of tasks in
+a service that are allowed in the <code>RUNNING</code> or <code>PENDING</code> state during a
+deployment, as a percentage of the desired number of tasks (rounded down
+to the nearest integer), and while any container instances are in the
+<code>DRAINING</code> state if the service contains tasks using the EC2 launch
+type. This parameter enables you to define the deployment batch size.
+For example, if your service has a desired number of four tasks and a
+maximum percent value of 200%, the scheduler may start four new tasks
+before stopping the four older tasks (provided that the cluster
+resources required to do this are available). The default value for
+maximum percent is 200%.</p>
+<p>If a service is using either the <code>CODE_DEPLOY</code> or <code>EXTERNAL</code> deployment
+controller types and tasks that use the EC2 launch type, the <strong>minimum
+healthy percent</strong> and <strong>maximum percent</strong> values are used only to define
+the lower and upper limit on the number of the tasks in the service that
+remain in the <code>RUNNING</code> state while the container instances are in the
+<code>DRAINING</code> state. If the tasks in the service use the Fargate launch
+type, the minimum healthy percent and maximum percent values aren't
+used, although they're currently visible when describing your service.</p>
+<p>When creating a service that uses the <code>EXTERNAL</code> deployment controller,
+you can specify only parameters that aren't controlled at the task set
+level. The only required parameter is the service name. You control your
+services using the CreateTaskSet operation. For more information, see
+<a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-types.html'>Amazon ECS Deployment Types</a>
+in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
+<p>When the service scheduler launches new tasks, it determines task
+placement in your cluster using the following logic:</p><ul>
+<li><p>Determine which of the container instances in your cluster can
+support your service's task definition (for example, they have the
+required CPU, memory, ports, and container instance attributes).</p></li>
+<li><p>By default, the service scheduler attempts to balance tasks across
+Availability Zones in this manner (although you can choose a
+different placement strategy) with the <code>placementStrategy</code>
+parameter):</p><ul>
+<li><p>Sort the valid container instances, giving priority to instances
+that have the fewest number of running tasks for this service in
+their respective Availability Zone. For example, if zone A has
+one running service task and zones B and C each have zero, valid
+container instances in either zone B or C are considered optimal
+for placement.</p></li>
+<li><p>Place the new service task on a valid container instance in an
+optimal Availability Zone (based on the previous steps),
+favoring container instances with the fewest number of running
+tasks for this service.</p></li>
+</ul></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>ecs_create_service</span>(<span class='no'>cluster</span>, <span class='no'>serviceName</span>, <span class='no'>taskDefinition</span>, <span class='no'>loadBalancers</span>,
-  <span class='no'>serviceRegistries</span>, <span class='no'>desiredCount</span>, <span class='no'>clientToken</span>, <span class='no'>launchType</span>,
-  <span class='no'>capacityProviderStrategy</span>, <span class='no'>platformVersion</span>, <span class='no'>role</span>,
-  <span class='no'>deploymentConfiguration</span>, <span class='no'>placementConstraints</span>, <span class='no'>placementStrategy</span>,
-  <span class='no'>networkConfiguration</span>, <span class='no'>healthCheckGracePeriodSeconds</span>, <span class='no'>schedulingStrategy</span>,
-  <span class='no'>deploymentController</span>, <span class='no'>tags</span>, <span class='no'>enableECSManagedTags</span>, <span class='no'>propagateTags</span>)</pre>
+    <pre class="usage"><span class='fu'>ecs_create_service</span><span class='op'>(</span><span class='va'>cluster</span>, <span class='va'>serviceName</span>, <span class='va'>taskDefinition</span>, <span class='va'>loadBalancers</span>,
+  <span class='va'>serviceRegistries</span>, <span class='va'>desiredCount</span>, <span class='va'>clientToken</span>, <span class='va'>launchType</span>,
+  <span class='va'>capacityProviderStrategy</span>, <span class='va'>platformVersion</span>, <span class='va'>role</span>,
+  <span class='va'>deploymentConfiguration</span>, <span class='va'>placementConstraints</span>, <span class='va'>placementStrategy</span>,
+  <span class='va'>networkConfiguration</span>, <span class='va'>healthCheckGracePeriodSeconds</span>, <span class='va'>schedulingStrategy</span>,
+  <span class='va'>deploymentController</span>, <span class='va'>tags</span>, <span class='va'>enableECSManagedTags</span>, <span class='va'>propagateTags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,8 +351,8 @@ within a Region or across multiple Regions.</p></td>
       <td><p>The <code>family</code> and <code>revision</code> (<code>family:revision</code>) or full ARN of the task
 definition to run in your service. If a <code>revision</code> is not specified, the
 latest <code>ACTIVE</code> revision is used.</p>
-<p>A task definition must be specified if the service is using the <code>ECS</code>
-deployment controller.</p></td>
+<p>A task definition must be specified if the service is using either the
+<code>ECS</code> or <code>CODE_DEPLOY</code> deployment controllers.</p></td>
     </tr>
     <tr>
       <th>loadBalancers</th>
@@ -167,9 +361,9 @@ service. For more information, see <a href='https://docs.aws.amazon.com/AmazonEC
 in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
 <p>If the service is using the rolling update (<code>ECS</code>) deployment controller
 and using either an Application Load Balancer or Network Load Balancer,
-you can specify multiple target groups to attach to the service. The
-service-linked role is required for services that make use of multiple
-target groups. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html'>Using Service-Linked Roles for Amazon ECS</a>
+you must specify one or more target group ARNs to attach to the service.
+The service-linked role is required for services that make use of
+multiple target groups. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html'>Using Service-Linked Roles for Amazon ECS</a>
 in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
 <p>If the service is using the <code>CODE_DEPLOY</code> deployment controller, the
 service is required to use either an Application Load Balancer or
@@ -190,14 +384,16 @@ when updating the service.</p>
 <p>For Application Load Balancers and Network Load Balancers, this object
 must contain the load balancer target group ARN, the container name (as
 it appears in a container definition), and the container port to access
-from the load balancer. When a task from this service is placed on a
-container instance, the container instance and port combination is
-registered as a target in the target group specified here.</p>
+from the load balancer. The load balancer name parameter must be
+omitted. When a task from this service is placed on a container
+instance, the container instance and port combination is registered as a
+target in the target group specified here.</p>
 <p>For Classic Load Balancers, this object must contain the load balancer
 name, the container name (as it appears in a container definition), and
-the container port to access from the load balancer. When a task from
-this service is placed on a container instance, the container instance
-is registered with the load balancer specified here.</p>
+the container port to access from the load balancer. The target group
+ARN parameter must be omitted. When a task from this service is placed
+on a container instance, the container instance is registered with the
+load balancer specified here.</p>
 <p>Services with tasks that use the <code>awsvpc</code> network mode (for example,
 those with the Fargate launch type) only support Application Load
 Balancers and Network Load Balancers. Classic Load Balancers are not
@@ -262,7 +458,7 @@ created.</p></td>
       <th>platformVersion</th>
       <td><p>The platform version that your tasks in the service are running on. A
 platform version is specified only for tasks using the Fargate launch
-type. If one isn\'t specified, the <code>LATEST</code> platform version is used by
+type. If one isn't specified, the <code>LATEST</code> platform version is used by
 default. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html'>AWS Fargate Platform Versions</a>
 in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></td>
     </tr>
@@ -282,7 +478,7 @@ discovery, an external deployment controller, multiple target groups, or
 Elastic Inference accelerators in which case you should not specify a
 role here. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html'>Using Service-Linked Roles for Amazon ECS</a>
 in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
-<p>If your specified role has a path other than <code>/</code>, then you must either
+<p>If your specified role has a path other than <code><a href='https://rdrr.io/r/base/Arithmetic.html'>/</a></code>, then you must either
 specify the full role ARN (this is recommended) or prefix the role name
 with the path. For example, if a role with the name <code>bar</code> has a path of
 <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more
@@ -320,9 +516,9 @@ in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></td>
 should ignore unhealthy Elastic Load Balancing target health checks
 after a task has first started. This is only used when your service is
 configured to use a load balancer. If your service has a load balancer
-defined and you don\'t specify a health check grace period value, the
+defined and you don't specify a health check grace period value, the
 default value of <code>0</code> is used.</p>
-<p>If your service\'s tasks take a while to start and respond to Elastic
+<p>If your service's tasks take a while to start and respond to Elastic
 Load Balancing health checks, you can specify a health check grace
 period of up to 2,147,483,647 seconds. During that time, the Amazon ECS
 service scheduler ignores health check status. This grace period can
@@ -346,11 +542,11 @@ each active container instance that meets all of the task placement
 constraints that you specify in your cluster. The service scheduler
 also evaluates the task placement constraints for running tasks and
 will stop tasks that do not meet the placement constraints. When
-you\'re using this strategy, you don\'t need to specify a desired
+you're using this strategy, you don't need to specify a desired
 number of tasks, a task placement strategy, or use Service Auto
 Scaling policies.</p>
 <p>Tasks using the Fargate launch type or the <code>CODE_DEPLOY</code> or
-<code>EXTERNAL</code> deployment controller types don\'t support the <code>DAEMON</code>
+<code>EXTERNAL</code> deployment controller types don't support the <code>DAEMON</code>
 scheduling strategy.</p></li>
 </ul></td>
     </tr>
@@ -399,212 +595,120 @@ creation, use the TagResource API action.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>In addition to maintaining the desired count of tasks in your service,
-you can optionally run your service behind one or more load balancers.
-The load balancers distribute traffic across the tasks that are
-associated with the service. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html'>Service Load Balancing</a>
-in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
-<p>Tasks for services that <em>do not</em> use a load balancer are considered
-healthy if they\'re in the <code>RUNNING</code> state. Tasks for services that <em>do</em>
-use a load balancer are considered healthy if they\'re in the <code>RUNNING</code>
-state and the container instance that they\'re hosted on is reported as
-healthy by the load balancer.</p>
-<p>There are two service scheduler strategies available:</p><ul>
-<li><p><code>REPLICA</code> - The replica scheduling strategy places and maintains the
-desired number of tasks across your cluster. By default, the service
-scheduler spreads tasks across Availability Zones. You can use task
-placement strategies and constraints to customize task placement
-decisions. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html'>Service Scheduler Concepts</a>
-in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></li>
-<li><p><code>DAEMON</code> - The daemon scheduling strategy deploys exactly one task
-on each active container instance that meets all of the task
-placement constraints that you specify in your cluster. The service
-scheduler also evaluates the task placement constraints for running
-tasks and will stop tasks that do not meet the placement
-constraints. When using this strategy, you don\'t need to specify a
-desired number of tasks, a task placement strategy, or use Service
-Auto Scaling policies. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html'>Service Scheduler Concepts</a>
-in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></li>
-</ul>
-
-<p>You can optionally specify a deployment configuration for your service.
-The deployment is triggered by changing properties, such as the task
-definition or the desired count of a service, with an UpdateService
-operation. The default value for a replica service for
-<code>minimumHealthyPercent</code> is 100%. The default value for a daemon service
-for <code>minimumHealthyPercent</code> is 0%.</p>
-<p>If a service is using the <code>ECS</code> deployment controller, the minimum
-healthy percent represents a lower limit on the number of tasks in a
-service that must remain in the <code>RUNNING</code> state during a deployment, as
-a percentage of the desired number of tasks (rounded up to the nearest
-integer), and while any container instances are in the <code>DRAINING</code> state
-if the service contains tasks using the EC2 launch type. This parameter
-enables you to deploy without using additional cluster capacity. For
-example, if your service has a desired number of four tasks and a
-minimum healthy percent of 50%, the scheduler might stop two existing
-tasks to free up cluster capacity before starting two new tasks. Tasks
-for services that <em>do not</em> use a load balancer are considered healthy if
-they\'re in the <code>RUNNING</code> state. Tasks for services that <em>do</em> use a load
-balancer are considered healthy if they\'re in the <code>RUNNING</code> state and
-they\'re reported as healthy by the load balancer. The default value for
-minimum healthy percent is 100%.</p>
-<p>If a service is using the <code>ECS</code> deployment controller, the <strong>maximum
-percent</strong> parameter represents an upper limit on the number of tasks in
-a service that are allowed in the <code>RUNNING</code> or <code>PENDING</code> state during a
-deployment, as a percentage of the desired number of tasks (rounded down
-to the nearest integer), and while any container instances are in the
-<code>DRAINING</code> state if the service contains tasks using the EC2 launch
-type. This parameter enables you to define the deployment batch size.
-For example, if your service has a desired number of four tasks and a
-maximum percent value of 200%, the scheduler may start four new tasks
-before stopping the four older tasks (provided that the cluster
-resources required to do this are available). The default value for
-maximum percent is 200%.</p>
-<p>If a service is using either the <code>CODE_DEPLOY</code> or <code>EXTERNAL</code> deployment
-controller types and tasks that use the EC2 launch type, the <strong>minimum
-healthy percent</strong> and <strong>maximum percent</strong> values are used only to define
-the lower and upper limit on the number of the tasks in the service that
-remain in the <code>RUNNING</code> state while the container instances are in the
-<code>DRAINING</code> state. If the tasks in the service use the Fargate launch
-type, the minimum healthy percent and maximum percent values aren\'t
-used, although they\'re currently visible when describing your service.</p>
-<p>When creating a service that uses the <code>EXTERNAL</code> deployment controller,
-you can specify only parameters that aren\'t controlled at the task set
-level. The only required parameter is the service name. You control your
-services using the CreateTaskSet operation. For more information, see
-<a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-types.html'>Amazon ECS Deployment Types</a>
-in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
-<p>When the service scheduler launches new tasks, it determines task
-placement in your cluster using the following logic:</p><ul>
-<li><p>Determine which of the container instances in your cluster can
-support your service\'s task definition (for example, they have the
-required CPU, memory, ports, and container instance attributes).</p></li>
-<li><p>By default, the service scheduler attempts to balance tasks across
-Availability Zones in this manner (although you can choose a
-different placement strategy) with the <code>placementStrategy</code>
-parameter):</p><ul>
-<li><p>Sort the valid container instances, giving priority to instances
-that have the fewest number of running tasks for this service in
-their respective Availability Zone. For example, if zone A has
-one running service task and zones B and C each have zero, valid
-container instances in either zone B or C are considered optimal
-for placement.</p></li>
-<li><p>Place the new service task on a valid container instance in an
-optimal Availability Zone (based on the previous steps),
-favoring container instances with the fewest number of running
-tasks for this service.</p></li>
-</ul></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_service</span>(
-  <span class='kw'>cluster</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>serviceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>taskDefinition</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>loadBalancers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>targetGroupArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>loadBalancerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>containerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>containerPort</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  ),
-  <span class='kw'>serviceRegistries</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>registryArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>port</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>containerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>containerPort</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  ),
-  <span class='kw'>desiredCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>clientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>launchType</span> <span class='kw'>=</span> <span class='st'>"EC2"</span><span class='kw'>|</span><span class='st'>"FARGATE"</span>,
-  <span class='kw'>capacityProviderStrategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>capacityProvider</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>weight</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  ),
-  <span class='kw'>platformVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>role</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>deploymentConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>maximumPercent</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>minimumHealthyPercent</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>placementConstraints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"distinctInstance"</span><span class='kw'>|</span><span class='st'>"memberOf"</span>,
-      <span class='kw'>expression</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>placementStrategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"random"</span><span class='kw'>|</span><span class='st'>"spread"</span><span class='kw'>|</span><span class='st'>"binpack"</span>,
-      <span class='kw'>field</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>networkConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>awsvpcConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>subnets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_service</span><span class='op'>(</span>
+  cluster <span class='op'>=</span> <span class='st'>"string"</span>,
+  serviceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  taskDefinition <span class='op'>=</span> <span class='st'>"string"</span>,
+  loadBalancers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      targetGroupArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      loadBalancerName <span class='op'>=</span> <span class='st'>"string"</span>,
+      containerName <span class='op'>=</span> <span class='st'>"string"</span>,
+      containerPort <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  serviceRegistries <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      registryArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      port <span class='op'>=</span> <span class='fl'>123</span>,
+      containerName <span class='op'>=</span> <span class='st'>"string"</span>,
+      containerPort <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  desiredCount <span class='op'>=</span> <span class='fl'>123</span>,
+  clientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  launchType <span class='op'>=</span> <span class='st'>"EC2"</span><span class='op'>|</span><span class='st'>"FARGATE"</span>,
+  capacityProviderStrategy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      capacityProvider <span class='op'>=</span> <span class='st'>"string"</span>,
+      weight <span class='op'>=</span> <span class='fl'>123</span>,
+      base <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  platformVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  role <span class='op'>=</span> <span class='st'>"string"</span>,
+  deploymentConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    deploymentCircuitBreaker <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      enable <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      rollback <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+    <span class='op'>)</span>,
+    maximumPercent <span class='op'>=</span> <span class='fl'>123</span>,
+    minimumHealthyPercent <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  placementConstraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      type <span class='op'>=</span> <span class='st'>"distinctInstance"</span><span class='op'>|</span><span class='st'>"memberOf"</span>,
+      expression <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  placementStrategy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      type <span class='op'>=</span> <span class='st'>"random"</span><span class='op'>|</span><span class='st'>"spread"</span><span class='op'>|</span><span class='st'>"binpack"</span>,
+      field <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  networkConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    awsvpcConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      subnets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>securityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      securityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>assignPublicIp</span> <span class='kw'>=</span> <span class='st'>"ENABLED"</span><span class='kw'>|</span><span class='st'>"DISABLED"</span>
-    )
-  ),
-  <span class='kw'>healthCheckGracePeriodSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>schedulingStrategy</span> <span class='kw'>=</span> <span class='st'>"REPLICA"</span><span class='kw'>|</span><span class='st'>"DAEMON"</span>,
-  <span class='kw'>deploymentController</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"ECS"</span><span class='kw'>|</span><span class='st'>"CODE_DEPLOY"</span><span class='kw'>|</span><span class='st'>"EXTERNAL"</span>
-  ),
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>enableECSManagedTags</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>propagateTags</span> <span class='kw'>=</span> <span class='st'>"TASK_DEFINITION"</span><span class='kw'>|</span><span class='st'>"SERVICE"</span>
-)</pre>
+      <span class='op'>)</span>,
+      assignPublicIp <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  healthCheckGracePeriodSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  schedulingStrategy <span class='op'>=</span> <span class='st'>"REPLICA"</span><span class='op'>|</span><span class='st'>"DAEMON"</span>,
+  deploymentController <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    type <span class='op'>=</span> <span class='st'>"ECS"</span><span class='op'>|</span><span class='st'>"CODE_DEPLOY"</span><span class='op'>|</span><span class='st'>"EXTERNAL"</span>
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  enableECSManagedTags <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  propagateTags <span class='op'>=</span> <span class='st'>"TASK_DEFINITION"</span><span class='op'>|</span><span class='st'>"SERVICE"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example creates a service in your default region called</span>
 <span class='co'># `ecs-simple-service`. The service uses the `hello_world` task</span>
 <span class='co'># definition and it maintains 10 copies of that task.</span>
-<span class='no'>svc</span>$<span class='fu'>create_service</span>(
-  <span class='kw'>desiredCount</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-  <span class='kw'>serviceName</span> <span class='kw'>=</span> <span class='st'>"ecs-simple-service"</span>,
-  <span class='kw'>taskDefinition</span> <span class='kw'>=</span> <span class='st'>"hello_world"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_service</span><span class='op'>(</span>
+  desiredCount <span class='op'>=</span> <span class='fl'>10L</span>,
+  serviceName <span class='op'>=</span> <span class='st'>"ecs-simple-service"</span>,
+  taskDefinition <span class='op'>=</span> <span class='st'>"hello_world"</span>
+<span class='op'>)</span>
 
 <span class='co'># This example creates a service in your default region called</span>
 <span class='co'># `ecs-simple-service-elb`. The service uses the `ecs-demo` task</span>
 <span class='co'># definition and it maintains 10 copies of that task. You must reference</span>
 <span class='co'># an existing load balancer in the same region by its name.</span>
-<span class='no'>svc</span>$<span class='fu'>create_service</span>(
-  <span class='kw'>desiredCount</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-  <span class='kw'>loadBalancers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>containerName</span> <span class='kw'>=</span> <span class='st'>"simple-app"</span>,
-      <span class='kw'>containerPort</span> <span class='kw'>=</span> <span class='fl'>80L</span>,
-      <span class='kw'>loadBalancerName</span> <span class='kw'>=</span> <span class='st'>"EC2Contai-EcsElast-15DCDAURT3ZO2"</span>
-    )
-  ),
-  <span class='kw'>role</span> <span class='kw'>=</span> <span class='st'>"ecsServiceRole"</span>,
-  <span class='kw'>serviceName</span> <span class='kw'>=</span> <span class='st'>"ecs-simple-service-elb"</span>,
-  <span class='kw'>taskDefinition</span> <span class='kw'>=</span> <span class='st'>"console-sample-app-static"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_service</span><span class='op'>(</span>
+  desiredCount <span class='op'>=</span> <span class='fl'>10L</span>,
+  loadBalancers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      containerName <span class='op'>=</span> <span class='st'>"simple-app"</span>,
+      containerPort <span class='op'>=</span> <span class='fl'>80L</span>,
+      loadBalancerName <span class='op'>=</span> <span class='st'>"EC2Contai-EcsElast-15DCDAURT3ZO2"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  role <span class='op'>=</span> <span class='st'>"ecsServiceRole"</span>,
+  serviceName <span class='op'>=</span> <span class='st'>"ecs-simple-service-elb"</span>,
+  taskDefinition <span class='op'>=</span> <span class='st'>"console-sample-app-static"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -620,7 +724,7 @@ tasks for this service.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

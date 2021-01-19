@@ -73,7 +73,7 @@ configured, tested, and assessed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ configured, tested, and assessed." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +93,7 @@ configured, tested, and assessed." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,9 +120,9 @@ configured, tested, and assessed." />
 configured, tested, and assessed.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>imagebuilder_create_image_recipe</span>(<span class='no'>name</span>, <span class='no'>description</span>, <span class='no'>semanticVersion</span>,
-  <span class='no'>components</span>, <span class='no'>parentImage</span>, <span class='no'>blockDeviceMappings</span>, <span class='no'>tags</span>, <span class='no'>workingDirectory</span>,
-  <span class='no'>clientToken</span>)</pre>
+    <pre class="usage"><span class='fu'>imagebuilder_create_image_recipe</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>description</span>, <span class='va'>semanticVersion</span>,
+  <span class='va'>components</span>, <span class='va'>parentImage</span>, <span class='va'>blockDeviceMappings</span>, <span class='va'>tags</span>, <span class='va'>workingDirectory</span>,
+  <span class='va'>clientToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,13 +148,11 @@ configured, tested, and assessed.</p>
       <td><p>[required] The parent image of the image recipe. The value of the string can be the
 ARN of the parent image or an AMI ID. The format for the ARN follows
 this example:
-<code>arn:aws:imagebuilder:us-west-2:aws:image/windows-server-2016-english-full-base-x86/2019.x.x</code>.
-The ARN ends with <code>/20xx.x.x</code>, which communicates to EC2 Image Builder
-that you want to use the latest AMI created in 20xx (year). You can
-provide the specific version that you want to use, or you can use a
-wildcard in all of the fields. If you enter an AMI ID for the string
-value, you must have access to the AMI, and the AMI must be in the same
-Region in which you are using Image Builder.</p></td>
+<code>arn:aws:imagebuilder:us-west-2:aws:image/windows-server-2016-english-full-base-x86/xxxx.x.x</code>.
+You can provide the specific version that you want to use, or you can
+use a wildcard in all of the fields. If you enter an AMI ID for the
+string value, you must have access to the AMI, and the AMI must be in
+the same Region in which you are using Image Builder.</p></td>
     </tr>
     <tr>
       <th>blockDeviceMappings</th>
@@ -177,38 +175,39 @@ Region in which you are using Image Builder.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_image_recipe</span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>semanticVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>components</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>componentArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>parentImage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>blockDeviceMappings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>deviceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ebs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>encrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>deleteOnTermination</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>iops</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>kmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>snapshotId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>volumeSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>volumeType</span> <span class='kw'>=</span> <span class='st'>"standard"</span><span class='kw'>|</span><span class='st'>"io1"</span><span class='kw'>|</span><span class='st'>"gp2"</span><span class='kw'>|</span><span class='st'>"sc1"</span><span class='kw'>|</span><span class='st'>"st1"</span>
-      ),
-      <span class='kw'>virtualName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>noDevice</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_image_recipe</span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"string"</span>,
+  description <span class='op'>=</span> <span class='st'>"string"</span>,
+  semanticVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  components <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      componentArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  parentImage <span class='op'>=</span> <span class='st'>"string"</span>,
+  blockDeviceMappings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      deviceName <span class='op'>=</span> <span class='st'>"string"</span>,
+      ebs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        encrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        deleteOnTermination <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        iops <span class='op'>=</span> <span class='fl'>123</span>,
+        kmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+        snapshotId <span class='op'>=</span> <span class='st'>"string"</span>,
+        volumeSize <span class='op'>=</span> <span class='fl'>123</span>,
+        volumeType <span class='op'>=</span> <span class='st'>"standard"</span><span class='op'>|</span><span class='st'>"io1"</span><span class='op'>|</span><span class='st'>"io2"</span><span class='op'>|</span><span class='st'>"gp2"</span><span class='op'>|</span><span class='st'>"sc1"</span><span class='op'>|</span><span class='st'>"st1"</span>
+      <span class='op'>)</span>,
+      virtualName <span class='op'>=</span> <span class='st'>"string"</span>,
+      noDevice <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>workingDirectory</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>clientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  workingDirectory <span class='op'>=</span> <span class='st'>"string"</span>,
+  clientToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -226,7 +225,7 @@ Region in which you are using Image Builder.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,14 @@
 
 
 <meta property="og:title" content="Exports optimization recommendations for Auto Scaling groups — computeoptimizer_export_auto_scaling_group_recommendations" />
-<meta property="og:description" content="Exports optimization recommendations for Auto Scaling groups." />
+<meta property="og:description" content="Exports optimization recommendations for Auto Scaling groups.
+Recommendations are exported in a comma-separated values (.csv) file,
+and its metadata in a JavaScript Object Notation (.json) file, to an
+existing Amazon Simple Storage Service (Amazon S3) bucket that you
+specify. For more information, see Exporting Recommendations
+in the Compute Optimizer User Guide.
+You can have only one Auto Scaling group export job in progress per AWS
+Region." />
 
 
 
@@ -72,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +99,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +123,18 @@
 
     <div class="ref-description">
     <p>Exports optimization recommendations for Auto Scaling groups.</p>
+<p>Recommendations are exported in a comma-separated values (.csv) file,
+and its metadata in a JavaScript Object Notation (.json) file, to an
+existing Amazon Simple Storage Service (Amazon S3) bucket that you
+specify. For more information, see <a href='https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html'>Exporting Recommendations</a>
+in the <em>Compute Optimizer User Guide</em>.</p>
+<p>You can have only one Auto Scaling group export job in progress per AWS
+Region.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>computeoptimizer_export_auto_scaling_group_recommendations</span>(<span class='no'>accountIds</span>,
-  <span class='no'>filters</span>, <span class='no'>fieldsToExport</span>, <span class='no'>s3DestinationConfig</span>, <span class='no'>fileFormat</span>,
-  <span class='no'>includeMemberAccounts</span>)</pre>
+    <pre class="usage"><span class='fu'>computeoptimizer_export_auto_scaling_group_recommendations</span><span class='op'>(</span><span class='va'>accountIds</span>,
+  <span class='va'>filters</span>, <span class='va'>fieldsToExport</span>, <span class='va'>s3DestinationConfig</span>, <span class='va'>fileFormat</span>,
+  <span class='va'>includeMemberAccounts</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,7 +143,7 @@
       <th>accountIds</th>
       <td><p>The IDs of the AWS accounts for which to export Auto Scaling group
 recommendations.</p>
-<p>If your account is the master account of an organization, use this
+<p>If your account is the management account of an organization, use this
 parameter to specify the member accounts for which you want to export
 recommendations.</p>
 <p>This parameter cannot be specified together with the include member
@@ -145,7 +159,9 @@ of Auto Scaling group recommendations.</p></td>
     </tr>
     <tr>
       <th>fieldsToExport</th>
-      <td><p>The recommendations data to include in the export file.</p></td>
+      <td><p>The recommendations data to include in the export file. For more
+information about the fields that can be exported, see <a href='https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files'>Exported files</a>
+in the <em>Compute Optimizer User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>s3DestinationConfig</th>
@@ -169,8 +185,8 @@ in the <em>Compute Optimizer user guide</em>.</p></td>
     <tr>
       <th>includeMemberAccounts</th>
       <td><p>Indicates whether to include recommendations for resources in all member
-accounts of the organization if your account is the master account of an
-organization.</p>
+accounts of the organization if your account is the management account
+of an organization.</p>
 <p>The member accounts must also be opted in to Compute Optimizer.</p>
 <p>Recommendations for member accounts of the organization are not included
 in the export file if this parameter is omitted.</p>
@@ -181,40 +197,32 @@ this parameter, or the account IDs parameter, is omitted.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Recommendations are exported in a comma-separated values (.csv) file,
-and its metadata in a JavaScript Object Notation (.json) file, to an
-existing Amazon Simple Storage Service (Amazon S3) bucket that you
-specify. For more information, see <a href='https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html'>Exporting Recommendations</a>
-in the <em>Compute Optimizer User Guide</em>.</p>
-<p>You can have only one Auto Scaling group export job in progress per AWS
-Region.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>export_auto_scaling_group_recommendations</span>(
-  <span class='kw'>accountIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>export_auto_scaling_group_recommendations</span><span class='op'>(</span>
+  accountIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"Finding"</span><span class='kw'>|</span><span class='st'>"RecommendationSourceType"</span>,
-      <span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      name <span class='op'>=</span> <span class='st'>"Finding"</span><span class='op'>|</span><span class='st'>"RecommendationSourceType"</span>,
+      values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>fieldsToExport</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"AccountId"</span><span class='kw'>|</span><span class='st'>"AutoScalingGroupArn"</span><span class='kw'>|</span><span class='st'>"AutoScalingGroupName"</span><span class='kw'>|</span><span class='st'>"Finding"</span><span class='kw'>|</span><span class='st'>"UtilizationMetricsCpuMaximum"</span><span class='kw'>|</span><span class='st'>"UtilizationMetricsMemoryMaximum"</span><span class='kw'>|</span><span class='st'>"LookbackPeriodInDays"</span><span class='kw'>|</span><span class='st'>"CurrentConfigurationInstanceType"</span><span class='kw'>|</span><span class='st'>"CurrentConfigurationDesiredCapacity"</span><span class='kw'>|</span><span class='st'>"CurrentConfigurationMinSize"</span><span class='kw'>|</span><span class='st'>"CurrentConfigurationMaxSize"</span><span class='kw'>|</span><span class='st'>"CurrentOnDemandPrice"</span><span class='kw'>|</span><span class='st'>"CurrentStandardOneYearNoUpfrontReservedPrice"</span><span class='kw'>|</span><span class='st'>"CurrentStandardThreeYearNoUpfrontReservedPrice"</span><span class='kw'>|</span><span class='st'>"CurrentVCpus"</span><span class='kw'>|</span><span class='st'>"CurrentMemory"</span><span class='kw'>|</span><span class='st'>"CurrentStorage"</span><span class='kw'>|</span><span class='st'>"CurrentNetwork"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsConfigurationInstanceType"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsConfigurationDesiredCapacity"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsConfigurationMinSize"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsConfigurationMaxSize"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsProjectedUtilizationMetricsCpuMaximum"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsPerformanceRisk"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsOnDemandPrice"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsStandardOneYearNoUpfrontReservedPrice"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsVcpus"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsMemory"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsStorage"</span><span class='kw'>|</span><span class='st'>"RecommendationOptionsNetwork"</span><span class='kw'>|</span><span class='st'>"LastRefreshTimestamp"</span>
-  ),
-  <span class='kw'>s3DestinationConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>keyPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>fileFormat</span> <span class='kw'>=</span> <span class='st'>"Csv"</span>,
-  <span class='kw'>includeMemberAccounts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  fieldsToExport <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"AccountId"</span><span class='op'>|</span><span class='st'>"AutoScalingGroupArn"</span><span class='op'>|</span><span class='st'>"AutoScalingGroupName"</span><span class='op'>|</span><span class='st'>"Finding"</span><span class='op'>|</span><span class='st'>"UtilizationMetricsCpuMaximum"</span><span class='op'>|</span><span class='st'>"UtilizationMetricsMemoryMaximum"</span><span class='op'>|</span><span class='st'>"UtilizationMetricsEbsReadOpsPerSecondMaximum"</span><span class='op'>|</span><span class='st'>"UtilizationMetricsEbsWriteOpsPerSecondMaximum"</span><span class='op'>|</span><span class='st'>"UtilizationMetricsEbsReadBytesPerSecondMaximum"</span><span class='op'>|</span><span class='st'>"UtilizationMetricsEbsWriteBytesPerSecondMaximum"</span><span class='op'>|</span><span class='st'>"LookbackPeriodInDays"</span><span class='op'>|</span><span class='st'>"CurrentConfigurationInstanceType"</span><span class='op'>|</span><span class='st'>"CurrentConfigurationDesiredCapacity"</span><span class='op'>|</span><span class='st'>"CurrentConfigurationMinSize"</span><span class='op'>|</span><span class='st'>"CurrentConfigurationMaxSize"</span><span class='op'>|</span><span class='st'>"CurrentOnDemandPrice"</span><span class='op'>|</span><span class='st'>"CurrentStandardOneYearNoUpfrontReservedPrice"</span><span class='op'>|</span><span class='st'>"CurrentStandardThreeYearNoUpfrontReservedPrice"</span><span class='op'>|</span><span class='st'>"CurrentVCpus"</span><span class='op'>|</span><span class='st'>"CurrentMemory"</span><span class='op'>|</span><span class='st'>"CurrentStorage"</span><span class='op'>|</span><span class='st'>"CurrentNetwork"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsConfigurationInstanceType"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsConfigurationDesiredCapacity"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsConfigurationMinSize"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsConfigurationMaxSize"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsProjectedUtilizationMetricsCpuMaximum"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsProjectedUtilizationMetricsMemoryMaximum"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsPerformanceRisk"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsOnDemandPrice"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsStandardOneYearNoUpfrontReservedPrice"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsStandardThreeYearNoUpfrontReservedPrice"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsVcpus"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsMemory"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsStorage"</span><span class='op'>|</span><span class='st'>"RecommendationOptionsNetwork"</span><span class='op'>|</span><span class='st'>"LastRefreshTimestamp"</span>
+  <span class='op'>)</span>,
+  s3DestinationConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+    keyPrefix <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  fileFormat <span class='op'>=</span> <span class='st'>"Csv"</span>,
+  includeMemberAccounts <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -232,7 +240,7 @@ Region.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

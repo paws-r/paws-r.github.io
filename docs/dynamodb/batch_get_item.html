@@ -43,7 +43,50 @@ from one or more tables — dynamodb_batch_get_item • paws</title>
 <meta property="og:title" content="The BatchGetItem operation returns the attributes of one or more items
 from one or more tables — dynamodb_batch_get_item" />
 <meta property="og:description" content="The BatchGetItem operation returns the attributes of one or more items
-from one or more tables. You identify requested items by primary key." />
+from one or more tables. You identify requested items by primary key.
+A single operation can retrieve up to 16 MB of data, which can contain
+as many as 100 items. BatchGetItem returns a partial result if the
+response size limit is exceeded, the table's provisioned throughput is
+exceeded, or an internal processing failure occurs. If a partial result
+is returned, the operation returns a value for UnprocessedKeys. You
+can use this value to retry the operation starting with the next item to
+get.
+If you request more than 100 items, BatchGetItem returns a
+ValidationException with the message &quot;Too many items requested for the
+BatchGetItem call.&quot;
+For example, if you ask to retrieve 100 items, but each individual item
+is 300 KB in size, the system returns 52 items (so as not to exceed the
+16 MB limit). It also returns an appropriate UnprocessedKeys value so
+you can get the next page of results. If desired, your application can
+include its own logic to assemble the pages of results into one dataset.
+If none of the items can be processed due to insufficient provisioned
+throughput on all of the tables in the request, then BatchGetItem
+returns a ProvisionedThroughputExceededException. If at least one of
+the items is successfully processed, then BatchGetItem completes
+successfully, while returning the keys of the unread items in
+UnprocessedKeys.
+If DynamoDB returns any unprocessed items, you should retry the batch
+operation on those items. However, we strongly recommend that you use
+an exponential backoff algorithm. If you retry the batch operation
+immediately, the underlying read or write requests can still fail due to
+throttling on the individual tables. If you delay the batch operation
+using exponential backoff, the individual requests in the batch are much
+more likely to succeed.
+For more information, see Batch Operations and Error Handling
+in the Amazon DynamoDB Developer Guide.
+By default, BatchGetItem performs eventually consistent reads on every
+table in the request. If you want strongly consistent reads instead, you
+can set ConsistentRead to true for any or all tables.
+In order to minimize response latency, BatchGetItem retrieves items in
+parallel.
+When designing your application, keep in mind that DynamoDB does not
+return items in any particular order. To help parse the response by
+item, include the primary key values for the items in your request in
+the ProjectionExpression parameter.
+If a requested item does not exist, it is not returned in the result.
+Requests for nonexistent items consume the minimum read capacity units
+according to the type of read. For more information, see Working with Tables
+in the Amazon DynamoDB Developer Guide." />
 
 
 
@@ -75,7 +118,7 @@ from one or more tables. You identify requested items by primary key." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +126,7 @@ from one or more tables. You identify requested items by primary key." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +138,7 @@ from one or more tables. You identify requested items by primary key." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,9 +164,52 @@ from one or more tables</h1>
     <div class="ref-description">
     <p>The <code>BatchGetItem</code> operation returns the attributes of one or more items
 from one or more tables. You identify requested items by primary key.</p>
+<p>A single operation can retrieve up to 16 MB of data, which can contain
+as many as 100 items. <code>BatchGetItem</code> returns a partial result if the
+response size limit is exceeded, the table's provisioned throughput is
+exceeded, or an internal processing failure occurs. If a partial result
+is returned, the operation returns a value for <code>UnprocessedKeys</code>. You
+can use this value to retry the operation starting with the next item to
+get.</p>
+<p>If you request more than 100 items, <code>BatchGetItem</code> returns a
+<code>ValidationException</code> with the message "Too many items requested for the
+BatchGetItem call."</p>
+<p>For example, if you ask to retrieve 100 items, but each individual item
+is 300 KB in size, the system returns 52 items (so as not to exceed the
+16 MB limit). It also returns an appropriate <code>UnprocessedKeys</code> value so
+you can get the next page of results. If desired, your application can
+include its own logic to assemble the pages of results into one dataset.</p>
+<p>If <em>none</em> of the items can be processed due to insufficient provisioned
+throughput on all of the tables in the request, then <code>BatchGetItem</code>
+returns a <code>ProvisionedThroughputExceededException</code>. If <em>at least one</em> of
+the items is successfully processed, then <code>BatchGetItem</code> completes
+successfully, while returning the keys of the unread items in
+<code>UnprocessedKeys</code>.</p>
+<p>If DynamoDB returns any unprocessed items, you should retry the batch
+operation on those items. However, <em>we strongly recommend that you use
+an exponential backoff algorithm</em>. If you retry the batch operation
+immediately, the underlying read or write requests can still fail due to
+throttling on the individual tables. If you delay the batch operation
+using exponential backoff, the individual requests in the batch are much
+more likely to succeed.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#BatchOperations'>Batch Operations and Error Handling</a>
+in the <em>Amazon DynamoDB Developer Guide</em>.</p>
+<p>By default, <code>BatchGetItem</code> performs eventually consistent reads on every
+table in the request. If you want strongly consistent reads instead, you
+can set <code>ConsistentRead</code> to <code>true</code> for any or all tables.</p>
+<p>In order to minimize response latency, <code>BatchGetItem</code> retrieves items in
+parallel.</p>
+<p>When designing your application, keep in mind that DynamoDB does not
+return items in any particular order. To help parse the response by
+item, include the primary key values for the items in your request in
+the <code>ProjectionExpression</code> parameter.</p>
+<p>If a requested item does not exist, it is not returned in the result.
+Requests for nonexistent items consume the minimum read capacity units
+according to the type of read. For more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#CapacityUnitCalculations'>Working with Tables</a>
+in the <em>Amazon DynamoDB Developer Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dynamodb_batch_get_item</span>(<span class='no'>RequestItems</span>, <span class='no'>ReturnConsumedCapacity</span>)</pre>
+    <pre class="usage"><span class='fu'>dynamodb_batch_get_item</span><span class='op'>(</span><span class='va'>RequestItems</span>, <span class='va'>ReturnConsumedCapacity</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,7 +254,7 @@ example:</p><ul>
 <p>Tokens that begin with the <strong>:</strong> character are <em>expression attribute
 values</em>, which are placeholders for the actual value at runtime.</p>
 <p>For more information about expression attribute names, see
-<a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.AccessingItemAttributes.html'>Accessing Item Attributes</a>
+<a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html'>Accessing Item Attributes</a>
 in the <em>Amazon DynamoDB Developer Guide</em>.</p></li>
 <li><p><code>Keys</code> - An array of primary key attribute values that define
 specific items in the table. For each primary key, you must provide
@@ -183,7 +269,7 @@ expression must be separated by commas.</p>
 <p>If no attribute names are specified, then all attributes are
 returned. If any of the requested attributes are not found, they do
 not appear in the result.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.AccessingItemAttributes.html'>Accessing Item Attributes</a>
+<p>For more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html'>Accessing Item Attributes</a>
 in the <em>Amazon DynamoDB Developer Guide</em>.</p></li>
 <li><p><code>AttributesToGet</code> - This is a legacy parameter. Use
 <code>ProjectionExpression</code> instead. For more information, see
@@ -197,135 +283,93 @@ in the <em>Amazon DynamoDB Developer Guide</em>.</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A single operation can retrieve up to 16 MB of data, which can contain
-as many as 100 items. <code>BatchGetItem</code> returns a partial result if the
-response size limit is exceeded, the table\'s provisioned throughput is
-exceeded, or an internal processing failure occurs. If a partial result
-is returned, the operation returns a value for <code>UnprocessedKeys</code>. You
-can use this value to retry the operation starting with the next item to
-get.</p>
-<p>If you request more than 100 items, <code>BatchGetItem</code> returns a
-<code>ValidationException</code> with the message \"Too many items requested for
-the BatchGetItem call.\"</p>
-<p>For example, if you ask to retrieve 100 items, but each individual item
-is 300 KB in size, the system returns 52 items (so as not to exceed the
-16 MB limit). It also returns an appropriate <code>UnprocessedKeys</code> value so
-you can get the next page of results. If desired, your application can
-include its own logic to assemble the pages of results into one dataset.</p>
-<p>If <em>none</em> of the items can be processed due to insufficient provisioned
-throughput on all of the tables in the request, then <code>BatchGetItem</code>
-returns a <code>ProvisionedThroughputExceededException</code>. If <em>at least one</em> of
-the items is successfully processed, then <code>BatchGetItem</code> completes
-successfully, while returning the keys of the unread items in
-<code>UnprocessedKeys</code>.</p>
-<p>If DynamoDB returns any unprocessed items, you should retry the batch
-operation on those items. However, <em>we strongly recommend that you use
-an exponential backoff algorithm</em>. If you retry the batch operation
-immediately, the underlying read or write requests can still fail due to
-throttling on the individual tables. If you delay the batch operation
-using exponential backoff, the individual requests in the batch are much
-more likely to succeed.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ErrorHandling.html#BatchOperations'>Batch Operations and Error Handling</a>
-in the <em>Amazon DynamoDB Developer Guide</em>.</p>
-<p>By default, <code>BatchGetItem</code> performs eventually consistent reads on every
-table in the request. If you want strongly consistent reads instead, you
-can set <code>ConsistentRead</code> to <code>true</code> for any or all tables.</p>
-<p>In order to minimize response latency, <code>BatchGetItem</code> retrieves items in
-parallel.</p>
-<p>When designing your application, keep in mind that DynamoDB does not
-return items in any particular order. To help parse the response by
-item, include the primary key values for the items in your request in
-the <code>ProjectionExpression</code> parameter.</p>
-<p>If a requested item does not exist, it is not returned in the result.
-Requests for nonexistent items consume the minimum read capacity units
-according to the type of read. For more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#CapacityUnitCalculations'>Working with Tables</a>
-in the <em>Amazon DynamoDB Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>batch_get_item</span>(
-  <span class='kw'>RequestItems</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Keys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>N</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>B</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-            <span class='kw'>SS</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>batch_get_item</span><span class='op'>(</span>
+  RequestItems <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Keys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            S <span class='op'>=</span> <span class='st'>"string"</span>,
+            N <span class='op'>=</span> <span class='st'>"string"</span>,
+            B <span class='op'>=</span> <span class='va'>raw</span>,
+            SS <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            ),
-            <span class='kw'>NS</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+            <span class='op'>)</span>,
+            NS <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            ),
-            <span class='kw'>BS</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='no'>raw</span>
-            ),
-            <span class='kw'>M</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-            ),
-            <span class='kw'>L</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-            ),
-            <span class='kw'>NULL</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-            <span class='kw'>BOOL</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-          )
-        )
-      ),
-      <span class='kw'>AttributesToGet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+            <span class='op'>)</span>,
+            BS <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='va'>raw</span>
+            <span class='op'>)</span>,
+            M <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+            <span class='op'>)</span>,
+            L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+            <span class='op'>)</span>,
+            <span class='cn'>NULL</span> <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            BOOL <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      AttributesToGet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>ConsistentRead</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>ProjectionExpression</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ExpressionAttributeNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      ConsistentRead <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      ProjectionExpression <span class='op'>=</span> <span class='st'>"string"</span>,
+      ExpressionAttributeNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>ReturnConsumedCapacity</span> <span class='kw'>=</span> <span class='st'>"INDEXES"</span><span class='kw'>|</span><span class='st'>"TOTAL"</span><span class='kw'>|</span><span class='st'>"NONE"</span>
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ReturnConsumedCapacity <span class='op'>=</span> <span class='st'>"INDEXES"</span><span class='op'>|</span><span class='st'>"TOTAL"</span><span class='op'>|</span><span class='st'>"NONE"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example reads multiple items from the Music table using a batch of</span>
 <span class='co'># three GetItem requests.  Only the AlbumTitle attribute is returned.</span>
-<span class='no'>svc</span>$<span class='fu'>batch_get_item</span>(
-  <span class='kw'>RequestItems</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Music</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Keys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Artist</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"No One You Know"</span>
-          ),
-          <span class='kw'>SongTitle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"Call Me Today"</span>
-          )
-        ),
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Artist</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"Acme Band"</span>
-          ),
-          <span class='kw'>SongTitle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"Happy Day"</span>
-          )
-        ),
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Artist</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"No One You Know"</span>
-          ),
-          <span class='kw'>SongTitle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"Scared of My Shadow"</span>
-          )
-        )
-      ),
-      <span class='kw'>ProjectionExpression</span> <span class='kw'>=</span> <span class='st'>"AlbumTitle"</span>
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>batch_get_item</span><span class='op'>(</span>
+  RequestItems <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Music <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Keys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Artist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            S <span class='op'>=</span> <span class='st'>"No One You Know"</span>
+          <span class='op'>)</span>,
+          SongTitle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            S <span class='op'>=</span> <span class='st'>"Call Me Today"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Artist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            S <span class='op'>=</span> <span class='st'>"Acme Band"</span>
+          <span class='op'>)</span>,
+          SongTitle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            S <span class='op'>=</span> <span class='st'>"Happy Day"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Artist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            S <span class='op'>=</span> <span class='st'>"No One You Know"</span>
+          <span class='op'>)</span>,
+          SongTitle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            S <span class='op'>=</span> <span class='st'>"Scared of My Shadow"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      ProjectionExpression <span class='op'>=</span> <span class='st'>"AlbumTitle"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -341,7 +385,7 @@ in the <em>Amazon DynamoDB Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

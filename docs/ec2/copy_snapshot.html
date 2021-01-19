@@ -45,7 +45,18 @@ S3 — ec2_copy_snapshot" />
 <meta property="og:description" content="Copies a point-in-time snapshot of an EBS volume and stores it in Amazon
 S3. You can copy the snapshot within the same Region or from one Region
 to another. You can use the snapshot to create EBS volumes or Amazon
-Machine Images (AMIs)." />
+Machine Images (AMIs).
+Copies of encrypted EBS snapshots remain encrypted. Copies of
+unencrypted snapshots remain unencrypted, unless you enable encryption
+for the snapshot copy operation. By default, encrypted snapshot copies
+use the default AWS Key Management Service (AWS KMS) customer master key
+(CMK); however, you can specify a different CMK.
+To copy an encrypted snapshot that has been shared from another account,
+you must have permissions for the CMK used to encrypt the snapshot.
+Snapshots created by copying another snapshot have an arbitrary volume
+ID that should not be used for any purpose.
+For more information, see Copying an Amazon EBS snapshot
+in the Amazon Elastic Compute Cloud User Guide." />
 
 
 
@@ -77,7 +88,7 @@ Machine Images (AMIs)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +96,7 @@ Machine Images (AMIs)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +108,7 @@ Machine Images (AMIs)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,10 +136,21 @@ S3</h1>
 S3. You can copy the snapshot within the same Region or from one Region
 to another. You can use the snapshot to create EBS volumes or Amazon
 Machine Images (AMIs).</p>
+<p>Copies of encrypted EBS snapshots remain encrypted. Copies of
+unencrypted snapshots remain unencrypted, unless you enable encryption
+for the snapshot copy operation. By default, encrypted snapshot copies
+use the default AWS Key Management Service (AWS KMS) customer master key
+(CMK); however, you can specify a different CMK.</p>
+<p>To copy an encrypted snapshot that has been shared from another account,
+you must have permissions for the CMK used to encrypt the snapshot.</p>
+<p>Snapshots created by copying another snapshot have an arbitrary volume
+ID that should not be used for any purpose.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html'>Copying an Amazon EBS snapshot</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_copy_snapshot</span>(<span class='no'>Description</span>, <span class='no'>DestinationRegion</span>, <span class='no'>Encrypted</span>, <span class='no'>KmsKeyId</span>,
-  <span class='no'>PresignedUrl</span>, <span class='no'>SourceRegion</span>, <span class='no'>SourceSnapshotId</span>, <span class='no'>TagSpecifications</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_copy_snapshot</span><span class='op'>(</span><span class='va'>Description</span>, <span class='va'>DestinationRegion</span>, <span class='va'>Encrypted</span>, <span class='va'>KmsKeyId</span>,
+  <span class='va'>PresignedUrl</span>, <span class='va'>SourceRegion</span>, <span class='va'>SourceSnapshotId</span>, <span class='va'>TagSpecifications</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,7 +175,7 @@ Region in your AWS configuration file.</p></td>
 not enabled, enable encryption using this parameter. Otherwise, omit
 this parameter. Encrypted snapshots are encrypted, even if you omit this
 parameter and encryption by default is not enabled. You cannot set this
-parameter to false. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html'>Amazon EBS Encryption</a>
+parameter to false. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html'>Amazon EBS encryption</a>
 in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></td>
     </tr>
     <tr>
@@ -163,12 +185,12 @@ master key (CMK) to use for Amazon EBS encryption. If this parameter is
 not specified, your AWS managed CMK for EBS is used. If <code>KmsKeyId</code> is
 specified, the encrypted state must be <code>true</code>.</p>
 <p>You can specify the CMK using any of the following:</p><ul>
-<li><p>Key ID. For example, key/1234abcd-12ab-34cd-56ef-1234567890ab.</p></li>
+<li><p>Key ID. For example, 1234abcd-12ab-34cd-56ef-1234567890ab.</p></li>
 <li><p>Key alias. For example, alias/ExampleAlias.</p></li>
 <li><p>Key ARN. For example,
-arn:aws:kms:<em>us-east-1</em>:<em>012345678910</em>:key/<em>abcd1234-a123-456a-a12b-a123b4cd56ef</em>.</p></li>
+arn:aws:kms:us-east-1:012345678910:key/1234abcd-12ab-34cd-56ef-1234567890ab.</p></li>
 <li><p>Alias ARN. For example,
-arn:aws:kms:<em>us-east-1</em>:<em>012345678910</em>:alias/<em>ExampleAlias</em>.</p></li>
+arn:aws:kms:us-east-1:012345678910:alias/ExampleAlias.</p></li>
 </ul>
 
 <p>AWS authenticates the CMK asynchronously. Therefore, if you specify an
@@ -179,13 +201,13 @@ but eventually fails.</p></td>
       <th>PresignedUrl</th>
       <td><p>When you copy an encrypted source snapshot using the Amazon EC2 Query
 API, you must supply a pre-signed URL. This parameter is optional for
-unencrypted snapshots. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html'>Query Requests</a>.</p>
+unencrypted snapshots. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html'>Query requests</a>.</p>
 <p>The <code>PresignedUrl</code> should use the snapshot source endpoint, the
 <code>CopySnapshot</code> action, and include the <code>SourceRegion</code>,
 <code>SourceSnapshotId</code>, and <code>DestinationRegion</code> parameters. The
 <code>PresignedUrl</code> must be signed using AWS Signature Version 4. Because EBS
 snapshots are stored in Amazon S3, the signing algorithm for this
-parameter uses the same logic that is described in <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html'>Authenticating Requests by Using Query Parameters (AWS Signature Version 4)</a>
+parameter uses the same logic that is described in <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html'>Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a>
 in the <em>Amazon Simple Storage Service API Reference</em>. An invalid or
 improperly signed <code>PresignedUrl</code> will cause the copy operation to fail
 asynchronously, and the snapshot will move to an <code>error</code> state.</p></td>
@@ -211,58 +233,48 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Copies of encrypted EBS snapshots remain encrypted. Copies of
-unencrypted snapshots remain unencrypted, unless you enable encryption
-for the snapshot copy operation. By default, encrypted snapshot copies
-use the default AWS Key Management Service (AWS KMS) customer master key
-(CMK); however, you can specify a different CMK.</p>
-<p>To copy an encrypted snapshot that has been shared from another account,
-you must have permissions for the CMK used to encrypt the snapshot.</p>
-<p>Snapshots created by copying another snapshot have an arbitrary volume
-ID that should not be used for any purpose.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html'>Copying an Amazon EBS Snapshot</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>copy_snapshot</span>(
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DestinationRegion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Encrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PresignedUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceRegion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceSnapshotId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TagSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='kw'>|</span><span class='st'>"customer-gateway"</span><span class='kw'>|</span><span class='st'>"dedicated-host"</span><span class='kw'>|</span><span class='st'>"dhcp-options"</span><span class='kw'>|</span><span class='st'>"elastic-ip"</span><span class='kw'>|</span><span class='st'>"elastic-gpu"</span><span class='kw'>|</span><span class='st'>"export-image-task"</span><span class='kw'>|</span><span class='st'>"export-instance-task"</span><span class='kw'>|</span><span class='st'>"fleet"</span><span class='kw'>|</span><span class='st'>"fpga-image"</span><span class='kw'>|</span><span class='st'>"host-reservation"</span><span class='kw'>|</span><span class='st'>"image"</span><span class='kw'>|</span><span class='st'>"import-image-task"</span><span class='kw'>|</span><span class='st'>"import-snapshot-task"</span><span class='kw'>|</span><span class='st'>"instance"</span><span class='kw'>|</span><span class='st'>"internet-gateway"</span><span class='kw'>|</span><span class='st'>"key-pair"</span><span class='kw'>|</span><span class='st'>"launch-template"</span><span class='kw'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='kw'>|</span><span class='st'>"natgateway"</span><span class='kw'>|</span><span class='st'>"network-acl"</span><span class='kw'>|</span><span class='st'>"network-interface"</span><span class='kw'>|</span><span class='st'>"placement-group"</span><span class='kw'>|</span><span class='st'>"reserved-instances"</span><span class='kw'>|</span><span class='st'>"route-table"</span><span class='kw'>|</span><span class='st'>"security-group"</span><span class='kw'>|</span><span class='st'>"snapshot"</span><span class='kw'>|</span><span class='st'>"spot-fleet-request"</span><span class='kw'>|</span><span class='st'>"spot-instances-request"</span><span class='kw'>|</span><span class='st'>"subnet"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-session"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-target"</span><span class='kw'>|</span><span class='st'>"transit-gateway"</span><span class='kw'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='kw'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='kw'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='kw'>|</span><span class='st'>"volume"</span><span class='kw'>|</span><span class='st'>"vpc"</span><span class='kw'>|</span><span class='st'>"vpc-peering-connection"</span><span class='kw'>|</span><span class='st'>"vpn-connection"</span><span class='kw'>|</span><span class='st'>"vpn-gateway"</span><span class='kw'>|</span><span class='st'>"vpc-flow-log"</span>,
-      <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>copy_snapshot</span><span class='op'>(</span>
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  DestinationRegion <span class='op'>=</span> <span class='st'>"string"</span>,
+  Encrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PresignedUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceRegion <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceSnapshotId <span class='op'>=</span> <span class='st'>"string"</span>,
+  TagSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ResourceType <span class='op'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='op'>|</span><span class='st'>"customer-gateway"</span><span class='op'>|</span><span class='st'>"dedicated-host"</span><span class='op'>|</span><span class='st'>"dhcp-options"</span><span class='op'>|</span><span class='st'>"egress-only-internet-gateway"</span><span class='op'>|</span><span class='st'>"elastic-ip"</span><span class='op'>|</span><span class='st'>"elastic-gpu"</span><span class='op'>|</span><span class='st'>"export-image-task"</span><span class='op'>|</span><span class='st'>"export-instance-task"</span><span class='op'>|</span><span class='st'>"fleet"</span><span class='op'>|</span><span class='st'>"fpga-image"</span><span class='op'>|</span><span class='st'>"host-reservation"</span><span class='op'>|</span><span class='st'>"image"</span><span class='op'>|</span><span class='st'>"import-image-task"</span><span class='op'>|</span><span class='st'>"import-snapshot-task"</span><span class='op'>|</span><span class='st'>"instance"</span><span class='op'>|</span><span class='st'>"internet-gateway"</span><span class='op'>|</span><span class='st'>"key-pair"</span><span class='op'>|</span><span class='st'>"launch-template"</span><span class='op'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='op'>|</span><span class='st'>"natgateway"</span><span class='op'>|</span><span class='st'>"network-acl"</span><span class='op'>|</span><span class='st'>"network-interface"</span><span class='op'>|</span><span class='st'>"network-insights-analysis"</span><span class='op'>|</span><span class='st'>"network-insights-path"</span><span class='op'>|</span><span class='st'>"placement-group"</span><span class='op'>|</span><span class='st'>"reserved-instances"</span><span class='op'>|</span><span class='st'>"route-table"</span><span class='op'>|</span><span class='st'>"security-group"</span><span class='op'>|</span><span class='st'>"snapshot"</span><span class='op'>|</span><span class='st'>"spot-fleet-request"</span><span class='op'>|</span><span class='st'>"spot-instances-request"</span><span class='op'>|</span><span class='st'>"subnet"</span><span class='op'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='op'>|</span><span class='st'>"traffic-mirror-session"</span><span class='op'>|</span><span class='st'>"traffic-mirror-target"</span><span class='op'>|</span><span class='st'>"transit-gateway"</span><span class='op'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='op'>|</span><span class='st'>"transit-gateway-connect-peer"</span><span class='op'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='op'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='op'>|</span><span class='st'>"volume"</span><span class='op'>|</span><span class='st'>"vpc"</span><span class='op'>|</span><span class='st'>"vpc-peering-connection"</span><span class='op'>|</span><span class='st'>"vpn-connection"</span><span class='op'>|</span><span class='st'>"vpn-gateway"</span><span class='op'>|</span><span class='st'>"vpc-flow-log"</span>,
+      Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Key <span class='op'>=</span> <span class='st'>"string"</span>,
+          Value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example copies a snapshot with the snapshot ID of</span>
 <span class='co'># `snap-066877671789bd71b` from the `us-west-2` region to the</span>
 <span class='co'># `us-east-1` region and adds a short description to identify the</span>
 <span class='co'># snapshot.</span>
-<span class='no'>svc</span>$<span class='fu'>copy_snapshot</span>(
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"This is my copied snapshot."</span>,
-  <span class='kw'>DestinationRegion</span> <span class='kw'>=</span> <span class='st'>"us-east-1"</span>,
-  <span class='kw'>SourceRegion</span> <span class='kw'>=</span> <span class='st'>"us-west-2"</span>,
-  <span class='kw'>SourceSnapshotId</span> <span class='kw'>=</span> <span class='st'>"snap-066877671789bd71b"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>copy_snapshot</span><span class='op'>(</span>
+  Description <span class='op'>=</span> <span class='st'>"This is my copied snapshot."</span>,
+  DestinationRegion <span class='op'>=</span> <span class='st'>"us-east-1"</span>,
+  SourceRegion <span class='op'>=</span> <span class='st'>"us-west-2"</span>,
+  SourceSnapshotId <span class='op'>=</span> <span class='st'>"snap-066877671789bd71b"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -278,7 +290,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

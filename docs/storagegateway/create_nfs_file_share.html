@@ -46,7 +46,15 @@ gateway — storagegateway_create_nfs_file_share" />
 gateway. In Storage Gateway, a file share is a file system mount point
 backed by Amazon S3 cloud storage. Storage Gateway exposes file shares
 using an NFS interface. This operation is only supported for file
-gateways." />
+gateways.
+File gateway requires AWS Security Token Service (AWS STS) to be
+activated to enable you to create a file share. Make sure AWS STS is
+activated in the AWS Region you are creating your file gateway in. If
+AWS STS is not activated in the AWS Region, activate it. For information
+about how to activate AWS STS, see Activating and deactivating AWS STS in an AWS Region
+in the AWS Identity and Access Management User Guide.
+File gateway does not support creating hard or symbolic links on a file
+share." />
 
 
 
@@ -78,7 +86,7 @@ gateways." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +94,7 @@ gateways." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +106,7 @@ gateways." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,13 +135,21 @@ gateway. In Storage Gateway, a file share is a file system mount point
 backed by Amazon S3 cloud storage. Storage Gateway exposes file shares
 using an NFS interface. This operation is only supported for file
 gateways.</p>
+<p>File gateway requires AWS Security Token Service (AWS STS) to be
+activated to enable you to create a file share. Make sure AWS STS is
+activated in the AWS Region you are creating your file gateway in. If
+AWS STS is not activated in the AWS Region, activate it. For information
+about how to activate AWS STS, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html'>Activating and deactivating AWS STS in an AWS Region</a>
+in the <em>AWS Identity and Access Management User Guide</em>.</p>
+<p>File gateway does not support creating hard or symbolic links on a file
+share.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>storagegateway_create_nfs_file_share</span>(<span class='no'>ClientToken</span>, <span class='no'>NFSFileShareDefaults</span>,
-  <span class='no'>GatewayARN</span>, <span class='no'>KMSEncrypted</span>, <span class='no'>KMSKey</span>, <span class='no'>Role</span>, <span class='no'>LocationARN</span>,
-  <span class='no'>DefaultStorageClass</span>, <span class='no'>ObjectACL</span>, <span class='no'>ClientList</span>, <span class='no'>Squash</span>, <span class='no'>ReadOnly</span>,
-  <span class='no'>GuessMIMETypeEnabled</span>, <span class='no'>RequesterPays</span>, <span class='no'>Tags</span>, <span class='no'>FileShareName</span>,
-  <span class='no'>CacheAttributes</span>)</pre>
+    <pre class="usage"><span class='fu'>storagegateway_create_nfs_file_share</span><span class='op'>(</span><span class='va'>ClientToken</span>, <span class='va'>NFSFileShareDefaults</span>,
+  <span class='va'>GatewayARN</span>, <span class='va'>KMSEncrypted</span>, <span class='va'>KMSKey</span>, <span class='va'>Role</span>, <span class='va'>LocationARN</span>,
+  <span class='va'>DefaultStorageClass</span>, <span class='va'>ObjectACL</span>, <span class='va'>ClientList</span>, <span class='va'>Squash</span>, <span class='va'>ReadOnly</span>,
+  <span class='va'>GuessMIMETypeEnabled</span>, <span class='va'>RequesterPays</span>, <span class='va'>Tags</span>, <span class='va'>FileShareName</span>,
+  <span class='va'>CacheAttributes</span>, <span class='va'>NotificationPolicy</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,7 +172,7 @@ create a file share.</p></td>
       <th>KMSEncrypted</th>
       <td><p>Set to <code>true</code> to use Amazon S3 server-side encryption with your own AWS
 KMS key, or <code>false</code> to use a key managed by Amazon S3. Optional.</p>
-<p>Valid Values: <code>true</code> \| <code>false</code></p></td>
+<p>Valid Values: <code>true</code> | <code>false</code></p></td>
     </tr>
     <tr>
       <th>KMSKey</th>
@@ -173,15 +189,15 @@ gateway assumes when it accesses the underlying storage.</p></td>
     <tr>
       <th>LocationARN</th>
       <td><p>[required] The ARN of the backend storage used for storing file data. A prefix name
-can be added to the S3 bucket name. It must end with a \"/\".</p></td>
+can be added to the S3 bucket name. It must end with a "/".</p></td>
     </tr>
     <tr>
       <th>DefaultStorageClass</th>
       <td><p>The default storage class for objects put into an Amazon S3 bucket by
 the file gateway. The default value is <code>S3_INTELLIGENT_TIERING</code>.
 Optional.</p>
-<p>Valid Values: <code>S3_STANDARD</code> \| <code>S3_INTELLIGENT_TIERING</code> \|
-<code>S3_STANDARD_IA</code> \| <code>S3_ONEZONE_IA</code></p></td>
+<p>Valid Values: <code>S3_STANDARD</code> | <code>S3_INTELLIGENT_TIERING</code> |
+<code>S3_STANDARD_IA</code> | <code>S3_ONEZONE_IA</code></p></td>
     </tr>
     <tr>
       <th>ObjectACL</th>
@@ -207,14 +223,14 @@ list must contain either valid IP addresses or valid CIDR blocks.</p></td>
       <th>ReadOnly</th>
       <td><p>A value that sets the write status of a file share. Set this value to
 <code>true</code> to set the write status to read-only, otherwise set to <code>false</code>.</p>
-<p>Valid Values: <code>true</code> \| <code>false</code></p></td>
+<p>Valid Values: <code>true</code> | <code>false</code></p></td>
     </tr>
     <tr>
       <th>GuessMIMETypeEnabled</th>
       <td><p>A value that enables guessing of the MIME type for uploaded objects
 based on file extensions. Set this value to <code>true</code> to enable MIME type
 guessing, otherwise set to <code>false</code>. The default value is <code>true</code>.</p>
-<p>Valid Values: <code>true</code> \| <code>false</code></p></td>
+<p>Valid Values: <code>true</code> | <code>false</code></p></td>
     </tr>
     <tr>
       <th>RequesterPays</th>
@@ -225,7 +241,7 @@ pays. However, the S3 bucket owner always pays the cost of storing data.</p>
 <p><code>RequesterPays</code> is a configuration for the S3 bucket that backs the file
 share, so make sure that the configuration on the file share is the same
 as the S3 bucket configuration.</p>
-<p>Valid Values: <code>true</code> \| <code>false</code></p></td>
+<p>Valid Values: <code>true</code> | <code>false</code></p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -233,8 +249,8 @@ as the S3 bucket configuration.</p>
 tag is a key-value pair.</p>
 <p>Valid characters for key and value are letters, spaces, and numbers
 representable in UTF-8 format, and the following special characters: + -
-= . \_ : / @. The maximum length of a tag\'s key is 128 characters, and
-the maximum length for a tag\'s value is 256.</p></td>
+= . \_ : / @. The maximum length of a tag's key is 128 characters, and
+the maximum length for a tag's value is 256.</p></td>
     </tr>
     <tr>
       <th>FileShareName</th>
@@ -246,54 +262,50 @@ the maximum length for a tag\'s value is 256.</p></td>
       <th>CacheAttributes</th>
       <td><p>Refresh cache information.</p></td>
     </tr>
+    <tr>
+      <th>NotificationPolicy</th>
+      <td><p>The notification policy of the file share.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>File gateway requires AWS Security Token Service (AWS STS) to be
-activated to enable you to create a file share. Make sure AWS STS is
-activated in the AWS Region you are creating your file gateway in. If
-AWS STS is not activated in the AWS Region, activate it. For information
-about how to activate AWS STS, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html'>Activating and deactivating AWS STS in an AWS Region</a>
-in the <em>AWS Identity and Access Management User Guide</em>.</p>
-<p>File gateway does not support creating hard or symbolic links on a file
-share.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_nfs_file_share</span>(
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NFSFileShareDefaults</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>FileMode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DirectoryMode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>GroupId</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>OwnerId</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>GatewayARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>KMSEncrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>KMSKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Role</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LocationARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DefaultStorageClass</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ObjectACL</span> <span class='kw'>=</span> <span class='st'>"private"</span><span class='kw'>|</span><span class='st'>"public-read"</span><span class='kw'>|</span><span class='st'>"public-read-write"</span><span class='kw'>|</span><span class='st'>"authenticated-read"</span><span class='kw'>|</span><span class='st'>"bucket-owner-read"</span><span class='kw'>|</span><span class='st'>"bucket-owner-full-control"</span><span class='kw'>|</span><span class='st'>"aws-exec-read"</span>,
-  <span class='kw'>ClientList</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_nfs_file_share</span><span class='op'>(</span>
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  NFSFileShareDefaults <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    FileMode <span class='op'>=</span> <span class='st'>"string"</span>,
+    DirectoryMode <span class='op'>=</span> <span class='st'>"string"</span>,
+    GroupId <span class='op'>=</span> <span class='fl'>123</span>,
+    OwnerId <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  GatewayARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  KMSEncrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  KMSKey <span class='op'>=</span> <span class='st'>"string"</span>,
+  Role <span class='op'>=</span> <span class='st'>"string"</span>,
+  LocationARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  DefaultStorageClass <span class='op'>=</span> <span class='st'>"string"</span>,
+  ObjectACL <span class='op'>=</span> <span class='st'>"private"</span><span class='op'>|</span><span class='st'>"public-read"</span><span class='op'>|</span><span class='st'>"public-read-write"</span><span class='op'>|</span><span class='st'>"authenticated-read"</span><span class='op'>|</span><span class='st'>"bucket-owner-read"</span><span class='op'>|</span><span class='st'>"bucket-owner-full-control"</span><span class='op'>|</span><span class='st'>"aws-exec-read"</span>,
+  ClientList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Squash</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReadOnly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>GuessMIMETypeEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>RequesterPays</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>FileShareName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CacheAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CacheStaleTimeoutInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  )
-)</pre>
+  <span class='op'>)</span>,
+  Squash <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReadOnly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  GuessMIMETypeEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  RequesterPays <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  FileShareName <span class='op'>=</span> <span class='st'>"string"</span>,
+  CacheAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CacheStaleTimeoutInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  NotificationPolicy <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -311,7 +323,7 @@ share.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

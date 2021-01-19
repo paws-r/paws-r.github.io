@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,10 +118,11 @@
     <p>Adds a new playback configuration to AWS Elemental MediaTailor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mediatailor_put_playback_configuration</span>(<span class='no'>AdDecisionServerUrl</span>,
-  <span class='no'>AvailSuppression</span>, <span class='no'>Bumper</span>, <span class='no'>CdnConfiguration</span>, <span class='no'>DashConfiguration</span>,
-  <span class='no'>LivePreRollConfiguration</span>, <span class='no'>Name</span>, <span class='no'>PersonalizationThresholdSeconds</span>,
-  <span class='no'>SlateAdUrl</span>, <span class='no'>Tags</span>, <span class='no'>TranscodeProfileName</span>, <span class='no'>VideoContentSourceUrl</span>)</pre>
+    <pre class="usage"><span class='fu'>mediatailor_put_playback_configuration</span><span class='op'>(</span><span class='va'>AdDecisionServerUrl</span>,
+  <span class='va'>AvailSuppression</span>, <span class='va'>Bumper</span>, <span class='va'>CdnConfiguration</span>, <span class='va'>DashConfiguration</span>,
+  <span class='va'>LivePreRollConfiguration</span>, <span class='va'>ManifestProcessingRules</span>, <span class='va'>Name</span>,
+  <span class='va'>PersonalizationThresholdSeconds</span>, <span class='va'>SlateAdUrl</span>, <span class='va'>Tags</span>, <span class='va'>TranscodeProfileName</span>,
+  <span class='va'>VideoContentSourceUrl</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,6 +161,12 @@ Amazon CloudFront, for content and ad segment management.</p></td>
       <td><p>The configuration for pre-roll ad insertion.</p></td>
     </tr>
     <tr>
+      <th>ManifestProcessingRules</th>
+      <td><p>The configuration for manifest processing rules. Manifest processing
+rules enable customization of the personalized manifests created by
+MediaTailor.</p></td>
+    </tr>
+    <tr>
       <th>Name</th>
       <td><p>The identifier for the playback configuration.</p></td>
     </tr>
@@ -171,7 +178,7 @@ ad break.</p></td>
     <tr>
       <th>SlateAdUrl</th>
       <td><p>The URL for a high-quality video asset to transcode and use to fill in
-time that\'s not used by ads. AWS Elemental MediaTailor shows the slate
+time that's not used by ads. AWS Elemental MediaTailor shows the slate
 to fill in gaps in media content. Configuring the slate is optional for
 non-VPAID configurations. For VPAID, the slate is required because
 MediaTailor provides it in the slots that are designated for dynamic ad
@@ -199,37 +206,43 @@ ID. The maximum length is 512 characters.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_playback_configuration</span>(
-  <span class='kw'>AdDecisionServerUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AvailSuppression</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Mode</span> <span class='kw'>=</span> <span class='st'>"OFF"</span><span class='kw'>|</span><span class='st'>"BEHIND_LIVE_EDGE"</span>,
-    <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Bumper</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>EndUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>StartUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>CdnConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AdSegmentUrlPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ContentSegmentUrlPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DashConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>MpdLocation</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>OriginManifestType</span> <span class='kw'>=</span> <span class='st'>"SINGLE_PERIOD"</span><span class='kw'>|</span><span class='st'>"MULTI_PERIOD"</span>
-  ),
-  <span class='kw'>LivePreRollConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AdDecisionServerUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>MaxDurationSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PersonalizationThresholdSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>SlateAdUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_playback_configuration</span><span class='op'>(</span>
+  AdDecisionServerUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  AvailSuppression <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Mode <span class='op'>=</span> <span class='st'>"OFF"</span><span class='op'>|</span><span class='st'>"BEHIND_LIVE_EDGE"</span>,
+    Value <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Bumper <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    EndUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+    StartUrl <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  CdnConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AdSegmentUrlPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+    ContentSegmentUrlPrefix <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  DashConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    MpdLocation <span class='op'>=</span> <span class='st'>"string"</span>,
+    OriginManifestType <span class='op'>=</span> <span class='st'>"SINGLE_PERIOD"</span><span class='op'>|</span><span class='st'>"MULTI_PERIOD"</span>
+  <span class='op'>)</span>,
+  LivePreRollConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AdDecisionServerUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+    MaxDurationSeconds <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  ManifestProcessingRules <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AdMarkerPassthrough <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  PersonalizationThresholdSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  SlateAdUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>TranscodeProfileName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VideoContentSourceUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  TranscodeProfileName <span class='op'>=</span> <span class='st'>"string"</span>,
+  VideoContentSourceUrl <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -247,7 +260,7 @@ ID. The maximum length is 512 characters.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

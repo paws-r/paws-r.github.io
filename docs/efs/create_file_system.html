@@ -43,9 +43,45 @@
 <meta property="og:description" content="Creates a new, empty file system. The operation requires a creation
 token in the request that Amazon EFS uses to ensure idempotent creation
 (calling the operation with same creation token has no effect). If a
-file system does not currently exist that is owned by the caller\'s AWS
+file system does not currently exist that is owned by the caller's AWS
 account with the specified creation token, this operation does the
-following:" />
+following:
+Creates a new, empty file system. The file system will have an
+Amazon EFS assigned ID, and an initial lifecycle state creating.
+Returns with the description of the created file system.
+
+
+Otherwise, this operation returns a FileSystemAlreadyExists error with
+the ID of the existing file system.
+For basic use cases, you can use a randomly generated UUID for the
+creation token.
+The idempotent operation allows you to retry a CreateFileSystem call
+without risk of creating an extra file system. This can happen when an
+initial call fails in a way that leaves it uncertain whether or not a
+file system was actually created. An example might be that a transport
+level timeout occurred or your connection was reset. As long as you use
+the same creation token, if the initial call had succeeded in creating a
+file system, the client can learn of its existence from the
+FileSystemAlreadyExists error.
+The CreateFileSystem call returns while the file system's lifecycle
+state is still creating. You can check the file system creation status
+by calling the DescribeFileSystems operation, which among other things
+returns the file system state.
+This operation also takes an optional PerformanceMode parameter that
+you choose for your file system. We recommend generalPurpose
+performance mode for most file systems. File systems using the maxIO
+performance mode can scale to higher levels of aggregate throughput and
+operations per second with a tradeoff of slightly higher latencies for
+most file operations. The performance mode can't be changed after the
+file system has been created. For more information, see Amazon EFS: Performance Modes.
+After the file system is fully created, Amazon EFS sets its lifecycle
+state to available, at which point you can create one or more mount
+targets for the file system in your VPC. For more information, see
+CreateMountTarget. You mount your Amazon EFS file system on an EC2
+instances in your VPC by using the mount target. For more information,
+see Amazon EFS: How it Works.
+This operation requires permissions for the
+elasticfilesystem:CreateFileSystem action." />
 
 
 
@@ -77,7 +113,7 @@ following:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +121,7 @@ following:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +133,7 @@ following:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,95 +159,9 @@ following:" />
     <p>Creates a new, empty file system. The operation requires a creation
 token in the request that Amazon EFS uses to ensure idempotent creation
 (calling the operation with same creation token has no effect). If a
-file system does not currently exist that is owned by the caller\'s AWS
+file system does not currently exist that is owned by the caller's AWS
 account with the specified creation token, this operation does the
-following:</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>efs_create_file_system</span>(<span class='no'>CreationToken</span>, <span class='no'>PerformanceMode</span>, <span class='no'>Encrypted</span>,
-  <span class='no'>KmsKeyId</span>, <span class='no'>ThroughputMode</span>, <span class='no'>ProvisionedThroughputInMibps</span>, <span class='no'>Tags</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>CreationToken</th>
-      <td><p>[required] A string of up to 64 ASCII characters. Amazon EFS uses this to ensure
-idempotent creation.</p></td>
-    </tr>
-    <tr>
-      <th>PerformanceMode</th>
-      <td><p>The performance mode of the file system. We recommend <code>generalPurpose</code>
-performance mode for most file systems. File systems using the <code>maxIO</code>
-performance mode can scale to higher levels of aggregate throughput and
-operations per second with a tradeoff of slightly higher latencies for
-most file operations. The performance mode can\'t be changed after the
-file system has been created.</p></td>
-    </tr>
-    <tr>
-      <th>Encrypted</th>
-      <td><p>A Boolean value that, if true, creates an encrypted file system. When
-creating an encrypted file system, you have the option of specifying
-CreateFileSystemRequest\$KmsKeyId for an existing AWS Key Management
-Service (AWS KMS) customer master key (CMK). If you don\'t specify a
-CMK, then the default CMK for Amazon EFS, <code>/aws/elasticfilesystem</code>, is
-used to protect the encrypted file system.</p></td>
-    </tr>
-    <tr>
-      <th>KmsKeyId</th>
-      <td><p>The ID of the AWS KMS CMK to be used to protect the encrypted file
-system. This parameter is only required if you want to use a nondefault
-CMK. If this parameter is not specified, the default CMK for Amazon EFS
-is used. This ID can be in one of the following formats:</p><ul>
-<li><p>Key ID - A unique identifier of the key, for example
-<code>1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p></li>
-<li><p>ARN - An Amazon Resource Name (ARN) for the key, for example
-<code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p></li>
-<li><p>Key alias - A previously created display name for a key, for example
-<code>alias/projectKey1</code>.</p></li>
-<li><p>Key alias ARN - An ARN for a key alias, for example
-<code>arn:aws:kms:us-west-2:444455556666:alias/projectKey1</code>.</p></li>
-</ul>
-
-<p>If <code>KmsKeyId</code> is specified, the CreateFileSystemRequest\$Encrypted
-parameter must be set to true.</p>
-<p>EFS accepts only symmetric CMKs. You cannot use asymmetric CMKs with EFS
-file systems.</p></td>
-    </tr>
-    <tr>
-      <th>ThroughputMode</th>
-      <td><p>The throughput mode for the file system to be created. There are two
-throughput modes to choose from for your file system: <code>bursting</code> and
-<code>provisioned</code>. If you set <code>ThroughputMode</code> to <code>provisioned</code>, you must
-also set a value for <code>ProvisionedThroughPutInMibps</code>. You can decrease
-your file system\'s throughput in Provisioned Throughput mode or change
-between the throughput modes as long as it's been more than 24 hours
-since the last decrease or throughput mode change. For more, see
-<a href='https://docs.aws.amazon.com/efs/latest/ug/performance.html#provisioned-throughput'>Specifying Throughput with Provisioned Mode</a>
-in the <em>Amazon EFS User Guide.</em></p></td>
-    </tr>
-    <tr>
-      <th>ProvisionedThroughputInMibps</th>
-      <td><p>The throughput, measured in MiB/s, that you want to provision for a file
-system that you\'re creating. Valid values are 1-1024. Required if
-<code>ThroughputMode</code> is set to <code>provisioned</code>. The upper limit for throughput
-is 1024 MiB/s. You can get this limit increased by contacting AWS
-Support. For more information, see <a href='https://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits'>Amazon EFS Limits That You Can Increase</a>
-in the <em>Amazon EFS User Guide.</em></p></td>
-    </tr>
-    <tr>
-      <th>Tags</th>
-      <td><p>A value that specifies to create one or more tags associated with the
-file system. Each tag is a user-defined key-value pair. Name your file
-system on creation by including a <code>"Key":"Name","Value":"\{value\}"</code>
-key-value pair.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
+following:</p><ul>
 <li><p>Creates a new, empty file system. The file system will have an
 Amazon EFS assigned ID, and an initial lifecycle state <code>creating</code>.</p></li>
 <li><p>Returns with the description of the created file system.</p></li>
@@ -229,7 +179,7 @@ level timeout occurred or your connection was reset. As long as you use
 the same creation token, if the initial call had succeeded in creating a
 file system, the client can learn of its existence from the
 <code>FileSystemAlreadyExists</code> error.</p>
-<p>The <code>CreateFileSystem</code> call returns while the file system\'s lifecycle
+<p>The <code>CreateFileSystem</code> call returns while the file system's lifecycle
 state is still <code>creating</code>. You can check the file system creation status
 by calling the DescribeFileSystems operation, which among other things
 returns the file system state.</p>
@@ -238,7 +188,7 @@ you choose for your file system. We recommend <code>generalPurpose</code>
 performance mode for most file systems. File systems using the <code>maxIO</code>
 performance mode can scale to higher levels of aggregate throughput and
 operations per second with a tradeoff of slightly higher latencies for
-most file operations. The performance mode can\'t be changed after the
+most file operations. The performance mode can't be changed after the
 file system has been created. For more information, see <a href='https://docs.aws.amazon.com/efs/latest/ug/performance.html#performancemodes.html'>Amazon EFS: Performance Modes</a>.</p>
 <p>After the file system is fully created, Amazon EFS sets its lifecycle
 state to <code>available</code>, at which point you can create one or more mount
@@ -248,40 +198,125 @@ instances in your VPC by using the mount target. For more information,
 see <a href='https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html'>Amazon EFS: How it Works</a>.</p>
 <p>This operation requires permissions for the
 <code>elasticfilesystem:CreateFileSystem</code> action.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>efs_create_file_system</span><span class='op'>(</span><span class='va'>CreationToken</span>, <span class='va'>PerformanceMode</span>, <span class='va'>Encrypted</span>,
+  <span class='va'>KmsKeyId</span>, <span class='va'>ThroughputMode</span>, <span class='va'>ProvisionedThroughputInMibps</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>CreationToken</th>
+      <td><p>[required] A string of up to 64 ASCII characters. Amazon EFS uses this to ensure
+idempotent creation.</p></td>
+    </tr>
+    <tr>
+      <th>PerformanceMode</th>
+      <td><p>The performance mode of the file system. We recommend <code>generalPurpose</code>
+performance mode for most file systems. File systems using the <code>maxIO</code>
+performance mode can scale to higher levels of aggregate throughput and
+operations per second with a tradeoff of slightly higher latencies for
+most file operations. The performance mode can't be changed after the
+file system has been created.</p></td>
+    </tr>
+    <tr>
+      <th>Encrypted</th>
+      <td><p>A Boolean value that, if true, creates an encrypted file system. When
+creating an encrypted file system, you have the option of specifying
+CreateFileSystemRequest$KmsKeyId for an existing AWS Key Management
+Service (AWS KMS) customer master key (CMK). If you don't specify a CMK,
+then the default CMK for Amazon EFS, <code>/aws/elasticfilesystem</code>, is used
+to protect the encrypted file system.</p></td>
+    </tr>
+    <tr>
+      <th>KmsKeyId</th>
+      <td><p>The ID of the AWS KMS CMK to be used to protect the encrypted file
+system. This parameter is only required if you want to use a nondefault
+CMK. If this parameter is not specified, the default CMK for Amazon EFS
+is used. This ID can be in one of the following formats:</p><ul>
+<li><p>Key ID - A unique identifier of the key, for example
+<code>1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p></li>
+<li><p>ARN - An Amazon Resource Name (ARN) for the key, for example
+<code>arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code>.</p></li>
+<li><p>Key alias - A previously created display name for a key, for example
+<code>alias/projectKey1</code>.</p></li>
+<li><p>Key alias ARN - An ARN for a key alias, for example
+<code>arn:aws:kms:us-west-2:444455556666:alias/projectKey1</code>.</p></li>
+</ul>
+
+<p>If <code>KmsKeyId</code> is specified, the CreateFileSystemRequest$Encrypted
+parameter must be set to true.</p>
+<p>EFS accepts only symmetric CMKs. You cannot use asymmetric CMKs with EFS
+file systems.</p></td>
+    </tr>
+    <tr>
+      <th>ThroughputMode</th>
+      <td><p>The throughput mode for the file system to be created. There are two
+throughput modes to choose from for your file system: <code>bursting</code> and
+<code>provisioned</code>. If you set <code>ThroughputMode</code> to <code>provisioned</code>, you must
+also set a value for <code>ProvisionedThroughPutInMibps</code>. You can decrease
+your file system's throughput in Provisioned Throughput mode or change
+between the throughput modes as long as it’s been more than 24 hours
+since the last decrease or throughput mode change. For more, see
+<a href='https://docs.aws.amazon.com/efs/latest/ug/performance.html#provisioned-throughput'>Specifying Throughput with Provisioned Mode</a>
+in the <em>Amazon EFS User Guide.</em></p></td>
+    </tr>
+    <tr>
+      <th>ProvisionedThroughputInMibps</th>
+      <td><p>The throughput, measured in MiB/s, that you want to provision for a file
+system that you're creating. Valid values are 1-1024. Required if
+<code>ThroughputMode</code> is set to <code>provisioned</code>. The upper limit for throughput
+is 1024 MiB/s. You can get this limit increased by contacting AWS
+Support. For more information, see <a href='https://docs.aws.amazon.com/efs/latest/ug/limits.html#soft-limits'>Amazon EFS Limits That You Can Increase</a>
+in the <em>Amazon EFS User Guide.</em></p></td>
+    </tr>
+    <tr>
+      <th>Tags</th>
+      <td><p>A value that specifies to create one or more tags associated with the
+file system. Each tag is a user-defined key-value pair. Name your file
+system on creation by including a <code>"Key":"Name","Value":"\{value\}"</code>
+key-value pair.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_file_system</span>(
-  <span class='kw'>CreationToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PerformanceMode</span> <span class='kw'>=</span> <span class='st'>"generalPurpose"</span><span class='kw'>|</span><span class='st'>"maxIO"</span>,
-  <span class='kw'>Encrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ThroughputMode</span> <span class='kw'>=</span> <span class='st'>"bursting"</span><span class='kw'>|</span><span class='st'>"provisioned"</span>,
-  <span class='kw'>ProvisionedThroughputInMibps</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_file_system</span><span class='op'>(</span>
+  CreationToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  PerformanceMode <span class='op'>=</span> <span class='st'>"generalPurpose"</span><span class='op'>|</span><span class='st'>"maxIO"</span>,
+  Encrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ThroughputMode <span class='op'>=</span> <span class='st'>"bursting"</span><span class='op'>|</span><span class='st'>"provisioned"</span>,
+  ProvisionedThroughputInMibps <span class='op'>=</span> <span class='fl'>123.0</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This operation creates a new file system with the default generalpurpose</span>
 <span class='co'># performance mode.</span>
-<span class='no'>svc</span>$<span class='fu'>create_file_system</span>(
-  <span class='kw'>CreationToken</span> <span class='kw'>=</span> <span class='st'>"tokenstring"</span>,
-  <span class='kw'>PerformanceMode</span> <span class='kw'>=</span> <span class='st'>"generalPurpose"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Name"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"MyFileSystem"</span>
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_file_system</span><span class='op'>(</span>
+  CreationToken <span class='op'>=</span> <span class='st'>"tokenstring"</span>,
+  PerformanceMode <span class='op'>=</span> <span class='st'>"generalPurpose"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Name"</span>,
+      Value <span class='op'>=</span> <span class='st'>"MyFileSystem"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -297,7 +332,7 @@ see <a href='https://docs.aws.amazon.com/efs/latest/ug/how-it-works.html'>Amazon
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

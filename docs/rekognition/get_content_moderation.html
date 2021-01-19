@@ -43,7 +43,34 @@ analysis started by StartContentModeration — rekognition_get_content_moderatio
 <meta property="og:title" content="Gets the unsafe content analysis results for a Amazon Rekognition Video
 analysis started by StartContentModeration — rekognition_get_content_moderation" />
 <meta property="og:description" content="Gets the unsafe content analysis results for a Amazon Rekognition Video
-analysis started by StartContentModeration." />
+analysis started by StartContentModeration.
+Unsafe content analysis of a video is an asynchronous operation. You
+start analysis by calling StartContentModeration which returns a job
+identifier (JobId). When analysis finishes, Amazon Rekognition Video
+publishes a completion status to the Amazon Simple Notification Service
+topic registered in the initial call to StartContentModeration. To get
+the results of the unsafe content analysis, first check that the status
+value published to the Amazon SNS topic is SUCCEEDED. If so, call
+GetContentModeration and pass the job identifier (JobId) from the
+initial call to StartContentModeration.
+For more information, see Working with Stored Videos in the Amazon
+Rekognition Devlopers Guide.
+GetContentModeration returns detected unsafe content labels, and the
+time they are detected, in an array, ModerationLabels, of
+ContentModerationDetection objects.
+By default, the moderated labels are returned sorted by time, in
+milliseconds from the start of the video. You can also sort them by
+moderated label by specifying NAME for the SortBy input parameter.
+Since video analysis can return a large number of results, use the
+MaxResults parameter to limit the number of labels returned in a
+single call to GetContentModeration. If there are more results than
+specified in MaxResults, the value of NextToken in the operation
+response contains a pagination token for getting the next set of
+results. To get the next page of results, call GetContentModeration
+and populate the NextToken request parameter with the value of
+NextToken returned from the previous call to GetContentModeration.
+For more information, see Detecting Unsafe Content in the Amazon
+Rekognition Developer Guide." />
 
 
 
@@ -75,7 +102,7 @@ analysis started by StartContentModeration." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +110,7 @@ analysis started by StartContentModeration." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +122,7 @@ analysis started by StartContentModeration." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,9 +148,36 @@ analysis started by StartContentModeration</h1>
     <div class="ref-description">
     <p>Gets the unsafe content analysis results for a Amazon Rekognition Video
 analysis started by StartContentModeration.</p>
+<p>Unsafe content analysis of a video is an asynchronous operation. You
+start analysis by calling StartContentModeration which returns a job
+identifier (<code>JobId</code>). When analysis finishes, Amazon Rekognition Video
+publishes a completion status to the Amazon Simple Notification Service
+topic registered in the initial call to <code>StartContentModeration</code>. To get
+the results of the unsafe content analysis, first check that the status
+value published to the Amazon SNS topic is <code>SUCCEEDED</code>. If so, call
+<code>GetContentModeration</code> and pass the job identifier (<code>JobId</code>) from the
+initial call to <code>StartContentModeration</code>.</p>
+<p>For more information, see Working with Stored Videos in the Amazon
+Rekognition Devlopers Guide.</p>
+<p><code>GetContentModeration</code> returns detected unsafe content labels, and the
+time they are detected, in an array, <code>ModerationLabels</code>, of
+ContentModerationDetection objects.</p>
+<p>By default, the moderated labels are returned sorted by time, in
+milliseconds from the start of the video. You can also sort them by
+moderated label by specifying <code>NAME</code> for the <code>SortBy</code> input parameter.</p>
+<p>Since video analysis can return a large number of results, use the
+<code>MaxResults</code> parameter to limit the number of labels returned in a
+single call to <code>GetContentModeration</code>. If there are more results than
+specified in <code>MaxResults</code>, the value of <code>NextToken</code> in the operation
+response contains a pagination token for getting the next set of
+results. To get the next page of results, call <code>GetContentModeration</code>
+and populate the <code>NextToken</code> request parameter with the value of
+<code>NextToken</code> returned from the previous call to <code>GetContentModeration</code>.</p>
+<p>For more information, see Detecting Unsafe Content in the Amazon
+Rekognition Developer Guide.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_get_content_moderation</span>(<span class='no'>JobId</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>, <span class='no'>SortBy</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_get_content_moderation</span><span class='op'>(</span><span class='va'>JobId</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span>, <span class='va'>SortBy</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,44 +210,16 @@ The default sort is by <code>TIMESTAMP</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Unsafe content analysis of a video is an asynchronous operation. You
-start analysis by calling StartContentModeration which returns a job
-identifier (<code>JobId</code>). When analysis finishes, Amazon Rekognition Video
-publishes a completion status to the Amazon Simple Notification Service
-topic registered in the initial call to <code>StartContentModeration</code>. To get
-the results of the unsafe content analysis, first check that the status
-value published to the Amazon SNS topic is <code>SUCCEEDED</code>. If so, call
-<code>GetContentModeration</code> and pass the job identifier (<code>JobId</code>) from the
-initial call to <code>StartContentModeration</code>.</p>
-<p>For more information, see Working with Stored Videos in the Amazon
-Rekognition Devlopers Guide.</p>
-<p><code>GetContentModeration</code> returns detected unsafe content labels, and the
-time they are detected, in an array, <code>ModerationLabels</code>, of
-ContentModerationDetection objects.</p>
-<p>By default, the moderated labels are returned sorted by time, in
-milliseconds from the start of the video. You can also sort them by
-moderated label by specifying <code>NAME</code> for the <code>SortBy</code> input parameter.</p>
-<p>Since video analysis can return a large number of results, use the
-<code>MaxResults</code> parameter to limit the number of labels returned in a
-single call to <code>GetContentModeration</code>. If there are more results than
-specified in <code>MaxResults</code>, the value of <code>NextToken</code> in the operation
-response contains a pagination token for getting the next set of
-results. To get the next page of results, call <code>GetContentModeration</code>
-and populate the <code>NextToken</code> request parameter with the value of
-<code>NextToken</code> returned from the previous call to <code>GetContentModeration</code>.</p>
-<p>For more information, see Detecting Unsafe Content in the Amazon
-Rekognition Developer Guide.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_content_moderation</span>(
-  <span class='kw'>JobId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SortBy</span> <span class='kw'>=</span> <span class='st'>"NAME"</span><span class='kw'>|</span><span class='st'>"TIMESTAMP"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_content_moderation</span><span class='op'>(</span>
+  JobId <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  SortBy <span class='op'>=</span> <span class='st'>"NAME"</span><span class='op'>|</span><span class='st'>"TIMESTAMP"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -211,7 +237,7 @@ Rekognition Developer Guide.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

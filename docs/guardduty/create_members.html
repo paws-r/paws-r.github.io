@@ -43,8 +43,17 @@ of AWS account IDs — guardduty_create_members • paws</title>
 <meta property="og:title" content="Creates member accounts of the current AWS account by specifying a list
 of AWS account IDs — guardduty_create_members" />
 <meta property="og:description" content="Creates member accounts of the current AWS account by specifying a list
-of AWS account IDs. The current AWS account can then invite these
-members to manage GuardDuty in their accounts." />
+of AWS account IDs. This step is a prerequisite for managing the
+associated member accounts either by invitation or through an
+organization.
+When using Create Members as an organizations delegated administrator
+this action will enable GuardDuty in the added member accounts, with the
+exception of the organization delegated administrator account, which
+must enable GuardDuty prior to being added as a member.
+If you are adding accounts by invitation use this action after GuardDuty
+has been enabled in potential member accounts and before using
+Invite Members
+." />
 
 
 
@@ -76,7 +85,7 @@ members to manage GuardDuty in their accounts." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +93,7 @@ members to manage GuardDuty in their accounts." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +105,7 @@ members to manage GuardDuty in their accounts." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,11 +130,20 @@ of AWS account IDs</h1>
 
     <div class="ref-description">
     <p>Creates member accounts of the current AWS account by specifying a list
-of AWS account IDs. The current AWS account can then invite these
-members to manage GuardDuty in their accounts.</p>
+of AWS account IDs. This step is a prerequisite for managing the
+associated member accounts either by invitation or through an
+organization.</p>
+<p>When using <code>Create Members</code> as an organizations delegated administrator
+this action will enable GuardDuty in the added member accounts, with the
+exception of the organization delegated administrator account, which
+must enable GuardDuty prior to being added as a member.</p>
+<p>If you are adding accounts by invitation use this action after GuardDuty
+has been enabled in potential member accounts and before using
+<a href='https://docs.aws.amazon.com/guardduty/latest/APIReference/API_InviteMembers.html'><code>Invite Members</code></a>
+.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>guardduty_create_members</span>(<span class='no'>DetectorId</span>, <span class='no'>AccountDetails</span>)</pre>
+    <pre class="usage"><span class='fu'>guardduty_create_members</span><span class='op'>(</span><span class='va'>DetectorId</span>, <span class='va'>AccountDetails</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,22 +156,23 @@ associate member accounts with.</p></td>
     <tr>
       <th>AccountDetails</th>
       <td><p>[required] A list of account ID and email address pairs of the accounts that you
-want to associate with the master GuardDuty account.</p></td>
+want to associate with the GuardDuty administrator account.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_members</span>(
-  <span class='kw'>DetectorId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AccountDetails</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>AccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Email</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_members</span><span class='op'>(</span>
+  DetectorId <span class='op'>=</span> <span class='st'>"string"</span>,
+  AccountDetails <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      AccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+      Email <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -171,7 +190,7 @@ want to associate with the master GuardDuty account.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,36 @@
 
 
 <meta property="og:title" content="Updates the specified destination of the specified delivery stream — firehose_update_destination" />
-<meta property="og:description" content="Updates the specified destination of the specified delivery stream." />
+<meta property="og:description" content="Updates the specified destination of the specified delivery stream.
+Use this operation to change the destination type (for example, to
+replace the Amazon S3 destination with Amazon Redshift) or change the
+parameters associated with a destination (for example, to change the
+bucket name of the Amazon S3 destination). The update might not occur
+immediately. The target delivery stream remains active while the
+configurations are updated, so data writes to the delivery stream can
+continue during this process. The updated configurations are usually
+effective within a few minutes.
+Switching between Amazon ES and other services is not supported. For an
+Amazon ES destination, you can only update to another Amazon ES
+destination.
+If the destination type is the same, Kinesis Data Firehose merges the
+configuration parameters specified with the destination configuration
+that already exists on the delivery stream. If any of the parameters are
+not specified in the call, the existing values are retained. For
+example, in the Amazon S3 destination, if EncryptionConfiguration is not
+specified, then the existing EncryptionConfiguration is maintained on
+the destination.
+If the destination type is not the same, for example, changing the
+destination from Amazon S3 to Amazon Redshift, Kinesis Data Firehose
+does not merge any parameters. In this case, all parameters must be
+specified.
+Kinesis Data Firehose uses CurrentDeliveryStreamVersionId to avoid
+race conditions and conflicting merges. This is a required field, and
+the service updates the configuration only if the existing configuration
+has a version ID that matches. After the update is applied successfully,
+the version ID is updated, and can be retrieved using
+DescribeDeliveryStream. Use the new version ID to set
+CurrentDeliveryStreamVersionId in the next call." />
 
 
 
@@ -72,7 +101,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +109,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +121,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,12 +145,42 @@
 
     <div class="ref-description">
     <p>Updates the specified destination of the specified delivery stream.</p>
+<p>Use this operation to change the destination type (for example, to
+replace the Amazon S3 destination with Amazon Redshift) or change the
+parameters associated with a destination (for example, to change the
+bucket name of the Amazon S3 destination). The update might not occur
+immediately. The target delivery stream remains active while the
+configurations are updated, so data writes to the delivery stream can
+continue during this process. The updated configurations are usually
+effective within a few minutes.</p>
+<p>Switching between Amazon ES and other services is not supported. For an
+Amazon ES destination, you can only update to another Amazon ES
+destination.</p>
+<p>If the destination type is the same, Kinesis Data Firehose merges the
+configuration parameters specified with the destination configuration
+that already exists on the delivery stream. If any of the parameters are
+not specified in the call, the existing values are retained. For
+example, in the Amazon S3 destination, if EncryptionConfiguration is not
+specified, then the existing <code>EncryptionConfiguration</code> is maintained on
+the destination.</p>
+<p>If the destination type is not the same, for example, changing the
+destination from Amazon S3 to Amazon Redshift, Kinesis Data Firehose
+does not merge any parameters. In this case, all parameters must be
+specified.</p>
+<p>Kinesis Data Firehose uses <code>CurrentDeliveryStreamVersionId</code> to avoid
+race conditions and conflicting merges. This is a required field, and
+the service updates the configuration only if the existing configuration
+has a version ID that matches. After the update is applied successfully,
+the version ID is updated, and can be retrieved using
+DescribeDeliveryStream. Use the new version ID to set
+<code>CurrentDeliveryStreamVersionId</code> in the next call.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>firehose_update_destination</span>(<span class='no'>DeliveryStreamName</span>,
-  <span class='no'>CurrentDeliveryStreamVersionId</span>, <span class='no'>DestinationId</span>, <span class='no'>S3DestinationUpdate</span>,
-  <span class='no'>ExtendedS3DestinationUpdate</span>, <span class='no'>RedshiftDestinationUpdate</span>,
-  <span class='no'>ElasticsearchDestinationUpdate</span>, <span class='no'>SplunkDestinationUpdate</span>)</pre>
+    <pre class="usage"><span class='fu'>firehose_update_destination</span><span class='op'>(</span><span class='va'>DeliveryStreamName</span>,
+  <span class='va'>CurrentDeliveryStreamVersionId</span>, <span class='va'>DestinationId</span>, <span class='va'>S3DestinationUpdate</span>,
+  <span class='va'>ExtendedS3DestinationUpdate</span>, <span class='va'>RedshiftDestinationUpdate</span>,
+  <span class='va'>ElasticsearchDestinationUpdate</span>, <span class='va'>SplunkDestinationUpdate</span>,
+  <span class='va'>HttpEndpointDestinationUpdate</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,366 +223,406 @@ configuration.</p></td>
       <th>SplunkDestinationUpdate</th>
       <td><p>Describes an update for a destination in Splunk.</p></td>
     </tr>
+    <tr>
+      <th>HttpEndpointDestinationUpdate</th>
+      <td><p>Describes an update to the specified HTTP endpoint destination.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Use this operation to change the destination type (for example, to
-replace the Amazon S3 destination with Amazon Redshift) or change the
-parameters associated with a destination (for example, to change the
-bucket name of the Amazon S3 destination). The update might not occur
-immediately. The target delivery stream remains active while the
-configurations are updated, so data writes to the delivery stream can
-continue during this process. The updated configurations are usually
-effective within a few minutes.</p>
-<p>Switching between Amazon ES and other services is not supported. For an
-Amazon ES destination, you can only update to another Amazon ES
-destination.</p>
-<p>If the destination type is the same, Kinesis Data Firehose merges the
-configuration parameters specified with the destination configuration
-that already exists on the delivery stream. If any of the parameters are
-not specified in the call, the existing values are retained. For
-example, in the Amazon S3 destination, if EncryptionConfiguration is not
-specified, then the existing <code>EncryptionConfiguration</code> is maintained on
-the destination.</p>
-<p>If the destination type is not the same, for example, changing the
-destination from Amazon S3 to Amazon Redshift, Kinesis Data Firehose
-does not merge any parameters. In this case, all parameters must be
-specified.</p>
-<p>Kinesis Data Firehose uses <code>CurrentDeliveryStreamVersionId</code> to avoid
-race conditions and conflicting merges. This is a required field, and
-the service updates the configuration only if the existing configuration
-has a version ID that matches. After the update is applied successfully,
-the version ID is updated, and can be retrieved using
-DescribeDeliveryStream. Use the new version ID to set
-<code>CurrentDeliveryStreamVersionId</code> in the next call.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_destination</span>(
-  <span class='kw'>DeliveryStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CurrentDeliveryStreamVersionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DestinationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>S3DestinationUpdate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>BucketARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ErrorOutputPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>BufferingHints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>SizeInMBs</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>IntervalInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>CompressionFormat</span> <span class='kw'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"ZIP"</span><span class='kw'>|</span><span class='st'>"Snappy"</span><span class='kw'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
-    <span class='kw'>EncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>NoEncryptionConfig</span> <span class='kw'>=</span> <span class='st'>"NoEncryption"</span>,
-      <span class='kw'>KMSEncryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>AWSKMSKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ExtendedS3DestinationUpdate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>BucketARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ErrorOutputPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>BufferingHints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>SizeInMBs</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>IntervalInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>CompressionFormat</span> <span class='kw'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"ZIP"</span><span class='kw'>|</span><span class='st'>"Snappy"</span><span class='kw'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
-    <span class='kw'>EncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>NoEncryptionConfig</span> <span class='kw'>=</span> <span class='st'>"NoEncryption"</span>,
-      <span class='kw'>KMSEncryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>AWSKMSKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>ProcessingConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Processors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"Lambda"</span>,
-          <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>ParameterName</span> <span class='kw'>=</span> <span class='st'>"LambdaArn"</span><span class='kw'>|</span><span class='st'>"NumberOfRetries"</span><span class='kw'>|</span><span class='st'>"RoleArn"</span><span class='kw'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='kw'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
-              <span class='kw'>ParameterValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          )
-        )
-      )
-    ),
-    <span class='kw'>S3BackupMode</span> <span class='kw'>=</span> <span class='st'>"Disabled"</span><span class='kw'>|</span><span class='st'>"Enabled"</span>,
-    <span class='kw'>S3BackupUpdate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BucketARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ErrorOutputPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BufferingHints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SizeInMBs</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>IntervalInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      ),
-      <span class='kw'>CompressionFormat</span> <span class='kw'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"ZIP"</span><span class='kw'>|</span><span class='st'>"Snappy"</span><span class='kw'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
-      <span class='kw'>EncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>NoEncryptionConfig</span> <span class='kw'>=</span> <span class='st'>"NoEncryption"</span>,
-        <span class='kw'>KMSEncryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>AWSKMSKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>DataFormatConversionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>SchemaConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>CatalogId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>DatabaseName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>TableName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Region</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>VersionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>InputFormatConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Deserializer</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>OpenXJsonSerDe</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>ConvertDotsInJsonKeysToUnderscores</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-            <span class='kw'>CaseInsensitive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-            <span class='kw'>ColumnToJsonKeyMappings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_destination</span><span class='op'>(</span>
+  DeliveryStreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  CurrentDeliveryStreamVersionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DestinationId <span class='op'>=</span> <span class='st'>"string"</span>,
+  S3DestinationUpdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    BucketARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+    ErrorOutputPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+    BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+      IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    CompressionFormat <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"ZIP"</span><span class='op'>|</span><span class='st'>"Snappy"</span><span class='op'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
+    EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      NoEncryptionConfig <span class='op'>=</span> <span class='st'>"NoEncryption"</span>,
+      KMSEncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+      LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ExtendedS3DestinationUpdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    BucketARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+    ErrorOutputPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+    BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+      IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    CompressionFormat <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"ZIP"</span><span class='op'>|</span><span class='st'>"Snappy"</span><span class='op'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
+    EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      NoEncryptionConfig <span class='op'>=</span> <span class='st'>"NoEncryption"</span>,
+      KMSEncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+      LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    ProcessingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Processors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Type <span class='op'>=</span> <span class='st'>"Lambda"</span>,
+          Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              ParameterName <span class='op'>=</span> <span class='st'>"LambdaArn"</span><span class='op'>|</span><span class='st'>"NumberOfRetries"</span><span class='op'>|</span><span class='st'>"RoleArn"</span><span class='op'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='op'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
+              ParameterValue <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    S3BackupMode <span class='op'>=</span> <span class='st'>"Disabled"</span><span class='op'>|</span><span class='st'>"Enabled"</span>,
+    S3BackupUpdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      BucketARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      ErrorOutputPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+        IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      CompressionFormat <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"ZIP"</span><span class='op'>|</span><span class='st'>"Snappy"</span><span class='op'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
+      EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        NoEncryptionConfig <span class='op'>=</span> <span class='st'>"NoEncryption"</span>,
+        KMSEncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+        LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    DataFormatConversionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      SchemaConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+        CatalogId <span class='op'>=</span> <span class='st'>"string"</span>,
+        DatabaseName <span class='op'>=</span> <span class='st'>"string"</span>,
+        TableName <span class='op'>=</span> <span class='st'>"string"</span>,
+        Region <span class='op'>=</span> <span class='st'>"string"</span>,
+        VersionId <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      InputFormatConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Deserializer <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          OpenXJsonSerDe <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            ConvertDotsInJsonKeysToUnderscores <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            CaseInsensitive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            ColumnToJsonKeyMappings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            )
-          ),
-          <span class='kw'>HiveJsonSerDe</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>TimestampFormats</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          HiveJsonSerDe <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            TimestampFormats <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            )
-          )
-        )
-      ),
-      <span class='kw'>OutputFormatConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Serializer</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>ParquetSerDe</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>BlockSizeBytes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>PageSizeBytes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>Compression</span> <span class='kw'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"SNAPPY"</span>,
-            <span class='kw'>EnableDictionaryCompression</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-            <span class='kw'>MaxPaddingBytes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>WriterVersion</span> <span class='kw'>=</span> <span class='st'>"V1"</span><span class='kw'>|</span><span class='st'>"V2"</span>
-          ),
-          <span class='kw'>OrcSerDe</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>StripeSizeBytes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>BlockSizeBytes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>RowIndexStride</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>EnablePadding</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-            <span class='kw'>PaddingTolerance</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-            <span class='kw'>Compression</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"ZLIB"</span><span class='kw'>|</span><span class='st'>"SNAPPY"</span>,
-            <span class='kw'>BloomFilterColumns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      OutputFormatConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Serializer <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          ParquetSerDe <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            BlockSizeBytes <span class='op'>=</span> <span class='fl'>123</span>,
+            PageSizeBytes <span class='op'>=</span> <span class='fl'>123</span>,
+            Compression <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"SNAPPY"</span>,
+            EnableDictionaryCompression <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            MaxPaddingBytes <span class='op'>=</span> <span class='fl'>123</span>,
+            WriterVersion <span class='op'>=</span> <span class='st'>"V1"</span><span class='op'>|</span><span class='st'>"V2"</span>
+          <span class='op'>)</span>,
+          OrcSerDe <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            StripeSizeBytes <span class='op'>=</span> <span class='fl'>123</span>,
+            BlockSizeBytes <span class='op'>=</span> <span class='fl'>123</span>,
+            RowIndexStride <span class='op'>=</span> <span class='fl'>123</span>,
+            EnablePadding <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            PaddingTolerance <span class='op'>=</span> <span class='fl'>123.0</span>,
+            Compression <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"ZLIB"</span><span class='op'>|</span><span class='st'>"SNAPPY"</span>,
+            BloomFilterColumns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            ),
-            <span class='kw'>BloomFilterFalsePositiveProbability</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-            <span class='kw'>DictionaryKeyThreshold</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-            <span class='kw'>FormatVersion</span> <span class='kw'>=</span> <span class='st'>"V0_11"</span><span class='kw'>|</span><span class='st'>"V0_12"</span>
-          )
-        )
-      ),
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-    )
-  ),
-  <span class='kw'>RedshiftDestinationUpdate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ClusterJDBCURL</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>CopyCommand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DataTableName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DataTableColumns</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>CopyOptions</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>Username</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Password</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>RetryOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DurationInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>S3Update</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BucketARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ErrorOutputPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BufferingHints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SizeInMBs</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>IntervalInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      ),
-      <span class='kw'>CompressionFormat</span> <span class='kw'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"ZIP"</span><span class='kw'>|</span><span class='st'>"Snappy"</span><span class='kw'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
-      <span class='kw'>EncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>NoEncryptionConfig</span> <span class='kw'>=</span> <span class='st'>"NoEncryption"</span>,
-        <span class='kw'>KMSEncryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>AWSKMSKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>ProcessingConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Processors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"Lambda"</span>,
-          <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>ParameterName</span> <span class='kw'>=</span> <span class='st'>"LambdaArn"</span><span class='kw'>|</span><span class='st'>"NumberOfRetries"</span><span class='kw'>|</span><span class='st'>"RoleArn"</span><span class='kw'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='kw'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
-              <span class='kw'>ParameterValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          )
-        )
-      )
-    ),
-    <span class='kw'>S3BackupMode</span> <span class='kw'>=</span> <span class='st'>"Disabled"</span><span class='kw'>|</span><span class='st'>"Enabled"</span>,
-    <span class='kw'>S3BackupUpdate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BucketARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ErrorOutputPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BufferingHints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SizeInMBs</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>IntervalInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      ),
-      <span class='kw'>CompressionFormat</span> <span class='kw'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"ZIP"</span><span class='kw'>|</span><span class='st'>"Snappy"</span><span class='kw'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
-      <span class='kw'>EncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>NoEncryptionConfig</span> <span class='kw'>=</span> <span class='st'>"NoEncryption"</span>,
-        <span class='kw'>KMSEncryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>AWSKMSKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ElasticsearchDestinationUpdate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DomainARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ClusterEndpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>IndexName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>TypeName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>IndexRotationPeriod</span> <span class='kw'>=</span> <span class='st'>"NoRotation"</span><span class='kw'>|</span><span class='st'>"OneHour"</span><span class='kw'>|</span><span class='st'>"OneDay"</span><span class='kw'>|</span><span class='st'>"OneWeek"</span><span class='kw'>|</span><span class='st'>"OneMonth"</span>,
-    <span class='kw'>BufferingHints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>IntervalInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>SizeInMBs</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>RetryOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DurationInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>S3Update</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BucketARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ErrorOutputPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BufferingHints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SizeInMBs</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>IntervalInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      ),
-      <span class='kw'>CompressionFormat</span> <span class='kw'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"ZIP"</span><span class='kw'>|</span><span class='st'>"Snappy"</span><span class='kw'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
-      <span class='kw'>EncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>NoEncryptionConfig</span> <span class='kw'>=</span> <span class='st'>"NoEncryption"</span>,
-        <span class='kw'>KMSEncryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>AWSKMSKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>ProcessingConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Processors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"Lambda"</span>,
-          <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>ParameterName</span> <span class='kw'>=</span> <span class='st'>"LambdaArn"</span><span class='kw'>|</span><span class='st'>"NumberOfRetries"</span><span class='kw'>|</span><span class='st'>"RoleArn"</span><span class='kw'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='kw'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
-              <span class='kw'>ParameterValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          )
-        )
-      )
-    ),
-    <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>SplunkDestinationUpdate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>HECEndpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>HECEndpointType</span> <span class='kw'>=</span> <span class='st'>"Raw"</span><span class='kw'>|</span><span class='st'>"Event"</span>,
-    <span class='kw'>HECToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>HECAcknowledgmentTimeoutInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>RetryOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DurationInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>S3BackupMode</span> <span class='kw'>=</span> <span class='st'>"FailedEventsOnly"</span><span class='kw'>|</span><span class='st'>"AllEvents"</span>,
-    <span class='kw'>S3Update</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BucketARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ErrorOutputPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BufferingHints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SizeInMBs</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>IntervalInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      ),
-      <span class='kw'>CompressionFormat</span> <span class='kw'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"ZIP"</span><span class='kw'>|</span><span class='st'>"Snappy"</span><span class='kw'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
-      <span class='kw'>EncryptionConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>NoEncryptionConfig</span> <span class='kw'>=</span> <span class='st'>"NoEncryption"</span>,
-        <span class='kw'>KMSEncryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>AWSKMSKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>ProcessingConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Processors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"Lambda"</span>,
-          <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>ParameterName</span> <span class='kw'>=</span> <span class='st'>"LambdaArn"</span><span class='kw'>|</span><span class='st'>"NumberOfRetries"</span><span class='kw'>|</span><span class='st'>"RoleArn"</span><span class='kw'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='kw'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
-              <span class='kw'>ParameterValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          )
-        )
-      )
-    ),
-    <span class='kw'>CloudWatchLoggingOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>LogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>LogStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+            <span class='op'>)</span>,
+            BloomFilterFalsePositiveProbability <span class='op'>=</span> <span class='fl'>123.0</span>,
+            DictionaryKeyThreshold <span class='op'>=</span> <span class='fl'>123.0</span>,
+            FormatVersion <span class='op'>=</span> <span class='st'>"V0_11"</span><span class='op'>|</span><span class='st'>"V0_12"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  RedshiftDestinationUpdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    ClusterJDBCURL <span class='op'>=</span> <span class='st'>"string"</span>,
+    CopyCommand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DataTableName <span class='op'>=</span> <span class='st'>"string"</span>,
+      DataTableColumns <span class='op'>=</span> <span class='st'>"string"</span>,
+      CopyOptions <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    Username <span class='op'>=</span> <span class='st'>"string"</span>,
+    Password <span class='op'>=</span> <span class='st'>"string"</span>,
+    RetryOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DurationInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    S3Update <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      BucketARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      ErrorOutputPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+        IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      CompressionFormat <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"ZIP"</span><span class='op'>|</span><span class='st'>"Snappy"</span><span class='op'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
+      EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        NoEncryptionConfig <span class='op'>=</span> <span class='st'>"NoEncryption"</span>,
+        KMSEncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+        LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ProcessingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Processors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Type <span class='op'>=</span> <span class='st'>"Lambda"</span>,
+          Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              ParameterName <span class='op'>=</span> <span class='st'>"LambdaArn"</span><span class='op'>|</span><span class='st'>"NumberOfRetries"</span><span class='op'>|</span><span class='st'>"RoleArn"</span><span class='op'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='op'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
+              ParameterValue <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    S3BackupMode <span class='op'>=</span> <span class='st'>"Disabled"</span><span class='op'>|</span><span class='st'>"Enabled"</span>,
+    S3BackupUpdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      BucketARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      ErrorOutputPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+        IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      CompressionFormat <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"ZIP"</span><span class='op'>|</span><span class='st'>"Snappy"</span><span class='op'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
+      EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        NoEncryptionConfig <span class='op'>=</span> <span class='st'>"NoEncryption"</span>,
+        KMSEncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+        LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+      LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ElasticsearchDestinationUpdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    DomainARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    ClusterEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    IndexName <span class='op'>=</span> <span class='st'>"string"</span>,
+    TypeName <span class='op'>=</span> <span class='st'>"string"</span>,
+    IndexRotationPeriod <span class='op'>=</span> <span class='st'>"NoRotation"</span><span class='op'>|</span><span class='st'>"OneHour"</span><span class='op'>|</span><span class='st'>"OneDay"</span><span class='op'>|</span><span class='st'>"OneWeek"</span><span class='op'>|</span><span class='st'>"OneMonth"</span>,
+    BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+      SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    RetryOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DurationInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    S3Update <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      BucketARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      ErrorOutputPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+        IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      CompressionFormat <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"ZIP"</span><span class='op'>|</span><span class='st'>"Snappy"</span><span class='op'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
+      EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        NoEncryptionConfig <span class='op'>=</span> <span class='st'>"NoEncryption"</span>,
+        KMSEncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+        LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ProcessingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Processors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Type <span class='op'>=</span> <span class='st'>"Lambda"</span>,
+          Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              ParameterName <span class='op'>=</span> <span class='st'>"LambdaArn"</span><span class='op'>|</span><span class='st'>"NumberOfRetries"</span><span class='op'>|</span><span class='st'>"RoleArn"</span><span class='op'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='op'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
+              ParameterValue <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+      LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  SplunkDestinationUpdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    HECEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    HECEndpointType <span class='op'>=</span> <span class='st'>"Raw"</span><span class='op'>|</span><span class='st'>"Event"</span>,
+    HECToken <span class='op'>=</span> <span class='st'>"string"</span>,
+    HECAcknowledgmentTimeoutInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+    RetryOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DurationInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    S3BackupMode <span class='op'>=</span> <span class='st'>"FailedEventsOnly"</span><span class='op'>|</span><span class='st'>"AllEvents"</span>,
+    S3Update <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      BucketARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      ErrorOutputPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+        IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      CompressionFormat <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"ZIP"</span><span class='op'>|</span><span class='st'>"Snappy"</span><span class='op'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
+      EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        NoEncryptionConfig <span class='op'>=</span> <span class='st'>"NoEncryption"</span>,
+        KMSEncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+        LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ProcessingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Processors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Type <span class='op'>=</span> <span class='st'>"Lambda"</span>,
+          Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              ParameterName <span class='op'>=</span> <span class='st'>"LambdaArn"</span><span class='op'>|</span><span class='st'>"NumberOfRetries"</span><span class='op'>|</span><span class='st'>"RoleArn"</span><span class='op'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='op'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
+              ParameterValue <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+      LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  HttpEndpointDestinationUpdate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    EndpointConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Url <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      AccessKey <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+      IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+      LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    RequestConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ContentEncoding <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"GZIP"</span>,
+      CommonAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AttributeName <span class='op'>=</span> <span class='st'>"string"</span>,
+          AttributeValue <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ProcessingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Processors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Type <span class='op'>=</span> <span class='st'>"Lambda"</span>,
+          Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              ParameterName <span class='op'>=</span> <span class='st'>"LambdaArn"</span><span class='op'>|</span><span class='st'>"NumberOfRetries"</span><span class='op'>|</span><span class='st'>"RoleArn"</span><span class='op'>|</span><span class='st'>"BufferSizeInMBs"</span><span class='op'>|</span><span class='st'>"BufferIntervalInSeconds"</span>,
+              ParameterValue <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    RetryOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DurationInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    S3BackupMode <span class='op'>=</span> <span class='st'>"FailedDataOnly"</span><span class='op'>|</span><span class='st'>"AllData"</span>,
+    S3Update <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      BucketARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      ErrorOutputPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      BufferingHints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SizeInMBs <span class='op'>=</span> <span class='fl'>123</span>,
+        IntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      CompressionFormat <span class='op'>=</span> <span class='st'>"UNCOMPRESSED"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"ZIP"</span><span class='op'>|</span><span class='st'>"Snappy"</span><span class='op'>|</span><span class='st'>"HADOOP_SNAPPY"</span>,
+      EncryptionConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        NoEncryptionConfig <span class='op'>=</span> <span class='st'>"NoEncryption"</span>,
+        KMSEncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      CloudWatchLoggingOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        LogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+        LogStreamName <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -541,7 +640,7 @@ DescribeDeliveryStream. Use the new version ID to set
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>This is AWS WAF CLASSIC documentation — waf_update_rate_based_rule • paws</title>
+<title>This is AWS WAF Classic documentation — waf_update_rate_based_rule • paws</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,47 @@
 
 
 
-<meta property="og:title" content="This is AWS WAF CLASSIC documentation — waf_update_rate_based_rule" />
+<meta property="og:title" content="This is AWS WAF Classic documentation — waf_update_rate_based_rule" />
 <meta property="og:description" content="This is AWS WAF Classic documentation. For more information, see
 AWS WAF Classic
-in the developer guide." />
+in the developer guide.
+For the latest version of AWS WAF, use the AWS WAFV2 API and see the
+AWS WAF Developer Guide.
+With the latest version, AWS WAF has a single set of endpoints for
+regional and global use.
+Inserts or deletes Predicate objects in a rule and updates the
+RateLimit in the rule.
+Each Predicate object identifies a predicate, such as a ByteMatchSet
+or an IPSet, that specifies the web requests that you want to block or
+count. The RateLimit specifies the number of requests every five
+minutes that triggers the rule.
+If you add more than one predicate to a RateBasedRule, a request must
+match all the predicates and exceed the RateLimit to be counted or
+blocked. For example, suppose you add the following to a
+RateBasedRule:
+An IPSet that matches the IP address 192.0.2.44/32
+A ByteMatchSet that matches BadBot in the User-Agent header
+
+
+Further, you specify a RateLimit of 1,000.
+You then add the RateBasedRule to a WebACL and specify that you want
+to block requests that satisfy the rule. For a request to be blocked, it
+must come from the IP address 192.0.2.44 and the User-Agent header
+in the request must contain the value BadBot. Further, requests that
+match these two conditions much be received at a rate of more than 1,000
+every five minutes. If the rate drops below this limit, AWS WAF no
+longer blocks the requests.
+As a second example, suppose you want to limit requests to a particular
+page on your site. To do this, you could add the following to a
+RateBasedRule:
+A ByteMatchSet with FieldToMatch of URI
+A PositionalConstraint of STARTS_WITH
+A TargetString of login
+
+
+Further, you specify a RateLimit of 1,000.
+By adding this RateBasedRule to a WebACL, you could limit requests
+to your login page without affecting the rest of your site." />
 
 
 
@@ -74,7 +111,7 @@ in the developer guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +119,7 @@ in the developer guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +131,7 @@ in the developer guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,7 +148,7 @@ in the developer guide." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>This is AWS WAF CLASSIC documentation</h1>
+    <h1>This is AWS WAF Classic documentation</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/waf_operations.R'><code>R/waf_operations.R</code></a></small>
     <div class="hidden name"><code>waf_update_rate_based_rule.Rd</code></div>
     </div>
@@ -120,40 +157,7 @@ in the developer guide." />
     <p>This is <strong>AWS WAF Classic</strong> documentation. For more information, see
 <a href='https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html'>AWS WAF Classic</a>
 in the developer guide.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>waf_update_rate_based_rule</span>(<span class='no'>RuleId</span>, <span class='no'>ChangeToken</span>, <span class='no'>Updates</span>, <span class='no'>RateLimit</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>RuleId</th>
-      <td><p>[required] The <code>RuleId</code> of the <code>RateBasedRule</code> that you want to update. <code>RuleId</code> is
-returned by <code>CreateRateBasedRule</code> and by ListRateBasedRules.</p></td>
-    </tr>
-    <tr>
-      <th>ChangeToken</th>
-      <td><p>[required] The value returned by the most recent call to GetChangeToken.</p></td>
-    </tr>
-    <tr>
-      <th>Updates</th>
-      <td><p>[required] An array of <code>RuleUpdate</code> objects that you want to insert into or delete
-from a RateBasedRule.</p></td>
-    </tr>
-    <tr>
-      <th>RateLimit</th>
-      <td><p>[required] The maximum number of requests, which have an identical value in the
-field specified by the <code>RateKey</code>, allowed in a five-minute period. If
-the number of requests exceeds the <code>RateLimit</code> and the other predicates
-specified in the rule are also met, AWS WAF triggers the action that is
-specified for this rule.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><strong>For the latest version of AWS WAF</strong>, use the AWS WAFV2 API and see the
+<p><strong>For the latest version of AWS WAF</strong>, use the AWS WAFV2 API and see the
 <a href='https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html'>AWS WAF Developer Guide</a>.
 With the latest version, AWS WAF has a single set of endpoints for
 regional and global use.</p>
@@ -190,24 +194,56 @@ page on your site. To do this, you could add the following to a
 <p>Further, you specify a <code>RateLimit</code> of 1,000.</p>
 <p>By adding this <code>RateBasedRule</code> to a <code>WebACL</code>, you could limit requests
 to your login page without affecting the rest of your site.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>waf_update_rate_based_rule</span><span class='op'>(</span><span class='va'>RuleId</span>, <span class='va'>ChangeToken</span>, <span class='va'>Updates</span>, <span class='va'>RateLimit</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>RuleId</th>
+      <td><p>[required] The <code>RuleId</code> of the <code>RateBasedRule</code> that you want to update. <code>RuleId</code> is
+returned by <code>CreateRateBasedRule</code> and by ListRateBasedRules.</p></td>
+    </tr>
+    <tr>
+      <th>ChangeToken</th>
+      <td><p>[required] The value returned by the most recent call to GetChangeToken.</p></td>
+    </tr>
+    <tr>
+      <th>Updates</th>
+      <td><p>[required] An array of <code>RuleUpdate</code> objects that you want to insert into or delete
+from a RateBasedRule.</p></td>
+    </tr>
+    <tr>
+      <th>RateLimit</th>
+      <td><p>[required] The maximum number of requests, which have an identical value in the
+field specified by the <code>RateKey</code>, allowed in a five-minute period. If
+the number of requests exceeds the <code>RateLimit</code> and the other predicates
+specified in the rule are also met, AWS WAF triggers the action that is
+specified for this rule.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_rate_based_rule</span>(
-  <span class='kw'>RuleId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ChangeToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Updates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Action</span> <span class='kw'>=</span> <span class='st'>"INSERT"</span><span class='kw'>|</span><span class='st'>"DELETE"</span>,
-      <span class='kw'>Predicate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Negated</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"IPMatch"</span><span class='kw'>|</span><span class='st'>"ByteMatch"</span><span class='kw'>|</span><span class='st'>"SqlInjectionMatch"</span><span class='kw'>|</span><span class='st'>"GeoMatch"</span><span class='kw'>|</span><span class='st'>"SizeConstraint"</span><span class='kw'>|</span><span class='st'>"XssMatch"</span><span class='kw'>|</span><span class='st'>"RegexMatch"</span>,
-        <span class='kw'>DataId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>RateLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_rate_based_rule</span><span class='op'>(</span>
+  RuleId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ChangeToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  Updates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Action <span class='op'>=</span> <span class='st'>"INSERT"</span><span class='op'>|</span><span class='st'>"DELETE"</span>,
+      Predicate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Negated <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        Type <span class='op'>=</span> <span class='st'>"IPMatch"</span><span class='op'>|</span><span class='st'>"ByteMatch"</span><span class='op'>|</span><span class='st'>"SqlInjectionMatch"</span><span class='op'>|</span><span class='st'>"GeoMatch"</span><span class='op'>|</span><span class='st'>"SizeConstraint"</span><span class='op'>|</span><span class='st'>"XssMatch"</span><span class='op'>|</span><span class='st'>"RegexMatch"</span>,
+        DataId <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  RateLimit <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -225,7 +261,7 @@ to your login page without affecting the rest of your site.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

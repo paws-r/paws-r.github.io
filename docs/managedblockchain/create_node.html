@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates a peer node in a member — managedblockchain_create_node • paws</title>
+<title>Creates a node on the specified blockchain network — managedblockchain_create_node • paws</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Creates a peer node in a member — managedblockchain_create_node" />
-<meta property="og:description" content="Creates a peer node in a member." />
+<meta property="og:title" content="Creates a node on the specified blockchain network — managedblockchain_create_node" />
+<meta property="og:description" content="Creates a node on the specified blockchain network.
+Applies to Hyperledger Fabric and Ethereum." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +93,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -109,17 +110,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Creates a peer node in a member</h1>
+    <h1>Creates a node on the specified blockchain network</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/managedblockchain_operations.R'><code>R/managedblockchain_operations.R</code></a></small>
     <div class="hidden name"><code>managedblockchain_create_node.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates a peer node in a member.</p>
+    <p>Creates a node on the specified blockchain network.</p>
+<p>Applies to Hyperledger Fabric and Ethereum.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>managedblockchain_create_node</span>(<span class='no'>ClientRequestToken</span>, <span class='no'>NetworkId</span>, <span class='no'>MemberId</span>,
-  <span class='no'>NodeConfiguration</span>)</pre>
+    <pre class="usage"><span class='fu'>managedblockchain_create_node</span><span class='op'>(</span><span class='va'>ClientRequestToken</span>, <span class='va'>NetworkId</span>, <span class='va'>MemberId</span>,
+  <span class='va'>NodeConfiguration</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,11 +136,17 @@ you use an AWS SDK or the AWS CLI.</p></td>
     </tr>
     <tr>
       <th>NetworkId</th>
-      <td><p>[required] The unique identifier of the network in which this node runs.</p></td>
+      <td><p>[required] The unique identifier of the network for the node.</p>
+<p>Ethereum public networks have the following <code>NetworkId</code>s:</p><ul>
+<li><p><code>n-ethereum-mainnet</code></p></li>
+<li><p><code>n-ethereum-rinkeby</code></p></li>
+<li><p><code>n-ethereum-ropsten</code></p></li>
+</ul></td>
     </tr>
     <tr>
       <th>MemberId</th>
-      <td><p>[required] The unique identifier of the member that owns this node.</p></td>
+      <td><p>The unique identifier of the member that owns this node.</p>
+<p>Applies only to Hyperledger Fabric.</p></td>
     </tr>
     <tr>
       <th>NodeConfiguration</th>
@@ -149,29 +157,31 @@ you use an AWS SDK or the AWS CLI.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_node</span>(
-  <span class='kw'>ClientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NetworkId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MemberId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NodeConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>AvailabilityZone</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>LogPublishingConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Fabric</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>ChaincodeLogs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Cloudwatch</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-          )
-        ),
-        <span class='kw'>PeerLogs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Cloudwatch</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-          )
-        )
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_node</span><span class='op'>(</span>
+  ClientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  NetworkId <span class='op'>=</span> <span class='st'>"string"</span>,
+  MemberId <span class='op'>=</span> <span class='st'>"string"</span>,
+  NodeConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    InstanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+    AvailabilityZone <span class='op'>=</span> <span class='st'>"string"</span>,
+    LogPublishingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Fabric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ChaincodeLogs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Cloudwatch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        PeerLogs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Cloudwatch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    StateDB <span class='op'>=</span> <span class='st'>"LevelDB"</span><span class='op'>|</span><span class='st'>"CouchDB"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -189,7 +199,7 @@ you use an AWS SDK or the AWS CLI.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

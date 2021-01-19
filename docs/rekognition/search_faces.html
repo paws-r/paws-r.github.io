@@ -45,7 +45,19 @@ the face belongs to — rekognition_search_faces" />
 <meta property="og:description" content="For a given input face ID, searches for matching faces in the collection
 the face belongs to. You get a face ID when you add a face to the
 collection using the IndexFaces operation. The operation compares the
-features of the input face with faces in the specified collection." />
+features of the input face with faces in the specified collection.
+You can also search faces without indexing faces by using the
+SearchFacesByImage operation.
+The operation response returns an array of faces that match, ordered by
+similarity score with the highest similarity first. More specifically,
+it is an array of metadata for each face match that is found. Along with
+the metadata, the response also includes a confidence value for each
+face match, indicating the confidence that the specific face matches the
+input face.
+For an example, see Searching for a Face Using Its Face ID in the Amazon
+Rekognition Developer Guide.
+This operation requires permissions to perform the
+rekognition:SearchFaces action." />
 
 
 
@@ -77,7 +89,7 @@ features of the input face with faces in the specified collection." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +97,7 @@ features of the input face with faces in the specified collection." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +109,7 @@ features of the input face with faces in the specified collection." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,10 +137,22 @@ the face belongs to</h1>
 the face belongs to. You get a face ID when you add a face to the
 collection using the IndexFaces operation. The operation compares the
 features of the input face with faces in the specified collection.</p>
+<p>You can also search faces without indexing faces by using the
+<code>SearchFacesByImage</code> operation.</p>
+<p>The operation response returns an array of faces that match, ordered by
+similarity score with the highest similarity first. More specifically,
+it is an array of metadata for each face match that is found. Along with
+the metadata, the response also includes a <code>confidence</code> value for each
+face match, indicating the confidence that the specific face matches the
+input face.</p>
+<p>For an example, see Searching for a Face Using Its Face ID in the Amazon
+Rekognition Developer Guide.</p>
+<p>This operation requires permissions to perform the
+<code>rekognition:SearchFaces</code> action.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_search_faces</span>(<span class='no'>CollectionId</span>, <span class='no'>FaceId</span>, <span class='no'>MaxFaces</span>,
-  <span class='no'>FaceMatchThreshold</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_search_faces</span><span class='op'>(</span><span class='va'>CollectionId</span>, <span class='va'>FaceId</span>, <span class='va'>MaxFaces</span>,
+  <span class='va'>FaceMatchThreshold</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,47 +173,36 @@ number of faces with the highest confidence in the match.</p></td>
     <tr>
       <th>FaceMatchThreshold</th>
       <td><p>Optional value specifying the minimum confidence in the face match to
-return. For example, don\'t return any matches where confidence in
+return. For example, don't return any matches where confidence in
 matches is less than 70%. The default value is 80%.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can also search faces without indexing faces by using the
-<code>SearchFacesByImage</code> operation.</p>
-<p>The operation response returns an array of faces that match, ordered by
-similarity score with the highest similarity first. More specifically,
-it is an array of metadata for each face match that is found. Along with
-the metadata, the response also includes a <code>confidence</code> value for each
-face match, indicating the confidence that the specific face matches the
-input face.</p>
-<p>For an example, see Searching for a Face Using Its Face ID in the Amazon
-Rekognition Developer Guide.</p>
-<p>This operation requires permissions to perform the
-<code>rekognition:SearchFaces</code> action.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>search_faces</span>(
-  <span class='kw'>CollectionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>FaceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxFaces</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>FaceMatchThreshold</span> <span class='kw'>=</span> <span class='fl'>123.0</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>search_faces</span><span class='op'>(</span>
+  CollectionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  FaceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxFaces <span class='op'>=</span> <span class='fl'>123</span>,
+  FaceMatchThreshold <span class='op'>=</span> <span class='fl'>123.0</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This operation searches for matching faces in the collection the</span>
 <span class='co'># supplied face belongs to.</span>
-<span class='no'>svc</span>$<span class='fu'>search_faces</span>(
-  <span class='kw'>CollectionId</span> <span class='kw'>=</span> <span class='st'>"myphotos"</span>,
-  <span class='kw'>FaceId</span> <span class='kw'>=</span> <span class='st'>"70008e50-75e4-55d0-8e80-363fb73b3a14"</span>,
-  <span class='kw'>FaceMatchThreshold</span> <span class='kw'>=</span> <span class='fl'>90L</span>,
-  <span class='kw'>MaxFaces</span> <span class='kw'>=</span> <span class='fl'>10L</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>search_faces</span><span class='op'>(</span>
+  CollectionId <span class='op'>=</span> <span class='st'>"myphotos"</span>,
+  FaceId <span class='op'>=</span> <span class='st'>"70008e50-75e4-55d0-8e80-363fb73b3a14"</span>,
+  FaceMatchThreshold <span class='op'>=</span> <span class='fl'>90L</span>,
+  MaxFaces <span class='op'>=</span> <span class='fl'>10L</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -205,7 +218,7 @@ Rekognition Developer Guide.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

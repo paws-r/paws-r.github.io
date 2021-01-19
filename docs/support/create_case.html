@@ -41,7 +41,30 @@
 
 <meta property="og:title" content="Creates a case in the AWS Support Center — support_create_case" />
 <meta property="og:description" content="Creates a case in the AWS Support Center. This operation is similar to
-how you create a case in the AWS Support Center Create Case page." />
+how you create a case in the AWS Support Center Create Case page.
+The AWS Support API doesn't support requesting service limit increases.
+You can submit a service limit increase in the following ways:
+Submit a request from the AWS Support Center Create Case page.
+Use the Service Quotas
+RequestServiceQuotaIncrease
+operation.
+
+
+A successful CreateCase request returns an AWS Support case number.
+You can use the DescribeCases operation and specify the case number to
+get existing AWS Support cases. After you create a case, use the
+AddCommunicationToCase operation to add additional communication or
+attachments to an existing case.
+The caseId is separate from the displayId that appears in the AWS
+Support Center. Use the DescribeCases operation to get the displayId.
+You must have a Business or Enterprise support plan to use the AWS
+Support API.
+If you call the AWS Support API from an account that does not have a
+Business or Enterprise support plan, the
+SubscriptionRequiredException error message appears. For
+information about changing your support plan, see AWS Support.
+
+" />
 
 
 
@@ -73,7 +96,7 @@ how you create a case in the AWS Support Center Create Case page." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +104,7 @@ how you create a case in the AWS Support Center Create Case page." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +116,7 @@ how you create a case in the AWS Support Center Create Case page." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -117,12 +140,35 @@ how you create a case in the AWS Support Center Create Case page." />
 
     <div class="ref-description">
     <p>Creates a case in the AWS Support Center. This operation is similar to
-how you create a case in the AWS Support Center <a href='https://console.aws.amazon.com/support/home#/case/create'>Create Case</a> page.</p>
+how you create a case in the AWS Support Center Create Case page.</p>
+<p>The AWS Support API doesn't support requesting service limit increases.
+You can submit a service limit increase in the following ways:</p><ul>
+<li><p>Submit a request from the AWS Support Center Create Case page.</p></li>
+<li><p>Use the Service Quotas
+<a href='https://docs.aws.amazon.com/servicequotas/2019-06-24/apireference/API_RequestServiceQuotaIncrease.html'>RequestServiceQuotaIncrease</a>
+operation.</p></li>
+</ul>
+
+<p>A successful <code>CreateCase</code> request returns an AWS Support case number.
+You can use the DescribeCases operation and specify the case number to
+get existing AWS Support cases. After you create a case, use the
+AddCommunicationToCase operation to add additional communication or
+attachments to an existing case.</p>
+<p>The <code>caseId</code> is separate from the <code>displayId</code> that appears in the AWS
+Support Center. Use the DescribeCases operation to get the <code>displayId</code>.</p><ul>
+<li><p>You must have a Business or Enterprise support plan to use the AWS
+Support API.</p></li>
+<li><p>If you call the AWS Support API from an account that does not have a
+Business or Enterprise support plan, the
+<code>SubscriptionRequiredException</code> error message appears. For
+information about changing your support plan, see <a href='https://aws.amazon.com/premiumsupport/'>AWS Support</a>.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>support_create_case</span>(<span class='no'>subject</span>, <span class='no'>serviceCode</span>, <span class='no'>severityCode</span>, <span class='no'>categoryCode</span>,
-  <span class='no'>communicationBody</span>, <span class='no'>ccEmailAddresses</span>, <span class='no'>language</span>, <span class='no'>issueType</span>,
-  <span class='no'>attachmentSetId</span>)</pre>
+    <pre class="usage"><span class='fu'>support_create_case</span><span class='op'>(</span><span class='va'>subject</span>, <span class='va'>serviceCode</span>, <span class='va'>severityCode</span>, <span class='va'>categoryCode</span>,
+  <span class='va'>communicationBody</span>, <span class='va'>ccEmailAddresses</span>, <span class='va'>language</span>, <span class='va'>issueType</span>,
+  <span class='va'>attachmentSetId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,7 +176,7 @@ how you create a case in the AWS Support Center <a href='https://console.aws.ama
     <tr>
       <th>subject</th>
       <td><p>[required] The title of the AWS Support case. The title appears in the <strong>Subject</strong>
-field on the AWS Support Center <a href='https://console.aws.amazon.com/support/home#/case/create'>Create Case</a> page.</p></td>
+field on the AWS Support Center Create Case page.</p></td>
     </tr>
     <tr>
       <th>serviceCode</th>
@@ -157,26 +203,25 @@ AWS service defines its own set of category codes.</p></td>
     <tr>
       <th>communicationBody</th>
       <td><p>[required] The communication body text that describes the issue. This text appears
-in the <strong>Description</strong> field on the AWS Support Center <a href='https://console.aws.amazon.com/support/home#/case/create'>Create Case</a> page.</p></td>
+in the <strong>Description</strong> field on the AWS Support Center Create Case page.</p></td>
     </tr>
     <tr>
       <th>ccEmailAddresses</th>
       <td><p>A list of email addresses that AWS Support copies on case
 correspondence. AWS Support identifies the account that creates the case
 when you specify your AWS credentials in an HTTP POST method or use the
-<a href='http://aws.amazon.com/tools/'>AWS SDKs</a>.</p></td>
+<a href='https://aws.amazon.com/tools/'>AWS SDKs</a>.</p></td>
     </tr>
     <tr>
       <th>language</th>
       <td><p>The language in which AWS Support handles the case. You must specify the
 ISO 639-1 code for the <code>language</code> parameter if you want support in that
-language. Currently, English (\"en\") and Japanese (\"ja\") are
-supported.</p></td>
+language. Currently, English ("en") and Japanese ("ja") are supported.</p></td>
     </tr>
     <tr>
       <th>issueType</th>
       <td><p>The type of issue for the case. You can specify <code>customer-service</code> or
-<code>technical</code>. If you don\'t specify a value, the default is <code>technical</code>.</p></td>
+<code>technical</code>. If you don't specify a value, the default is <code>technical</code>.</p></td>
     </tr>
     <tr>
       <th>attachmentSetId</th>
@@ -185,48 +230,23 @@ by using the AddAttachmentsToSet operation.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The AWS Support API doesn\'t support requesting service limit increases.
-You can submit a service limit increase in the following ways:</p><ul>
-<li><p>Submit a request from the AWS Support Center <a href='https://console.aws.amazon.com/support/home#/case/create'>Create Case</a>
-page.</p></li>
-<li><p>Use the Service Quotas
-<a href='https://docs.aws.amazon.com/servicequotas/2019-06-24/apireference/API_RequestServiceQuotaIncrease.html'>RequestServiceQuotaIncrease</a>
-operation.</p></li>
-</ul>
-
-<p>A successful <code>CreateCase</code> request returns an AWS Support case number.
-You can use the DescribeCases operation and specify the case number to
-get existing AWS Support cases. After you create a case, use the
-AddCommunicationToCase operation to add additional communication or
-attachments to an existing case.</p>
-<p>The <code>caseId</code> is separate from the <code>displayId</code> that appears in the <a href='https://console.aws.amazon.com/support'>AWS Support Center</a>. Use the
-DescribeCases operation to get the <code>displayId</code>.</p><ul>
-<li><p>You must have a Business or Enterprise support plan to use the AWS
-Support API.</p></li>
-<li><p>If you call the AWS Support API from an account that does not have a
-Business or Enterprise support plan, the
-<code>SubscriptionRequiredException</code> error message appears. For
-information about changing your support plan, see <a href='http://aws.amazon.com/premiumsupport/'>AWS Support</a>.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_case</span>(
-  <span class='kw'>subject</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>serviceCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>severityCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>categoryCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>communicationBody</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ccEmailAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_case</span><span class='op'>(</span>
+  subject <span class='op'>=</span> <span class='st'>"string"</span>,
+  serviceCode <span class='op'>=</span> <span class='st'>"string"</span>,
+  severityCode <span class='op'>=</span> <span class='st'>"string"</span>,
+  categoryCode <span class='op'>=</span> <span class='st'>"string"</span>,
+  communicationBody <span class='op'>=</span> <span class='st'>"string"</span>,
+  ccEmailAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>language</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>issueType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>attachmentSetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  language <span class='op'>=</span> <span class='st'>"string"</span>,
+  issueType <span class='op'>=</span> <span class='st'>"string"</span>,
+  attachmentSetId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -244,7 +264,7 @@ information about changing your support plan, see <a href='http://aws.amazon.com
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

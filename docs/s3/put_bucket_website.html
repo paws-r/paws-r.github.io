@@ -46,7 +46,49 @@ subresource — s3_put_bucket_website" />
 subresource. To configure a bucket as a website, you can add this
 subresource on the bucket with website configuration information such as
 the file name of the index document and any redirect rules. For more
-information, see Hosting Websites on Amazon S3." />
+information, see Hosting Websites on Amazon S3.
+This PUT operation requires the S3:PutBucketWebsite permission. By
+default, only the bucket owner can configure the website attached to a
+bucket; however, bucket owners can allow other users to set the website
+configuration by writing a bucket policy that grants them the
+S3:PutBucketWebsite permission.
+To redirect all website requests sent to the bucket's website endpoint,
+you add a website configuration with the following elements. Because all
+requests are sent to another website, you don't need to provide index
+document name for the bucket.
+WebsiteConfiguration
+RedirectAllRequestsTo
+HostName
+Protocol
+
+
+If you want granular control over redirects, you can use the following
+elements to add routing rules that describe conditions for redirecting
+requests and information about the redirect destination. In this case,
+the website configuration must provide an index document for the bucket,
+because some requests might not be redirected.
+WebsiteConfiguration
+IndexDocument
+Suffix
+ErrorDocument
+Key
+RoutingRules
+RoutingRule
+Condition
+HttpErrorCodeReturnedEquals
+KeyPrefixEquals
+Redirect
+Protocol
+HostName
+ReplaceKeyPrefixWith
+ReplaceKeyWith
+HttpRedirectCode
+
+
+Amazon S3 has a limitation of 50 routing rules per website
+configuration. If you require more than 50 routing rules, you can use
+object redirect. For more information, see Configuring an Object Redirect
+in the Amazon Simple Storage Service Developer Guide." />
 
 
 
@@ -78,7 +120,7 @@ information, see Hosting Websites on Amazon S3." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +128,7 @@ information, see Hosting Websites on Amazon S3." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +140,7 @@ information, see Hosting Websites on Amazon S3." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,39 +169,14 @@ subresource. To configure a bucket as a website, you can add this
 subresource on the bucket with website configuration information such as
 the file name of the index document and any redirect rules. For more
 information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html'>Hosting Websites on Amazon S3</a>.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>s3_put_bucket_website</span>(<span class='no'>Bucket</span>, <span class='no'>ContentMD5</span>, <span class='no'>WebsiteConfiguration</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Bucket</th>
-      <td><p>[required] The bucket name.</p></td>
-    </tr>
-    <tr>
-      <th>ContentMD5</th>
-      <td><p>The base64-encoded 128-bit MD5 digest of the data. You must use this
-header as a message integrity check to verify that the request body was
-not corrupted in transit. For more information, see <a href='http://www.ietf.org/rfc/rfc1864.txt'>RFC 1864</a>.</p></td>
-    </tr>
-    <tr>
-      <th>WebsiteConfiguration</th>
-      <td><p>[required] Container for the request.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This PUT operation requires the <code>S3:PutBucketWebsite</code> permission. By
+<p>This PUT operation requires the <code>S3:PutBucketWebsite</code> permission. By
 default, only the bucket owner can configure the website attached to a
 bucket; however, bucket owners can allow other users to set the website
 configuration by writing a bucket policy that grants them the
 <code>S3:PutBucketWebsite</code> permission.</p>
-<p>To redirect all website requests sent to the bucket\'s website endpoint,
+<p>To redirect all website requests sent to the bucket's website endpoint,
 you add a website configuration with the following elements. Because all
-requests are sent to another website, you don\'t need to provide index
+requests are sent to another website, you don't need to provide index
 document name for the bucket.</p><ul>
 <li><p><code>WebsiteConfiguration</code></p></li>
 <li><p><code>RedirectAllRequestsTo</code></p></li>
@@ -194,58 +211,94 @@ because some requests might not be redirected.</p><ul>
 configuration. If you require more than 50 routing rules, you can use
 object redirect. For more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html'>Configuring an Object Redirect</a>
 in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>s3_put_bucket_website</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>ContentMD5</span>, <span class='va'>WebsiteConfiguration</span>,
+  <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Bucket</th>
+      <td><p>[required] The bucket name.</p></td>
+    </tr>
+    <tr>
+      <th>ContentMD5</th>
+      <td><p>The base64-encoded 128-bit MD5 digest of the data. You must use this
+header as a message integrity check to verify that the request body was
+not corrupted in transit. For more information, see <a href='https://www.ietf.org/rfc/rfc1864.txt'>RFC 1864</a>.</p>
+<p>For requests made using the AWS Command Line Interface (CLI) or AWS
+SDKs, this field is calculated automatically.</p></td>
+    </tr>
+    <tr>
+      <th>WebsiteConfiguration</th>
+      <td><p>[required] Container for the request.</p></td>
+    </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_bucket_website</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ContentMD5</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>WebsiteConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ErrorDocument</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>IndexDocument</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Suffix</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>RedirectAllRequestsTo</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>HostName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Protocol</span> <span class='kw'>=</span> <span class='st'>"http"</span><span class='kw'>|</span><span class='st'>"https"</span>
-    ),
-    <span class='kw'>RoutingRules</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Condition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>HttpErrorCodeReturnedEquals</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>KeyPrefixEquals</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        ),
-        <span class='kw'>Redirect</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>HostName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>HttpRedirectCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Protocol</span> <span class='kw'>=</span> <span class='st'>"http"</span><span class='kw'>|</span><span class='st'>"https"</span>,
-          <span class='kw'>ReplaceKeyPrefixWith</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>ReplaceKeyWith</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_website</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  ContentMD5 <span class='op'>=</span> <span class='st'>"string"</span>,
+  WebsiteConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ErrorDocument <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    IndexDocument <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Suffix <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    RedirectAllRequestsTo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      HostName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Protocol <span class='op'>=</span> <span class='st'>"http"</span><span class='op'>|</span><span class='st'>"https"</span>
+    <span class='op'>)</span>,
+    RoutingRules <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          HttpErrorCodeReturnedEquals <span class='op'>=</span> <span class='st'>"string"</span>,
+          KeyPrefixEquals <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>,
+        Redirect <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          HostName <span class='op'>=</span> <span class='st'>"string"</span>,
+          HttpRedirectCode <span class='op'>=</span> <span class='st'>"string"</span>,
+          Protocol <span class='op'>=</span> <span class='st'>"http"</span><span class='op'>|</span><span class='st'>"https"</span>,
+          ReplaceKeyPrefixWith <span class='op'>=</span> <span class='st'>"string"</span>,
+          ReplaceKeyWith <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example adds website configuration to a bucket.</span>
-<span class='no'>svc</span>$<span class='fu'>put_bucket_website</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>ContentMD5</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>WebsiteConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ErrorDocument</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"error.html"</span>
-    ),
-    <span class='kw'>IndexDocument</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Suffix</span> <span class='kw'>=</span> <span class='st'>"index.html"</span>
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_website</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  ContentMD5 <span class='op'>=</span> <span class='st'>""</span>,
+  WebsiteConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ErrorDocument <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"error.html"</span>
+    <span class='op'>)</span>,
+    IndexDocument <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Suffix <span class='op'>=</span> <span class='st'>"index.html"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -261,7 +314,7 @@ in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

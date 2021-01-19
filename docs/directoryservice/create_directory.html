@@ -41,7 +41,11 @@
 
 <meta property="og:title" content="Creates a Simple AD directory — directoryservice_create_directory" />
 <meta property="og:description" content="Creates a Simple AD directory. For more information, see Simple Active Directory
-in the AWS Directory Service Admin Guide." />
+in the AWS Directory Service Admin Guide.
+Before you call CreateDirectory, ensure that all of the required
+permissions have been explicitly granted through a policy. For details
+about what permissions are required to run the CreateDirectory
+operation, see AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference." />
 
 
 
@@ -73,7 +77,7 @@ in the AWS Directory Service Admin Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +85,7 @@ in the AWS Directory Service Admin Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +97,7 @@ in the AWS Directory Service Admin Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,10 +122,14 @@ in the AWS Directory Service Admin Guide." />
     <div class="ref-description">
     <p>Creates a Simple AD directory. For more information, see <a href='https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_simple_ad.html'>Simple Active Directory</a>
 in the <em>AWS Directory Service Admin Guide</em>.</p>
+<p>Before you call <code>CreateDirectory</code>, ensure that all of the required
+permissions have been explicitly granted through a policy. For details
+about what permissions are required to run the <code>CreateDirectory</code>
+operation, see <a href='https://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html'>AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>directoryservice_create_directory</span>(<span class='no'>Name</span>, <span class='no'>ShortName</span>, <span class='no'>Password</span>,
-  <span class='no'>Description</span>, <span class='no'>Size</span>, <span class='no'>VpcSettings</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>directoryservice_create_directory</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>ShortName</span>, <span class='va'>Password</span>,
+  <span class='va'>Description</span>, <span class='va'>Size</span>, <span class='va'>VpcSettings</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,7 +148,27 @@ in the <em>AWS Directory Service Admin Guide</em>.</p>
 process creates a directory administrator account with the user name
 <code>Administrator</code> and this password.</p>
 <p>If you need to change the password for the administrator account, you
-can use the ResetUserPassword API call.</p></td>
+can use the ResetUserPassword API call.</p>
+<p>The regex pattern for this string is made up of the following
+conditions:</p><ul>
+<li><p>Length (?=^.{8,64}$) – Must be between 8 and 64 characters</p></li>
+</ul>
+
+<p>AND any 3 of the following password complexity rules required by Active
+Directory:</p><ul>
+<li><p>Numbers and upper case and lowercase
+(?=.<em><code>\\d</code>)(?=.</em>[A-Z])(?=.*[a-z])</p></li>
+<li><p>Numbers and special characters and lower case
+(?=.<em><code>\\d</code>)(?=.</em>[^A-Za-z0-9<code>\\s</code>])(?=.*[a-z])</p></li>
+<li><p>Special characters and upper case and lower case
+(?=.<em>[^A-Za-z0-9<code>\\s</code>])(?=.</em>[A-Z])(?=.*[a-z])</p></li>
+<li><p>Numbers and upper case and special characters
+(?=.<em><code>\\d</code>)(?=.</em>[A-Z])(?=.*[^A-Za-z0-9<code>\\s</code>])</p></li>
+</ul>
+
+<p>For additional information about how Active Directory passwords are
+enforced, see <a href='https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/password-must-meet-complexity-requirements'>Password must meet complexity requirements</a>
+on the Microsoft website.</p></td>
     </tr>
     <tr>
       <th>Description</th>
@@ -161,34 +189,29 @@ the operation.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Before you call <code>CreateDirectory</code>, ensure that all of the required
-permissions have been explicitly granted through a policy. For details
-about what permissions are required to run the <code>CreateDirectory</code>
-operation, see <a href='http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html'>AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_directory</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ShortName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Password</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Size</span> <span class='kw'>=</span> <span class='st'>"Small"</span><span class='kw'>|</span><span class='st'>"Large"</span>,
-  <span class='kw'>VpcSettings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>VpcId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_directory</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  ShortName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Password <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Size <span class='op'>=</span> <span class='st'>"Small"</span><span class='op'>|</span><span class='st'>"Large"</span>,
+  VpcSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    VpcId <span class='op'>=</span> <span class='st'>"string"</span>,
+    SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -206,7 +229,7 @@ operation, see <a href='http://docs.aws.amazon.com/directoryservice/latest/admin
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

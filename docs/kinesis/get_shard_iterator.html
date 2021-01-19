@@ -41,7 +41,40 @@
 
 <meta property="og:title" content="Gets an Amazon Kinesis shard iterator — kinesis_get_shard_iterator" />
 <meta property="og:description" content="Gets an Amazon Kinesis shard iterator. A shard iterator expires 5
-minutes after it is returned to the requester." />
+minutes after it is returned to the requester.
+A shard iterator specifies the shard position from which to start
+reading data records sequentially. The position is specified using the
+sequence number of a data record in a shard. A sequence number is the
+identifier associated with every record ingested in the stream, and is
+assigned when a record is put into the stream. Each stream has one or
+more shards.
+You must specify the shard iterator type. For example, you can set the
+ShardIteratorType parameter to read exactly from the position denoted
+by a specific sequence number by using the AT_SEQUENCE_NUMBER shard
+iterator type. Alternatively, the parameter can read right after the
+sequence number by using the AFTER_SEQUENCE_NUMBER shard iterator
+type, using sequence numbers returned by earlier calls to PutRecord,
+PutRecords, GetRecords, or DescribeStream. In the request, you can
+specify the shard iterator type AT_TIMESTAMP to read records from an
+arbitrary point in time, TRIM_HORIZON to cause ShardIterator to
+point to the last untrimmed record in the shard in the system (the
+oldest data record in the shard), or LATEST so that you always read
+the most recent data in the shard.
+When you read repeatedly from a stream, use a GetShardIterator request
+to get the first shard iterator for use in your first GetRecords request
+and for subsequent reads use the shard iterator returned by the
+GetRecords request in NextShardIterator. A new shard iterator is
+returned by every GetRecords request in NextShardIterator, which you
+use in the ShardIterator parameter of the next GetRecords request.
+If a GetShardIterator request is made too often, you receive a
+ProvisionedThroughputExceededException. For more information about
+throughput limits, see GetRecords, and Streams Limits
+in the Amazon Kinesis Data Streams Developer Guide.
+If the shard is closed, GetShardIterator returns a valid iterator for
+the last sequence number of the shard. A shard can be closed as a result
+of using SplitShard or MergeShards.
+GetShardIterator has a limit of five transactions per second per account
+per open shard." />
 
 
 
@@ -73,7 +106,7 @@ minutes after it is returned to the requester." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +114,7 @@ minutes after it is returned to the requester." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +126,7 @@ minutes after it is returned to the requester." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,10 +151,43 @@ minutes after it is returned to the requester." />
     <div class="ref-description">
     <p>Gets an Amazon Kinesis shard iterator. A shard iterator expires 5
 minutes after it is returned to the requester.</p>
+<p>A shard iterator specifies the shard position from which to start
+reading data records sequentially. The position is specified using the
+sequence number of a data record in a shard. A sequence number is the
+identifier associated with every record ingested in the stream, and is
+assigned when a record is put into the stream. Each stream has one or
+more shards.</p>
+<p>You must specify the shard iterator type. For example, you can set the
+<code>ShardIteratorType</code> parameter to read exactly from the position denoted
+by a specific sequence number by using the <code>AT_SEQUENCE_NUMBER</code> shard
+iterator type. Alternatively, the parameter can read right after the
+sequence number by using the <code>AFTER_SEQUENCE_NUMBER</code> shard iterator
+type, using sequence numbers returned by earlier calls to PutRecord,
+PutRecords, GetRecords, or DescribeStream. In the request, you can
+specify the shard iterator type <code>AT_TIMESTAMP</code> to read records from an
+arbitrary point in time, <code>TRIM_HORIZON</code> to cause <code>ShardIterator</code> to
+point to the last untrimmed record in the shard in the system (the
+oldest data record in the shard), or <code>LATEST</code> so that you always read
+the most recent data in the shard.</p>
+<p>When you read repeatedly from a stream, use a GetShardIterator request
+to get the first shard iterator for use in your first GetRecords request
+and for subsequent reads use the shard iterator returned by the
+GetRecords request in <code>NextShardIterator</code>. A new shard iterator is
+returned by every GetRecords request in <code>NextShardIterator</code>, which you
+use in the <code>ShardIterator</code> parameter of the next GetRecords request.</p>
+<p>If a GetShardIterator request is made too often, you receive a
+<code>ProvisionedThroughputExceededException</code>. For more information about
+throughput limits, see GetRecords, and <a href='https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html'>Streams Limits</a>
+in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
+<p>If the shard is closed, GetShardIterator returns a valid iterator for
+the last sequence number of the shard. A shard can be closed as a result
+of using SplitShard or MergeShards.</p>
+<p>GetShardIterator has a limit of five transactions per second per account
+per open shard.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kinesis_get_shard_iterator</span>(<span class='no'>StreamName</span>, <span class='no'>ShardId</span>, <span class='no'>ShardIteratorType</span>,
-  <span class='no'>StartingSequenceNumber</span>, <span class='no'>Timestamp</span>)</pre>
+    <pre class="usage"><span class='fu'>kinesis_get_shard_iterator</span><span class='op'>(</span><span class='va'>StreamName</span>, <span class='va'>ShardId</span>, <span class='va'>ShardIteratorType</span>,
+  <span class='va'>StartingSequenceNumber</span>, <span class='va'>Timestamp</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,53 +238,19 @@ horizon, the iterator returned is for the oldest untrimmed data record
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A shard iterator specifies the shard position from which to start
-reading data records sequentially. The position is specified using the
-sequence number of a data record in a shard. A sequence number is the
-identifier associated with every record ingested in the stream, and is
-assigned when a record is put into the stream. Each stream has one or
-more shards.</p>
-<p>You must specify the shard iterator type. For example, you can set the
-<code>ShardIteratorType</code> parameter to read exactly from the position denoted
-by a specific sequence number by using the <code>AT_SEQUENCE_NUMBER</code> shard
-iterator type. Alternatively, the parameter can read right after the
-sequence number by using the <code>AFTER_SEQUENCE_NUMBER</code> shard iterator
-type, using sequence numbers returned by earlier calls to PutRecord,
-PutRecords, GetRecords, or DescribeStream. In the request, you can
-specify the shard iterator type <code>AT_TIMESTAMP</code> to read records from an
-arbitrary point in time, <code>TRIM_HORIZON</code> to cause <code>ShardIterator</code> to
-point to the last untrimmed record in the shard in the system (the
-oldest data record in the shard), or <code>LATEST</code> so that you always read
-the most recent data in the shard.</p>
-<p>When you read repeatedly from a stream, use a GetShardIterator request
-to get the first shard iterator for use in your first GetRecords request
-and for subsequent reads use the shard iterator returned by the
-GetRecords request in <code>NextShardIterator</code>. A new shard iterator is
-returned by every GetRecords request in <code>NextShardIterator</code>, which you
-use in the <code>ShardIterator</code> parameter of the next GetRecords request.</p>
-<p>If a GetShardIterator request is made too often, you receive a
-<code>ProvisionedThroughputExceededException</code>. For more information about
-throughput limits, see GetRecords, and <a href='http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html'>Streams Limits</a>
-in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
-<p>If the shard is closed, GetShardIterator returns a valid iterator for
-the last sequence number of the shard. A shard can be closed as a result
-of using SplitShard or MergeShards.</p>
-<p>GetShardIterator has a limit of five transactions per second per account
-per open shard.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_shard_iterator</span>(
-  <span class='kw'>StreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ShardId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ShardIteratorType</span> <span class='kw'>=</span> <span class='st'>"AT_SEQUENCE_NUMBER"</span><span class='kw'>|</span><span class='st'>"AFTER_SEQUENCE_NUMBER"</span><span class='kw'>|</span><span class='st'>"TRIM_HORIZON"</span><span class='kw'>|</span><span class='st'>"LATEST"</span><span class='kw'>|</span><span class='st'>"AT_TIMESTAMP"</span>,
-  <span class='kw'>StartingSequenceNumber</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Timestamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_shard_iterator</span><span class='op'>(</span>
+  StreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ShardId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ShardIteratorType <span class='op'>=</span> <span class='st'>"AT_SEQUENCE_NUMBER"</span><span class='op'>|</span><span class='st'>"AFTER_SEQUENCE_NUMBER"</span><span class='op'>|</span><span class='st'>"TRIM_HORIZON"</span><span class='op'>|</span><span class='st'>"LATEST"</span><span class='op'>|</span><span class='st'>"AT_TIMESTAMP"</span>,
+  StartingSequenceNumber <span class='op'>=</span> <span class='st'>"string"</span>,
+  Timestamp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -236,7 +268,7 @@ per open shard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

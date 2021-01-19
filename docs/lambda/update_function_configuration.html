@@ -40,7 +40,20 @@
 
 
 <meta property="og:title" content="Modify the version-specific settings of a Lambda function — lambda_update_function_configuration" />
-<meta property="og:description" content="Modify the version-specific settings of a Lambda function." />
+<meta property="og:description" content="Modify the version-specific settings of a Lambda function.
+When you update a function, Lambda provisions an instance of the
+function and its supporting resources. If your function connects to a
+VPC, this process can take a minute. During this time, you can't modify
+the function, but you can still invoke it. The LastUpdateStatus,
+LastUpdateStatusReason, and LastUpdateStatusReasonCode fields in the
+response from GetFunctionConfiguration indicate when the update is
+complete and the function is processing events with the new
+configuration. For more information, see Function States.
+These settings can vary between versions of a function and are locked
+when you publish a version. You can't modify the configuration of a
+published version, only the unpublished version.
+To configure function concurrency, use PutFunctionConcurrency. To grant
+invoke permissions to an account or AWS service, use AddPermission." />
 
 
 
@@ -72,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +93,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +105,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,12 +129,25 @@
 
     <div class="ref-description">
     <p>Modify the version-specific settings of a Lambda function.</p>
+<p>When you update a function, Lambda provisions an instance of the
+function and its supporting resources. If your function connects to a
+VPC, this process can take a minute. During this time, you can't modify
+the function, but you can still invoke it. The <code>LastUpdateStatus</code>,
+<code>LastUpdateStatusReason</code>, and <code>LastUpdateStatusReasonCode</code> fields in the
+response from GetFunctionConfiguration indicate when the update is
+complete and the function is processing events with the new
+configuration. For more information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html'>Function States</a>.</p>
+<p>These settings can vary between versions of a function and are locked
+when you publish a version. You can't modify the configuration of a
+published version, only the unpublished version.</p>
+<p>To configure function concurrency, use PutFunctionConcurrency. To grant
+invoke permissions to an account or AWS service, use AddPermission.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lambda_update_function_configuration</span>(<span class='no'>FunctionName</span>, <span class='no'>Role</span>, <span class='no'>Handler</span>,
-  <span class='no'>Description</span>, <span class='no'>Timeout</span>, <span class='no'>MemorySize</span>, <span class='no'>VpcConfig</span>, <span class='no'>Environment</span>, <span class='no'>Runtime</span>,
-  <span class='no'>DeadLetterConfig</span>, <span class='no'>KMSKeyArn</span>, <span class='no'>TracingConfig</span>, <span class='no'>RevisionId</span>, <span class='no'>Layers</span>,
-  <span class='no'>FileSystemConfigs</span>)</pre>
+    <pre class="usage"><span class='fu'>lambda_update_function_configuration</span><span class='op'>(</span><span class='va'>FunctionName</span>, <span class='va'>Role</span>, <span class='va'>Handler</span>,
+  <span class='va'>Description</span>, <span class='va'>Timeout</span>, <span class='va'>MemorySize</span>, <span class='va'>VpcConfig</span>, <span class='va'>Environment</span>, <span class='va'>Runtime</span>,
+  <span class='va'>DeadLetterConfig</span>, <span class='va'>KMSKeyArn</span>, <span class='va'>TracingConfig</span>, <span class='va'>RevisionId</span>, <span class='va'>Layers</span>,
+  <span class='va'>FileSystemConfigs</span>, <span class='va'>ImageConfig</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,14 +167,14 @@ the function name, it is limited to 64 characters in length.</p></td>
     </tr>
     <tr>
       <th>Role</th>
-      <td><p>The Amazon Resource Name (ARN) of the function\'s execution role.</p></td>
+      <td><p>The Amazon Resource Name (ARN) of the function's execution role.</p></td>
     </tr>
     <tr>
       <th>Handler</th>
       <td><p>The name of the method within your code that Lambda calls to execute
 your function. The format includes the file name. It can also include
 namespaces and other qualifiers, depending on the runtime. For more
-information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/programming-model-v2.html'>Programming Model</a>.</p></td>
+information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-features.html'>Programming Model</a>.</p></td>
     </tr>
     <tr>
       <th>Description</th>
@@ -161,9 +187,9 @@ it. The default is 3 seconds. The maximum allowed value is 900 seconds.</p></td>
     </tr>
     <tr>
       <th>MemorySize</th>
-      <td><p>The amount of memory that your function has access to. Increasing the
-function\'s memory also increases its CPU allocation. The default value
-is 128 MB. The value must be a multiple of 64 MB.</p></td>
+      <td><p>The amount of memory available to the function at runtime. Increasing
+the function's memory also increases its CPU allocation. The default
+value is 128 MB. The value can be any multiple of 1 MB.</p></td>
     </tr>
     <tr>
       <th>VpcConfig</th>
@@ -179,7 +205,7 @@ execution.</p></td>
     </tr>
     <tr>
       <th>Runtime</th>
-      <td><p>The identifier of the function\'s
+      <td><p>The identifier of the function's
 <a href='https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html'>runtime</a>.</p></td>
     </tr>
     <tr>
@@ -190,9 +216,9 @@ more information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/invo
     </tr>
     <tr>
       <th>KMSKeyArn</th>
-      <td><p>The ARN of the AWS Key Management Service (AWS KMS) key that\'s used to
-encrypt your function\'s environment variables. If it\'s not provided,
-AWS Lambda uses a default service key.</p></td>
+      <td><p>The ARN of the AWS Key Management Service (AWS KMS) key that's used to
+encrypt your function's environment variables. If it's not provided, AWS
+Lambda uses a default service key.</p></td>
     </tr>
     <tr>
       <th>TracingConfig</th>
@@ -201,90 +227,91 @@ with AWS X-Ray.</p></td>
     </tr>
     <tr>
       <th>RevisionId</th>
-      <td><p>Only update the function if the revision ID matches the ID that\'s
+      <td><p>Only update the function if the revision ID matches the ID that's
 specified. Use this option to avoid modifying a function that has
 changed since you last read it.</p></td>
     </tr>
     <tr>
       <th>Layers</th>
       <td><p>A list of <a href='https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html'>function layers</a>
-to add to the function\'s execution environment. Specify each layer by
+to add to the function's execution environment. Specify each layer by
 its ARN, including the version.</p></td>
     </tr>
     <tr>
       <th>FileSystemConfigs</th>
       <td><p>Connection settings for an Amazon EFS file system.</p></td>
     </tr>
+    <tr>
+      <th>ImageConfig</th>
+      <td><p>Configuration values that override the container image Dockerfile.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you update a function, Lambda provisions an instance of the
-function and its supporting resources. If your function connects to a
-VPC, this process can take a minute. During this time, you can\'t modify
-the function, but you can still invoke it. The <code>LastUpdateStatus</code>,
-<code>LastUpdateStatusReason</code>, and <code>LastUpdateStatusReasonCode</code> fields in the
-response from GetFunctionConfiguration indicate when the update is
-complete and the function is processing events with the new
-configuration. For more information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html'>Function States</a>.</p>
-<p>These settings can vary between versions of a function and are locked
-when you publish a version. You can\'t modify the configuration of a
-published version, only the unpublished version.</p>
-<p>To configure function concurrency, use PutFunctionConcurrency. To grant
-invoke permissions to an account or AWS service, use AddPermission.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_function_configuration</span>(
-  <span class='kw'>FunctionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Role</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Handler</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Timeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MemorySize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>VpcConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_function_configuration</span><span class='op'>(</span>
+  FunctionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Role <span class='op'>=</span> <span class='st'>"string"</span>,
+  Handler <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Timeout <span class='op'>=</span> <span class='fl'>123</span>,
+  MemorySize <span class='op'>=</span> <span class='fl'>123</span>,
+  VpcConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Environment</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Variables <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Runtime</span> <span class='kw'>=</span> <span class='st'>"nodejs"</span><span class='kw'>|</span><span class='st'>"nodejs4.3"</span><span class='kw'>|</span><span class='st'>"nodejs6.10"</span><span class='kw'>|</span><span class='st'>"nodejs8.10"</span><span class='kw'>|</span><span class='st'>"nodejs10.x"</span><span class='kw'>|</span><span class='st'>"nodejs12.x"</span><span class='kw'>|</span><span class='st'>"java8"</span><span class='kw'>|</span><span class='st'>"java11"</span><span class='kw'>|</span><span class='st'>"python2.7"</span><span class='kw'>|</span><span class='st'>"python3.6"</span><span class='kw'>|</span><span class='st'>"python3.7"</span><span class='kw'>|</span><span class='st'>"python3.8"</span><span class='kw'>|</span><span class='st'>"dotnetcore1.0"</span><span class='kw'>|</span><span class='st'>"dotnetcore2.0"</span><span class='kw'>|</span><span class='st'>"dotnetcore2.1"</span><span class='kw'>|</span><span class='st'>"dotnetcore3.1"</span><span class='kw'>|</span><span class='st'>"nodejs4.3-edge"</span><span class='kw'>|</span><span class='st'>"go1.x"</span><span class='kw'>|</span><span class='st'>"ruby2.5"</span><span class='kw'>|</span><span class='st'>"ruby2.7"</span><span class='kw'>|</span><span class='st'>"provided"</span>,
-  <span class='kw'>DeadLetterConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>TargetArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>KMSKeyArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TracingConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Mode</span> <span class='kw'>=</span> <span class='st'>"Active"</span><span class='kw'>|</span><span class='st'>"PassThrough"</span>
-  ),
-  <span class='kw'>RevisionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Layers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Runtime <span class='op'>=</span> <span class='st'>"nodejs"</span><span class='op'>|</span><span class='st'>"nodejs4.3"</span><span class='op'>|</span><span class='st'>"nodejs6.10"</span><span class='op'>|</span><span class='st'>"nodejs8.10"</span><span class='op'>|</span><span class='st'>"nodejs10.x"</span><span class='op'>|</span><span class='st'>"nodejs12.x"</span><span class='op'>|</span><span class='st'>"java8"</span><span class='op'>|</span><span class='st'>"java8.al2"</span><span class='op'>|</span><span class='st'>"java11"</span><span class='op'>|</span><span class='st'>"python2.7"</span><span class='op'>|</span><span class='st'>"python3.6"</span><span class='op'>|</span><span class='st'>"python3.7"</span><span class='op'>|</span><span class='st'>"python3.8"</span><span class='op'>|</span><span class='st'>"dotnetcore1.0"</span><span class='op'>|</span><span class='st'>"dotnetcore2.0"</span><span class='op'>|</span><span class='st'>"dotnetcore2.1"</span><span class='op'>|</span><span class='st'>"dotnetcore3.1"</span><span class='op'>|</span><span class='st'>"nodejs4.3-edge"</span><span class='op'>|</span><span class='st'>"go1.x"</span><span class='op'>|</span><span class='st'>"ruby2.5"</span><span class='op'>|</span><span class='st'>"ruby2.7"</span><span class='op'>|</span><span class='st'>"provided"</span><span class='op'>|</span><span class='st'>"provided.al2"</span>,
+  DeadLetterConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    TargetArn <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  KMSKeyArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  TracingConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Mode <span class='op'>=</span> <span class='st'>"Active"</span><span class='op'>|</span><span class='st'>"PassThrough"</span>
+  <span class='op'>)</span>,
+  RevisionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Layers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>FileSystemConfigs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Arn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>LocalMountPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  FileSystemConfigs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Arn <span class='op'>=</span> <span class='st'>"string"</span>,
+      LocalMountPath <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ImageConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    EntryPoint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    Command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    WorkingDirectory <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example modifies the memory size to be 256 MB for the</span>
 <span class='co'># unpublished ($LATEST) version of a function named my-function.</span>
-<span class='no'>svc</span>$<span class='fu'>update_function_configuration</span>(
-  <span class='kw'>FunctionName</span> <span class='kw'>=</span> <span class='st'>"my-function"</span>,
-  <span class='kw'>MemorySize</span> <span class='kw'>=</span> <span class='fl'>256L</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_function_configuration</span><span class='op'>(</span>
+  FunctionName <span class='op'>=</span> <span class='st'>"my-function"</span>,
+  MemorySize <span class='op'>=</span> <span class='fl'>256L</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -300,7 +327,7 @@ invoke permissions to an account or AWS service, use AddPermission.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

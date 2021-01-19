@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Creates a model package that you can use to create Amazon SageMaker
-models or list on AWS Marketplace — sagemaker_create_model_package • paws</title>
+models or list on AWS Marketplace, or a versioned model that is part of
+a model group — sagemaker_create_model_package • paws</title>
 
 
 <!-- jquery -->
@@ -41,10 +42,23 @@ models or list on AWS Marketplace — sagemaker_create_model_package • paws</t
 
 
 <meta property="og:title" content="Creates a model package that you can use to create Amazon SageMaker
-models or list on AWS Marketplace — sagemaker_create_model_package" />
+models or list on AWS Marketplace, or a versioned model that is part of
+a model group — sagemaker_create_model_package" />
 <meta property="og:description" content="Creates a model package that you can use to create Amazon SageMaker
-models or list on AWS Marketplace. Buyers can subscribe to model
-packages listed on AWS Marketplace to create models in Amazon SageMaker." />
+models or list on AWS Marketplace, or a versioned model that is part of
+a model group. Buyers can subscribe to model packages listed on AWS
+Marketplace to create models in Amazon SageMaker.
+To create a model package by specifying a Docker container that contains
+your inference code and the Amazon S3 location of your model artifacts,
+provide values for InferenceSpecification. To create a model from an
+algorithm resource that you created or subscribed to in AWS Marketplace,
+provide a value for SourceAlgorithmSpecification.
+There are two types of model packages:
+Versioned - a model that is part of a model group in the model
+registry.
+Unversioned - a model package that is not part of a model group.
+
+" />
 
 
 
@@ -76,7 +90,7 @@ packages listed on AWS Marketplace to create models in Amazon SageMaker." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +98,7 @@ packages listed on AWS Marketplace to create models in Amazon SageMaker." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +110,7 @@ packages listed on AWS Marketplace to create models in Amazon SageMaker." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -114,29 +128,51 @@ packages listed on AWS Marketplace to create models in Amazon SageMaker." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Creates a model package that you can use to create Amazon SageMaker
-models or list on AWS Marketplace</h1>
+models or list on AWS Marketplace, or a versioned model that is part of
+a model group</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/sagemaker_operations.R'><code>R/sagemaker_operations.R</code></a></small>
     <div class="hidden name"><code>sagemaker_create_model_package.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Creates a model package that you can use to create Amazon SageMaker
-models or list on AWS Marketplace. Buyers can subscribe to model
-packages listed on AWS Marketplace to create models in Amazon SageMaker.</p>
+models or list on AWS Marketplace, or a versioned model that is part of
+a model group. Buyers can subscribe to model packages listed on AWS
+Marketplace to create models in Amazon SageMaker.</p>
+<p>To create a model package by specifying a Docker container that contains
+your inference code and the Amazon S3 location of your model artifacts,
+provide values for <code>InferenceSpecification</code>. To create a model from an
+algorithm resource that you created or subscribed to in AWS Marketplace,
+provide a value for <code>SourceAlgorithmSpecification</code>.</p>
+<p>There are two types of model packages:</p><ul>
+<li><p>Versioned - a model that is part of a model group in the model
+registry.</p></li>
+<li><p>Unversioned - a model package that is not part of a model group.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>sagemaker_create_model_package</span>(<span class='no'>ModelPackageName</span>,
-  <span class='no'>ModelPackageDescription</span>, <span class='no'>InferenceSpecification</span>,
-  <span class='no'>ValidationSpecification</span>, <span class='no'>SourceAlgorithmSpecification</span>,
-  <span class='no'>CertifyForMarketplace</span>)</pre>
+    <pre class="usage"><span class='fu'>sagemaker_create_model_package</span><span class='op'>(</span><span class='va'>ModelPackageName</span>, <span class='va'>ModelPackageGroupName</span>,
+  <span class='va'>ModelPackageDescription</span>, <span class='va'>InferenceSpecification</span>,
+  <span class='va'>ValidationSpecification</span>, <span class='va'>SourceAlgorithmSpecification</span>,
+  <span class='va'>CertifyForMarketplace</span>, <span class='va'>Tags</span>, <span class='va'>ModelApprovalStatus</span>, <span class='va'>MetadataProperties</span>,
+  <span class='va'>ModelMetrics</span>, <span class='va'>ClientToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ModelPackageName</th>
-      <td><p>[required] The name of the model package. The name must have 1 to 63 characters.
-Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p></td>
+      <td><p>The name of the model package. The name must have 1 to 63 characters.
+Valid characters are a-z, A-Z, 0-9, and - (hyphen).</p>
+<p>This parameter is required for unversioned models. It is not applicable
+to versioned models.</p></td>
+    </tr>
+    <tr>
+      <th>ModelPackageGroupName</th>
+      <td><p>The name of the model group that this model version belongs to.</p>
+<p>This parameter is required for versioned models, and does not apply to
+unversioned models.</p></td>
     </tr>
     <tr>
       <th>ModelPackageDescription</th>
@@ -165,94 +201,171 @@ SageMaker runs to test the model package.</p></td>
     </tr>
     <tr>
       <th>CertifyForMarketplace</th>
-      <td><p>Whether to certify the model package for listing on AWS Marketplace.</p></td>
+      <td><p>Whether to certify the model package for listing on AWS Marketplace.</p>
+<p>This parameter is optional for unversioned models, and does not apply to
+versioned models.</p></td>
+    </tr>
+    <tr>
+      <th>Tags</th>
+      <td><p>A list of key value pairs associated with the model. For more
+information, see <a href='https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html'>Tagging AWS resources</a>
+in the <em>AWS General Reference Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>ModelApprovalStatus</th>
+      <td><p>Whether the model is approved for deployment.</p>
+<p>This parameter is optional for versioned models, and does not apply to
+unversioned models.</p>
+<p>For versioned models, the value of this parameter must be set to
+<code>Approved</code> to deploy the model.</p></td>
+    </tr>
+    <tr>
+      <th>MetadataProperties</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>ModelMetrics</th>
+      <td><p>A structure that contains model metrics reports.</p></td>
+    </tr>
+    <tr>
+      <th>ClientToken</th>
+      <td><p>A unique token that guarantees that the call to this API is idempotent.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To create a model package by specifying a Docker container that contains
-your inference code and the Amazon S3 location of your model artifacts,
-provide values for <code>InferenceSpecification</code>. To create a model from an
-algorithm resource that you created or subscribed to in AWS Marketplace,
-provide a value for <code>SourceAlgorithmSpecification</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_model_package</span>(
-  <span class='kw'>ModelPackageName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ModelPackageDescription</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InferenceSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Containers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>ContainerHostname</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Image</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>ImageDigest</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>ModelDataUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>ProductId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>SupportedTransformInstanceTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='st'>"ml.m4.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.10xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.large"</span><span class='kw'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.24xlarge"</span>
-    ),
-    <span class='kw'>SupportedRealtimeInferenceInstanceTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='st'>"ml.t2.medium"</span><span class='kw'>|</span><span class='st'>"ml.t2.large"</span><span class='kw'>|</span><span class='st'>"ml.t2.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.t2.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.10xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.large"</span><span class='kw'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5d.large"</span><span class='kw'>|</span><span class='st'>"ml.m5d.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5d.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5d.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5d.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5d.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.large"</span><span class='kw'>|</span><span class='st'>"ml.c4.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.large"</span><span class='kw'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.large"</span><span class='kw'>|</span><span class='st'>"ml.c5d.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.g4dn.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5.large"</span><span class='kw'>|</span><span class='st'>"ml.r5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5d.large"</span><span class='kw'>|</span><span class='st'>"ml.r5d.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5d.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5d.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5d.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.r5d.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.inf1.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.inf1.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.inf1.6xlarge"</span><span class='kw'>|</span><span class='st'>"ml.inf1.24xlarge"</span>
-    ),
-    <span class='kw'>SupportedContentTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_model_package</span><span class='op'>(</span>
+  ModelPackageName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ModelPackageGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ModelPackageDescription <span class='op'>=</span> <span class='st'>"string"</span>,
+  InferenceSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Containers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ContainerHostname <span class='op'>=</span> <span class='st'>"string"</span>,
+        Image <span class='op'>=</span> <span class='st'>"string"</span>,
+        ImageDigest <span class='op'>=</span> <span class='st'>"string"</span>,
+        ModelDataUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+        ProductId <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    SupportedTransformInstanceTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"ml.m4.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.10xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.large"</span><span class='op'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.24xlarge"</span>
+    <span class='op'>)</span>,
+    SupportedRealtimeInferenceInstanceTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"ml.t2.medium"</span><span class='op'>|</span><span class='st'>"ml.t2.large"</span><span class='op'>|</span><span class='st'>"ml.t2.xlarge"</span><span class='op'>|</span><span class='st'>"ml.t2.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.10xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.large"</span><span class='op'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5d.large"</span><span class='op'>|</span><span class='st'>"ml.m5d.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5d.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5d.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5d.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5d.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.large"</span><span class='op'>|</span><span class='st'>"ml.c4.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.large"</span><span class='op'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.large"</span><span class='op'>|</span><span class='st'>"ml.c5d.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.g4dn.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5.large"</span><span class='op'>|</span><span class='st'>"ml.r5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5d.large"</span><span class='op'>|</span><span class='st'>"ml.r5d.xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5d.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5d.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5d.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.r5d.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.inf1.xlarge"</span><span class='op'>|</span><span class='st'>"ml.inf1.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.inf1.6xlarge"</span><span class='op'>|</span><span class='st'>"ml.inf1.24xlarge"</span>
+    <span class='op'>)</span>,
+    SupportedContentTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>SupportedResponseMIMETypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    SupportedResponseMIMETypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ValidationSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ValidationRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ValidationProfiles</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>ProfileName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>TransformJobDefinition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>MaxConcurrentTransforms</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>MaxPayloadInMB</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>BatchStrategy</span> <span class='kw'>=</span> <span class='st'>"MultiRecord"</span><span class='kw'>|</span><span class='st'>"SingleRecord"</span>,
-          <span class='kw'>Environment</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ValidationSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ValidationRole <span class='op'>=</span> <span class='st'>"string"</span>,
+    ValidationProfiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ProfileName <span class='op'>=</span> <span class='st'>"string"</span>,
+        TransformJobDefinition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          MaxConcurrentTransforms <span class='op'>=</span> <span class='fl'>123</span>,
+          MaxPayloadInMB <span class='op'>=</span> <span class='fl'>123</span>,
+          BatchStrategy <span class='op'>=</span> <span class='st'>"MultiRecord"</span><span class='op'>|</span><span class='st'>"SingleRecord"</span>,
+          Environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='st'>"string"</span>
-          ),
-          <span class='kw'>TransformInput</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>DataSource</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>S3DataSource</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>S3DataType</span> <span class='kw'>=</span> <span class='st'>"ManifestFile"</span><span class='kw'>|</span><span class='st'>"S3Prefix"</span><span class='kw'>|</span><span class='st'>"AugmentedManifestFile"</span>,
-                <span class='kw'>S3Uri</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-              )
-            ),
-            <span class='kw'>ContentType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>CompressionType</span> <span class='kw'>=</span> <span class='st'>"None"</span><span class='kw'>|</span><span class='st'>"Gzip"</span>,
-            <span class='kw'>SplitType</span> <span class='kw'>=</span> <span class='st'>"None"</span><span class='kw'>|</span><span class='st'>"Line"</span><span class='kw'>|</span><span class='st'>"RecordIO"</span><span class='kw'>|</span><span class='st'>"TFRecord"</span>
-          ),
-          <span class='kw'>TransformOutput</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>S3OutputPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Accept</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>AssembleWith</span> <span class='kw'>=</span> <span class='st'>"None"</span><span class='kw'>|</span><span class='st'>"Line"</span>,
-            <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          ),
-          <span class='kw'>TransformResources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"ml.m4.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.10xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.large"</span><span class='kw'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.24xlarge"</span>,
-            <span class='kw'>InstanceCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>VolumeKmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>SourceAlgorithmSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SourceAlgorithms</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>ModelDataUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>AlgorithmName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>CertifyForMarketplace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+          <span class='op'>)</span>,
+          TransformInput <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            DataSource <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              S3DataSource <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                S3DataType <span class='op'>=</span> <span class='st'>"ManifestFile"</span><span class='op'>|</span><span class='st'>"S3Prefix"</span><span class='op'>|</span><span class='st'>"AugmentedManifestFile"</span>,
+                S3Uri <span class='op'>=</span> <span class='st'>"string"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>,
+            ContentType <span class='op'>=</span> <span class='st'>"string"</span>,
+            CompressionType <span class='op'>=</span> <span class='st'>"None"</span><span class='op'>|</span><span class='st'>"Gzip"</span>,
+            SplitType <span class='op'>=</span> <span class='st'>"None"</span><span class='op'>|</span><span class='st'>"Line"</span><span class='op'>|</span><span class='st'>"RecordIO"</span><span class='op'>|</span><span class='st'>"TFRecord"</span>
+          <span class='op'>)</span>,
+          TransformOutput <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            S3OutputPath <span class='op'>=</span> <span class='st'>"string"</span>,
+            Accept <span class='op'>=</span> <span class='st'>"string"</span>,
+            AssembleWith <span class='op'>=</span> <span class='st'>"None"</span><span class='op'>|</span><span class='st'>"Line"</span>,
+            KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          TransformResources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            InstanceType <span class='op'>=</span> <span class='st'>"ml.m4.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.10xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.large"</span><span class='op'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.24xlarge"</span>,
+            InstanceCount <span class='op'>=</span> <span class='fl'>123</span>,
+            VolumeKmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  SourceAlgorithmSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SourceAlgorithms <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ModelDataUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+        AlgorithmName <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  CertifyForMarketplace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ModelApprovalStatus <span class='op'>=</span> <span class='st'>"Approved"</span><span class='op'>|</span><span class='st'>"Rejected"</span><span class='op'>|</span><span class='st'>"PendingManualApproval"</span>,
+  MetadataProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CommitId <span class='op'>=</span> <span class='st'>"string"</span>,
+    Repository <span class='op'>=</span> <span class='st'>"string"</span>,
+    GeneratedBy <span class='op'>=</span> <span class='st'>"string"</span>,
+    ProjectId <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  ModelMetrics <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ModelQuality <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Statistics <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ContentType <span class='op'>=</span> <span class='st'>"string"</span>,
+        ContentDigest <span class='op'>=</span> <span class='st'>"string"</span>,
+        S3Uri <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      Constraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ContentType <span class='op'>=</span> <span class='st'>"string"</span>,
+        ContentDigest <span class='op'>=</span> <span class='st'>"string"</span>,
+        S3Uri <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ModelDataQuality <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Statistics <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ContentType <span class='op'>=</span> <span class='st'>"string"</span>,
+        ContentDigest <span class='op'>=</span> <span class='st'>"string"</span>,
+        S3Uri <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      Constraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ContentType <span class='op'>=</span> <span class='st'>"string"</span>,
+        ContentDigest <span class='op'>=</span> <span class='st'>"string"</span>,
+        S3Uri <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Bias <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Report <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ContentType <span class='op'>=</span> <span class='st'>"string"</span>,
+        ContentDigest <span class='op'>=</span> <span class='st'>"string"</span>,
+        S3Uri <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Explainability <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Report <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ContentType <span class='op'>=</span> <span class='st'>"string"</span>,
+        ContentDigest <span class='op'>=</span> <span class='st'>"string"</span>,
+        S3Uri <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -270,7 +383,7 @@ provide a value for <code>SourceAlgorithmSpecification</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

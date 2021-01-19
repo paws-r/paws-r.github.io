@@ -44,7 +44,25 @@ performance instances — ec2_describe_instance_credit_specifications • paws</
 performance instances — ec2_describe_instance_credit_specifications" />
 <meta property="og:description" content="Describes the credit option for CPU usage of the specified burstable
 performance instances. The credit options are standard and
-unlimited." />
+unlimited.
+If you do not specify an instance ID, Amazon EC2 returns burstable
+performance instances with the unlimited credit option, as well as
+instances that were previously configured as T2, T3, and T3a with the
+unlimited credit option. For example, if you resize a T2 instance,
+while it is configured as unlimited, to an M4 instance, Amazon EC2
+returns the M4 instance.
+If you specify one or more instance IDs, Amazon EC2 returns the credit
+option (standard or unlimited) of those instances. If you specify an
+instance ID that is not valid, such as an instance that is not a
+burstable performance instance, an error is returned.
+Recently terminated instances might appear in the returned results. This
+interval is usually less than one hour.
+If an Availability Zone is experiencing a service disruption and you
+specify instance IDs in the affected zone, or do not specify any
+instance IDs at all, the call fails. If you specify only instance IDs in
+an unaffected zone, the call works normally.
+For more information, see Burstable performance instances
+in the Amazon Elastic Compute Cloud User Guide." />
 
 
 
@@ -76,7 +94,7 @@ unlimited." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +102,7 @@ unlimited." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +114,7 @@ unlimited." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +141,28 @@ performance instances</h1>
     <p>Describes the credit option for CPU usage of the specified burstable
 performance instances. The credit options are <code>standard</code> and
 <code>unlimited</code>.</p>
+<p>If you do not specify an instance ID, Amazon EC2 returns burstable
+performance instances with the <code>unlimited</code> credit option, as well as
+instances that were previously configured as T2, T3, and T3a with the
+<code>unlimited</code> credit option. For example, if you resize a T2 instance,
+while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2
+returns the M4 instance.</p>
+<p>If you specify one or more instance IDs, Amazon EC2 returns the credit
+option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an
+instance ID that is not valid, such as an instance that is not a
+burstable performance instance, an error is returned.</p>
+<p>Recently terminated instances might appear in the returned results. This
+interval is usually less than one hour.</p>
+<p>If an Availability Zone is experiencing a service disruption and you
+specify instance IDs in the affected zone, or do not specify any
+instance IDs at all, the call fails. If you specify only instance IDs in
+an unaffected zone, the call works normally.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html'>Burstable performance instances</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_describe_instance_credit_specifications</span>(<span class='no'>DryRun</span>, <span class='no'>Filters</span>,
-  <span class='no'>InstanceIds</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_describe_instance_credit_specifications</span><span class='op'>(</span><span class='va'>DryRun</span>, <span class='va'>Filters</span>,
+  <span class='va'>InstanceIds</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,45 +199,26 @@ parameter and the instance IDs parameter in the same call.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you do not specify an instance ID, Amazon EC2 returns burstable
-performance instances with the <code>unlimited</code> credit option, as well as
-instances that were previously configured as T2, T3, and T3a with the
-<code>unlimited</code> credit option. For example, if you resize a T2 instance,
-while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2
-returns the M4 instance.</p>
-<p>If you specify one or more instance IDs, Amazon EC2 returns the credit
-option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an
-instance ID that is not valid, such as an instance that is not a
-burstable performance instance, an error is returned.</p>
-<p>Recently terminated instances might appear in the returned results. This
-interval is usually less than one hour.</p>
-<p>If an Availability Zone is experiencing a service disruption and you
-specify instance IDs in the affected zone, or do not specify any
-instance IDs at all, the call fails. If you specify only instance IDs in
-an unaffected zone, the call works normally.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html'>Burstable performance instances</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_instance_credit_specifications</span>(
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_instance_credit_specifications</span><span class='op'>(</span>
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>InstanceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  InstanceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -219,7 +236,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,30 @@
 
 
 <meta property="og:title" content="Creates a backup for an existing table — dynamodb_create_backup" />
-<meta property="og:description" content="Creates a backup for an existing table." />
+<meta property="og:description" content="Creates a backup for an existing table.
+Each time you create an on-demand backup, the entire table data is
+backed up. There is no limit to the number of on-demand backups that can
+be taken.
+When you create an on-demand backup, a time marker of the request is
+cataloged, and the backup is created asynchronously, by applying all
+changes until the time of the request to the last full table snapshot.
+Backup requests are processed instantaneously and become available for
+restore within minutes.
+You can call CreateBackup at a maximum rate of 50 times per second.
+All backups in DynamoDB work without consuming any provisioned
+throughput on the table.
+If you submit a backup request on 2018-12-14 at 14:25:00, the backup is
+guaranteed to contain all data committed to the table up to 14:24:00,
+and data committed after 14:26:00 will not be. The backup might contain
+data modifications made between 14:24:00 and 14:26:00. On-demand backup
+does not support causal consistency.
+Along with data, the following are also included on the backups:
+Global secondary indexes (GSIs)
+Local secondary indexes (LSIs)
+Streams
+Provisioned read and write capacity
+
+" />
 
 
 
@@ -72,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +103,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +115,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,26 +139,7 @@
 
     <div class="ref-description">
     <p>Creates a backup for an existing table.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>dynamodb_create_backup</span>(<span class='no'>TableName</span>, <span class='no'>BackupName</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>TableName</th>
-      <td><p>[required] The name of the table.</p></td>
-    </tr>
-    <tr>
-      <th>BackupName</th>
-      <td><p>[required] Specified name for the backup.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Each time you create an on-demand backup, the entire table data is
+<p>Each time you create an on-demand backup, the entire table data is
 backed up. There is no limit to the number of on-demand backups that can
 be taken.</p>
 <p>When you create an on-demand backup, a time marker of the request is
@@ -158,13 +162,31 @@ does not support causal consistency.</p>
 <li><p>Provisioned read and write capacity</p></li>
 </ul>
 
+    </div>
+
+    <pre class="usage"><span class='fu'>dynamodb_create_backup</span><span class='op'>(</span><span class='va'>TableName</span>, <span class='va'>BackupName</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>TableName</th>
+      <td><p>[required] The name of the table.</p></td>
+    </tr>
+    <tr>
+      <th>BackupName</th>
+      <td><p>[required] Specified name for the backup.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_backup</span>(
-  <span class='kw'>TableName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>BackupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_backup</span><span class='op'>(</span>
+  TableName <span class='op'>=</span> <span class='st'>"string"</span>,
+  BackupName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -182,7 +204,7 @@ does not support causal consistency.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

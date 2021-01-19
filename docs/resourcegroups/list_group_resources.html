@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Returns a list of ARNs of resources that are members of a specified
+<title>Returns a list of ARNs of the resources that are members of a specified
 resource group — resourcegroups_list_group_resources • paws</title>
 
 
@@ -40,10 +40,15 @@ resource group — resourcegroups_list_group_resources • paws</title>
 
 
 
-<meta property="og:title" content="Returns a list of ARNs of resources that are members of a specified
+<meta property="og:title" content="Returns a list of ARNs of the resources that are members of a specified
 resource group — resourcegroups_list_group_resources" />
-<meta property="og:description" content="Returns a list of ARNs of resources that are members of a specified
-resource group." />
+<meta property="og:description" content="Returns a list of ARNs of the resources that are members of a specified
+resource group.
+Minimum permissions
+To run this command, you must have the following permissions:
+resource-groups:ListGroupResources
+
+" />
 
 
 
@@ -75,7 +80,7 @@ resource group." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +88,7 @@ resource group." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +100,7 @@ resource group." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,66 +117,104 @@ resource group." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Returns a list of ARNs of resources that are members of a specified
+    <h1>Returns a list of ARNs of the resources that are members of a specified
 resource group</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/resourcegroups_operations.R'><code>R/resourcegroups_operations.R</code></a></small>
     <div class="hidden name"><code>resourcegroups_list_group_resources.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns a list of ARNs of resources that are members of a specified
+    <p>Returns a list of ARNs of the resources that are members of a specified
 resource group.</p>
+<p><strong>Minimum permissions</strong></p>
+<p>To run this command, you must have the following permissions:</p><ul>
+<li><p><code>resource-groups:ListGroupResources</code></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>resourcegroups_list_group_resources</span>(<span class='no'>GroupName</span>, <span class='no'>Filters</span>, <span class='no'>MaxResults</span>,
-  <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>resourcegroups_list_group_resources</span><span class='op'>(</span><span class='va'>GroupName</span>, <span class='va'>Group</span>, <span class='va'>Filters</span>,
+  <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>GroupName</th>
-      <td><p>[required] The name of the resource group.</p></td>
+      <td><p><em><strong>Deprecated - don't use this parameter. Use the <code>Group</code> request field
+instead.</strong></em></p></td>
+    </tr>
+    <tr>
+      <th>Group</th>
+      <td><p>The name or the ARN of the resource group</p></td>
     </tr>
     <tr>
       <th>Filters</th>
       <td><p>Filters, formatted as ResourceFilter objects, that you want to apply to
-a ListGroupResources operation.</p><ul>
+a <code>ListGroupResources</code> operation. Filters the results to include only
+those of the specified resource types.</p><ul>
 <li><p><code>resource-type</code> - Filter resources by their type. Specify up to five
-resource types in the format AWS::ServiceCode::ResourceType. For
-example, AWS::EC2::Instance, or AWS::S3::Bucket.</p></li>
-</ul></td>
+resource types in the format <code>AWS::ServiceCode::ResourceType</code>. For
+example, <code>AWS::EC2::Instance</code>, or <code>AWS::S3::Bucket</code>.</p></li>
+</ul>
+
+<p>When you specify a <code>resource-type</code> filter for <code>ListGroupResources</code>, AWS
+Resource Groups validates your filter resource types against the types
+that are defined in the query associated with the group. For example, if
+a group contains only S3 buckets because its query specifies only that
+resource type, but your <code>resource-type</code> filter includes EC2 instances,
+AWS Resource Groups does not filter for EC2 instances. In this case, a
+<code>ListGroupResources</code> request returns a <code>BadRequestException</code> error with
+a message similar to the following:</p>
+<p><code>The resource types specified as filters in the request are not valid.</code></p>
+<p>The error includes a list of resource types that failed the validation
+because they are not part of the query associated with the group. This
+validation doesn't occur when the group query specifies
+<code>AWS::AllSupported</code>, because a group based on such a query can contain
+any of the allowed resource types for the query type (tag-based or AWS
+CloudFormation stack-based queries).</p></td>
     </tr>
     <tr>
       <th>MaxResults</th>
-      <td><p>The maximum number of group member ARNs that are returned in a single
-call by ListGroupResources, in paginated output. By default, this number
-is 50.</p></td>
+      <td><p>The total number of results that you want included on each page of the
+response. If you do not include this parameter, it defaults to a value
+that is specific to the operation. If additional items exist beyond the
+maximum you specify, the <code>NextToken</code> response element is present and has
+a value (is not null). Include that value as the <code>NextToken</code> request
+parameter in the next call to the operation to get the next part of the
+results. Note that the service might return fewer results than the
+maximum even when there are more results available. You should check
+<code>NextToken</code> after every operation to ensure that you receive all of the
+results.</p></td>
     </tr>
     <tr>
       <th>NextToken</th>
-      <td><p>The NextToken value that is returned in a paginated ListGroupResources
-request. To get the next page of results, run the call again, add the
-NextToken parameter, and specify the NextToken value.</p></td>
+      <td><p>The parameter for receiving additional results if you receive a
+<code>NextToken</code> response in a previous request. A <code>NextToken</code> response
+indicates that more output is available. Set this parameter to the value
+provided by a previous call's <code>NextToken</code> response to indicate where the
+output should continue from.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_group_resources</span>(
-  <span class='kw'>GroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"resource-type"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_group_resources</span><span class='op'>(</span>
+  GroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Group <span class='op'>=</span> <span class='st'>"string"</span>,
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"resource-type"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -189,7 +232,7 @@ NextToken parameter, and specify the NextToken value.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

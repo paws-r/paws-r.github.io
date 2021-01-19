@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,14 +118,19 @@
     <p>Creates a broker. Note: This API is asynchronous.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mq_create_broker</span>(<span class='no'>AutoMinorVersionUpgrade</span>, <span class='no'>BrokerName</span>, <span class='no'>Configuration</span>,
-  <span class='no'>CreatorRequestId</span>, <span class='no'>DeploymentMode</span>, <span class='no'>EncryptionOptions</span>, <span class='no'>EngineType</span>,
-  <span class='no'>EngineVersion</span>, <span class='no'>HostInstanceType</span>, <span class='no'>Logs</span>, <span class='no'>MaintenanceWindowStartTime</span>,
-  <span class='no'>PubliclyAccessible</span>, <span class='no'>SecurityGroups</span>, <span class='no'>StorageType</span>, <span class='no'>SubnetIds</span>, <span class='no'>Tags</span>, <span class='no'>Users</span>)</pre>
+    <pre class="usage"><span class='fu'>mq_create_broker</span><span class='op'>(</span><span class='va'>AuthenticationStrategy</span>, <span class='va'>AutoMinorVersionUpgrade</span>,
+  <span class='va'>BrokerName</span>, <span class='va'>Configuration</span>, <span class='va'>CreatorRequestId</span>, <span class='va'>DeploymentMode</span>,
+  <span class='va'>EncryptionOptions</span>, <span class='va'>EngineType</span>, <span class='va'>EngineVersion</span>, <span class='va'>HostInstanceType</span>,
+  <span class='va'>LdapServerMetadata</span>, <span class='va'>Logs</span>, <span class='va'>MaintenanceWindowStartTime</span>,
+  <span class='va'>PubliclyAccessible</span>, <span class='va'>SecurityGroups</span>, <span class='va'>StorageType</span>, <span class='va'>SubnetIds</span>, <span class='va'>Tags</span>, <span class='va'>Users</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>AuthenticationStrategy</th>
+      <td><p>The authentication strategy used to secure the broker.</p></td>
+    </tr>
     <tr>
       <th>AutoMinorVersionUpgrade</th>
       <td><p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p></td>
@@ -152,7 +157,7 @@
     </tr>
     <tr>
       <th>EngineType</th>
-      <td><p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p></td>
+      <td><p>Required. The type of broker engine. Note: Currently, Amazon MQ supports ACTIVEMQ and RABBITMQ.</p></td>
     </tr>
     <tr>
       <th>EngineVersion</th>
@@ -161,6 +166,10 @@
     <tr>
       <th>HostInstanceType</th>
       <td><p>Required. The broker's instance type.</p></td>
+    </tr>
+    <tr>
+      <th>LdapServerMetadata</th>
+      <td><p>The metadata of the LDAP server used to authenticate and authorize connections to the broker.</p></td>
     </tr>
     <tr>
       <th>Logs</th>
@@ -184,7 +193,7 @@
     </tr>
     <tr>
       <th>SubnetIds</th>
-      <td><p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ deployment requires two subnets.</p></td>
+      <td><p>The list of groups that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE_INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE_STANDBY_MULTI_AZ deployment (ACTIVEMQ) requires two subnets. A CLUSTER_MULTI_AZ deployment (RABBITMQ) has no subnet requirements when deployed with public accessibility, deployment without public accessibility requires at least one subnet.</p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -192,60 +201,77 @@
     </tr>
     <tr>
       <th>Users</th>
-      <td><p>Required. The list of ActiveMQ users (persons or applications) who can access queues and topics. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p></td>
+      <td><p>Required. The list of broker users (persons or applications) who can access queues and topics. For RabbitMQ brokers, one and only one administrative user is accepted and created when a broker is first provisioned. All subsequent broker users are created by making RabbitMQ API calls directly to brokers or via the RabbitMQ Web Console. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_broker</span>(
-  <span class='kw'>AutoMinorVersionUpgrade</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>BrokerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Configuration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Revision</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>CreatorRequestId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DeploymentMode</span> <span class='kw'>=</span> <span class='st'>"SINGLE_INSTANCE"</span><span class='kw'>|</span><span class='st'>"ACTIVE_STANDBY_MULTI_AZ"</span>,
-  <span class='kw'>EncryptionOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>UseAwsOwnedKey</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>EngineType</span> <span class='kw'>=</span> <span class='st'>"ACTIVEMQ"</span>,
-  <span class='kw'>EngineVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HostInstanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Logs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Audit</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>General</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>MaintenanceWindowStartTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DayOfWeek</span> <span class='kw'>=</span> <span class='st'>"MONDAY"</span><span class='kw'>|</span><span class='st'>"TUESDAY"</span><span class='kw'>|</span><span class='st'>"WEDNESDAY"</span><span class='kw'>|</span><span class='st'>"THURSDAY"</span><span class='kw'>|</span><span class='st'>"FRIDAY"</span><span class='kw'>|</span><span class='st'>"SATURDAY"</span><span class='kw'>|</span><span class='st'>"SUNDAY"</span>,
-    <span class='kw'>TimeOfDay</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>TimeZone</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>PubliclyAccessible</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>SecurityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_broker</span><span class='op'>(</span>
+  AuthenticationStrategy <span class='op'>=</span> <span class='st'>"SIMPLE"</span><span class='op'>|</span><span class='st'>"LDAP"</span>,
+  AutoMinorVersionUpgrade <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  BrokerName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Configuration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Id <span class='op'>=</span> <span class='st'>"string"</span>,
+    Revision <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  CreatorRequestId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DeploymentMode <span class='op'>=</span> <span class='st'>"SINGLE_INSTANCE"</span><span class='op'>|</span><span class='st'>"ACTIVE_STANDBY_MULTI_AZ"</span><span class='op'>|</span><span class='st'>"CLUSTER_MULTI_AZ"</span>,
+  EncryptionOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+    UseAwsOwnedKey <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  EngineType <span class='op'>=</span> <span class='st'>"ACTIVEMQ"</span><span class='op'>|</span><span class='st'>"RABBITMQ"</span>,
+  EngineVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  HostInstanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+  LdapServerMetadata <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Hosts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    RoleBase <span class='op'>=</span> <span class='st'>"string"</span>,
+    RoleName <span class='op'>=</span> <span class='st'>"string"</span>,
+    RoleSearchMatching <span class='op'>=</span> <span class='st'>"string"</span>,
+    RoleSearchSubtree <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    ServiceAccountPassword <span class='op'>=</span> <span class='st'>"string"</span>,
+    ServiceAccountUsername <span class='op'>=</span> <span class='st'>"string"</span>,
+    UserBase <span class='op'>=</span> <span class='st'>"string"</span>,
+    UserRoleName <span class='op'>=</span> <span class='st'>"string"</span>,
+    UserSearchMatching <span class='op'>=</span> <span class='st'>"string"</span>,
+    UserSearchSubtree <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  Logs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Audit <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    General <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  MaintenanceWindowStartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DayOfWeek <span class='op'>=</span> <span class='st'>"MONDAY"</span><span class='op'>|</span><span class='st'>"TUESDAY"</span><span class='op'>|</span><span class='st'>"WEDNESDAY"</span><span class='op'>|</span><span class='st'>"THURSDAY"</span><span class='op'>|</span><span class='st'>"FRIDAY"</span><span class='op'>|</span><span class='st'>"SATURDAY"</span><span class='op'>|</span><span class='st'>"SUNDAY"</span>,
+    TimeOfDay <span class='op'>=</span> <span class='st'>"string"</span>,
+    TimeZone <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  PubliclyAccessible <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  SecurityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>StorageType</span> <span class='kw'>=</span> <span class='st'>"EBS"</span><span class='kw'>|</span><span class='st'>"EFS"</span>,
-  <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  StorageType <span class='op'>=</span> <span class='st'>"EBS"</span><span class='op'>|</span><span class='st'>"EFS"</span>,
+  SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Users</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ConsoleAccess</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Groups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Users <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ConsoleAccess <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Groups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>Password</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Username</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+      <span class='op'>)</span>,
+      Password <span class='op'>=</span> <span class='st'>"string"</span>,
+      Username <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -263,7 +289,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

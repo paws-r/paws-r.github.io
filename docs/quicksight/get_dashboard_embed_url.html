@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generates a URL and authorization code that you can embed in your web
-server code — quicksight_get_dashboard_embed_url • paws</title>
+<title>Generates a session URL and authorization code that you can use to embed
+an Amazon QuickSight read-only dashboard in your web server code — quicksight_get_dashboard_embed_url • paws</title>
 
 
 <!-- jquery -->
@@ -40,11 +40,23 @@ server code — quicksight_get_dashboard_embed_url • paws</title>
 
 
 
-<meta property="og:title" content="Generates a URL and authorization code that you can embed in your web
-server code — quicksight_get_dashboard_embed_url" />
-<meta property="og:description" content="Generates a URL and authorization code that you can embed in your web
-server code. Before you use this command, make sure that you have
-configured the dashboards and permissions." />
+<meta property="og:title" content="Generates a session URL and authorization code that you can use to embed
+an Amazon QuickSight read-only dashboard in your web server code — quicksight_get_dashboard_embed_url" />
+<meta property="og:description" content="Generates a session URL and authorization code that you can use to embed
+an Amazon QuickSight read-only dashboard in your web server code. Before
+you use this command, make sure that you have configured the dashboards
+and permissions.
+Currently, you can use GetDashboardEmbedURL only from the server, not
+from the user's browser. The following rules apply to the combination of
+URL and authorization code:
+They must be used together.
+They can be used one time only.
+They are valid for 5 minutes after you run this command.
+The resulting user session is valid for 10 hours.
+
+
+For more information, see Embedded Analytics
+in the Amazon QuickSight User Guide." />
 
 
 
@@ -76,7 +88,7 @@ configured the dashboards and permissions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +96,7 @@ configured the dashboards and permissions." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +108,7 @@ configured the dashboards and permissions." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -113,33 +125,46 @@ configured the dashboards and permissions." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generates a URL and authorization code that you can embed in your web
-server code</h1>
+    <h1>Generates a session URL and authorization code that you can use to embed
+an Amazon QuickSight read-only dashboard in your web server code</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/quicksight_operations.R'><code>R/quicksight_operations.R</code></a></small>
     <div class="hidden name"><code>quicksight_get_dashboard_embed_url.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generates a URL and authorization code that you can embed in your web
-server code. Before you use this command, make sure that you have
-configured the dashboards and permissions.</p>
+    <p>Generates a session URL and authorization code that you can use to embed
+an Amazon QuickSight read-only dashboard in your web server code. Before
+you use this command, make sure that you have configured the dashboards
+and permissions.</p>
+<p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not
+from the user's browser. The following rules apply to the combination of
+URL and authorization code:</p><ul>
+<li><p>They must be used together.</p></li>
+<li><p>They can be used one time only.</p></li>
+<li><p>They are valid for 5 minutes after you run this command.</p></li>
+<li><p>The resulting user session is valid for 10 hours.</p></li>
+</ul>
+
+<p>For more information, see <a href='https://docs.aws.amazon.com/quicksight/latest/user/embedded-analytics.html'>Embedded Analytics</a>
+in the <em>Amazon QuickSight User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>quicksight_get_dashboard_embed_url</span>(<span class='no'>AwsAccountId</span>, <span class='no'>DashboardId</span>,
-  <span class='no'>IdentityType</span>, <span class='no'>SessionLifetimeInMinutes</span>, <span class='no'>UndoRedoDisabled</span>, <span class='no'>ResetDisabled</span>,
-  <span class='no'>UserArn</span>)</pre>
+    <pre class="usage"><span class='fu'>quicksight_get_dashboard_embed_url</span><span class='op'>(</span><span class='va'>AwsAccountId</span>, <span class='va'>DashboardId</span>,
+  <span class='va'>IdentityType</span>, <span class='va'>SessionLifetimeInMinutes</span>, <span class='va'>UndoRedoDisabled</span>, <span class='va'>ResetDisabled</span>,
+  <span class='va'>StatePersistenceEnabled</span>, <span class='va'>UserArn</span>, <span class='va'>Namespace</span>, <span class='va'>AdditionalDashboardIds</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>AwsAccountId</th>
-      <td><p>[required] The ID for the AWS account that contains the dashboard that you\'re
+      <td><p>[required] The ID for the AWS account that contains the dashboard that you're
 embedding.</p></td>
     </tr>
     <tr>
       <th>DashboardId</th>
-      <td><p>[required] The ID for the dashboard, also added to the IAM policy.</p></td>
+      <td><p>[required] The ID for the dashboard, also added to the AWS Identity and Access
+Management (IAM) policy.</p></td>
     </tr>
     <tr>
       <th>IdentityType</th>
@@ -161,8 +186,19 @@ FALSE, which enables the undo/redo button.</p></td>
 which enables the reset button.</p></td>
     </tr>
     <tr>
+      <th>StatePersistenceEnabled</th>
+      <td><p>Adds persistence of state for the user session in an embedded dashboard.
+Persistence applies to the sheet and the parameter settings. These are
+control settings that the dashboard subscriber (QuickSight reader)
+chooses while viewing the dashboard. If this is set to <code>TRUE</code>, the
+settings are the same when the subscriber reopens the same dashboard
+URL. The state is stored in QuickSight, not in a browser cookie. If this
+is set to FALSE, the state of the user session is not persisted. The
+default is <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
       <th>UserArn</th>
-      <td><p>The Amazon QuickSight user\'s Amazon Resource Name (ARN), for use with
+      <td><p>The Amazon QuickSight user's Amazon Resource Name (ARN), for use with
 <code>QUICKSIGHT</code> identity type. You can use this for any Amazon QuickSight
 users in your account (readers, authors, or admins) authenticated as one
 of the following:</p><ul>
@@ -171,36 +207,46 @@ of the following:</p><ul>
 <li><p>IAM users and IAM role-based sessions authenticated through
 Federated Single Sign-On using SAML, OpenID Connect, or IAM
 federation.</p></li>
-</ul></td>
+</ul>
+
+<p>Omit this parameter for users in the third group – IAM users and IAM
+role-based sessions.</p></td>
+    </tr>
+    <tr>
+      <th>Namespace</th>
+      <td><p>The QuickSight namespace that contains the dashboard IDs in this
+request. If you're not using a custom namespace, set this to
+"<code>default</code>".</p></td>
+    </tr>
+    <tr>
+      <th>AdditionalDashboardIds</th>
+      <td><p>A list of one or more dashboard IDs that you want to add to a session
+that includes anonymous users. The <code>IdentityType</code> parameter must be set
+to <code>ANONYMOUS</code> for this to work, because other identity types
+authenticate as QuickSight or IAM users. For example, if you set
+"<code>--dashboard-id dash_id1 --dashboard-id dash_id2 dash_id3 identity-type ANONYMOUS</code>",
+the session can access all three dashboards.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Currently, you can use <code>GetDashboardEmbedURL</code> only from the server, not
-from the user\'s browser. The following rules apply to the combination
-of URL and authorization code:</p><ul>
-<li><p>They must be used together.</p></li>
-<li><p>They can be used one time only.</p></li>
-<li><p>They are valid for 5 minutes after you run this command.</p></li>
-<li><p>The resulting user session is valid for 10 hours.</p></li>
-</ul>
-
-<p>For more information, see <a href='https://docs.aws.amazon.com/quicksight/latest/user/embedding-dashboards.html'>Embedding Amazon QuickSight Dashboards</a>
-in the <em>Amazon QuickSight User Guide</em> or <a href='https://docs.aws.amazon.com/quicksight/latest/APIReference/qs-dev-embedded-dashboards.html'>Embedding Amazon QuickSight Dashboards</a>
-in the <em>Amazon QuickSight API Reference</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_dashboard_embed_url</span>(
-  <span class='kw'>AwsAccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DashboardId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IdentityType</span> <span class='kw'>=</span> <span class='st'>"IAM"</span><span class='kw'>|</span><span class='st'>"QUICKSIGHT"</span>,
-  <span class='kw'>SessionLifetimeInMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>UndoRedoDisabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>ResetDisabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>UserArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_dashboard_embed_url</span><span class='op'>(</span>
+  AwsAccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DashboardId <span class='op'>=</span> <span class='st'>"string"</span>,
+  IdentityType <span class='op'>=</span> <span class='st'>"IAM"</span><span class='op'>|</span><span class='st'>"QUICKSIGHT"</span><span class='op'>|</span><span class='st'>"ANONYMOUS"</span>,
+  SessionLifetimeInMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+  UndoRedoDisabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  ResetDisabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  StatePersistenceEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  UserArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+  AdditionalDashboardIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -218,7 +264,7 @@ in the <em>Amazon QuickSight API Reference</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

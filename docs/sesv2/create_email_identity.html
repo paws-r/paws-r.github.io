@@ -43,9 +43,26 @@
 <meta property="og:description" content="Starts the process of verifying an email identity. An identity is an
 email address or domain that you use when you send email. Before you can
 use an identity to send email, you first have to verify it. By verifying
-an identity, you demonstrate that you\'re the owner of the identity, and
-that you\'ve given Amazon SES API v2 permission to send email from the
-identity." />
+an identity, you demonstrate that you're the owner of the identity, and
+that you've given Amazon SES API v2 permission to send email from the
+identity.
+When you verify an email address, Amazon SES sends an email to the
+address. Your email address is verified as soon as you follow the link
+in the verification email.
+When you verify a domain without specifying the DkimSigningAttributes
+object, this operation provides a set of DKIM tokens. You can convert
+these tokens into CNAME records, which you then add to the DNS
+configuration for your domain. Your domain is verified when Amazon SES
+detects these records in the DNS configuration for your domain. This
+verification method is known as Easy DKIM.
+Alternatively, you can perform the verification process by providing
+your own public-private key pair. This verification method is known as
+Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the
+CreateEmailIdentity operation has to include the
+DkimSigningAttributes object. When you specify this object, you
+provide a selector (a component of the DNS record name that identifies
+the public key that you want to use for DKIM authentication) and a
+private key." />
 
 
 
@@ -77,7 +94,7 @@ identity." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +102,7 @@ identity." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +114,7 @@ identity." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,12 +140,29 @@ identity." />
     <p>Starts the process of verifying an email identity. An <em>identity</em> is an
 email address or domain that you use when you send email. Before you can
 use an identity to send email, you first have to verify it. By verifying
-an identity, you demonstrate that you\'re the owner of the identity, and
-that you\'ve given Amazon SES API v2 permission to send email from the
+an identity, you demonstrate that you're the owner of the identity, and
+that you've given Amazon SES API v2 permission to send email from the
 identity.</p>
+<p>When you verify an email address, Amazon SES sends an email to the
+address. Your email address is verified as soon as you follow the link
+in the verification email.</p>
+<p>When you verify a domain without specifying the <code>DkimSigningAttributes</code>
+object, this operation provides a set of DKIM tokens. You can convert
+these tokens into CNAME records, which you then add to the DNS
+configuration for your domain. Your domain is verified when Amazon SES
+detects these records in the DNS configuration for your domain. This
+verification method is known as <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-authentication-dkim-easy.html'>Easy DKIM</a>.</p>
+<p>Alternatively, you can perform the verification process by providing
+your own public-private key pair. This verification method is known as
+Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the
+<code>CreateEmailIdentity</code> operation has to include the
+<code>DkimSigningAttributes</code> object. When you specify this object, you
+provide a selector (a component of the DNS record name that identifies
+the public key that you want to use for DKIM authentication) and a
+private key.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sesv2_create_email_identity</span>(<span class='no'>EmailIdentity</span>, <span class='no'>Tags</span>, <span class='no'>DkimSigningAttributes</span>)</pre>
+    <pre class="usage"><span class='fu'>sesv2_create_email_identity</span><span class='op'>(</span><span class='va'>EmailIdentity</span>, <span class='va'>Tags</span>, <span class='va'>DkimSigningAttributes</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,47 +180,29 @@ to associate with the email identity.</p></td>
       <th>DkimSigningAttributes</th>
       <td><p>If your request includes this object, Amazon SES configures the identity
 to use Bring Your Own DKIM (BYODKIM) for DKIM authentication purposes,
-as opposed to the default method, <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html'>Easy DKIM</a>.</p>
+as opposed to the default method, <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-authentication-dkim-easy.html'>Easy DKIM</a>.</p>
 <p>You can only specify this object if the email identity is a domain, as
 opposed to an address.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you verify an email address, Amazon SES sends an email to the
-address. Your email address is verified as soon as you follow the link
-in the verification email.</p>
-<p>When you verify a domain without specifying the <code>DkimSigningAttributes</code>
-object, this operation provides a set of DKIM tokens. You can convert
-these tokens into CNAME records, which you then add to the DNS
-configuration for your domain. Your domain is verified when Amazon SES
-detects these records in the DNS configuration for your domain. This
-verification method is known as <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html'>Easy DKIM</a>.</p>
-<p>Alternatively, you can perform the verification process by providing
-your own public-private key pair. This verification method is known as
-Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the
-<code>CreateEmailIdentity</code> operation has to include the
-<code>DkimSigningAttributes</code> object. When you specify this object, you
-provide a selector (a component of the DNS record name that identifies
-the public key that you want to use for DKIM authentication) and a
-private key.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_email_identity</span>(
-  <span class='kw'>EmailIdentity</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>DkimSigningAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DomainSigningSelector</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DomainSigningPrivateKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_email_identity</span><span class='op'>(</span>
+  EmailIdentity <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DkimSigningAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DomainSigningSelector <span class='op'>=</span> <span class='st'>"string"</span>,
+    DomainSigningPrivateKey <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -204,7 +220,7 @@ private key.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

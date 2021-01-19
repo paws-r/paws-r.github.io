@@ -44,7 +44,38 @@ cluster that you own and manage — kms_create_custom_key_store • paws</title>
 cluster that you own and manage — kms_create_custom_key_store" />
 <meta property="og:description" content="Creates a custom key store
 that is associated with an AWS CloudHSM cluster
-that you own and manage." />
+that you own and manage.
+This operation is part of the Custom Key Store feature
+feature in AWS KMS, which combines the convenience and extensive
+integration of AWS KMS with the isolation and control of a single-tenant
+key store.
+Before you create the custom key store, you must assemble the required
+elements, including an AWS CloudHSM cluster that fulfills the
+requirements for a custom key store. For details about the required
+elements, see Assemble the Prerequisites
+in the AWS Key Management Service Developer Guide.
+When the operation completes successfully, it returns the ID of the new
+custom key store. Before you can use your new custom key store, you need
+to use the ConnectCustomKeyStore operation to connect the new key store
+to its AWS CloudHSM cluster. Even if you are not going to use your
+custom key store immediately, you might want to connect it to verify
+that all settings are correct and then disconnect it until you are ready
+to use it.
+For help with failures, see Troubleshooting a Custom Key Store
+in the AWS Key Management Service Developer Guide.
+Cross-account use: No. You cannot perform this operation on a custom
+key store in a different AWS account.
+Required permissions:
+kms:CreateCustomKeyStore
+(IAM policy).
+Related operations:
+ConnectCustomKeyStore
+DeleteCustomKeyStore
+DescribeCustomKeyStores
+DisconnectCustomKeyStore
+UpdateCustomKeyStore
+
+" />
 
 
 
@@ -76,7 +107,7 @@ that you own and manage." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +115,7 @@ that you own and manage." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +127,7 @@ that you own and manage." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +154,41 @@ cluster that you own and manage</h1>
     <p>Creates a <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key store</a>
 that is associated with an <a href='https://docs.aws.amazon.com/cloudhsm/latest/userguide/clusters.html'>AWS CloudHSM cluster</a>
 that you own and manage.</p>
+<p>This operation is part of the <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>Custom Key Store feature</a>
+feature in AWS KMS, which combines the convenience and extensive
+integration of AWS KMS with the isolation and control of a single-tenant
+key store.</p>
+<p>Before you create the custom key store, you must assemble the required
+elements, including an AWS CloudHSM cluster that fulfills the
+requirements for a custom key store. For details about the required
+elements, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/create-keystore.html#before-keystore'>Assemble the Prerequisites</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p>When the operation completes successfully, it returns the ID of the new
+custom key store. Before you can use your new custom key store, you need
+to use the ConnectCustomKeyStore operation to connect the new key store
+to its AWS CloudHSM cluster. Even if you are not going to use your
+custom key store immediately, you might want to connect it to verify
+that all settings are correct and then disconnect it until you are ready
+to use it.</p>
+<p>For help with failures, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html'>Troubleshooting a Custom Key Store</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p><strong>Cross-account use</strong>: No. You cannot perform this operation on a custom
+key store in a different AWS account.</p>
+<p><strong>Required permissions</strong>:
+<a href='https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html'>kms:CreateCustomKeyStore</a>
+(IAM policy).</p>
+<p><strong>Related operations:</strong></p><ul>
+<li><p>ConnectCustomKeyStore</p></li>
+<li><p>DeleteCustomKeyStore</p></li>
+<li><p>DescribeCustomKeyStores</p></li>
+<li><p>DisconnectCustomKeyStore</p></li>
+<li><p>UpdateCustomKeyStore</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>kms_create_custom_key_store</span>(<span class='no'>CustomKeyStoreName</span>, <span class='no'>CloudHsmClusterId</span>,
-  <span class='no'>TrustAnchorCertificate</span>, <span class='no'>KeyStorePassword</span>)</pre>
+    <pre class="usage"><span class='fu'>kms_create_custom_key_store</span><span class='op'>(</span><span class='va'>CustomKeyStoreName</span>, <span class='va'>CloudHsmClusterId</span>,
+  <span class='va'>TrustAnchorCertificate</span>, <span class='va'>KeyStorePassword</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,35 +224,16 @@ change the password in the AWS CloudHSM cluster.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation is part of the <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>Custom Key Store feature</a>
-feature in AWS KMS, which combines the convenience and extensive
-integration of AWS KMS with the isolation and control of a single-tenant
-key store.</p>
-<p>Before you create the custom key store, you must assemble the required
-elements, including an AWS CloudHSM cluster that fulfills the
-requirements for a custom key store. For details about the required
-elements, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/create-keystore.html#before-keystore'>Assemble the Prerequisites</a>
-in the <em>AWS Key Management Service Developer Guide</em>.</p>
-<p>When the operation completes successfully, it returns the ID of the new
-custom key store. Before you can use your new custom key store, you need
-to use the ConnectCustomKeyStore operation to connect the new key store
-to its AWS CloudHSM cluster. Even if you are not going to use your
-custom key store immediately, you might want to connect it to verify
-that all settings are correct and then disconnect it until you are ready
-to use it.</p>
-<p>For help with failures, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html'>Troubleshooting a Custom Key Store</a>
-in the <em>AWS Key Management Service Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_custom_key_store</span>(
-  <span class='kw'>CustomKeyStoreName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CloudHsmClusterId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TrustAnchorCertificate</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>KeyStorePassword</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_custom_key_store</span><span class='op'>(</span>
+  CustomKeyStoreName <span class='op'>=</span> <span class='st'>"string"</span>,
+  CloudHsmClusterId <span class='op'>=</span> <span class='st'>"string"</span>,
+  TrustAnchorCertificate <span class='op'>=</span> <span class='st'>"string"</span>,
+  KeyStorePassword <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -208,7 +251,7 @@ in the <em>AWS Key Management Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

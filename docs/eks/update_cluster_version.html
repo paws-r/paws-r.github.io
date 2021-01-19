@@ -43,7 +43,14 @@
 <meta property="og:description" content="Updates an Amazon EKS cluster to the specified Kubernetes version. Your
 cluster continues to function during the update. The response output
 includes an update ID that you can use to track the status of your
-cluster update with the DescribeUpdate API operation." />
+cluster update with the DescribeUpdate API operation.
+Cluster updates are asynchronous, and they should finish within a few
+minutes. During an update, the cluster status moves to UPDATING (this
+status transition is eventually consistent). When the update is complete
+(either Failed or Successful), the cluster status moves to Active.
+If your cluster has managed node groups attached to it, all of your node
+groups’ Kubernetes versions must match the cluster’s Kubernetes version
+in order to update the cluster to a new Kubernetes version." />
 
 
 
@@ -75,7 +82,7 @@ cluster update with the DescribeUpdate API operation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +90,7 @@ cluster update with the DescribeUpdate API operation." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +102,7 @@ cluster update with the DescribeUpdate API operation." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,9 +129,16 @@ cluster update with the DescribeUpdate API operation." />
 cluster continues to function during the update. The response output
 includes an update ID that you can use to track the status of your
 cluster update with the DescribeUpdate API operation.</p>
+<p>Cluster updates are asynchronous, and they should finish within a few
+minutes. During an update, the cluster status moves to <code>UPDATING</code> (this
+status transition is eventually consistent). When the update is complete
+(either <code>Failed</code> or <code>Successful</code>), the cluster status moves to <code>Active</code>.</p>
+<p>If your cluster has managed node groups attached to it, all of your node
+groups’ Kubernetes versions must match the cluster’s Kubernetes version
+in order to update the cluster to a new Kubernetes version.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>eks_update_cluster_version</span>(<span class='no'>name</span>, <span class='no'>version</span>, <span class='no'>clientRequestToken</span>)</pre>
+    <pre class="usage"><span class='fu'>eks_update_cluster_version</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>version</span>, <span class='va'>clientRequestToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,23 +158,15 @@ idempotency of the request.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Cluster updates are asynchronous, and they should finish within a few
-minutes. During an update, the cluster status moves to <code>UPDATING</code> (this
-status transition is eventually consistent). When the update is complete
-(either <code>Failed</code> or <code>Successful</code>), the cluster status moves to <code>Active</code>.</p>
-<p>If your cluster has managed node groups attached to it, all of your node
-groups' Kubernetes versions must match the cluster's Kubernetes version
-in order to update the cluster to a new Kubernetes version.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_cluster_version</span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>clientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_cluster_version</span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"string"</span>,
+  version <span class='op'>=</span> <span class='st'>"string"</span>,
+  clientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -178,7 +184,7 @@ in order to update the cluster to a new Kubernetes version.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

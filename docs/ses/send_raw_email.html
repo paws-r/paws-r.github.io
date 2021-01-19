@@ -40,7 +40,76 @@
 
 
 <meta property="og:title" content="Composes an email message and immediately queues it for sending — ses_send_raw_email" />
-<meta property="og:description" content="Composes an email message and immediately queues it for sending." />
+<meta property="og:description" content="Composes an email message and immediately queues it for sending.
+This operation is more flexible than the SendEmail API operation. When
+you use the SendRawEmail operation, you can specify the headers of the
+message as well as its content. This flexibility is useful, for example,
+when you want to send a multipart MIME email (such a message that
+contains both a text and an HTML version). You can also use this
+operation to send messages that include attachments.
+The SendRawEmail operation has the following requirements:
+You can only send email from verified email addresses or domains.
+If you try to send email from an address that isn't verified, the
+operation results in an &quot;Email address not verified&quot; error.
+If your account is still in the Amazon SES sandbox,
+you can only send email to other verified addresses in your account,
+or to addresses that are associated with the Amazon SES mailbox simulator.
+The maximum message size, including attachments, is 10 MB.
+Each message has to include at least one recipient address. A
+recipient address includes any address on the To:, CC:, or BCC:
+lines.
+If you send a single message to more than one recipient address, and
+one of the recipient addresses isn't in a valid format (that is,
+it's not in the format
+UserName@[SubDomain.]Domain.TopLevelDomain), Amazon SES rejects
+the entire message, even if the other addresses are valid.
+Each message can include up to 50 recipient addresses across the
+To:, CC:, or BCC: lines. If you need to send a single message to
+more than 50 recipients, you have to split the list of recipient
+addresses into groups of less than 50 recipients, and send separate
+messages to each group.
+Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for
+MIME message parts. However, if Amazon SES has to modify the
+contents of your message (for example, if you use open and click
+tracking), 8-bit content isn't preserved. For this reason, we highly
+recommend that you encode all content that isn't 7-bit ASCII. For
+more information, see MIME Encoding
+in the Amazon SES Developer Guide.
+
+
+Additionally, keep the following considerations in mind when using the
+SendRawEmail operation:
+Although you can customize the message headers when using the
+SendRawEmail operation, Amazon SES will automatically apply its
+own Message-ID and Date headers; if you passed these headers
+when creating the message, they will be overwritten by the values
+that Amazon SES provides.
+If you are using sending authorization to send on behalf of another
+user, SendRawEmail enables you to specify the cross-account
+identity for the email's Source, From, and Return-Path parameters in
+one of two ways: you can pass optional parameters SourceArn,
+FromArn, and/or ReturnPathArn to the API, or you can include the
+following X-headers in the header of your raw email:
+X-SES-SOURCE-ARN
+X-SES-FROM-ARN
+X-SES-RETURN-PATH-ARN
+
+
+Don't include these X-headers in the DKIM signature. Amazon SES
+removes these before it sends the email.
+If you only specify the SourceIdentityArn parameter, Amazon SES
+sets the From and Return-Path addresses to the same identity that
+you specified.
+For more information about sending authorization, see the Using Sending Authorization with Amazon SES
+in the Amazon SES Developer Guide.
+For every message that you send, the total number of recipients
+(including each recipient in the To:, CC: and BCC: fields) is
+counted against the maximum number of emails you can send in a
+24-hour period (your sending quota). For more information about
+sending quotas in Amazon SES, see Managing Your Amazon SES Sending Limits
+in the Amazon SES Developer Guide.
+
+" />
 
 
 
@@ -72,7 +141,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +149,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +161,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,18 +185,87 @@
 
     <div class="ref-description">
     <p>Composes an email message and immediately queues it for sending.</p>
+<p>This operation is more flexible than the <code>SendEmail</code> API operation. When
+you use the <code>SendRawEmail</code> operation, you can specify the headers of the
+message as well as its content. This flexibility is useful, for example,
+when you want to send a multipart MIME email (such a message that
+contains both a text and an HTML version). You can also use this
+operation to send messages that include attachments.</p>
+<p>The <code>SendRawEmail</code> operation has the following requirements:</p><ul>
+<li><p>You can only send email from <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html'>verified email addresses or domains</a>.
+If you try to send email from an address that isn't verified, the
+operation results in an "Email address not verified" error.</p></li>
+<li><p>If your account is still in the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html'>Amazon SES sandbox</a>,
+you can only send email to other verified addresses in your account,
+or to addresses that are associated with the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-simulator.html'>Amazon SES mailbox simulator</a>.</p></li>
+<li><p>The maximum message size, including attachments, is 10 MB.</p></li>
+<li><p>Each message has to include at least one recipient address. A
+recipient address includes any address on the To:, CC:, or BCC:
+lines.</p></li>
+<li><p>If you send a single message to more than one recipient address, and
+one of the recipient addresses isn't in a valid format (that is,
+it's not in the format
+<em>UserName@[SubDomain.]Domain.TopLevelDomain</em>), Amazon SES rejects
+the entire message, even if the other addresses are valid.</p></li>
+<li><p>Each message can include up to 50 recipient addresses across the
+To:, CC:, or BCC: lines. If you need to send a single message to
+more than 50 recipients, you have to split the list of recipient
+addresses into groups of less than 50 recipients, and send separate
+messages to each group.</p></li>
+<li><p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for
+MIME message parts. However, if Amazon SES has to modify the
+contents of your message (for example, if you use open and click
+tracking), 8-bit content isn't preserved. For this reason, we highly
+recommend that you encode all content that isn't 7-bit ASCII. For
+more information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding'>MIME Encoding</a>
+in the <em>Amazon SES Developer Guide</em>.</p></li>
+</ul>
+
+<p>Additionally, keep the following considerations in mind when using the
+<code>SendRawEmail</code> operation:</p><ul>
+<li><p>Although you can customize the message headers when using the
+<code>SendRawEmail</code> operation, Amazon SES will automatically apply its
+own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers
+when creating the message, they will be overwritten by the values
+that Amazon SES provides.</p></li>
+<li><p>If you are using sending authorization to send on behalf of another
+user, <code>SendRawEmail</code> enables you to specify the cross-account
+identity for the email's Source, From, and Return-Path parameters in
+one of two ways: you can pass optional parameters <code>SourceArn</code>,
+<code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the
+following X-headers in the header of your raw email:</p><ul>
+<li><p><code>X-SES-SOURCE-ARN</code></p></li>
+<li><p><code>X-SES-FROM-ARN</code></p></li>
+<li><p><code>X-SES-RETURN-PATH-ARN</code></p></li>
+</ul>
+
+<p>Don't include these X-headers in the DKIM signature. Amazon SES
+removes these before it sends the email.</p>
+<p>If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES
+sets the From and Return-Path addresses to the same identity that
+you specified.</p>
+<p>For more information about sending authorization, see the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html'>Using Sending Authorization with Amazon SES</a>
+in the <em>Amazon SES Developer Guide.</em></p></li>
+<li><p>For every message that you send, the total number of recipients
+(including each recipient in the To:, CC: and BCC: fields) is
+counted against the maximum number of emails you can send in a
+24-hour period (your <em>sending quota</em>). For more information about
+sending quotas in Amazon SES, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-quotas.html'>Managing Your Amazon SES Sending Limits</a>
+in the <em>Amazon SES Developer Guide.</em></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>ses_send_raw_email</span>(<span class='no'>Source</span>, <span class='no'>Destinations</span>, <span class='no'>RawMessage</span>, <span class='no'>FromArn</span>, <span class='no'>SourceArn</span>,
-  <span class='no'>ReturnPathArn</span>, <span class='no'>Tags</span>, <span class='no'>ConfigurationSetName</span>)</pre>
+    <pre class="usage"><span class='fu'>ses_send_raw_email</span><span class='op'>(</span><span class='va'>Source</span>, <span class='va'>Destinations</span>, <span class='va'>RawMessage</span>, <span class='va'>FromArn</span>, <span class='va'>SourceArn</span>,
+  <span class='va'>ReturnPathArn</span>, <span class='va'>Tags</span>, <span class='va'>ConfigurationSetName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Source</th>
-      <td><p>The identity\'s email address. If you do not provide a value for this
-parameter, you must specify a \"From\" address in the raw text of the
+      <td><p>The identity's email address. If you do not provide a value for this
+parameter, you must specify a "From" address in the raw text of the
 message. (You can also specify both.)</p>
 <p>Amazon SES does not support the SMTPUTF8 extension, as described
 in<a href='https://tools.ietf.org/html/rfc6531'>RFC6531</a>. For this reason, the
@@ -160,7 +298,7 @@ line.</p></li>
 <li><p>All of the required header fields must be present in the message.</p></li>
 <li><p>Each part of a multipart MIME message must be formatted properly.</p></li>
 <li><p>Attachments must be of a content type that Amazon SES supports. For
-a list on unsupported content types, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html'>Unsupported Attachment Types</a>
+a list on unsupported content types, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-raw-mime'>Unsupported Attachment Types</a>
 in the <em>Amazon SES Developer Guide</em>.</p></li>
 <li><p>The entire message must be base64-encoded.</p></li>
 <li><p>If any of the MIME parts in your message contain content that is
@@ -168,16 +306,16 @@ outside of the 7-bit ASCII character range, we highly recommend that
 you encode that content. For more information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html'>Sending Raw Email</a>
 in the <em>Amazon SES Developer Guide</em>.</p></li>
 <li><p>Per <a href='https://tools.ietf.org/html/rfc5321#section-4.5.3.1.6'>RFC 5321</a>, the
-maximum length of each line of text, including the \&lt;CRLF\&gt;, must
-not exceed 1,000 characters.</p></li>
+maximum length of each line of text, including the &lt;CRLF&gt;,
+must not exceed 1,000 characters.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>FromArn</th>
       <td><p>This parameter is used only for sending authorization. It is the ARN of
 the identity that is associated with the sending authorization policy
-that permits you to specify a particular \"From\" address in the header
-of the raw email.</p>
+that permits you to specify a particular "From" address in the header of
+the raw email.</p>
 <p>Instead of using this parameter, you can use the X-header
 <code>X-SES-FROM-ARN</code> in the raw message of the email. If you use both the
 <code>FromArn</code> parameter and the corresponding X-header, Amazon SES uses the
@@ -237,115 +375,47 @@ events.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation is more flexible than the <code>SendEmail</code> API operation. When
-you use the <code>SendRawEmail</code> operation, you can specify the headers of the
-message as well as its content. This flexibility is useful, for example,
-when you want to send a multipart MIME email (such a message that
-contains both a text and an HTML version). You can also use this
-operation to send messages that include attachments.</p>
-<p>The <code>SendRawEmail</code> operation has the following requirements:</p><ul>
-<li><p>You can only send email from <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html'>verified email addresses or domains</a>.
-If you try to send email from an address that isn\'t verified, the
-operation results in an \"Email address not verified\" error.</p></li>
-<li><p>If your account is still in the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html'>Amazon SES sandbox</a>,
-you can only send email to other verified addresses in your account,
-or to addresses that are associated with the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mailbox-simulator.html'>Amazon SES mailbox simulator</a>.</p></li>
-<li><p>The maximum message size, including attachments, is 10 MB.</p></li>
-<li><p>Each message has to include at least one recipient address. A
-recipient address includes any address on the To:, CC:, or BCC:
-lines.</p></li>
-<li><p>If you send a single message to more than one recipient address, and
-one of the recipient addresses isn\'t in a valid format (that is,
-it\'s not in the format
-<em>UserName@[SubDomain.]Domain.TopLevelDomain</em>), Amazon SES rejects
-the entire message, even if the other addresses are valid.</p></li>
-<li><p>Each message can include up to 50 recipient addresses across the
-To:, CC:, or BCC: lines. If you need to send a single message to
-more than 50 recipients, you have to split the list of recipient
-addresses into groups of less than 50 recipients, and send separate
-messages to each group.</p></li>
-<li><p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for
-MIME message parts. However, if Amazon SES has to modify the
-contents of your message (for example, if you use open and click
-tracking), 8-bit content isn\'t preserved. For this reason, we
-highly recommend that you encode all content that isn\'t 7-bit
-ASCII. For more information, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding'>MIME Encoding</a>
-in the <em>Amazon SES Developer Guide</em>.</p></li>
-</ul>
-
-<p>Additionally, keep the following considerations in mind when using the
-<code>SendRawEmail</code> operation:</p><ul>
-<li><p>Although you can customize the message headers when using the
-<code>SendRawEmail</code> operation, Amazon SES will automatically apply its
-own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers
-when creating the message, they will be overwritten by the values
-that Amazon SES provides.</p></li>
-<li><p>If you are using sending authorization to send on behalf of another
-user, <code>SendRawEmail</code> enables you to specify the cross-account
-identity for the email\'s Source, From, and Return-Path parameters
-in one of two ways: you can pass optional parameters <code>SourceArn</code>,
-<code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the
-following X-headers in the header of your raw email:</p><ul>
-<li><p><code>X-SES-SOURCE-ARN</code></p></li>
-<li><p><code>X-SES-FROM-ARN</code></p></li>
-<li><p><code>X-SES-RETURN-PATH-ARN</code></p></li>
-</ul>
-
-<p>Don\'t include these X-headers in the DKIM signature. Amazon SES
-removes these before it sends the email.</p>
-<p>If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES
-sets the From and Return-Path addresses to the same identity that
-you specified.</p>
-<p>For more information about sending authorization, see the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html'>Using Sending Authorization with Amazon SES</a>
-in the <em>Amazon SES Developer Guide.</em></p></li>
-<li><p>For every message that you send, the total number of recipients
-(including each recipient in the To:, CC: and BCC: fields) is
-counted against the maximum number of emails you can send in a
-24-hour period (your <em>sending quota</em>). For more information about
-sending quotas in Amazon SES, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html'>Managing Your Amazon SES Sending Limits</a>
-in the <em>Amazon SES Developer Guide.</em></p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>send_raw_email</span>(
-  <span class='kw'>Source</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Destinations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_raw_email</span><span class='op'>(</span>
+  Source <span class='op'>=</span> <span class='st'>"string"</span>,
+  Destinations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>RawMessage</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Data</span> <span class='kw'>=</span> <span class='no'>raw</span>
-  ),
-  <span class='kw'>FromArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReturnPathArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ConfigurationSetName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  RawMessage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Data <span class='op'>=</span> <span class='va'>raw</span>
+  <span class='op'>)</span>,
+  FromArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReturnPathArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ConfigurationSetName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example sends an email with an attachment:</span>
-<span class='no'>svc</span>$<span class='fu'>send_raw_email</span>(
-  <span class='kw'>Destinations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>FromArn</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>RawMessage</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"From: sender@example.com\\nTo: recipient@example.com\\nSubject: Test email (cont..."</span>
-  ),
-  <span class='kw'>ReturnPathArn</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>Source</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>SourceArn</span> <span class='kw'>=</span> <span class='st'>""</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_raw_email</span><span class='op'>(</span>
+  Destinations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  FromArn <span class='op'>=</span> <span class='st'>""</span>,
+  RawMessage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Data <span class='op'>=</span> <span class='st'>"From: sender@example.com\\nTo: recipient@example.com\\nSubject: Test email (cont..."</span>
+  <span class='op'>)</span>,
+  ReturnPathArn <span class='op'>=</span> <span class='st'>""</span>,
+  Source <span class='op'>=</span> <span class='st'>""</span>,
+  SourceArn <span class='op'>=</span> <span class='st'>""</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -361,7 +431,7 @@ in the <em>Amazon SES Developer Guide.</em></p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

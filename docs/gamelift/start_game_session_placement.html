@@ -44,9 +44,54 @@ CreateGameSessionQueue) — gamelift_start_game_session_placement • paws</titl
 CreateGameSessionQueue) — gamelift_start_game_session_placement" />
 <meta property="og:description" content="Places a request for a new game session in a queue (see
 CreateGameSessionQueue). When processing a placement request, Amazon
-GameLift searches for available resources on the queue\'s destinations,
+GameLift searches for available resources on the queue's destinations,
 scanning each until it finds resources or the placement request times
-out." />
+out.
+A game session placement request can also request player sessions. When
+a new game session is successfully created, Amazon GameLift creates a
+player session for each player included in the request.
+When placing a game session, by default Amazon GameLift tries each fleet
+in the order they are listed in the queue configuration. Ideally, a
+queue's destinations are listed in preference order.
+Alternatively, when requesting a game session with players, you can also
+provide latency data for each player in relevant Regions. Latency data
+indicates the performance lag a player experiences when connected to a
+fleet in the Region. Amazon GameLift uses latency data to reorder the
+list of destinations to place the game session in a Region with minimal
+lag. If latency data is provided for multiple players, Amazon GameLift
+calculates each Region's average lag for all players and reorders to get
+the best game play across all players.
+To place a new game session request, specify the following:
+The queue name and a set of game session properties and settings
+A unique ID (such as a UUID) for the placement. You use this ID to
+track the status of the placement request
+(Optional) A set of player data and a unique player ID for each
+player that you are joining to the new game session (player data is
+optional, but if you include it, you must also provide a unique ID
+for each player)
+Latency data for all players (if you want to optimize game play for
+the players)
+
+
+If successful, a new game session placement is created.
+To track the status of a placement request, call
+DescribeGameSessionPlacement and check the request's status. If the
+status is FULFILLED, a new game session has been created and a game
+session ARN and Region are referenced. If the placement request times
+out, you can resubmit the request or retry it with a different queue.
+CreateGameSession
+DescribeGameSessions
+DescribeGameSessionDetails
+SearchGameSessions
+UpdateGameSession
+GetGameSessionLogUrl
+Game session placements
+StartGameSessionPlacement
+DescribeGameSessionPlacement
+StopGameSessionPlacement
+
+
+" />
 
 
 
@@ -78,7 +123,7 @@ out." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +131,7 @@ out." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +143,7 @@ out." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,14 +169,59 @@ CreateGameSessionQueue)</h1>
     <div class="ref-description">
     <p>Places a request for a new game session in a queue (see
 CreateGameSessionQueue). When processing a placement request, Amazon
-GameLift searches for available resources on the queue\'s destinations,
+GameLift searches for available resources on the queue's destinations,
 scanning each until it finds resources or the placement request times
 out.</p>
+<p>A game session placement request can also request player sessions. When
+a new game session is successfully created, Amazon GameLift creates a
+player session for each player included in the request.</p>
+<p>When placing a game session, by default Amazon GameLift tries each fleet
+in the order they are listed in the queue configuration. Ideally, a
+queue's destinations are listed in preference order.</p>
+<p>Alternatively, when requesting a game session with players, you can also
+provide latency data for each player in relevant Regions. Latency data
+indicates the performance lag a player experiences when connected to a
+fleet in the Region. Amazon GameLift uses latency data to reorder the
+list of destinations to place the game session in a Region with minimal
+lag. If latency data is provided for multiple players, Amazon GameLift
+calculates each Region's average lag for all players and reorders to get
+the best game play across all players.</p>
+<p>To place a new game session request, specify the following:</p><ul>
+<li><p>The queue name and a set of game session properties and settings</p></li>
+<li><p>A unique ID (such as a UUID) for the placement. You use this ID to
+track the status of the placement request</p></li>
+<li><p>(Optional) A set of player data and a unique player ID for each
+player that you are joining to the new game session (player data is
+optional, but if you include it, you must also provide a unique ID
+for each player)</p></li>
+<li><p>Latency data for all players (if you want to optimize game play for
+the players)</p></li>
+</ul>
+
+<p>If successful, a new game session placement is created.</p>
+<p>To track the status of a placement request, call
+DescribeGameSessionPlacement and check the request's status. If the
+status is <code>FULFILLED</code>, a new game session has been created and a game
+session ARN and Region are referenced. If the placement request times
+out, you can resubmit the request or retry it with a different queue.</p><ul>
+<li><p>CreateGameSession</p></li>
+<li><p>DescribeGameSessions</p></li>
+<li><p>DescribeGameSessionDetails</p></li>
+<li><p>SearchGameSessions</p></li>
+<li><p>UpdateGameSession</p></li>
+<li><p>GetGameSessionLogUrl</p></li>
+<li><p>Game session placements</p><ul>
+<li><p>StartGameSessionPlacement</p></li>
+<li><p>DescribeGameSessionPlacement</p></li>
+<li><p>StopGameSessionPlacement</p></li>
+</ul></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_start_game_session_placement</span>(<span class='no'>PlacementId</span>, <span class='no'>GameSessionQueueName</span>,
-  <span class='no'>GameProperties</span>, <span class='no'>MaximumPlayerSessionCount</span>, <span class='no'>GameSessionName</span>,
-  <span class='no'>PlayerLatencies</span>, <span class='no'>DesiredPlayerSessions</span>, <span class='no'>GameSessionData</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_start_game_session_placement</span><span class='op'>(</span><span class='va'>PlacementId</span>, <span class='va'>GameSessionQueueName</span>,
+  <span class='va'>GameProperties</span>, <span class='va'>MaximumPlayerSessionCount</span>, <span class='va'>GameSessionName</span>,
+  <span class='va'>PlayerLatencies</span>, <span class='va'>DesiredPlayerSessions</span>, <span class='va'>GameSessionData</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,82 +274,36 @@ object with a request to start a new game session (see <a href='https://docs.aws
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A game session placement request can also request player sessions. When
-a new game session is successfully created, Amazon GameLift creates a
-player session for each player included in the request.</p>
-<p>When placing a game session, by default Amazon GameLift tries each fleet
-in the order they are listed in the queue configuration. Ideally, a
-queue\'s destinations are listed in preference order.</p>
-<p>Alternatively, when requesting a game session with players, you can also
-provide latency data for each player in relevant Regions. Latency data
-indicates the performance lag a player experiences when connected to a
-fleet in the Region. Amazon GameLift uses latency data to reorder the
-list of destinations to place the game session in a Region with minimal
-lag. If latency data is provided for multiple players, Amazon GameLift
-calculates each Region\'s average lag for all players and reorders to
-get the best game play across all players.</p>
-<p>To place a new game session request, specify the following:</p><ul>
-<li><p>The queue name and a set of game session properties and settings</p></li>
-<li><p>A unique ID (such as a UUID) for the placement. You use this ID to
-track the status of the placement request</p></li>
-<li><p>(Optional) A set of player data and a unique player ID for each
-player that you are joining to the new game session (player data is
-optional, but if you include it, you must also provide a unique ID
-for each player)</p></li>
-<li><p>Latency data for all players (if you want to optimize game play for
-the players)</p></li>
-</ul>
-
-<p>If successful, a new game session placement is created.</p>
-<p>To track the status of a placement request, call
-DescribeGameSessionPlacement and check the request\'s status. If the
-status is <code>FULFILLED</code>, a new game session has been created and a game
-session ARN and Region are referenced. If the placement request times
-out, you can resubmit the request or retry it with a different queue.</p><ul>
-<li><p>CreateGameSession</p></li>
-<li><p>DescribeGameSessions</p></li>
-<li><p>DescribeGameSessionDetails</p></li>
-<li><p>SearchGameSessions</p></li>
-<li><p>UpdateGameSession</p></li>
-<li><p>GetGameSessionLogUrl</p></li>
-<li><p>Game session placements</p><ul>
-<li><p>StartGameSessionPlacement</p></li>
-<li><p>DescribeGameSessionPlacement</p></li>
-<li><p>StopGameSessionPlacement</p></li>
-</ul></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>start_game_session_placement</span>(
-  <span class='kw'>PlacementId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameSessionQueueName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>MaximumPlayerSessionCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>GameSessionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PlayerLatencies</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>PlayerId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>RegionIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>LatencyInMilliseconds</span> <span class='kw'>=</span> <span class='fl'>123.0</span>
-    )
-  ),
-  <span class='kw'>DesiredPlayerSessions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>PlayerId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>PlayerData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>GameSessionData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>start_game_session_placement</span><span class='op'>(</span>
+  PlacementId <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameSessionQueueName <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MaximumPlayerSessionCount <span class='op'>=</span> <span class='fl'>123</span>,
+  GameSessionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  PlayerLatencies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      PlayerId <span class='op'>=</span> <span class='st'>"string"</span>,
+      RegionIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+      LatencyInMilliseconds <span class='op'>=</span> <span class='fl'>123.0</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DesiredPlayerSessions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      PlayerId <span class='op'>=</span> <span class='st'>"string"</span>,
+      PlayerData <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  GameSessionData <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -277,7 +321,7 @@ out, you can resubmit the request or retry it with a different queue.</p><ul>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

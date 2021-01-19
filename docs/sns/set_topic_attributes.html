@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,7 +118,7 @@
     <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sns_set_topic_attributes</span>(<span class='no'>TopicArn</span>, <span class='no'>AttributeName</span>, <span class='no'>AttributeValue</span>)</pre>
+    <pre class="usage"><span class='fu'>sns_set_topic_attributes</span><span class='op'>(</span><span class='va'>TopicArn</span>, <span class='va'>AttributeName</span>, <span class='va'>AttributeValue</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,33 +132,40 @@
       <td><p>[required] A map of attributes with their corresponding values.</p>
 <p>The following lists the names, descriptions, and values of the special
 request parameters that the <code>SetTopicAttributes</code> action uses:</p><ul>
-<li><p><code>DeliveryPolicy</code> -- The policy that defines how Amazon SNS retries
+<li><p><code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries
 failed deliveries to HTTP/S endpoints.</p></li>
-<li><p><code>DisplayName</code> -- The display name to use for a topic with SMS
+<li><p><code>DisplayName</code> – The display name to use for a topic with SMS
 subscriptions.</p></li>
-<li><p><code>Policy</code> -- The policy that defines who can access your topic. By
+<li><p><code>Policy</code> – The policy that defines who can access your topic. By
 default, only the topic owner can publish or subscribe to the topic.</p></li>
 </ul>
 
 <p>The following attribute applies only to
 <a href='https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html'>server-side-encryption</a>:</p><ul>
-<li><p><code>KmsMasterKeyId</code> -- The ID of an AWS-managed customer master key
+<li><p><code>KmsMasterKeyId</code> – The ID of an AWS-managed customer master key
 (CMK) for Amazon SNS or a custom CMK. For more information, see <a href='https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms'>Key Terms</a>.
 For more examples, see
 <a href='https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters'>KeyId</a>
 in the <em>AWS Key Management Service API Reference</em>.</p></li>
 </ul>
 
-<p>The following attribute applies only to FIFO topics:</p><ul>
-<li><p><code>ContentBasedDeduplication</code> -- Enables content-based deduplication.
-Amazon SNS uses a SHA-256 hash to generate the
-<code>MessageDeduplicationId</code> using the body of the message (but not the
-attributes of the message).</p></li>
-<li><p>When <code>ContentBasedDeduplication</code> is in effect, messages with
-identical content sent within the deduplication interval are treated
-as duplicates and only one copy of the message is delivered.</p></li>
-<li><p>If the queue has <code>ContentBasedDeduplication</code> set, your
-<code>MessageDeduplicationId</code> overrides the generated one.</p></li>
+<p>The following attribute applies only to <a href='https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html'>FIFO topics</a>:</p><ul>
+<li><p><code>ContentBasedDeduplication</code> – Enables content-based deduplication
+for FIFO topics.</p><ul>
+<li><p>By default, <code>ContentBasedDeduplication</code> is set to <code>false</code>. If
+you create a FIFO topic and this attribute is <code>false</code>, you must
+specify a value for the <code>MessageDeduplicationId</code> parameter for
+the
+<a href='https://docs.aws.amazon.com/sns/latest/api/API_Publish.html'>Publish</a>
+action.</p></li>
+<li><p>When you set <code>ContentBasedDeduplication</code> to <code>true</code>, Amazon SNS
+uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code>
+using the body of the message (but not the attributes of the
+message).</p>
+<p>(Optional) To override the generated value, you can specify a
+value for the the <code>MessageDeduplicationId</code> parameter for the
+<code>Publish</code> action.</p></li>
+</ul></li>
 </ul></td>
     </tr>
     <tr>
@@ -170,11 +177,12 @@ as duplicates and only one copy of the message is delivered.</p></li>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>set_topic_attributes</span>(
-  <span class='kw'>TopicArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AttributeName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AttributeValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>set_topic_attributes</span><span class='op'>(</span>
+  TopicArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  AttributeName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AttributeValue <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -192,7 +200,7 @@ as duplicates and only one copy of the message is delivered.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

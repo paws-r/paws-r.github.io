@@ -40,7 +40,17 @@
 
 
 <meta property="og:title" content="Creates a new user in the specified user pool — cognitoidentityprovider_admin_create_user" />
-<meta property="og:description" content="Creates a new user in the specified user pool." />
+<meta property="og:description" content="Creates a new user in the specified user pool.
+If MessageAction is not set, the default is to send a welcome message
+via email or phone (SMS).
+This message is based on a template that you configured in your call to
+create or update a user pool. This template includes your custom sign-up
+instructions and placeholders for user name and temporary password.
+Alternatively, you can call AdminCreateUser with “SUPPRESS” for the
+MessageAction parameter, and Amazon Cognito will not send any email.
+In either case, the user will be in the FORCE_CHANGE_PASSWORD state
+until they sign in and change their password.
+AdminCreateUser requires developer credentials." />
 
 
 
@@ -72,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +90,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +102,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +126,21 @@
 
     <div class="ref-description">
     <p>Creates a new user in the specified user pool.</p>
+<p>If <code>MessageAction</code> is not set, the default is to send a welcome message
+via email or phone (SMS).</p>
+<p>This message is based on a template that you configured in your call to
+create or update a user pool. This template includes your custom sign-up
+instructions and placeholders for user name and temporary password.</p>
+<p>Alternatively, you can call <code>AdminCreateUser</code> with “SUPPRESS” for the
+<code>MessageAction</code> parameter, and Amazon Cognito will not send any email.</p>
+<p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state
+until they sign in and change their password.</p>
+<p><code>AdminCreateUser</code> requires developer credentials.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cognitoidentityprovider_admin_create_user</span>(<span class='no'>UserPoolId</span>, <span class='no'>Username</span>,
-  <span class='no'>UserAttributes</span>, <span class='no'>ValidationData</span>, <span class='no'>TemporaryPassword</span>, <span class='no'>ForceAliasCreation</span>,
-  <span class='no'>MessageAction</span>, <span class='no'>DesiredDeliveryMediums</span>, <span class='no'>ClientMetadata</span>)</pre>
+    <pre class="usage"><span class='fu'>cognitoidentityprovider_admin_create_user</span><span class='op'>(</span><span class='va'>UserPoolId</span>, <span class='va'>Username</span>,
+  <span class='va'>UserAttributes</span>, <span class='va'>ValidationData</span>, <span class='va'>TemporaryPassword</span>, <span class='va'>ForceAliasCreation</span>,
+  <span class='va'>MessageAction</span>, <span class='va'>DesiredDeliveryMediums</span>, <span class='va'>ClientMetadata</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,19 +160,20 @@ the username cannot be changed.</p></td>
       <td><p>An array of name-value pairs that contain user attributes and attribute
 values to be set for the user to be created. You can create a user
 without specifying any attributes other than <code>Username</code>. However, any
-attributes that you specify as required (in or in the <strong>Attributes</strong> tab
-of the console) must be supplied either by you (in your call to
-<code>AdminCreateUser</code>) or by the user (when he or she signs up in response
-to your welcome message).</p>
+attributes that you specify as required (when creating a user pool or in
+the <strong>Attributes</strong> tab of the console) must be supplied either by you
+(in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs
+up in response to your welcome message).</p>
 <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the
 attribute name.</p>
 <p>To send a message inviting the user to sign up, you must specify the
-user\'s email address or phone number. This can be done in your call to
+user's email address or phone number. This can be done in your call to
 AdminCreateUser or in the <strong>Users</strong> tab of the Amazon Cognito console
 for managing your user pools.</p>
 <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email_verified</code>
 attribute to <code>True</code>, and you can set the <code>phone_number_verified</code>
-attribute to <code>True</code>. (You can also do this by calling .)</p><ul>
+attribute to <code>True</code>. (You can also do this by calling
+<a href='https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminUpdateUserAttributes.html'>AdminUpdateUserAttributes</a>.)</p><ul>
 <li><p><strong>email</strong>: The email address of the user to whom the message that
 contains the code and username will be sent. Required if the
 <code>email_verified</code> attribute is set to <code>True</code>, or if <code>"EMAIL"</code> is
@@ -165,20 +186,20 @@ specified in the <code>DesiredDeliveryMediums</code> parameter.</p></li>
     </tr>
     <tr>
       <th>ValidationData</th>
-      <td><p>The user\'s validation data. This is an array of name-value pairs that
+      <td><p>The user's validation data. This is an array of name-value pairs that
 contain user attributes and attribute values that you can use for custom
 validation, such as restricting the types of user accounts that can be
 registered. For example, you might choose to allow or disallow user
-sign-up based on the user\'s domain.</p>
+sign-up based on the user's domain.</p>
 <p>To configure custom validation, you must create a Pre Sign-up Lambda
 trigger for the user pool as described in the Amazon Cognito Developer
 Guide. The Lambda trigger receives the validation data and uses it in
 the validation process.</p>
-<p>The user\'s validation data is not persisted.</p></td>
+<p>The user's validation data is not persisted.</p></td>
     </tr>
     <tr>
       <th>TemporaryPassword</th>
-      <td><p>The user\'s temporary password. This password must conform to the
+      <td><p>The user's temporary password. This password must conform to the
 password policy that you specified when you created the user pool.</p>
 <p>The temporary password is valid only once. To complete the Admin Create
 User flow, the user must enter the temporary password in the sign-in
@@ -206,9 +227,9 @@ value is <code>False</code>.</p></td>
     <tr>
       <th>MessageAction</th>
       <td><p>Set to <code>"RESEND"</code> to resend the invitation message to a user that
-already exists and reset the expiration limit on the user\'s account.
-Set to <code>"SUPPRESS"</code> to suppress sending the message. Only one value can
-be specified.</p></td>
+already exists and reset the expiration limit on the user's account. Set
+to <code>"SUPPRESS"</code> to suppress sending the message. Only one value can be
+specified.</p></td>
     </tr>
     <tr>
       <th>DesiredDeliveryMediums</th>
@@ -240,51 +261,40 @@ does not include triggers, the ClientMetadata parameter serves no
 purpose.</p></li>
 <li><p>Amazon Cognito does not validate the ClientMetadata value.</p></li>
 <li><p>Amazon Cognito does not encrypt the the ClientMetadata value, so
-don\'t use it to provide sensitive information.</p></li>
+don't use it to provide sensitive information.</p></li>
 </ul></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If <code>MessageAction</code> is not set, the default is to send a welcome message
-via email or phone (SMS).</p>
-<p>This message is based on a template that you configured in your call to
-or . This template includes your custom sign-up instructions and
-placeholders for user name and temporary password.</p>
-<p>Alternatively, you can call AdminCreateUser with "SUPPRESS" for the
-<code>MessageAction</code> parameter, and Amazon Cognito will not send any email.</p>
-<p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state
-until they sign in and change their password.</p>
-<p>AdminCreateUser requires developer credentials.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>admin_create_user</span>(
-  <span class='kw'>UserPoolId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Username</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>UserAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ValidationData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>TemporaryPassword</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ForceAliasCreation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>MessageAction</span> <span class='kw'>=</span> <span class='st'>"RESEND"</span><span class='kw'>|</span><span class='st'>"SUPPRESS"</span>,
-  <span class='kw'>DesiredDeliveryMediums</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"SMS"</span><span class='kw'>|</span><span class='st'>"EMAIL"</span>
-  ),
-  <span class='kw'>ClientMetadata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>admin_create_user</span><span class='op'>(</span>
+  UserPoolId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Username <span class='op'>=</span> <span class='st'>"string"</span>,
+  UserAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ValidationData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TemporaryPassword <span class='op'>=</span> <span class='st'>"string"</span>,
+  ForceAliasCreation <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  MessageAction <span class='op'>=</span> <span class='st'>"RESEND"</span><span class='op'>|</span><span class='st'>"SUPPRESS"</span>,
+  DesiredDeliveryMediums <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"SMS"</span><span class='op'>|</span><span class='st'>"EMAIL"</span>
+  <span class='op'>)</span>,
+  ClientMetadata <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -302,7 +312,7 @@ until they sign in and change their password.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -42,56 +42,35 @@
 <meta property="og:title" content="AWS Health APIs and Notifications — health" />
 <meta property="og:description" content="AWS Health
 The AWS Health API provides programmatic access to the AWS Health
-information that is presented in the AWS Personal Health Dashboard. You can get
-information about events that affect your AWS resources:
-DescribeEvents: Summary information about events.
-DescribeEventDetails: Detailed information about one or more events.
-DescribeAffectedEntities: Information about AWS resources that are
-affected by one or more events.
-
-
-In addition, these operations provide information about event types and
-summary counts of events or affected entities:
-DescribeEventTypes: Information about the kinds of events that AWS
-Health tracks.
-DescribeEventAggregates: A count of the number of events that meet
-specified criteria.
-DescribeEntityAggregates: A count of the number of affected entities
-that meet specified criteria.
-
-
-AWS Health integrates with AWS Organizations to provide a centralized
-view of AWS Health events across all accounts in your organization.
-DescribeEventsForOrganization: Summary information about events
-across the organization.
-DescribeAffectedAccountsForOrganization: List of accounts in your
-organization impacted by an event.
-DescribeEventDetailsForOrganization: Detailed information about
-events in your organization.
-DescribeAffectedEntitiesForOrganization: Information about AWS
-resources in your organization that are affected by events.
-
-
-You can use the following operations to enable or disable AWS Health
-from working with AWS Organizations.
-EnableHealthServiceAccessForOrganization: Enables AWS Health to work
-with AWS Organizations.
-DisableHealthServiceAccessForOrganization: Disables AWS Health from
-working with AWS Organizations.
-DescribeHealthServiceStatusForOrganization: Status information about
-enabling or disabling AWS Health from working with AWS
-Organizations.
-
-
-The Health API requires a Business or Enterprise support plan from AWS Support. Calling the Health API
-from an account that does not have a Business or Enterprise support plan
-causes a SubscriptionRequiredException.
+information that appears in the AWS Personal Health Dashboard. You can use the API
+operations to get information about AWS Health events that affect your
+AWS services and resources.
+You must have a Business or Enterprise support plan from AWS Support to use the AWS Health
+API. If you call the AWS Health API from an AWS account that doesn't
+have a Business or Enterprise support plan, you receive a
+SubscriptionRequiredException error.
+AWS Health has a single endpoint: health.us-east-1.amazonaws.com
+(HTTPS). Use this endpoint to call the AWS Health API operations.
 For authentication of requests, AWS Health uses the Signature Version 4 Signing Process.
-See the AWS Health User Guide
-for information about how to use the API.
-Service Endpoint
-The HTTP endpoint for the AWS Health API is:
-https://health.us-east-1.amazonaws.com
+If your AWS account is part of AWS Organizations, you can use the AWS
+Health organizational view feature. This feature provides a centralized
+view of AWS Health events across all accounts in your organization. You
+can aggregate AWS Health events in real time to identify accounts in
+your organization that are affected by an operational event or get
+notified of security vulnerabilities. Use the organizational view API
+operations to enable this feature and return event information. For more
+information, see Aggregating AWS Health events
+in the AWS Health User Guide.
+When you use the AWS Health API operations to return AWS Health events,
+see the following recommendations:
+Use the
+eventScopeCode
+parameter to specify whether to return AWS Health events that are
+public or account-specific.
+Use pagination to view all events from the response. For example, if
+you call the DescribeEventsForOrganization operation to get all
+events in your organization, you might receive several page results.
+Specify the nextToken in the next request to return more results.
 
 " />
 
@@ -125,7 +104,7 @@ https://health.us-east-1.amazonaws.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -133,7 +112,7 @@ https://health.us-east-1.amazonaws.com
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -145,7 +124,7 @@ https://health.us-east-1.amazonaws.com
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -170,61 +149,40 @@ https://health.us-east-1.amazonaws.com
     <div class="ref-description">
     <p>AWS Health</p>
 <p>The AWS Health API provides programmatic access to the AWS Health
-information that is presented in the <a href='https://phd.aws.amazon.com/phd/home#/'>AWS Personal Health Dashboard</a>. You can get
-information about events that affect your AWS resources:</p><ul>
-<li><p>DescribeEvents: Summary information about events.</p></li>
-<li><p>DescribeEventDetails: Detailed information about one or more events.</p></li>
-<li><p>DescribeAffectedEntities: Information about AWS resources that are
-affected by one or more events.</p></li>
-</ul>
-
-<p>In addition, these operations provide information about event types and
-summary counts of events or affected entities:</p><ul>
-<li><p>DescribeEventTypes: Information about the kinds of events that AWS
-Health tracks.</p></li>
-<li><p>DescribeEventAggregates: A count of the number of events that meet
-specified criteria.</p></li>
-<li><p>DescribeEntityAggregates: A count of the number of affected entities
-that meet specified criteria.</p></li>
-</ul>
-
-<p>AWS Health integrates with AWS Organizations to provide a centralized
-view of AWS Health events across all accounts in your organization.</p><ul>
-<li><p>DescribeEventsForOrganization: Summary information about events
-across the organization.</p></li>
-<li><p>DescribeAffectedAccountsForOrganization: List of accounts in your
-organization impacted by an event.</p></li>
-<li><p>DescribeEventDetailsForOrganization: Detailed information about
-events in your organization.</p></li>
-<li><p>DescribeAffectedEntitiesForOrganization: Information about AWS
-resources in your organization that are affected by events.</p></li>
-</ul>
-
-<p>You can use the following operations to enable or disable AWS Health
-from working with AWS Organizations.</p><ul>
-<li><p>EnableHealthServiceAccessForOrganization: Enables AWS Health to work
-with AWS Organizations.</p></li>
-<li><p>DisableHealthServiceAccessForOrganization: Disables AWS Health from
-working with AWS Organizations.</p></li>
-<li><p>DescribeHealthServiceStatusForOrganization: Status information about
-enabling or disabling AWS Health from working with AWS
-Organizations.</p></li>
-</ul>
-
-<p>The Health API requires a Business or Enterprise support plan from <a href='http://aws.amazon.com/premiumsupport/'>AWS Support</a>. Calling the Health API
-from an account that does not have a Business or Enterprise support plan
-causes a <code>SubscriptionRequiredException</code>.</p>
+information that appears in the <a href='https://phd.aws.amazon.com/phd/home#/'>AWS Personal Health Dashboard</a>. You can use the API
+operations to get information about AWS Health events that affect your
+AWS services and resources.</p>
+<p>You must have a Business or Enterprise support plan from <a href='https://aws.amazon.com/premiumsupport/'>AWS Support</a> to use the AWS Health
+API. If you call the AWS Health API from an AWS account that doesn't
+have a Business or Enterprise support plan, you receive a
+<code>SubscriptionRequiredException</code> error.</p>
+<p>AWS Health has a single endpoint: health.us-east-1.amazonaws.com
+(HTTPS). Use this endpoint to call the AWS Health API operations.</p>
 <p>For authentication of requests, AWS Health uses the <a href='https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html'>Signature Version 4 Signing Process</a>.</p>
-<p>See the <a href='https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html'>AWS Health User Guide</a>
-for information about how to use the API.</p>
-<p><strong>Service Endpoint</strong></p>
-<p>The HTTP endpoint for the AWS Health API is:</p><ul>
-<li><p>https://health.us-east-1.amazonaws.com</p></li>
+<p>If your AWS account is part of AWS Organizations, you can use the AWS
+Health organizational view feature. This feature provides a centralized
+view of AWS Health events across all accounts in your organization. You
+can aggregate AWS Health events in real time to identify accounts in
+your organization that are affected by an operational event or get
+notified of security vulnerabilities. Use the organizational view API
+operations to enable this feature and return event information. For more
+information, see <a href='https://docs.aws.amazon.com/health/latest/ug/aggregate-events.html'>Aggregating AWS Health events</a>
+in the <em>AWS Health User Guide</em>.</p>
+<p>When you use the AWS Health API operations to return AWS Health events,
+see the following recommendations:</p><ul>
+<li><p>Use the
+<a href='https://docs.aws.amazon.com/health/latest/APIReference/API_Event.html#AWSHealth-Type-Event-eventScopeCode'>eventScopeCode</a>
+parameter to specify whether to return AWS Health events that are
+public or account-specific.</p></li>
+<li><p>Use pagination to view all events from the response. For example, if
+you call the <code>DescribeEventsForOrganization</code> operation to get all
+events in your organization, you might receive several page results.
+Specify the <code>nextToken</code> in the next request to return more results.</p></li>
 </ul>
 
     </div>
 
-    <pre class="usage"><span class='fu'>health</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>health</span><span class='op'>(</span>config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -238,20 +196,21 @@ for information about how to use the API.</p>
     <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
 
     
-<pre><span class='no'>svc</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>health</span>(
-  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>creds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>access_key_id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>secret_access_key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>session_token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>profile</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>health</span><span class='op'>(</span>
+  config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    credentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        access_key_id <span class='op'>=</span> <span class='st'>"string"</span>,
+        secret_access_key <span class='op'>=</span> <span class='st'>"string"</span>,
+        session_token <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      profile <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    endpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    region <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
@@ -266,22 +225,24 @@ for information about how to use the API.</p>
 <tr><td><a href='describe_event_details.html'>describe_event_details</a></td><td>Returns detailed information about one or more specified events</td></tr>
 <tr><td><a href='describe_event_details_for_organization.html'>describe_event_details_for_organization</a></td><td>Returns detailed information about one or more specified events for one or more accounts in your organization</td></tr>
 <tr><td><a href='describe_events.html'>describe_events</a></td><td>Returns information about events that meet the specified filter criteria</td></tr>
-<tr><td><a href='describe_events_for_organization.html'>describe_events_for_organization</a></td><td>Returns information about events across your organization in AWS Organizations, meeting the specified filter criteria</td></tr>
+<tr><td><a href='describe_events_for_organization.html'>describe_events_for_organization</a></td><td>Returns information about events across your organization in AWS Organizations</td></tr>
 <tr><td><a href='describe_event_types.html'>describe_event_types</a></td><td>Returns the event types that meet the specified filter criteria</td></tr>
 <tr><td><a href='describe_health_service_status_for_organization.html'>describe_health_service_status_for_organization</a></td><td>This operation provides status information on enabling or disabling AWS Health to work with your organization</td></tr>
-<tr><td><a href='disable_health_service_access_for_organization.html'>disable_health_service_access_for_organization</a></td><td>Calling this operation disables Health from working with AWS Organizations</td></tr>
+<tr><td><a href='disable_health_service_access_for_organization.html'>disable_health_service_access_for_organization</a></td><td>Disables AWS Health from working with AWS Organizations</td></tr>
 <tr><td><a href='enable_health_service_access_for_organization.html'>enable_health_service_access_for_organization</a></td><td>Calling this operation enables AWS Health to work with AWS Organizations</td></tr>
 </table>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>health</span>()
-<span class='no'>svc</span>$<span class='fu'>describe_affected_accounts_for_organization</span>(
-  <span class='kw'>Foo</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)
-}</pre>
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>health</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_affected_accounts_for_organization</span><span class='op'>(</span>
+  Foo <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -297,7 +258,7 @@ for information about how to use the API.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

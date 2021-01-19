@@ -44,7 +44,35 @@ Site-to-Site VPN connection — ec2_modify_vpn_connection • paws</title>
 Site-to-Site VPN connection — ec2_modify_vpn_connection" />
 <meta property="og:description" content="Modifies the customer gateway or the target gateway of an AWS
 Site-to-Site VPN connection. To modify the target gateway, the following
-migration options are available:" />
+migration options are available:
+An existing virtual private gateway to a new virtual private gateway
+An existing virtual private gateway to a transit gateway
+An existing transit gateway to a new transit gateway
+An existing transit gateway to a virtual private gateway
+
+
+Before you perform the migration to the new gateway, you must configure
+the new gateway. Use CreateVpnGateway to create a virtual private
+gateway, or CreateTransitGateway to create a transit gateway.
+This step is required when you migrate from a virtual private gateway
+with static routes to a transit gateway.
+You must delete the static routes before you migrate to the new gateway.
+Keep a copy of the static route before you delete it. You will need to
+add back these routes to the transit gateway after the VPN connection
+migration is complete.
+After you migrate to the new gateway, you might need to modify your VPC
+route table. Use CreateRoute and DeleteRoute to make the changes
+described in VPN Gateway Target Modification Required VPC Route Table Updates
+in the AWS Site-to-Site VPN User Guide.
+When the new gateway is a transit gateway, modify the transit gateway
+route table to allow traffic between the VPC and the AWS Site-to-Site
+VPN connection. Use CreateTransitGatewayRoute to add the routes.
+If you deleted VPN static routes, you must add the static routes to the
+transit gateway route table.
+After you perform this operation, the AWS VPN endpoint's IP addresses on
+the AWS side and the tunnel options remain intact. Your AWS Site-to-Site
+VPN connection will be temporarily unavailable for a brief period while
+we provision the new endpoints." />
 
 
 
@@ -76,7 +104,7 @@ migration options are available:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +112,7 @@ migration options are available:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +124,7 @@ migration options are available:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,11 +150,39 @@ Site-to-Site VPN connection</h1>
     <div class="ref-description">
     <p>Modifies the customer gateway or the target gateway of an AWS
 Site-to-Site VPN connection. To modify the target gateway, the following
-migration options are available:</p>
+migration options are available:</p><ul>
+<li><p>An existing virtual private gateway to a new virtual private gateway</p></li>
+<li><p>An existing virtual private gateway to a transit gateway</p></li>
+<li><p>An existing transit gateway to a new transit gateway</p></li>
+<li><p>An existing transit gateway to a virtual private gateway</p></li>
+</ul>
+
+<p>Before you perform the migration to the new gateway, you must configure
+the new gateway. Use CreateVpnGateway to create a virtual private
+gateway, or CreateTransitGateway to create a transit gateway.</p>
+<p>This step is required when you migrate from a virtual private gateway
+with static routes to a transit gateway.</p>
+<p>You must delete the static routes before you migrate to the new gateway.</p>
+<p>Keep a copy of the static route before you delete it. You will need to
+add back these routes to the transit gateway after the VPN connection
+migration is complete.</p>
+<p>After you migrate to the new gateway, you might need to modify your VPC
+route table. Use CreateRoute and DeleteRoute to make the changes
+described in <a href='https://docs.aws.amazon.com/vpn/latest/s2svpn/modify-vpn-target.html#step-update-routing'>VPN Gateway Target Modification Required VPC Route Table Updates</a>
+in the <em>AWS Site-to-Site VPN User Guide</em>.</p>
+<p>When the new gateway is a transit gateway, modify the transit gateway
+route table to allow traffic between the VPC and the AWS Site-to-Site
+VPN connection. Use CreateTransitGatewayRoute to add the routes.</p>
+<p>If you deleted VPN static routes, you must add the static routes to the
+transit gateway route table.</p>
+<p>After you perform this operation, the AWS VPN endpoint's IP addresses on
+the AWS side and the tunnel options remain intact. Your AWS Site-to-Site
+VPN connection will be temporarily unavailable for a brief period while
+we provision the new endpoints.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_modify_vpn_connection</span>(<span class='no'>VpnConnectionId</span>, <span class='no'>TransitGatewayId</span>,
-  <span class='no'>CustomerGatewayId</span>, <span class='no'>VpnGatewayId</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_modify_vpn_connection</span><span class='op'>(</span><span class='va'>VpnConnectionId</span>, <span class='va'>TransitGatewayId</span>,
+  <span class='va'>CustomerGatewayId</span>, <span class='va'>VpnGatewayId</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,48 +213,17 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>An existing virtual private gateway to a new virtual private gateway</p></li>
-<li><p>An existing virtual private gateway to a transit gateway</p></li>
-<li><p>An existing transit gateway to a new transit gateway</p></li>
-<li><p>An existing transit gateway to a virtual private gateway</p></li>
-</ul>
-
-<p>Before you perform the migration to the new gateway, you must configure
-the new gateway. Use CreateVpnGateway to create a virtual private
-gateway, or CreateTransitGateway to create a transit gateway.</p>
-<p>This step is required when you migrate from a virtual private gateway
-with static routes to a transit gateway.</p>
-<p>You must delete the static routes before you migrate to the new gateway.</p>
-<p>Keep a copy of the static route before you delete it. You will need to
-add back these routes to the transit gateway after the VPN connection
-migration is complete.</p>
-<p>After you migrate to the new gateway, you might need to modify your VPC
-route table. Use CreateRoute and DeleteRoute to make the changes
-described in <a href='https://docs.aws.amazon.com/vpn/latest/s2svpn/modify-vpn-target.html#step-update-routing'>VPN Gateway Target Modification Required VPC Route Table Updates</a>
-in the <em>AWS Site-to-Site VPN User Guide</em>.</p>
-<p>When the new gateway is a transit gateway, modify the transit gateway
-route table to allow traffic between the VPC and the AWS Site-to-Site
-VPN connection. Use CreateTransitGatewayRoute to add the routes.</p>
-<p>If you deleted VPN static routes, you must add the static routes to the
-transit gateway route table.</p>
-<p>After you perform this operation, the AWS VPN endpoint\'s IP addresses
-on the AWS side and the tunnel options remain intact. Your AWS
-Site-to-Site VPN connection will be temporarily unavailable for a brief
-period while we provision the new endpoints.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>modify_vpn_connection</span>(
-  <span class='kw'>VpnConnectionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TransitGatewayId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CustomerGatewayId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VpnGatewayId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>modify_vpn_connection</span><span class='op'>(</span>
+  VpnConnectionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  TransitGatewayId <span class='op'>=</span> <span class='st'>"string"</span>,
+  CustomerGatewayId <span class='op'>=</span> <span class='st'>"string"</span>,
+  VpnGatewayId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -216,7 +241,7 @@ period while we provision the new endpoints.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

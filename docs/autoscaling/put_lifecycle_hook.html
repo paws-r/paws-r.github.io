@@ -41,7 +41,35 @@
 
 <meta property="og:title" content="Creates or updates a lifecycle hook for the specified Auto Scaling group — autoscaling_put_lifecycle_hook" />
 <meta property="og:description" content="Creates or updates a lifecycle hook for the specified Auto Scaling
-group." />
+group.
+A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on
+an instance when the instance launches (before it is put into service)
+or as the instance terminates (before it is fully terminated).
+This step is a part of the procedure for adding a lifecycle hook to an
+Auto Scaling group:
+(Optional) Create a Lambda function and a rule that allows
+CloudWatch Events to invoke your Lambda function when Amazon EC2
+Auto Scaling launches or terminates instances.
+(Optional) Create a notification target and an IAM role. The target
+can be either an Amazon SQS queue or an Amazon SNS topic. The role
+allows Amazon EC2 Auto Scaling to publish lifecycle notifications to
+the target.
+Create the lifecycle hook. Specify whether the hook is used when
+the instances launch or terminate.
+If you need more time, record the lifecycle action heartbeat to keep
+the instance in a pending state using the
+RecordLifecycleActionHeartbeat API call.
+If you finish before the timeout period ends, complete the lifecycle
+action using the CompleteLifecycleAction API call.
+
+
+For more information, see Amazon EC2 Auto Scaling lifecycle hooks
+in the Amazon EC2 Auto Scaling User Guide.
+If you exceed your maximum limit of lifecycle hooks, which by default is
+50 per Auto Scaling group, the call fails.
+You can view the lifecycle hooks for an Auto Scaling group using the
+DescribeLifecycleHooks API call. If you are no longer using a lifecycle
+hook, you can delete it by calling the DeleteLifecycleHook API." />
 
 
 
@@ -73,7 +101,7 @@ group." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +109,7 @@ group." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +121,7 @@ group." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,11 +146,39 @@ group." />
     <div class="ref-description">
     <p>Creates or updates a lifecycle hook for the specified Auto Scaling
 group.</p>
+<p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on
+an instance when the instance launches (before it is put into service)
+or as the instance terminates (before it is fully terminated).</p>
+<p>This step is a part of the procedure for adding a lifecycle hook to an
+Auto Scaling group:</p><ol>
+<li><p>(Optional) Create a Lambda function and a rule that allows
+CloudWatch Events to invoke your Lambda function when Amazon EC2
+Auto Scaling launches or terminates instances.</p></li>
+<li><p>(Optional) Create a notification target and an IAM role. The target
+can be either an Amazon SQS queue or an Amazon SNS topic. The role
+allows Amazon EC2 Auto Scaling to publish lifecycle notifications to
+the target.</p></li>
+<li><p><strong>Create the lifecycle hook. Specify whether the hook is used when
+the instances launch or terminate.</strong></p></li>
+<li><p>If you need more time, record the lifecycle action heartbeat to keep
+the instance in a pending state using the
+RecordLifecycleActionHeartbeat API call.</p></li>
+<li><p>If you finish before the timeout period ends, complete the lifecycle
+action using the CompleteLifecycleAction API call.</p></li>
+</ol>
+
+<p>For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html'>Amazon EC2 Auto Scaling lifecycle hooks</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p>
+<p>If you exceed your maximum limit of lifecycle hooks, which by default is
+50 per Auto Scaling group, the call fails.</p>
+<p>You can view the lifecycle hooks for an Auto Scaling group using the
+DescribeLifecycleHooks API call. If you are no longer using a lifecycle
+hook, you can delete it by calling the DeleteLifecycleHook API.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>autoscaling_put_lifecycle_hook</span>(<span class='no'>LifecycleHookName</span>, <span class='no'>AutoScalingGroupName</span>,
-  <span class='no'>LifecycleTransition</span>, <span class='no'>RoleARN</span>, <span class='no'>NotificationTargetARN</span>,
-  <span class='no'>NotificationMetadata</span>, <span class='no'>HeartbeatTimeout</span>, <span class='no'>DefaultResult</span>)</pre>
+    <pre class="usage"><span class='fu'>autoscaling_put_lifecycle_hook</span><span class='op'>(</span><span class='va'>LifecycleHookName</span>, <span class='va'>AutoScalingGroupName</span>,
+  <span class='va'>LifecycleTransition</span>, <span class='va'>RoleARN</span>, <span class='va'>NotificationTargetARN</span>,
+  <span class='va'>NotificationMetadata</span>, <span class='va'>HeartbeatTimeout</span>, <span class='va'>DefaultResult</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,62 +246,35 @@ can be either <code>CONTINUE</code> or <code>ABANDON</code>. The default value i
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on
-an instance when the instance launches (before it is put into service)
-or as the instance terminates (before it is fully terminated).</p>
-<p>This step is a part of the procedure for adding a lifecycle hook to an
-Auto Scaling group:</p><ol>
-<li><p>(Optional) Create a Lambda function and a rule that allows
-CloudWatch Events to invoke your Lambda function when Amazon EC2
-Auto Scaling launches or terminates instances.</p></li>
-<li><p>(Optional) Create a notification target and an IAM role. The target
-can be either an Amazon SQS queue or an Amazon SNS topic. The role
-allows Amazon EC2 Auto Scaling to publish lifecycle notifications to
-the target.</p></li>
-<li><p><strong>Create the lifecycle hook. Specify whether the hook is used when
-the instances launch or terminate.</strong></p></li>
-<li><p>If you need more time, record the lifecycle action heartbeat to keep
-the instance in a pending state using the
-RecordLifecycleActionHeartbeat API call.</p></li>
-<li><p>If you finish before the timeout period ends, complete the lifecycle
-action using the CompleteLifecycleAction API call.</p></li>
-</ol>
-
-<p>For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html'>Amazon EC2 Auto Scaling Lifecycle Hooks</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p>
-<p>If you exceed your maximum limit of lifecycle hooks, which by default is
-50 per Auto Scaling group, the call fails.</p>
-<p>You can view the lifecycle hooks for an Auto Scaling group using the
-DescribeLifecycleHooks API call. If you are no longer using a lifecycle
-hook, you can delete it by calling the DeleteLifecycleHook API.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_lifecycle_hook</span>(
-  <span class='kw'>LifecycleHookName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LifecycleTransition</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NotificationTargetARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NotificationMetadata</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HeartbeatTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>DefaultResult</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_lifecycle_hook</span><span class='op'>(</span>
+  LifecycleHookName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  LifecycleTransition <span class='op'>=</span> <span class='st'>"string"</span>,
+  RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  NotificationTargetARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  NotificationMetadata <span class='op'>=</span> <span class='st'>"string"</span>,
+  HeartbeatTimeout <span class='op'>=</span> <span class='fl'>123</span>,
+  DefaultResult <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example creates a lifecycle hook.</span>
-<span class='no'>svc</span>$<span class='fu'>put_lifecycle_hook</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
-  <span class='kw'>LifecycleHookName</span> <span class='kw'>=</span> <span class='st'>"my-lifecycle-hook"</span>,
-  <span class='kw'>LifecycleTransition</span> <span class='kw'>=</span> <span class='st'>"autoscaling:EC2_INSTANCE_LAUNCHING"</span>,
-  <span class='kw'>NotificationTargetARN</span> <span class='kw'>=</span> <span class='st'>"arn:aws:sns:us-west-2:123456789012:my-sns-topic --role-arn"</span>,
-  <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/my-auto-scaling-role"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_lifecycle_hook</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
+  LifecycleHookName <span class='op'>=</span> <span class='st'>"my-lifecycle-hook"</span>,
+  LifecycleTransition <span class='op'>=</span> <span class='st'>"autoscaling:EC2_INSTANCE_LAUNCHING"</span>,
+  NotificationTargetARN <span class='op'>=</span> <span class='st'>"arn:aws:sns:us-west-2:123456789012:my-sns-topic --role-arn"</span>,
+  RoleARN <span class='op'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/my-auto-scaling-role"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -261,7 +290,7 @@ hook, you can delete it by calling the DeleteLifecycleHook API.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

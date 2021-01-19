@@ -52,7 +52,37 @@ insights into your data. For example, using Lambda metrics, you could
 divide the Errors metric by the Invocations metric to get an error rate
 time series. For more information about metric math expressions, see
 Metric Math Syntax and Functions
-in the Amazon CloudWatch User Guide." />
+in the Amazon CloudWatch User Guide.
+Calls to the GetMetricData API have a different pricing structure than
+calls to GetMetricStatistics. For more information about pricing, see
+Amazon CloudWatch Pricing.
+Amazon CloudWatch retains metric data as follows:
+Data points with a period of less than 60 seconds are available for
+3 hours. These data points are high-resolution metrics and are
+available only for custom metrics that have been defined with a
+StorageResolution of 1.
+Data points with a period of 60 seconds (1-minute) are available for
+15 days.
+Data points with a period of 300 seconds (5-minute) are available
+for 63 days.
+Data points with a period of 3600 seconds (1 hour) are available for
+455 days (15 months).
+
+
+Data points that are initially published with a shorter period are
+aggregated together for long-term storage. For example, if you collect
+data using a period of 1 minute, the data remains available for 15 days
+with 1-minute resolution. After 15 days, this data is still available,
+but is aggregated and retrievable only with a resolution of 5 minutes.
+After 63 days, the data is further aggregated and is available with a
+resolution of 1 hour.
+If you omit Unit in your request, all data that was collected with any
+unit is returned, along with the corresponding units that were specified
+when the data was reported to CloudWatch. If you specify a unit, the
+operation returns only data that was collected with that unit specified.
+If you specify a unit that does not match the data collected, the
+results of the operation are null. CloudWatch does not perform unit
+conversions." />
 
 
 
@@ -84,7 +114,7 @@ in the Amazon CloudWatch User Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -92,7 +122,7 @@ in the Amazon CloudWatch User Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -104,7 +134,7 @@ in the Amazon CloudWatch User Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,10 +168,40 @@ divide the Errors metric by the Invocations metric to get an error rate
 time series. For more information about metric math expressions, see
 <a href='https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax'>Metric Math Syntax and Functions</a>
 in the <em>Amazon CloudWatch User Guide</em>.</p>
+<p>Calls to the <code>GetMetricData</code> API have a different pricing structure than
+calls to <code>GetMetricStatistics</code>. For more information about pricing, see
+<a href='https://aws.amazon.com/cloudwatch/pricing/'>Amazon CloudWatch Pricing</a>.</p>
+<p>Amazon CloudWatch retains metric data as follows:</p><ul>
+<li><p>Data points with a period of less than 60 seconds are available for
+3 hours. These data points are high-resolution metrics and are
+available only for custom metrics that have been defined with a
+<code>StorageResolution</code> of 1.</p></li>
+<li><p>Data points with a period of 60 seconds (1-minute) are available for
+15 days.</p></li>
+<li><p>Data points with a period of 300 seconds (5-minute) are available
+for 63 days.</p></li>
+<li><p>Data points with a period of 3600 seconds (1 hour) are available for
+455 days (15 months).</p></li>
+</ul>
+
+<p>Data points that are initially published with a shorter period are
+aggregated together for long-term storage. For example, if you collect
+data using a period of 1 minute, the data remains available for 15 days
+with 1-minute resolution. After 15 days, this data is still available,
+but is aggregated and retrievable only with a resolution of 5 minutes.
+After 63 days, the data is further aggregated and is available with a
+resolution of 1 hour.</p>
+<p>If you omit <code>Unit</code> in your request, all data that was collected with any
+unit is returned, along with the corresponding units that were specified
+when the data was reported to CloudWatch. If you specify a unit, the
+operation returns only data that was collected with that unit specified.
+If you specify a unit that does not match the data collected, the
+results of the operation are null. CloudWatch does not perform unit
+conversions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloudwatch_get_metric_data</span>(<span class='no'>MetricDataQueries</span>, <span class='no'>StartTime</span>, <span class='no'>EndTime</span>,
-  <span class='no'>NextToken</span>, <span class='no'>ScanBy</span>, <span class='no'>MaxDatapoints</span>)</pre>
+    <pre class="usage"><span class='fu'>cloudwatch_get_metric_data</span><span class='op'>(</span><span class='va'>MetricDataQueries</span>, <span class='va'>StartTime</span>, <span class='va'>EndTime</span>,
+  <span class='va'>NextToken</span>, <span class='va'>ScanBy</span>, <span class='va'>MaxDatapoints</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,7 +238,7 @@ your request is rounded down and you receive data from 01:05:10 to
 data, using a period of 5 seconds, you receive data timestamped between
 15:02:15 and 15:07:15.</p>
 <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that
-align with the value of the metric\'s <code>Period</code> and sync up with the
+align with the value of the metric's <code>Period</code> and sync up with the
 beginning and end of an hour. For example, if the <code>Period</code> of a metric
 is 5 minutes, specifying 12:05 or 12:30 as <code>StartTime</code> can get a faster
 response from CloudWatch than setting 12:07 or 12:29 as the <code>StartTime</code>.</p></td>
@@ -189,15 +249,15 @@ response from CloudWatch than setting 12:07 or 12:29 as the <code>StartTime</cod
 <p>The value specified is exclusive; results include data points up to the
 specified time stamp.</p>
 <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that
-align with the value of the metric\'s <code>Period</code> and sync up with the
+align with the value of the metric's <code>Period</code> and sync up with the
 beginning and end of an hour. For example, if the <code>Period</code> of a metric
 is 5 minutes, specifying 12:05 or 12:30 as <code>EndTime</code> can get a faster
 response from CloudWatch than setting 12:07 or 12:29 as the <code>EndTime</code>.</p></td>
     </tr>
     <tr>
       <th>NextToken</th>
-      <td><p>Include this value, if it was returned by the previous call, to get the
-next set of data points.</p></td>
+      <td><p>Include this value, if it was returned by the previous <code>GetMetricData</code>
+operation, to get the next set of data points.</p></td>
     </tr>
     <tr>
       <th>ScanBy</th>
@@ -213,76 +273,45 @@ paginating. If you omit this, the default of 100,800 is used.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than
-calls to <code>GetMetricStatistics</code>. For more information about pricing, see
-<a href='https://aws.amazon.com/cloudwatch/pricing/'>Amazon CloudWatch Pricing</a>.</p>
-<p>Amazon CloudWatch retains metric data as follows:</p><ul>
-<li><p>Data points with a period of less than 60 seconds are available for
-3 hours. These data points are high-resolution metrics and are
-available only for custom metrics that have been defined with a
-<code>StorageResolution</code> of 1.</p></li>
-<li><p>Data points with a period of 60 seconds (1-minute) are available for
-15 days.</p></li>
-<li><p>Data points with a period of 300 seconds (5-minute) are available
-for 63 days.</p></li>
-<li><p>Data points with a period of 3600 seconds (1 hour) are available for
-455 days (15 months).</p></li>
-</ul>
-
-<p>Data points that are initially published with a shorter period are
-aggregated together for long-term storage. For example, if you collect
-data using a period of 1 minute, the data remains available for 15 days
-with 1-minute resolution. After 15 days, this data is still available,
-but is aggregated and retrievable only with a resolution of 5 minutes.
-After 63 days, the data is further aggregated and is available with a
-resolution of 1 hour.</p>
-<p>If you omit <code>Unit</code> in your request, all data that was collected with any
-unit is returned, along with the corresponding units that were specified
-when the data was reported to CloudWatch. If you specify a unit, the
-operation returns only data data that was collected with that unit
-specified. If you specify a unit that does not match the data collected,
-the results of the operation are null. CloudWatch does not perform unit
-conversions.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_metric_data</span>(
-  <span class='kw'>MetricDataQueries</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>MetricStat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Metric</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>MetricName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Dimensions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          )
-        ),
-        <span class='kw'>Period</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Stat</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Unit</span> <span class='kw'>=</span> <span class='st'>"Seconds"</span><span class='kw'>|</span><span class='st'>"Microseconds"</span><span class='kw'>|</span><span class='st'>"Milliseconds"</span><span class='kw'>|</span><span class='st'>"Bytes"</span><span class='kw'>|</span><span class='st'>"Kilobytes"</span><span class='kw'>|</span><span class='st'>"Megabytes"</span><span class='kw'>|</span><span class='st'>"Gigabytes"</span><span class='kw'>|</span><span class='st'>"Terabytes"</span><span class='kw'>|</span><span class='st'>"Bits"</span><span class='kw'>|</span><span class='st'>"Kilobits"</span><span class='kw'>|</span><span class='st'>"Megabits"</span><span class='kw'>|</span><span class='st'>"Gigabits"</span><span class='kw'>|</span><span class='st'>"Terabits"</span><span class='kw'>|</span><span class='st'>"Percent"</span><span class='kw'>|</span><span class='st'>"Count"</span><span class='kw'>|</span><span class='st'>"Bytes/Second"</span><span class='kw'>|</span><span class='st'>"Kilobytes/Second"</span><span class='kw'>|</span><span class='st'>"Megabytes/Second"</span><span class='kw'>|</span><span class='st'>"Gigabytes/Second"</span><span class='kw'>|</span><span class='st'>"Terabytes/Second"</span><span class='kw'>|</span><span class='st'>"Bits/Second"</span><span class='kw'>|</span><span class='st'>"Kilobits/Second"</span><span class='kw'>|</span><span class='st'>"Megabits/Second"</span><span class='kw'>|</span><span class='st'>"Gigabits/Second"</span><span class='kw'>|</span><span class='st'>"Terabits/Second"</span><span class='kw'>|</span><span class='st'>"Count/Second"</span><span class='kw'>|</span><span class='st'>"None"</span>
-      ),
-      <span class='kw'>Expression</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Label</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ReturnData</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Period</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  ),
-  <span class='kw'>StartTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_metric_data</span><span class='op'>(</span>
+  MetricDataQueries <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Id <span class='op'>=</span> <span class='st'>"string"</span>,
+      MetricStat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Metric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+          MetricName <span class='op'>=</span> <span class='st'>"string"</span>,
+          Dimensions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Name <span class='op'>=</span> <span class='st'>"string"</span>,
+              Value <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        Period <span class='op'>=</span> <span class='fl'>123</span>,
+        Stat <span class='op'>=</span> <span class='st'>"string"</span>,
+        Unit <span class='op'>=</span> <span class='st'>"Seconds"</span><span class='op'>|</span><span class='st'>"Microseconds"</span><span class='op'>|</span><span class='st'>"Milliseconds"</span><span class='op'>|</span><span class='st'>"Bytes"</span><span class='op'>|</span><span class='st'>"Kilobytes"</span><span class='op'>|</span><span class='st'>"Megabytes"</span><span class='op'>|</span><span class='st'>"Gigabytes"</span><span class='op'>|</span><span class='st'>"Terabytes"</span><span class='op'>|</span><span class='st'>"Bits"</span><span class='op'>|</span><span class='st'>"Kilobits"</span><span class='op'>|</span><span class='st'>"Megabits"</span><span class='op'>|</span><span class='st'>"Gigabits"</span><span class='op'>|</span><span class='st'>"Terabits"</span><span class='op'>|</span><span class='st'>"Percent"</span><span class='op'>|</span><span class='st'>"Count"</span><span class='op'>|</span><span class='st'>"Bytes/Second"</span><span class='op'>|</span><span class='st'>"Kilobytes/Second"</span><span class='op'>|</span><span class='st'>"Megabytes/Second"</span><span class='op'>|</span><span class='st'>"Gigabytes/Second"</span><span class='op'>|</span><span class='st'>"Terabytes/Second"</span><span class='op'>|</span><span class='st'>"Bits/Second"</span><span class='op'>|</span><span class='st'>"Kilobits/Second"</span><span class='op'>|</span><span class='st'>"Megabits/Second"</span><span class='op'>|</span><span class='st'>"Gigabits/Second"</span><span class='op'>|</span><span class='st'>"Terabits/Second"</span><span class='op'>|</span><span class='st'>"Count/Second"</span><span class='op'>|</span><span class='st'>"None"</span>
+      <span class='op'>)</span>,
+      Expression <span class='op'>=</span> <span class='st'>"string"</span>,
+      Label <span class='op'>=</span> <span class='st'>"string"</span>,
+      ReturnData <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Period <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  StartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>EndTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+  <span class='op'>)</span>,
+  EndTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ScanBy</span> <span class='kw'>=</span> <span class='st'>"TimestampDescending"</span><span class='kw'>|</span><span class='st'>"TimestampAscending"</span>,
-  <span class='kw'>MaxDatapoints</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+  <span class='op'>)</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  ScanBy <span class='op'>=</span> <span class='st'>"TimestampDescending"</span><span class='op'>|</span><span class='st'>"TimestampAscending"</span>,
+  MaxDatapoints <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -300,7 +329,7 @@ conversions.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

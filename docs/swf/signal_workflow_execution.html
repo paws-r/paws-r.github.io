@@ -48,7 +48,28 @@ identified by the given domain, workflowId and runId — swf_signal_workflow_exe
 history and creates a decision task for the workflow execution
 identified by the given domain, workflowId and runId. The event is
 recorded with the specified user defined signalName and input (if
-provided)." />
+provided).
+If a runId isn't specified, then the WorkflowExecutionSignaled event
+is recorded in the history of the current open workflow with the
+matching workflowId in the domain.
+If the specified workflow execution isn't open, this method fails with
+UnknownResource.
+Access Control
+You can use IAM policies to control this action's access to Amazon SWF
+resources as follows:
+Use a Resource element with the domain name to limit the action to
+only specified domains.
+Use an Action element to allow or deny permission to call this
+action.
+You cannot use an IAM policy to constrain this action's parameters.
+
+
+If the caller doesn't have sufficient permissions to invoke the action,
+or the parameter values fall outside the specified constraints, the
+action fails. The associated event attribute's cause parameter is set
+to OPERATION_NOT_PERMITTED. For details and example IAM policies, see
+Using IAM to Manage Access to Amazon SWF Workflows
+in the Amazon SWF Developer Guide." />
 
 
 
@@ -80,7 +101,7 @@ provided)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +109,7 @@ provided)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +121,7 @@ provided)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -130,10 +151,31 @@ history and creates a decision task for the workflow execution
 identified by the given domain, workflowId and runId. The event is
 recorded with the specified user defined signalName and input (if
 provided).</p>
+<p>If a runId isn't specified, then the <code>WorkflowExecutionSignaled</code> event
+is recorded in the history of the current open workflow with the
+matching workflowId in the domain.</p>
+<p>If the specified workflow execution isn't open, this method fails with
+<code>UnknownResource</code>.</p>
+<p><strong>Access Control</strong></p>
+<p>You can use IAM policies to control this action's access to Amazon SWF
+resources as follows:</p><ul>
+<li><p>Use a <code>Resource</code> element with the domain name to limit the action to
+only specified domains.</p></li>
+<li><p>Use an <code>Action</code> element to allow or deny permission to call this
+action.</p></li>
+<li><p>You cannot use an IAM policy to constrain this action's parameters.</p></li>
+</ul>
+
+<p>If the caller doesn't have sufficient permissions to invoke the action,
+or the parameter values fall outside the specified constraints, the
+action fails. The associated event attribute's <code>cause</code> parameter is set
+to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see
+<a href='https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html'>Using IAM to Manage Access to Amazon SWF Workflows</a>
+in the <em>Amazon SWF Developer Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>swf_signal_workflow_execution</span>(<span class='no'>domain</span>, <span class='no'>workflowId</span>, <span class='no'>runId</span>, <span class='no'>signalName</span>,
-  <span class='no'>input</span>)</pre>
+    <pre class="usage"><span class='fu'>swf_signal_workflow_execution</span><span class='op'>(</span><span class='va'>domain</span>, <span class='va'>workflowId</span>, <span class='va'>runId</span>, <span class='va'>signalName</span>,
+  <span class='va'>input</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,43 +200,21 @@ workflow.</p></td>
     <tr>
       <th>input</th>
       <td><p>Data to attach to the <code>WorkflowExecutionSignaled</code> event in the target
-workflow execution\'s history.</p></td>
+workflow execution's history.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If a runId isn\'t specified, then the <code>WorkflowExecutionSignaled</code> event
-is recorded in the history of the current open workflow with the
-matching workflowId in the domain.</p>
-<p>If the specified workflow execution isn\'t open, this method fails with
-<code>UnknownResource</code>.</p>
-<p><strong>Access Control</strong></p>
-<p>You can use IAM policies to control this action\'s access to Amazon SWF
-resources as follows:</p><ul>
-<li><p>Use a <code>Resource</code> element with the domain name to limit the action to
-only specified domains.</p></li>
-<li><p>Use an <code>Action</code> element to allow or deny permission to call this
-action.</p></li>
-<li><p>You cannot use an IAM policy to constrain this action\'s parameters.</p></li>
-</ul>
-
-<p>If the caller doesn\'t have sufficient permissions to invoke the action,
-or the parameter values fall outside the specified constraints, the
-action fails. The associated event attribute\'s <code>cause</code> parameter is set
-to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see
-<a href='https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html'>Using IAM to Manage Access to Amazon SWF Workflows</a>
-in the <em>Amazon SWF Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>signal_workflow_execution</span>(
-  <span class='kw'>domain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>workflowId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>runId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>signalName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>input</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>signal_workflow_execution</span><span class='op'>(</span>
+  domain <span class='op'>=</span> <span class='st'>"string"</span>,
+  workflowId <span class='op'>=</span> <span class='st'>"string"</span>,
+  runId <span class='op'>=</span> <span class='st'>"string"</span>,
+  signalName <span class='op'>=</span> <span class='st'>"string"</span>,
+  input <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -212,7 +232,7 @@ in the <em>Amazon SWF Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

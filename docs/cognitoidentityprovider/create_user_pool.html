@@ -75,7 +75,7 @@ the pool." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ the pool." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +95,7 @@ the pool." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,14 +123,14 @@ the pool</h1>
 the pool.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cognitoidentityprovider_create_user_pool</span>(<span class='no'>PoolName</span>, <span class='no'>Policies</span>,
-  <span class='no'>LambdaConfig</span>, <span class='no'>AutoVerifiedAttributes</span>, <span class='no'>AliasAttributes</span>,
-  <span class='no'>UsernameAttributes</span>, <span class='no'>SmsVerificationMessage</span>, <span class='no'>EmailVerificationMessage</span>,
-  <span class='no'>EmailVerificationSubject</span>, <span class='no'>VerificationMessageTemplate</span>,
-  <span class='no'>SmsAuthenticationMessage</span>, <span class='no'>MfaConfiguration</span>, <span class='no'>DeviceConfiguration</span>,
-  <span class='no'>EmailConfiguration</span>, <span class='no'>SmsConfiguration</span>, <span class='no'>UserPoolTags</span>,
-  <span class='no'>AdminCreateUserConfig</span>, <span class='no'>Schema</span>, <span class='no'>UserPoolAddOns</span>, <span class='no'>UsernameConfiguration</span>,
-  <span class='no'>AccountRecoverySetting</span>)</pre>
+    <pre class="usage"><span class='fu'>cognitoidentityprovider_create_user_pool</span><span class='op'>(</span><span class='va'>PoolName</span>, <span class='va'>Policies</span>,
+  <span class='va'>LambdaConfig</span>, <span class='va'>AutoVerifiedAttributes</span>, <span class='va'>AliasAttributes</span>,
+  <span class='va'>UsernameAttributes</span>, <span class='va'>SmsVerificationMessage</span>, <span class='va'>EmailVerificationMessage</span>,
+  <span class='va'>EmailVerificationSubject</span>, <span class='va'>VerificationMessageTemplate</span>,
+  <span class='va'>SmsAuthenticationMessage</span>, <span class='va'>MfaConfiguration</span>, <span class='va'>DeviceConfiguration</span>,
+  <span class='va'>EmailConfiguration</span>, <span class='va'>SmsConfiguration</span>, <span class='va'>UserPoolTags</span>,
+  <span class='va'>AdminCreateUserConfig</span>, <span class='va'>Schema</span>, <span class='va'>UserPoolAddOns</span>, <span class='va'>UsernameConfiguration</span>,
+  <span class='va'>AccountRecoverySetting</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,16 +178,22 @@ usernames when a user signs up.</p></td>
     </tr>
     <tr>
       <th>EmailVerificationMessage</th>
-      <td><p>A string representing the email verification message.</p></td>
+      <td><p>A string representing the email verification message.
+EmailVerificationMessage is allowed only if
+<a href='https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount'>EmailSendingAccount</a>
+is DEVELOPER.</p></td>
     </tr>
     <tr>
       <th>EmailVerificationSubject</th>
-      <td><p>A string representing the email verification subject.</p></td>
+      <td><p>A string representing the email verification subject.
+EmailVerificationSubject is allowed only if
+<a href='https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_EmailConfigurationType.html#CognitoUserPools-Type-EmailConfigurationType-EmailSendingAccount'>EmailSendingAccount</a>
+is DEVELOPER.</p></td>
     </tr>
     <tr>
       <th>VerificationMessageTemplate</th>
       <td><p>The template for the verification message that the user sees when the
-app requests permission to access the user\'s information.</p></td>
+app requests permission to access the user's information.</p></td>
     </tr>
     <tr>
       <th>SmsAuthenticationMessage</th>
@@ -227,15 +233,16 @@ can be standard or custom attributes.</p></td>
     <tr>
       <th>UserPoolAddOns</th>
       <td><p>Used to enable advanced security risk detection. Set the key
-<code>AdvancedSecurityMode</code> to the value \"AUDIT\".</p></td>
+<code>AdvancedSecurityMode</code> to the value "AUDIT".</p></td>
     </tr>
     <tr>
       <th>UsernameConfiguration</th>
       <td><p>You can choose to set case sensitivity on the username input for the
 selected sign-in option. For example, when this is set to <code>False</code>, users
-will be able to sign in using either \"username\" or \"Username\". This
+will be able to sign in using either "username" or "Username". This
 configuration is immutable once it has been set. For more information,
-see .</p></td>
+see
+<a href='https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_UsernameConfigurationType.html'>UsernameConfigurationType</a>.</p></td>
     </tr>
     <tr>
       <th>AccountRecoverySetting</th>
@@ -245,121 +252,128 @@ you to define a preferred method when a user has more than one method
 available. With this setting, SMS does not qualify for a valid password
 recovery mechanism if the user also has SMS MFA enabled. In the absence
 of this setting, Cognito uses the legacy behavior to determine the
-recovery method where SMS is preferred over email.</p>
-<p>Starting February 1, 2020, the value of <code>AccountRecoverySetting</code> will
-default to <code>verified_email</code> first and <code>verified_phone_number</code> as the
-second option for newly created user pools if no value is provided.</p></td>
+recovery method where SMS is preferred over email.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_user_pool</span>(
-  <span class='kw'>PoolName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Policies</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>PasswordPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>MinimumLength</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>RequireUppercase</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>RequireLowercase</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>RequireNumbers</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>RequireSymbols</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>TemporaryPasswordValidityDays</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  ),
-  <span class='kw'>LambdaConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>PreSignUp</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>CustomMessage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>PostConfirmation</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>PreAuthentication</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>PostAuthentication</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DefineAuthChallenge</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>CreateAuthChallenge</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>VerifyAuthChallengeResponse</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>PreTokenGeneration</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>UserMigration</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AutoVerifiedAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"phone_number"</span><span class='kw'>|</span><span class='st'>"email"</span>
-  ),
-  <span class='kw'>AliasAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"phone_number"</span><span class='kw'>|</span><span class='st'>"email"</span><span class='kw'>|</span><span class='st'>"preferred_username"</span>
-  ),
-  <span class='kw'>UsernameAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"phone_number"</span><span class='kw'>|</span><span class='st'>"email"</span>
-  ),
-  <span class='kw'>SmsVerificationMessage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EmailVerificationMessage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EmailVerificationSubject</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VerificationMessageTemplate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SmsMessage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>EmailMessage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>EmailSubject</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>EmailMessageByLink</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>EmailSubjectByLink</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DefaultEmailOption</span> <span class='kw'>=</span> <span class='st'>"CONFIRM_WITH_LINK"</span><span class='kw'>|</span><span class='st'>"CONFIRM_WITH_CODE"</span>
-  ),
-  <span class='kw'>SmsAuthenticationMessage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MfaConfiguration</span> <span class='kw'>=</span> <span class='st'>"OFF"</span><span class='kw'>|</span><span class='st'>"ON"</span><span class='kw'>|</span><span class='st'>"OPTIONAL"</span>,
-  <span class='kw'>DeviceConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ChallengeRequiredOnNewDevice</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>DeviceOnlyRememberedOnUserPrompt</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>EmailConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ReplyToEmailAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>EmailSendingAccount</span> <span class='kw'>=</span> <span class='st'>"COGNITO_DEFAULT"</span><span class='kw'>|</span><span class='st'>"DEVELOPER"</span>,
-    <span class='kw'>From</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ConfigurationSet</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SmsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SnsCallerArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ExternalId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>UserPoolTags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_user_pool</span><span class='op'>(</span>
+  PoolName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Policies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    PasswordPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      MinimumLength <span class='op'>=</span> <span class='fl'>123</span>,
+      RequireUppercase <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      RequireLowercase <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      RequireNumbers <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      RequireSymbols <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      TemporaryPasswordValidityDays <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  LambdaConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    PreSignUp <span class='op'>=</span> <span class='st'>"string"</span>,
+    CustomMessage <span class='op'>=</span> <span class='st'>"string"</span>,
+    PostConfirmation <span class='op'>=</span> <span class='st'>"string"</span>,
+    PreAuthentication <span class='op'>=</span> <span class='st'>"string"</span>,
+    PostAuthentication <span class='op'>=</span> <span class='st'>"string"</span>,
+    DefineAuthChallenge <span class='op'>=</span> <span class='st'>"string"</span>,
+    CreateAuthChallenge <span class='op'>=</span> <span class='st'>"string"</span>,
+    VerifyAuthChallengeResponse <span class='op'>=</span> <span class='st'>"string"</span>,
+    PreTokenGeneration <span class='op'>=</span> <span class='st'>"string"</span>,
+    UserMigration <span class='op'>=</span> <span class='st'>"string"</span>,
+    CustomSMSSender <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      LambdaVersion <span class='op'>=</span> <span class='st'>"V1_0"</span>,
+      LambdaArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    CustomEmailSender <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      LambdaVersion <span class='op'>=</span> <span class='st'>"V1_0"</span>,
+      LambdaArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    KMSKeyID <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  AutoVerifiedAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"phone_number"</span><span class='op'>|</span><span class='st'>"email"</span>
+  <span class='op'>)</span>,
+  AliasAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"phone_number"</span><span class='op'>|</span><span class='st'>"email"</span><span class='op'>|</span><span class='st'>"preferred_username"</span>
+  <span class='op'>)</span>,
+  UsernameAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"phone_number"</span><span class='op'>|</span><span class='st'>"email"</span>
+  <span class='op'>)</span>,
+  SmsVerificationMessage <span class='op'>=</span> <span class='st'>"string"</span>,
+  EmailVerificationMessage <span class='op'>=</span> <span class='st'>"string"</span>,
+  EmailVerificationSubject <span class='op'>=</span> <span class='st'>"string"</span>,
+  VerificationMessageTemplate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SmsMessage <span class='op'>=</span> <span class='st'>"string"</span>,
+    EmailMessage <span class='op'>=</span> <span class='st'>"string"</span>,
+    EmailSubject <span class='op'>=</span> <span class='st'>"string"</span>,
+    EmailMessageByLink <span class='op'>=</span> <span class='st'>"string"</span>,
+    EmailSubjectByLink <span class='op'>=</span> <span class='st'>"string"</span>,
+    DefaultEmailOption <span class='op'>=</span> <span class='st'>"CONFIRM_WITH_LINK"</span><span class='op'>|</span><span class='st'>"CONFIRM_WITH_CODE"</span>
+  <span class='op'>)</span>,
+  SmsAuthenticationMessage <span class='op'>=</span> <span class='st'>"string"</span>,
+  MfaConfiguration <span class='op'>=</span> <span class='st'>"OFF"</span><span class='op'>|</span><span class='st'>"ON"</span><span class='op'>|</span><span class='st'>"OPTIONAL"</span>,
+  DeviceConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ChallengeRequiredOnNewDevice <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    DeviceOnlyRememberedOnUserPrompt <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  EmailConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    ReplyToEmailAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+    EmailSendingAccount <span class='op'>=</span> <span class='st'>"COGNITO_DEFAULT"</span><span class='op'>|</span><span class='st'>"DEVELOPER"</span>,
+    From <span class='op'>=</span> <span class='st'>"string"</span>,
+    ConfigurationSet <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  SmsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SnsCallerArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    ExternalId <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  UserPoolTags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AdminCreateUserConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AllowAdminCreateUserOnly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>UnusedAccountValidityDays</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>InviteMessageTemplate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>SMSMessage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>EmailMessage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>EmailSubject</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Schema</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>AttributeDataType</span> <span class='kw'>=</span> <span class='st'>"String"</span><span class='kw'>|</span><span class='st'>"Number"</span><span class='kw'>|</span><span class='st'>"DateTime"</span><span class='kw'>|</span><span class='st'>"Boolean"</span>,
-      <span class='kw'>DeveloperOnlyAttribute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Mutable</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>Required</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>NumberAttributeConstraints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>MinValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>MaxValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>StringAttributeConstraints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>MinLength</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>MaxLength</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>UserPoolAddOns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AdvancedSecurityMode</span> <span class='kw'>=</span> <span class='st'>"OFF"</span><span class='kw'>|</span><span class='st'>"AUDIT"</span><span class='kw'>|</span><span class='st'>"ENFORCED"</span>
-  ),
-  <span class='kw'>UsernameConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CaseSensitive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>AccountRecoverySetting</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RecoveryMechanisms</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Priority</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"verified_email"</span><span class='kw'>|</span><span class='st'>"verified_phone_number"</span><span class='kw'>|</span><span class='st'>"admin_only"</span>
-      )
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  AdminCreateUserConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AllowAdminCreateUserOnly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    UnusedAccountValidityDays <span class='op'>=</span> <span class='fl'>123</span>,
+    InviteMessageTemplate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      SMSMessage <span class='op'>=</span> <span class='st'>"string"</span>,
+      EmailMessage <span class='op'>=</span> <span class='st'>"string"</span>,
+      EmailSubject <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Schema <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      AttributeDataType <span class='op'>=</span> <span class='st'>"String"</span><span class='op'>|</span><span class='st'>"Number"</span><span class='op'>|</span><span class='st'>"DateTime"</span><span class='op'>|</span><span class='st'>"Boolean"</span>,
+      DeveloperOnlyAttribute <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Mutable <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      Required <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      NumberAttributeConstraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        MinValue <span class='op'>=</span> <span class='st'>"string"</span>,
+        MaxValue <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      StringAttributeConstraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        MinLength <span class='op'>=</span> <span class='st'>"string"</span>,
+        MaxLength <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  UserPoolAddOns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AdvancedSecurityMode <span class='op'>=</span> <span class='st'>"OFF"</span><span class='op'>|</span><span class='st'>"AUDIT"</span><span class='op'>|</span><span class='st'>"ENFORCED"</span>
+  <span class='op'>)</span>,
+  UsernameConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CaseSensitive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  AccountRecoverySetting <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RecoveryMechanisms <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Priority <span class='op'>=</span> <span class='fl'>123</span>,
+        Name <span class='op'>=</span> <span class='st'>"verified_email"</span><span class='op'>|</span><span class='st'>"verified_phone_number"</span><span class='op'>|</span><span class='st'>"admin_only"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -377,7 +391,7 @@ second option for newly created user pools if no value is provided.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

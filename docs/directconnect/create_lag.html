@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Creates a link aggregation group (LAG) with the specified number of
-bundled physical connections between the customer network and a specific
-AWS Direct Connect location — directconnect_create_lag • paws</title>
+bundled physical dedicated connections between the customer network and
+a specific AWS Direct Connect location — directconnect_create_lag • paws</title>
 
 
 <!-- jquery -->
@@ -42,13 +42,30 @@ AWS Direct Connect location — directconnect_create_lag • paws</title>
 
 
 <meta property="og:title" content="Creates a link aggregation group (LAG) with the specified number of
-bundled physical connections between the customer network and a specific
-AWS Direct Connect location — directconnect_create_lag" />
+bundled physical dedicated connections between the customer network and
+a specific AWS Direct Connect location — directconnect_create_lag" />
 <meta property="og:description" content="Creates a link aggregation group (LAG) with the specified number of
-bundled physical connections between the customer network and a specific
-AWS Direct Connect location. A LAG is a logical interface that uses the
-Link Aggregation Control Protocol (LACP) to aggregate multiple
-interfaces, enabling you to treat them as a single interface." />
+bundled physical dedicated connections between the customer network and
+a specific AWS Direct Connect location. A LAG is a logical interface
+that uses the Link Aggregation Control Protocol (LACP) to aggregate
+multiple interfaces, enabling you to treat them as a single interface.
+All connections in a LAG must use the same bandwidth (either 1Gbps or
+10Gbps) and must terminate at the same AWS Direct Connect endpoint.
+You can have up to 10 dedicated connections per LAG. Regardless of this
+limit, if you request more connections for the LAG than AWS Direct
+Connect can allocate on a single endpoint, no LAG is created.
+You can specify an existing physical dedicated connection or
+interconnect to include in the LAG (which counts towards the total
+number of connections). Doing so interrupts the current physical
+dedicated connection, and re-establishes them as a member of the LAG.
+The LAG will be created on the same AWS Direct Connect endpoint to which
+the dedicated connection terminates. Any virtual interfaces associated
+with the dedicated connection are automatically disassociated and
+re-associated with the LAG. The connection ID does not change.
+If the AWS account used to create a LAG is a registered AWS Direct
+Connect Partner, the LAG is automatically enabled to host
+sub-connections. For a LAG owned by a partner, any associated virtual
+interfaces cannot be directly configured." />
 
 
 
@@ -80,7 +97,7 @@ interfaces, enabling you to treat them as a single interface." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +105,7 @@ interfaces, enabling you to treat them as a single interface." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +117,7 @@ interfaces, enabling you to treat them as a single interface." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,31 +135,48 @@ interfaces, enabling you to treat them as a single interface." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Creates a link aggregation group (LAG) with the specified number of
-bundled physical connections between the customer network and a specific
-AWS Direct Connect location</h1>
+bundled physical dedicated connections between the customer network and
+a specific AWS Direct Connect location</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/directconnect_operations.R'><code>R/directconnect_operations.R</code></a></small>
     <div class="hidden name"><code>directconnect_create_lag.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Creates a link aggregation group (LAG) with the specified number of
-bundled physical connections between the customer network and a specific
-AWS Direct Connect location. A LAG is a logical interface that uses the
-Link Aggregation Control Protocol (LACP) to aggregate multiple
-interfaces, enabling you to treat them as a single interface.</p>
+bundled physical dedicated connections between the customer network and
+a specific AWS Direct Connect location. A LAG is a logical interface
+that uses the Link Aggregation Control Protocol (LACP) to aggregate
+multiple interfaces, enabling you to treat them as a single interface.</p>
+<p>All connections in a LAG must use the same bandwidth (either 1Gbps or
+10Gbps) and must terminate at the same AWS Direct Connect endpoint.</p>
+<p>You can have up to 10 dedicated connections per LAG. Regardless of this
+limit, if you request more connections for the LAG than AWS Direct
+Connect can allocate on a single endpoint, no LAG is created.</p>
+<p>You can specify an existing physical dedicated connection or
+interconnect to include in the LAG (which counts towards the total
+number of connections). Doing so interrupts the current physical
+dedicated connection, and re-establishes them as a member of the LAG.
+The LAG will be created on the same AWS Direct Connect endpoint to which
+the dedicated connection terminates. Any virtual interfaces associated
+with the dedicated connection are automatically disassociated and
+re-associated with the LAG. The connection ID does not change.</p>
+<p>If the AWS account used to create a LAG is a registered AWS Direct
+Connect Partner, the LAG is automatically enabled to host
+sub-connections. For a LAG owned by a partner, any associated virtual
+interfaces cannot be directly configured.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>directconnect_create_lag</span>(<span class='no'>numberOfConnections</span>, <span class='no'>location</span>,
-  <span class='no'>connectionsBandwidth</span>, <span class='no'>lagName</span>, <span class='no'>connectionId</span>, <span class='no'>tags</span>, <span class='no'>childConnectionTags</span>,
-  <span class='no'>providerName</span>)</pre>
+    <pre class="usage"><span class='fu'>directconnect_create_lag</span><span class='op'>(</span><span class='va'>numberOfConnections</span>, <span class='va'>location</span>,
+  <span class='va'>connectionsBandwidth</span>, <span class='va'>lagName</span>, <span class='va'>connectionId</span>, <span class='va'>tags</span>, <span class='va'>childConnectionTags</span>,
+  <span class='va'>providerName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>numberOfConnections</th>
-      <td><p>[required] The number of physical connections initially provisioned and bundled by
-the LAG.</p></td>
+      <td><p>[required] The number of physical dedicated connections initially provisioned and
+bundled by the LAG.</p></td>
     </tr>
     <tr>
       <th>location</th>
@@ -150,9 +184,8 @@ the LAG.</p></td>
     </tr>
     <tr>
       <th>connectionsBandwidth</th>
-      <td><p>[required] The bandwidth of the individual physical connections bundled by the LAG.
-The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps,
-500Mbps, 1Gbps, 2Gbps, 5Gbps, and 10Gbps.</p></td>
+      <td><p>[required] The bandwidth of the individual physical dedicated connections bundled
+by the LAG. The possible values are 1Gbps and 10Gbps.</p></td>
     </tr>
     <tr>
       <th>lagName</th>
@@ -160,7 +193,7 @@ The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps,
     </tr>
     <tr>
       <th>connectionId</th>
-      <td><p>The ID of an existing connection to migrate to the LAG.</p></td>
+      <td><p>The ID of an existing dedicated connection to migrate to the LAG.</p></td>
     </tr>
     <tr>
       <th>tags</th>
@@ -176,48 +209,30 @@ The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps,
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>All connections in a LAG must use the same bandwidth and must terminate
-at the same AWS Direct Connect endpoint.</p>
-<p>You can have up to 10 connections per LAG. Regardless of this limit, if
-you request more connections for the LAG than AWS Direct Connect can
-allocate on a single endpoint, no LAG is created.</p>
-<p>You can specify an existing physical connection or interconnect to
-include in the LAG (which counts towards the total number of
-connections). Doing so interrupts the current physical connection or
-hosted connections, and re-establishes them as a member of the LAG. The
-LAG will be created on the same AWS Direct Connect endpoint to which the
-connection terminates. Any virtual interfaces associated with the
-connection are automatically disassociated and re-associated with the
-LAG. The connection ID does not change.</p>
-<p>If the AWS account used to create a LAG is a registered AWS Direct
-Connect Partner, the LAG is automatically enabled to host
-sub-connections. For a LAG owned by a partner, any associated virtual
-interfaces cannot be directly configured.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_lag</span>(
-  <span class='kw'>numberOfConnections</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>connectionsBandwidth</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>lagName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>connectionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>childConnectionTags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>providerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_lag</span><span class='op'>(</span>
+  numberOfConnections <span class='op'>=</span> <span class='fl'>123</span>,
+  location <span class='op'>=</span> <span class='st'>"string"</span>,
+  connectionsBandwidth <span class='op'>=</span> <span class='st'>"string"</span>,
+  lagName <span class='op'>=</span> <span class='st'>"string"</span>,
+  connectionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  childConnectionTags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  providerName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -235,7 +250,7 @@ interfaces cannot be directly configured.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
