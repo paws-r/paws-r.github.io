@@ -49,7 +49,15 @@ the repository — codebuild_create_webhook" />
 <meta property="og:description" content="For an existing AWS CodeBuild build project that has its source code
 stored in a GitHub or Bitbucket repository, enables AWS CodeBuild to
 start rebuilding the source code every time a code change is pushed to
-the repository." />
+the repository.
+If you enable webhooks for an AWS CodeBuild project, and the project is
+used as a build step in AWS CodePipeline, then two identical builds are
+created for each commit. One build is triggered through webhooks, and
+one through AWS CodePipeline. Because billing is on a per-build basis,
+you are billed for both builds. Therefore, if you are using AWS
+CodePipeline, we recommend that you disable webhooks in AWS CodeBuild.
+In the AWS CodeBuild console, clear the Webhook box. For more
+information, see step 5 in Change a Build Project's Settings." />
 
 
 
@@ -81,7 +89,7 @@ the repository." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -89,7 +97,7 @@ the repository." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +109,7 @@ the repository." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -131,9 +139,18 @@ the repository</h1>
 stored in a GitHub or Bitbucket repository, enables AWS CodeBuild to
 start rebuilding the source code every time a code change is pushed to
 the repository.</p>
+<p>If you enable webhooks for an AWS CodeBuild project, and the project is
+used as a build step in AWS CodePipeline, then two identical builds are
+created for each commit. One build is triggered through webhooks, and
+one through AWS CodePipeline. Because billing is on a per-build basis,
+you are billed for both builds. Therefore, if you are using AWS
+CodePipeline, we recommend that you disable webhooks in AWS CodeBuild.
+In the AWS CodeBuild console, clear the Webhook box. For more
+information, see step 5 in <a href='https://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console'>Change a Build Project's Settings</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>codebuild_create_webhook</span>(<span class='no'>projectName</span>, <span class='no'>branchFilter</span>, <span class='no'>filterGroups</span>)</pre>
+    <pre class="usage"><span class='fu'>codebuild_create_webhook</span><span class='op'>(</span><span class='va'>projectName</span>, <span class='va'>branchFilter</span>, <span class='va'>filterGroups</span>,
+  <span class='va'>buildType</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,34 +176,30 @@ specify <code>EVENT</code> as its <code>type</code>.</p>
 <code>filterGroups</code> array must pass. For a filter group to pass, each of its
 filters must pass.</p></td>
     </tr>
+    <tr>
+      <th>buildType</th>
+      <td><p>Specifies the type of build this webhook will trigger.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you enable webhooks for an AWS CodeBuild project, and the project is
-used as a build step in AWS CodePipeline, then two identical builds are
-created for each commit. One build is triggered through webhooks, and
-one through AWS CodePipeline. Because billing is on a per-build basis,
-you are billed for both builds. Therefore, if you are using AWS
-CodePipeline, we recommend that you disable webhooks in AWS CodeBuild.
-In the AWS CodeBuild console, clear the Webhook box. For more
-information, see step 5 in <a href='https://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console'>Change a Build Project\'s Settings</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_webhook</span>(
-  <span class='kw'>projectName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>branchFilter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>filterGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"EVENT"</span><span class='kw'>|</span><span class='st'>"BASE_REF"</span><span class='kw'>|</span><span class='st'>"HEAD_REF"</span><span class='kw'>|</span><span class='st'>"ACTOR_ACCOUNT_ID"</span><span class='kw'>|</span><span class='st'>"FILE_PATH"</span><span class='kw'>|</span><span class='st'>"COMMIT_MESSAGE"</span>,
-        <span class='kw'>pattern</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>excludeMatchedPattern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_webhook</span><span class='op'>(</span>
+  projectName <span class='op'>=</span> <span class='st'>"string"</span>,
+  branchFilter <span class='op'>=</span> <span class='st'>"string"</span>,
+  filterGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        type <span class='op'>=</span> <span class='st'>"EVENT"</span><span class='op'>|</span><span class='st'>"BASE_REF"</span><span class='op'>|</span><span class='st'>"HEAD_REF"</span><span class='op'>|</span><span class='st'>"ACTOR_ACCOUNT_ID"</span><span class='op'>|</span><span class='st'>"FILE_PATH"</span><span class='op'>|</span><span class='st'>"COMMIT_MESSAGE"</span>,
+        pattern <span class='op'>=</span> <span class='st'>"string"</span>,
+        excludeMatchedPattern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  buildType <span class='op'>=</span> <span class='st'>"BUILD"</span><span class='op'>|</span><span class='st'>"BUILD_BATCH"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -204,7 +217,7 @@ information, see step 5 in <a href='https://docs.aws.amazon.com/codebuild/latest
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

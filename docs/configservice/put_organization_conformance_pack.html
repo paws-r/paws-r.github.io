@@ -40,7 +40,29 @@
 
 
 <meta property="og:title" content="Deploys conformance packs across member accounts in an AWS Organization — configservice_put_organization_conformance_pack" />
-<meta property="og:description" content="Deploys conformance packs across member accounts in an AWS Organization." />
+<meta property="og:description" content="Deploys conformance packs across member accounts in an AWS Organization.
+Only a master account and a delegated administrator can call this API.
+When calling this API with a delegated administrator, you must ensure
+AWS Organizations ListDelegatedAdministrator permissions are added.
+This API enables organization service access for
+config-multiaccountsetup.amazonaws.com through the
+EnableAWSServiceAccess action and creates a service linked role
+AWSServiceRoleForConfigMultiAccountSetup in the master or delegated
+administrator account of your organization. The service linked role is
+created only when the role does not exist in the caller account. To use
+this API with delegated administrator, register a delegated
+administrator by calling AWS Organization register-delegate-admin for
+config-multiaccountsetup.amazonaws.com.
+Prerequisite: Ensure you call EnableAllFeatures API to enable all
+features in an organization.
+You must specify either the TemplateS3Uri or the TemplateBody
+parameter, but not both. If you provide both AWS Config uses the
+TemplateS3Uri parameter and ignores the TemplateBody parameter.
+AWS Config sets the state of a conformance pack to CREATE\_IN\_PROGRESS
+and UPDATE\_IN\_PROGRESS until the conformance pack is created or
+updated. You cannot update a conformance pack while it is in this state.
+You can create 6 conformance packs with 25 AWS Config rules in each pack
+and 3 delegated administrator per organization." />
 
 
 
@@ -72,7 +94,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +102,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +114,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,12 +138,34 @@
 
     <div class="ref-description">
     <p>Deploys conformance packs across member accounts in an AWS Organization.</p>
+<p>Only a master account and a delegated administrator can call this API.
+When calling this API with a delegated administrator, you must ensure
+AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p>
+<p>This API enables organization service access for
+<code>config-multiaccountsetup.amazonaws.com</code> through the
+<code>EnableAWSServiceAccess</code> action and creates a service linked role
+<code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated
+administrator account of your organization. The service linked role is
+created only when the role does not exist in the caller account. To use
+this API with delegated administrator, register a delegated
+administrator by calling AWS Organization <code>register-delegate-admin</code> for
+<code>config-multiaccountsetup.amazonaws.com</code>.</p>
+<p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all
+features in an organization.</p>
+<p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code>
+parameter, but not both. If you provide both AWS Config uses the
+<code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p>
+<p>AWS Config sets the state of a conformance pack to CREATE\_IN\_PROGRESS
+and UPDATE\_IN\_PROGRESS until the conformance pack is created or
+updated. You cannot update a conformance pack while it is in this state.</p>
+<p>You can create 6 conformance packs with 25 AWS Config rules in each pack
+and 3 delegated administrator per organization.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>configservice_put_organization_conformance_pack</span>(
-  <span class='no'>OrganizationConformancePackName</span>, <span class='no'>TemplateS3Uri</span>, <span class='no'>TemplateBody</span>,
-  <span class='no'>DeliveryS3Bucket</span>, <span class='no'>DeliveryS3KeyPrefix</span>, <span class='no'>ConformancePackInputParameters</span>,
-  <span class='no'>ExcludedAccounts</span>)</pre>
+    <pre class="usage"><span class='fu'>configservice_put_organization_conformance_pack</span><span class='op'>(</span>
+  <span class='va'>OrganizationConformancePackName</span>, <span class='va'>TemplateS3Uri</span>, <span class='va'>TemplateBody</span>,
+  <span class='va'>DeliveryS3Bucket</span>, <span class='va'>DeliveryS3KeyPrefix</span>, <span class='va'>ConformancePackInputParameters</span>,
+  <span class='va'>ExcludedAccounts</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,11 +188,11 @@ maximum length of 51,200 bytes.</p></td>
     </tr>
     <tr>
       <th>DeliveryS3Bucket</th>
-      <td><p>[required] Location of an Amazon S3 bucket where AWS Config can deliver evaluation
+      <td><p>Location of an Amazon S3 bucket where AWS Config can deliver evaluation
 results. AWS Config stores intermediate files while processing
 conformance pack template.</p>
 <p>The delivery bucket name should start with awsconfigconforms. For
-example: \"Resource\": \"arn:aws:s3:::your\_bucket\_name/*\". For more
+example: "Resource": "arn:aws:s3:::your\_bucket\_name/*". For more
 information, see <a href='https://docs.aws.amazon.com/config/latest/developerguide/conformance-pack-organization-apis.html'>Permissions for cross account bucket access</a>.</p></td>
     </tr>
     <tr>
@@ -166,42 +210,26 @@ pack while deploying a conformance pack.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This API enables organization service access for
-<code>config-multiaccountsetup.amazonaws.com</code> through the
-<code>EnableAWSServiceAccess</code> action and creates a service linked role
-<code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your
-organization. The service linked role is created only when the role does
-not exist in the master account. AWS Config verifies the existence of
-role with GetRole action.</p>
-<p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code>
-parameter, but not both. If you provide both AWS Config uses the
-<code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p>
-<p>AWS Config sets the state of a conformance pack to CREATE\_IN\_PROGRESS
-and UPDATE\_IN\_PROGRESS until the confomance pack is created or
-updated. You cannot update a conformance pack while it is in this state.</p>
-<p>You can create 6 conformance packs with 25 AWS Config rules in each
-pack.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_organization_conformance_pack</span>(
-  <span class='kw'>OrganizationConformancePackName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TemplateS3Uri</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TemplateBody</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DeliveryS3Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DeliveryS3KeyPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ConformancePackInputParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ParameterName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ParameterValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ExcludedAccounts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_organization_conformance_pack</span><span class='op'>(</span>
+  OrganizationConformancePackName <span class='op'>=</span> <span class='st'>"string"</span>,
+  TemplateS3Uri <span class='op'>=</span> <span class='st'>"string"</span>,
+  TemplateBody <span class='op'>=</span> <span class='st'>"string"</span>,
+  DeliveryS3Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  DeliveryS3KeyPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+  ConformancePackInputParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ParameterName <span class='op'>=</span> <span class='st'>"string"</span>,
+      ParameterValue <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ExcludedAccounts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -219,7 +247,7 @@ pack.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

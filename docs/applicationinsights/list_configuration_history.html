@@ -44,7 +44,14 @@ updates performed by Application Insights — applicationinsights_list_configura
 updates performed by Application Insights — applicationinsights_list_configuration_history" />
 <meta property="og:description" content="Lists the INFO, WARN, and ERROR events for periodic configuration
 updates performed by Application Insights. Examples of events
-represented are:" />
+represented are:
+INFO: creating a new alarm or updating an alarm threshold.
+WARN: alarm not created due to insufficient data points used to
+predict thresholds.
+ERROR: alarm not created due to permission errors or exceeding
+quotas.
+
+" />
 
 
 
@@ -76,7 +83,7 @@ represented are:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +91,7 @@ represented are:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +103,7 @@ represented are:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,11 +129,18 @@ updates performed by Application Insights</h1>
     <div class="ref-description">
     <p>Lists the INFO, WARN, and ERROR events for periodic configuration
 updates performed by Application Insights. Examples of events
-represented are:</p>
+represented are:</p><ul>
+<li><p>INFO: creating a new alarm or updating an alarm threshold.</p></li>
+<li><p>WARN: alarm not created due to insufficient data points used to
+predict thresholds.</p></li>
+<li><p>ERROR: alarm not created due to permission errors or exceeding
+quotas.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>applicationinsights_list_configuration_history</span>(<span class='no'>ResourceGroupName</span>,
-  <span class='no'>StartTime</span>, <span class='no'>EndTime</span>, <span class='no'>EventStatus</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>applicationinsights_list_configuration_history</span><span class='op'>(</span><span class='va'>ResourceGroupName</span>,
+  <span class='va'>StartTime</span>, <span class='va'>EndTime</span>, <span class='va'>EventStatus</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,32 +183,22 @@ This value is <code>null</code> when there are no more results to return.</p></t
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>INFO: creating a new alarm or updating an alarm threshold.</p></li>
-<li><p>WARN: alarm not created due to insufficient data points used to
-predict thresholds.</p></li>
-<li><p>ERROR: alarm not created due to permission errors or exceeding
-quotas.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_configuration_history</span>(
-  <span class='kw'>ResourceGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StartTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_configuration_history</span><span class='op'>(</span>
+  ResourceGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  StartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>EndTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+  <span class='op'>)</span>,
+  EndTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>EventStatus</span> <span class='kw'>=</span> <span class='st'>"INFO"</span><span class='kw'>|</span><span class='st'>"WARN"</span><span class='kw'>|</span><span class='st'>"ERROR"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  EventStatus <span class='op'>=</span> <span class='st'>"INFO"</span><span class='op'>|</span><span class='st'>"WARN"</span><span class='op'>|</span><span class='st'>"ERROR"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -212,7 +216,7 @@ quotas.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

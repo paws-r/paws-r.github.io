@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +118,9 @@
     <p>Creates an identity provider for a user pool.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cognitoidentityprovider_create_identity_provider</span>(<span class='no'>UserPoolId</span>,
-  <span class='no'>ProviderName</span>, <span class='no'>ProviderType</span>, <span class='no'>ProviderDetails</span>, <span class='no'>AttributeMapping</span>,
-  <span class='no'>IdpIdentifiers</span>)</pre>
+    <pre class="usage"><span class='fu'>cognitoidentityprovider_create_identity_provider</span><span class='op'>(</span><span class='va'>UserPoolId</span>,
+  <span class='va'>ProviderName</span>, <span class='va'>ProviderType</span>, <span class='va'>ProviderDetails</span>, <span class='va'>AttributeMapping</span>,
+  <span class='va'>IdpIdentifiers</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,10 +141,16 @@
       <th>ProviderDetails</th>
       <td><p>[required] The identity provider details. The following list describes the provider
 detail keys for each identity provider type.</p><ul>
-<li><p>For Google, Facebook and Login with Amazon:</p><ul>
+<li><p>For Google and Login with Amazon:</p><ul>
 <li><p>client\_id</p></li>
 <li><p>client\_secret</p></li>
 <li><p>authorize\_scopes</p></li>
+</ul></li>
+<li><p>For Facebook:</p><ul>
+<li><p>client\_id</p></li>
+<li><p>client\_secret</p></li>
+<li><p>authorize\_scopes</p></li>
+<li><p>api\_version</p></li>
 </ul></li>
 <li><p>For Sign in with Apple:</p><ul>
 <li><p>client\_id</p></li>
@@ -167,7 +173,6 @@ oidc\_issuer key</em></p></li>
 by oidc\_issuer key</em></p></li>
 <li><p>jwks\_uri <em>if not available from discovery URL specified by
 oidc\_issuer key</em></p></li>
-<li><p>authorize\_scopes</p></li>
 </ul></li>
 <li><p>For SAML providers:</p><ul>
 <li><p>MetadataFile OR MetadataURL</p></li>
@@ -189,20 +194,21 @@ pool attributes.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_identity_provider</span>(
-  <span class='kw'>UserPoolId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProviderName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProviderType</span> <span class='kw'>=</span> <span class='st'>"SAML"</span><span class='kw'>|</span><span class='st'>"Facebook"</span><span class='kw'>|</span><span class='st'>"Google"</span><span class='kw'>|</span><span class='st'>"LoginWithAmazon"</span><span class='kw'>|</span><span class='st'>"SignInWithApple"</span><span class='kw'>|</span><span class='st'>"OIDC"</span>,
-  <span class='kw'>ProviderDetails</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_identity_provider</span><span class='op'>(</span>
+  UserPoolId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProviderName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProviderType <span class='op'>=</span> <span class='st'>"SAML"</span><span class='op'>|</span><span class='st'>"Facebook"</span><span class='op'>|</span><span class='st'>"Google"</span><span class='op'>|</span><span class='st'>"LoginWithAmazon"</span><span class='op'>|</span><span class='st'>"SignInWithApple"</span><span class='op'>|</span><span class='st'>"OIDC"</span>,
+  ProviderDetails <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AttributeMapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  AttributeMapping <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>IdpIdentifiers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  IdpIdentifiers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -220,7 +226,7 @@ pool attributes.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

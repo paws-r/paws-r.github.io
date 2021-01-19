@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Restricts access to tasks assigned to workers in the specified workforce
-to those within specific ranges of IP addresses — sagemaker_update_workforce • paws</title>
+<title>Use this operation to update your workforce — sagemaker_update_workforce • paws</title>
 
 
 <!-- jquery -->
@@ -40,12 +39,28 @@ to those within specific ranges of IP addresses — sagemaker_update_workforce �
 
 
 
-<meta property="og:title" content="Restricts access to tasks assigned to workers in the specified workforce
-to those within specific ranges of IP addresses — sagemaker_update_workforce" />
-<meta property="og:description" content="Restricts access to tasks assigned to workers in the specified workforce
-to those within specific ranges of IP addresses. You specify allowed IP
-addresses by creating a list of up to ten
-CIDRs." />
+<meta property="og:title" content="Use this operation to update your workforce — sagemaker_update_workforce" />
+<meta property="og:description" content="Use this operation to update your workforce. You can use this operation
+to require that workers use specific IP addresses to work on tasks and
+to update your OpenID Connect (OIDC) Identity Provider (IdP) workforce
+configuration.
+Use SourceIpConfig to restrict worker access to tasks to a specific
+range of IP addresses. You specify allowed IP addresses by creating a
+list of up to ten
+CIDRs.
+By default, a workforce isn't restricted to specific IP addresses. If
+you specify a range of IP addresses, workers who attempt to access tasks
+using any IP address outside the specified range are denied and get a
+Not Found error message on the worker portal.
+Use OidcConfig to update the configuration of a workforce created
+using your own OIDC IdP.
+You can only update your OIDC IdP configuration when there are no work
+teams associated with your workforce. You can delete work teams using
+the operation.
+After restricting access to a range of IP addresses or updating your
+OIDC IdP configuration with this operation, you can view details about
+your update workforce using the operation.
+This operation only applies to private workforces." />
 
 
 
@@ -77,7 +92,7 @@ CIDRs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +100,7 @@ CIDRs." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +112,7 @@ CIDRs." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -114,29 +129,44 @@ CIDRs." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Restricts access to tasks assigned to workers in the specified workforce
-to those within specific ranges of IP addresses</h1>
+    <h1>Use this operation to update your workforce</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/sagemaker_operations.R'><code>R/sagemaker_operations.R</code></a></small>
     <div class="hidden name"><code>sagemaker_update_workforce.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Restricts access to tasks assigned to workers in the specified workforce
-to those within specific ranges of IP addresses. You specify allowed IP
-addresses by creating a list of up to ten
-<a href='https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html'>CIDRs</a>.</p>
+    <p>Use this operation to update your workforce. You can use this operation
+to require that workers use specific IP addresses to work on tasks and
+to update your OpenID Connect (OIDC) Identity Provider (IdP) workforce
+configuration.</p>
+<p>Use <code>SourceIpConfig</code> to restrict worker access to tasks to a specific
+range of IP addresses. You specify allowed IP addresses by creating a
+list of up to ten
+<a href='https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html'>CIDRs</a>.
+By default, a workforce isn't restricted to specific IP addresses. If
+you specify a range of IP addresses, workers who attempt to access tasks
+using any IP address outside the specified range are denied and get a
+<code>Not Found</code> error message on the worker portal.</p>
+<p>Use <code>OidcConfig</code> to update the configuration of a workforce created
+using your own OIDC IdP.</p>
+<p>You can only update your OIDC IdP configuration when there are no work
+teams associated with your workforce. You can delete work teams using
+the operation.</p>
+<p>After restricting access to a range of IP addresses or updating your
+OIDC IdP configuration with this operation, you can view details about
+your update workforce using the operation.</p>
+<p>This operation only applies to private workforces.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sagemaker_update_workforce</span>(<span class='no'>WorkforceName</span>, <span class='no'>SourceIpConfig</span>)</pre>
+    <pre class="usage"><span class='fu'>sagemaker_update_workforce</span><span class='op'>(</span><span class='va'>WorkforceName</span>, <span class='va'>SourceIpConfig</span>, <span class='va'>OidcConfig</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>WorkforceName</th>
-      <td><p>[required] The name of the private workforce whose access you want to restrict.
-<code>WorkforceName</code> is automatically set to <code>default</code> when a workforce is
-created and cannot be modified.</p></td>
+      <td><p>[required] The name of the private workforce that you want to update. You can find
+your workforce name by using the operation.</p></td>
     </tr>
     <tr>
       <th>SourceIpConfig</th>
@@ -145,28 +175,35 @@ created and cannot be modified.</p></td>
 that can be used to access tasks assigned to this workforce.</p>
 <p>Maximum: Ten CIDR values</p></td>
     </tr>
+    <tr>
+      <th>OidcConfig</th>
+      <td><p>Use this parameter to update your OIDC Identity Provider (IdP)
+configuration for a workforce made using your own IdP.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>By default, a workforce isn\'t restricted to specific IP addresses. If
-you specify a range of IP addresses, workers who attempt to access tasks
-using any IP address outside the specified range are denied access and
-get a <code>Not Found</code> error message on the worker portal. After restricting
-access with this operation, you can see the allowed IP values for a
-private workforce with the operation.</p>
-<p>This operation applies only to private workforces.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_workforce</span>(
-  <span class='kw'>WorkforceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceIpConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Cidrs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_workforce</span><span class='op'>(</span>
+  WorkforceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceIpConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Cidrs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  OidcConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ClientId <span class='op'>=</span> <span class='st'>"string"</span>,
+    ClientSecret <span class='op'>=</span> <span class='st'>"string"</span>,
+    Issuer <span class='op'>=</span> <span class='st'>"string"</span>,
+    AuthorizationEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    TokenEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    UserInfoEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    LogoutEndpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    JwksUri <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -184,7 +221,7 @@ private workforce with the operation.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

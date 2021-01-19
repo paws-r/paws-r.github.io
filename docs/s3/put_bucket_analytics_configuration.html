@@ -44,7 +44,51 @@ analytics configuration ID) — s3_put_bucket_analytics_configuration • paws</
 analytics configuration ID) — s3_put_bucket_analytics_configuration" />
 <meta property="og:description" content="Sets an analytics configuration for the bucket (specified by the
 analytics configuration ID). You can have up to 1,000 analytics
-configurations per bucket." />
+configurations per bucket.
+You can choose to have storage class analysis export analysis reports
+sent to a comma-separated values (CSV) flat file. See the DataExport
+request element. Reports are updated daily and are based on the object
+filters that you configure. When selecting data export, you specify a
+destination bucket and an optional destination prefix where the file is
+written. You can export the data to a destination bucket in a different
+account. However, the destination bucket must be in the same Region as
+the bucket that you are making the PUT analytics configuration to. For
+more information, see Amazon S3 Analytics – Storage Class Analysis.
+You must create a bucket policy on the destination bucket where the
+exported file is written to grant permissions to Amazon S3 to write
+objects to the bucket. For an example policy, see Granting Permissions for Amazon S3 Inventory and Storage Class Analysis.
+To use this operation, you must have permissions to perform the
+s3:PutAnalyticsConfiguration action. The bucket owner has this
+permission by default. The bucket owner can grant this permission to
+others. For more information about permissions, see Permissions Related to Bucket Subresource Operations
+and Managing Access Permissions to Your Amazon S3 Resources.
+Special Errors
+
+HTTP Error: HTTP 400 Bad Request
+Code: InvalidArgument
+Cause: Invalid argument.
+
+
+HTTP Error: HTTP 400 Bad Request
+Code: TooManyConfigurations
+Cause: You are attempting to create a new configuration but
+have already reached the 1,000-configuration limit.
+
+
+HTTP Error: HTTP 403 Forbidden
+Code: AccessDenied
+Cause: You are not the owner of the specified bucket, or you do
+not have the s3:PutAnalyticsConfiguration bucket permission to
+set the configuration on the bucket.
+
+
+
+Related Resources
+GetBucketAnalyticsConfiguration
+DeleteBucketAnalyticsConfiguration
+ListBucketAnalyticsConfigurations
+
+" />
 
 
 
@@ -76,7 +120,7 @@ configurations per bucket." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +128,7 @@ configurations per bucket." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +140,7 @@ configurations per bucket." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,31 +167,7 @@ analytics configuration ID)</h1>
     <p>Sets an analytics configuration for the bucket (specified by the
 analytics configuration ID). You can have up to 1,000 analytics
 configurations per bucket.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>s3_put_bucket_analytics_configuration</span>(<span class='no'>Bucket</span>, <span class='no'>Id</span>,
-  <span class='no'>AnalyticsConfiguration</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Bucket</th>
-      <td><p>[required] The name of the bucket to which an analytics configuration is stored.</p></td>
-    </tr>
-    <tr>
-      <th>Id</th>
-      <td><p>[required] The ID that identifies the analytics configuration.</p></td>
-    </tr>
-    <tr>
-      <th>AnalyticsConfiguration</th>
-      <td><p>[required] The configuration and any analyses for the analytics filter.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can choose to have storage class analysis export analysis reports
+<p>You can choose to have storage class analysis export analysis reports
 sent to a comma-separated values (CSV) flat file. See the <code>DataExport</code>
 request element. Reports are updated daily and are based on the object
 filters that you configure. When selecting data export, you specify a
@@ -155,7 +175,7 @@ destination bucket and an optional destination prefix where the file is
 written. You can export the data to a destination bucket in a different
 account. However, the destination bucket must be in the same Region as
 the bucket that you are making the PUT analytics configuration to. For
-more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html'>Amazon S3 Analytics -- Storage Class Analysis</a>.</p>
+more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html'>Amazon S3 Analytics – Storage Class Analysis</a>.</p>
 <p>You must create a bucket policy on the destination bucket where the
 exported file is written to grant permissions to Amazon S3 to write
 objects to the bucket. For an example policy, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9'>Granting Permissions for Amazon S3 Inventory and Storage Class Analysis</a>.</p>
@@ -185,46 +205,81 @@ set the configuration on the bucket.</em></p></li>
 </ul></li>
 </ul>
 
-<p><strong>Related Resources</strong></p>
+<p><strong>Related Resources</strong></p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAnalyticsConfiguration.html'>GetBucketAnalyticsConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html'>DeleteBucketAnalyticsConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html'>ListBucketAnalyticsConfigurations</a></p></li>
+</ul>
+
+    </div>
+
+    <pre class="usage"><span class='fu'>s3_put_bucket_analytics_configuration</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Id</span>,
+  <span class='va'>AnalyticsConfiguration</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Bucket</th>
+      <td><p>[required] The name of the bucket to which an analytics configuration is stored.</p></td>
+    </tr>
+    <tr>
+      <th>Id</th>
+      <td><p>[required] The ID that identifies the analytics configuration.</p></td>
+    </tr>
+    <tr>
+      <th>AnalyticsConfiguration</th>
+      <td><p>[required] The configuration and any analyses for the analytics filter.</p></td>
+    </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_bucket_analytics_configuration</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AnalyticsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Tag</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>And</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      )
-    ),
-    <span class='kw'>StorageClassAnalysis</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DataExport</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>OutputSchemaVersion</span> <span class='kw'>=</span> <span class='st'>"V_1"</span>,
-        <span class='kw'>Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>S3BucketDestination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Format</span> <span class='kw'>=</span> <span class='st'>"CSV"</span>,
-            <span class='kw'>BucketAccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_analytics_configuration</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Id <span class='op'>=</span> <span class='st'>"string"</span>,
+  AnalyticsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Id <span class='op'>=</span> <span class='st'>"string"</span>,
+    Filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+      Tag <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Key <span class='op'>=</span> <span class='st'>"string"</span>,
+        Value <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      And <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+        Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Key <span class='op'>=</span> <span class='st'>"string"</span>,
+            Value <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    StorageClassAnalysis <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DataExport <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        OutputSchemaVersion <span class='op'>=</span> <span class='st'>"V_1"</span>,
+        Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          S3BucketDestination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Format <span class='op'>=</span> <span class='st'>"CSV"</span>,
+            BucketAccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+            Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+            Prefix <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -242,7 +297,7 @@ set the configuration on the bucket.</em></p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

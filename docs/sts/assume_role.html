@@ -50,7 +50,98 @@ account or for cross-account access. For a comparison of AssumeRole
 with other API operations that produce temporary credentials, see
 Requesting Temporary Security Credentials
 and Comparing the AWS STS API operations
-in the IAM User Guide." />
+in the IAM User Guide.
+You cannot use AWS account root user credentials to call AssumeRole.
+You must use credentials for an IAM user or an IAM role to call
+AssumeRole.
+For cross-account access, imagine that you own multiple accounts and
+need to access resources in each account. You could create long-term
+credentials in each account to access those resources. However, managing
+all those credentials and remembering which one can access which account
+can be time consuming. Instead, you can create one set of long-term
+credentials in one account. Then use temporary security credentials to
+access all the other accounts by assuming roles in those accounts. For
+more information about roles, see IAM Roles
+in the IAM User Guide.
+Session Duration
+By default, the temporary security credentials created by AssumeRole
+last for one hour. However, you can use the optional DurationSeconds
+parameter to specify the duration of your session. You can provide a
+value from 900 seconds (15 minutes) up to the maximum session duration
+setting for the role. This setting can have a value from 1 hour to 12
+hours. To learn how to view the maximum value for your role, see View the Maximum Session Duration Setting for a Role
+in the IAM User Guide. The maximum session duration limit applies when
+you use the AssumeRole* API operations or the assume-role* CLI
+commands. However the limit does not apply when you use those operations
+to create a console URL. For more information, see Using IAM Roles
+in the IAM User Guide.
+Permissions
+The temporary security credentials created by AssumeRole can be used
+to make API calls to any AWS service with the following exception: You
+cannot call the AWS STS GetFederationToken or GetSessionToken API
+operations.
+(Optional) You can pass inline or managed session policies
+to this operation. You can pass a single JSON policy document to use as
+an inline session policy. You can also specify up to 10 managed policies
+to use as managed session policies. The plain text that you use for both
+inline and managed session policies can't exceed 2,048 characters.
+Passing policies to this operation returns new temporary credentials.
+The resulting session's permissions are the intersection of the role's
+identity-based policy and the session policies. You can use the role's
+temporary credentials in subsequent AWS API calls to access resources in
+the account that owns the role. You cannot use session policies to grant
+more permissions than those allowed by the identity-based policy of the
+role that is being assumed. For more information, see Session Policies
+in the IAM User Guide.
+To assume a role from a different account, your AWS account must be
+trusted by the role. The trust relationship is defined in the role's
+trust policy when the role is created. That trust policy states which
+accounts are allowed to delegate that access to users in the account.
+A user who wants to access a role in a different account must also have
+permissions that are delegated from the user account administrator. The
+administrator must attach a policy that allows the user to call
+AssumeRole for the ARN of the role in the other account. If the user
+is in the same account as the role, then you can do either of the
+following:
+Attach a policy to the user (identical to the previous user in a
+different account).
+Add the user as a principal directly in the role's trust policy.
+
+
+In this case, the trust policy acts as an IAM resource-based policy.
+Users in the same account as the role do not need explicit permission to
+assume the role. For more information about trust policies and
+resource-based policies, see IAM Policies
+in the IAM User Guide.
+Tags
+(Optional) You can pass tag key-value pairs to your session. These tags
+are called session tags. For more information about session tags, see
+Passing Session Tags in STS
+in the IAM User Guide.
+An administrator must grant you the permissions necessary to pass
+session tags. The administrator can also create granular permissions to
+allow you to pass only specific session tags. For more information, see
+Tutorial: Using Tags for Attribute-Based Access Control
+in the IAM User Guide.
+You can set the session tags as transitive. Transitive tags persist
+during role chaining. For more information, see Chaining Roles with Session Tags
+in the IAM User Guide.
+Using MFA with AssumeRole
+(Optional) You can include multi-factor authentication (MFA) information
+when you call AssumeRole. This is useful for cross-account scenarios
+to ensure that the user that assumes the role has been authenticated
+with an AWS MFA device. In that scenario, the trust policy of the role
+being assumed includes a condition that tests for MFA authentication. If
+the caller does not include valid MFA information, the request to assume
+the role is denied. The condition in a trust policy that tests for MFA
+authentication might look like the following example.
+&quot;Condition&quot;: \{&quot;Bool&quot;: \{&quot;aws:MultiFactorAuthPresent&quot;: true\}\}
+For more information, see Configuring MFA-Protected API Access
+in the IAM User Guide guide.
+To use MFA with AssumeRole, you pass values for the SerialNumber and
+TokenCode parameters. The SerialNumber value identifies the user's
+hardware or virtual MFA device. The TokenCode is the time-based
+one-time password (TOTP) that the MFA device produces." />
 
 
 
@@ -82,7 +173,7 @@ in the IAM User Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -90,7 +181,7 @@ in the IAM User Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -102,7 +193,7 @@ in the IAM User Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -135,11 +226,102 @@ with other API operations that produce temporary credentials, see
 <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html'>Requesting Temporary Security Credentials</a>
 and <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison'>Comparing the AWS STS API operations</a>
 in the <em>IAM User Guide</em>.</p>
+<p>You cannot use AWS account root user credentials to call <code>AssumeRole</code>.
+You must use credentials for an IAM user or an IAM role to call
+<code>AssumeRole</code>.</p>
+<p>For cross-account access, imagine that you own multiple accounts and
+need to access resources in each account. You could create long-term
+credentials in each account to access those resources. However, managing
+all those credentials and remembering which one can access which account
+can be time consuming. Instead, you can create one set of long-term
+credentials in one account. Then use temporary security credentials to
+access all the other accounts by assuming roles in those accounts. For
+more information about roles, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html'>IAM Roles</a>
+in the <em>IAM User Guide</em>.</p>
+<p><strong>Session Duration</strong></p>
+<p>By default, the temporary security credentials created by <code>AssumeRole</code>
+last for one hour. However, you can use the optional <code>DurationSeconds</code>
+parameter to specify the duration of your session. You can provide a
+value from 900 seconds (15 minutes) up to the maximum session duration
+setting for the role. This setting can have a value from 1 hour to 12
+hours. To learn how to view the maximum value for your role, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html#id_roles_use_view-role-max-session'>View the Maximum Session Duration Setting for a Role</a>
+in the <em>IAM User Guide</em>. The maximum session duration limit applies when
+you use the <code>AssumeRole*</code> API operations or the <code>assume-role*</code> CLI
+commands. However the limit does not apply when you use those operations
+to create a console URL. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html'>Using IAM Roles</a>
+in the <em>IAM User Guide</em>.</p>
+<p><strong>Permissions</strong></p>
+<p>The temporary security credentials created by <code>AssumeRole</code> can be used
+to make API calls to any AWS service with the following exception: You
+cannot call the AWS STS <code>GetFederationToken</code> or <code>GetSessionToken</code> API
+operations.</p>
+<p>(Optional) You can pass inline or managed <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_session'>session policies</a>
+to this operation. You can pass a single JSON policy document to use as
+an inline session policy. You can also specify up to 10 managed policies
+to use as managed session policies. The plain text that you use for both
+inline and managed session policies can't exceed 2,048 characters.
+Passing policies to this operation returns new temporary credentials.
+The resulting session's permissions are the intersection of the role's
+identity-based policy and the session policies. You can use the role's
+temporary credentials in subsequent AWS API calls to access resources in
+the account that owns the role. You cannot use session policies to grant
+more permissions than those allowed by the identity-based policy of the
+role that is being assumed. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_session'>Session Policies</a>
+in the <em>IAM User Guide</em>.</p>
+<p>To assume a role from a different account, your AWS account must be
+trusted by the role. The trust relationship is defined in the role's
+trust policy when the role is created. That trust policy states which
+accounts are allowed to delegate that access to users in the account.</p>
+<p>A user who wants to access a role in a different account must also have
+permissions that are delegated from the user account administrator. The
+administrator must attach a policy that allows the user to call
+<code>AssumeRole</code> for the ARN of the role in the other account. If the user
+is in the same account as the role, then you can do either of the
+following:</p><ul>
+<li><p>Attach a policy to the user (identical to the previous user in a
+different account).</p></li>
+<li><p>Add the user as a principal directly in the role's trust policy.</p></li>
+</ul>
+
+<p>In this case, the trust policy acts as an IAM resource-based policy.
+Users in the same account as the role do not need explicit permission to
+assume the role. For more information about trust policies and
+resource-based policies, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html'>IAM Policies</a>
+in the <em>IAM User Guide</em>.</p>
+<p><strong>Tags</strong></p>
+<p>(Optional) You can pass tag key-value pairs to your session. These tags
+are called session tags. For more information about session tags, see
+<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_session-tags.html'>Passing Session Tags in STS</a>
+in the <em>IAM User Guide</em>.</p>
+<p>An administrator must grant you the permissions necessary to pass
+session tags. The administrator can also create granular permissions to
+allow you to pass only specific session tags. For more information, see
+<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_attribute-based-access-control.html'>Tutorial: Using Tags for Attribute-Based Access Control</a>
+in the <em>IAM User Guide</em>.</p>
+<p>You can set the session tags as transitive. Transitive tags persist
+during role chaining. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_session-tags.html#id_session-tags_role-chaining'>Chaining Roles with Session Tags</a>
+in the <em>IAM User Guide</em>.</p>
+<p><strong>Using MFA with AssumeRole</strong></p>
+<p>(Optional) You can include multi-factor authentication (MFA) information
+when you call <code>AssumeRole</code>. This is useful for cross-account scenarios
+to ensure that the user that assumes the role has been authenticated
+with an AWS MFA device. In that scenario, the trust policy of the role
+being assumed includes a condition that tests for MFA authentication. If
+the caller does not include valid MFA information, the request to assume
+the role is denied. The condition in a trust policy that tests for MFA
+authentication might look like the following example.</p>
+<p><code>"Condition": \{"Bool": \{"aws:MultiFactorAuthPresent": true\}\}</code></p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_configure-api-require.html'>Configuring MFA-Protected API Access</a>
+in the <em>IAM User Guide</em> guide.</p>
+<p>To use MFA with <code>AssumeRole</code>, you pass values for the <code>SerialNumber</code> and
+<code>TokenCode</code> parameters. The <code>SerialNumber</code> value identifies the user's
+hardware or virtual MFA device. The <code>TokenCode</code> is the time-based
+one-time password (TOTP) that the MFA device produces.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sts_assume_role</span>(<span class='no'>RoleArn</span>, <span class='no'>RoleSessionName</span>, <span class='no'>PolicyArns</span>, <span class='no'>Policy</span>,
-  <span class='no'>DurationSeconds</span>, <span class='no'>Tags</span>, <span class='no'>TransitiveTagKeys</span>, <span class='no'>ExternalId</span>, <span class='no'>SerialNumber</span>,
-  <span class='no'>TokenCode</span>)</pre>
+    <pre class="usage"><span class='fu'>sts_assume_role</span><span class='op'>(</span><span class='va'>RoleArn</span>, <span class='va'>RoleSessionName</span>, <span class='va'>PolicyArns</span>, <span class='va'>Policy</span>,
+  <span class='va'>DurationSeconds</span>, <span class='va'>Tags</span>, <span class='va'>TransitiveTagKeys</span>, <span class='va'>ExternalId</span>, <span class='va'>SerialNumber</span>,
+  <span class='va'>TokenCode</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,7 +353,7 @@ want to use as managed session policies. The policies must exist in the
 same account as the role.</p>
 <p>This parameter is optional. You can provide up to 10 managed policy
 ARNs. However, the plain text that you use for both inline and managed
-session policies can\'t exceed 2,048 characters. For more information
+session policies can't exceed 2,048 characters. For more information
 about ARNs, see <a href='https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html'>Amazon Resource Names (ARNs) and AWS Service Namespaces</a>
 in the AWS General Reference.</p>
 <p>An AWS conversion compresses the passed session policies and session
@@ -181,8 +363,8 @@ requirements. The <code>PackedPolicySize</code> response element indicates by
 percentage how close the policies and tags for your request are to the
 upper size limit.</p>
 <p>Passing policies to this operation returns new temporary credentials.
-The resulting session\'s permissions are the intersection of the role\'s
-identity-based policy and the session policies. You can use the role\'s
+The resulting session's permissions are the intersection of the role's
+identity-based policy and the session policies. You can use the role's
 temporary credentials in subsequent AWS API calls to access resources in
 the account that owns the role. You cannot use session policies to grant
 more permissions than those allowed by the identity-based policy of the
@@ -194,16 +376,16 @@ in the <em>IAM User Guide</em>.</p></td>
       <td><p>An IAM policy in JSON format that you want to use as an inline session
 policy.</p>
 <p>This parameter is optional. Passing policies to this operation returns
-new temporary credentials. The resulting session\'s permissions are the
-intersection of the role\'s identity-based policy and the session
-policies. You can use the role\'s temporary credentials in subsequent
-AWS API calls to access resources in the account that owns the role. You
+new temporary credentials. The resulting session's permissions are the
+intersection of the role's identity-based policy and the session
+policies. You can use the role's temporary credentials in subsequent AWS
+API calls to access resources in the account that owns the role. You
 cannot use session policies to grant more permissions than those allowed
 by the identity-based policy of the role that is being assumed. For more
 information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_session'>Session Policies</a>
 in the <em>IAM User Guide</em>.</p>
 <p>The plain text that you use for both inline and managed session policies
-can\'t exceed 2,048 characters. The JSON policy characters can be any
+can't exceed 2,048 characters. The JSON policy characters can be any
 ASCII character from the space character to the end of the valid
 character list (<code>U+0020</code> through <code>U+00FF</code>). It can also include the tab
 (<code>U+0009</code>), linefeed (<code>U+000A</code>), and carriage return (<code>U+000D</code>) characters.</p>
@@ -240,8 +422,8 @@ of a key name and an associated value. For more information about
 session tags, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_session-tags.html'>Tagging AWS STS Sessions</a>
 in the <em>IAM User Guide</em>.</p>
 <p>This parameter is optional. You can pass up to 50 session tags. The
-plain text session tag keys can't exceed 128 characters, and the values
-can't exceed 256 characters. For these and additional limits, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html#reference_iam-limits-entity-length'>IAM and STS Character Limits</a>
+plain text session tag keys can’t exceed 128 characters, and the values
+can’t exceed 256 characters. For these and additional limits, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-limits-entity-length'>IAM and STS Character Limits</a>
 in the <em>IAM User Guide</em>.</p>
 <p>An AWS conversion compresses the passed session policies and session
 tags into a packed binary format that has a separate limit. Your request
@@ -252,7 +434,7 @@ upper size limit.</p>
 <p>You can pass a session tag with the same key as a tag that is already
 attached to the role. When you do, session tags override a role tag with
 the same key.</p>
-<p>Tag key--value pairs are not case sensitive, but case is preserved. This
+<p>Tag key–value pairs are not case sensitive, but case is preserved. This
 means that you cannot have separate <code>Department</code> and <code>department</code> tag
 keys. Assume that the role has the <code>Department</code>=<code>Marketing</code> tag and you
 pass the <code>department</code>=<code>engineering</code> session tag. <code>Department</code> and
@@ -262,7 +444,7 @@ in the request takes precedence over the role tag.</p>
 operation, the new session inherits any transitive session tags from the
 calling session. If you pass a session tag with the same key as an
 inherited tag, the operation fails. To view the inherited tags for a
-session, see the AWS CloudTrail logs. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/session-tags.html#id_session-tags_ctlogs'>Viewing Session Tags in CloudTrail</a>
+session, see the AWS CloudTrail logs. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/#id_session-tags_ctlogs'>Viewing Session Tags in CloudTrail</a>
 in the <em>IAM User Guide</em>.</p></td>
     </tr>
     <tr>
@@ -315,161 +497,71 @@ characters: =,.@-</p></td>
 being assumed requires MFA (that is, if the policy includes a condition
 that tests for MFA). If the role being assumed requires MFA and if the
 <code>TokenCode</code> value is missing or expired, the <code>AssumeRole</code> call returns
-an \"access denied\" error.</p>
+an "access denied" error.</p>
 <p>The format for this parameter, as described by its regex pattern, is a
 sequence of six numeric digits.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You cannot use AWS account root user credentials to call <code>AssumeRole</code>.
-You must use credentials for an IAM user or an IAM role to call
-<code>AssumeRole</code>.</p>
-<p>For cross-account access, imagine that you own multiple accounts and
-need to access resources in each account. You could create long-term
-credentials in each account to access those resources. However, managing
-all those credentials and remembering which one can access which account
-can be time consuming. Instead, you can create one set of long-term
-credentials in one account. Then use temporary security credentials to
-access all the other accounts by assuming roles in those accounts. For
-more information about roles, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html'>IAM Roles</a>
-in the <em>IAM User Guide</em>.</p>
-<p><strong>Session Duration</strong></p>
-<p>By default, the temporary security credentials created by <code>AssumeRole</code>
-last for one hour. However, you can use the optional <code>DurationSeconds</code>
-parameter to specify the duration of your session. You can provide a
-value from 900 seconds (15 minutes) up to the maximum session duration
-setting for the role. This setting can have a value from 1 hour to 12
-hours. To learn how to view the maximum value for your role, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html#id_roles_use_view-role-max-session'>View the Maximum Session Duration Setting for a Role</a>
-in the <em>IAM User Guide</em>. The maximum session duration limit applies when
-you use the <code>AssumeRole*</code> API operations or the <code>assume-role*</code> CLI
-commands. However the limit does not apply when you use those operations
-to create a console URL. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html'>Using IAM Roles</a>
-in the <em>IAM User Guide</em>.</p>
-<p><strong>Permissions</strong></p>
-<p>The temporary security credentials created by <code>AssumeRole</code> can be used
-to make API calls to any AWS service with the following exception: You
-cannot call the AWS STS <code>GetFederationToken</code> or <code>GetSessionToken</code> API
-operations.</p>
-<p>(Optional) You can pass inline or managed <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_session'>session policies</a>
-to this operation. You can pass a single JSON policy document to use as
-an inline session policy. You can also specify up to 10 managed policies
-to use as managed session policies. The plain text that you use for both
-inline and managed session policies can\'t exceed 2,048 characters.
-Passing policies to this operation returns new temporary credentials.
-The resulting session\'s permissions are the intersection of the role\'s
-identity-based policy and the session policies. You can use the role\'s
-temporary credentials in subsequent AWS API calls to access resources in
-the account that owns the role. You cannot use session policies to grant
-more permissions than those allowed by the identity-based policy of the
-role that is being assumed. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_session'>Session Policies</a>
-in the <em>IAM User Guide</em>.</p>
-<p>To assume a role from a different account, your AWS account must be
-trusted by the role. The trust relationship is defined in the role\'s
-trust policy when the role is created. That trust policy states which
-accounts are allowed to delegate that access to users in the account.</p>
-<p>A user who wants to access a role in a different account must also have
-permissions that are delegated from the user account administrator. The
-administrator must attach a policy that allows the user to call
-<code>AssumeRole</code> for the ARN of the role in the other account. If the user
-is in the same account as the role, then you can do either of the
-following:</p><ul>
-<li><p>Attach a policy to the user (identical to the previous user in a
-different account).</p></li>
-<li><p>Add the user as a principal directly in the role\'s trust policy.</p></li>
-</ul>
-
-<p>In this case, the trust policy acts as an IAM resource-based policy.
-Users in the same account as the role do not need explicit permission to
-assume the role. For more information about trust policies and
-resource-based policies, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html'>IAM Policies</a>
-in the <em>IAM User Guide</em>.</p>
-<p><strong>Tags</strong></p>
-<p>(Optional) You can pass tag key-value pairs to your session. These tags
-are called session tags. For more information about session tags, see
-<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_session-tags.html'>Passing Session Tags in STS</a>
-in the <em>IAM User Guide</em>.</p>
-<p>An administrator must grant you the permissions necessary to pass
-session tags. The administrator can also create granular permissions to
-allow you to pass only specific session tags. For more information, see
-<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_attribute-based-access-control.html'>Tutorial: Using Tags for Attribute-Based Access Control</a>
-in the <em>IAM User Guide</em>.</p>
-<p>You can set the session tags as transitive. Transitive tags persist
-during role chaining. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_session-tags.html#id_session-tags_role-chaining'>Chaining Roles with Session Tags</a>
-in the <em>IAM User Guide</em>.</p>
-<p><strong>Using MFA with AssumeRole</strong></p>
-<p>(Optional) You can include multi-factor authentication (MFA) information
-when you call <code>AssumeRole</code>. This is useful for cross-account scenarios
-to ensure that the user that assumes the role has been authenticated
-with an AWS MFA device. In that scenario, the trust policy of the role
-being assumed includes a condition that tests for MFA authentication. If
-the caller does not include valid MFA information, the request to assume
-the role is denied. The condition in a trust policy that tests for MFA
-authentication might look like the following example.</p>
-<p><code>"Condition": \{"Bool": \{"aws:MultiFactorAuthPresent": true\}\}</code></p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/MFAProtectedAPI.html'>Configuring MFA-Protected API Access</a>
-in the <em>IAM User Guide</em> guide.</p>
-<p>To use MFA with <code>AssumeRole</code>, you pass values for the <code>SerialNumber</code> and
-<code>TokenCode</code> parameters. The <code>SerialNumber</code> value identifies the user\'s
-hardware or virtual MFA device. The <code>TokenCode</code> is the time-based
-one-time password (TOTP) that the MFA device produces.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>assume_role</span>(
-  <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RoleSessionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PolicyArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>arn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Policy</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DurationSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>TransitiveTagKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>assume_role</span><span class='op'>(</span>
+  RoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  RoleSessionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  PolicyArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      arn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Policy <span class='op'>=</span> <span class='st'>"string"</span>,
+  DurationSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TransitiveTagKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ExternalId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SerialNumber</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TokenCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  ExternalId <span class='op'>=</span> <span class='st'>"string"</span>,
+  SerialNumber <span class='op'>=</span> <span class='st'>"string"</span>,
+  TokenCode <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># </span>
-<span class='no'>svc</span>$<span class='fu'>assume_role</span>(
-  <span class='kw'>ExternalId</span> <span class='kw'>=</span> <span class='st'>"123ABC"</span>,
-  <span class='kw'>Policy</span> <span class='kw'>=</span> <span class='st'>"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":..."</span>,
-  <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/demo"</span>,
-  <span class='kw'>RoleSessionName</span> <span class='kw'>=</span> <span class='st'>"testAssumeRoleSession"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Project"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"Unicorn"</span>
-    ),
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Team"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"Automation"</span>
-    ),
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Cost-Center"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"12345"</span>
-    )
-  ),
-  <span class='kw'>TransitiveTagKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>assume_role</span><span class='op'>(</span>
+  ExternalId <span class='op'>=</span> <span class='st'>"123ABC"</span>,
+  Policy <span class='op'>=</span> <span class='st'>"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":..."</span>,
+  RoleArn <span class='op'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/demo"</span>,
+  RoleSessionName <span class='op'>=</span> <span class='st'>"testAssumeRoleSession"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Project"</span>,
+      Value <span class='op'>=</span> <span class='st'>"Unicorn"</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Team"</span>,
+      Value <span class='op'>=</span> <span class='st'>"Automation"</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Cost-Center"</span>,
+      Value <span class='op'>=</span> <span class='st'>"12345"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TransitiveTagKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"Project"</span>,
     <span class='st'>"Cost-Center"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -485,7 +577,7 @@ one-time password (TOTP) that the MFA device produces.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

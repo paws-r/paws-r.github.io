@@ -44,7 +44,20 @@ Amazon Simple Storage Service (Amazon S3) bucket — forecastservice_create_fore
 Amazon Simple Storage Service (Amazon S3) bucket — forecastservice_create_forecast_export_job" />
 <meta property="og:description" content="Exports a forecast created by the CreateForecast operation to your
 Amazon Simple Storage Service (Amazon S3) bucket. The forecast file name
-will match the following conventions:" />
+will match the following conventions:
+&amp;lt;ForecastExportJobName&amp;gt;\&amp;lt;ExportTimestamp&amp;gt;\&amp;lt;PartNumber&amp;gt;
+where the &amp;lt;ExportTimestamp&amp;gt; component is in Java SimpleDateFormat
+(yyyy-MM-ddTHH-mm-ssZ).
+You must specify a DataDestination object that includes an AWS Identity
+and Access Management (IAM) role that Amazon Forecast can assume to
+access the Amazon S3 bucket. For more information, see
+aws-forecast-iam-roles.
+For more information, see howitworks-forecast.
+To get a list of all your forecast export jobs, use the
+ListForecastExportJobs operation.
+The Status of the forecast export job must be ACTIVE before you can
+access the forecast in your Amazon S3 bucket. To get the status, use the
+DescribeForecastExportJob operation." />
 
 
 
@@ -76,7 +89,7 @@ will match the following conventions:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +97,7 @@ will match the following conventions:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +109,7 @@ will match the following conventions:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +136,23 @@ Amazon Simple Storage Service (Amazon S3) bucket</h1>
     <p>Exports a forecast created by the CreateForecast operation to your
 Amazon Simple Storage Service (Amazon S3) bucket. The forecast file name
 will match the following conventions:</p>
+<p>&lt;ForecastExportJobName&gt;\<em>&lt;ExportTimestamp&gt;\</em>&lt;PartNumber&gt;</p>
+<p>where the &lt;ExportTimestamp&gt; component is in Java SimpleDateFormat
+(yyyy-MM-ddTHH-mm-ssZ).</p>
+<p>You must specify a DataDestination object that includes an AWS Identity
+and Access Management (IAM) role that Amazon Forecast can assume to
+access the Amazon S3 bucket. For more information, see
+aws-forecast-iam-roles.</p>
+<p>For more information, see howitworks-forecast.</p>
+<p>To get a list of all your forecast export jobs, use the
+ListForecastExportJobs operation.</p>
+<p>The <code>Status</code> of the forecast export job must be <code>ACTIVE</code> before you can
+access the forecast in your Amazon S3 bucket. To get the status, use the
+DescribeForecastExportJob operation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>forecastservice_create_forecast_export_job</span>(<span class='no'>ForecastExportJobName</span>,
-  <span class='no'>ForecastArn</span>, <span class='no'>Destination</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>forecastservice_create_forecast_export_job</span><span class='op'>(</span><span class='va'>ForecastExportJobName</span>,
+  <span class='va'>ForecastArn</span>, <span class='va'>Destination</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,41 +202,27 @@ count against your tags per resource limit.</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>\&lt;ForecastExportJobName\&gt;\<em>\&lt;ExportTimestamp\&gt;\</em>\&lt;PartNumber\&gt;</p>
-<p>where the \&lt;ExportTimestamp\&gt; component is in Java SimpleDateFormat
-(yyyy-MM-ddTHH-mm-ssZ).</p>
-<p>You must specify a DataDestination object that includes an AWS Identity
-and Access Management (IAM) role that Amazon Forecast can assume to
-access the Amazon S3 bucket. For more information, see
-aws-forecast-iam-roles.</p>
-<p>For more information, see howitworks-forecast.</p>
-<p>To get a list of all your forecast export jobs, use the
-ListForecastExportJobs operation.</p>
-<p>The <code>Status</code> of the forecast export job must be <code>ACTIVE</code> before you can
-access the forecast in your Amazon S3 bucket. To get the status, use the
-DescribeForecastExportJob operation.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_forecast_export_job</span>(
-  <span class='kw'>ForecastExportJobName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ForecastArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Path</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>KMSKeyArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_forecast_export_job</span><span class='op'>(</span>
+  ForecastExportJobName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ForecastArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Path <span class='op'>=</span> <span class='st'>"string"</span>,
+      RoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      KMSKeyArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -228,7 +240,7 @@ DescribeForecastExportJob operation.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

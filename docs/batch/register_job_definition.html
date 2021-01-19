@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,8 +118,9 @@
     <p>Registers an AWS Batch job definition.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>batch_register_job_definition</span>(<span class='no'>jobDefinitionName</span>, <span class='no'>type</span>, <span class='no'>parameters</span>,
-  <span class='no'>containerProperties</span>, <span class='no'>nodeProperties</span>, <span class='no'>retryStrategy</span>, <span class='no'>timeout</span>)</pre>
+    <pre class="usage"><span class='fu'>batch_register_job_definition</span><span class='op'>(</span><span class='va'>jobDefinitionName</span>, <span class='va'>type</span>, <span class='va'>parameters</span>,
+  <span class='va'>containerProperties</span>, <span class='va'>nodeProperties</span>, <span class='va'>retryStrategy</span>, <span class='va'>propagateTags</span>,
+  <span class='va'>timeout</span>, <span class='va'>tags</span>, <span class='va'>platformCapabilities</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -131,7 +132,11 @@ and lowercase), numbers, hyphens, and underscores are allowed.</p></td>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>[required] The type of job definition.</p></td>
+      <td><p>[required] The type of job definition. For more information about multi-node
+parallel jobs, see <a href='https://docs.aws.amazon.com/batch/latest/userguide/multi-node-job-def.html'>Creating a multi-node parallel job definition</a>
+in the <em>AWS Batch User Guide</em>.</p>
+<p>If the job is run on Fargate resources, then <code>multinode</code> isn't
+supported.</p></td>
     </tr>
     <tr>
       <th>parameters</th>
@@ -143,198 +148,338 @@ defaults from the job definition.</p></td>
     <tr>
       <th>containerProperties</th>
       <td><p>An object with various properties specific to single-node
-container-based jobs. If the job definition\'s <code>type</code> parameter is
+container-based jobs. If the job definition's <code>type</code> parameter is
 <code>container</code>, then you must specify either <code>containerProperties</code> or
-<code>nodeProperties</code>.</p></td>
+<code>nodeProperties</code>.</p>
+<p>If the job runs on Fargate resources, then you must not specify
+<code>nodeProperties</code>; use only <code>containerProperties</code>.</p></td>
     </tr>
     <tr>
       <th>nodeProperties</th>
       <td><p>An object with various properties specific to multi-node parallel jobs.
 If you specify node properties for a job, it becomes a multi-node
 parallel job. For more information, see <a href='https://docs.aws.amazon.com/batch/latest/userguide/multi-node-parallel-jobs.html'>Multi-node Parallel Jobs</a>
-in the <em>AWS Batch User Guide</em>. If the job definition\'s <code>type</code> parameter
+in the <em>AWS Batch User Guide</em>. If the job definition's <code>type</code> parameter
 is <code>container</code>, then you must specify either <code>containerProperties</code> or
-<code>nodeProperties</code>.</p></td>
+<code>nodeProperties</code>.</p>
+<p>If the job runs on Fargate resources, then you must not specify
+<code>nodeProperties</code>; use <code>containerProperties</code> instead.</p></td>
     </tr>
     <tr>
       <th>retryStrategy</th>
       <td><p>The retry strategy to use for failed jobs that are submitted with this
-job definition. Any retry strategy that is specified during a SubmitJob
+job definition. Any retry strategy that's specified during a SubmitJob
 operation overrides the retry strategy defined here. If a job is
-terminated due to a timeout, it is not retried.</p></td>
+terminated due to a timeout, it isn't retried.</p></td>
+    </tr>
+    <tr>
+      <th>propagateTags</th>
+      <td><p>Specifies whether to propagate the tags from the job or job definition
+to the corresponding Amazon ECS task. If no value is specified, the tags
+are not propagated. Tags can only be propagated to the tasks during task
+creation. For tags with the same name, job tags are given priority over
+job definitions tags. If the total number of combined tags from the job
+and job definition is over 50, the job is moved to the <code>FAILED</code> state.</p></td>
     </tr>
     <tr>
       <th>timeout</th>
       <td><p>The timeout configuration for jobs that are submitted with this job
 definition, after which AWS Batch terminates your jobs if they have not
-finished. If a job is terminated due to a timeout, it is not retried.
-The minimum value for the timeout is 60 seconds. Any timeout
-configuration that is specified during a SubmitJob operation overrides
-the timeout configuration defined here. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/job_timeouts.html'>Job Timeouts</a>
-in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></td>
+finished. If a job is terminated due to a timeout, it isn't retried. The
+minimum value for the timeout is 60 seconds. Any timeout configuration
+that's specified during a SubmitJob operation overrides the timeout
+configuration defined here. For more information, see <a href='https://docs.aws.amazon.com/batch/latest/userguide/job_timeouts.html'>Job Timeouts</a>
+in the <em>AWS Batch User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>tags</th>
+      <td><p>The tags that you apply to the job definition to help you categorize and
+organize your resources. Each tag consists of a key and an optional
+value. For more information, see <a href='https://docs.aws.amazon.com/batch/latest/userguide/using-tags.html'>Tagging AWS Resources</a>
+in <em>AWS Batch User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>platformCapabilities</th>
+      <td><p>The platform capabilities required by the job definition. If no value is
+specified, it defaults to <code>EC2</code>. To run the job on Fargate resources,
+specify <code>FARGATE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>register_job_definition</span>(
-  <span class='kw'>jobDefinitionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"container"</span><span class='kw'>|</span><span class='st'>"multinode"</span>,
-  <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>register_job_definition</span><span class='op'>(</span>
+  jobDefinitionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  type <span class='op'>=</span> <span class='st'>"container"</span><span class='op'>|</span><span class='st'>"multinode"</span>,
+  parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>containerProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>image</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>vcpus</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>command</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  containerProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    image <span class='op'>=</span> <span class='st'>"string"</span>,
+    vcpus <span class='op'>=</span> <span class='fl'>123</span>,
+    memory <span class='op'>=</span> <span class='fl'>123</span>,
+    command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>jobRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>volumes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>host</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>sourcePath</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        ),
-        <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>environment</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>mountPoints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>containerPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>readOnly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>sourceVolume</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>readonlyRootFilesystem</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>privileged</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>ulimits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>hardLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>softLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      )
-    ),
-    <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>instanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>resourceRequirements</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"GPU"</span>
-      )
-    ),
-    <span class='kw'>linuxParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>devices</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>hostPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>containerPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>permissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='st'>"READ"</span><span class='kw'>|</span><span class='st'>"WRITE"</span><span class='kw'>|</span><span class='st'>"MKNOD"</span>
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>nodeProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>numNodes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>mainNode</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>nodeRangeProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>targetNodes</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>container</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>image</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>vcpus</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>command</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    jobRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    executionRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    volumes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        host <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          sourcePath <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>,
+        name <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        name <span class='op'>=</span> <span class='st'>"string"</span>,
+        value <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    mountPoints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+        readOnly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        sourceVolume <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    readonlyRootFilesystem <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    privileged <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    ulimits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        hardLimit <span class='op'>=</span> <span class='fl'>123</span>,
+        name <span class='op'>=</span> <span class='st'>"string"</span>,
+        softLimit <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    user <span class='op'>=</span> <span class='st'>"string"</span>,
+    instanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+    resourceRequirements <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        value <span class='op'>=</span> <span class='st'>"string"</span>,
+        type <span class='op'>=</span> <span class='st'>"GPU"</span><span class='op'>|</span><span class='st'>"VCPU"</span><span class='op'>|</span><span class='st'>"MEMORY"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    linuxParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      devices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          hostPath <span class='op'>=</span> <span class='st'>"string"</span>,
+          containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+          permissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='st'>"READ"</span><span class='op'>|</span><span class='st'>"WRITE"</span><span class='op'>|</span><span class='st'>"MKNOD"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      initProcessEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      sharedMemorySize <span class='op'>=</span> <span class='fl'>123</span>,
+      tmpfs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+          size <span class='op'>=</span> <span class='fl'>123</span>,
+          mountOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='st'>"string"</span>
-          ),
-          <span class='kw'>jobRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>volumes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>host</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>sourcePath</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-              ),
-              <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          ),
-          <span class='kw'>environment</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          ),
-          <span class='kw'>mountPoints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>containerPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>readOnly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-              <span class='kw'>sourceVolume</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-            )
-          ),
-          <span class='kw'>readonlyRootFilesystem</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-          <span class='kw'>privileged</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-          <span class='kw'>ulimits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>hardLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-              <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>softLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>
-            )
-          ),
-          <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>instanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>resourceRequirements</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"GPU"</span>
-            )
-          ),
-          <span class='kw'>linuxParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>devices</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>hostPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>containerPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>permissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                  <span class='st'>"READ"</span><span class='kw'>|</span><span class='st'>"WRITE"</span><span class='kw'>|</span><span class='st'>"MKNOD"</span>
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>retryStrategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>attempts</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>attemptDurationSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  )
-)</pre>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      maxSwap <span class='op'>=</span> <span class='fl'>123</span>,
+      swappiness <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    logConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      logDriver <span class='op'>=</span> <span class='st'>"json-file"</span><span class='op'>|</span><span class='st'>"syslog"</span><span class='op'>|</span><span class='st'>"journald"</span><span class='op'>|</span><span class='st'>"gelf"</span><span class='op'>|</span><span class='st'>"fluentd"</span><span class='op'>|</span><span class='st'>"awslogs"</span><span class='op'>|</span><span class='st'>"splunk"</span>,
+      options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      secretOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          name <span class='op'>=</span> <span class='st'>"string"</span>,
+          valueFrom <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    secrets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        name <span class='op'>=</span> <span class='st'>"string"</span>,
+        valueFrom <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    networkConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      assignPublicIp <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>
+    <span class='op'>)</span>,
+    fargatePlatformConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      platformVersion <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  nodeProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    numNodes <span class='op'>=</span> <span class='fl'>123</span>,
+    mainNode <span class='op'>=</span> <span class='fl'>123</span>,
+    nodeRangeProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        targetNodes <span class='op'>=</span> <span class='st'>"string"</span>,
+        container <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          image <span class='op'>=</span> <span class='st'>"string"</span>,
+          vcpus <span class='op'>=</span> <span class='fl'>123</span>,
+          memory <span class='op'>=</span> <span class='fl'>123</span>,
+          command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          jobRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+          executionRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+          volumes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              host <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                sourcePath <span class='op'>=</span> <span class='st'>"string"</span>
+              <span class='op'>)</span>,
+              name <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              name <span class='op'>=</span> <span class='st'>"string"</span>,
+              value <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          mountPoints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+              readOnly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+              sourceVolume <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          readonlyRootFilesystem <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+          privileged <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+          ulimits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              hardLimit <span class='op'>=</span> <span class='fl'>123</span>,
+              name <span class='op'>=</span> <span class='st'>"string"</span>,
+              softLimit <span class='op'>=</span> <span class='fl'>123</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          user <span class='op'>=</span> <span class='st'>"string"</span>,
+          instanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+          resourceRequirements <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              value <span class='op'>=</span> <span class='st'>"string"</span>,
+              type <span class='op'>=</span> <span class='st'>"GPU"</span><span class='op'>|</span><span class='st'>"VCPU"</span><span class='op'>|</span><span class='st'>"MEMORY"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          linuxParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            devices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                hostPath <span class='op'>=</span> <span class='st'>"string"</span>,
+                containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+                permissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  <span class='st'>"READ"</span><span class='op'>|</span><span class='st'>"WRITE"</span><span class='op'>|</span><span class='st'>"MKNOD"</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>,
+            initProcessEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+            sharedMemorySize <span class='op'>=</span> <span class='fl'>123</span>,
+            tmpfs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+                size <span class='op'>=</span> <span class='fl'>123</span>,
+                mountOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  <span class='st'>"string"</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>,
+            maxSwap <span class='op'>=</span> <span class='fl'>123</span>,
+            swappiness <span class='op'>=</span> <span class='fl'>123</span>
+          <span class='op'>)</span>,
+          logConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            logDriver <span class='op'>=</span> <span class='st'>"json-file"</span><span class='op'>|</span><span class='st'>"syslog"</span><span class='op'>|</span><span class='st'>"journald"</span><span class='op'>|</span><span class='st'>"gelf"</span><span class='op'>|</span><span class='st'>"fluentd"</span><span class='op'>|</span><span class='st'>"awslogs"</span><span class='op'>|</span><span class='st'>"splunk"</span>,
+            options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='st'>"string"</span>
+            <span class='op'>)</span>,
+            secretOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                name <span class='op'>=</span> <span class='st'>"string"</span>,
+                valueFrom <span class='op'>=</span> <span class='st'>"string"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          secrets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              name <span class='op'>=</span> <span class='st'>"string"</span>,
+              valueFrom <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          networkConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            assignPublicIp <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>
+          <span class='op'>)</span>,
+          fargatePlatformConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            platformVersion <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  retryStrategy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    attempts <span class='op'>=</span> <span class='fl'>123</span>,
+    evaluateOnExit <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        onStatusReason <span class='op'>=</span> <span class='st'>"string"</span>,
+        onReason <span class='op'>=</span> <span class='st'>"string"</span>,
+        onExitCode <span class='op'>=</span> <span class='st'>"string"</span>,
+        action <span class='op'>=</span> <span class='st'>"RETRY"</span><span class='op'>|</span><span class='st'>"EXIT"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  propagateTags <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  timeout <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    attemptDurationSeconds <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  platformCapabilities <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"EC2"</span><span class='op'>|</span><span class='st'>"FARGATE"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example registers a job definition for a simple container job.</span>
-<span class='no'>svc</span>$<span class='fu'>register_job_definition</span>(
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"container"</span>,
-  <span class='kw'>containerProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>command</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>register_job_definition</span><span class='op'>(</span>
+  type <span class='op'>=</span> <span class='st'>"container"</span>,
+  containerProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"sleep"</span>,
       <span class='st'>"10"</span>
-    ),
-    <span class='kw'>image</span> <span class='kw'>=</span> <span class='st'>"busybox"</span>,
-    <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>128L</span>,
-    <span class='kw'>vcpus</span> <span class='kw'>=</span> <span class='fl'>1L</span>
-  ),
-  <span class='kw'>jobDefinitionName</span> <span class='kw'>=</span> <span class='st'>"sleep10"</span>
-)
-}</pre>
+    <span class='op'>)</span>,
+    image <span class='op'>=</span> <span class='st'>"busybox"</span>,
+    memory <span class='op'>=</span> <span class='fl'>128L</span>,
+    vcpus <span class='op'>=</span> <span class='fl'>1L</span>
+  <span class='op'>)</span>,
+  jobDefinitionName <span class='op'>=</span> <span class='st'>"sleep10"</span>
+<span class='op'>)</span>
+
+<span class='co'># This demonstrates calling the RegisterJobDefinition action, including</span>
+<span class='co'># tags.</span>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>register_job_definition</span><span class='op'>(</span>
+  type <span class='op'>=</span> <span class='st'>"container"</span>,
+  containerProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"sleep"</span>,
+      <span class='st'>"30"</span>
+    <span class='op'>)</span>,
+    image <span class='op'>=</span> <span class='st'>"busybox"</span>,
+    memory <span class='op'>=</span> <span class='fl'>128L</span>,
+    vcpus <span class='op'>=</span> <span class='fl'>1L</span>
+  <span class='op'>)</span>,
+  jobDefinitionName <span class='op'>=</span> <span class='st'>"sleep30"</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Department <span class='op'>=</span> <span class='st'>"Engineering"</span>,
+    User <span class='op'>=</span> <span class='st'>"JaneDoe"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -350,7 +495,7 @@ in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

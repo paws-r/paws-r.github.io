@@ -42,7 +42,14 @@
 <meta property="og:title" content="Updates a snapshot schedule configured for a gateway volume — storagegateway_update_snapshot_schedule" />
 <meta property="og:description" content="Updates a snapshot schedule configured for a gateway volume. This
 operation is only supported in the cached volume and stored volume
-gateway types." />
+gateway types.
+The default snapshot schedule for volume is once every 24 hours,
+starting at the creation time of the volume. You can use this API to
+change the snapshot schedule configured for the volume.
+In the request you must identify the gateway volume whose snapshot
+schedule you want to update, and the schedule information, including
+when you want the snapshot to begin on a day and the frequency (in
+hours) of snapshots." />
 
 
 
@@ -74,7 +81,7 @@ gateway types." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +89,7 @@ gateway types." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +101,7 @@ gateway types." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +127,17 @@ gateway types." />
     <p>Updates a snapshot schedule configured for a gateway volume. This
 operation is only supported in the cached volume and stored volume
 gateway types.</p>
+<p>The default snapshot schedule for volume is once every 24 hours,
+starting at the creation time of the volume. You can use this API to
+change the snapshot schedule configured for the volume.</p>
+<p>In the request you must identify the gateway volume whose snapshot
+schedule you want to update, and the schedule information, including
+when you want the snapshot to begin on a day and the frequency (in
+hours) of snapshots.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>storagegateway_update_snapshot_schedule</span>(<span class='no'>VolumeARN</span>, <span class='no'>StartAt</span>,
-  <span class='no'>RecurrenceInHours</span>, <span class='no'>Description</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>storagegateway_update_snapshot_schedule</span><span class='op'>(</span><span class='va'>VolumeARN</span>, <span class='va'>StartAt</span>,
+  <span class='va'>RecurrenceInHours</span>, <span class='va'>Description</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,47 +168,41 @@ description.</p></td>
 a key-value pair.</p>
 <p>Valid characters for key and value are letters, spaces, and numbers
 representable in UTF-8 format, and the following special characters: + -
-= . \_ : / @. The maximum length of a tag\'s key is 128 characters, and
-the maximum length for a tag\'s value is 256.</p></td>
+= . \_ : / @. The maximum length of a tag's key is 128 characters, and
+the maximum length for a tag's value is 256.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The default snapshot schedule for volume is once every 24 hours,
-starting at the creation time of the volume. You can use this API to
-change the snapshot schedule configured for the volume.</p>
-<p>In the request you must identify the gateway volume whose snapshot
-schedule you want to update, and the schedule information, including
-when you want the snapshot to begin on a day and the frequency (in
-hours) of snapshots.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_snapshot_schedule</span>(
-  <span class='kw'>VolumeARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StartAt</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>RecurrenceInHours</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_snapshot_schedule</span><span class='op'>(</span>
+  VolumeARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  StartAt <span class='op'>=</span> <span class='fl'>123</span>,
+  RecurrenceInHours <span class='op'>=</span> <span class='fl'>123</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Updates a snapshot schedule configured for a gateway volume.</span>
-<span class='no'>svc</span>$<span class='fu'>update_snapshot_schedule</span>(
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"Hourly snapshot"</span>,
-  <span class='kw'>RecurrenceInHours</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>StartAt</span> <span class='kw'>=</span> <span class='fl'>0L</span>,
-  <span class='kw'>VolumeARN</span> <span class='kw'>=</span> <span class='st'>"arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/volume/vol..."</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_snapshot_schedule</span><span class='op'>(</span>
+  Description <span class='op'>=</span> <span class='st'>"Hourly snapshot"</span>,
+  RecurrenceInHours <span class='op'>=</span> <span class='fl'>1L</span>,
+  StartAt <span class='op'>=</span> <span class='fl'>0L</span>,
+  VolumeARN <span class='op'>=</span> <span class='st'>"arn:aws:storagegateway:us-east-1:111122223333:gateway/sgw-12A3456B/volume/vol..."</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -210,7 +218,7 @@ hours) of snapshots.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

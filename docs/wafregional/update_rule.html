@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>This is AWS WAF CLASSIC documentation — wafregional_update_rule • paws</title>
+<title>This is AWS WAF Classic documentation — wafregional_update_rule • paws</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,44 @@
 
 
 
-<meta property="og:title" content="This is AWS WAF CLASSIC documentation — wafregional_update_rule" />
+<meta property="og:title" content="This is AWS WAF Classic documentation — wafregional_update_rule" />
 <meta property="og:description" content="This is AWS WAF Classic documentation. For more information, see
 AWS WAF Classic
-in the developer guide." />
+in the developer guide.
+For the latest version of AWS WAF, use the AWS WAFV2 API and see the
+AWS WAF Developer Guide.
+With the latest version, AWS WAF has a single set of endpoints for
+regional and global use.
+Inserts or deletes Predicate objects in a Rule. Each Predicate
+object identifies a predicate, such as a ByteMatchSet or an IPSet, that
+specifies the web requests that you want to allow, block, or count. If
+you add more than one predicate to a Rule, a request must match all of
+the specifications to be allowed, blocked, or counted. For example,
+suppose that you add the following to a Rule:
+A ByteMatchSet that matches the value BadBot in the User-Agent
+header
+An IPSet that matches the IP address 192.0.2.44
+
+
+You then add the Rule to a WebACL and specify that you want to block
+requests that satisfy the Rule. For a request to be blocked, the
+User-Agent header in the request must contain the value BadBot and
+the request must originate from the IP address 192.0.2.44.
+To create and configure a Rule, perform the following steps:
+Create and update the predicates that you want to include in the
+Rule.
+Create the Rule. See CreateRule.
+Use GetChangeToken to get the change token that you provide in the
+ChangeToken parameter of an UpdateRule request.
+Submit an UpdateRule request to add predicates to the Rule.
+Create and update a WebACL that contains the Rule. See
+CreateWebACL.
+
+
+If you want to replace one ByteMatchSet or IPSet with another, you
+delete the existing one and add the new one.
+For more information about how to use the AWS WAF API to allow or block
+HTTP requests, see the AWS WAF Developer Guide." />
 
 
 
@@ -74,7 +108,7 @@ in the developer guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +116,7 @@ in the developer guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +128,7 @@ in the developer guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,7 +145,7 @@ in the developer guide." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>This is AWS WAF CLASSIC documentation</h1>
+    <h1>This is AWS WAF Classic documentation</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/wafregional_operations.R'><code>R/wafregional_operations.R</code></a></small>
     <div class="hidden name"><code>wafregional_update_rule.Rd</code></div>
     </div>
@@ -120,36 +154,7 @@ in the developer guide." />
     <p>This is <strong>AWS WAF Classic</strong> documentation. For more information, see
 <a href='https://docs.aws.amazon.com/waf/latest/developerguide/classic-waf-chapter.html'>AWS WAF Classic</a>
 in the developer guide.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>wafregional_update_rule</span>(<span class='no'>RuleId</span>, <span class='no'>ChangeToken</span>, <span class='no'>Updates</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>RuleId</th>
-      <td><p>[required] The <code>RuleId</code> of the <code>Rule</code> that you want to update. <code>RuleId</code> is returned
-by <code>CreateRule</code> and by ListRules.</p></td>
-    </tr>
-    <tr>
-      <th>ChangeToken</th>
-      <td><p>[required] The value returned by the most recent call to GetChangeToken.</p></td>
-    </tr>
-    <tr>
-      <th>Updates</th>
-      <td><p>[required] An array of <code>RuleUpdate</code> objects that you want to insert into or delete
-from a Rule. For more information, see the applicable data types:</p><ul>
-<li><p>RuleUpdate: Contains <code>Action</code> and <code>Predicate</code></p></li>
-<li><p>Predicate: Contains <code>DataId</code>, <code>Negated</code>, and <code>Type</code></p></li>
-<li><p>FieldToMatch: Contains <code>Data</code> and <code>Type</code></p></li>
-</ul></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><strong>For the latest version of AWS WAF</strong>, use the AWS WAFV2 API and see the
+<p><strong>For the latest version of AWS WAF</strong>, use the AWS WAFV2 API and see the
 <a href='https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html'>AWS WAF Developer Guide</a>.
 With the latest version, AWS WAF has a single set of endpoints for
 regional and global use.</p>
@@ -183,44 +188,74 @@ CreateWebACL.</p></li>
 delete the existing one and add the new one.</p>
 <p>For more information about how to use the AWS WAF API to allow or block
 HTTP requests, see the <a href='https://docs.aws.amazon.com/waf/latest/developerguide/'>AWS WAF Developer Guide</a>.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>wafregional_update_rule</span><span class='op'>(</span><span class='va'>RuleId</span>, <span class='va'>ChangeToken</span>, <span class='va'>Updates</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>RuleId</th>
+      <td><p>[required] The <code>RuleId</code> of the <code>Rule</code> that you want to update. <code>RuleId</code> is returned
+by <code>CreateRule</code> and by ListRules.</p></td>
+    </tr>
+    <tr>
+      <th>ChangeToken</th>
+      <td><p>[required] The value returned by the most recent call to GetChangeToken.</p></td>
+    </tr>
+    <tr>
+      <th>Updates</th>
+      <td><p>[required] An array of <code>RuleUpdate</code> objects that you want to insert into or delete
+from a Rule. For more information, see the applicable data types:</p><ul>
+<li><p>RuleUpdate: Contains <code>Action</code> and <code>Predicate</code></p></li>
+<li><p>Predicate: Contains <code>DataId</code>, <code>Negated</code>, and <code>Type</code></p></li>
+<li><p>FieldToMatch: Contains <code>Data</code> and <code>Type</code></p></li>
+</ul></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_rule</span>(
-  <span class='kw'>RuleId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ChangeToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Updates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Action</span> <span class='kw'>=</span> <span class='st'>"INSERT"</span><span class='kw'>|</span><span class='st'>"DELETE"</span>,
-      <span class='kw'>Predicate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Negated</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"IPMatch"</span><span class='kw'>|</span><span class='st'>"ByteMatch"</span><span class='kw'>|</span><span class='st'>"SqlInjectionMatch"</span><span class='kw'>|</span><span class='st'>"GeoMatch"</span><span class='kw'>|</span><span class='st'>"SizeConstraint"</span><span class='kw'>|</span><span class='st'>"XssMatch"</span><span class='kw'>|</span><span class='st'>"RegexMatch"</span>,
-        <span class='kw'>DataId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_rule</span><span class='op'>(</span>
+  RuleId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ChangeToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  Updates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Action <span class='op'>=</span> <span class='st'>"INSERT"</span><span class='op'>|</span><span class='st'>"DELETE"</span>,
+      Predicate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Negated <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        Type <span class='op'>=</span> <span class='st'>"IPMatch"</span><span class='op'>|</span><span class='st'>"ByteMatch"</span><span class='op'>|</span><span class='st'>"SqlInjectionMatch"</span><span class='op'>|</span><span class='st'>"GeoMatch"</span><span class='op'>|</span><span class='st'>"SizeConstraint"</span><span class='op'>|</span><span class='st'>"XssMatch"</span><span class='op'>|</span><span class='st'>"RegexMatch"</span>,
+        DataId <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example deletes a Predicate object in a rule with the ID</span>
 <span class='co'># example1ds3t-46da-4fdb-b8d5-abc321j569j5.</span>
-<span class='no'>svc</span>$<span class='fu'>update_rule</span>(
-  <span class='kw'>ChangeToken</span> <span class='kw'>=</span> <span class='st'>"abcd12f2-46da-4fdb-b8d5-fbd4c466928f"</span>,
-  <span class='kw'>RuleId</span> <span class='kw'>=</span> <span class='st'>"example1ds3t-46da-4fdb-b8d5-abc321j569j5"</span>,
-  <span class='kw'>Updates</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Action</span> <span class='kw'>=</span> <span class='st'>"DELETE"</span>,
-      <span class='kw'>Predicate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>DataId</span> <span class='kw'>=</span> <span class='st'>"MyByteMatchSetID"</span>,
-        <span class='kw'>Negated</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-        <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"ByteMatch"</span>
-      )
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_rule</span><span class='op'>(</span>
+  ChangeToken <span class='op'>=</span> <span class='st'>"abcd12f2-46da-4fdb-b8d5-fbd4c466928f"</span>,
+  RuleId <span class='op'>=</span> <span class='st'>"example1ds3t-46da-4fdb-b8d5-abc321j569j5"</span>,
+  Updates <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Action <span class='op'>=</span> <span class='st'>"DELETE"</span>,
+      Predicate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        DataId <span class='op'>=</span> <span class='st'>"MyByteMatchSetID"</span>,
+        Negated <span class='op'>=</span> <span class='cn'>FALSE</span>,
+        Type <span class='op'>=</span> <span class='st'>"ByteMatch"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -236,7 +271,7 @@ HTTP requests, see the <a href='https://docs.aws.amazon.com/waf/latest/developer
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

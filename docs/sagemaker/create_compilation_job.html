@@ -42,7 +42,27 @@
 <meta property="og:title" content="Starts a model compilation job — sagemaker_create_compilation_job" />
 <meta property="og:description" content="Starts a model compilation job. After the model has been compiled,
 Amazon SageMaker saves the resulting model artifacts to an Amazon Simple
-Storage Service (Amazon S3) bucket that you specify." />
+Storage Service (Amazon S3) bucket that you specify.
+If you choose to host your model using Amazon SageMaker hosting
+services, you can use the resulting model artifacts as part of the
+model. You can also use the artifacts with AWS IoT Greengrass. In that
+case, deploy them as an ML resource.
+In the request body, you provide the following:
+A name for the compilation job
+Information about the input model artifacts
+The output location for the compiled model and the device (target)
+that the model runs on
+The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker
+assumes to perform the model compilation job.
+
+
+You can also provide a Tag to track the model compilation job's
+resource use and costs. The response body contains the
+CompilationJobArn for the compiled job.
+To stop a model compilation job, use StopCompilationJob. To get
+information about a particular model compilation job, use
+DescribeCompilationJob. To get information about multiple model
+compilation jobs, use ListCompilationJobs." />
 
 
 
@@ -74,7 +94,7 @@ Storage Service (Amazon S3) bucket that you specify." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +102,7 @@ Storage Service (Amazon S3) bucket that you specify." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +114,7 @@ Storage Service (Amazon S3) bucket that you specify." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +140,30 @@ Storage Service (Amazon S3) bucket that you specify." />
     <p>Starts a model compilation job. After the model has been compiled,
 Amazon SageMaker saves the resulting model artifacts to an Amazon Simple
 Storage Service (Amazon S3) bucket that you specify.</p>
+<p>If you choose to host your model using Amazon SageMaker hosting
+services, you can use the resulting model artifacts as part of the
+model. You can also use the artifacts with AWS IoT Greengrass. In that
+case, deploy them as an ML resource.</p>
+<p>In the request body, you provide the following:</p><ul>
+<li><p>A name for the compilation job</p></li>
+<li><p>Information about the input model artifacts</p></li>
+<li><p>The output location for the compiled model and the device (target)
+that the model runs on</p></li>
+<li><p>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker
+assumes to perform the model compilation job.</p></li>
+</ul>
+
+<p>You can also provide a <code>Tag</code> to track the model compilation job's
+resource use and costs. The response body contains the
+<code>CompilationJobArn</code> for the compiled job.</p>
+<p>To stop a model compilation job, use StopCompilationJob. To get
+information about a particular model compilation job, use
+DescribeCompilationJob. To get information about multiple model
+compilation jobs, use ListCompilationJobs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sagemaker_create_compilation_job</span>(<span class='no'>CompilationJobName</span>, <span class='no'>RoleArn</span>,
-  <span class='no'>InputConfig</span>, <span class='no'>OutputConfig</span>, <span class='no'>StoppingCondition</span>)</pre>
+    <pre class="usage"><span class='fu'>sagemaker_create_compilation_job</span><span class='op'>(</span><span class='va'>CompilationJobName</span>, <span class='va'>RoleArn</span>,
+  <span class='va'>InputConfig</span>, <span class='va'>OutputConfig</span>, <span class='va'>StoppingCondition</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,49 +205,48 @@ and the target device the model runs on.</p></td>
 job reaches the time limit, Amazon SageMaker ends the compilation job.
 Use this API to cap model training costs.</p></td>
     </tr>
+    <tr>
+      <th>Tags</th>
+      <td><p>An array of key-value pairs. You can use tags to categorize your AWS
+resources in different ways, for example, by purpose, owner, or
+environment. For more information, see <a href='https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html'>Tagging AWS Resources</a>.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you choose to host your model using Amazon SageMaker hosting
-services, you can use the resulting model artifacts as part of the
-model. You can also use the artifacts with AWS IoT Greengrass. In that
-case, deploy them as an ML resource.</p>
-<p>In the request body, you provide the following:</p><ul>
-<li><p>A name for the compilation job</p></li>
-<li><p>Information about the input model artifacts</p></li>
-<li><p>The output location for the compiled model and the device (target)
-that the model runs on</p></li>
-<li><p><code>The Amazon Resource Name (ARN) of the IAM role that Amazon SageMaker assumes to perform the model compilation job</code></p></li>
-</ul>
-
-<p>You can also provide a <code>Tag</code> to track the model compilation job\'s
-resource use and costs. The response body contains the
-<code>CompilationJobArn</code> for the compiled job.</p>
-<p>To stop a model compilation job, use StopCompilationJob. To get
-information about a particular model compilation job, use
-DescribeCompilationJob. To get information about multiple model
-compilation jobs, use ListCompilationJobs.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_compilation_job</span>(
-  <span class='kw'>CompilationJobName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InputConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Uri</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DataInputConfig</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Framework</span> <span class='kw'>=</span> <span class='st'>"TENSORFLOW"</span><span class='kw'>|</span><span class='st'>"KERAS"</span><span class='kw'>|</span><span class='st'>"MXNET"</span><span class='kw'>|</span><span class='st'>"ONNX"</span><span class='kw'>|</span><span class='st'>"PYTORCH"</span><span class='kw'>|</span><span class='st'>"XGBOOST"</span><span class='kw'>|</span><span class='st'>"TFLITE"</span>
-  ),
-  <span class='kw'>OutputConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3OutputLocation</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>TargetDevice</span> <span class='kw'>=</span> <span class='st'>"lambda"</span><span class='kw'>|</span><span class='st'>"ml_m4"</span><span class='kw'>|</span><span class='st'>"ml_m5"</span><span class='kw'>|</span><span class='st'>"ml_c4"</span><span class='kw'>|</span><span class='st'>"ml_c5"</span><span class='kw'>|</span><span class='st'>"ml_p2"</span><span class='kw'>|</span><span class='st'>"ml_p3"</span><span class='kw'>|</span><span class='st'>"ml_inf1"</span><span class='kw'>|</span><span class='st'>"jetson_tx1"</span><span class='kw'>|</span><span class='st'>"jetson_tx2"</span><span class='kw'>|</span><span class='st'>"jetson_nano"</span><span class='kw'>|</span><span class='st'>"jetson_xavier"</span><span class='kw'>|</span><span class='st'>"rasp3b"</span><span class='kw'>|</span><span class='st'>"imx8qm"</span><span class='kw'>|</span><span class='st'>"deeplens"</span><span class='kw'>|</span><span class='st'>"rk3399"</span><span class='kw'>|</span><span class='st'>"rk3288"</span><span class='kw'>|</span><span class='st'>"aisage"</span><span class='kw'>|</span><span class='st'>"sbe_c"</span><span class='kw'>|</span><span class='st'>"qcs605"</span><span class='kw'>|</span><span class='st'>"qcs603"</span><span class='kw'>|</span><span class='st'>"sitara_am57x"</span><span class='kw'>|</span><span class='st'>"amba_cv22"</span>
-  ),
-  <span class='kw'>StoppingCondition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>MaxRuntimeInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>MaxWaitTimeInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_compilation_job</span><span class='op'>(</span>
+  CompilationJobName <span class='op'>=</span> <span class='st'>"string"</span>,
+  RoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  InputConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Uri <span class='op'>=</span> <span class='st'>"string"</span>,
+    DataInputConfig <span class='op'>=</span> <span class='st'>"string"</span>,
+    Framework <span class='op'>=</span> <span class='st'>"TENSORFLOW"</span><span class='op'>|</span><span class='st'>"KERAS"</span><span class='op'>|</span><span class='st'>"MXNET"</span><span class='op'>|</span><span class='st'>"ONNX"</span><span class='op'>|</span><span class='st'>"PYTORCH"</span><span class='op'>|</span><span class='st'>"XGBOOST"</span><span class='op'>|</span><span class='st'>"TFLITE"</span><span class='op'>|</span><span class='st'>"DARKNET"</span><span class='op'>|</span><span class='st'>"SKLEARN"</span>
+  <span class='op'>)</span>,
+  OutputConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3OutputLocation <span class='op'>=</span> <span class='st'>"string"</span>,
+    TargetDevice <span class='op'>=</span> <span class='st'>"lambda"</span><span class='op'>|</span><span class='st'>"ml_m4"</span><span class='op'>|</span><span class='st'>"ml_m5"</span><span class='op'>|</span><span class='st'>"ml_c4"</span><span class='op'>|</span><span class='st'>"ml_c5"</span><span class='op'>|</span><span class='st'>"ml_p2"</span><span class='op'>|</span><span class='st'>"ml_p3"</span><span class='op'>|</span><span class='st'>"ml_g4dn"</span><span class='op'>|</span><span class='st'>"ml_inf1"</span><span class='op'>|</span><span class='st'>"jetson_tx1"</span><span class='op'>|</span><span class='st'>"jetson_tx2"</span><span class='op'>|</span><span class='st'>"jetson_nano"</span><span class='op'>|</span><span class='st'>"jetson_xavier"</span><span class='op'>|</span><span class='st'>"rasp3b"</span><span class='op'>|</span><span class='st'>"imx8qm"</span><span class='op'>|</span><span class='st'>"deeplens"</span><span class='op'>|</span><span class='st'>"rk3399"</span><span class='op'>|</span><span class='st'>"rk3288"</span><span class='op'>|</span><span class='st'>"aisage"</span><span class='op'>|</span><span class='st'>"sbe_c"</span><span class='op'>|</span><span class='st'>"qcs605"</span><span class='op'>|</span><span class='st'>"qcs603"</span><span class='op'>|</span><span class='st'>"sitara_am57x"</span><span class='op'>|</span><span class='st'>"amba_cv22"</span><span class='op'>|</span><span class='st'>"x86_win32"</span><span class='op'>|</span><span class='st'>"x86_win64"</span><span class='op'>|</span><span class='st'>"coreml"</span><span class='op'>|</span><span class='st'>"jacinto_tda4vm"</span>,
+    TargetPlatform <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Os <span class='op'>=</span> <span class='st'>"ANDROID"</span><span class='op'>|</span><span class='st'>"LINUX"</span>,
+      Arch <span class='op'>=</span> <span class='st'>"X86_64"</span><span class='op'>|</span><span class='st'>"X86"</span><span class='op'>|</span><span class='st'>"ARM64"</span><span class='op'>|</span><span class='st'>"ARM_EABI"</span><span class='op'>|</span><span class='st'>"ARM_EABIHF"</span>,
+      Accelerator <span class='op'>=</span> <span class='st'>"INTEL_GRAPHICS"</span><span class='op'>|</span><span class='st'>"MALI"</span><span class='op'>|</span><span class='st'>"NVIDIA"</span>
+    <span class='op'>)</span>,
+    CompilerOptions <span class='op'>=</span> <span class='st'>"string"</span>,
+    KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  StoppingCondition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    MaxRuntimeInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+    MaxWaitTimeInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -225,7 +264,7 @@ compilation jobs, use ListCompilationJobs.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

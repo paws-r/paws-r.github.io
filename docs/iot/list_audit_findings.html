@@ -43,7 +43,7 @@ performed during a specified time period — iot_list_audit_findings • paws</t
 <meta property="og:title" content="Lists the findings (results) of a Device Defender audit or of the audits
 performed during a specified time period — iot_list_audit_findings" />
 <meta property="og:description" content="Lists the findings (results) of a Device Defender audit or of the audits
-performed during a specified time period. (Findings are retained for 180
+performed during a specified time period. (Findings are retained for 90
 days.)" />
 
 
@@ -76,7 +76,7 @@ days.)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@ days.)" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +96,7 @@ days.)" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,12 +121,12 @@ performed during a specified time period</h1>
 
     <div class="ref-description">
     <p>Lists the findings (results) of a Device Defender audit or of the audits
-performed during a specified time period. (Findings are retained for 180
+performed during a specified time period. (Findings are retained for 90
 days.)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iot_list_audit_findings</span>(<span class='no'>taskId</span>, <span class='no'>checkName</span>, <span class='no'>resourceIdentifier</span>,
-  <span class='no'>maxResults</span>, <span class='no'>nextToken</span>, <span class='no'>startTime</span>, <span class='no'>endTime</span>)</pre>
+    <pre class="usage"><span class='fu'>iot_list_audit_findings</span><span class='op'>(</span><span class='va'>taskId</span>, <span class='va'>checkName</span>, <span class='va'>resourceIdentifier</span>,
+  <span class='va'>maxResults</span>, <span class='va'>nextToken</span>, <span class='va'>startTime</span>, <span class='va'>endTime</span>, <span class='va'>listSuppressedFindings</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,36 +164,45 @@ both.</p></td>
 must specify either the startTime and endTime or the taskId, but not
 both.</p></td>
     </tr>
+    <tr>
+      <th>listSuppressedFindings</th>
+      <td><p>Boolean flag indicating whether only the suppressed findings or the
+unsuppressed findings should be listed. If this parameter isn't
+provided, the response will list both suppressed and unsuppressed
+findings.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_audit_findings</span>(
-  <span class='kw'>taskId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>checkName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>resourceIdentifier</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>deviceCertificateId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>caCertificateId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>cognitoIdentityPoolId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>clientId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>policyVersionIdentifier</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>policyName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>policyVersionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>account</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>iamRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>roleAliasArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>maxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>nextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>startTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_audit_findings</span><span class='op'>(</span>
+  taskId <span class='op'>=</span> <span class='st'>"string"</span>,
+  checkName <span class='op'>=</span> <span class='st'>"string"</span>,
+  resourceIdentifier <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    deviceCertificateId <span class='op'>=</span> <span class='st'>"string"</span>,
+    caCertificateId <span class='op'>=</span> <span class='st'>"string"</span>,
+    cognitoIdentityPoolId <span class='op'>=</span> <span class='st'>"string"</span>,
+    clientId <span class='op'>=</span> <span class='st'>"string"</span>,
+    policyVersionIdentifier <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      policyName <span class='op'>=</span> <span class='st'>"string"</span>,
+      policyVersionId <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    account <span class='op'>=</span> <span class='st'>"string"</span>,
+    iamRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    roleAliasArn <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  maxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  nextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  startTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>endTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+  <span class='op'>)</span>,
+  endTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  )
-)</pre>
+  <span class='op'>)</span>,
+  listSuppressedFindings <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -211,7 +220,7 @@ both.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

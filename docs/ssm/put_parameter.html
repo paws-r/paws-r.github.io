@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,8 +118,8 @@
     <p>Add a parameter to the system.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_put_parameter</span>(<span class='no'>Name</span>, <span class='no'>Description</span>, <span class='no'>Value</span>, <span class='no'>Type</span>, <span class='no'>KeyId</span>, <span class='no'>Overwrite</span>,
-  <span class='no'>AllowedPattern</span>, <span class='no'>Tags</span>, <span class='no'>Tier</span>, <span class='no'>Policies</span>, <span class='no'>DataType</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_put_parameter</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>Description</span>, <span class='va'>Value</span>, <span class='va'>Type</span>, <span class='va'>KeyId</span>, <span class='va'>Overwrite</span>,
+  <span class='va'>AllowedPattern</span>, <span class='va'>Tags</span>, <span class='va'>Tier</span>, <span class='va'>Policies</span>, <span class='va'>DataType</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -134,18 +134,18 @@ parameter. For example: <code>/Dev/DBServer/MySQL/db-string13</code></p>
 <p>Naming Constraints:</p><ul>
 <li><p>Parameter names are case sensitive.</p></li>
 <li><p>A parameter name must be unique within an AWS Region</p></li>
-<li><p>A parameter name can\'t be prefixed with \"aws\" or \"ssm\"
+<li><p>A parameter name can't be prefixed with "aws" or "ssm"
 (case-insensitive).</p></li>
 <li><p>Parameter names can include only the following symbols and letters:
 <code>a-zA-Z0-9_.-/</code></p></li>
-<li><p>A parameter name can\'t include spaces.</p></li>
+<li><p>A parameter name can't include spaces.</p></li>
 <li><p>Parameter hierarchies are limited to a maximum depth of fifteen
 levels.</p></li>
 </ul>
 
 <p>For additional information about valid values for parameter names, see
-<a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-parameter-name-constraints.html'>About requirements and constraints for parameter names</a>
-in the <em>AWS Systems Manager User Guide</em>.</p>
+<a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/'>About requirements and constraints for parameter names</a> in
+the <em>AWS Systems Manager User Guide</em>.</p>
 <p>The maximum length constraint listed below includes capacity for
 additional system attributes that are not part of the name. The maximum
 length for a parameter name, including the full length of the parameter
@@ -163,14 +163,17 @@ Optional but recommended.</p>
       <th>Value</th>
       <td><p>[required] The parameter value that you want to add to the system. Standard
 parameters have a value limit of 4 KB. Advanced parameters have a value
-limit of 8 KB.</p></td>
+limit of 8 KB.</p>
+<p>Parameters can't be referenced or nested in the values of other
+parameters. You can't include <code>\{\{\}\}</code> or <code>\{\{ssm:&lt;i&gt;parameter-name&lt;/i&gt;\}\}</code>
+in a parameter value.</p></td>
     </tr>
     <tr>
       <th>Type</th>
       <td><p>The type of parameter that you want to add to the system.</p>
 <p><code>SecureString</code> is not currently supported for AWS CloudFormation
-templates or in the China Regions.</p>
-<p>Items in a <code>StringList</code> must be separated by a comma (,). You can\'t use
+templates.</p>
+<p>Items in a <code>StringList</code> must be separated by a comma (,). You can't use
 other punctuation or special character to escape items in the list. If
 you have a parameter value that requires a comma, then use the <code>String</code>
 data type.</p>
@@ -183,7 +186,7 @@ You must specify a parameter type when creating a parameter.</p></td>
 default AWS Key Management Service (AWS KMS) key automatically assigned
 to your AWS account or a custom key. Required for parameters that use
 the <code>SecureString</code> data type.</p>
-<p>If you don\'t specify a key ID, the system uses the default key
+<p>If you don't specify a key ID, the system uses the default key
 associated with your AWS account.</p><ul>
 <li><p>To use your default AWS KMS key, choose the <code>SecureString</code> data
 type, and do <em>not</em> specify the <code>Key ID</code> when you create the
@@ -196,13 +199,13 @@ the <code>Key ID</code> parameter.</p></li>
     <tr>
       <th>Overwrite</th>
       <td><p>Overwrite an existing parameter. If not specified, will default to
-\"false\".</p></td>
+"false".</p></td>
     </tr>
     <tr>
       <th>AllowedPattern</th>
       <td><p>A regular expression used to validate the parameter value. For example,
 for String types with values restricted to numbers, you can specify the
-following: AllowedPattern=\^<code>\\d</code>+\$</p></td>
+following: AllowedPattern=^<code>\\d</code>+$</p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -226,7 +229,7 @@ AddTagsToResource action.</p></td>
       <td><p>The parameter tier to assign to a parameter.</p>
 <p>Parameter Store offers a standard tier and an advanced tier for
 parameters. Standard parameters have a content size limit of 4 KB and
-can\'t be configured to use parameter policies. You can create a maximum
+can't be configured to use parameter policies. You can create a maximum
 of 10,000 standard parameters for each Region in an AWS account.
 Standard parameters are offered at no additional cost.</p>
 <p>Advanced parameters have a content size limit of 8 KB and can be
@@ -235,7 +238,7 @@ configured to use parameter policies. You can create a maximum of
 parameters incur a charge. For more information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html'>Standard and advanced parameter tiers</a>
 in the <em>AWS Systems Manager User Guide</em>.</p>
 <p>You can change a standard parameter to an advanced parameter any time.
-But you can\'t revert an advanced parameter to a standard parameter.
+But you can't revert an advanced parameter to a standard parameter.
 Reverting an advanced parameter to a standard parameter would result in
 data loss because the system would truncate the size of the parameter
 from 8 KB to 4 KB. Reverting would also remove any policies attached to
@@ -258,7 +261,7 @@ specify one of the following as the default:</p><ul>
 requests as advanced parameters.</p></li>
 <li><p><strong>Intelligent-Tiering</strong>: With this option, Parameter Store evaluates
 each request to determine if the parameter is standard or advanced.</p>
-<p>If the request doesn\'t include any options that require an advanced
+<p>If the request doesn't include any options that require an advanced
 parameter, the parameter is created in the standard-parameter tier.
 If one or more options requiring an advanced parameter are included
 in the request, Parameter Store create a parameter in the
@@ -276,8 +279,8 @@ current Region.</p></li>
 </ul>
 
 <p>For more information about configuring the default tier option, see
-<a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/ps-default-tier.html'>Specifying a default parameter tier</a>
-in the <em>AWS Systems Manager User Guide</em>.</p></td>
+<a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/'>Specifying a default parameter tier</a> in
+the <em>AWS Systems Manager User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>Policies</th>
@@ -312,7 +315,7 @@ plain text and Amazon Machine Image IDs.</p>
 <p>When you create a <code>String</code> parameter and specify <code>aws:ec2:image</code>,
 Systems Manager validates the parameter value is in the required format,
 such as <code>ami-12345abcdeEXAMPLE</code>, and that the specified AMI is available
-in your AWS account. For more information, see <a href='http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-ec2-aliases.html'>Native parameter support for Amazon Machine Image IDs</a>
+in your AWS account. For more information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-ec2-aliases.html'>Native parameter support for Amazon Machine Image IDs</a>
 in the <em>AWS Systems Manager User Guide</em>.</p></td>
     </tr>
     </table>
@@ -320,24 +323,25 @@ in the <em>AWS Systems Manager User Guide</em>.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_parameter</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"String"</span><span class='kw'>|</span><span class='st'>"StringList"</span><span class='kw'>|</span><span class='st'>"SecureString"</span>,
-  <span class='kw'>KeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>AllowedPattern</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Tier</span> <span class='kw'>=</span> <span class='st'>"Standard"</span><span class='kw'>|</span><span class='st'>"Advanced"</span><span class='kw'>|</span><span class='st'>"Intelligent-Tiering"</span>,
-  <span class='kw'>Policies</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DataType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_parameter</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Value <span class='op'>=</span> <span class='st'>"string"</span>,
+  Type <span class='op'>=</span> <span class='st'>"String"</span><span class='op'>|</span><span class='st'>"StringList"</span><span class='op'>|</span><span class='st'>"SecureString"</span>,
+  KeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Overwrite <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  AllowedPattern <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Tier <span class='op'>=</span> <span class='st'>"Standard"</span><span class='op'>|</span><span class='st'>"Advanced"</span><span class='op'>|</span><span class='st'>"Intelligent-Tiering"</span>,
+  Policies <span class='op'>=</span> <span class='st'>"string"</span>,
+  DataType <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -355,7 +359,7 @@ in the <em>AWS Systems Manager User Guide</em>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

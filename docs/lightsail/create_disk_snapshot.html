@@ -42,7 +42,28 @@
 <meta property="og:title" content="Creates a snapshot of a block storage disk — lightsail_create_disk_snapshot" />
 <meta property="og:description" content="Creates a snapshot of a block storage disk. You can use snapshots for
 backups, to make copies of disks, and to save data before shutting down
-a Lightsail instance." />
+a Lightsail instance.
+You can take a snapshot of an attached disk that is in use; however,
+snapshots only capture data that has been written to your disk at the
+time the snapshot command is issued. This may exclude any data that has
+been cached by any applications or the operating system. If you can
+pause any file systems on the disk long enough to take a snapshot, your
+snapshot should be complete. Nevertheless, if you cannot pause all file
+writes to the disk, you should unmount the disk from within the
+Lightsail instance, issue the create disk snapshot command, and then
+remount the disk to ensure a consistent and complete snapshot. You may
+remount and use your disk while the snapshot status is pending.
+You can also use this operation to create a snapshot of an instance's
+system volume. You might want to do this, for example, to recover data
+from the system volume of a botched instance or to create a backup of
+the system volume like you would for a block storage disk. To create a
+snapshot of a system volume, just define the instance name parameter
+when issuing the snapshot command, and a snapshot of the defined
+instance's system volume will be created. After the snapshot is
+available, you can create a block storage disk from the snapshot and
+attach it to a running instance to access the data on the disk.
+The create disk snapshot operation supports tag-based access control
+via request tags. For more information, see the Lightsail Dev Guide." />
 
 
 
@@ -74,7 +95,7 @@ a Lightsail instance." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +103,7 @@ a Lightsail instance." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +115,7 @@ a Lightsail instance." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +141,31 @@ a Lightsail instance." />
     <p>Creates a snapshot of a block storage disk. You can use snapshots for
 backups, to make copies of disks, and to save data before shutting down
 a Lightsail instance.</p>
+<p>You can take a snapshot of an attached disk that is in use; however,
+snapshots only capture data that has been written to your disk at the
+time the snapshot command is issued. This may exclude any data that has
+been cached by any applications or the operating system. If you can
+pause any file systems on the disk long enough to take a snapshot, your
+snapshot should be complete. Nevertheless, if you cannot pause all file
+writes to the disk, you should unmount the disk from within the
+Lightsail instance, issue the create disk snapshot command, and then
+remount the disk to ensure a consistent and complete snapshot. You may
+remount and use your disk while the snapshot status is pending.</p>
+<p>You can also use this operation to create a snapshot of an instance's
+system volume. You might want to do this, for example, to recover data
+from the system volume of a botched instance or to create a backup of
+the system volume like you would for a block storage disk. To create a
+snapshot of a system volume, just define the <code>instance name</code> parameter
+when issuing the snapshot command, and a snapshot of the defined
+instance's system volume will be created. After the snapshot is
+available, you can create a block storage disk from the snapshot and
+attach it to a running instance to access the data on the disk.</p>
+<p>The <code>create disk snapshot</code> operation supports tag-based access control
+via request tags. For more information, see the Lightsail Dev Guide.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lightsail_create_disk_snapshot</span>(<span class='no'>diskName</span>, <span class='no'>diskSnapshotName</span>, <span class='no'>instanceName</span>,
-  <span class='no'>tags</span>)</pre>
+    <pre class="usage"><span class='fu'>lightsail_create_disk_snapshot</span><span class='op'>(</span><span class='va'>diskName</span>, <span class='va'>diskSnapshotName</span>, <span class='va'>instanceName</span>,
+  <span class='va'>tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,7 +186,7 @@ based on the source disk.</p></td>
       <th>instanceName</th>
       <td><p>The unique name of the source instance (e.g.,
 <code>Amazon_Linux-512MB-Virginia-1</code>). When this is defined, a snapshot of
-the instance\'s system volume is created.</p>
+the instance's system volume is created.</p>
 <p>This parameter cannot be defined together with the <code>disk name</code>
 parameter. The <code>instance name</code> and <code>disk name</code> parameters are mutually
 exclusive.</p></td>
@@ -152,48 +194,25 @@ exclusive.</p></td>
     <tr>
       <th>tags</th>
       <td><p>The tag keys and optional values to add to the resource during create.</p>
-<p>To tag a resource after it has been created, see the <code>tag resource</code>
-operation.</p></td>
+<p>Use the <code>TagResource</code> action to tag a resource after it's created.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can take a snapshot of an attached disk that is in use; however,
-snapshots only capture data that has been written to your disk at the
-time the snapshot command is issued. This may exclude any data that has
-been cached by any applications or the operating system. If you can
-pause any file systems on the disk long enough to take a snapshot, your
-snapshot should be complete. Nevertheless, if you cannot pause all file
-writes to the disk, you should unmount the disk from within the
-Lightsail instance, issue the create disk snapshot command, and then
-remount the disk to ensure a consistent and complete snapshot. You may
-remount and use your disk while the snapshot status is pending.</p>
-<p>You can also use this operation to create a snapshot of an instance\'s
-system volume. You might want to do this, for example, to recover data
-from the system volume of a botched instance or to create a backup of
-the system volume like you would for a block storage disk. To create a
-snapshot of a system volume, just define the <code>instance name</code> parameter
-when issuing the snapshot command, and a snapshot of the defined
-instance\'s system volume will be created. After the snapshot is
-available, you can create a block storage disk from the snapshot and
-attach it to a running instance to access the data on the disk.</p>
-<p>The <code>create disk snapshot</code> operation supports tag-based access control
-via request tags. For more information, see the <a href='https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags'>Lightsail Dev Guide</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_disk_snapshot</span>(
-  <span class='kw'>diskName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>diskSnapshotName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>instanceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_disk_snapshot</span><span class='op'>(</span>
+  diskName <span class='op'>=</span> <span class='st'>"string"</span>,
+  diskSnapshotName <span class='op'>=</span> <span class='st'>"string"</span>,
+  instanceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -211,7 +230,7 @@ via request tags. For more information, see the <a href='https://lightsail.aws.a
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

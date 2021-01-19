@@ -41,7 +41,17 @@
 
 <meta property="og:title" content="Sends an email message — pinpointemail_send_email" />
 <meta property="og:description" content="Sends an email message. You can use the Amazon Pinpoint Email API to
-send two types of messages:" />
+send two types of messages:
+Simple – A standard email message. When you create this type of
+message, you specify the sender, the recipient, and the message
+body, and Amazon Pinpoint assembles the message for you.
+Raw – A raw, MIME-formatted email message. When you send this
+type of email, you have to specify all of the message headers, as
+well as the message body. You can use this message type to send
+messages that contain attachments. The message that you specify has
+to be a valid MIME message.
+
+" />
 
 
 
@@ -73,7 +83,7 @@ send two types of messages:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +91,7 @@ send two types of messages:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +103,7 @@ send two types of messages:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -117,19 +127,29 @@ send two types of messages:" />
 
     <div class="ref-description">
     <p>Sends an email message. You can use the Amazon Pinpoint Email API to
-send two types of messages:</p>
+send two types of messages:</p><ul>
+<li><p><strong>Simple</strong> – A standard email message. When you create this type of
+message, you specify the sender, the recipient, and the message
+body, and Amazon Pinpoint assembles the message for you.</p></li>
+<li><p><strong>Raw</strong> – A raw, MIME-formatted email message. When you send this
+type of email, you have to specify all of the message headers, as
+well as the message body. You can use this message type to send
+messages that contain attachments. The message that you specify has
+to be a valid MIME message.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>pinpointemail_send_email</span>(<span class='no'>FromEmailAddress</span>, <span class='no'>Destination</span>,
-  <span class='no'>ReplyToAddresses</span>, <span class='no'>FeedbackForwardingEmailAddress</span>, <span class='no'>Content</span>, <span class='no'>EmailTags</span>,
-  <span class='no'>ConfigurationSetName</span>)</pre>
+    <pre class="usage"><span class='fu'>pinpointemail_send_email</span><span class='op'>(</span><span class='va'>FromEmailAddress</span>, <span class='va'>Destination</span>,
+  <span class='va'>ReplyToAddresses</span>, <span class='va'>FeedbackForwardingEmailAddress</span>, <span class='va'>Content</span>, <span class='va'>EmailTags</span>,
+  <span class='va'>ConfigurationSetName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>FromEmailAddress</th>
-      <td><p>The email address that you want to use as the \"From\" address for the
+      <td><p>The email address that you want to use as the "From" address for the
 email. The address that you specify has to be verified.</p></td>
     </tr>
     <tr>
@@ -138,7 +158,7 @@ email. The address that you specify has to be verified.</p></td>
     </tr>
     <tr>
       <th>ReplyToAddresses</th>
-      <td><p>The \"Reply-to\" email addresses for the message. When the recipient
+      <td><p>The "Reply-to" email addresses for the message. When the recipient
 replies to the message, each Reply-to address receives the reply.</p></td>
     </tr>
     <tr>
@@ -165,73 +185,60 @@ email.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p><strong>Simple</strong> -- A standard email message. When you create this type of
-message, you specify the sender, the recipient, and the message
-body, and Amazon Pinpoint assembles the message for you.</p></li>
-<li><p><strong>Raw</strong> -- A raw, MIME-formatted email message. When you send this
-type of email, you have to specify all of the message headers, as
-well as the message body. You can use this message type to send
-messages that contain attachments. The message that you specify has
-to be a valid MIME message.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>send_email</span>(
-  <span class='kw'>FromEmailAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ToAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_email</span><span class='op'>(</span>
+  FromEmailAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+  Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ToAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>CcAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    CcAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>BccAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    BccAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ReplyToAddresses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ReplyToAddresses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>FeedbackForwardingEmailAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Content</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Simple</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Subject</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>Body</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Text</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        ),
-        <span class='kw'>Html</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Data</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Charset</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>Raw</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Data</span> <span class='kw'>=</span> <span class='no'>raw</span>
-    ),
-    <span class='kw'>Template</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>TemplateArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>TemplateData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>EmailTags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ConfigurationSetName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  FeedbackForwardingEmailAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+  Content <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Simple <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Subject <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Data <span class='op'>=</span> <span class='st'>"string"</span>,
+        Charset <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      Body <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Data <span class='op'>=</span> <span class='st'>"string"</span>,
+          Charset <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>,
+        Html <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Data <span class='op'>=</span> <span class='st'>"string"</span>,
+          Charset <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Raw <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Data <span class='op'>=</span> <span class='va'>raw</span>
+    <span class='op'>)</span>,
+    Template <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      TemplateArn <span class='op'>=</span> <span class='st'>"string"</span>,
+      TemplateData <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  EmailTags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ConfigurationSetName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -249,7 +256,7 @@ to be a valid MIME message.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

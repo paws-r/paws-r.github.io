@@ -43,7 +43,31 @@
 <meta property="og:description" content="This operation lists in-progress multipart uploads. An in-progress
 multipart upload is a multipart upload that has been initiated using the
 Initiate Multipart Upload request, but has not yet been completed or
-aborted." />
+aborted.
+This operation returns at most 1,000 multipart uploads in the response.
+1,000 multipart uploads is the maximum number of uploads a response can
+include, which is also the default value. You can further limit the
+number of uploads in a response by specifying the max-uploads
+parameter in the response. If additional multipart uploads satisfy the
+list criteria, the response will contain an IsTruncated element with
+the value true. To list the additional multipart uploads, use the
+key-marker and upload-id-marker request parameters.
+In the response, the uploads are sorted by key. If your application has
+initiated more than one multipart upload using the same object key, then
+uploads in the response are first sorted by key. Additionally, uploads
+are sorted in ascending order within each key by the upload initiation
+time.
+For more information on multipart uploads, see Uploading Objects Using Multipart Upload.
+For information on permissions required to use the multipart upload API,
+see Multipart Upload API and Permissions.
+The following operations are related to ListMultipartUploads:
+CreateMultipartUpload
+UploadPart
+CompleteMultipartUpload
+ListParts
+AbortMultipartUpload
+
+" />
 
 
 
@@ -75,7 +99,7 @@ aborted." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +107,7 @@ aborted." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +119,7 @@ aborted." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,23 +146,55 @@ aborted." />
 multipart upload is a multipart upload that has been initiated using the
 Initiate Multipart Upload request, but has not yet been completed or
 aborted.</p>
+<p>This operation returns at most 1,000 multipart uploads in the response.
+1,000 multipart uploads is the maximum number of uploads a response can
+include, which is also the default value. You can further limit the
+number of uploads in a response by specifying the <code>max-uploads</code>
+parameter in the response. If additional multipart uploads satisfy the
+list criteria, the response will contain an <code>IsTruncated</code> element with
+the value true. To list the additional multipart uploads, use the
+<code>key-marker</code> and <code>upload-id-marker</code> request parameters.</p>
+<p>In the response, the uploads are sorted by key. If your application has
+initiated more than one multipart upload using the same object key, then
+uploads in the response are first sorted by key. Additionally, uploads
+are sorted in ascending order within each key by the upload initiation
+time.</p>
+<p>For more information on multipart uploads, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html'>Uploading Objects Using Multipart Upload</a>.</p>
+<p>For information on permissions required to use the multipart upload API,
+see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html'>Multipart Upload API and Permissions</a>.</p>
+<p>The following operations are related to <code>ListMultipartUploads</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html'>CreateMultipartUpload</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html'>UploadPart</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html'>CompleteMultipartUpload</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html'>ListParts</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html'>AbortMultipartUpload</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_list_multipart_uploads</span>(<span class='no'>Bucket</span>, <span class='no'>Delimiter</span>, <span class='no'>EncodingType</span>, <span class='no'>KeyMarker</span>,
-  <span class='no'>MaxUploads</span>, <span class='no'>Prefix</span>, <span class='no'>UploadIdMarker</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_list_multipart_uploads</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Delimiter</span>, <span class='va'>EncodingType</span>, <span class='va'>KeyMarker</span>,
+  <span class='va'>MaxUploads</span>, <span class='va'>Prefix</span>, <span class='va'>UploadIdMarker</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Bucket</th>
-      <td><p>[required] Name of the bucket to which the multipart upload was initiated.</p>
+      <td><p>[required] The name of the bucket to which the multipart upload was initiated.</p>
 <p>When using this API with an access point, you must direct requests to
 the access point hostname. The access point hostname takes the form
 <em>AccessPointName</em>-<em>AccountId</em>.s3-accesspoint.<em>Region</em>.amazonaws.com.
-When using this operation using an access point through the AWS SDKs,
-you provide the access point ARN in place of the bucket name. For more
+When using this operation with an access point through the AWS SDKs, you
+provide the access point ARN in place of the bucket name. For more
 information about access point ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html'>Using Access Points</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>When using this API with Amazon S3 on Outposts, you must direct requests
+to the S3 on Outposts hostname. The S3 on Outposts hostname takes the
+form
+<em>AccessPointName</em>-<em>AccountId</em>.<em>outpostID</em>.s3-outposts.<em>Region</em>.amazonaws.com.
+When using this operation using S3 on Outposts through the AWS SDKs, you
+provide the Outposts bucket ARN in place of the bucket name. For more
+information about S3 on Outposts ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html'>Using S3 on Outposts</a>
 in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
@@ -146,7 +202,7 @@ in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></td>
       <td><p>Character you use to group keys.</p>
 <p>All keys that contain the same string between the prefix, if specified,
 and the first occurrence of the delimiter after the prefix are grouped
-under a single result element, <code>CommonPrefixes</code>. If you don\'t specify
+under a single result element, <code>CommonPrefixes</code>. If you don't specify
 the prefix parameter, then the substring starts at the beginning of the
 key. The keys that are grouped under <code>CommonPrefixes</code> result element are
 not returned elsewhere in the response.</p></td>
@@ -177,7 +233,7 @@ returned in a response.</p></td>
       <td><p>Lists in-progress uploads only for those keys that begin with the
 specified prefix. You can use prefixes to separate a bucket into
 different grouping of keys. (You can think of using prefix to make
-groups in the same way you\'d use a folder in a file system.)</p></td>
+groups in the same way you'd use a folder in a file system.)</p></td>
     </tr>
     <tr>
       <th>UploadIdMarker</th>
@@ -188,65 +244,49 @@ for a key equal to the key-marker might be included in the list only if
 they have an upload ID lexicographically greater than the specified
 <code>upload-id-marker</code>.</p></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation returns at most 1,000 multipart uploads in the response.
-1,000 multipart uploads is the maximum number of uploads a response can
-include, which is also the default value. You can further limit the
-number of uploads in a response by specifying the <code>max-uploads</code>
-parameter in the response. If additional multipart uploads satisfy the
-list criteria, the response will contain an <code>IsTruncated</code> element with
-the value true. To list the additional multipart uploads, use the
-<code>key-marker</code> and <code>upload-id-marker</code> request parameters.</p>
-<p>In the response, the uploads are sorted by key. If your application has
-initiated more than one multipart upload using the same object key, then
-uploads in the response are first sorted by key. Additionally, uploads
-are sorted in ascending order within each key by the upload initiation
-time.</p>
-<p>For more information on multipart uploads, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html'>Uploading Objects Using Multipart Upload</a>.</p>
-<p>For information on permissions required to use the multipart upload API,
-see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html'>Multipart Upload API and Permissions</a>.</p>
-<p>The following operations are related to <code>ListMultipartUploads</code>:</p><ul>
-<li><p>CreateMultipartUpload</p></li>
-<li><p>UploadPart</p></li>
-<li><p>CompleteMultipartUpload</p></li>
-<li><p>ListParts</p></li>
-<li><p>AbortMultipartUpload</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_multipart_uploads</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Delimiter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EncodingType</span> <span class='kw'>=</span> <span class='st'>"url"</span>,
-  <span class='kw'>KeyMarker</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxUploads</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>UploadIdMarker</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_multipart_uploads</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Delimiter <span class='op'>=</span> <span class='st'>"string"</span>,
+  EncodingType <span class='op'>=</span> <span class='st'>"url"</span>,
+  KeyMarker <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxUploads <span class='op'>=</span> <span class='fl'>123</span>,
+  Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+  UploadIdMarker <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example specifies the upload-id-marker and key-marker from</span>
 <span class='co'># previous truncated response to retrieve next setup of multipart uploads.</span>
-<span class='no'>svc</span>$<span class='fu'>list_multipart_uploads</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>KeyMarker</span> <span class='kw'>=</span> <span class='st'>"nextkeyfrompreviousresponse"</span>,
-  <span class='kw'>MaxUploads</span> <span class='kw'>=</span> <span class='st'>"2"</span>,
-  <span class='kw'>UploadIdMarker</span> <span class='kw'>=</span> <span class='st'>"valuefrompreviousresponse"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_multipart_uploads</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  KeyMarker <span class='op'>=</span> <span class='st'>"nextkeyfrompreviousresponse"</span>,
+  MaxUploads <span class='op'>=</span> <span class='st'>"2"</span>,
+  UploadIdMarker <span class='op'>=</span> <span class='st'>"valuefrompreviousresponse"</span>
+<span class='op'>)</span>
 
 <span class='co'># The following example lists in-progress multipart uploads on a specific</span>
 <span class='co'># bucket.</span>
-<span class='no'>svc</span>$<span class='fu'>list_multipart_uploads</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_multipart_uploads</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -262,7 +302,7 @@ see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.h
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

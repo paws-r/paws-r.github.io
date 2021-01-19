@@ -42,14 +42,27 @@ namespace — iotthingsgraph_upload_entity_definitions • paws</title>
 
 <meta property="og:title" content="Asynchronously uploads one or more entity definitions to the user's
 namespace — iotthingsgraph_upload_entity_definitions" />
-<meta property="og:description" content="Asynchronously uploads one or more entity definitions to the user\'s
+<meta property="og:description" content="Asynchronously uploads one or more entity definitions to the user's
 namespace. The document parameter is required if
 syncWithPublicNamespace and deleteExistingEntites are false. If the
-syncWithPublicNamespace parameter is set to true, the user\'s
+syncWithPublicNamespace parameter is set to true, the user's
 namespace will synchronize with the latest version of the public
 namespace. If deprecateExistingEntities is set to true, all entities
 in the latest version will be deleted before the new
-DefinitionDocument is uploaded." />
+DefinitionDocument is uploaded.
+When a user uploads entity definitions for the first time, the service
+creates a new namespace for the user. The new namespace tracks the
+public namespace. Currently users can have only one namespace. The
+namespace version increments whenever a user uploads entity definitions
+that are backwards-incompatible and whenever a user sets the
+syncWithPublicNamespace parameter or the deprecateExistingEntities
+parameter to true.
+The IDs for all of the entities should be in URN format. Each entity
+must be in the user's namespace. Users can't create entities in the
+public namespace, but entity definitions can refer to entities in the
+public namespace.
+Valid entities are Device, DeviceModel, Service, Capability,
+State, Action, Event, Property, Mapping, Enum." />
 
 
 
@@ -81,7 +94,7 @@ DefinitionDocument is uploaded." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -89,7 +102,7 @@ DefinitionDocument is uploaded." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +114,7 @@ DefinitionDocument is uploaded." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,18 +138,31 @@ namespace</h1>
     </div>
 
     <div class="ref-description">
-    <p>Asynchronously uploads one or more entity definitions to the user\'s
+    <p>Asynchronously uploads one or more entity definitions to the user's
 namespace. The <code>document</code> parameter is required if
 <code>syncWithPublicNamespace</code> and <code>deleteExistingEntites</code> are false. If the
-<code>syncWithPublicNamespace</code> parameter is set to <code>true</code>, the user\'s
+<code>syncWithPublicNamespace</code> parameter is set to <code>true</code>, the user's
 namespace will synchronize with the latest version of the public
 namespace. If <code>deprecateExistingEntities</code> is set to true, all entities
 in the latest version will be deleted before the new
 <code>DefinitionDocument</code> is uploaded.</p>
+<p>When a user uploads entity definitions for the first time, the service
+creates a new namespace for the user. The new namespace tracks the
+public namespace. Currently users can have only one namespace. The
+namespace version increments whenever a user uploads entity definitions
+that are backwards-incompatible and whenever a user sets the
+<code>syncWithPublicNamespace</code> parameter or the <code>deprecateExistingEntities</code>
+parameter to <code>true</code>.</p>
+<p>The IDs for all of the entities should be in URN format. Each entity
+must be in the user's namespace. Users can't create entities in the
+public namespace, but entity definitions can refer to entities in the
+public namespace.</p>
+<p>Valid entities are <code>Device</code>, <code>DeviceModel</code>, <code>Service</code>, <code>Capability</code>,
+<code>State</code>, <code>Action</code>, <code>Event</code>, <code>Property</code>, <code>Mapping</code>, <code>Enum</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iotthingsgraph_upload_entity_definitions</span>(<span class='no'>document</span>,
-  <span class='no'>syncWithPublicNamespace</span>, <span class='no'>deprecateExistingEntities</span>)</pre>
+    <pre class="usage"><span class='fu'>iotthingsgraph_upload_entity_definitions</span><span class='op'>(</span><span class='va'>document</span>,
+  <span class='va'>syncWithPublicNamespace</span>, <span class='va'>deprecateExistingEntities</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,32 +185,18 @@ the upload will create a new namespace version.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When a user uploads entity definitions for the first time, the service
-creates a new namespace for the user. The new namespace tracks the
-public namespace. Currently users can have only one namespace. The
-namespace version increments whenever a user uploads entity definitions
-that are backwards-incompatible and whenever a user sets the
-<code>syncWithPublicNamespace</code> parameter or the <code>deprecateExistingEntities</code>
-parameter to <code>true</code>.</p>
-<p>The IDs for all of the entities should be in URN format. Each entity
-must be in the user\'s namespace. Users can\'t create entities in the
-public namespace, but entity definitions can refer to entities in the
-public namespace.</p>
-<p>Valid entities are <code>Device</code>, <code>DeviceModel</code>, <code>Service</code>, <code>Capability</code>,
-<code>State</code>, <code>Action</code>, <code>Event</code>, <code>Property</code>, <code>Mapping</code>, <code>Enum</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>upload_entity_definitions</span>(
-  <span class='kw'>document</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>language</span> <span class='kw'>=</span> <span class='st'>"GRAPHQL"</span>,
-    <span class='kw'>text</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>syncWithPublicNamespace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>deprecateExistingEntities</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>upload_entity_definitions</span><span class='op'>(</span>
+  document <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    language <span class='op'>=</span> <span class='st'>"GRAPHQL"</span>,
+    text <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  syncWithPublicNamespace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  deprecateExistingEntities <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -202,7 +214,7 @@ public namespace.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

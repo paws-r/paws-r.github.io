@@ -6,9 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Retrieves a paginated list of access policies for an AWS SSO identity (a
-user or group) or an AWS IoT SiteWise Monitor resource (a portal or
-project) — iotsitewise_list_access_policies • paws</title>
+<title>Retrieves a paginated list of access policies for an identity (an AWS
+SSO user, an AWS SSO group, or an IAM user) or an AWS IoT SiteWise
+Monitor resource (a portal or project) — iotsitewise_list_access_policies • paws</title>
 
 
 <!-- jquery -->
@@ -41,12 +41,12 @@ project) — iotsitewise_list_access_policies • paws</title>
 
 
 
-<meta property="og:title" content="Retrieves a paginated list of access policies for an AWS SSO identity (a
-user or group) or an AWS IoT SiteWise Monitor resource (a portal or
-project) — iotsitewise_list_access_policies" />
-<meta property="og:description" content="Retrieves a paginated list of access policies for an AWS SSO identity (a
-user or group) or an AWS IoT SiteWise Monitor resource (a portal or
-project)." />
+<meta property="og:title" content="Retrieves a paginated list of access policies for an identity (an AWS
+SSO user, an AWS SSO group, or an IAM user) or an AWS IoT SiteWise
+Monitor resource (a portal or project) — iotsitewise_list_access_policies" />
+<meta property="og:description" content="Retrieves a paginated list of access policies for an identity (an AWS
+SSO user, an AWS SSO group, or an IAM user) or an AWS IoT SiteWise
+Monitor resource (a portal or project)." />
 
 
 
@@ -78,7 +78,7 @@ project)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@ project)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +98,7 @@ project)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -115,34 +115,34 @@ project)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Retrieves a paginated list of access policies for an AWS SSO identity (a
-user or group) or an AWS IoT SiteWise Monitor resource (a portal or
-project)</h1>
+    <h1>Retrieves a paginated list of access policies for an identity (an AWS
+SSO user, an AWS SSO group, or an IAM user) or an AWS IoT SiteWise
+Monitor resource (a portal or project)</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/iotsitewise_operations.R'><code>R/iotsitewise_operations.R</code></a></small>
     <div class="hidden name"><code>iotsitewise_list_access_policies.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Retrieves a paginated list of access policies for an AWS SSO identity (a
-user or group) or an AWS IoT SiteWise Monitor resource (a portal or
-project).</p>
+    <p>Retrieves a paginated list of access policies for an identity (an AWS
+SSO user, an AWS SSO group, or an IAM user) or an AWS IoT SiteWise
+Monitor resource (a portal or project).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iotsitewise_list_access_policies</span>(<span class='no'>identityType</span>, <span class='no'>identityId</span>, <span class='no'>resourceType</span>,
-  <span class='no'>resourceId</span>, <span class='no'>nextToken</span>, <span class='no'>maxResults</span>)</pre>
+    <pre class="usage"><span class='fu'>iotsitewise_list_access_policies</span><span class='op'>(</span><span class='va'>identityType</span>, <span class='va'>identityId</span>, <span class='va'>resourceType</span>,
+  <span class='va'>resourceId</span>, <span class='va'>iamArn</span>, <span class='va'>nextToken</span>, <span class='va'>maxResults</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>identityType</th>
-      <td><p>The type of identity (user or group). This parameter is required if you
-specify <code>identityId</code>.</p></td>
+      <td><p>The type of identity (AWS SSO user, AWS SSO group, or IAM user). This
+parameter is required if you specify <code>identityId</code>.</p></td>
     </tr>
     <tr>
       <th>identityId</th>
-      <td><p>The ID of the identity. This parameter is required if you specify
-<code>identityType</code>.</p></td>
+      <td><p>The ID of the identity. This parameter is required if you specify <code>USER</code>
+or <code>GROUP</code> for <code>identityType</code>.</p></td>
     </tr>
     <tr>
       <th>resourceType</th>
@@ -155,26 +155,35 @@ you specify <code>resourceId</code>.</p></td>
 <code>resourceType</code>.</p></td>
     </tr>
     <tr>
+      <th>iamArn</th>
+      <td><p>The ARN of the IAM user. For more information, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html'>IAM ARNs</a>
+in the <em>IAM User Guide</em>. This parameter is required if you specify <code>IAM</code>
+for <code>identityType</code>.</p></td>
+    </tr>
+    <tr>
       <th>nextToken</th>
       <td><p>The token to be used for the next set of paginated results.</p></td>
     </tr>
     <tr>
       <th>maxResults</th>
-      <td><p>The maximum number of results to be returned per paginated request.</p></td>
+      <td><p>The maximum number of results to be returned per paginated request.</p>
+<p>Default: 50</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_access_policies</span>(
-  <span class='kw'>identityType</span> <span class='kw'>=</span> <span class='st'>"USER"</span><span class='kw'>|</span><span class='st'>"GROUP"</span>,
-  <span class='kw'>identityId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>resourceType</span> <span class='kw'>=</span> <span class='st'>"PORTAL"</span><span class='kw'>|</span><span class='st'>"PROJECT"</span>,
-  <span class='kw'>resourceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>nextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>maxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_access_policies</span><span class='op'>(</span>
+  identityType <span class='op'>=</span> <span class='st'>"USER"</span><span class='op'>|</span><span class='st'>"GROUP"</span><span class='op'>|</span><span class='st'>"IAM"</span>,
+  identityId <span class='op'>=</span> <span class='st'>"string"</span>,
+  resourceType <span class='op'>=</span> <span class='st'>"PORTAL"</span><span class='op'>|</span><span class='st'>"PROJECT"</span>,
+  resourceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  iamArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  nextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  maxResults <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -192,7 +201,7 @@ you specify <code>resourceId</code>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

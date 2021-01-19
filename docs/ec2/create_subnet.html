@@ -40,7 +40,24 @@
 
 
 <meta property="og:title" content="Creates a subnet in a specified VPC — ec2_create_subnet" />
-<meta property="og:description" content="Creates a subnet in a specified VPC." />
+<meta property="og:description" content="Creates a subnet in a specified VPC.
+You must specify an IPv4 CIDR block for the subnet. After you create a
+subnet, you can't change its CIDR block. The allowed block size is
+between a /16 netmask (65,536 IP addresses) and /28 netmask (16 IP
+addresses). The CIDR block must not overlap with the CIDR block of an
+existing subnet in the VPC.
+If you've associated an IPv6 CIDR block with your VPC, you can create a
+subnet with an IPv6 CIDR block that uses a /64 prefix length.
+AWS reserves both the first four and the last IPv4 address in each
+subnet's CIDR block. They're not available for use.
+If you add more than one subnet to a VPC, they're set up in a star
+topology with a logical router in the middle.
+When you stop an instance in a subnet, it retains its private IPv4
+address. It's therefore possible to have a subnet with no running
+instances (they're all stopped), but no remaining IP addresses
+available.
+For more information about subnets, see Your VPC and Subnets
+in the Amazon Virtual Private Cloud User Guide." />
 
 
 
@@ -72,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +97,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +109,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +133,27 @@
 
     <div class="ref-description">
     <p>Creates a subnet in a specified VPC.</p>
+<p>You must specify an IPv4 CIDR block for the subnet. After you create a
+subnet, you can't change its CIDR block. The allowed block size is
+between a /16 netmask (65,536 IP addresses) and /28 netmask (16 IP
+addresses). The CIDR block must not overlap with the CIDR block of an
+existing subnet in the VPC.</p>
+<p>If you've associated an IPv6 CIDR block with your VPC, you can create a
+subnet with an IPv6 CIDR block that uses a /64 prefix length.</p>
+<p>AWS reserves both the first four and the last IPv4 address in each
+subnet's CIDR block. They're not available for use.</p>
+<p>If you add more than one subnet to a VPC, they're set up in a star
+topology with a logical router in the middle.</p>
+<p>When you stop an instance in a subnet, it retains its private IPv4
+address. It's therefore possible to have a subnet with no running
+instances (they're all stopped), but no remaining IP addresses
+available.</p>
+<p>For more information about subnets, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html'>Your VPC and Subnets</a>
+in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_create_subnet</span>(<span class='no'>TagSpecifications</span>, <span class='no'>AvailabilityZone</span>,
-  <span class='no'>AvailabilityZoneId</span>, <span class='no'>CidrBlock</span>, <span class='no'>Ipv6CidrBlock</span>, <span class='no'>OutpostArn</span>, <span class='no'>VpcId</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_create_subnet</span><span class='op'>(</span><span class='va'>TagSpecifications</span>, <span class='va'>AvailabilityZone</span>,
+  <span class='va'>AvailabilityZoneId</span>, <span class='va'>CidrBlock</span>, <span class='va'>Ipv6CidrBlock</span>, <span class='va'>OutpostArn</span>, <span class='va'>VpcId</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,60 +208,44 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You must specify an IPv4 CIDR block for the subnet. After you create a
-subnet, you can\'t change its CIDR block. The allowed block size is
-between a /16 netmask (65,536 IP addresses) and /28 netmask (16 IP
-addresses). The CIDR block must not overlap with the CIDR block of an
-existing subnet in the VPC.</p>
-<p>If you\'ve associated an IPv6 CIDR block with your VPC, you can create a
-subnet with an IPv6 CIDR block that uses a /64 prefix length.</p>
-<p>AWS reserves both the first four and the last IPv4 address in each
-subnet\'s CIDR block. They\'re not available for use.</p>
-<p>If you add more than one subnet to a VPC, they\'re set up in a star
-topology with a logical router in the middle.</p>
-<p>When you stop an instance in a subnet, it retains its private IPv4
-address. It\'s therefore possible to have a subnet with no running
-instances (they\'re all stopped), but no remaining IP addresses
-available.</p>
-<p>For more information about subnets, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html'>Your VPC and Subnets</a>
-in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_subnet</span>(
-  <span class='kw'>TagSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='kw'>|</span><span class='st'>"customer-gateway"</span><span class='kw'>|</span><span class='st'>"dedicated-host"</span><span class='kw'>|</span><span class='st'>"dhcp-options"</span><span class='kw'>|</span><span class='st'>"elastic-ip"</span><span class='kw'>|</span><span class='st'>"elastic-gpu"</span><span class='kw'>|</span><span class='st'>"export-image-task"</span><span class='kw'>|</span><span class='st'>"export-instance-task"</span><span class='kw'>|</span><span class='st'>"fleet"</span><span class='kw'>|</span><span class='st'>"fpga-image"</span><span class='kw'>|</span><span class='st'>"host-reservation"</span><span class='kw'>|</span><span class='st'>"image"</span><span class='kw'>|</span><span class='st'>"import-image-task"</span><span class='kw'>|</span><span class='st'>"import-snapshot-task"</span><span class='kw'>|</span><span class='st'>"instance"</span><span class='kw'>|</span><span class='st'>"internet-gateway"</span><span class='kw'>|</span><span class='st'>"key-pair"</span><span class='kw'>|</span><span class='st'>"launch-template"</span><span class='kw'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='kw'>|</span><span class='st'>"natgateway"</span><span class='kw'>|</span><span class='st'>"network-acl"</span><span class='kw'>|</span><span class='st'>"network-interface"</span><span class='kw'>|</span><span class='st'>"placement-group"</span><span class='kw'>|</span><span class='st'>"reserved-instances"</span><span class='kw'>|</span><span class='st'>"route-table"</span><span class='kw'>|</span><span class='st'>"security-group"</span><span class='kw'>|</span><span class='st'>"snapshot"</span><span class='kw'>|</span><span class='st'>"spot-fleet-request"</span><span class='kw'>|</span><span class='st'>"spot-instances-request"</span><span class='kw'>|</span><span class='st'>"subnet"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-session"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-target"</span><span class='kw'>|</span><span class='st'>"transit-gateway"</span><span class='kw'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='kw'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='kw'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='kw'>|</span><span class='st'>"volume"</span><span class='kw'>|</span><span class='st'>"vpc"</span><span class='kw'>|</span><span class='st'>"vpc-peering-connection"</span><span class='kw'>|</span><span class='st'>"vpn-connection"</span><span class='kw'>|</span><span class='st'>"vpn-gateway"</span><span class='kw'>|</span><span class='st'>"vpc-flow-log"</span>,
-      <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>AvailabilityZone</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AvailabilityZoneId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CidrBlock</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Ipv6CidrBlock</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OutpostArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VpcId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_subnet</span><span class='op'>(</span>
+  TagSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ResourceType <span class='op'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='op'>|</span><span class='st'>"customer-gateway"</span><span class='op'>|</span><span class='st'>"dedicated-host"</span><span class='op'>|</span><span class='st'>"dhcp-options"</span><span class='op'>|</span><span class='st'>"egress-only-internet-gateway"</span><span class='op'>|</span><span class='st'>"elastic-ip"</span><span class='op'>|</span><span class='st'>"elastic-gpu"</span><span class='op'>|</span><span class='st'>"export-image-task"</span><span class='op'>|</span><span class='st'>"export-instance-task"</span><span class='op'>|</span><span class='st'>"fleet"</span><span class='op'>|</span><span class='st'>"fpga-image"</span><span class='op'>|</span><span class='st'>"host-reservation"</span><span class='op'>|</span><span class='st'>"image"</span><span class='op'>|</span><span class='st'>"import-image-task"</span><span class='op'>|</span><span class='st'>"import-snapshot-task"</span><span class='op'>|</span><span class='st'>"instance"</span><span class='op'>|</span><span class='st'>"internet-gateway"</span><span class='op'>|</span><span class='st'>"key-pair"</span><span class='op'>|</span><span class='st'>"launch-template"</span><span class='op'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='op'>|</span><span class='st'>"natgateway"</span><span class='op'>|</span><span class='st'>"network-acl"</span><span class='op'>|</span><span class='st'>"network-interface"</span><span class='op'>|</span><span class='st'>"network-insights-analysis"</span><span class='op'>|</span><span class='st'>"network-insights-path"</span><span class='op'>|</span><span class='st'>"placement-group"</span><span class='op'>|</span><span class='st'>"reserved-instances"</span><span class='op'>|</span><span class='st'>"route-table"</span><span class='op'>|</span><span class='st'>"security-group"</span><span class='op'>|</span><span class='st'>"snapshot"</span><span class='op'>|</span><span class='st'>"spot-fleet-request"</span><span class='op'>|</span><span class='st'>"spot-instances-request"</span><span class='op'>|</span><span class='st'>"subnet"</span><span class='op'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='op'>|</span><span class='st'>"traffic-mirror-session"</span><span class='op'>|</span><span class='st'>"traffic-mirror-target"</span><span class='op'>|</span><span class='st'>"transit-gateway"</span><span class='op'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='op'>|</span><span class='st'>"transit-gateway-connect-peer"</span><span class='op'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='op'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='op'>|</span><span class='st'>"volume"</span><span class='op'>|</span><span class='st'>"vpc"</span><span class='op'>|</span><span class='st'>"vpc-peering-connection"</span><span class='op'>|</span><span class='st'>"vpn-connection"</span><span class='op'>|</span><span class='st'>"vpn-gateway"</span><span class='op'>|</span><span class='st'>"vpc-flow-log"</span>,
+      Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Key <span class='op'>=</span> <span class='st'>"string"</span>,
+          Value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  AvailabilityZone <span class='op'>=</span> <span class='st'>"string"</span>,
+  AvailabilityZoneId <span class='op'>=</span> <span class='st'>"string"</span>,
+  CidrBlock <span class='op'>=</span> <span class='st'>"string"</span>,
+  Ipv6CidrBlock <span class='op'>=</span> <span class='st'>"string"</span>,
+  OutpostArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  VpcId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example creates a subnet in the specified VPC with the specified</span>
 <span class='co'># CIDR block. We recommend that you let us select an Availability Zone for</span>
 <span class='co'># you.</span>
-<span class='no'>svc</span>$<span class='fu'>create_subnet</span>(
-  <span class='kw'>CidrBlock</span> <span class='kw'>=</span> <span class='st'>"10.0.1.0/24"</span>,
-  <span class='kw'>VpcId</span> <span class='kw'>=</span> <span class='st'>"vpc-a01106c2"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_subnet</span><span class='op'>(</span>
+  CidrBlock <span class='op'>=</span> <span class='st'>"10.0.1.0/24"</span>,
+  VpcId <span class='op'>=</span> <span class='st'>"vpc-a01106c2"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -243,7 +261,7 @@ in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -41,8 +41,14 @@
 
 <meta property="og:title" content="Creates a Lightsail load balancer — lightsail_create_load_balancer" />
 <meta property="og:description" content="Creates a Lightsail load balancer. To learn more about deciding whether
-to load balance your application, see Configure your Lightsail instances for load balancing.
-You can create up to 5 load balancers per AWS Region in your account." />
+to load balance your application, see Configure your Lightsail instances
+for load balancing. You can create up to 5 load balancers per AWS Region
+in your account.
+When you create a load balancer, you can specify a unique name and port
+settings. To change additional load balancer settings, use the
+UpdateLoadBalancerAttribute operation.
+The create load balancer operation supports tag-based access control
+via request tags. For more information, see the Lightsail Dev Guide." />
 
 
 
@@ -74,7 +80,7 @@ You can create up to 5 load balancers per AWS Region in your account." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +88,7 @@ You can create up to 5 load balancers per AWS Region in your account." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +100,7 @@ You can create up to 5 load balancers per AWS Region in your account." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,13 +124,19 @@ You can create up to 5 load balancers per AWS Region in your account." />
 
     <div class="ref-description">
     <p>Creates a Lightsail load balancer. To learn more about deciding whether
-to load balance your application, see <a href='https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing'>Configure your Lightsail instances for load balancing</a>.
-You can create up to 5 load balancers per AWS Region in your account.</p>
+to load balance your application, see Configure your Lightsail instances
+for load balancing. You can create up to 5 load balancers per AWS Region
+in your account.</p>
+<p>When you create a load balancer, you can specify a unique name and port
+settings. To change additional load balancer settings, use the
+<code>UpdateLoadBalancerAttribute</code> operation.</p>
+<p>The <code>create load balancer</code> operation supports tag-based access control
+via request tags. For more information, see the Lightsail Dev Guide.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lightsail_create_load_balancer</span>(<span class='no'>loadBalancerName</span>, <span class='no'>instancePort</span>,
-  <span class='no'>healthCheckPath</span>, <span class='no'>certificateName</span>, <span class='no'>certificateDomainName</span>,
-  <span class='no'>certificateAlternativeNames</span>, <span class='no'>tags</span>)</pre>
+    <pre class="usage"><span class='fu'>lightsail_create_load_balancer</span><span class='op'>(</span><span class='va'>loadBalancerName</span>, <span class='va'>instancePort</span>,
+  <span class='va'>healthCheckPath</span>, <span class='va'>certificateName</span>, <span class='va'>certificateDomainName</span>,
+  <span class='va'>certificateAlternativeNames</span>, <span class='va'>tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,13 +147,13 @@ You can create up to 5 load balancers per AWS Region in your account.</p>
     </tr>
     <tr>
       <th>instancePort</th>
-      <td><p>[required] The instance port where you\'re creating your load balancer.</p></td>
+      <td><p>[required] The instance port where you're creating your load balancer.</p></td>
     </tr>
     <tr>
       <th>healthCheckPath</th>
       <td><p>The path you provided to perform the load balancer health check. If you
-didn\'t specify a health check path, Lightsail uses the root path of
-your website (e.g., <code><a href='https://rdrr.io/r/base/Arithmetic.html'>"/"</a></code>).</p>
+didn't specify a health check path, Lightsail uses the root path of your
+website (e.g., <code>"/"</code>).</p>
 <p>You may want to specify a custom health check path other than the root
 of your application if your home page loads slowly or has a lot of media
 or scripting on it.</p></td>
@@ -168,37 +180,30 @@ certificate (e.g., <code>www.example.com</code>, <code>example.com</code>, <code
     <tr>
       <th>tags</th>
       <td><p>The tag keys and optional values to add to the resource during create.</p>
-<p>To tag a resource after it has been created, see the <code>tag resource</code>
-operation.</p></td>
+<p>Use the <code>TagResource</code> action to tag a resource after it's created.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you create a load balancer, you can specify a unique name and port
-settings. To change additional load balancer settings, use the
-<code>UpdateLoadBalancerAttribute</code> operation.</p>
-<p>The <code>create load balancer</code> operation supports tag-based access control
-via request tags. For more information, see the <a href='https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags'>Lightsail Dev Guide</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_load_balancer</span>(
-  <span class='kw'>loadBalancerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>instancePort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>healthCheckPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>certificateName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>certificateDomainName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>certificateAlternativeNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_load_balancer</span><span class='op'>(</span>
+  loadBalancerName <span class='op'>=</span> <span class='st'>"string"</span>,
+  instancePort <span class='op'>=</span> <span class='fl'>123</span>,
+  healthCheckPath <span class='op'>=</span> <span class='st'>"string"</span>,
+  certificateName <span class='op'>=</span> <span class='st'>"string"</span>,
+  certificateDomainName <span class='op'>=</span> <span class='st'>"string"</span>,
+  certificateAlternativeNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -216,7 +221,7 @@ via request tags. For more information, see the <a href='https://lightsail.aws.a
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

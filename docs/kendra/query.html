@@ -42,7 +42,20 @@
 <meta property="og:title" content="Searches an active index — kendra_query" />
 <meta property="og:description" content="Searches an active index. Use this API to search your documents using
 query. The Query operation enables to do faceted search and to filter
-results based on document attributes." />
+results based on document attributes.
+It also enables you to provide user context that Amazon Kendra uses to
+enforce document access control in the search results.
+Amazon Kendra searches your index for text content and question and
+answer (FAQ) content. By default the response contains three types of
+results.
+Relevant passages
+Matching FAQs
+Relevant documents
+
+
+You can specify that the query return only one type of result using the
+QueryResultTypeConfig parameter.
+Each query returns the 100 most relevant results." />
 
 
 
@@ -74,7 +87,7 @@ results based on document attributes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +95,7 @@ results based on document attributes." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +107,7 @@ results based on document attributes." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,11 +133,24 @@ results based on document attributes." />
     <p>Searches an active index. Use this API to search your documents using
 query. The <code>Query</code> operation enables to do faceted search and to filter
 results based on document attributes.</p>
+<p>It also enables you to provide user context that Amazon Kendra uses to
+enforce document access control in the search results.</p>
+<p>Amazon Kendra searches your index for text content and question and
+answer (FAQ) content. By default the response contains three types of
+results.</p><ul>
+<li><p>Relevant passages</p></li>
+<li><p>Matching FAQs</p></li>
+<li><p>Relevant documents</p></li>
+</ul>
+
+<p>You can specify that the query return only one type of result using the
+<code>QueryResultTypeConfig</code> parameter.</p>
+<p>Each query returns the 100 most relevant results.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kendra_query</span>(<span class='no'>IndexId</span>, <span class='no'>QueryText</span>, <span class='no'>AttributeFilter</span>, <span class='no'>Facets</span>,
-  <span class='no'>RequestedDocumentAttributes</span>, <span class='no'>QueryResultTypeFilter</span>, <span class='no'>PageNumber</span>,
-  <span class='no'>PageSize</span>)</pre>
+    <pre class="usage"><span class='fu'>kendra_query</span><span class='op'>(</span><span class='va'>IndexId</span>, <span class='va'>QueryText</span>, <span class='va'>AttributeFilter</span>, <span class='va'>Facets</span>,
+  <span class='va'>RequestedDocumentAttributes</span>, <span class='va'>QueryResultTypeFilter</span>, <span class='va'>PageNumber</span>,
+  <span class='va'>PageSize</span>, <span class='va'>SortingConfiguration</span>, <span class='va'>UserContext</span>, <span class='va'>VisitorId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,140 +201,155 @@ Use this parameter to get result pages after the first one.</p></td>
 The default page size is 10. The maximum number of results returned is
 100. If you ask for more than 100 results, only 100 are returned.</p></td>
     </tr>
+    <tr>
+      <th>SortingConfiguration</th>
+      <td><p>Provides information that determines how the results of the query are
+sorted. You can set the field that Amazon Kendra should sort the results
+on, and specify whether the results should be sorted in ascending or
+descending order. In the case of ties in sorting the results, the
+results are sorted by relevance.</p>
+<p>If you don't provide sorting configuration, the results are sorted by
+the relevance that Amazon Kendra determines for the result.</p></td>
+    </tr>
+    <tr>
+      <th>UserContext</th>
+      <td><p>The user context token.</p></td>
+    </tr>
+    <tr>
+      <th>VisitorId</th>
+      <td><p>Provides an identifier for a specific user. The <code>VisitorId</code> should be a
+unique identifier, such as a GUID. Don't use personally identifiable
+information, such as the user's email address, as the <code>VisitorId</code>.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>It also enables you to provide user context that Amazon Kendra uses to
-enforce document access control in the search results.</p>
-<p>Amazon Kendra searches your index for text content and question and
-answer (FAQ) content. By default the response contains three types of
-results.</p><ul>
-<li><p>Relevant passages</p></li>
-<li><p>Matching FAQs</p></li>
-<li><p>Relevant documents</p></li>
-</ul>
-
-<p>You can specify that the query return only one type of result using the
-<code>QueryResultTypeConfig</code> parameter.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>query</span>(
-  <span class='kw'>IndexId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>QueryText</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AttributeFilter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AndAllFilters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-    ),
-    <span class='kw'>OrAllFilters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-    ),
-    <span class='kw'>NotFilter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>EqualsTo</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StringListValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>query</span><span class='op'>(</span>
+  IndexId <span class='op'>=</span> <span class='st'>"string"</span>,
+  QueryText <span class='op'>=</span> <span class='st'>"string"</span>,
+  AttributeFilter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AndAllFilters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    OrAllFilters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    NotFilter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    EqualsTo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+        StringListValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>LongValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>DateValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+        <span class='op'>)</span>,
+        LongValue <span class='op'>=</span> <span class='fl'>123</span>,
+        DateValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
           <span class='st'>"2015-01-01"</span>
-        )
-      )
-    ),
-    <span class='kw'>ContainsAll</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StringListValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ContainsAll <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+        StringListValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>LongValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>DateValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+        <span class='op'>)</span>,
+        LongValue <span class='op'>=</span> <span class='fl'>123</span>,
+        DateValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
           <span class='st'>"2015-01-01"</span>
-        )
-      )
-    ),
-    <span class='kw'>ContainsAny</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StringListValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    ContainsAny <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+        StringListValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>LongValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>DateValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+        <span class='op'>)</span>,
+        LongValue <span class='op'>=</span> <span class='fl'>123</span>,
+        DateValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
           <span class='st'>"2015-01-01"</span>
-        )
-      )
-    ),
-    <span class='kw'>GreaterThan</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StringListValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    GreaterThan <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+        StringListValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>LongValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>DateValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+        <span class='op'>)</span>,
+        LongValue <span class='op'>=</span> <span class='fl'>123</span>,
+        DateValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
           <span class='st'>"2015-01-01"</span>
-        )
-      )
-    ),
-    <span class='kw'>GreaterThanOrEquals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StringListValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    GreaterThanOrEquals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+        StringListValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>LongValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>DateValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+        <span class='op'>)</span>,
+        LongValue <span class='op'>=</span> <span class='fl'>123</span>,
+        DateValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
           <span class='st'>"2015-01-01"</span>
-        )
-      )
-    ),
-    <span class='kw'>LessThan</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StringListValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    LessThan <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+        StringListValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>LongValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>DateValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+        <span class='op'>)</span>,
+        LongValue <span class='op'>=</span> <span class='fl'>123</span>,
+        DateValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
           <span class='st'>"2015-01-01"</span>
-        )
-      )
-    ),
-    <span class='kw'>LessThanOrEquals</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>StringListValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    LessThanOrEquals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+        StringListValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>LongValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>DateValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+        <span class='op'>)</span>,
+        LongValue <span class='op'>=</span> <span class='fl'>123</span>,
+        DateValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
           <span class='st'>"2015-01-01"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>Facets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DocumentAttributeKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>RequestedDocumentAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Facets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DocumentAttributeKey <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  RequestedDocumentAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>QueryResultTypeFilter</span> <span class='kw'>=</span> <span class='st'>"DOCUMENT"</span><span class='kw'>|</span><span class='st'>"QUESTION_ANSWER"</span><span class='kw'>|</span><span class='st'>"ANSWER"</span>,
-  <span class='kw'>PageNumber</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>PageSize</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+  <span class='op'>)</span>,
+  QueryResultTypeFilter <span class='op'>=</span> <span class='st'>"DOCUMENT"</span><span class='op'>|</span><span class='st'>"QUESTION_ANSWER"</span><span class='op'>|</span><span class='st'>"ANSWER"</span>,
+  PageNumber <span class='op'>=</span> <span class='fl'>123</span>,
+  PageSize <span class='op'>=</span> <span class='fl'>123</span>,
+  SortingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DocumentAttributeKey <span class='op'>=</span> <span class='st'>"string"</span>,
+    SortOrder <span class='op'>=</span> <span class='st'>"DESC"</span><span class='op'>|</span><span class='st'>"ASC"</span>
+  <span class='op'>)</span>,
+  UserContext <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Token <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  VisitorId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -326,7 +367,7 @@ results.</p><ul>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -43,7 +43,20 @@ detect and recognize faces in a streaming video — rekognition_create_stream_pr
 <meta property="og:title" content="Creates an Amazon Rekognition stream processor that you can use to
 detect and recognize faces in a streaming video — rekognition_create_stream_processor" />
 <meta property="og:description" content="Creates an Amazon Rekognition stream processor that you can use to
-detect and recognize faces in a streaming video." />
+detect and recognize faces in a streaming video.
+Amazon Rekognition Video is a consumer of live video from Amazon Kinesis
+Video Streams. Amazon Rekognition Video sends analysis results to Amazon
+Kinesis Data Streams.
+You provide as input a Kinesis video stream (Input) and a Kinesis data
+stream (Output) stream. You also specify the face recognition criteria
+in Settings. For example, the collection containing faces that you
+want to recognize. Use Name to assign an identifier for the stream
+processor. You use Name to manage the stream processor. For example,
+you can start processing the source video by calling
+StartStreamProcessor with the Name field.
+After you have finished analyzing a streaming video, use
+StopStreamProcessor to stop processing. You can delete the stream
+processor by calling DeleteStreamProcessor." />
 
 
 
@@ -75,7 +88,7 @@ detect and recognize faces in a streaming video." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +96,7 @@ detect and recognize faces in a streaming video." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +108,7 @@ detect and recognize faces in a streaming video." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +134,23 @@ detect and recognize faces in a streaming video</h1>
     <div class="ref-description">
     <p>Creates an Amazon Rekognition stream processor that you can use to
 detect and recognize faces in a streaming video.</p>
+<p>Amazon Rekognition Video is a consumer of live video from Amazon Kinesis
+Video Streams. Amazon Rekognition Video sends analysis results to Amazon
+Kinesis Data Streams.</p>
+<p>You provide as input a Kinesis video stream (<code>Input</code>) and a Kinesis data
+stream (<code>Output</code>) stream. You also specify the face recognition criteria
+in <code>Settings</code>. For example, the collection containing faces that you
+want to recognize. Use <code>Name</code> to assign an identifier for the stream
+processor. You use <code>Name</code> to manage the stream processor. For example,
+you can start processing the source video by calling
+StartStreamProcessor with the <code>Name</code> field.</p>
+<p>After you have finished analyzing a streaming video, use
+StopStreamProcessor to stop processing. You can delete the stream
+processor by calling DeleteStreamProcessor.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_create_stream_processor</span>(<span class='no'>Input</span>, <span class='no'>Output</span>, <span class='no'>Name</span>, <span class='no'>Settings</span>,
-  <span class='no'>RoleArn</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_create_stream_processor</span><span class='op'>(</span><span class='va'>Input</span>, <span class='va'>Output</span>, <span class='va'>Name</span>, <span class='va'>Settings</span>,
+  <span class='va'>RoleArn</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,44 +185,30 @@ attributes to detect.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Amazon Rekognition Video is a consumer of live video from Amazon Kinesis
-Video Streams. Amazon Rekognition Video sends analysis results to Amazon
-Kinesis Data Streams.</p>
-<p>You provide as input a Kinesis video stream (<code>Input</code>) and a Kinesis data
-stream (<code>Output</code>) stream. You also specify the face recognition criteria
-in <code>Settings</code>. For example, the collection containing faces that you
-want to recognize. Use <code>Name</code> to assign an identifier for the stream
-processor. You use <code>Name</code> to manage the stream processor. For example,
-you can start processing the source video by calling
-StartStreamProcessor with the <code>Name</code> field.</p>
-<p>After you have finished analyzing a streaming video, use
-StopStreamProcessor to stop processing. You can delete the stream
-processor by calling DeleteStreamProcessor.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_stream_processor</span>(
-  <span class='kw'>Input</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>KinesisVideoStream</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Arn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Output</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>KinesisDataStream</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Arn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Settings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>FaceSearch</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CollectionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>FaceMatchThreshold</span> <span class='kw'>=</span> <span class='fl'>123.0</span>
-    )
-  ),
-  <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_stream_processor</span><span class='op'>(</span>
+  Input <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    KinesisVideoStream <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Arn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Output <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    KinesisDataStream <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Arn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Settings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    FaceSearch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CollectionId <span class='op'>=</span> <span class='st'>"string"</span>,
+      FaceMatchThreshold <span class='op'>=</span> <span class='fl'>123.0</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  RoleArn <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -214,7 +226,7 @@ processor by calling DeleteStreamProcessor.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

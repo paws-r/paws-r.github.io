@@ -44,7 +44,61 @@
 (also referred to as a PutRecords request) — kinesis_put_records" />
 <meta property="og:description" content="Writes multiple data records into a Kinesis data stream in a single call
 (also referred to as a PutRecords request). Use this operation to send
-data into the stream for data ingestion and processing." />
+data into the stream for data ingestion and processing.
+Each PutRecords request can support up to 500 records. Each record in
+the request can be as large as 1 MiB, up to a limit of 5 MiB for the
+entire request, including partition keys. Each shard can support writes
+up to 1,000 records per second, up to a maximum data write total of 1
+MiB per second.
+You must specify the name of the stream that captures, stores, and
+transports the data; and an array of request Records, with each record
+in the array requiring a partition key and data blob. The record size
+limit applies to the total size of the partition key and data blob.
+The data blob can be any type of data; for example, a segment from a log
+file, geographic/location data, website clickstream data, and so on.
+The partition key is used by Kinesis Data Streams as input to a hash
+function that maps the partition key and associated data to a specific
+shard. An MD5 hash function is used to map partition keys to 128-bit
+integer values and to map associated data records to shards. As a result
+of this hashing mechanism, all data records with the same partition key
+map to the same shard within the stream. For more information, see
+Adding Data to a Stream
+in the Amazon Kinesis Data Streams Developer Guide.
+Each record in the Records array may include an optional parameter,
+ExplicitHashKey, which overrides the partition key to shard mapping.
+This parameter allows a data producer to determine explicitly the shard
+where the record is stored. For more information, see Adding Multiple Records with PutRecords
+in the Amazon Kinesis Data Streams Developer Guide.
+The PutRecords response includes an array of response Records. Each
+record in the response array directly correlates with a record in the
+request array using natural ordering, from the top to the bottom of the
+request and response. The response Records array always includes the
+same number of records as the request array.
+The response Records array includes both successfully and
+unsuccessfully processed records. Kinesis Data Streams attempts to
+process all records in each PutRecords request. A single record
+failure does not stop the processing of subsequent records. As a result,
+PutRecords doesn't guarantee the ordering of records. If you need to
+read records in the same order they are written to the stream, use
+PutRecord instead of PutRecords, and write to the same shard.
+A successfully processed record includes ShardId and SequenceNumber
+values. The ShardId parameter identifies the shard in the stream where
+the record is stored. The SequenceNumber parameter is an identifier
+assigned to the put record, unique to all records in the stream.
+An unsuccessfully processed record includes ErrorCode and
+ErrorMessage values. ErrorCode reflects the type of error and can be
+one of the following values: ProvisionedThroughputExceededException or
+InternalFailure. ErrorMessage provides more detailed information
+about the ProvisionedThroughputExceededException exception including
+the account ID, stream name, and shard ID of the record that was
+throttled. For more information about partially successful responses,
+see Adding Multiple Records with PutRecords
+in the Amazon Kinesis Data Streams Developer Guide.
+After you write a record to a stream, you cannot modify that record or
+its order within the stream.
+By default, data records are accessible for 24 hours from the time that
+they are added to a stream. You can use IncreaseStreamRetentionPeriod or
+DecreaseStreamRetentionPeriod to modify this retention period." />
 
 
 
@@ -76,7 +130,7 @@ data into the stream for data ingestion and processing." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +138,7 @@ data into the stream for data ingestion and processing." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +150,7 @@ data into the stream for data ingestion and processing." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,9 +177,63 @@ data into the stream for data ingestion and processing." />
     <p>Writes multiple data records into a Kinesis data stream in a single call
 (also referred to as a <code>PutRecords</code> request). Use this operation to send
 data into the stream for data ingestion and processing.</p>
+<p>Each <code>PutRecords</code> request can support up to 500 records. Each record in
+the request can be as large as 1 MiB, up to a limit of 5 MiB for the
+entire request, including partition keys. Each shard can support writes
+up to 1,000 records per second, up to a maximum data write total of 1
+MiB per second.</p>
+<p>You must specify the name of the stream that captures, stores, and
+transports the data; and an array of request <code>Records</code>, with each record
+in the array requiring a partition key and data blob. The record size
+limit applies to the total size of the partition key and data blob.</p>
+<p>The data blob can be any type of data; for example, a segment from a log
+file, geographic/location data, website clickstream data, and so on.</p>
+<p>The partition key is used by Kinesis Data Streams as input to a hash
+function that maps the partition key and associated data to a specific
+shard. An MD5 hash function is used to map partition keys to 128-bit
+integer values and to map associated data records to shards. As a result
+of this hashing mechanism, all data records with the same partition key
+map to the same shard within the stream. For more information, see
+<a href='https://docs.aws.amazon.com/streams/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream'>Adding Data to a Stream</a>
+in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
+<p>Each record in the <code>Records</code> array may include an optional parameter,
+<code>ExplicitHashKey</code>, which overrides the partition key to shard mapping.
+This parameter allows a data producer to determine explicitly the shard
+where the record is stored. For more information, see <a href='https://docs.aws.amazon.com/streams/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-putrecords'>Adding Multiple Records with PutRecords</a>
+in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
+<p>The <code>PutRecords</code> response includes an array of response <code>Records</code>. Each
+record in the response array directly correlates with a record in the
+request array using natural ordering, from the top to the bottom of the
+request and response. The response <code>Records</code> array always includes the
+same number of records as the request array.</p>
+<p>The response <code>Records</code> array includes both successfully and
+unsuccessfully processed records. Kinesis Data Streams attempts to
+process all records in each <code>PutRecords</code> request. A single record
+failure does not stop the processing of subsequent records. As a result,
+PutRecords doesn't guarantee the ordering of records. If you need to
+read records in the same order they are written to the stream, use
+PutRecord instead of <code>PutRecords</code>, and write to the same shard.</p>
+<p>A successfully processed record includes <code>ShardId</code> and <code>SequenceNumber</code>
+values. The <code>ShardId</code> parameter identifies the shard in the stream where
+the record is stored. The <code>SequenceNumber</code> parameter is an identifier
+assigned to the put record, unique to all records in the stream.</p>
+<p>An unsuccessfully processed record includes <code>ErrorCode</code> and
+<code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error and can be
+one of the following values: <code>ProvisionedThroughputExceededException</code> or
+<code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information
+about the <code>ProvisionedThroughputExceededException</code> exception including
+the account ID, stream name, and shard ID of the record that was
+throttled. For more information about partially successful responses,
+see <a href='https://docs.aws.amazon.com/streams/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-putrecords'>Adding Multiple Records with PutRecords</a>
+in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
+<p>After you write a record to a stream, you cannot modify that record or
+its order within the stream.</p>
+<p>By default, data records are accessible for 24 hours from the time that
+they are added to a stream. You can use IncreaseStreamRetentionPeriod or
+DecreaseStreamRetentionPeriod to modify this retention period.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kinesis_put_records</span>(<span class='no'>Records</span>, <span class='no'>StreamName</span>)</pre>
+    <pre class="usage"><span class='fu'>kinesis_put_records</span><span class='op'>(</span><span class='va'>Records</span>, <span class='va'>StreamName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,70 +248,20 @@ data into the stream for data ingestion and processing.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Each <code>PutRecords</code> request can support up to 500 records. Each record in
-the request can be as large as 1 MB, up to a limit of 5 MB for the
-entire request, including partition keys. Each shard can support writes
-up to 1,000 records per second, up to a maximum data write total of 1 MB
-per second.</p>
-<p>You must specify the name of the stream that captures, stores, and
-transports the data; and an array of request <code>Records</code>, with each record
-in the array requiring a partition key and data blob. The record size
-limit applies to the total size of the partition key and data blob.</p>
-<p>The data blob can be any type of data; for example, a segment from a log
-file, geographic/location data, website clickstream data, and so on.</p>
-<p>The partition key is used by Kinesis Data Streams as input to a hash
-function that maps the partition key and associated data to a specific
-shard. An MD5 hash function is used to map partition keys to 128-bit
-integer values and to map associated data records to shards. As a result
-of this hashing mechanism, all data records with the same partition key
-map to the same shard within the stream. For more information, see
-<a href='http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream'>Adding Data to a Stream</a>
-in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
-<p>Each record in the <code>Records</code> array may include an optional parameter,
-<code>ExplicitHashKey</code>, which overrides the partition key to shard mapping.
-This parameter allows a data producer to determine explicitly the shard
-where the record is stored. For more information, see <a href='http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-putrecords'>Adding Multiple Records with PutRecords</a>
-in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
-<p>The <code>PutRecords</code> response includes an array of response <code>Records</code>. Each
-record in the response array directly correlates with a record in the
-request array using natural ordering, from the top to the bottom of the
-request and response. The response <code>Records</code> array always includes the
-same number of records as the request array.</p>
-<p>The response <code>Records</code> array includes both successfully and
-unsuccessfully processed records. Kinesis Data Streams attempts to
-process all records in each <code>PutRecords</code> request. A single record
-failure does not stop the processing of subsequent records.</p>
-<p>A successfully processed record includes <code>ShardId</code> and <code>SequenceNumber</code>
-values. The <code>ShardId</code> parameter identifies the shard in the stream where
-the record is stored. The <code>SequenceNumber</code> parameter is an identifier
-assigned to the put record, unique to all records in the stream.</p>
-<p>An unsuccessfully processed record includes <code>ErrorCode</code> and
-<code>ErrorMessage</code> values. <code>ErrorCode</code> reflects the type of error and can be
-one of the following values: <code>ProvisionedThroughputExceededException</code> or
-<code>InternalFailure</code>. <code>ErrorMessage</code> provides more detailed information
-about the <code>ProvisionedThroughputExceededException</code> exception including
-the account ID, stream name, and shard ID of the record that was
-throttled. For more information about partially successful responses,
-see <a href='http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-add-data-to-stream.html#kinesis-using-sdk-java-putrecords'>Adding Multiple Records with PutRecords</a>
-in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
-<p>By default, data records are accessible for 24 hours from the time that
-they are added to a stream. You can use IncreaseStreamRetentionPeriod or
-DecreaseStreamRetentionPeriod to modify this retention period.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_records</span>(
-  <span class='kw'>Records</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Data</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-      <span class='kw'>ExplicitHashKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>PartitionKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>StreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_records</span><span class='op'>(</span>
+  Records <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Data <span class='op'>=</span> <span class='va'>raw</span>,
+      ExplicitHashKey <span class='op'>=</span> <span class='st'>"string"</span>,
+      PartitionKey <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  StreamName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -221,7 +279,7 @@ DecreaseStreamRetentionPeriod to modify this retention period.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

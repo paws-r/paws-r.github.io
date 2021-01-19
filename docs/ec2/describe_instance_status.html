@@ -42,7 +42,24 @@
 <meta property="og:title" content="Describes the status of the specified instances or all of your instances — ec2_describe_instance_status" />
 <meta property="og:description" content="Describes the status of the specified instances or all of your
 instances. By default, only running instances are described, unless you
-specifically indicate to return the status of all instances." />
+specifically indicate to return the status of all instances.
+Instance status includes the following components:
+Status checks - Amazon EC2 performs status checks on running EC2
+instances to identify hardware and software issues. For more
+information, see Status checks for your instances
+and Troubleshooting instances with failed status checks
+in the Amazon Elastic Compute Cloud User Guide.
+Scheduled events - Amazon EC2 can schedule events (such as
+reboot, stop, or terminate) for your instances related to hardware
+issues, software updates, or system maintenance. For more
+information, see Scheduled events for your instances
+in the Amazon Elastic Compute Cloud User Guide.
+Instance state - You can manage your instances from the moment
+you launch them through their termination. For more information, see
+Instance lifecycle
+in the Amazon Elastic Compute Cloud User Guide.
+
+" />
 
 
 
@@ -74,7 +91,7 @@ specifically indicate to return the status of all instances." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +99,7 @@ specifically indicate to return the status of all instances." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +111,7 @@ specifically indicate to return the status of all instances." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +137,27 @@ specifically indicate to return the status of all instances." />
     <p>Describes the status of the specified instances or all of your
 instances. By default, only running instances are described, unless you
 specifically indicate to return the status of all instances.</p>
+<p>Instance status includes the following components:</p><ul>
+<li><p><strong>Status checks</strong> - Amazon EC2 performs status checks on running EC2
+instances to identify hardware and software issues. For more
+information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html'>Status checks for your instances</a>
+and <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html'>Troubleshooting instances with failed status checks</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></li>
+<li><p><strong>Scheduled events</strong> - Amazon EC2 can schedule events (such as
+reboot, stop, or terminate) for your instances related to hardware
+issues, software updates, or system maintenance. For more
+information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html'>Scheduled events for your instances</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></li>
+<li><p><strong>Instance state</strong> - You can manage your instances from the moment
+you launch them through their termination. For more information, see
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html'>Instance lifecycle</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_describe_instance_status</span>(<span class='no'>Filters</span>, <span class='no'>InstanceIds</span>, <span class='no'>MaxResults</span>,
-  <span class='no'>NextToken</span>, <span class='no'>DryRun</span>, <span class='no'>IncludeAllInstances</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_describe_instance_status</span><span class='op'>(</span><span class='va'>Filters</span>, <span class='va'>InstanceIds</span>, <span class='va'>MaxResults</span>,
+  <span class='va'>NextToken</span>, <span class='va'>DryRun</span>, <span class='va'>IncludeAllInstances</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,9 +166,9 @@ specifically indicate to return the status of all instances.</p>
       <th>Filters</th>
       <td><p>The filters.</p><ul>
 <li><p><code>availability-zone</code> - The Availability Zone of the instance.</p></li>
-<li><p><code>event.code</code> - The code for the scheduled event (<code>instance-reboot</code>
-\| <code>system-reboot</code> \| <code>system-maintenance</code> \| <code>instance-retirement</code>
-\| <code>instance-stop</code>).</p></li>
+<li><p><code>event.code</code> - The code for the scheduled event (<code>instance-reboot</code> |
+<code>system-reboot</code> | <code>system-maintenance</code> | <code>instance-retirement</code> |
+<code>instance-stop</code>).</p></li>
 <li><p><code>event.description</code> - A description of the event.</p></li>
 <li><p><code>event.instance-event-id</code> - The ID of the event whose date and time
 you are modifying.</p></li>
@@ -149,20 +183,20 @@ unsigned integer. The high byte is used for internal purposes and
 should be ignored. The low byte is set based on the state
 represented. The valid values are 0 (pending), 16 (running), 32
 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p></li>
-<li><p><code>instance-state-name</code> - The state of the instance (<code>pending</code> \|
-<code>running</code> \| <code>shutting-down</code> \| <code>terminated</code> \| <code>stopping</code> \|
+<li><p><code>instance-state-name</code> - The state of the instance (<code>pending</code> |
+<code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> |
 <code>stopped</code>).</p></li>
 <li><p><code>instance-status.reachability</code> - Filters on instance status where
-the name is <code>reachability</code> (<code>passed</code> \| <code>failed</code> \| <code>initializing</code>
-\| <code>insufficient-data</code>).</p></li>
-<li><p><code>instance-status.status</code> - The status of the instance (<code>ok</code> \|
-<code>impaired</code> \| <code>initializing</code> \| <code>insufficient-data</code> \|
+the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> |
+<code>insufficient-data</code>).</p></li>
+<li><p><code>instance-status.status</code> - The status of the instance (<code>ok</code> |
+<code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> |
 <code>not-applicable</code>).</p></li>
 <li><p><code>system-status.reachability</code> - Filters on system status where the
-name is <code>reachability</code> (<code>passed</code> \| <code>failed</code> \| <code>initializing</code> \|
+name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> |
 <code>insufficient-data</code>).</p></li>
-<li><p><code>system-status.status</code> - The system status of the instance (<code>ok</code> \|
-<code>impaired</code> \| <code>initializing</code> \| <code>insufficient-data</code> \|
+<li><p><code>system-status.status</code> - The system status of the instance (<code>ok</code> |
+<code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> |
 <code>not-applicable</code>).</p></li>
 </ul></td>
     </tr>
@@ -198,56 +232,40 @@ includes the health status for running instances only.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Instance status includes the following components:</p><ul>
-<li><p><strong>Status checks</strong> - Amazon EC2 performs status checks on running EC2
-instances to identify hardware and software issues. For more
-information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html'>Status checks for your instances</a>
-and <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html'>Troubleshooting instances with failed status checks</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></li>
-<li><p><strong>Scheduled events</strong> - Amazon EC2 can schedule events (such as
-reboot, stop, or terminate) for your instances related to hardware
-issues, software updates, or system maintenance. For more
-information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html'>Scheduled events for your instances</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></li>
-<li><p><strong>Instance state</strong> - You can manage your instances from the moment
-you launch them through their termination. For more information, see
-<a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html'>Instance lifecycle</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_instance_status</span>(
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_instance_status</span><span class='op'>(</span>
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>InstanceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  InstanceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>IncludeAllInstances</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+  <span class='op'>)</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  IncludeAllInstances <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example describes the current status of the specified instance.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_instance_status</span>(
-  <span class='kw'>InstanceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_instance_status</span><span class='op'>(</span>
+  InstanceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"i-1234567890abcdef0"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -263,7 +281,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

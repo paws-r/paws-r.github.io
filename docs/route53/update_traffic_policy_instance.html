@@ -43,7 +43,22 @@ created based on the settings in a specified traffic policy version — route53_
 <meta property="og:title" content="Updates the resource record sets in a specified hosted zone that were
 created based on the settings in a specified traffic policy version — route53_update_traffic_policy_instance" />
 <meta property="og:description" content="Updates the resource record sets in a specified hosted zone that were
-created based on the settings in a specified traffic policy version." />
+created based on the settings in a specified traffic policy version.
+When you update a traffic policy instance, Amazon Route 53 continues to
+respond to DNS queries for the root resource record set name (such as
+example.com) while it replaces one group of resource record sets with
+another. Route 53 performs the following operations:
+Route 53 creates a new group of resource record sets based on the
+specified traffic policy. This is true regardless of how significant
+the differences are between the existing resource record sets and
+the new resource record sets.
+When all of the new resource record sets have been created, Route 53
+starts to respond to DNS queries for the root resource record set
+name (such as example.com) by using the new resource record sets.
+Route 53 deletes the old group of resource record sets that are
+associated with the root resource record set name.
+
+" />
 
 
 
@@ -75,7 +90,7 @@ created based on the settings in a specified traffic policy version." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +98,7 @@ created based on the settings in a specified traffic policy version." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +110,7 @@ created based on the settings in a specified traffic policy version." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +136,25 @@ created based on the settings in a specified traffic policy version</h1>
     <div class="ref-description">
     <p>Updates the resource record sets in a specified hosted zone that were
 created based on the settings in a specified traffic policy version.</p>
+<p>When you update a traffic policy instance, Amazon Route 53 continues to
+respond to DNS queries for the root resource record set name (such as
+example.com) while it replaces one group of resource record sets with
+another. Route 53 performs the following operations:</p><ol>
+<li><p>Route 53 creates a new group of resource record sets based on the
+specified traffic policy. This is true regardless of how significant
+the differences are between the existing resource record sets and
+the new resource record sets.</p></li>
+<li><p>When all of the new resource record sets have been created, Route 53
+starts to respond to DNS queries for the root resource record set
+name (such as example.com) by using the new resource record sets.</p></li>
+<li><p>Route 53 deletes the old group of resource record sets that are
+associated with the root resource record set name.</p></li>
+</ol>
+
     </div>
 
-    <pre class="usage"><span class='fu'>route53_update_traffic_policy_instance</span>(<span class='no'>Id</span>, <span class='no'>TTL</span>, <span class='no'>TrafficPolicyId</span>,
-  <span class='no'>TrafficPolicyVersion</span>)</pre>
+    <pre class="usage"><span class='fu'>route53_update_traffic_policy_instance</span><span class='op'>(</span><span class='va'>Id</span>, <span class='va'>TTL</span>, <span class='va'>TrafficPolicyId</span>,
+  <span class='va'>TrafficPolicyVersion</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,32 +181,16 @@ instance.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you update a traffic policy instance, Amazon Route 53 continues to
-respond to DNS queries for the root resource record set name (such as
-example.com) while it replaces one group of resource record sets with
-another. Route 53 performs the following operations:</p><ol>
-<li><p>Route 53 creates a new group of resource record sets based on the
-specified traffic policy. This is true regardless of how significant
-the differences are between the existing resource record sets and
-the new resource record sets.</p></li>
-<li><p>When all of the new resource record sets have been created, Route 53
-starts to respond to DNS queries for the root resource record set
-name (such as example.com) by using the new resource record sets.</p></li>
-<li><p>Route 53 deletes the old group of resource record sets that are
-associated with the root resource record set name.</p></li>
-</ol>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_traffic_policy_instance</span>(
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TTL</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>TrafficPolicyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TrafficPolicyVersion</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_traffic_policy_instance</span><span class='op'>(</span>
+  Id <span class='op'>=</span> <span class='st'>"string"</span>,
+  TTL <span class='op'>=</span> <span class='fl'>123</span>,
+  TrafficPolicyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  TrafficPolicyVersion <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -194,7 +208,7 @@ associated with the root resource record set name.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

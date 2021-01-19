@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +118,9 @@
     <p>Updates a <code>Resolver</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>appsync_update_resolver</span>(<span class='no'>apiId</span>, <span class='no'>typeName</span>, <span class='no'>fieldName</span>, <span class='no'>dataSourceName</span>,
-  <span class='no'>requestMappingTemplate</span>, <span class='no'>responseMappingTemplate</span>, <span class='no'>kind</span>, <span class='no'>pipelineConfig</span>,
-  <span class='no'>syncConfig</span>, <span class='no'>cachingConfig</span>)</pre>
+    <pre class="usage"><span class='fu'>appsync_update_resolver</span><span class='op'>(</span><span class='va'>apiId</span>, <span class='va'>typeName</span>, <span class='va'>fieldName</span>, <span class='va'>dataSourceName</span>,
+  <span class='va'>requestMappingTemplate</span>, <span class='va'>responseMappingTemplate</span>, <span class='va'>kind</span>, <span class='va'>pipelineConfig</span>,
+  <span class='va'>syncConfig</span>, <span class='va'>cachingConfig</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,7 +143,13 @@
     </tr>
     <tr>
       <th>requestMappingTemplate</th>
-      <td><p>[required] The new request mapping template.</p></td>
+      <td><p>The new request mapping template.</p>
+<p>A resolver uses a request mapping template to convert a GraphQL
+expression into a format that a data source can understand. Mapping
+templates are written in Apache Velocity Template Language (VTL).</p>
+<p>VTL request mapping templates are optional when using a Lambda data
+source. For all other data sources, VTL request and response mapping
+templates are required.</p></td>
     </tr>
     <tr>
       <th>responseMappingTemplate</th>
@@ -178,33 +184,34 @@ data sources.</p></li>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_resolver</span>(
-  <span class='kw'>apiId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>typeName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>fieldName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>dataSourceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>requestMappingTemplate</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>responseMappingTemplate</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>kind</span> <span class='kw'>=</span> <span class='st'>"UNIT"</span><span class='kw'>|</span><span class='st'>"PIPELINE"</span>,
-  <span class='kw'>pipelineConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>functions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_resolver</span><span class='op'>(</span>
+  apiId <span class='op'>=</span> <span class='st'>"string"</span>,
+  typeName <span class='op'>=</span> <span class='st'>"string"</span>,
+  fieldName <span class='op'>=</span> <span class='st'>"string"</span>,
+  dataSourceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  requestMappingTemplate <span class='op'>=</span> <span class='st'>"string"</span>,
+  responseMappingTemplate <span class='op'>=</span> <span class='st'>"string"</span>,
+  kind <span class='op'>=</span> <span class='st'>"UNIT"</span><span class='op'>|</span><span class='st'>"PIPELINE"</span>,
+  pipelineConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    functions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>syncConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>conflictHandler</span> <span class='kw'>=</span> <span class='st'>"OPTIMISTIC_CONCURRENCY"</span><span class='kw'>|</span><span class='st'>"LAMBDA"</span><span class='kw'>|</span><span class='st'>"AUTOMERGE"</span><span class='kw'>|</span><span class='st'>"NONE"</span>,
-    <span class='kw'>conflictDetection</span> <span class='kw'>=</span> <span class='st'>"VERSION"</span><span class='kw'>|</span><span class='st'>"NONE"</span>,
-    <span class='kw'>lambdaConflictHandlerConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>lambdaConflictHandlerArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>cachingConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ttl</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>cachingKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  syncConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    conflictHandler <span class='op'>=</span> <span class='st'>"OPTIMISTIC_CONCURRENCY"</span><span class='op'>|</span><span class='st'>"LAMBDA"</span><span class='op'>|</span><span class='st'>"AUTOMERGE"</span><span class='op'>|</span><span class='st'>"NONE"</span>,
+    conflictDetection <span class='op'>=</span> <span class='st'>"VERSION"</span><span class='op'>|</span><span class='st'>"NONE"</span>,
+    lambdaConflictHandlerConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      lambdaConflictHandlerArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  cachingConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ttl <span class='op'>=</span> <span class='fl'>123</span>,
+    cachingKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -222,7 +229,7 @@ data sources.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -41,14 +41,85 @@
 
 <meta property="og:title" content="Creates or updates a scaling policy for a fleet — gamelift_put_scaling_policy" />
 <meta property="og:description" content="Creates or updates a scaling policy for a fleet. Scaling policies are
-used to automatically scale a fleet\'s hosting capacity to meet player
+used to automatically scale a fleet's hosting capacity to meet player
 demand. An active scaling policy instructs Amazon GameLift to track a
-fleet metric and automatically change the fleet\'s capacity when a
+fleet metric and automatically change the fleet's capacity when a
 certain threshold is reached. There are two types of scaling policies:
 target-based and rule-based. Use a target-based policy to quickly and
 efficiently manage fleet scaling; this option is the most commonly used.
 Use rule-based policies when you need to exert fine-grained control over
-auto-scaling." />
+auto-scaling.
+Fleets can have multiple scaling policies of each type in force at the
+same time; you can have one target-based policy, one or multiple
+rule-based scaling policies, or both. We recommend caution, however,
+because multiple auto-scaling policies can have unintended consequences.
+You can temporarily suspend all scaling policies for a fleet by calling
+StopFleetActions with the fleet action AUTO\_SCALING. To resume scaling
+policies, call StartFleetActions with the same fleet action. To stop
+just one scaling policy--or to permanently remove it, you must delete
+the policy with DeleteScalingPolicy.
+Learn more about how to work with auto-scaling in Set Up Fleet Automatic Scaling.
+Target-based policy
+A target-based policy tracks a single metric:
+PercentAvailableGameSessions. This metric tells us how much of a fleet's
+hosting capacity is ready to host game sessions but is not currently in
+use. This is the fleet's buffer; it measures the additional player
+demand that the fleet could handle at current capacity. With a
+target-based policy, you set your ideal buffer size and leave it to
+Amazon GameLift to take whatever action is needed to maintain that
+target.
+For example, you might choose to maintain a 10% buffer for a fleet that
+has the capacity to host 100 simultaneous game sessions. This policy
+tells Amazon GameLift to take action whenever the fleet's available
+capacity falls below or rises above 10 game sessions. Amazon GameLift
+will start new instances or stop unused instances in order to return to
+the 10% buffer.
+To create or update a target-based policy, specify a fleet ID and name,
+and set the policy type to &quot;TargetBased&quot;. Specify the metric to track
+(PercentAvailableGameSessions) and reference a TargetConfiguration
+object with your desired buffer value. Exclude all other parameters. On
+a successful request, the policy name is returned. The scaling policy is
+automatically in force as soon as it's successfully created. If the
+fleet's auto-scaling actions are temporarily suspended, the new policy
+will be in force once the fleet actions are restarted.
+Rule-based policy
+A rule-based policy tracks specified fleet metric, sets a threshold
+value, and specifies the type of action to initiate when triggered. With
+a rule-based policy, you can select from several available fleet
+metrics. Each policy specifies whether to scale up or scale down (and by
+how much), so you need one policy for each type of action.
+For example, a policy may make the following statement: &quot;If the
+percentage of idle instances is greater than 20% for more than 15
+minutes, then reduce the fleet capacity by 10%.&quot;
+A policy's rule statement has the following structure:
+If \\[MetricName\\] is \\[ComparisonOperator\\] \\[Threshold\\]
+for \\[EvaluationPeriods\\] minutes, then
+\\[ScalingAdjustmentType\\] to/by \\[ScalingAdjustment\\].
+To implement the example, the rule statement would look like this:
+If \\[PercentIdleInstances\\] is \\[GreaterThanThreshold\\]
+\\[20\\] for \\[15\\] minutes, then \\[PercentChangeInCapacity\\]
+to/by \\[10\\].
+To create or update a scaling policy, specify a unique combination of
+name and fleet ID, and set the policy type to &quot;RuleBased&quot;. Specify the
+parameter values for a policy rule statement. On a successful request,
+the policy name is returned. Scaling policies are automatically in force
+as soon as they're successfully created. If the fleet's auto-scaling
+actions are temporarily suspended, the new policy will be in force once
+the fleet actions are restarted.
+DescribeFleetCapacity
+UpdateFleetCapacity
+DescribeEC2InstanceLimits
+Manage scaling policies:
+PutScalingPolicy (auto-scaling)
+DescribeScalingPolicies (auto-scaling)
+DeleteScalingPolicy (auto-scaling)
+
+Manage fleet actions:
+StartFleetActions
+StopFleetActions
+
+
+" />
 
 
 
@@ -80,7 +151,7 @@ auto-scaling." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +159,7 @@ auto-scaling." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +171,7 @@ auto-scaling." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,19 +195,90 @@ auto-scaling." />
 
     <div class="ref-description">
     <p>Creates or updates a scaling policy for a fleet. Scaling policies are
-used to automatically scale a fleet\'s hosting capacity to meet player
+used to automatically scale a fleet's hosting capacity to meet player
 demand. An active scaling policy instructs Amazon GameLift to track a
-fleet metric and automatically change the fleet\'s capacity when a
+fleet metric and automatically change the fleet's capacity when a
 certain threshold is reached. There are two types of scaling policies:
 target-based and rule-based. Use a target-based policy to quickly and
 efficiently manage fleet scaling; this option is the most commonly used.
 Use rule-based policies when you need to exert fine-grained control over
 auto-scaling.</p>
+<p>Fleets can have multiple scaling policies of each type in force at the
+same time; you can have one target-based policy, one or multiple
+rule-based scaling policies, or both. We recommend caution, however,
+because multiple auto-scaling policies can have unintended consequences.</p>
+<p>You can temporarily suspend all scaling policies for a fleet by calling
+StopFleetActions with the fleet action AUTO\_SCALING. To resume scaling
+policies, call StartFleetActions with the same fleet action. To stop
+just one scaling policy--or to permanently remove it, you must delete
+the policy with DeleteScalingPolicy.</p>
+<p>Learn more about how to work with auto-scaling in <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-autoscaling.html'>Set Up Fleet Automatic Scaling</a>.</p>
+<p><strong>Target-based policy</strong></p>
+<p>A target-based policy tracks a single metric:
+PercentAvailableGameSessions. This metric tells us how much of a fleet's
+hosting capacity is ready to host game sessions but is not currently in
+use. This is the fleet's buffer; it measures the additional player
+demand that the fleet could handle at current capacity. With a
+target-based policy, you set your ideal buffer size and leave it to
+Amazon GameLift to take whatever action is needed to maintain that
+target.</p>
+<p>For example, you might choose to maintain a 10% buffer for a fleet that
+has the capacity to host 100 simultaneous game sessions. This policy
+tells Amazon GameLift to take action whenever the fleet's available
+capacity falls below or rises above 10 game sessions. Amazon GameLift
+will start new instances or stop unused instances in order to return to
+the 10% buffer.</p>
+<p>To create or update a target-based policy, specify a fleet ID and name,
+and set the policy type to "TargetBased". Specify the metric to track
+(PercentAvailableGameSessions) and reference a TargetConfiguration
+object with your desired buffer value. Exclude all other parameters. On
+a successful request, the policy name is returned. The scaling policy is
+automatically in force as soon as it's successfully created. If the
+fleet's auto-scaling actions are temporarily suspended, the new policy
+will be in force once the fleet actions are restarted.</p>
+<p><strong>Rule-based policy</strong></p>
+<p>A rule-based policy tracks specified fleet metric, sets a threshold
+value, and specifies the type of action to initiate when triggered. With
+a rule-based policy, you can select from several available fleet
+metrics. Each policy specifies whether to scale up or scale down (and by
+how much), so you need one policy for each type of action.</p>
+<p>For example, a policy may make the following statement: "If the
+percentage of idle instances is greater than 20% for more than 15
+minutes, then reduce the fleet capacity by 10%."</p>
+<p>A policy's rule statement has the following structure:</p>
+<p>If <code>\\[MetricName\\]</code> is <code>\\[ComparisonOperator\\]</code> <code>\\[Threshold\\]</code>
+for <code>\\[EvaluationPeriods\\]</code> minutes, then
+<code>\\[ScalingAdjustmentType\\]</code> to/by <code>\\[ScalingAdjustment\\]</code>.</p>
+<p>To implement the example, the rule statement would look like this:</p>
+<p>If <code>\\[PercentIdleInstances\\]</code> is <code>\\[GreaterThanThreshold\\]</code>
+<code>\\[20\\]</code> for <code>\\[15\\]</code> minutes, then <code>\\[PercentChangeInCapacity\\]</code>
+to/by <code>\\[10\\]</code>.</p>
+<p>To create or update a scaling policy, specify a unique combination of
+name and fleet ID, and set the policy type to "RuleBased". Specify the
+parameter values for a policy rule statement. On a successful request,
+the policy name is returned. Scaling policies are automatically in force
+as soon as they're successfully created. If the fleet's auto-scaling
+actions are temporarily suspended, the new policy will be in force once
+the fleet actions are restarted.</p><ul>
+<li><p>DescribeFleetCapacity</p></li>
+<li><p>UpdateFleetCapacity</p></li>
+<li><p>DescribeEC2InstanceLimits</p></li>
+<li><p>Manage scaling policies:</p><ul>
+<li><p>PutScalingPolicy (auto-scaling)</p></li>
+<li><p>DescribeScalingPolicies (auto-scaling)</p></li>
+<li><p>DeleteScalingPolicy (auto-scaling)</p></li>
+</ul></li>
+<li><p>Manage fleet actions:</p><ul>
+<li><p>StartFleetActions</p></li>
+<li><p>StopFleetActions</p></li>
+</ul></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_put_scaling_policy</span>(<span class='no'>Name</span>, <span class='no'>FleetId</span>, <span class='no'>ScalingAdjustment</span>,
-  <span class='no'>ScalingAdjustmentType</span>, <span class='no'>Threshold</span>, <span class='no'>ComparisonOperator</span>, <span class='no'>EvaluationPeriods</span>,
-  <span class='no'>MetricName</span>, <span class='no'>PolicyType</span>, <span class='no'>TargetConfiguration</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_put_scaling_policy</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>FleetId</span>, <span class='va'>ScalingAdjustment</span>,
+  <span class='va'>ScalingAdjustmentType</span>, <span class='va'>Threshold</span>, <span class='va'>ComparisonOperator</span>, <span class='va'>EvaluationPeriods</span>,
+  <span class='va'>MetricName</span>, <span class='va'>PolicyType</span>, <span class='va'>TargetConfiguration</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,17 +301,17 @@ following statuses: ERROR or DELETING.</p></td>
     </tr>
     <tr>
       <th>ScalingAdjustmentType</th>
-      <td><p>The type of adjustment to make to a fleet\'s instance count (see
+      <td><p>The type of adjustment to make to a fleet's instance count (see
 FleetCapacity):</p><ul>
-<li><p><strong>ChangeInCapacity</strong> \-- add (or subtract) the scaling adjustment
+<li><p><strong>ChangeInCapacity</strong> -- add (or subtract) the scaling adjustment
 value from the current instance count. Positive values scale up
 while negative values scale down.</p></li>
-<li><p><strong>ExactCapacity</strong> \-- set the instance count to the scaling
+<li><p><strong>ExactCapacity</strong> -- set the instance count to the scaling
 adjustment value.</p></li>
-<li><p><strong>PercentChangeInCapacity</strong> \-- increase or reduce the current
+<li><p><strong>PercentChangeInCapacity</strong> -- increase or reduce the current
 instance count by the scaling adjustment, read as a percentage.
 Positive values scale up while negative values scale down; for
-example, a value of \"-10\" scales the fleet down by 10%.</p></li>
+example, a value of "-10" scales the fleet down by 10%.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -191,37 +333,37 @@ threshold before a scaling event is triggered.</p></td>
       <td><p>[required] Name of the Amazon GameLift-defined metric that is used to trigger a
 scaling adjustment. For detailed descriptions of fleet metrics, see
 <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/monitoring-cloudwatch.html'>Monitor Amazon GameLift with Amazon CloudWatch</a>.</p><ul>
-<li><p><strong>ActivatingGameSessions</strong> \-- Game sessions in the process of being
+<li><p><strong>ActivatingGameSessions</strong> -- Game sessions in the process of being
 created.</p></li>
-<li><p><strong>ActiveGameSessions</strong> \-- Game sessions that are currently running.</p></li>
-<li><p><strong>ActiveInstances</strong> \-- Fleet instances that are currently running
-at least one game session.</p></li>
-<li><p><strong>AvailableGameSessions</strong> \-- Additional game sessions that fleet
+<li><p><strong>ActiveGameSessions</strong> -- Game sessions that are currently running.</p></li>
+<li><p><strong>ActiveInstances</strong> -- Fleet instances that are currently running at
+least one game session.</p></li>
+<li><p><strong>AvailableGameSessions</strong> -- Additional game sessions that fleet
 could host simultaneously, given current capacity.</p></li>
-<li><p><strong>AvailablePlayerSessions</strong> \-- Empty player slots in currently
+<li><p><strong>AvailablePlayerSessions</strong> -- Empty player slots in currently
 active game sessions. This includes game sessions that are not
 currently accepting players. Reserved player slots are not included.</p></li>
-<li><p><strong>CurrentPlayerSessions</strong> \-- Player slots in active game sessions
+<li><p><strong>CurrentPlayerSessions</strong> -- Player slots in active game sessions
 that are being used by a player or are reserved for a player.</p></li>
-<li><p><strong>IdleInstances</strong> \-- Active instances that are currently hosting
+<li><p><strong>IdleInstances</strong> -- Active instances that are currently hosting
 zero game sessions.</p></li>
-<li><p><strong>PercentAvailableGameSessions</strong> \-- Unused percentage of the total
+<li><p><strong>PercentAvailableGameSessions</strong> -- Unused percentage of the total
 number of game sessions that a fleet could host simultaneously,
 given current capacity. Use this metric for a target-based scaling
 policy.</p></li>
-<li><p><strong>PercentIdleInstances</strong> \-- Percentage of the total number of
-active instances that are hosting zero game sessions.</p></li>
-<li><p><strong>QueueDepth</strong> \-- Pending game session placement requests, in any
+<li><p><strong>PercentIdleInstances</strong> -- Percentage of the total number of active
+instances that are hosting zero game sessions.</p></li>
+<li><p><strong>QueueDepth</strong> -- Pending game session placement requests, in any
 queue, where the current fleet is the top-priority destination.</p></li>
-<li><p><strong>WaitTime</strong> \-- Current wait time for pending game session
-placement requests, in any queue, where the current fleet is the
-top-priority destination.</p></li>
+<li><p><strong>WaitTime</strong> -- Current wait time for pending game session placement
+requests, in any queue, where the current fleet is the top-priority
+destination.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>PolicyType</th>
       <td><p>The type of scaling policy to create. For a target-based policy, set the
-parameter <em>MetricName</em> to \'PercentAvailableGameSessions\' and specify a
+parameter <em>MetricName</em> to 'PercentAvailableGameSessions' and specify a
 <em>TargetConfiguration</em>. For a rule-based policy set the following
 parameters: <em>MetricName</em>, <em>ComparisonOperator</em>, <em>Threshold</em>,
 <em>EvaluationPeriods</em>, <em>ScalingAdjustmentType</em>, and <em>ScalingAdjustment</em>.</p></td>
@@ -232,96 +374,24 @@ parameters: <em>MetricName</em>, <em>ComparisonOperator</em>, <em>Threshold</em>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Fleets can have multiple scaling policies of each type in force at the
-same time; you can have one target-based policy, one or multiple
-rule-based scaling policies, or both. We recommend caution, however,
-because multiple auto-scaling policies can have unintended consequences.</p>
-<p>You can temporarily suspend all scaling policies for a fleet by calling
-StopFleetActions with the fleet action AUTO\_SCALING. To resume scaling
-policies, call StartFleetActions with the same fleet action. To stop
-just one scaling policy\--or to permanently remove it, you must delete
-the policy with DeleteScalingPolicy.</p>
-<p>Learn more about how to work with auto-scaling in <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-autoscaling.html'>Set Up Fleet Automatic Scaling</a>.</p>
-<p><strong>Target-based policy</strong></p>
-<p>A target-based policy tracks a single metric:
-PercentAvailableGameSessions. This metric tells us how much of a
-fleet\'s hosting capacity is ready to host game sessions but is not
-currently in use. This is the fleet\'s buffer; it measures the
-additional player demand that the fleet could handle at current
-capacity. With a target-based policy, you set your ideal buffer size and
-leave it to Amazon GameLift to take whatever action is needed to
-maintain that target.</p>
-<p>For example, you might choose to maintain a 10% buffer for a fleet that
-has the capacity to host 100 simultaneous game sessions. This policy
-tells Amazon GameLift to take action whenever the fleet\'s available
-capacity falls below or rises above 10 game sessions. Amazon GameLift
-will start new instances or stop unused instances in order to return to
-the 10% buffer.</p>
-<p>To create or update a target-based policy, specify a fleet ID and name,
-and set the policy type to \"TargetBased\". Specify the metric to track
-(PercentAvailableGameSessions) and reference a TargetConfiguration
-object with your desired buffer value. Exclude all other parameters. On
-a successful request, the policy name is returned. The scaling policy is
-automatically in force as soon as it\'s successfully created. If the
-fleet\'s auto-scaling actions are temporarily suspended, the new policy
-will be in force once the fleet actions are restarted.</p>
-<p><strong>Rule-based policy</strong></p>
-<p>A rule-based policy tracks specified fleet metric, sets a threshold
-value, and specifies the type of action to initiate when triggered. With
-a rule-based policy, you can select from several available fleet
-metrics. Each policy specifies whether to scale up or scale down (and by
-how much), so you need one policy for each type of action.</p>
-<p>For example, a policy may make the following statement: \"If the
-percentage of idle instances is greater than 20% for more than 15
-minutes, then reduce the fleet capacity by 10%.\"</p>
-<p>A policy\'s rule statement has the following structure:</p>
-<p>If <code>\\[MetricName\\]</code> is <code>\\[ComparisonOperator\\]</code> <code>\\[Threshold\\]</code>
-for <code>\\[EvaluationPeriods\\]</code> minutes, then
-<code>\\[ScalingAdjustmentType\\]</code> to/by <code>\\[ScalingAdjustment\\]</code>.</p>
-<p>To implement the example, the rule statement would look like this:</p>
-<p>If <code>\\[PercentIdleInstances\\]</code> is <code>\\[GreaterThanThreshold\\]</code>
-<code>\\[20\\]</code> for <code>\\[15\\]</code> minutes, then <code>\\[PercentChangeInCapacity\\]</code>
-to/by <code>\\[10\\]</code>.</p>
-<p>To create or update a scaling policy, specify a unique combination of
-name and fleet ID, and set the policy type to \"RuleBased\". Specify the
-parameter values for a policy rule statement. On a successful request,
-the policy name is returned. Scaling policies are automatically in force
-as soon as they\'re successfully created. If the fleet\'s auto-scaling
-actions are temporarily suspended, the new policy will be in force once
-the fleet actions are restarted.</p><ul>
-<li><p>DescribeFleetCapacity</p></li>
-<li><p>UpdateFleetCapacity</p></li>
-<li><p>DescribeEC2InstanceLimits</p></li>
-<li><p>Manage scaling policies:</p><ul>
-<li><p>PutScalingPolicy (auto-scaling)</p></li>
-<li><p>DescribeScalingPolicies (auto-scaling)</p></li>
-<li><p>DeleteScalingPolicy (auto-scaling)</p></li>
-</ul></li>
-<li><p>Manage fleet actions:</p><ul>
-<li><p>StartFleetActions</p></li>
-<li><p>StopFleetActions</p></li>
-</ul></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_scaling_policy</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>FleetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ScalingAdjustment</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ScalingAdjustmentType</span> <span class='kw'>=</span> <span class='st'>"ChangeInCapacity"</span><span class='kw'>|</span><span class='st'>"ExactCapacity"</span><span class='kw'>|</span><span class='st'>"PercentChangeInCapacity"</span>,
-  <span class='kw'>Threshold</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-  <span class='kw'>ComparisonOperator</span> <span class='kw'>=</span> <span class='st'>"GreaterThanOrEqualToThreshold"</span><span class='kw'>|</span><span class='st'>"GreaterThanThreshold"</span><span class='kw'>|</span><span class='st'>"LessThanThreshold"</span><span class='kw'>|</span><span class='st'>"LessThanOrEqualToThreshold"</span>,
-  <span class='kw'>EvaluationPeriods</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MetricName</span> <span class='kw'>=</span> <span class='st'>"ActivatingGameSessions"</span><span class='kw'>|</span><span class='st'>"ActiveGameSessions"</span><span class='kw'>|</span><span class='st'>"ActiveInstances"</span><span class='kw'>|</span><span class='st'>"AvailableGameSessions"</span><span class='kw'>|</span><span class='st'>"AvailablePlayerSessions"</span><span class='kw'>|</span><span class='st'>"CurrentPlayerSessions"</span><span class='kw'>|</span><span class='st'>"IdleInstances"</span><span class='kw'>|</span><span class='st'>"PercentAvailableGameSessions"</span><span class='kw'>|</span><span class='st'>"PercentIdleInstances"</span><span class='kw'>|</span><span class='st'>"QueueDepth"</span><span class='kw'>|</span><span class='st'>"WaitTime"</span>,
-  <span class='kw'>PolicyType</span> <span class='kw'>=</span> <span class='st'>"RuleBased"</span><span class='kw'>|</span><span class='st'>"TargetBased"</span>,
-  <span class='kw'>TargetConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>TargetValue</span> <span class='kw'>=</span> <span class='fl'>123.0</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_scaling_policy</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  FleetId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ScalingAdjustment <span class='op'>=</span> <span class='fl'>123</span>,
+  ScalingAdjustmentType <span class='op'>=</span> <span class='st'>"ChangeInCapacity"</span><span class='op'>|</span><span class='st'>"ExactCapacity"</span><span class='op'>|</span><span class='st'>"PercentChangeInCapacity"</span>,
+  Threshold <span class='op'>=</span> <span class='fl'>123.0</span>,
+  ComparisonOperator <span class='op'>=</span> <span class='st'>"GreaterThanOrEqualToThreshold"</span><span class='op'>|</span><span class='st'>"GreaterThanThreshold"</span><span class='op'>|</span><span class='st'>"LessThanThreshold"</span><span class='op'>|</span><span class='st'>"LessThanOrEqualToThreshold"</span>,
+  EvaluationPeriods <span class='op'>=</span> <span class='fl'>123</span>,
+  MetricName <span class='op'>=</span> <span class='st'>"ActivatingGameSessions"</span><span class='op'>|</span><span class='st'>"ActiveGameSessions"</span><span class='op'>|</span><span class='st'>"ActiveInstances"</span><span class='op'>|</span><span class='st'>"AvailableGameSessions"</span><span class='op'>|</span><span class='st'>"AvailablePlayerSessions"</span><span class='op'>|</span><span class='st'>"CurrentPlayerSessions"</span><span class='op'>|</span><span class='st'>"IdleInstances"</span><span class='op'>|</span><span class='st'>"PercentAvailableGameSessions"</span><span class='op'>|</span><span class='st'>"PercentIdleInstances"</span><span class='op'>|</span><span class='st'>"QueueDepth"</span><span class='op'>|</span><span class='st'>"WaitTime"</span>,
+  PolicyType <span class='op'>=</span> <span class='st'>"RuleBased"</span><span class='op'>|</span><span class='st'>"TargetBased"</span>,
+  TargetConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    TargetValue <span class='op'>=</span> <span class='fl'>123.0</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -339,7 +409,7 @@ the fleet actions are restarted.</p><ul>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

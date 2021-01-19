@@ -43,7 +43,9 @@
 <meta property="og:description" content="Returns a shard iterator. A shard iterator provides information about
 how to retrieve the stream records from within a shard. Use the shard
 iterator in a subsequent GetRecords request to read the stream records
-from the shard." />
+from the shard.
+A shard iterator expires 15 minutes after it is returned to the
+requester." />
 
 
 
@@ -75,7 +77,7 @@ from the shard." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +85,7 @@ from the shard." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +97,7 @@ from the shard." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +124,12 @@ from the shard." />
 how to retrieve the stream records from within a shard. Use the shard
 iterator in a subsequent <code>GetRecords</code> request to read the stream records
 from the shard.</p>
+<p>A shard iterator expires 15 minutes after it is returned to the
+requester.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dynamodbstreams_get_shard_iterator</span>(<span class='no'>StreamArn</span>, <span class='no'>ShardId</span>,
-  <span class='no'>ShardIteratorType</span>, <span class='no'>SequenceNumber</span>)</pre>
+    <pre class="usage"><span class='fu'>dynamodbstreams_get_shard_iterator</span><span class='op'>(</span><span class='va'>StreamArn</span>, <span class='va'>ShardId</span>,
+  <span class='va'>ShardIteratorType</span>, <span class='va'>SequenceNumber</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,31 +168,30 @@ reading.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A shard iterator expires 15 minutes after it is returned to the
-requester.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_shard_iterator</span>(
-  <span class='kw'>StreamArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ShardId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ShardIteratorType</span> <span class='kw'>=</span> <span class='st'>"TRIM_HORIZON"</span><span class='kw'>|</span><span class='st'>"LATEST"</span><span class='kw'>|</span><span class='st'>"AT_SEQUENCE_NUMBER"</span><span class='kw'>|</span><span class='st'>"AFTER_SEQUENCE_NUMBER"</span>,
-  <span class='kw'>SequenceNumber</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_shard_iterator</span><span class='op'>(</span>
+  StreamArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  ShardId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ShardIteratorType <span class='op'>=</span> <span class='st'>"TRIM_HORIZON"</span><span class='op'>|</span><span class='st'>"LATEST"</span><span class='op'>|</span><span class='st'>"AT_SEQUENCE_NUMBER"</span><span class='op'>|</span><span class='st'>"AFTER_SEQUENCE_NUMBER"</span>,
+  SequenceNumber <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example returns a shard iterator for the provided stream</span>
 <span class='co'># ARN and shard ID.</span>
-<span class='no'>svc</span>$<span class='fu'>get_shard_iterator</span>(
-  <span class='kw'>ShardId</span> <span class='kw'>=</span> <span class='st'>"00000001414576573621-f55eea83"</span>,
-  <span class='kw'>ShardIteratorType</span> <span class='kw'>=</span> <span class='st'>"TRIM_HORIZON"</span>,
-  <span class='kw'>StreamArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:dynamodb:us-west-2:111122223333:table/Forum/stream/2015-05-20T20:51:1..."</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_shard_iterator</span><span class='op'>(</span>
+  ShardId <span class='op'>=</span> <span class='st'>"00000001414576573621-f55eea83"</span>,
+  ShardIteratorType <span class='op'>=</span> <span class='st'>"TRIM_HORIZON"</span>,
+  StreamArn <span class='op'>=</span> <span class='st'>"arn:aws:dynamodb:us-west-2:111122223333:table/Forum/stream/2015-05-20T20:51:1..."</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -204,7 +207,7 @@ requester.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

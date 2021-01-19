@@ -45,7 +45,16 @@ activation process associates your agent with your account. In the
 activation process, you specify information such as the AWS Region that
 you want to activate the agent in. You activate the agent in the AWS
 Region where your target locations (in Amazon S3 or Amazon EFS) reside.
-Your tasks are created in this AWS Region." />
+Your tasks are created in this AWS Region.
+You can activate the agent in a VPC (virtual private cloud) or provide
+the agent access to a VPC endpoint so you can run tasks without going
+over the public internet.
+You can use an agent for more than one location. If a task uses multiple
+agents, all of them need to have status AVAILABLE for the task to run.
+If you use multiple agents for a source location, the status of all the
+agents must be AVAILABLE for the task to run.
+Agents are automatically updated by AWS on a regular basis, using a
+mechanism that ensures minimal interruption to your tasks." />
 
 
 
@@ -77,7 +86,7 @@ Your tasks are created in this AWS Region." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +94,7 @@ Your tasks are created in this AWS Region." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +106,7 @@ Your tasks are created in this AWS Region." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,10 +135,19 @@ activation process, you specify information such as the AWS Region that
 you want to activate the agent in. You activate the agent in the AWS
 Region where your target locations (in Amazon S3 or Amazon EFS) reside.
 Your tasks are created in this AWS Region.</p>
+<p>You can activate the agent in a VPC (virtual private cloud) or provide
+the agent access to a VPC endpoint so you can run tasks without going
+over the public internet.</p>
+<p>You can use an agent for more than one location. If a task uses multiple
+agents, all of them need to have status AVAILABLE for the task to run.
+If you use multiple agents for a source location, the status of all the
+agents must be AVAILABLE for the task to run.</p>
+<p>Agents are automatically updated by AWS on a regular basis, using a
+mechanism that ensures minimal interruption to your tasks.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datasync_create_agent</span>(<span class='no'>ActivationKey</span>, <span class='no'>AgentName</span>, <span class='no'>Tags</span>, <span class='no'>VpcEndpointId</span>,
-  <span class='no'>SubnetArns</span>, <span class='no'>SecurityGroupArns</span>)</pre>
+    <pre class="usage"><span class='fu'>datasync_create_agent</span><span class='op'>(</span><span class='va'>ActivationKey</span>, <span class='va'>AgentName</span>, <span class='va'>Tags</span>, <span class='va'>VpcEndpointId</span>,
+  <span class='va'>SubnetArns</span>, <span class='va'>SecurityGroupArns</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,11 +182,10 @@ representable in UTF-8 format, and the following special characters: + -
     </tr>
     <tr>
       <th>VpcEndpointId</th>
-      <td><p>The ID of the VPC (Virtual Private Cloud) endpoint that the agent has
+      <td><p>The ID of the VPC (virtual private cloud) endpoint that the agent has
 access to. This is the client-side VPC endpoint, also called a
-PrivateLink. If you don\'t have a PrivateLink VPC endpoint, see
-<a href='https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html#create-endpoint-service'>Creating a VPC Endpoint Service Configuration</a>
-in the AWS VPC User Guide.</p>
+PrivateLink. If you don't have a PrivateLink VPC endpoint, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html#create-endpoint-service'>Creating a VPC Endpoint Service Configuration</a>
+in the Amazon VPC User Guide.</p>
 <p>VPC endpoint ID looks like this: <code>vpce-01234d5aff67890e1</code>.</p></td>
     </tr>
     <tr>
@@ -185,41 +202,31 @@ these four network interfaces.</p></td>
     <tr>
       <th>SecurityGroupArns</th>
       <td><p>The ARNs of the security groups used to protect your data transfer task
-subnets. See CreateAgentRequest\$SubnetArns.</p></td>
+subnets. See CreateAgentRequest$SubnetArns.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can activate the agent in a VPC (Virtual private Cloud) or provide
-the agent access to a VPC endpoint so you can run tasks without going
-over the public Internet.</p>
-<p>You can use an agent for more than one location. If a task uses multiple
-agents, all of them need to have status AVAILABLE for the task to run.
-If you use multiple agents for a source location, the status of all the
-agents must be AVAILABLE for the task to run.</p>
-<p>Agents are automatically updated by AWS on a regular basis, using a
-mechanism that ensures minimal interruption to your tasks.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_agent</span>(
-  <span class='kw'>ActivationKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AgentName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>VpcEndpointId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SubnetArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_agent</span><span class='op'>(</span>
+  ActivationKey <span class='op'>=</span> <span class='st'>"string"</span>,
+  AgentName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  VpcEndpointId <span class='op'>=</span> <span class='st'>"string"</span>,
+  SubnetArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SecurityGroupArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  SecurityGroupArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -237,7 +244,7 @@ mechanism that ensures minimal interruption to your tasks.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

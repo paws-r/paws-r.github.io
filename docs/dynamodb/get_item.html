@@ -44,7 +44,11 @@ given primary key — dynamodb_get_item • paws</title>
 given primary key — dynamodb_get_item" />
 <meta property="og:description" content="The GetItem operation returns a set of attributes for the item with
 the given primary key. If there is no matching item, GetItem does not
-return any data and there will be no Item element in the response." />
+return any data and there will be no Item element in the response.
+GetItem provides an eventually consistent read by default. If your
+application requires a strongly consistent read, set ConsistentRead to
+true. Although a strongly consistent read might take more time than an
+eventually consistent read, it always returns the last updated value." />
 
 
 
@@ -76,7 +80,7 @@ return any data and there will be no Item element in the response." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +88,7 @@ return any data and there will be no Item element in the response." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +100,7 @@ return any data and there will be no Item element in the response." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +127,14 @@ given primary key</h1>
     <p>The <code>GetItem</code> operation returns a set of attributes for the item with
 the given primary key. If there is no matching item, <code>GetItem</code> does not
 return any data and there will be no <code>Item</code> element in the response.</p>
+<p><code>GetItem</code> provides an eventually consistent read by default. If your
+application requires a strongly consistent read, set <code>ConsistentRead</code> to
+<code>true</code>. Although a strongly consistent read might take more time than an
+eventually consistent read, it always returns the last updated value.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>dynamodb_get_item</span>(<span class='no'>TableName</span>, <span class='no'>Key</span>, <span class='no'>AttributesToGet</span>, <span class='no'>ConsistentRead</span>,
-  <span class='no'>ReturnConsumedCapacity</span>, <span class='no'>ProjectionExpression</span>, <span class='no'>ExpressionAttributeNames</span>)</pre>
+    <pre class="usage"><span class='fu'>dynamodb_get_item</span><span class='op'>(</span><span class='va'>TableName</span>, <span class='va'>Key</span>, <span class='va'>AttributesToGet</span>, <span class='va'>ConsistentRead</span>,
+  <span class='va'>ReturnConsumedCapacity</span>, <span class='va'>ProjectionExpression</span>, <span class='va'>ExpressionAttributeNames</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,7 +177,7 @@ document. The attributes in the expression must be separated by commas.</p>
 <p>If no attribute names are specified, then all attributes are returned.
 If any of the requested attributes are not found, they do not appear in
 the result.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.AccessingItemAttributes.html'>Specifying Item Attributes</a>
+<p>For more information, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html'>Specifying Item Attributes</a>
 in the <em>Amazon DynamoDB Developer Guide</em>.</p></td>
     </tr>
     <tr>
@@ -204,75 +212,72 @@ example:</p><ul>
 
 <p>Tokens that begin with the <strong>:</strong> character are <em>expression attribute
 values</em>, which are placeholders for the actual value at runtime.</p>
-<p>For more information on expression attribute names, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.AccessingItemAttributes.html'>Specifying Item Attributes</a>
+<p>For more information on expression attribute names, see <a href='https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.Attributes.html'>Specifying Item Attributes</a>
 in the <em>Amazon DynamoDB Developer Guide</em>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>GetItem</code> provides an eventually consistent read by default. If your
-application requires a strongly consistent read, set <code>ConsistentRead</code> to
-<code>true</code>. Although a strongly consistent read might take more time than an
-eventually consistent read, it always returns the last updated value.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_item</span>(
-  <span class='kw'>TableName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>N</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>B</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-      <span class='kw'>SS</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_item</span><span class='op'>(</span>
+  TableName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      S <span class='op'>=</span> <span class='st'>"string"</span>,
+      N <span class='op'>=</span> <span class='st'>"string"</span>,
+      B <span class='op'>=</span> <span class='va'>raw</span>,
+      SS <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>NS</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      NS <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>BS</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='no'>raw</span>
-      ),
-      <span class='kw'>M</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-      ),
-      <span class='kw'>L</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-      ),
-      <span class='kw'>NULL</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>BOOL</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-    )
-  ),
-  <span class='kw'>AttributesToGet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      BS <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='va'>raw</span>
+      <span class='op'>)</span>,
+      M <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+      <span class='op'>)</span>,
+      L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+      <span class='op'>)</span>,
+      <span class='cn'>NULL</span> <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      BOOL <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  AttributesToGet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ConsistentRead</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>ReturnConsumedCapacity</span> <span class='kw'>=</span> <span class='st'>"INDEXES"</span><span class='kw'>|</span><span class='st'>"TOTAL"</span><span class='kw'>|</span><span class='st'>"NONE"</span>,
-  <span class='kw'>ProjectionExpression</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ExpressionAttributeNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  ConsistentRead <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  ReturnConsumedCapacity <span class='op'>=</span> <span class='st'>"INDEXES"</span><span class='op'>|</span><span class='st'>"TOTAL"</span><span class='op'>|</span><span class='st'>"NONE"</span>,
+  ProjectionExpression <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpressionAttributeNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example retrieves an item from the Music table. The table has a</span>
 <span class='co'># partition key and a sort key (Artist and SongTitle), so you must specify</span>
 <span class='co'># both of these attributes.</span>
-<span class='no'>svc</span>$<span class='fu'>get_item</span>(
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Artist</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"Acme Band"</span>
-    ),
-    <span class='kw'>SongTitle</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"Happy Day"</span>
-    )
-  ),
-  <span class='kw'>TableName</span> <span class='kw'>=</span> <span class='st'>"Music"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_item</span><span class='op'>(</span>
+  Key <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Artist <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      S <span class='op'>=</span> <span class='st'>"Acme Band"</span>
+    <span class='op'>)</span>,
+    SongTitle <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      S <span class='op'>=</span> <span class='st'>"Happy Day"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TableName <span class='op'>=</span> <span class='st'>"Music"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -288,7 +293,7 @@ eventually consistent read, it always returns the last updated value.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

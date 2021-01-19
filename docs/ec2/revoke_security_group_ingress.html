@@ -42,7 +42,20 @@
 <meta property="og:title" content="Removes the specified ingress rules from a security group — ec2_revoke_security_group_ingress" />
 <meta property="og:description" content="Removes the specified ingress rules from a security group. To remove a
 rule, the values that you specify (for example, ports) must match the
-existing rule\'s values exactly." />
+existing rule's values exactly.
+[EC2-Classic , default VPC] If the values you specify do not match the
+existing rule's values, no error is returned, and the output describes
+the security group rules that were not revoked.
+AWS recommends that you use DescribeSecurityGroups to verify that the
+rule has been removed.
+Each rule consists of the protocol and the CIDR range or source security
+group. For the TCP and UDP protocols, you must also specify the
+destination port or range of ports. For the ICMP protocol, you must also
+specify the ICMP type and code. If the security group rule has a
+description, you do not have to specify the description to revoke the
+rule.
+Rule changes are propagated to instances within the security group as
+quickly as possible. However, a small delay might occur." />
 
 
 
@@ -74,7 +87,7 @@ existing rule\'s values exactly." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +95,7 @@ existing rule\'s values exactly." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +107,7 @@ existing rule\'s values exactly." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,19 +132,32 @@ existing rule\'s values exactly." />
     <div class="ref-description">
     <p>Removes the specified ingress rules from a security group. To remove a
 rule, the values that you specify (for example, ports) must match the
-existing rule\'s values exactly.</p>
+existing rule's values exactly.</p>
+<p>[EC2-Classic , default VPC] If the values you specify do not match the
+existing rule's values, no error is returned, and the output describes
+the security group rules that were not revoked.</p>
+<p>AWS recommends that you use DescribeSecurityGroups to verify that the
+rule has been removed.</p>
+<p>Each rule consists of the protocol and the CIDR range or source security
+group. For the TCP and UDP protocols, you must also specify the
+destination port or range of ports. For the ICMP protocol, you must also
+specify the ICMP type and code. If the security group rule has a
+description, you do not have to specify the description to revoke the
+rule.</p>
+<p>Rule changes are propagated to instances within the security group as
+quickly as possible. However, a small delay might occur.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_revoke_security_group_ingress</span>(<span class='no'>CidrIp</span>, <span class='no'>FromPort</span>, <span class='no'>GroupId</span>, <span class='no'>GroupName</span>,
-  <span class='no'>IpPermissions</span>, <span class='no'>IpProtocol</span>, <span class='no'>SourceSecurityGroupName</span>,
-  <span class='no'>SourceSecurityGroupOwnerId</span>, <span class='no'>ToPort</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_revoke_security_group_ingress</span><span class='op'>(</span><span class='va'>CidrIp</span>, <span class='va'>FromPort</span>, <span class='va'>GroupId</span>, <span class='va'>GroupName</span>,
+  <span class='va'>IpPermissions</span>, <span class='va'>IpProtocol</span>, <span class='va'>SourceSecurityGroupName</span>,
+  <span class='va'>SourceSecurityGroupOwnerId</span>, <span class='va'>ToPort</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>CidrIp</th>
-      <td><p>The CIDR IP address range. You can\'t specify this parameter when
+      <td><p>The CIDR IP address range. You can't specify this parameter when
 specifying a source security group.</p></td>
     </tr>
     <tr>
@@ -153,7 +179,7 @@ request.</p></td>
     </tr>
     <tr>
       <th>IpPermissions</th>
-      <td><p>The sets of IP permissions. You can\'t specify a source security group
+      <td><p>The sets of IP permissions. You can't specify a source security group
 and a CIDR IP address range in the same set of permissions.</p></td>
     </tr>
     <tr>
@@ -164,7 +190,7 @@ Use <code>-1</code> to specify all.</p></td>
     <tr>
       <th>SourceSecurityGroupName</th>
       <td><p>[EC2-Classic, default VPC] The name of the source security group. You
-can\'t specify this parameter in combination with the following
+can't specify this parameter in combination with the following
 parameters: the CIDR IP address range, the start of the port range, the
 IP protocol, and the end of the port range. For EC2-VPC, the source
 security group must be in the same VPC. To revoke a specific rule for an
@@ -173,7 +199,7 @@ IP protocol and port range, use a set of IP permissions instead.</p></td>
     <tr>
       <th>SourceSecurityGroupOwnerId</th>
       <td><p>[EC2-Classic] The AWS account ID of the source security group, if the
-source security group is in a different account. You can\'t specify this
+source security group is in a different account. You can't specify this
 parameter in combination with the following parameters: the CIDR IP
 address range, the IP protocol, the start of the port range, and the end
 of the port range. To revoke a specific rule for an IP protocol and port
@@ -194,69 +220,57 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>[EC2-Classic only] If the values you specify do not match the existing
-rule\'s values, no error is returned. Use DescribeSecurityGroups to
-verify that the rule has been removed.</p>
-<p>Each rule consists of the protocol and the CIDR range or source security
-group. For the TCP and UDP protocols, you must also specify the
-destination port or range of ports. For the ICMP protocol, you must also
-specify the ICMP type and code. If the security group rule has a
-description, you do not have to specify the description to revoke the
-rule.</p>
-<p>Rule changes are propagated to instances within the security group as
-quickly as possible. However, a small delay might occur.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>revoke_security_group_ingress</span>(
-  <span class='kw'>CidrIp</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>FromPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>GroupId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IpPermissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>FromPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>IpProtocol</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>IpRanges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>CidrIp</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>Ipv6Ranges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>CidrIpv6</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>PrefixListIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>PrefixListId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>ToPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>UserIdGroupPairs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>GroupId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>GroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>PeeringStatus</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>UserId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>VpcId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>VpcPeeringConnectionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>IpProtocol</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceSecurityGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceSecurityGroupOwnerId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ToPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>revoke_security_group_ingress</span><span class='op'>(</span>
+  CidrIp <span class='op'>=</span> <span class='st'>"string"</span>,
+  FromPort <span class='op'>=</span> <span class='fl'>123</span>,
+  GroupId <span class='op'>=</span> <span class='st'>"string"</span>,
+  GroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  IpPermissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      FromPort <span class='op'>=</span> <span class='fl'>123</span>,
+      IpProtocol <span class='op'>=</span> <span class='st'>"string"</span>,
+      IpRanges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          CidrIp <span class='op'>=</span> <span class='st'>"string"</span>,
+          Description <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      Ipv6Ranges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          CidrIpv6 <span class='op'>=</span> <span class='st'>"string"</span>,
+          Description <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      PrefixListIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Description <span class='op'>=</span> <span class='st'>"string"</span>,
+          PrefixListId <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      ToPort <span class='op'>=</span> <span class='fl'>123</span>,
+      UserIdGroupPairs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Description <span class='op'>=</span> <span class='st'>"string"</span>,
+          GroupId <span class='op'>=</span> <span class='st'>"string"</span>,
+          GroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+          PeeringStatus <span class='op'>=</span> <span class='st'>"string"</span>,
+          UserId <span class='op'>=</span> <span class='st'>"string"</span>,
+          VpcId <span class='op'>=</span> <span class='st'>"string"</span>,
+          VpcPeeringConnectionId <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  IpProtocol <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceSecurityGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceSecurityGroupOwnerId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ToPort <span class='op'>=</span> <span class='fl'>123</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -274,7 +288,7 @@ quickly as possible. However, a small delay might occur.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -48,9 +48,9 @@ metadata, to files, directories, and symbolic links (symlinks) from your
 FSx file system to its linked data repository. A
 CreateDataRepositoryTask operation will fail if a data repository is
 not linked to the FSx file system. To learn more about data repository
-tasks, see Using Data Repository Tasks.
+tasks, see Data Repository Tasks.
 To learn more about linking a data repository to your file system, see
-Setting the Export Prefix." />
+Linking your file system to an S3 bucket." />
 
 
 
@@ -82,7 +82,7 @@ Setting the Export Prefix." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@ Setting the Export Prefix." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -102,7 +102,7 @@ Setting the Export Prefix." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -133,13 +133,13 @@ metadata, to files, directories, and symbolic links (symlinks) from your
 FSx file system to its linked data repository. A
 <code>CreateDataRepositoryTask</code> operation will fail if a data repository is
 not linked to the FSx file system. To learn more about data repository
-tasks, see <a href='https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html'>Using Data Repository Tasks</a>.
+tasks, see <a href='https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-repository-tasks.html'>Data Repository Tasks</a>.
 To learn more about linking a data repository to your file system, see
-<a href='https://docs.aws.amazon.com/fsx/latest/LustreGuide/export-data-repository.html#export-prefix'>Setting the Export Prefix</a>.</p>
+<a href='https://docs.aws.amazon.com/fsx/latest/LustreGuide/create-fs-linked-data-repo.html'>Linking your file system to an S3 bucket</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fsx_create_data_repository_task</span>(<span class='no'>Type</span>, <span class='no'>Paths</span>, <span class='no'>FileSystemId</span>, <span class='no'>Report</span>,
-  <span class='no'>ClientRequestToken</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>fsx_create_data_repository_task</span><span class='op'>(</span><span class='va'>Type</span>, <span class='va'>Paths</span>, <span class='va'>FileSystemId</span>, <span class='va'>Report</span>,
+  <span class='va'>ClientRequestToken</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,7 +156,7 @@ system root directory. The paths you provide need to be relative to the
 mount point of the file system. If the mount point is <code>/mnt/fsx</code> and
 <code>/mnt/fsx/path1</code> is a directory or file on the file system you want to
 export, then the path to provide is <code>path1</code>. If a path that you provide
-isn\'t valid, the task fails.</p></td>
+isn't valid, the task fails.</p></td>
     </tr>
     <tr>
       <th>FileSystemId</th>
@@ -182,26 +182,27 @@ files that Amazon FSx processed that meet the criteria specified by the
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_data_repository_task</span>(
-  <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"EXPORT_TO_REPOSITORY"</span>,
-  <span class='kw'>Paths</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_data_repository_task</span><span class='op'>(</span>
+  Type <span class='op'>=</span> <span class='st'>"EXPORT_TO_REPOSITORY"</span>,
+  Paths <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>FileSystemId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Report</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>Path</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Format</span> <span class='kw'>=</span> <span class='st'>"REPORT_CSV_20191124"</span>,
-    <span class='kw'>Scope</span> <span class='kw'>=</span> <span class='st'>"FAILED_FILES_ONLY"</span>
-  ),
-  <span class='kw'>ClientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  FileSystemId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Report <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    Path <span class='op'>=</span> <span class='st'>"string"</span>,
+    Format <span class='op'>=</span> <span class='st'>"REPORT_CSV_20191124"</span>,
+    Scope <span class='op'>=</span> <span class='st'>"FAILED_FILES_ONLY"</span>
+  <span class='op'>)</span>,
+  ClientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -219,7 +220,7 @@ files that Amazon FSx processed that meet the criteria specified by the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

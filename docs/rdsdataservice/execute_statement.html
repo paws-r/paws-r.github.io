@@ -40,7 +40,12 @@
 
 
 <meta property="og:title" content="Runs a SQL statement against a database — rdsdataservice_execute_statement" />
-<meta property="og:description" content="Runs a SQL statement against a database." />
+<meta property="og:description" content="Runs a SQL statement against a database.
+If a call isn't part of a transaction because it doesn't include the
+transactionID parameter, changes that result from the call are
+committed automatically.
+The response size limit is 1 MB. If the call returns more than 1 MB of
+response data, the call is terminated." />
 
 
 
@@ -72,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +85,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +97,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +121,16 @@
 
     <div class="ref-description">
     <p>Runs a SQL statement against a database.</p>
+<p>If a call isn't part of a transaction because it doesn't include the
+<code>transactionID</code> parameter, changes that result from the call are
+committed automatically.</p>
+<p>The response size limit is 1 MB. If the call returns more than 1 MB of
+response data, the call is terminated.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rdsdataservice_execute_statement</span>(<span class='no'>continueAfterTimeout</span>, <span class='no'>database</span>,
-  <span class='no'>includeResultMetadata</span>, <span class='no'>parameters</span>, <span class='no'>resourceArn</span>, <span class='no'>resultSetOptions</span>,
-  <span class='no'>schema</span>, <span class='no'>secretArn</span>, <span class='no'>sql</span>, <span class='no'>transactionId</span>)</pre>
+    <pre class="usage"><span class='fu'>rdsdataservice_execute_statement</span><span class='op'>(</span><span class='va'>continueAfterTimeout</span>, <span class='va'>database</span>,
+  <span class='va'>includeResultMetadata</span>, <span class='va'>parameters</span>, <span class='va'>resourceArn</span>, <span class='va'>resultSetOptions</span>,
+  <span class='va'>schema</span>, <span class='va'>secretArn</span>, <span class='va'>sql</span>, <span class='va'>transactionId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,65 +183,59 @@ structures.</p></td>
       <td><p>The identifier of a transaction that was started by using the
 <code>BeginTransaction</code> operation. Specify the transaction ID of the
 transaction that you want to include the SQL statement in.</p>
-<p>If the SQL statement is not part of a transaction, don\'t set this
+<p>If the SQL statement is not part of a transaction, don't set this
 parameter.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If a call isn\'t part of a transaction because it doesn\'t include the
-<code>transactionID</code> parameter, changes that result from the call are
-committed automatically.</p>
-<p>The response size limit is 1 MB. If the call returns more than 1 MB of
-response data, the call is terminated.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>execute_statement</span>(
-  <span class='kw'>continueAfterTimeout</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>database</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>includeResultMetadata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>typeHint</span> <span class='kw'>=</span> <span class='st'>"DATE"</span><span class='kw'>|</span><span class='st'>"DECIMAL"</span><span class='kw'>|</span><span class='st'>"TIME"</span><span class='kw'>|</span><span class='st'>"TIMESTAMP"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>arrayValue</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>arrayValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-          ),
-          <span class='kw'>booleanValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-          ),
-          <span class='kw'>doubleValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>execute_statement</span><span class='op'>(</span>
+  continueAfterTimeout <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  database <span class='op'>=</span> <span class='st'>"string"</span>,
+  includeResultMetadata <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      name <span class='op'>=</span> <span class='st'>"string"</span>,
+      typeHint <span class='op'>=</span> <span class='st'>"DATE"</span><span class='op'>|</span><span class='st'>"DECIMAL"</span><span class='op'>|</span><span class='st'>"TIME"</span><span class='op'>|</span><span class='st'>"TIMESTAMP"</span>,
+      value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        arrayValue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          arrayValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+          <span class='op'>)</span>,
+          booleanValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+          <span class='op'>)</span>,
+          doubleValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='fl'>123.0</span>
-          ),
-          <span class='kw'>longValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+          <span class='op'>)</span>,
+          longValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='fl'>123</span>
-          ),
-          <span class='kw'>stringValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+          <span class='op'>)</span>,
+          stringValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='st'>"string"</span>
-          )
-        ),
-        <span class='kw'>blobValue</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-        <span class='kw'>booleanValue</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>doubleValue</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-        <span class='kw'>isNull</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>longValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>stringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>resourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>resultSetOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>decimalReturnType</span> <span class='kw'>=</span> <span class='st'>"DOUBLE_OR_LONG"</span><span class='kw'>|</span><span class='st'>"STRING"</span>
-  ),
-  <span class='kw'>schema</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>secretArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>sql</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>transactionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        blobValue <span class='op'>=</span> <span class='va'>raw</span>,
+        booleanValue <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        doubleValue <span class='op'>=</span> <span class='fl'>123.0</span>,
+        isNull <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        longValue <span class='op'>=</span> <span class='fl'>123</span>,
+        stringValue <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  resourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  resultSetOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    decimalReturnType <span class='op'>=</span> <span class='st'>"DOUBLE_OR_LONG"</span><span class='op'>|</span><span class='st'>"STRING"</span>
+  <span class='op'>)</span>,
+  schema <span class='op'>=</span> <span class='st'>"string"</span>,
+  secretArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  sql <span class='op'>=</span> <span class='st'>"string"</span>,
+  transactionId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -249,7 +253,7 @@ response data, the call is terminated.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

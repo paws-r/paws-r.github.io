@@ -40,7 +40,13 @@
 
 
 <meta property="og:title" content="Delivers a message to the specified queue — sqs_send_message" />
-<meta property="og:description" content="Delivers a message to the specified queue." />
+<meta property="og:description" content="Delivers a message to the specified queue.
+A message can include only XML, JSON, and unformatted text. The
+following Unicode characters are allowed:
+#x9 | #xA | #xD | #x20 to #xD7FF | #xE000 to #xFFFD |
+#x10000 to #x10FFFF
+Any characters not included in this list will be rejected. For more
+information, see the W3C specification for characters." />
 
 
 
@@ -72,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +86,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +98,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +122,16 @@
 
     <div class="ref-description">
     <p>Delivers a message to the specified queue.</p>
+<p>A message can include only XML, JSON, and unformatted text. The
+following Unicode characters are allowed:</p>
+<p><code>#x9</code> | <code>#xA</code> | <code>#xD</code> | <code>#x20</code> to <code>#xD7FF</code> | <code>#xE000</code> to <code>#xFFFD</code> |
+<code>#x10000</code> to <code>#x10FFFF</code></p>
+<p>Any characters not included in this list will be rejected. For more
+information, see the <a href='http://www.w3.org/TR/REC-xml/#charsets'>W3C specification for characters</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sqs_send_message</span>(<span class='no'>QueueUrl</span>, <span class='no'>MessageBody</span>, <span class='no'>DelaySeconds</span>, <span class='no'>MessageAttributes</span>,
-  <span class='no'>MessageSystemAttributes</span>, <span class='no'>MessageDeduplicationId</span>, <span class='no'>MessageGroupId</span>)</pre>
+    <pre class="usage"><span class='fu'>sqs_send_message</span><span class='op'>(</span><span class='va'>QueueUrl</span>, <span class='va'>MessageBody</span>, <span class='va'>DelaySeconds</span>, <span class='va'>MessageAttributes</span>,
+  <span class='va'>MessageSystemAttributes</span>, <span class='va'>MessageDeduplicationId</span>, <span class='va'>MessageGroupId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -131,10 +143,11 @@
     </tr>
     <tr>
       <th>MessageBody</th>
-      <td><p>[required] The message to send. The maximum string size is 256 KB.</p>
+      <td><p>[required] The message to send. The minimum size is one character. The maximum size
+is 256 KB.</p>
 <p>A message can include only XML, JSON, and unformatted text. The
 following Unicode characters are allowed:</p>
-<p><code>#x9</code> \| <code>#xA</code> \| <code>#xD</code> \| <code>#x20</code> to <code>#xD7FF</code> \| <code>#xE000</code> to <code>#xFFFD</code> \|
+<p><code>#x9</code> | <code>#xA</code> | <code>#xD</code> | <code>#x20</code> to <code>#xD7FF</code> | <code>#xE000</code> to <code>#xFFFD</code> |
 <code>#x10000</code> to <code>#x10FFFF</code></p>
 <p>Any characters not included in this list will be rejected. For more
 information, see the <a href='http://www.w3.org/TR/REC-xml/#charsets'>W3C specification for characters</a>.</p></td>
@@ -144,15 +157,15 @@ information, see the <a href='http://www.w3.org/TR/REC-xml/#charsets'>W3C specif
       <td><p>The length of time, in seconds, for which to delay a specific message.
 Valid values: 0 to 900. Maximum: 15 minutes. Messages with a positive
 <code>DelaySeconds</code> value become available for processing after the delay
-period is finished. If you don\'t specify a value, the default value for
+period is finished. If you don't specify a value, the default value for
 the queue applies.</p>
-<p>When you set <code>FifoQueue</code>, you can\'t set <code>DelaySeconds</code> per message. You
+<p>When you set <code>FifoQueue</code>, you can't set <code>DelaySeconds</code> per message. You
 can set this parameter only on a queue level.</p></td>
     </tr>
     <tr>
       <th>MessageAttributes</th>
       <td><p>Each message attribute consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>. For
-more information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html'>Amazon SQS Message Attributes</a>
+more information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-metadata.html#sqs-message-attributes'>Amazon SQS Message Attributes</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
@@ -162,7 +175,7 @@ consists of a <code>Name</code>, <code>Type</code>, and <code>Value</code>.</p><
 <li><p>Currently, the only supported message system attribute is
 <code>AWSTraceHeader</code>. Its type must be <code>String</code> and its value must be a
 correctly formatted AWS X-Ray trace header string.</p></li>
-<li><p>The size of a message system attribute doesn\'t count towards the
+<li><p>The size of a message system attribute doesn't count towards the
 total size of a message.</p></li>
 </ul></td>
     </tr>
@@ -172,18 +185,18 @@ total size of a message.</p></li>
 <p>The token used for deduplication of sent messages. If a message with a
 particular <code>MessageDeduplicationId</code> is sent successfully, any messages
 sent with the same <code>MessageDeduplicationId</code> are accepted successfully
-but aren\'t delivered during the 5-minute deduplication interval. For
+but aren't delivered during the 5-minute deduplication interval. For
 more information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing'>Exactly-Once Processing</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p><ul>
 <li><p>Every message must have a unique <code>MessageDeduplicationId</code>,</p><ul>
 <li><p>You may provide a <code>MessageDeduplicationId</code> explicitly.</p></li>
-<li><p>If you aren\'t able to provide a <code>MessageDeduplicationId</code> and
-you enable <code>ContentBasedDeduplication</code> for your queue, Amazon
-SQS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code>
+<li><p>If you aren't able to provide a <code>MessageDeduplicationId</code> and you
+enable <code>ContentBasedDeduplication</code> for your queue, Amazon SQS
+uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code>
 using the body of the message (but not the attributes of the
 message).</p></li>
-<li><p>If you don\'t provide a <code>MessageDeduplicationId</code> and the queue
-doesn\'t have <code>ContentBasedDeduplication</code> set, the action fails
+<li><p>If you don't provide a <code>MessageDeduplicationId</code> and the queue
+doesn't have <code>ContentBasedDeduplication</code> set, the action fails
 with an error.</p></li>
 <li><p>If the queue has <code>ContentBasedDeduplication</code> set, your
 <code>MessageDeduplicationId</code> overrides the generated one.</p></li>
@@ -202,7 +215,7 @@ message is delivered.</p></li>
 (this can be useful for troubleshooting delivery issues).</p>
 <p>If a message is sent successfully but the acknowledgement is lost and
 the message is resent with the same <code>MessageDeduplicationId</code> after the
-deduplication interval, Amazon SQS can\'t detect duplicate messages.</p>
+deduplication interval, Amazon SQS can't detect duplicate messages.</p>
 <p>Amazon SQS continues to keep track of the message deduplication ID even
 after the message is received and deleted.</p>
 <p>The maximum length of <code>MessageDeduplicationId</code> is 128 characters.
@@ -223,10 +236,10 @@ single queue, use <code>MessageGroupId</code> values (for example, session data 
 multiple users). In this scenario, multiple consumers can process the
 queue, but the session data of each user is processed in a FIFO fashion.</p><ul>
 <li><p>You must associate a non-empty <code>MessageGroupId</code> with a message. If
-you don\'t provide a <code>MessageGroupId</code>, the action fails.</p></li>
+you don't provide a <code>MessageGroupId</code>, the action fails.</p></li>
 <li><p><code>ReceiveMessage</code> might return messages with multiple
 <code>MessageGroupId</code> values. For each <code>MessageGroupId</code>, the messages are
-sorted by time sent. The caller can\'t specify a <code>MessageGroupId</code>.</p></li>
+sorted by time sent. The caller can't specify a <code>MessageGroupId</code>.</p></li>
 </ul>
 
 <p>The length of <code>MessageGroupId</code> is 128 characters. Valid values:
@@ -234,55 +247,48 @@ alphanumeric characters and punctuation
 <code>(!\"#$%&amp;amp;\'()*+,-./:;&amp;lt;=&amp;gt;?@\\[\\\]^_\`\{|\}~)</code>.</p>
 <p>For best practices of using <code>MessageGroupId</code>, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/using-messagegroupid-property.html'>Using the MessageGroupId Property</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
-<p><code>MessageGroupId</code> is required for FIFO queues. You can\'t use it for
+<p><code>MessageGroupId</code> is required for FIFO queues. You can't use it for
 Standard queues.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A message can include only XML, JSON, and unformatted text. The
-following Unicode characters are allowed:</p>
-<p><code>#x9</code> \| <code>#xA</code> \| <code>#xD</code> \| <code>#x20</code> to <code>#xD7FF</code> \| <code>#xE000</code> to <code>#xFFFD</code> \|
-<code>#x10000</code> to <code>#x10FFFF</code></p>
-<p>Any characters not included in this list will be rejected. For more
-information, see the <a href='http://www.w3.org/TR/REC-xml/#charsets'>W3C specification for characters</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>send_message</span>(
-  <span class='kw'>QueueUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MessageBody</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DelaySeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MessageAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BinaryValue</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-      <span class='kw'>StringListValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_message</span><span class='op'>(</span>
+  QueueUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  MessageBody <span class='op'>=</span> <span class='st'>"string"</span>,
+  DelaySeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  MessageAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+      BinaryValue <span class='op'>=</span> <span class='va'>raw</span>,
+      StringListValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>BinaryListValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='no'>raw</span>
-      ),
-      <span class='kw'>DataType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>MessageSystemAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>StringValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>BinaryValue</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-      <span class='kw'>StringListValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      BinaryListValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='va'>raw</span>
+      <span class='op'>)</span>,
+      DataType <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MessageSystemAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      StringValue <span class='op'>=</span> <span class='st'>"string"</span>,
+      BinaryValue <span class='op'>=</span> <span class='va'>raw</span>,
+      StringListValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>BinaryListValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='no'>raw</span>
-      ),
-      <span class='kw'>DataType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>MessageDeduplicationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MessageGroupId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+      <span class='op'>)</span>,
+      BinaryListValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='va'>raw</span>
+      <span class='op'>)</span>,
+      DataType <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MessageDeduplicationId <span class='op'>=</span> <span class='st'>"string"</span>,
+  MessageGroupId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -300,7 +306,7 @@ information, see the <a href='http://www.w3.org/TR/REC-xml/#charsets'>W3C specif
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

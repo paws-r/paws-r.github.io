@@ -78,7 +78,7 @@ instance to the environment." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@ instance to the environment." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +98,7 @@ instance to the environment." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -128,8 +128,9 @@ Elastic Compute Cloud (Amazon EC2) instance, and then connects from the
 instance to the environment.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloud9_create_environment_ec2</span>(<span class='no'>name</span>, <span class='no'>description</span>, <span class='no'>clientRequestToken</span>,
-  <span class='no'>instanceType</span>, <span class='no'>subnetId</span>, <span class='no'>automaticStopTimeMinutes</span>, <span class='no'>ownerArn</span>, <span class='no'>tags</span>)</pre>
+    <pre class="usage"><span class='fu'>cloud9_create_environment_ec2</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>description</span>, <span class='va'>clientRequestToken</span>,
+  <span class='va'>instanceType</span>, <span class='va'>subnetId</span>, <span class='va'>automaticStopTimeMinutes</span>, <span class='va'>ownerArn</span>, <span class='va'>tags</span>,
+  <span class='va'>connectionType</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,7 +148,7 @@ instance to the environment.</p>
       <th>clientRequestToken</th>
       <td><p>A unique, case-sensitive string that helps AWS Cloud9 to ensure this
 operation completes no more than one time.</p>
-<p>For more information, see <a href='http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html'>Client Tokens</a>
+<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html'>Client Tokens</a>
 in the <em>Amazon EC2 API Reference</em>.</p></td>
     </tr>
     <tr>
@@ -169,47 +170,55 @@ environment has last been used.</p></td>
       <th>ownerArn</th>
       <td><p>The Amazon Resource Name (ARN) of the environment owner. This ARN can be
 the ARN of any AWS IAM principal. If this value is not specified, the
-ARN defaults to this environment\'s creator.</p></td>
+ARN defaults to this environment's creator.</p></td>
     </tr>
     <tr>
       <th>tags</th>
       <td><p>An array of key-value pairs that will be associated with the new AWS
 Cloud9 development environment.</p></td>
     </tr>
+    <tr>
+      <th>connectionType</th>
+      <td><p>The connection type used for connecting to an Amazon EC2 environment.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_environment_ec2</span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>clientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>instanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>subnetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>automaticStopTimeMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ownerArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_environment_ec2</span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"string"</span>,
+  description <span class='op'>=</span> <span class='st'>"string"</span>,
+  clientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  instanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+  subnetId <span class='op'>=</span> <span class='st'>"string"</span>,
+  automaticStopTimeMinutes <span class='op'>=</span> <span class='fl'>123</span>,
+  ownerArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  connectionType <span class='op'>=</span> <span class='st'>"CONNECT_SSH"</span><span class='op'>|</span><span class='st'>"CONNECT_SSM"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># </span>
-<span class='no'>svc</span>$<span class='fu'>create_environment_ec2</span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"my-demo-environment"</span>,
-  <span class='kw'>automaticStopTimeMinutes</span> <span class='kw'>=</span> <span class='fl'>60L</span>,
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"This is my demonstration environment."</span>,
-  <span class='kw'>instanceType</span> <span class='kw'>=</span> <span class='st'>"t2.micro"</span>,
-  <span class='kw'>ownerArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::123456789012:user/MyDemoUser"</span>,
-  <span class='kw'>subnetId</span> <span class='kw'>=</span> <span class='st'>"subnet-1fab8aEX"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_environment_ec2</span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"my-demo-environment"</span>,
+  automaticStopTimeMinutes <span class='op'>=</span> <span class='fl'>60L</span>,
+  description <span class='op'>=</span> <span class='st'>"This is my demonstration environment."</span>,
+  instanceType <span class='op'>=</span> <span class='st'>"t2.micro"</span>,
+  ownerArn <span class='op'>=</span> <span class='st'>"arn:aws:iam::123456789012:user/MyDemoUser"</span>,
+  subnetId <span class='op'>=</span> <span class='st'>"subnet-1fab8aEX"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -225,7 +234,7 @@ Cloud9 development environment.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

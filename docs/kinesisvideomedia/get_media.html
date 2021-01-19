@@ -43,7 +43,39 @@
 <meta property="og:description" content="Use this API to retrieve media content from a Kinesis video stream. In
 the request, you identify the stream name or stream Amazon Resource Name
 (ARN), and the starting chunk. Kinesis Video Streams then returns a
-stream of chunks in order by fragment number." />
+stream of chunks in order by fragment number.
+You must first call the GetDataEndpoint API to get an endpoint. Then
+send the GetMedia requests to this endpoint using the --endpoint-url parameter.
+When you put media data (fragments) on a stream, Kinesis Video Streams
+stores each incoming fragment and related metadata in what is called a
+&quot;chunk.&quot; For more information, see
+PutMedia.
+The GetMedia API returns a stream of these chunks starting from the
+chunk that you specify in the request.
+The following limits apply when using the GetMedia API:
+A client can call GetMedia up to five times per second per stream.
+Kinesis Video Streams sends media data at a rate of up to 25
+megabytes per second (or 200 megabits per second) during a
+GetMedia session.
+
+
+If an error is thrown after invoking a Kinesis Video Streams media API,
+in addition to the HTTP status code and the response body, it includes
+the following pieces of information:
+x-amz-ErrorType HTTP header – contains a more specific error type
+in addition to what the HTTP status code provides.
+x-amz-RequestId HTTP header – if you want to report an issue to
+AWS, the support team can better diagnose the problem if given the
+Request Id.
+
+
+Both the HTTP status code and the ErrorType header can be utilized to
+make programmatic decisions about whether errors are retry-able and
+under what conditions, as well as provide information on what actions
+the client programmer might need to take in order to successfully try
+again.
+For more information, see the Errors section at the bottom of this
+topic, as well as Common Errors." />
 
 
 
@@ -75,7 +107,7 @@ stream of chunks in order by fragment number." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +115,7 @@ stream of chunks in order by fragment number." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +127,7 @@ stream of chunks in order by fragment number." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,37 +154,11 @@ stream of chunks in order by fragment number." />
 the request, you identify the stream name or stream Amazon Resource Name
 (ARN), and the starting chunk. Kinesis Video Streams then returns a
 stream of chunks in order by fragment number.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>kinesisvideomedia_get_media</span>(<span class='no'>StreamName</span>, <span class='no'>StreamARN</span>, <span class='no'>StartSelector</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>StreamName</th>
-      <td><p>The Kinesis video stream name from where you want to get the media
-content. If you don\'t specify the <code>streamName</code>, you must specify the
-<code>streamARN</code>.</p></td>
-    </tr>
-    <tr>
-      <th>StreamARN</th>
-      <td><p>The ARN of the stream from where you want to get the media content. If
-you don\'t specify the <code>streamARN</code>, you must specify the <code>streamName</code>.</p></td>
-    </tr>
-    <tr>
-      <th>StartSelector</th>
-      <td><p>[required] Identifies the starting chunk to get from the specified stream.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then
-send the <code>GetMedia</code> requests to this endpoint using the <a href='https://docs.aws.amazon.com/cli/latest/reference/'>\--endpoint-url parameter</a>.</p>
+<p>You must first call the <code>GetDataEndpoint</code> API to get an endpoint. Then
+send the <code>GetMedia</code> requests to this endpoint using the <a href='https://docs.aws.amazon.com/cli/latest/reference/'>--endpoint-url parameter</a>.</p>
 <p>When you put media data (fragments) on a stream, Kinesis Video Streams
 stores each incoming fragment and related metadata in what is called a
-\"chunk.\" For more information, see
+"chunk." For more information, see
 <a href='https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_dataplane_PutMedia.html'>PutMedia</a>.
 The <code>GetMedia</code> API returns a stream of these chunks starting from the
 chunk that you specify in the request.</p>
@@ -166,9 +172,9 @@ megabytes per second (or 200 megabits per second) during a
 <p>If an error is thrown after invoking a Kinesis Video Streams media API,
 in addition to the HTTP status code and the response body, it includes
 the following pieces of information:</p><ul>
-<li><p><code>x-amz-ErrorType</code> HTTP header -- contains a more specific error type
+<li><p><code>x-amz-ErrorType</code> HTTP header – contains a more specific error type
 in addition to what the HTTP status code provides.</p></li>
-<li><p><code>x-amz-RequestId</code> HTTP header -- if you want to report an issue to
+<li><p><code>x-amz-RequestId</code> HTTP header – if you want to report an issue to
 AWS, the support team can better diagnose the problem if given the
 Request Id.</p></li>
 </ul>
@@ -180,21 +186,46 @@ the client programmer might need to take in order to successfully try
 again.</p>
 <p>For more information, see the <strong>Errors</strong> section at the bottom of this
 topic, as well as <a href='https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/CommonErrors.html'>Common Errors</a>.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>kinesisvideomedia_get_media</span><span class='op'>(</span><span class='va'>StreamName</span>, <span class='va'>StreamARN</span>, <span class='va'>StartSelector</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>StreamName</th>
+      <td><p>The Kinesis video stream name from where you want to get the media
+content. If you don't specify the <code>streamName</code>, you must specify the
+<code>streamARN</code>.</p></td>
+    </tr>
+    <tr>
+      <th>StreamARN</th>
+      <td><p>The ARN of the stream from where you want to get the media content. If
+you don't specify the <code>streamARN</code>, you must specify the <code>streamName</code>.</p></td>
+    </tr>
+    <tr>
+      <th>StartSelector</th>
+      <td><p>[required] Identifies the starting chunk to get from the specified stream.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_media</span>(
-  <span class='kw'>StreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StreamARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StartSelector</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>StartSelectorType</span> <span class='kw'>=</span> <span class='st'>"FRAGMENT_NUMBER"</span><span class='kw'>|</span><span class='st'>"SERVER_TIMESTAMP"</span><span class='kw'>|</span><span class='st'>"PRODUCER_TIMESTAMP"</span><span class='kw'>|</span><span class='st'>"NOW"</span><span class='kw'>|</span><span class='st'>"EARLIEST"</span><span class='kw'>|</span><span class='st'>"CONTINUATION_TOKEN"</span>,
-    <span class='kw'>AfterFragmentNumber</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>StartTimestamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_media</span><span class='op'>(</span>
+  StreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  StreamARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  StartSelector <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    StartSelectorType <span class='op'>=</span> <span class='st'>"FRAGMENT_NUMBER"</span><span class='op'>|</span><span class='st'>"SERVER_TIMESTAMP"</span><span class='op'>|</span><span class='st'>"PRODUCER_TIMESTAMP"</span><span class='op'>|</span><span class='st'>"NOW"</span><span class='op'>|</span><span class='st'>"EARLIEST"</span><span class='op'>|</span><span class='st'>"CONTINUATION_TOKEN"</span>,
+    AfterFragmentNumber <span class='op'>=</span> <span class='st'>"string"</span>,
+    StartTimestamp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
       <span class='st'>"2015-01-01"</span>
-    ),
-    <span class='kw'>ContinuationToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+    <span class='op'>)</span>,
+    ContinuationToken <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -212,7 +243,7 @@ topic, as well as <a href='https://docs.aws.amazon.com/kinesisvideostreams/lates
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

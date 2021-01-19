@@ -40,10 +40,42 @@
 
 
 <meta property="og:title" content="Registers an AMI — ec2_register_image" />
-<meta property="og:description" content="Registers an AMI. When you\'re creating an AMI, this is the final step
+<meta property="og:description" content="Registers an AMI. When you're creating an AMI, this is the final step
 you must complete before you can launch an instance from the AMI. For
 more information about creating AMIs, see Creating your own AMIs
-in the Amazon Elastic Compute Cloud User Guide." />
+in the Amazon Elastic Compute Cloud User Guide.
+For Amazon EBS-backed instances, CreateImage creates and registers the
+AMI in a single request, so you don't have to register the AMI yourself.
+You can also use RegisterImage to create an Amazon EBS-backed Linux
+AMI from a snapshot of a root device volume. You specify the snapshot
+using the block device mapping. For more information, see Launching a Linux instance from a backup
+in the Amazon Elastic Compute Cloud User Guide.
+If any snapshots have AWS Marketplace product codes, they are copied to
+the new AMI.
+Windows and some Linux distributions, such as Red Hat Enterprise Linux
+(RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing
+product code associated with an AMI to verify the subscription status
+for package updates. To create a new AMI for operating systems that
+require a billing product code, instead of registering the AMI, do the
+following to preserve the billing product code association:
+Launch an instance from an existing AMI with that billing product
+code.
+Customize the instance.
+Create an AMI from the instance using CreateImage.
+
+
+If you purchase a Reserved Instance to apply to an On-Demand Instance
+that was launched from an AMI with a billing product code, make sure
+that the Reserved Instance has the matching billing product code. If you
+purchase a Reserved Instance without the matching billing product code,
+the Reserved Instance will not be applied to the On-Demand Instance. For
+information about how to obtain the platform details and billing
+information of an AMI, see Obtaining billing information
+in the Amazon Elastic Compute Cloud User Guide.
+If needed, you can deregister an AMI at any time. Any modifications you
+make to an AMI backed by an instance store volume invalidates its
+registration. If you make changes to an image, deregister the previous
+image and register the new image." />
 
 
 
@@ -75,7 +107,7 @@ in the Amazon Elastic Compute Cloud User Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +115,7 @@ in the Amazon Elastic Compute Cloud User Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +127,7 @@ in the Amazon Elastic Compute Cloud User Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,15 +150,47 @@ in the Amazon Elastic Compute Cloud User Guide." />
     </div>
 
     <div class="ref-description">
-    <p>Registers an AMI. When you\'re creating an AMI, this is the final step
+    <p>Registers an AMI. When you're creating an AMI, this is the final step
 you must complete before you can launch an instance from the AMI. For
-more information about creating AMIs, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html'>Creating your own AMIs</a>
+more information about creating AMIs, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html#creating-an-ami'>Creating your own AMIs</a>
 in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
+<p>For Amazon EBS-backed instances, CreateImage creates and registers the
+AMI in a single request, so you don't have to register the AMI yourself.</p>
+<p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux
+AMI from a snapshot of a root device volume. You specify the snapshot
+using the block device mapping. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html#creating-launching-ami-from-snapshot'>Launching a Linux instance from a backup</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
+<p>If any snapshots have AWS Marketplace product codes, they are copied to
+the new AMI.</p>
+<p>Windows and some Linux distributions, such as Red Hat Enterprise Linux
+(RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing
+product code associated with an AMI to verify the subscription status
+for package updates. To create a new AMI for operating systems that
+require a billing product code, instead of registering the AMI, do the
+following to preserve the billing product code association:</p><ol>
+<li><p>Launch an instance from an existing AMI with that billing product
+code.</p></li>
+<li><p>Customize the instance.</p></li>
+<li><p>Create an AMI from the instance using CreateImage.</p></li>
+</ol>
+
+<p>If you purchase a Reserved Instance to apply to an On-Demand Instance
+that was launched from an AMI with a billing product code, make sure
+that the Reserved Instance has the matching billing product code. If you
+purchase a Reserved Instance without the matching billing product code,
+the Reserved Instance will not be applied to the On-Demand Instance. For
+information about how to obtain the platform details and billing
+information of an AMI, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ami-billing-info.html'>Obtaining billing information</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
+<p>If needed, you can deregister an AMI at any time. Any modifications you
+make to an AMI backed by an instance store volume invalidates its
+registration. If you make changes to an image, deregister the previous
+image and register the new image.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_register_image</span>(<span class='no'>ImageLocation</span>, <span class='no'>Architecture</span>, <span class='no'>BlockDeviceMappings</span>,
-  <span class='no'>Description</span>, <span class='no'>DryRun</span>, <span class='no'>EnaSupport</span>, <span class='no'>KernelId</span>, <span class='no'>Name</span>, <span class='no'>BillingProducts</span>,
-  <span class='no'>RamdiskId</span>, <span class='no'>RootDeviceName</span>, <span class='no'>SriovNetSupport</span>, <span class='no'>VirtualizationType</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_register_image</span><span class='op'>(</span><span class='va'>ImageLocation</span>, <span class='va'>Architecture</span>, <span class='va'>BlockDeviceMappings</span>,
+  <span class='va'>Description</span>, <span class='va'>DryRun</span>, <span class='va'>EnaSupport</span>, <span class='va'>KernelId</span>, <span class='va'>Name</span>, <span class='va'>BillingProducts</span>,
+  <span class='va'>RamdiskId</span>, <span class='va'>RootDeviceName</span>, <span class='va'>SriovNetSupport</span>, <span class='va'>VirtualizationType</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,7 +240,7 @@ a PV AMI can make instances launched from the AMI unreachable.</p></td>
       <td><p>[required] A name for your AMI.</p>
 <p>Constraints: 3-128 alphanumeric characters, parentheses (()), square
 brackets ([]), spaces ( ), periods (.), slashes (/), dashes (-),
-single quotes (\'), at-signs (@), or underscores(\_)</p></td>
+single quotes ('), at-signs (@), or underscores(\_)</p></td>
     </tr>
     <tr>
       <th>BillingProducts</th>
@@ -203,81 +267,48 @@ a PV AMI can make instances launched from the AMI unreachable.</p></td>
     </tr>
     <tr>
       <th>VirtualizationType</th>
-      <td><p>The type of virtualization (<code>hvm</code> \| <code>paravirtual</code>).</p>
+      <td><p>The type of virtualization (<code>hvm</code> | <code>paravirtual</code>).</p>
 <p>Default: <code>paravirtual</code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For Amazon EBS-backed instances, CreateImage creates and registers the
-AMI in a single request, so you don\'t have to register the AMI
-yourself.</p>
-<p>You can also use <code>RegisterImage</code> to create an Amazon EBS-backed Linux
-AMI from a snapshot of a root device volume. You specify the snapshot
-using the block device mapping. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-launch-snapshot.html'>Launching a Linux instance from a backup</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
-<p>If any snapshots have AWS Marketplace product codes, they are copied to
-the new AMI.</p>
-<p>Windows and some Linux distributions, such as Red Hat Enterprise Linux
-(RHEL) and SUSE Linux Enterprise Server (SLES), use the EC2 billing
-product code associated with an AMI to verify the subscription status
-for package updates. To create a new AMI for operating systems that
-require a billing product code, instead of registering the AMI, do the
-following to preserve the billing product code association:</p><ol>
-<li><p>Launch an instance from an existing AMI with that billing product
-code.</p></li>
-<li><p>Customize the instance.</p></li>
-<li><p>Create an AMI from the instance using CreateImage.</p></li>
-</ol>
-
-<p>If you purchase a Reserved Instance to apply to an On-Demand Instance
-that was launched from an AMI with a billing product code, make sure
-that the Reserved Instance has the matching billing product code. If you
-purchase a Reserved Instance without the matching billing product code,
-the Reserved Instance will not be applied to the On-Demand Instance. For
-information about how to obtain the platform details and billing
-information of an AMI, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ami-billing-info.html'>Obtaining billing information</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
-<p>If needed, you can deregister an AMI at any time. Any modifications you
-make to an AMI backed by an instance store volume invalidates its
-registration. If you make changes to an image, deregister the previous
-image and register the new image.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>register_image</span>(
-  <span class='kw'>ImageLocation</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Architecture</span> <span class='kw'>=</span> <span class='st'>"i386"</span><span class='kw'>|</span><span class='st'>"x86_64"</span><span class='kw'>|</span><span class='st'>"arm64"</span>,
-  <span class='kw'>BlockDeviceMappings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DeviceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>VirtualName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Ebs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>DeleteOnTermination</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>Iops</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>SnapshotId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>VolumeSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>VolumeType</span> <span class='kw'>=</span> <span class='st'>"standard"</span><span class='kw'>|</span><span class='st'>"io1"</span><span class='kw'>|</span><span class='st'>"gp2"</span><span class='kw'>|</span><span class='st'>"sc1"</span><span class='kw'>|</span><span class='st'>"st1"</span>,
-        <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Encrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-      ),
-      <span class='kw'>NoDevice</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>EnaSupport</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>KernelId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>BillingProducts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>register_image</span><span class='op'>(</span>
+  ImageLocation <span class='op'>=</span> <span class='st'>"string"</span>,
+  Architecture <span class='op'>=</span> <span class='st'>"i386"</span><span class='op'>|</span><span class='st'>"x86_64"</span><span class='op'>|</span><span class='st'>"arm64"</span>,
+  BlockDeviceMappings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DeviceName <span class='op'>=</span> <span class='st'>"string"</span>,
+      VirtualName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Ebs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        DeleteOnTermination <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        Iops <span class='op'>=</span> <span class='fl'>123</span>,
+        SnapshotId <span class='op'>=</span> <span class='st'>"string"</span>,
+        VolumeSize <span class='op'>=</span> <span class='fl'>123</span>,
+        VolumeType <span class='op'>=</span> <span class='st'>"standard"</span><span class='op'>|</span><span class='st'>"io1"</span><span class='op'>|</span><span class='st'>"io2"</span><span class='op'>|</span><span class='st'>"gp2"</span><span class='op'>|</span><span class='st'>"sc1"</span><span class='op'>|</span><span class='st'>"st1"</span><span class='op'>|</span><span class='st'>"gp3"</span>,
+        KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+        Throughput <span class='op'>=</span> <span class='fl'>123</span>,
+        Encrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+      <span class='op'>)</span>,
+      NoDevice <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  EnaSupport <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  KernelId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  BillingProducts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>RamdiskId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RootDeviceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SriovNetSupport</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VirtualizationType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  RamdiskId <span class='op'>=</span> <span class='st'>"string"</span>,
+  RootDeviceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  SriovNetSupport <span class='op'>=</span> <span class='st'>"string"</span>,
+  VirtualizationType <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -295,7 +326,7 @@ image and register the new image.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

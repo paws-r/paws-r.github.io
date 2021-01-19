@@ -43,7 +43,21 @@
 <meta property="og:description" content="Returns the current status of Easy DKIM signing for an entity. For
 domain name identities, this operation also returns the DKIM tokens that
 are required for Easy DKIM signing, and whether Amazon SES has
-successfully verified that these tokens have been published." />
+successfully verified that these tokens have been published.
+This operation takes a list of identities as input and returns the
+following information for each:
+Whether Easy DKIM signing is enabled or disabled.
+A set of DKIM tokens that represent the identity. If the identity is
+an email address, the tokens represent the domain of that address.
+Whether Amazon SES has successfully verified the DKIM tokens
+published in the domain's DNS. This information is only returned for
+domain name identities, not for email addresses.
+
+
+This operation is throttled at one request per second and can only get
+DKIM attributes for up to 100 identities at a time.
+For more information about creating DNS records using DKIM tokens, go to
+the Amazon SES Developer Guide." />
 
 
 
@@ -75,7 +89,7 @@ successfully verified that these tokens have been published." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +97,7 @@ successfully verified that these tokens have been published." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +109,7 @@ successfully verified that these tokens have been published." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,9 +136,23 @@ successfully verified that these tokens have been published." />
 domain name identities, this operation also returns the DKIM tokens that
 are required for Easy DKIM signing, and whether Amazon SES has
 successfully verified that these tokens have been published.</p>
+<p>This operation takes a list of identities as input and returns the
+following information for each:</p><ul>
+<li><p>Whether Easy DKIM signing is enabled or disabled.</p></li>
+<li><p>A set of DKIM tokens that represent the identity. If the identity is
+an email address, the tokens represent the domain of that address.</p></li>
+<li><p>Whether Amazon SES has successfully verified the DKIM tokens
+published in the domain's DNS. This information is only returned for
+domain name identities, not for email addresses.</p></li>
+</ul>
+
+<p>This operation is throttled at one request per second and can only get
+DKIM attributes for up to 100 identities at a time.</p>
+<p>For more information about creating DNS records using DKIM tokens, go to
+the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/'>Amazon SES Developer Guide</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ses_get_identity_dkim_attributes</span>(<span class='no'>Identities</span>)</pre>
+    <pre class="usage"><span class='fu'>ses_get_identity_dkim_attributes</span><span class='op'>(</span><span class='va'>Identities</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,43 +164,30 @@ both.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation takes a list of identities as input and returns the
-following information for each:</p><ul>
-<li><p>Whether Easy DKIM signing is enabled or disabled.</p></li>
-<li><p>A set of DKIM tokens that represent the identity. If the identity is
-an email address, the tokens represent the domain of that address.</p></li>
-<li><p>Whether Amazon SES has successfully verified the DKIM tokens
-published in the domain\'s DNS. This information is only returned
-for domain name identities, not for email addresses.</p></li>
-</ul>
-
-<p>This operation is throttled at one request per second and can only get
-DKIM attributes for up to 100 identities at a time.</p>
-<p>For more information about creating DNS records using DKIM tokens, go to
-the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html'>Amazon SES Developer Guide</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_identity_dkim_attributes</span>(
-  <span class='kw'>Identities</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_identity_dkim_attributes</span><span class='op'>(</span>
+  Identities <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example retrieves the Amazon SES Easy DKIM attributes for</span>
 <span class='co'># a list of identities:</span>
-<span class='no'>svc</span>$<span class='fu'>get_identity_dkim_attributes</span>(
-  <span class='kw'>Identities</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_identity_dkim_attributes</span><span class='op'>(</span>
+  Identities <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"example.com"</span>,
     <span class='st'>"user@example.com"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -188,7 +203,7 @@ the <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

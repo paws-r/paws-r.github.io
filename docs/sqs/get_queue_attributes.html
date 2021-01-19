@@ -40,7 +40,10 @@
 
 
 <meta property="og:title" content="Gets attributes for the specified queue — sqs_get_queue_attributes" />
-<meta property="og:description" content="Gets attributes for the specified queue." />
+<meta property="og:description" content="Gets attributes for the specified queue.
+To determine whether a queue is
+FIFO,
+you can check whether QueueName ends with the .fifo suffix." />
 
 
 
@@ -72,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +83,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +95,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,9 +119,12 @@
 
     <div class="ref-description">
     <p>Gets attributes for the specified queue.</p>
+<p>To determine whether a queue is
+<a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html'>FIFO</a>,
+you can check whether <code>QueueName</code> ends with the <code>.fifo</code> suffix.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sqs_get_queue_attributes</span>(<span class='no'>QueueUrl</span>, <span class='no'>AttributeNames</span>)</pre>
+    <pre class="usage"><span class='fu'>sqs_get_queue_attributes</span><span class='op'>(</span><span class='va'>QueueUrl</span>, <span class='va'>AttributeNames</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,91 +147,123 @@ can handle new attributes gracefully.</p>
 <code>ApproximateNumberOfMessagesVisible</code> metrics may not achieve consistency
 until at least 1 minute after the producers stop sending messages. This
 period is required for the queue metadata to reach eventual consistency.</p><ul>
-<li><p><code>All</code> -- Returns all values.</p></li>
-<li><p><code>ApproximateNumberOfMessages</code> -- Returns the approximate number of
+<li><p><code>All</code> – Returns all values.</p></li>
+<li><p><code>ApproximateNumberOfMessages</code> – Returns the approximate number of
 messages available for retrieval from the queue.</p></li>
-<li><p><code>ApproximateNumberOfMessagesDelayed</code> -- Returns the approximate
+<li><p><code>ApproximateNumberOfMessagesDelayed</code> – Returns the approximate
 number of messages in the queue that are delayed and not available
 for reading immediately. This can happen when the queue is
 configured as a delay queue or when a message has been sent with a
 delay parameter.</p></li>
-<li><p><code>ApproximateNumberOfMessagesNotVisible</code> -- Returns the approximate
+<li><p><code>ApproximateNumberOfMessagesNotVisible</code> – Returns the approximate
 number of messages that are in flight. Messages are considered to be
 <em>in flight</em> if they have been sent to a client but have not yet been
 deleted or have not yet reached the end of their visibility window.</p></li>
-<li><p><code>CreatedTimestamp</code> -- Returns the time when the queue was created in
-seconds (<a href='http://en.wikipedia.org/wiki/Unix_time'>epoch time</a>).</p></li>
-<li><p><code>DelaySeconds</code> -- Returns the default delay on the queue in seconds.</p></li>
-<li><p><code>LastModifiedTimestamp</code> -- Returns the time when the queue was last
-changed in seconds (<a href='http://en.wikipedia.org/wiki/Unix_time'>epoch time</a>).</p></li>
-<li><p><code>MaximumMessageSize</code> -- Returns the limit of how many bytes a
-message can contain before Amazon SQS rejects it.</p></li>
-<li><p><code>MessageRetentionPeriod</code> -- Returns the length of time, in seconds,
+<li><p><code>CreatedTimestamp</code> – Returns the time when the queue was created in
+seconds (<a href='https://en.wikipedia.org/wiki/Unix_time'>epoch time</a>).</p></li>
+<li><p><code>DelaySeconds</code> – Returns the default delay on the queue in seconds.</p></li>
+<li><p><code>LastModifiedTimestamp</code> – Returns the time when the queue was last
+changed in seconds (<a href='https://en.wikipedia.org/wiki/Unix_time'>epoch time</a>).</p></li>
+<li><p><code>MaximumMessageSize</code> – Returns the limit of how many bytes a message
+can contain before Amazon SQS rejects it.</p></li>
+<li><p><code>MessageRetentionPeriod</code> – Returns the length of time, in seconds,
 for which Amazon SQS retains a message.</p></li>
-<li><p><code>Policy</code> -- Returns the policy of the queue.</p></li>
-<li><p><code>QueueArn</code> -- Returns the Amazon resource name (ARN) of the queue.</p></li>
-<li><p><code>ReceiveMessageWaitTimeSeconds</code> -- Returns the length of time, in
+<li><p><code>Policy</code> – Returns the policy of the queue.</p></li>
+<li><p><code>QueueArn</code> – Returns the Amazon resource name (ARN) of the queue.</p></li>
+<li><p><code>ReceiveMessageWaitTimeSeconds</code> – Returns the length of time, in
 seconds, for which the <code>ReceiveMessage</code> action waits for a message
 to arrive.</p></li>
-<li><p><code>RedrivePolicy</code> -- The string that includes the parameters for the
+<li><p><code>RedrivePolicy</code> – The string that includes the parameters for the
 dead-letter queue functionality of the source queue as a JSON
 object. For more information about the redrive policy and
 dead-letter queues, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html'>Using Amazon SQS Dead-Letter Queues</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p><ul>
-<li><p><code>deadLetterTargetArn</code> -- The Amazon Resource Name (ARN) of the
+<li><p><code>deadLetterTargetArn</code> – The Amazon Resource Name (ARN) of the
 dead-letter queue to which Amazon SQS moves messages after the
 value of <code>maxReceiveCount</code> is exceeded.</p></li>
-<li><p><code>maxReceiveCount</code> -- The number of times a message is delivered
+<li><p><code>maxReceiveCount</code> – The number of times a message is delivered
 to the source queue before being moved to the dead-letter queue.
 When the <code>ReceiveCount</code> for a message exceeds the
 <code>maxReceiveCount</code> for a queue, Amazon SQS moves the message to
 the dead-letter-queue.</p></li>
 </ul></li>
-<li><p><code>VisibilityTimeout</code> -- Returns the visibility timeout for the queue.
+<li><p><code>VisibilityTimeout</code> – Returns the visibility timeout for the queue.
 For more information about the visibility timeout, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html'>Visibility Timeout</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p></li>
 </ul>
 
 <p>The following attributes apply only to
 <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html'>server-side-encryption</a>:</p><ul>
-<li><p><code>KmsMasterKeyId</code> -- Returns the ID of an AWS-managed customer master
+<li><p><code>KmsMasterKeyId</code> – Returns the ID of an AWS-managed customer master
 key (CMK) for Amazon SQS or a custom CMK. For more information, see
 <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-sse-key-terms'>Key Terms</a>.</p></li>
-<li><p><code>KmsDataKeyReusePeriodSeconds</code> -- Returns the length of time, in
+<li><p><code>KmsDataKeyReusePeriodSeconds</code> – Returns the length of time, in
 seconds, for which Amazon SQS can reuse a data key to encrypt or
 decrypt messages before calling AWS KMS again. For more information,
 see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work'>How Does the Data Key Reuse Period Work?</a>.</p></li>
 </ul>
 
 <p>The following attributes apply only to <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html'>FIFO (first-in-first-out) queues</a>:</p><ul>
-<li><p><code>FifoQueue</code> -- Returns whether the queue is FIFO. For more
-information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic'>FIFO Queue Logic</a>
+<li><p><code>FifoQueue</code> – Returns information about whether the queue is FIFO.
+For more information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-understanding-logic'>FIFO Queue Logic</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
 <p>To determine whether a queue is
 <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html'>FIFO</a>,
 you can check whether <code>QueueName</code> ends with the <code>.fifo</code> suffix.</p></li>
-<li><p><code>ContentBasedDeduplication</code> -- Returns whether content-based
+<li><p><code>ContentBasedDeduplication</code> – Returns whether content-based
 deduplication is enabled for the queue. For more information, see
 <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html#FIFO-queues-exactly-once-processing'>Exactly-Once Processing</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p></li>
-</ul></td>
+</ul>
+
+<p><strong>Preview: High throughput for FIFO queues</strong></p>
+<p><strong>High throughput for Amazon SQS FIFO queues is in preview release and
+is subject to change.</strong> This feature provides a high number of
+transactions per second (TPS) for messages in FIFO queues. For
+information on throughput quotas, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html'>Quotas related to messages</a>
+in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
+<p>This preview includes two new attributes:</p><ul>
+<li><p><code>DeduplicationScope</code> – Specifies whether message deduplication
+occurs at the message group or queue level. Valid values are
+<code>messageGroup</code> and <code>queue</code>.</p></li>
+<li><p><code>FifoThroughputLimit</code> – Specifies whether the FIFO queue throughput
+quota applies to the entire queue or per message group. Valid values
+are <code>perQueue</code> and <code>perMessageGroupId</code>. The <code>perMessageGroupId</code>
+value is allowed only when the value for <code>DeduplicationScope</code> is
+<code>messageGroup</code>.</p></li>
+</ul>
+
+<p>To enable high throughput for FIFO queues, do the following:</p><ul>
+<li><p>Set <code>DeduplicationScope</code> to <code>messageGroup</code>.</p></li>
+<li><p>Set <code>FifoThroughputLimit</code> to <code>perMessageGroupId</code>.</p></li>
+</ul>
+
+<p>If you set these attributes to anything other than the values shown for
+enabling high throughput, standard throughput is in effect and
+deduplication occurs as specified.</p>
+<p>This preview is available in the following AWS Regions:</p><ul>
+<li><p>US East (Ohio); us-east-2</p></li>
+<li><p>US East (N. Virginia); us-east-1</p></li>
+<li><p>US West (Oregon); us-west-2</p></li>
+<li><p>Europe (Ireland); eu-west-1</p></li>
+</ul>
+
+<p>For more information about high throughput for FIFO queues, see
+<a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html'>Preview: High throughput for FIFO queues</a>
+in the <em>Amazon Simple Queue Service Developer Guide</em>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To determine whether a queue is
-<a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html'>FIFO</a>,
-you can check whether <code>QueueName</code> ends with the <code>.fifo</code> suffix.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_queue_attributes</span>(
-  <span class='kw'>QueueUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AttributeNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"All"</span><span class='kw'>|</span><span class='st'>"Policy"</span><span class='kw'>|</span><span class='st'>"VisibilityTimeout"</span><span class='kw'>|</span><span class='st'>"MaximumMessageSize"</span><span class='kw'>|</span><span class='st'>"MessageRetentionPeriod"</span><span class='kw'>|</span><span class='st'>"ApproximateNumberOfMessages"</span><span class='kw'>|</span><span class='st'>"ApproximateNumberOfMessagesNotVisible"</span><span class='kw'>|</span><span class='st'>"CreatedTimestamp"</span><span class='kw'>|</span><span class='st'>"LastModifiedTimestamp"</span><span class='kw'>|</span><span class='st'>"QueueArn"</span><span class='kw'>|</span><span class='st'>"ApproximateNumberOfMessagesDelayed"</span><span class='kw'>|</span><span class='st'>"DelaySeconds"</span><span class='kw'>|</span><span class='st'>"ReceiveMessageWaitTimeSeconds"</span><span class='kw'>|</span><span class='st'>"RedrivePolicy"</span><span class='kw'>|</span><span class='st'>"FifoQueue"</span><span class='kw'>|</span><span class='st'>"ContentBasedDeduplication"</span><span class='kw'>|</span><span class='st'>"KmsMasterKeyId"</span><span class='kw'>|</span><span class='st'>"KmsDataKeyReusePeriodSeconds"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_queue_attributes</span><span class='op'>(</span>
+  QueueUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  AttributeNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"All"</span><span class='op'>|</span><span class='st'>"Policy"</span><span class='op'>|</span><span class='st'>"VisibilityTimeout"</span><span class='op'>|</span><span class='st'>"MaximumMessageSize"</span><span class='op'>|</span><span class='st'>"MessageRetentionPeriod"</span><span class='op'>|</span><span class='st'>"ApproximateNumberOfMessages"</span><span class='op'>|</span><span class='st'>"ApproximateNumberOfMessagesNotVisible"</span><span class='op'>|</span><span class='st'>"CreatedTimestamp"</span><span class='op'>|</span><span class='st'>"LastModifiedTimestamp"</span><span class='op'>|</span><span class='st'>"QueueArn"</span><span class='op'>|</span><span class='st'>"ApproximateNumberOfMessagesDelayed"</span><span class='op'>|</span><span class='st'>"DelaySeconds"</span><span class='op'>|</span><span class='st'>"ReceiveMessageWaitTimeSeconds"</span><span class='op'>|</span><span class='st'>"RedrivePolicy"</span><span class='op'>|</span><span class='st'>"FifoQueue"</span><span class='op'>|</span><span class='st'>"ContentBasedDeduplication"</span><span class='op'>|</span><span class='st'>"KmsMasterKeyId"</span><span class='op'>|</span><span class='st'>"KmsDataKeyReusePeriodSeconds"</span><span class='op'>|</span><span class='st'>"DeduplicationScope"</span><span class='op'>|</span><span class='st'>"FifoThroughputLimit"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -243,7 +281,7 @@ you can check whether <code>QueueName</code> ends with the <code>.fifo</code> su
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -44,7 +44,20 @@ can be associated in the Application Discovery Service repository — migrationh
 can be associated in the Application Discovery Service repository — migrationhub_put_resource_attributes" />
 <meta property="og:description" content="Provides identifying details of the resource being migrated so that it
 can be associated in the Application Discovery Service repository. This
-association occurs asynchronously after PutResourceAttributes returns." />
+association occurs asynchronously after PutResourceAttributes returns.
+Keep in mind that subsequent calls to PutResourceAttributes will
+override previously stored attributes. For example, if it is first
+called with a MAC address, but later, it is desired to add an IP
+address, it will then be required to call it with both the IP and
+MAC addresses to prevent overriding the MAC address.
+Note the instructions regarding the special use case of the
+ResourceAttributeList
+parameter when specifying any &quot;VM&quot; related value.
+
+
+Because this is an asynchronous call, it will always return 200, whether
+an association occurs or not. To confirm if an association was found
+based on the provided details, call ListDiscoveredResources." />
 
 
 
@@ -76,7 +89,7 @@ association occurs asynchronously after PutResourceAttributes returns." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +97,7 @@ association occurs asynchronously after PutResourceAttributes returns." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +109,7 @@ association occurs asynchronously after PutResourceAttributes returns." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,11 +135,24 @@ can be associated in the Application Discovery Service repository</h1>
     <div class="ref-description">
     <p>Provides identifying details of the resource being migrated so that it
 can be associated in the Application Discovery Service repository. This
-association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p>
+association occurs asynchronously after <code>PutResourceAttributes</code> returns.</p><ul>
+<li><p>Keep in mind that subsequent calls to PutResourceAttributes will
+override previously stored attributes. For example, if it is first
+called with a MAC address, but later, it is desired to <em>add</em> an IP
+address, it will then be required to call it with <em>both</em> the IP and
+MAC addresses to prevent overriding the MAC address.</p></li>
+<li><p>Note the instructions regarding the special use case of the
+<a href='https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList'><code>ResourceAttributeList</code></a>
+parameter when specifying any "VM" related value.</p></li>
+</ul>
+
+<p>Because this is an asynchronous call, it will always return 200, whether
+an association occurs or not. To confirm if an association was found
+based on the provided details, call <code>ListDiscoveredResources</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>migrationhub_put_resource_attributes</span>(<span class='no'>ProgressUpdateStream</span>,
-  <span class='no'>MigrationTaskName</span>, <span class='no'>ResourceAttributeList</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>migrationhub_put_resource_attributes</span><span class='op'>(</span><span class='va'>ProgressUpdateStream</span>,
+  <span class='va'>MigrationTaskName</span>, <span class='va'>ResourceAttributeList</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,13 +175,13 @@ repository.</p>
 reserved for the following values:
 <code>IPV4_ADDRESS | IPV6_ADDRESS | MAC_ADDRESS | FQDN | VM_MANAGER_ID | VM_MANAGED_OBJECT_REFERENCE | VM_NAME | VM_PATH | BIOS_ID | MOTHERBOARD_SERIAL_NUMBER</code>
 where the identifying value can be a string up to 256 characters.</p><ul>
-<li><p>If any \"VM\" related value is set for a <code>ResourceAttribute</code> object,
+<li><p>If any "VM" related value is set for a <code>ResourceAttribute</code> object,
 it is required that <code>VM_MANAGER_ID</code>, as a minimum, is always set. If
-<code>VM_MANAGER_ID</code> is not set, then all \"VM\" fields will be discarded
-and \"VM\" fields will not be used for matching the migration task
-to a server in Application Discovery Service repository. See the
+<code>VM_MANAGER_ID</code> is not set, then all "VM" fields will be discarded
+and "VM" fields will not be used for matching the migration task to
+a server in Application Discovery Service repository. See the
 <a href='https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#API_PutResourceAttributes_Examples'>Example</a>
-section below for a use case of specifying \"VM\" related values.</p></li>
+section below for a use case of specifying "VM" related values.</p></li>
 <li><p>If a server you are trying to match has multiple IP or MAC
 addresses, you should provide as many as you know in separate
 type/value pairs passed to the <code>ResourceAttributeList</code> parameter to
@@ -169,37 +195,21 @@ Used to test if the caller has permission to make the call.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>Keep in mind that subsequent calls to PutResourceAttributes will
-override previously stored attributes. For example, if it is first
-called with a MAC address, but later, it is desired to <em>add</em> an IP
-address, it will then be required to call it with <em>both</em> the IP and
-MAC addresses to prevent overriding the MAC address.</p></li>
-<li><p>Note the instructions regarding the special use case of the
-<a href='https://docs.aws.amazon.com/migrationhub/latest/ug/API_PutResourceAttributes.html#migrationhub-PutResourceAttributes-request-ResourceAttributeList'><code>ResourceAttributeList</code></a>
-parameter when specifying any \"VM\" related value.</p></li>
-</ul>
-
-<p>Because this is an asynchronous call, it will always return 200, whether
-an association occurs or not. To confirm if an association was found
-based on the provided details, call <code>ListDiscoveredResources</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_resource_attributes</span>(
-  <span class='kw'>ProgressUpdateStream</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MigrationTaskName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ResourceAttributeList</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"IPV4_ADDRESS"</span><span class='kw'>|</span><span class='st'>"IPV6_ADDRESS"</span><span class='kw'>|</span><span class='st'>"MAC_ADDRESS"</span><span class='kw'>|</span><span class='st'>"FQDN"</span><span class='kw'>|</span><span class='st'>"VM_MANAGER_ID"</span><span class='kw'>|</span><span class='st'>"VM_MANAGED_OBJECT_REFERENCE"</span><span class='kw'>|</span><span class='st'>"VM_NAME"</span><span class='kw'>|</span><span class='st'>"VM_PATH"</span><span class='kw'>|</span><span class='st'>"BIOS_ID"</span><span class='kw'>|</span><span class='st'>"MOTHERBOARD_SERIAL_NUMBER"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_resource_attributes</span><span class='op'>(</span>
+  ProgressUpdateStream <span class='op'>=</span> <span class='st'>"string"</span>,
+  MigrationTaskName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ResourceAttributeList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"IPV4_ADDRESS"</span><span class='op'>|</span><span class='st'>"IPV6_ADDRESS"</span><span class='op'>|</span><span class='st'>"MAC_ADDRESS"</span><span class='op'>|</span><span class='st'>"FQDN"</span><span class='op'>|</span><span class='st'>"VM_MANAGER_ID"</span><span class='op'>|</span><span class='st'>"VM_MANAGED_OBJECT_REFERENCE"</span><span class='op'>|</span><span class='st'>"VM_NAME"</span><span class='op'>|</span><span class='st'>"VM_PATH"</span><span class='op'>|</span><span class='st'>"BIOS_ID"</span><span class='op'>|</span><span class='st'>"MOTHERBOARD_SERIAL_NUMBER"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -217,7 +227,7 @@ based on the provided details, call <code>ListDiscoveredResources</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

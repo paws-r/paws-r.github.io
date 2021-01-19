@@ -42,7 +42,29 @@
 <meta property="og:title" content="Adds a permission to a queue for a specific principal — sqs_add_permission" />
 <meta property="og:description" content="Adds a permission to a queue for a specific
 principal.
-This allows sharing access to the queue." />
+This allows sharing access to the queue.
+When you create a queue, you have full control access rights for the
+queue. Only you, the owner of the queue, can grant or deny permissions
+to the queue. For more information about these permissions, see Allow Developers to Write Messages to a Shared Queue
+in the Amazon Simple Queue Service Developer Guide.
+AddPermission generates a policy for you. You can use
+&amp;lt;a&amp;gt;SetQueueAttributes&amp;lt;/a&amp;gt; to upload your policy. For more
+information, see Using Custom Policies with the Amazon SQS Access Policy Language
+in the Amazon Simple Queue Service Developer Guide.
+An Amazon SQS policy can have a maximum of 7 actions.
+To remove the ability to change queue permissions, you must deny
+permission to the AddPermission, RemovePermission, and
+SetQueueAttributes actions in your IAM policy.
+
+
+Some actions take lists of parameters. These lists are specified using
+the param.n notation. Values of n are integers starting from 1. For
+example, a parameter list with two elements looks like this:
+&amp;amp;amp;AttributeName.1=first
+&amp;amp;amp;AttributeName.2=second
+Cross-account permissions don't apply to this action. For more
+information, see Grant cross-account permissions to a role and a user name
+in the Amazon Simple Queue Service Developer Guide." />
 
 
 
@@ -74,7 +96,7 @@ This allows sharing access to the queue." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +104,7 @@ This allows sharing access to the queue." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +116,7 @@ This allows sharing access to the queue." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,51 +142,9 @@ This allows sharing access to the queue." />
     <p>Adds a permission to a queue for a specific
 <a href='https://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P'>principal</a>.
 This allows sharing access to the queue.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>sqs_add_permission</span>(<span class='no'>QueueUrl</span>, <span class='no'>Label</span>, <span class='no'>AWSAccountIds</span>, <span class='no'>Actions</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>QueueUrl</th>
-      <td><p>[required] The URL of the Amazon SQS queue to which permissions are added.</p>
-<p>Queue URLs and names are case-sensitive.</p></td>
-    </tr>
-    <tr>
-      <th>Label</th>
-      <td><p>[required] The unique identification of the permission you\'re setting (for
-example, <code>AliceSendMessage</code>). Maximum 80 characters. Allowed characters
-include alphanumeric characters, hyphens (<code>-</code>), and underscores (<code>_</code>).</p></td>
-    </tr>
-    <tr>
-      <th>AWSAccountIds</th>
-      <td><p>[required] The AWS account number of the
-<a href='https://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P'>principal</a>
-who is given permission. The principal must have an AWS account, but
-does not need to be signed up for Amazon SQS. For information about
-locating the AWS account identification, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-making-api-requests.html#sqs-api-request-authentication'>Your AWS Identifiers</a>
-in the <em>Amazon Simple Queue Service Developer Guide</em>.</p></td>
-    </tr>
-    <tr>
-      <th>Actions</th>
-      <td><p>[required] The action the client wants to allow for the specified principal. Valid
-values: the name of any action or <code>*</code>.</p>
-<p>For more information about these actions, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-overview-of-managing-access.html'>Overview of Managing Access Permissions to Your Amazon Simple Queue Service Resource</a>
-in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
-<p>Specifying <code>SendMessage</code>, <code>DeleteMessage</code>, or <code>ChangeMessageVisibility</code>
-for <code>ActionName.n</code> also grants permissions for the corresponding batch
-versions of those actions: <code>SendMessageBatch</code>, <code>DeleteMessageBatch</code>, and
-<code>ChangeMessageVisibilityBatch</code>.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you create a queue, you have full control access rights for the
+<p>When you create a queue, you have full control access rights for the
 queue. Only you, the owner of the queue, can grant or deny permissions
-to the queue. For more information about these permissions, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-writing-an-sqs-policy.html#write-messages-to-shared-queue'>Allow Developers to Write Messages to a Shared Queue</a>
+to the queue. For more information about these permissions, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-basic-examples-of-iam-policies.html#write-messages-to-shared-queue'>Allow Developers to Write Messages to a Shared Queue</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p><ul>
 <li><p><code>AddPermission</code> generates a policy for you. You can use
 <code>&lt;a&gt;SetQueueAttributes&lt;/a&gt;</code> to upload your policy. For more
@@ -181,22 +161,63 @@ the <code>param.n</code> notation. Values of <code>n</code> are integers startin
 example, a parameter list with two elements looks like this:</p>
 <p><code>&amp;amp;AttributeName.1=first</code></p>
 <p><code>&amp;amp;AttributeName.2=second</code></p>
-<p>Cross-account permissions don\'t apply to this action. For more
-information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-customer-managed-policy-examples.html#grant-cross-account-permissions-to-role-and-user-name'>Grant Cross-Account Permissions to a Role and a User Name</a>
+<p>Cross-account permissions don't apply to this action. For more
+information, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-basic-examples-of-sqs-policies.html#grant-cross-account-permissions-to-role-and-user-name'>Grant cross-account permissions to a role and a user name</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>sqs_add_permission</span><span class='op'>(</span><span class='va'>QueueUrl</span>, <span class='va'>Label</span>, <span class='va'>AWSAccountIds</span>, <span class='va'>Actions</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>QueueUrl</th>
+      <td><p>[required] The URL of the Amazon SQS queue to which permissions are added.</p>
+<p>Queue URLs and names are case-sensitive.</p></td>
+    </tr>
+    <tr>
+      <th>Label</th>
+      <td><p>[required] The unique identification of the permission you're setting (for example,
+<code>AliceSendMessage</code>). Maximum 80 characters. Allowed characters include
+alphanumeric characters, hyphens (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code>), and underscores (<code>_</code>).</p></td>
+    </tr>
+    <tr>
+      <th>AWSAccountIds</th>
+      <td><p>[required] The AWS account number of the
+<a href='https://docs.aws.amazon.com/general/latest/gr/glos-chap.html#P'>principal</a>
+who is given permission. The principal must have an AWS account, but
+does not need to be signed up for Amazon SQS. For information about
+locating the AWS account identification, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-making-api-requests.html#sqs-api-request-authentication'>Your AWS Identifiers</a>
+in the <em>Amazon Simple Queue Service Developer Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>Actions</th>
+      <td><p>[required] The action the client wants to allow for the specified principal. Valid
+values: the name of any action or <code><a href='https://rdrr.io/r/base/Arithmetic.html'>*</a></code>.</p>
+<p>For more information about these actions, see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-overview-of-managing-access.html'>Overview of Managing Access Permissions to Your Amazon Simple Queue Service Resource</a>
+in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
+<p>Specifying <code>SendMessage</code>, <code>DeleteMessage</code>, or <code>ChangeMessageVisibility</code>
+for <code>ActionName.n</code> also grants permissions for the corresponding batch
+versions of those actions: <code>SendMessageBatch</code>, <code>DeleteMessageBatch</code>, and
+<code>ChangeMessageVisibilityBatch</code>.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>add_permission</span>(
-  <span class='kw'>QueueUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Label</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AWSAccountIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>add_permission</span><span class='op'>(</span>
+  QueueUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  Label <span class='op'>=</span> <span class='st'>"string"</span>,
+  AWSAccountIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Actions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Actions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -214,7 +235,7 @@ in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

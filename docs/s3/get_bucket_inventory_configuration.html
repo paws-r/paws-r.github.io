@@ -43,7 +43,20 @@ configuration ID) from the bucket — s3_get_bucket_inventory_configuration • 
 <meta property="og:title" content="Returns an inventory configuration (identified by the inventory
 configuration ID) from the bucket — s3_get_bucket_inventory_configuration" />
 <meta property="og:description" content="Returns an inventory configuration (identified by the inventory
-configuration ID) from the bucket." />
+configuration ID) from the bucket.
+To use this operation, you must have permissions to perform the
+s3:GetInventoryConfiguration action. The bucket owner has this
+permission by default and can grant this permission to others. For more
+information about permissions, see Permissions Related to Bucket Subresource Operations
+and Managing Access Permissions to Your Amazon S3 Resources.
+For information about the Amazon S3 inventory feature, see Amazon S3 Inventory.
+The following operations are related to
+GetBucketInventoryConfiguration:
+DeleteBucketInventoryConfiguration
+ListBucketInventoryConfigurations
+PutBucketInventoryConfiguration
+
+" />
 
 
 
@@ -75,7 +88,7 @@ configuration ID) from the bucket." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +96,7 @@ configuration ID) from the bucket." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +108,7 @@ configuration ID) from the bucket." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,9 +134,22 @@ configuration ID) from the bucket</h1>
     <div class="ref-description">
     <p>Returns an inventory configuration (identified by the inventory
 configuration ID) from the bucket.</p>
+<p>To use this operation, you must have permissions to perform the
+<code>s3:GetInventoryConfiguration</code> action. The bucket owner has this
+permission by default and can grant this permission to others. For more
+information about permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources'>Permissions Related to Bucket Subresource Operations</a>
+and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html'>Managing Access Permissions to Your Amazon S3 Resources</a>.</p>
+<p>For information about the Amazon S3 inventory feature, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html'>Amazon S3 Inventory</a>.</p>
+<p>The following operations are related to
+<code>GetBucketInventoryConfiguration</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketInventoryConfiguration.html'>DeleteBucketInventoryConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketInventoryConfigurations.html'>ListBucketInventoryConfigurations</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketInventoryConfiguration.html'>PutBucketInventoryConfiguration</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_get_bucket_inventory_configuration</span>(<span class='no'>Bucket</span>, <span class='no'>Id</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_get_bucket_inventory_configuration</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Id</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,30 +163,23 @@ retrieve.</p></td>
       <th>Id</th>
       <td><p>[required] The ID used to identify the inventory configuration.</p></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To use this operation, you must have permissions to perform the
-<code>s3:GetInventoryConfiguration</code> action. The bucket owner has this
-permission by default and can grant this permission to others. For more
-information about permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources'>Permissions Related to Bucket Subresource Operations</a>
-and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html'>Managing Access Permissions to Your Amazon S3 Resources</a>.</p>
-<p>For information about the Amazon S3 inventory feature, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html'>Amazon S3 Inventory</a>.</p>
-<p>The following operations are related to
-<code>GetBucketInventoryConfiguration</code>:</p><ul>
-<li><p>DeleteBucketInventoryConfiguration</p></li>
-<li><p>ListBucketInventoryConfigurations</p></li>
-<li><p>PutBucketInventoryConfiguration</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_bucket_inventory_configuration</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_bucket_inventory_configuration</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Id <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -178,7 +197,7 @@ and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.h
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

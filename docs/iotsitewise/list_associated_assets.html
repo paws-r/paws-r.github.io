@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Retrieves a paginated list of the assets associated to a parent asset
-(assetId) by a given hierarchy (hierarchyId) — iotsitewise_list_associated_assets • paws</title>
+<title>Retrieves a paginated list of associated assets — iotsitewise_list_associated_assets • paws</title>
 
 
 <!-- jquery -->
@@ -40,10 +39,14 @@
 
 
 
-<meta property="og:title" content="Retrieves a paginated list of the assets associated to a parent asset
-(assetId) by a given hierarchy (hierarchyId) — iotsitewise_list_associated_assets" />
-<meta property="og:description" content="Retrieves a paginated list of the assets associated to a parent asset
-(assetId) by a given hierarchy (hierarchyId)." />
+<meta property="og:title" content="Retrieves a paginated list of associated assets — iotsitewise_list_associated_assets" />
+<meta property="og:description" content="Retrieves a paginated list of associated assets.
+You can use this operation to do the following:
+List child assets associated to a parent asset by a hierarchy that
+you specify.
+List an asset's parent asset.
+
+" />
 
 
 
@@ -75,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +86,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +98,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,37 +115,54 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Retrieves a paginated list of the assets associated to a parent asset
-(assetId) by a given hierarchy (hierarchyId)</h1>
+    <h1>Retrieves a paginated list of associated assets</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/iotsitewise_operations.R'><code>R/iotsitewise_operations.R</code></a></small>
     <div class="hidden name"><code>iotsitewise_list_associated_assets.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Retrieves a paginated list of the assets associated to a parent asset
-(<code>assetId</code>) by a given hierarchy (<code>hierarchyId</code>).</p>
+    <p>Retrieves a paginated list of associated assets.</p>
+<p>You can use this operation to do the following:</p><ul>
+<li><p>List child assets associated to a parent asset by a hierarchy that
+you specify.</p></li>
+<li><p>List an asset's parent asset.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>iotsitewise_list_associated_assets</span>(<span class='no'>assetId</span>, <span class='no'>hierarchyId</span>, <span class='no'>nextToken</span>,
-  <span class='no'>maxResults</span>)</pre>
+    <pre class="usage"><span class='fu'>iotsitewise_list_associated_assets</span><span class='op'>(</span><span class='va'>assetId</span>, <span class='va'>hierarchyId</span>,
+  <span class='va'>traversalDirection</span>, <span class='va'>nextToken</span>, <span class='va'>maxResults</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>assetId</th>
-      <td><p>[required] The ID of the parent asset.</p></td>
+      <td><p>[required] The ID of the asset to query.</p></td>
     </tr>
     <tr>
       <th>hierarchyId</th>
-      <td><p>[required] The hierarchy ID (of the parent asset model) whose associated assets are
-returned. To find a hierarchy ID, use the
+      <td><p>The ID of the hierarchy by which child assets are associated to the
+asset. To find a hierarchy ID, use the
 <a href='https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_DescribeAsset.html'>DescribeAsset</a>
 or
 <a href='https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_DescribeAssetModel.html'>DescribeAssetModel</a>
-actions.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-hierarchies.html'>Asset Hierarchies</a>
+operations. This parameter is required if you choose <code>CHILD</code> for
+<code>traversalDirection</code>.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/iot-sitewise/latest/userguide/asset-hierarchies.html'>Asset hierarchies</a>
 in the <em>AWS IoT SiteWise User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>traversalDirection</th>
+      <td><p>The direction to list associated assets. Choose one of the following
+options:</p><ul>
+<li><p><code>CHILD</code> – The list includes all child assets associated to the
+asset. The <code>hierarchyId</code> parameter is required if you choose
+<code>CHILD</code>.</p></li>
+<li><p><code>PARENT</code> – The list includes the asset's parent asset.</p></li>
+</ul>
+
+<p>Default: <code>CHILD</code></p></td>
     </tr>
     <tr>
       <th>nextToken</th>
@@ -150,19 +170,22 @@ in the <em>AWS IoT SiteWise User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>maxResults</th>
-      <td><p>The maximum number of results to be returned per paginated request.</p></td>
+      <td><p>The maximum number of results to be returned per paginated request.</p>
+<p>Default: 50</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_associated_assets</span>(
-  <span class='kw'>assetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>hierarchyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>nextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>maxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_associated_assets</span><span class='op'>(</span>
+  assetId <span class='op'>=</span> <span class='st'>"string"</span>,
+  hierarchyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  traversalDirection <span class='op'>=</span> <span class='st'>"PARENT"</span><span class='op'>|</span><span class='st'>"CHILD"</span>,
+  nextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  maxResults <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -180,7 +203,7 @@ in the <em>AWS IoT SiteWise User Guide</em>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

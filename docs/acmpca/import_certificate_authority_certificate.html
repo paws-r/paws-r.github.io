@@ -43,7 +43,70 @@
 <meta property="og:description" content="Imports a signed private CA certificate into ACM Private CA. This action
 is used when you are using a chain of trust whose root is located
 outside ACM Private CA. Before you can call this action, the following
-preparations must in place:" />
+preparations must in place:
+In ACM Private CA, call the
+CreateCertificateAuthority
+action to create the private CA that that you plan to back with the
+imported certificate.
+Call the
+GetCertificateAuthorityCsr
+action to generate a certificate signing request (CSR).
+Sign the CSR using a root or intermediate CA hosted by either an
+on-premises PKI hierarchy or by a commercial CA.
+Create a certificate chain and copy the signed certificate and the
+certificate chain to your working directory.
+
+
+ACM Private CA supports three scenarios for installing a CA certificate:
+Installing a certificate for a root CA hosted by ACM Private CA.
+Installing a subordinate CA certificate whose parent authority is
+hosted by ACM Private CA.
+Installing a subordinate CA certificate whose parent authority is
+externally hosted.
+
+
+The following addtitional requirements apply when you import a CA
+certificate.
+Only a self-signed certificate can be imported as a root CA.
+A self-signed certificate cannot be imported as a subordinate CA.
+Your certificate chain must not include the private CA certificate
+that you are importing.
+Your root CA must be the last certificate in your chain. The
+subordinate certificate, if any, that your root CA signed must be
+next to last. The subordinate certificate signed by the preceding
+subordinate CA must come next, and so on until your chain is built.
+The chain must be PEM-encoded.
+The maximum allowed size of a certificate is 32 KB.
+The maximum allowed size of a certificate chain is 2 MB.
+
+
+Enforcement of Critical Constraints
+ACM Private CA allows the following extensions to be marked critical in
+the imported CA certificate or chain.
+Basic constraints (must be marked critical)
+Subject alternative names
+Key usage
+Extended key usage
+Authority key identifier
+Subject key identifier
+Issuer alternative name
+Subject directory attributes
+Subject information access
+Certificate policies
+Policy mappings
+Inhibit anyPolicy
+
+
+ACM Private CA rejects the following extensions when they are marked
+critical in an imported CA certificate or chain.
+Name constraints
+Policy constraints
+CRL distribution points
+Authority information access
+Freshest CRL
+Any other extension
+
+" />
 
 
 
@@ -75,7 +138,7 @@ preparations must in place:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +146,7 @@ preparations must in place:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +158,7 @@ preparations must in place:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,11 +184,74 @@ preparations must in place:" />
     <p>Imports a signed private CA certificate into ACM Private CA. This action
 is used when you are using a chain of trust whose root is located
 outside ACM Private CA. Before you can call this action, the following
-preparations must in place:</p>
+preparations must in place:</p><ol>
+<li><p>In ACM Private CA, call the
+<a href='https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreateCertificateAuthority.html'>CreateCertificateAuthority</a>
+action to create the private CA that that you plan to back with the
+imported certificate.</p></li>
+<li><p>Call the
+<a href='https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_GetCertificateAuthorityCsr.html'>GetCertificateAuthorityCsr</a>
+action to generate a certificate signing request (CSR).</p></li>
+<li><p>Sign the CSR using a root or intermediate CA hosted by either an
+on-premises PKI hierarchy or by a commercial CA.</p></li>
+<li><p>Create a certificate chain and copy the signed certificate and the
+certificate chain to your working directory.</p></li>
+</ol>
+
+<p>ACM Private CA supports three scenarios for installing a CA certificate:</p><ul>
+<li><p>Installing a certificate for a root CA hosted by ACM Private CA.</p></li>
+<li><p>Installing a subordinate CA certificate whose parent authority is
+hosted by ACM Private CA.</p></li>
+<li><p>Installing a subordinate CA certificate whose parent authority is
+externally hosted.</p></li>
+</ul>
+
+<p>The following addtitional requirements apply when you import a CA
+certificate.</p><ul>
+<li><p>Only a self-signed certificate can be imported as a root CA.</p></li>
+<li><p>A self-signed certificate cannot be imported as a subordinate CA.</p></li>
+<li><p>Your certificate chain must not include the private CA certificate
+that you are importing.</p></li>
+<li><p>Your root CA must be the last certificate in your chain. The
+subordinate certificate, if any, that your root CA signed must be
+next to last. The subordinate certificate signed by the preceding
+subordinate CA must come next, and so on until your chain is built.</p></li>
+<li><p>The chain must be PEM-encoded.</p></li>
+<li><p>The maximum allowed size of a certificate is 32 KB.</p></li>
+<li><p>The maximum allowed size of a certificate chain is 2 MB.</p></li>
+</ul>
+
+<p><em>Enforcement of Critical Constraints</em></p>
+<p>ACM Private CA allows the following extensions to be marked critical in
+the imported CA certificate or chain.</p><ul>
+<li><p>Basic constraints (<em>must</em> be marked critical)</p></li>
+<li><p>Subject alternative names</p></li>
+<li><p>Key usage</p></li>
+<li><p>Extended key usage</p></li>
+<li><p>Authority key identifier</p></li>
+<li><p>Subject key identifier</p></li>
+<li><p>Issuer alternative name</p></li>
+<li><p>Subject directory attributes</p></li>
+<li><p>Subject information access</p></li>
+<li><p>Certificate policies</p></li>
+<li><p>Policy mappings</p></li>
+<li><p>Inhibit anyPolicy</p></li>
+</ul>
+
+<p>ACM Private CA rejects the following extensions when they are marked
+critical in an imported CA certificate or chain.</p><ul>
+<li><p>Name constraints</p></li>
+<li><p>Policy constraints</p></li>
+<li><p>CRL distribution points</p></li>
+<li><p>Authority information access</p></li>
+<li><p>Freshest CRL</p></li>
+<li><p>Any other extension</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>acmpca_import_certificate_authority_certificate</span>(<span class='no'>CertificateAuthorityArn</span>,
-  <span class='no'>Certificate</span>, <span class='no'>CertificateChain</span>)</pre>
+    <pre class="usage"><span class='fu'>acmpca_import_certificate_authority_certificate</span><span class='op'>(</span><span class='va'>CertificateAuthorityArn</span>,
+  <span class='va'>Certificate</span>, <span class='va'>CertificateChain</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,7 +259,8 @@ preparations must in place:</p>
     <tr>
       <th>CertificateAuthorityArn</th>
       <td><p>[required] The Amazon Resource Name (ARN) that was returned when you called
-CreateCertificateAuthority. This must be of the form:</p>
+<a href='https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CreateCertificateAuthority.html'>CreateCertificateAuthority</a>.
+This must be of the form:</p>
 <p><code>arn:aws:acm-pca:&lt;i&gt;region&lt;/i&gt;:&lt;i&gt;account&lt;/i&gt;:certificate-authority/&lt;i&gt;12345678-1234-1234-1234-123456789012&lt;/i&gt; </code></p></td>
     </tr>
     <tr>
@@ -145,7 +272,7 @@ that you control.</p></td>
     <tr>
       <th>CertificateChain</th>
       <td><p>A PEM-encoded file that contains all of your certificates, other than
-the certificate you\'re importing, chaining up to your root CA. Your ACM
+the certificate you're importing, chaining up to your root CA. Your ACM
 Private CA-hosted or on-premises root certificate is the last in the
 chain, and each certificate in the chain signs the one preceding.</p>
 <p>This parameter must be supplied when you import a subordinate CA. When
@@ -153,44 +280,15 @@ you import a root CA, there is no chain.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ol>
-<li><p>In ACM Private CA, call the CreateCertificateAuthority action to
-create the private CA that that you plan to back with the imported
-certificate.</p></li>
-<li><p>Call the GetCertificateAuthorityCsr action to generate a certificate
-signing request (CSR).</p></li>
-<li><p>Sign the CSR using a root or intermediate CA hosted either by an
-on-premises PKI hierarchy or a commercial CA..</p></li>
-<li><p>Create a certificate chain and copy the signed certificate and the
-certificate chain to your working directory.</p></li>
-</ol>
-
-<p>The following requirements apply when you import a CA certificate.</p><ul>
-<li><p>You cannot import a non-self-signed certificate for use as a root
-CA.</p></li>
-<li><p>You cannot import a self-signed certificate for use as a subordinate
-CA.</p></li>
-<li><p>Your certificate chain must not include the private CA certificate
-that you are importing.</p></li>
-<li><p>Your ACM Private CA-hosted or on-premises CA certificate must be the
-last certificate in your chain. The subordinate certificate, if any,
-that your root CA signed must be next to last. The subordinate
-certificate signed by the preceding subordinate CA must come next,
-and so on until your chain is built.</p></li>
-<li><p>The chain must be PEM-encoded.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>import_certificate_authority_certificate</span>(
-  <span class='kw'>CertificateAuthorityArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Certificate</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-  <span class='kw'>CertificateChain</span> <span class='kw'>=</span> <span class='no'>raw</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>import_certificate_authority_certificate</span><span class='op'>(</span>
+  CertificateAuthorityArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Certificate <span class='op'>=</span> <span class='va'>raw</span>,
+  CertificateChain <span class='op'>=</span> <span class='va'>raw</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -208,7 +306,7 @@ and so on until your chain is built.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

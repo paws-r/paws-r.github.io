@@ -43,7 +43,21 @@ provider strategy for a cluster — ecs_put_cluster_capacity_providers • paws<
 <meta property="og:title" content="Modifies the available capacity providers and the default capacity
 provider strategy for a cluster — ecs_put_cluster_capacity_providers" />
 <meta property="og:description" content="Modifies the available capacity providers and the default capacity
-provider strategy for a cluster." />
+provider strategy for a cluster.
+You must specify both the available capacity providers and a default
+capacity provider strategy for the cluster. If the specified cluster has
+existing capacity providers associated with it, you must specify all
+existing capacity providers in addition to any new ones you want to add.
+Any existing capacity providers associated with a cluster that are
+omitted from a PutClusterCapacityProviders API call will be
+disassociated with the cluster. You can only disassociate an existing
+capacity provider from a cluster if it's not being used by any existing
+tasks.
+When creating a service or running a task on a cluster, if no capacity
+provider or launch type is specified, then the cluster's default
+capacity provider strategy is used. It is recommended to define a
+default capacity provider strategy for your cluster, however you may
+specify an empty array (\\[\\]) to bypass defining a default strategy." />
 
 
 
@@ -75,7 +89,7 @@ provider strategy for a cluster." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +97,7 @@ provider strategy for a cluster." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +109,7 @@ provider strategy for a cluster." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +135,24 @@ provider strategy for a cluster</h1>
     <div class="ref-description">
     <p>Modifies the available capacity providers and the default capacity
 provider strategy for a cluster.</p>
+<p>You must specify both the available capacity providers and a default
+capacity provider strategy for the cluster. If the specified cluster has
+existing capacity providers associated with it, you must specify all
+existing capacity providers in addition to any new ones you want to add.
+Any existing capacity providers associated with a cluster that are
+omitted from a PutClusterCapacityProviders API call will be
+disassociated with the cluster. You can only disassociate an existing
+capacity provider from a cluster if it's not being used by any existing
+tasks.</p>
+<p>When creating a service or running a task on a cluster, if no capacity
+provider or launch type is specified, then the cluster's default
+capacity provider strategy is used. It is recommended to define a
+default capacity provider strategy for your cluster, however you may
+specify an empty array (<code>\\[\\]</code>) to bypass defining a default strategy.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ecs_put_cluster_capacity_providers</span>(<span class='no'>cluster</span>, <span class='no'>capacityProviders</span>,
-  <span class='no'>defaultCapacityProviderStrategy</span>)</pre>
+    <pre class="usage"><span class='fu'>ecs_put_cluster_capacity_providers</span><span class='op'>(</span><span class='va'>cluster</span>, <span class='va'>capacityProviders</span>,
+  <span class='va'>defaultCapacityProviderStrategy</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,38 +197,23 @@ cluster to be used.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You must specify both the available capacity providers and a default
-capacity provider strategy for the cluster. If the specified cluster has
-existing capacity providers associated with it, you must specify all
-existing capacity providers in addition to any new ones you want to add.
-Any existing capacity providers associated with a cluster that are
-omitted from a PutClusterCapacityProviders API call will be
-disassociated with the cluster. You can only disassociate an existing
-capacity provider from a cluster if it\'s not being used by any existing
-tasks.</p>
-<p>When creating a service or running a task on a cluster, if no capacity
-provider or launch type is specified, then the cluster\'s default
-capacity provider strategy is used. It is recommended to define a
-default capacity provider strategy for your cluster, however you may
-specify an empty array (<code>\\[\\]</code>) to bypass defining a default strategy.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_cluster_capacity_providers</span>(
-  <span class='kw'>cluster</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>capacityProviders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_cluster_capacity_providers</span><span class='op'>(</span>
+  cluster <span class='op'>=</span> <span class='st'>"string"</span>,
+  capacityProviders <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>defaultCapacityProviderStrategy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>capacityProvider</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>weight</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  defaultCapacityProviderStrategy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      capacityProvider <span class='op'>=</span> <span class='st'>"string"</span>,
+      weight <span class='op'>=</span> <span class='fl'>123</span>,
+      base <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -218,7 +231,7 @@ specify an empty array (<code>\\[\\]</code>) to bypass defining a default strate
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

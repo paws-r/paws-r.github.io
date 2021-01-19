@@ -41,7 +41,35 @@
 
 <meta property="og:title" content="Adds one or more tags to an IAM user — iam_tag_user" />
 <meta property="og:description" content="Adds one or more tags to an IAM user. If a tag with the same key name
-already exists, then that tag is overwritten with the new value." />
+already exists, then that tag is overwritten with the new value.
+A tag consists of a key name and an associated value. By assigning tags
+to your resources, you can do the following:
+Administrative grouping and discovery - Attach tags to resources
+to aid in organization and search. For example, you could search for
+all resources with the key name Project and the value
+MyImportantProject. Or search for all resources with the key name
+Cost Center and the value 41200.
+Access control - Reference tags in IAM user-based and
+resource-based policies. You can use tags to restrict access to only
+an IAM requesting user or to a role that has a specified tag
+attached. You can also restrict access to only those resources that
+have a certain tag attached. For examples of policies that show how
+to use tags to control access, see Control Access Using IAM Tags
+in the IAM User Guide.
+Cost allocation - Use tags to help track which individuals and
+teams are using which AWS resources.
+&amp;lt;!-- --&amp;gt;
+
+Make sure that you have no invalid tags and that you do not exceed
+the allowed number of tags per role. In either case, the entire
+request fails and no tags are added to the role.
+AWS always interprets the tag Value as a single string. If you
+need to store an array, you can store comma-separated values in the
+string. However, you must interpret the value in your code.
+
+
+For more information about tagging, see Tagging IAM Identities
+in the IAM User Guide." />
 
 
 
@@ -73,7 +101,7 @@ already exists, then that tag is overwritten with the new value." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +109,7 @@ already exists, then that tag is overwritten with the new value." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +121,7 @@ already exists, then that tag is overwritten with the new value." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,30 +146,7 @@ already exists, then that tag is overwritten with the new value." />
     <div class="ref-description">
     <p>Adds one or more tags to an IAM user. If a tag with the same key name
 already exists, then that tag is overwritten with the new value.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>iam_tag_user</span>(<span class='no'>UserName</span>, <span class='no'>Tags</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>UserName</th>
-      <td><p>[required] The name of the user that you want to add tags to.</p>
-<p>This parameter accepts (through its <a href='http://wikipedia.org/wiki/regex'>regex pattern</a>) a string of characters that
-consist of upper and lowercase alphanumeric characters with no spaces.
-You can also include any of the following characters: =,.@-</p></td>
-    </tr>
-    <tr>
-      <th>Tags</th>
-      <td><p>[required] The list of tags that you want to attach to the user. Each tag consists
-of a key name and an associated value.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A tag consists of a key name and an associated value. By assigning tags
+<p>A tag consists of a key name and an associated value. By assigning tags
 to your resources, you can do the following:</p><ul>
 <li><p><strong>Administrative grouping and discovery</strong> - Attach tags to resources
 to aid in organization and search. For example, you could search for
@@ -169,37 +174,61 @@ string. However, you must interpret the value in your code.</p></li>
 
 <p>For more information about tagging, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html'>Tagging IAM Identities</a>
 in the <em>IAM User Guide</em>.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>iam_tag_user</span><span class='op'>(</span><span class='va'>UserName</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>UserName</th>
+      <td><p>[required] The name of the user that you want to add tags to.</p>
+<p>This parameter accepts (through its <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a>) a string of characters
+that consist of upper and lowercase alphanumeric characters with no
+spaces. You can also include any of the following characters: =,.@-</p></td>
+    </tr>
+    <tr>
+      <th>Tags</th>
+      <td><p>[required] The list of tags that you want to attach to the user. Each tag consists
+of a key name and an associated value.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>tag_user</span>(
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>tag_user</span><span class='op'>(</span>
+  UserName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example shows how to add tags to an existing user.</span>
-<span class='no'>svc</span>$<span class='fu'>tag_user</span>(
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Dept"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"Accounting"</span>
-    ),
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"CostCenter"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"12345"</span>
-    )
-  ),
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"anika"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>tag_user</span><span class='op'>(</span>
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Dept"</span>,
+      Value <span class='op'>=</span> <span class='st'>"Accounting"</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"CostCenter"</span>,
+      Value <span class='op'>=</span> <span class='st'>"12345"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  UserName <span class='op'>=</span> <span class='st'>"anika"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -215,7 +244,7 @@ in the <em>IAM User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

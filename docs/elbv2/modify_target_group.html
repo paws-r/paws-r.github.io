@@ -75,7 +75,7 @@ targets in the specified target group." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ targets in the specified target group." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +95,7 @@ targets in the specified target group." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +123,10 @@ targets in the specified target group</h1>
 targets in the specified target group.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>elbv2_modify_target_group</span>(<span class='no'>TargetGroupArn</span>, <span class='no'>HealthCheckProtocol</span>,
-  <span class='no'>HealthCheckPort</span>, <span class='no'>HealthCheckPath</span>, <span class='no'>HealthCheckEnabled</span>,
-  <span class='no'>HealthCheckIntervalSeconds</span>, <span class='no'>HealthCheckTimeoutSeconds</span>,
-  <span class='no'>HealthyThresholdCount</span>, <span class='no'>UnhealthyThresholdCount</span>, <span class='no'>Matcher</span>)</pre>
+    <pre class="usage"><span class='fu'>elbv2_modify_target_group</span><span class='op'>(</span><span class='va'>TargetGroupArn</span>, <span class='va'>HealthCheckProtocol</span>,
+  <span class='va'>HealthCheckPort</span>, <span class='va'>HealthCheckPath</span>, <span class='va'>HealthCheckEnabled</span>,
+  <span class='va'>HealthCheckIntervalSeconds</span>, <span class='va'>HealthCheckTimeoutSeconds</span>,
+  <span class='va'>HealthyThresholdCount</span>, <span class='va'>UnhealthyThresholdCount</span>, <span class='va'>Matcher</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,9 +139,9 @@ targets in the specified target group.</p>
       <th>HealthCheckProtocol</th>
       <td><p>The protocol the load balancer uses when performing health checks on
 targets. The TCP protocol is supported for health checks only if the
-protocol of the target group is TCP, TLS, UDP, or TCP\_UDP. The TLS,
-UDP, and TCP\_UDP protocols are not supported for health checks.</p>
-<p>With Network Load Balancers, you can\'t modify this setting.</p></td>
+protocol of the target group is TCP, TLS, UDP, or TCP\_UDP. The GENEVE,
+TLS, UDP, and TCP\_UDP protocols are not supported for health checks.</p>
+<p>With Network Load Balancers, you can't modify this setting.</p></td>
     </tr>
     <tr>
       <th>HealthCheckPort</th>
@@ -150,8 +150,11 @@ targets.</p></td>
     </tr>
     <tr>
       <th>HealthCheckPath</th>
-      <td><p>[HTTP/HTTPS health checks] The ping path that is the destination for
-the health check request.</p></td>
+      <td><p>[HTTP/HTTPS health checks] The destination for health checks on the
+targets.</p>
+<p>[HTTP1 or HTTP2 protocol version] The ping path. The default is /.</p>
+<p>[GRPC protocol version] The path of a custom health check method with
+the format /package.service/method. The default is /AWS.ALB/healthcheck.</p></td>
     </tr>
     <tr>
       <th>HealthCheckEnabled</th>
@@ -160,16 +163,15 @@ the health check request.</p></td>
     <tr>
       <th>HealthCheckIntervalSeconds</th>
       <td><p>The approximate amount of time, in seconds, between health checks of an
-individual target. For Application Load Balancers, the range is 5 to 300
-seconds. For Network Load Balancers, the supported values are 10 or 30
-seconds.</p>
-<p>With Network Load Balancers, you can\'t modify this setting.</p></td>
+individual target. For TCP health checks, the supported values are 10 or
+30 seconds.</p>
+<p>With Network Load Balancers, you can't modify this setting.</p></td>
     </tr>
     <tr>
       <th>HealthCheckTimeoutSeconds</th>
       <td><p>[HTTP/HTTPS health checks] The amount of time, in seconds, during
 which no response means a failed health check.</p>
-<p>With Network Load Balancers, you can\'t modify this setting.</p></td>
+<p>With Network Load Balancers, you can't modify this setting.</p></td>
     </tr>
     <tr>
       <th>HealthyThresholdCount</th>
@@ -179,49 +181,50 @@ considering an unhealthy target healthy.</p></td>
     <tr>
       <th>UnhealthyThresholdCount</th>
       <td><p>The number of consecutive health check failures required before
-considering the target unhealthy. For Network Load Balancers, this value
-must be the same as the healthy threshold count.</p></td>
+considering the target unhealthy. For target groups with a protocol of
+TCP or TLS, this value must be the same as the healthy threshold count.</p></td>
     </tr>
     <tr>
       <th>Matcher</th>
-      <td><p>[HTTP/HTTPS health checks] The HTTP codes to use when checking for a
-successful response from a target.</p>
-<p>With Network Load Balancers, you can\'t modify this setting.</p></td>
+      <td><p>[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking
+for a successful response from a target.</p>
+<p>With Network Load Balancers, you can't modify this setting.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To monitor the health of the targets, use DescribeTargetHealth.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>modify_target_group</span>(
-  <span class='kw'>TargetGroupArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HealthCheckProtocol</span> <span class='kw'>=</span> <span class='st'>"HTTP"</span><span class='kw'>|</span><span class='st'>"HTTPS"</span><span class='kw'>|</span><span class='st'>"TCP"</span><span class='kw'>|</span><span class='st'>"TLS"</span><span class='kw'>|</span><span class='st'>"UDP"</span><span class='kw'>|</span><span class='st'>"TCP_UDP"</span>,
-  <span class='kw'>HealthCheckPort</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HealthCheckPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HealthCheckEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>HealthCheckIntervalSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>HealthCheckTimeoutSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>HealthyThresholdCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>UnhealthyThresholdCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Matcher</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>HttpCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>modify_target_group</span><span class='op'>(</span>
+  TargetGroupArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  HealthCheckProtocol <span class='op'>=</span> <span class='st'>"HTTP"</span><span class='op'>|</span><span class='st'>"HTTPS"</span><span class='op'>|</span><span class='st'>"TCP"</span><span class='op'>|</span><span class='st'>"TLS"</span><span class='op'>|</span><span class='st'>"UDP"</span><span class='op'>|</span><span class='st'>"TCP_UDP"</span><span class='op'>|</span><span class='st'>"GENEVE"</span>,
+  HealthCheckPort <span class='op'>=</span> <span class='st'>"string"</span>,
+  HealthCheckPath <span class='op'>=</span> <span class='st'>"string"</span>,
+  HealthCheckEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  HealthCheckIntervalSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  HealthCheckTimeoutSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  HealthyThresholdCount <span class='op'>=</span> <span class='fl'>123</span>,
+  UnhealthyThresholdCount <span class='op'>=</span> <span class='fl'>123</span>,
+  Matcher <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    HttpCode <span class='op'>=</span> <span class='st'>"string"</span>,
+    GrpcCode <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example changes the configuration of the health checks used to</span>
 <span class='co'># evaluate the health of the targets for the specified target group.</span>
-<span class='no'>svc</span>$<span class='fu'>modify_target_group</span>(
-  <span class='kw'>HealthCheckPort</span> <span class='kw'>=</span> <span class='st'>"443"</span>,
-  <span class='kw'>HealthCheckProtocol</span> <span class='kw'>=</span> <span class='st'>"HTTPS"</span>,
-  <span class='kw'>TargetGroupArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-https..."</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>modify_target_group</span><span class='op'>(</span>
+  HealthCheckPort <span class='op'>=</span> <span class='st'>"443"</span>,
+  HealthCheckProtocol <span class='op'>=</span> <span class='st'>"HTTPS"</span>,
+  TargetGroupArn <span class='op'>=</span> <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:targetgroup/my-https..."</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -237,7 +240,7 @@ successful response from a target.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

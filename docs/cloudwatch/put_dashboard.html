@@ -44,7 +44,21 @@ dashboard — cloudwatch_put_dashboard • paws</title>
 dashboard — cloudwatch_put_dashboard" />
 <meta property="og:description" content="Creates a dashboard if it does not already exist, or updates an existing
 dashboard. If you update a dashboard, the entire contents are replaced
-with what you specify here." />
+with what you specify here.
+All dashboards in your account are global, not region-specific.
+A simple way to create a dashboard using PutDashboard is to copy an
+existing dashboard. To copy an existing dashboard using the console, you
+can load the dashboard and then use the View/edit source command in the
+Actions menu to display the JSON block for that dashboard. Another way
+to copy a dashboard is to use GetDashboard, and then use the data
+returned within DashboardBody as the template for the new dashboard
+when you call PutDashboard.
+When you create a dashboard with PutDashboard, a good practice is to
+add a text widget at the top of the dashboard with a message that the
+dashboard was created by script and should not be changed in the
+console. This message could also point console users to the location of
+the DashboardBody script or the CloudFormation template used to create
+the dashboard." />
 
 
 
@@ -76,7 +90,7 @@ with what you specify here." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +98,7 @@ with what you specify here." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +110,7 @@ with what you specify here." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,33 +137,7 @@ dashboard</h1>
     <p>Creates a dashboard if it does not already exist, or updates an existing
 dashboard. If you update a dashboard, the entire contents are replaced
 with what you specify here.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>cloudwatch_put_dashboard</span>(<span class='no'>DashboardName</span>, <span class='no'>DashboardBody</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>DashboardName</th>
-      <td><p>[required] The name of the dashboard. If a dashboard with this name already exists,
-this call modifies that dashboard, replacing its current contents.
-Otherwise, a new dashboard is created. The maximum length is 255, and
-valid characters are A-Z, a-z, 0-9, \"-\", and \"\_\". This parameter is
-required.</p></td>
-    </tr>
-    <tr>
-      <th>DashboardBody</th>
-      <td><p>[required] The detailed information about the dashboard in JSON format, including
-the widgets to include and their location on the dashboard. This
-parameter is required.</p>
-<p>For more information about the syntax, see <a href='https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/CloudWatch-Dashboard-Body-Structure.html'>Dashboard Body Structure and Syntax</a>.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>All dashboards in your account are global, not region-specific.</p>
+<p>All dashboards in your account are global, not region-specific.</p>
 <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an
 existing dashboard. To copy an existing dashboard using the console, you
 can load the dashboard and then use the View/edit source command in the
@@ -163,13 +151,38 @@ dashboard was created by script and should not be changed in the
 console. This message could also point console users to the location of
 the <code>DashboardBody</code> script or the CloudFormation template used to create
 the dashboard.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>cloudwatch_put_dashboard</span><span class='op'>(</span><span class='va'>DashboardName</span>, <span class='va'>DashboardBody</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>DashboardName</th>
+      <td><p>[required] The name of the dashboard. If a dashboard with this name already exists,
+this call modifies that dashboard, replacing its current contents.
+Otherwise, a new dashboard is created. The maximum length is 255, and
+valid characters are A-Z, a-z, 0-9, "-", and "\_". This parameter is
+required.</p></td>
+    </tr>
+    <tr>
+      <th>DashboardBody</th>
+      <td><p>[required] The detailed information about the dashboard in JSON format, including
+the widgets to include and their location on the dashboard. This
+parameter is required.</p>
+<p>For more information about the syntax, see <a href='https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/CloudWatch-Dashboard-Body-Structure.html'>Dashboard Body Structure and Syntax</a>.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_dashboard</span>(
-  <span class='kw'>DashboardName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DashboardBody</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_dashboard</span><span class='op'>(</span>
+  DashboardName <span class='op'>=</span> <span class='st'>"string"</span>,
+  DashboardBody <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -187,7 +200,7 @@ the dashboard.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

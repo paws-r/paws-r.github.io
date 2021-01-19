@@ -40,7 +40,12 @@
 
 
 <meta property="og:title" content="Creates a new cluster with the specified parameters — redshift_create_cluster" />
-<meta property="og:description" content="Creates a new cluster with the specified parameters." />
+<meta property="og:description" content="Creates a new cluster with the specified parameters.
+To create a cluster in Virtual Private Cloud (VPC), you must provide a
+cluster subnet group name. The cluster subnet group identifies the
+subnets of your VPC that Amazon Redshift uses when creating the cluster.
+For more information about managing clusters, go to Amazon Redshift Clusters
+in the Amazon Redshift Cluster Management Guide." />
 
 
 
@@ -72,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +85,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +97,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,17 +121,23 @@
 
     <div class="ref-description">
     <p>Creates a new cluster with the specified parameters.</p>
+<p>To create a cluster in Virtual Private Cloud (VPC), you must provide a
+cluster subnet group name. The cluster subnet group identifies the
+subnets of your VPC that Amazon Redshift uses when creating the cluster.
+For more information about managing clusters, go to <a href='https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html'>Amazon Redshift Clusters</a>
+in the <em>Amazon Redshift Cluster Management Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>redshift_create_cluster</span>(<span class='no'>DBName</span>, <span class='no'>ClusterIdentifier</span>, <span class='no'>ClusterType</span>,
-  <span class='no'>NodeType</span>, <span class='no'>MasterUsername</span>, <span class='no'>MasterUserPassword</span>, <span class='no'>ClusterSecurityGroups</span>,
-  <span class='no'>VpcSecurityGroupIds</span>, <span class='no'>ClusterSubnetGroupName</span>, <span class='no'>AvailabilityZone</span>,
-  <span class='no'>PreferredMaintenanceWindow</span>, <span class='no'>ClusterParameterGroupName</span>,
-  <span class='no'>AutomatedSnapshotRetentionPeriod</span>, <span class='no'>ManualSnapshotRetentionPeriod</span>, <span class='no'>Port</span>,
-  <span class='no'>ClusterVersion</span>, <span class='no'>AllowVersionUpgrade</span>, <span class='no'>NumberOfNodes</span>, <span class='no'>PubliclyAccessible</span>,
-  <span class='no'>Encrypted</span>, <span class='no'>HsmClientCertificateIdentifier</span>, <span class='no'>HsmConfigurationIdentifier</span>,
-  <span class='no'>ElasticIp</span>, <span class='no'>Tags</span>, <span class='no'>KmsKeyId</span>, <span class='no'>EnhancedVpcRouting</span>, <span class='no'>AdditionalInfo</span>, <span class='no'>IamRoles</span>,
-  <span class='no'>MaintenanceTrackName</span>, <span class='no'>SnapshotScheduleIdentifier</span>)</pre>
+    <pre class="usage"><span class='fu'>redshift_create_cluster</span><span class='op'>(</span><span class='va'>DBName</span>, <span class='va'>ClusterIdentifier</span>, <span class='va'>ClusterType</span>,
+  <span class='va'>NodeType</span>, <span class='va'>MasterUsername</span>, <span class='va'>MasterUserPassword</span>, <span class='va'>ClusterSecurityGroups</span>,
+  <span class='va'>VpcSecurityGroupIds</span>, <span class='va'>ClusterSubnetGroupName</span>, <span class='va'>AvailabilityZone</span>,
+  <span class='va'>PreferredMaintenanceWindow</span>, <span class='va'>ClusterParameterGroupName</span>,
+  <span class='va'>AutomatedSnapshotRetentionPeriod</span>, <span class='va'>ManualSnapshotRetentionPeriod</span>, <span class='va'>Port</span>,
+  <span class='va'>ClusterVersion</span>, <span class='va'>AllowVersionUpgrade</span>, <span class='va'>NumberOfNodes</span>, <span class='va'>PubliclyAccessible</span>,
+  <span class='va'>Encrypted</span>, <span class='va'>HsmClientCertificateIdentifier</span>, <span class='va'>HsmConfigurationIdentifier</span>,
+  <span class='va'>ElasticIp</span>, <span class='va'>Tags</span>, <span class='va'>KmsKeyId</span>, <span class='va'>EnhancedVpcRouting</span>, <span class='va'>AdditionalInfo</span>, <span class='va'>IamRoles</span>,
+  <span class='va'>MaintenanceTrackName</span>, <span class='va'>SnapshotScheduleIdentifier</span>,
+  <span class='va'>AvailabilityZoneRelocation</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,7 +181,7 @@ modifying. The identifier also appears in the Amazon Redshift console.</p>
 <li><p><code>multi-node</code>, the <strong>NumberOfNodes</strong> parameter is required.</p></li>
 </ul>
 
-<p>Valid Values: <code>multi-node</code> \| <code>single-node</code></p>
+<p>Valid Values: <code>multi-node</code> | <code>single-node</code></p>
 <p>Default: <code>multi-node</code></p></td>
     </tr>
     <tr>
@@ -178,8 +189,8 @@ modifying. The identifier also appears in the Amazon Redshift console.</p>
       <td><p>[required] The node type to be provisioned for the cluster. For information about
 node types, go to <a href='https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes'>Working with Clusters</a>
 in the <em>Amazon Redshift Cluster Management Guide</em>.</p>
-<p>Valid Values: <code>ds2.xlarge</code> \| <code>ds2.8xlarge</code> \| <code>dc1.large</code> \|
-<code>dc1.8xlarge</code> \| <code>dc2.large</code> \| <code>dc2.8xlarge</code> \| <code>ra3.4xlarge</code> \|
+<p>Valid Values: <code>ds2.xlarge</code> | <code>ds2.8xlarge</code> | <code>dc1.large</code> | <code>dc1.8xlarge</code>
+| <code>dc2.large</code> | <code>dc2.8xlarge</code> | <code>ra3.xlplus</code> | <code>ra3.4xlarge</code> |
 <code>ra3.16xlarge</code></p></td>
     </tr>
     <tr>
@@ -187,7 +198,7 @@ in the <em>Amazon Redshift Cluster Management Guide</em>.</p>
       <td><p>[required] The user name associated with the master user account for the cluster
 that is being created.</p>
 <p>Constraints:</p><ul>
-<li><p>Must be 1 - 128 alphanumeric characters. The user name can\'t be
+<li><p>Must be 1 - 128 alphanumeric characters. The user name can't be
 <code>PUBLIC</code>.</p></li>
 <li><p>First character must be a letter.</p></li>
 <li><p>Cannot be a reserved word. A list of reserved words can be found in
@@ -204,8 +215,8 @@ that is being created.</p>
 <li><p>Must contain at least one uppercase letter.</p></li>
 <li><p>Must contain at least one lowercase letter.</p></li>
 <li><p>Must contain one number.</p></li>
-<li><p>Can be any printable ASCII character (ASCII code 33 to 126) except
-\' (single quote), \" (double quote), \, /, @, or space.</p></li>
+<li><p>Can be any printable ASCII character (ASCII code 33 to 126) except '
+(single quote), " (double quote), \, /, @, or space.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -246,7 +257,7 @@ maintenance can occur.</p>
 time per region, occurring on a random day of the week. For more
 information about the time blocks for each region, see <a href='https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-maintenance-windows'>Maintenance Windows</a>
 in Amazon Redshift Cluster Management Guide.</p>
-<p>Valid Days: Mon \| Tue \| Wed \| Thu \| Fri \| Sat \| Sun</p>
+<p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p>
 <p>Constraints: Minimum 30-minute window.</p></td>
     </tr>
     <tr>
@@ -272,7 +283,7 @@ CreateClusterSnapshot.</p>
     <tr>
       <th>ManualSnapshotRetentionPeriod</th>
       <td><p>The default number of days to retain a manual snapshot. If the value is
--1, the snapshot is retained indefinitely. This setting doesn\'t change
+-1, the snapshot is retained indefinitely. This setting doesn't change
 the retention period of existing snapshots.</p>
 <p>The value must be either -1 or an integer between 1 and 3,653.</p></td>
     </tr>
@@ -310,9 +321,9 @@ when the <strong>ClusterType</strong> parameter is specified as <code>multi-node
 <p>For information about determining how many nodes you need, go to
 <a href='https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#how-many-nodes'>Working with Clusters</a>
 in the <em>Amazon Redshift Cluster Management Guide</em>.</p>
-<p>If you don\'t specify this parameter, you get a single-node cluster.
-When requesting a multi-node cluster, you must specify the number of
-nodes that you want in the cluster.</p>
+<p>If you don't specify this parameter, you get a single-node cluster. When
+requesting a multi-node cluster, you must specify the number of nodes
+that you want in the cluster.</p>
 <p>Default: <code>1</code></p>
 <p>Constraints: Value must be at least 1 and no more than 100.</p></td>
     </tr>
@@ -377,68 +388,68 @@ to 10 IAM roles in a single request.</p>
     <tr>
       <th>MaintenanceTrackName</th>
       <td><p>An optional parameter for the name of the maintenance track for the
-cluster. If you don\'t provide a maintenance track name, the cluster is
+cluster. If you don't provide a maintenance track name, the cluster is
 assigned to the <code>current</code> track.</p></td>
     </tr>
     <tr>
       <th>SnapshotScheduleIdentifier</th>
       <td><p>A unique identifier for the snapshot schedule.</p></td>
     </tr>
+    <tr>
+      <th>AvailabilityZoneRelocation</th>
+      <td><p>The option to enable relocation for an Amazon Redshift cluster between
+Availability Zones after the cluster is created.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To create a cluster in Virtual Private Cloud (VPC), you must provide a
-cluster subnet group name. The cluster subnet group identifies the
-subnets of your VPC that Amazon Redshift uses when creating the cluster.
-For more information about managing clusters, go to <a href='https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html'>Amazon Redshift Clusters</a>
-in the <em>Amazon Redshift Cluster Management Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_cluster</span>(
-  <span class='kw'>DBName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClusterIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClusterType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NodeType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MasterUsername</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MasterUserPassword</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClusterSecurityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_cluster</span><span class='op'>(</span>
+  DBName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClusterIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClusterType <span class='op'>=</span> <span class='st'>"string"</span>,
+  NodeType <span class='op'>=</span> <span class='st'>"string"</span>,
+  MasterUsername <span class='op'>=</span> <span class='st'>"string"</span>,
+  MasterUserPassword <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClusterSecurityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>VpcSecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  VpcSecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ClusterSubnetGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AvailabilityZone</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PreferredMaintenanceWindow</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClusterParameterGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AutomatedSnapshotRetentionPeriod</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ManualSnapshotRetentionPeriod</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Port</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ClusterVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AllowVersionUpgrade</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>NumberOfNodes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>PubliclyAccessible</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Encrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>HsmClientCertificateIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HsmConfigurationIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ElasticIp</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EnhancedVpcRouting</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>AdditionalInfo</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IamRoles</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  ClusterSubnetGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AvailabilityZone <span class='op'>=</span> <span class='st'>"string"</span>,
+  PreferredMaintenanceWindow <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClusterParameterGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AutomatedSnapshotRetentionPeriod <span class='op'>=</span> <span class='fl'>123</span>,
+  ManualSnapshotRetentionPeriod <span class='op'>=</span> <span class='fl'>123</span>,
+  Port <span class='op'>=</span> <span class='fl'>123</span>,
+  ClusterVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  AllowVersionUpgrade <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  NumberOfNodes <span class='op'>=</span> <span class='fl'>123</span>,
+  PubliclyAccessible <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Encrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  HsmClientCertificateIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  HsmConfigurationIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  ElasticIp <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  EnhancedVpcRouting <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  AdditionalInfo <span class='op'>=</span> <span class='st'>"string"</span>,
+  IamRoles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>MaintenanceTrackName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SnapshotScheduleIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  MaintenanceTrackName <span class='op'>=</span> <span class='st'>"string"</span>,
+  SnapshotScheduleIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  AvailabilityZoneRelocation <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -456,7 +467,7 @@ in the <em>Amazon Redshift Cluster Management Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

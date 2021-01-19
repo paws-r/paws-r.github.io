@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,29 +118,37 @@
     <p>Runs commands on one or more managed instances.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_send_command</span>(<span class='no'>InstanceIds</span>, <span class='no'>Targets</span>, <span class='no'>DocumentName</span>, <span class='no'>DocumentVersion</span>,
-  <span class='no'>DocumentHash</span>, <span class='no'>DocumentHashType</span>, <span class='no'>TimeoutSeconds</span>, <span class='no'>Comment</span>, <span class='no'>Parameters</span>,
-  <span class='no'>OutputS3Region</span>, <span class='no'>OutputS3BucketName</span>, <span class='no'>OutputS3KeyPrefix</span>, <span class='no'>MaxConcurrency</span>,
-  <span class='no'>MaxErrors</span>, <span class='no'>ServiceRoleArn</span>, <span class='no'>NotificationConfig</span>, <span class='no'>CloudWatchOutputConfig</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_send_command</span><span class='op'>(</span><span class='va'>InstanceIds</span>, <span class='va'>Targets</span>, <span class='va'>DocumentName</span>, <span class='va'>DocumentVersion</span>,
+  <span class='va'>DocumentHash</span>, <span class='va'>DocumentHashType</span>, <span class='va'>TimeoutSeconds</span>, <span class='va'>Comment</span>, <span class='va'>Parameters</span>,
+  <span class='va'>OutputS3Region</span>, <span class='va'>OutputS3BucketName</span>, <span class='va'>OutputS3KeyPrefix</span>, <span class='va'>MaxConcurrency</span>,
+  <span class='va'>MaxErrors</span>, <span class='va'>ServiceRoleArn</span>, <span class='va'>NotificationConfig</span>, <span class='va'>CloudWatchOutputConfig</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>InstanceIds</th>
-      <td><p>The instance IDs where the command should run. You can specify a maximum
-of 50 IDs. If you prefer not to list individual instance IDs, you can
-instead send commands to a fleet of instances using the Targets
-parameter, which accepts EC2 tags. For more information about how to use
-targets, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html'>Using targets and rate controls to send commands to a fleet</a>
+      <td><p>The IDs of the instances where the command should run. Specifying
+instance IDs is most useful when you are targeting a limited number of
+instances, though you can specify up to 50 IDs.</p>
+<p>To target a larger number of instances, or if you prefer not to list
+individual instance IDs, we recommend using the <code>Targets</code> option
+instead. Using <code>Targets</code>, which accepts tag key-value pairs to identify
+the instances to send commands to, you can a send command to tens,
+hundreds, or thousands of instances at once.</p>
+<p>For more information about how to use targets, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html'>Using targets and rate controls to send commands to a fleet</a>
 in the <em>AWS Systems Manager User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>Targets</th>
-      <td><p>(Optional) An array of search criteria that targets instances using a
-Key,Value combination that you specify. Targets is required if you
-don\'t provide one or more instance IDs in the call. For more
-information about how to use targets, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html'>Sending commands to a fleet</a>
+      <td><p>An array of search criteria that targets instances using a <code>Key,Value</code>
+combination that you specify. Specifying targets is most useful when you
+want to send a command to a large number of instances at once. Using
+<code>Targets</code>, which accepts tag key-value pairs to identify instances, you
+can send a command to tens, hundreds, or thousands of instances at once.</p>
+<p>To send a command to a smaller number of instances, you can use the
+<code>InstanceIds</code> option instead.</p>
+<p>For more information about how to use targets, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html'>Sending commands to a fleet</a>
 in the <em>AWS Systems Manager User Guide</em>.</p></td>
     </tr>
     <tr>
@@ -151,13 +159,13 @@ public document or a custom document.</p></td>
     <tr>
       <th>DocumentVersion</th>
       <td><p>The SSM document version to use in the request. You can specify
-\$DEFAULT, \$LATEST, or a specific version number. If you run commands
-by using the AWS CLI, then you must escape the first two options by
-using a backslash. If you specify a version number, then you don\'t need
-to use the backslash. For example:</p>
-<p>\--document-version \"\\$DEFAULT\"</p>
-<p>\--document-version \"\\$LATEST\"</p>
-<p>\--document-version \"3\"</p></td>
+$DEFAULT, $LATEST, or a specific version number. If you run commands by
+using the AWS CLI, then you must escape the first two options by using a
+backslash. If you specify a version number, then you don't need to use
+the backslash. For example:</p>
+<p>--document-version "\$DEFAULT"</p>
+<p>--document-version "\$LATEST"</p>
+<p>--document-version "3"</p></td>
     </tr>
     <tr>
       <th>DocumentHash</th>
@@ -238,47 +246,48 @@ Logs.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>send_command</span>(
-  <span class='kw'>InstanceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>send_command</span><span class='op'>(</span>
+  InstanceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Targets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Targets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>DocumentName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DocumentVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DocumentHash</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DocumentHashType</span> <span class='kw'>=</span> <span class='st'>"Sha256"</span><span class='kw'>|</span><span class='st'>"Sha1"</span>,
-  <span class='kw'>TimeoutSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Comment</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DocumentName <span class='op'>=</span> <span class='st'>"string"</span>,
+  DocumentVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  DocumentHash <span class='op'>=</span> <span class='st'>"string"</span>,
+  DocumentHashType <span class='op'>=</span> <span class='st'>"Sha256"</span><span class='op'>|</span><span class='st'>"Sha1"</span>,
+  TimeoutSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  Comment <span class='op'>=</span> <span class='st'>"string"</span>,
+  Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>OutputS3Region</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OutputS3BucketName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OutputS3KeyPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxConcurrency</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxErrors</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServiceRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NotificationConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>NotificationArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>NotificationEvents</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='st'>"All"</span><span class='kw'>|</span><span class='st'>"InProgress"</span><span class='kw'>|</span><span class='st'>"Success"</span><span class='kw'>|</span><span class='st'>"TimedOut"</span><span class='kw'>|</span><span class='st'>"Cancelled"</span><span class='kw'>|</span><span class='st'>"Failed"</span>
-    ),
-    <span class='kw'>NotificationType</span> <span class='kw'>=</span> <span class='st'>"Command"</span><span class='kw'>|</span><span class='st'>"Invocation"</span>
-  ),
-  <span class='kw'>CloudWatchOutputConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CloudWatchLogGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>CloudWatchOutputEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  )
-)</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  OutputS3Region <span class='op'>=</span> <span class='st'>"string"</span>,
+  OutputS3BucketName <span class='op'>=</span> <span class='st'>"string"</span>,
+  OutputS3KeyPrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxConcurrency <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxErrors <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServiceRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  NotificationConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    NotificationArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    NotificationEvents <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"All"</span><span class='op'>|</span><span class='st'>"InProgress"</span><span class='op'>|</span><span class='st'>"Success"</span><span class='op'>|</span><span class='st'>"TimedOut"</span><span class='op'>|</span><span class='st'>"Cancelled"</span><span class='op'>|</span><span class='st'>"Failed"</span>
+    <span class='op'>)</span>,
+    NotificationType <span class='op'>=</span> <span class='st'>"Command"</span><span class='op'>|</span><span class='st'>"Invocation"</span>
+  <span class='op'>)</span>,
+  CloudWatchOutputConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CloudWatchLogGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+    CloudWatchOutputEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -296,7 +305,7 @@ Logs.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

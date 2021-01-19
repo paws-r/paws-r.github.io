@@ -78,7 +78,7 @@ the request." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@ the request." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +98,7 @@ the request." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -128,8 +128,8 @@ AWS Identity and Access Management (IAM) identity or role specified in
 the request.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>quicksight_register_user</span>(<span class='no'>IdentityType</span>, <span class='no'>Email</span>, <span class='no'>UserRole</span>, <span class='no'>IamArn</span>,
-  <span class='no'>SessionName</span>, <span class='no'>AwsAccountId</span>, <span class='no'>Namespace</span>, <span class='no'>UserName</span>)</pre>
+    <pre class="usage"><span class='fu'>quicksight_register_user</span><span class='op'>(</span><span class='va'>IdentityType</span>, <span class='va'>Email</span>, <span class='va'>UserRole</span>, <span class='va'>IamArn</span>,
+  <span class='va'>SessionName</span>, <span class='va'>AwsAccountId</span>, <span class='va'>Namespace</span>, <span class='va'>UserName</span>, <span class='va'>CustomPermissionsName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,8 +156,8 @@ following:</p><ul>
 and dashboards.</p></li>
 <li><p><code>ADMIN</code>: A user who is an author, who can also manage Amazon
 QuickSight settings.</p></li>
-<li><p><code>RESTRICTED_READER</code>: This role isn\'t currently available for use.</p></li>
-<li><p><code>RESTRICTED_AUTHOR</code>: This role isn\'t currently available for use.</p></li>
+<li><p><code>RESTRICTED_READER</code>: This role isn't currently available for use.</p></li>
+<li><p><code>RESTRICTED_AUTHOR</code>: This role isn't currently available for use.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -168,12 +168,12 @@ QuickSight.</p></td>
     <tr>
       <th>SessionName</th>
       <td><p>You need to use this parameter only when you register one or more users
-using an assumed IAM role. You don\'t need to provide the session name
+using an assumed IAM role. You don't need to provide the session name
 for other scenarios, for example when you are registering an IAM user or
 an Amazon QuickSight user. You can register multiple users using the
 same IAM role if each user has a different session name. For more
 information on assuming IAM roles, see
-<a href='https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sts/assume-role.html'><code>assume-role</code></a>
+<a href='https://docs.aws.amazon.com/cli/latest/reference/sts/assume-role.html'><code>assume-role</code></a>
 in the <em>AWS CLI Reference.</em></p></td>
     </tr>
     <tr>
@@ -190,21 +190,50 @@ ID for the AWS account that contains your Amazon QuickSight account.</p></td>
       <td><p>The Amazon QuickSight user name that you want to create for the user you
 are registering.</p></td>
     </tr>
+    <tr>
+      <th>CustomPermissionsName</th>
+      <td><p>(Enterprise edition only) The name of the custom permissions profile
+that you want to assign to this user. Customized permissions allows you
+to control a user's access by restricting access the following
+operations:</p><ul>
+<li><p>Create and update data sources</p></li>
+<li><p>Create and update datasets</p></li>
+<li><p>Create and update email reports</p></li>
+<li><p>Subscribe to email reports</p></li>
+</ul>
+
+<p>To add custom permissions to an existing user, use <code>&lt;a&gt;UpdateUser&lt;/a&gt;</code>
+instead.</p>
+<p>A set of custom permissions includes any combination of these
+restrictions. Currently, you need to create the profile names for custom
+permission sets by using the QuickSight console. Then, you use the
+<code>RegisterUser</code> API operation to assign the named set of permissions to a
+QuickSight user.</p>
+<p>QuickSight custom permissions are applied through IAM policies.
+Therefore, they override the permissions typically granted by assigning
+QuickSight users to one of the default security cohorts in QuickSight
+(admin, author, reader).</p>
+<p>This feature is available only to QuickSight Enterprise edition
+subscriptions that use SAML 2.0-Based Federation for Single Sign-On
+(SSO).</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>register_user</span>(
-  <span class='kw'>IdentityType</span> <span class='kw'>=</span> <span class='st'>"IAM"</span><span class='kw'>|</span><span class='st'>"QUICKSIGHT"</span>,
-  <span class='kw'>Email</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>UserRole</span> <span class='kw'>=</span> <span class='st'>"ADMIN"</span><span class='kw'>|</span><span class='st'>"AUTHOR"</span><span class='kw'>|</span><span class='st'>"READER"</span><span class='kw'>|</span><span class='st'>"RESTRICTED_AUTHOR"</span><span class='kw'>|</span><span class='st'>"RESTRICTED_READER"</span>,
-  <span class='kw'>IamArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SessionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AwsAccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>register_user</span><span class='op'>(</span>
+  IdentityType <span class='op'>=</span> <span class='st'>"IAM"</span><span class='op'>|</span><span class='st'>"QUICKSIGHT"</span>,
+  Email <span class='op'>=</span> <span class='st'>"string"</span>,
+  UserRole <span class='op'>=</span> <span class='st'>"ADMIN"</span><span class='op'>|</span><span class='st'>"AUTHOR"</span><span class='op'>|</span><span class='st'>"READER"</span><span class='op'>|</span><span class='st'>"RESTRICTED_AUTHOR"</span><span class='op'>|</span><span class='st'>"RESTRICTED_READER"</span>,
+  IamArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  SessionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AwsAccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+  UserName <span class='op'>=</span> <span class='st'>"string"</span>,
+  CustomPermissionsName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -222,7 +251,7 @@ are registering.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

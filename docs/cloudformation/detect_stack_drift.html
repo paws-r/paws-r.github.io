@@ -6,9 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Detects whether a stack's actual configuration differs, or has
-<em>drifted</em>, from it's expected configuration, as defined in the stack
-template and any values specified as template parameters — cloudformation_detect_stack_drift • paws</title>
+<title>Detects whether a stack's actual configuration differs, or has drifted,
+from it's expected configuration, as defined in the stack template and
+any values specified as template parameters — cloudformation_detect_stack_drift • paws</title>
 
 
 <!-- jquery -->
@@ -41,18 +41,32 @@ template and any values specified as template parameters — cloudformation_dete
 
 
 
-<meta property="og:title" content="Detects whether a stack's actual configuration differs, or has
-<em>drifted</em>, from it's expected configuration, as defined in the stack
-template and any values specified as template parameters — cloudformation_detect_stack_drift" />
-<meta property="og:description" content="Detects whether a stack\'s actual configuration differs, or has
-drifted, from it\'s expected configuration, as defined in the stack
+<meta property="og:title" content="Detects whether a stack's actual configuration differs, or has drifted,
+from it's expected configuration, as defined in the stack template and
+any values specified as template parameters — cloudformation_detect_stack_drift" />
+<meta property="og:description" content="Detects whether a stack's actual configuration differs, or has
+drifted, from it's expected configuration, as defined in the stack
 template and any values specified as template parameters. For each
 resource in the stack that supports drift detection, AWS CloudFormation
 compares the actual configuration of the resource with its expected
 template configuration. Only resource properties explicitly defined in
 the stack template are checked for drift. A stack is considered to have
 drifted if one or more of its resources differ from their expected
-template configurations. For more information, see Detecting Unregulated Configuration Changes to Stacks and Resources." />
+template configurations. For more information, see Detecting Unregulated Configuration Changes to Stacks and Resources.
+Use DetectStackDrift to detect drift on all supported resources for a
+given stack, or DetectStackResourceDrift to detect drift on individual
+resources.
+For a list of stack resources that currently support drift detection,
+see Resources that Support Drift Detection.
+DetectStackDrift can take up to several minutes, depending on the
+number of resources contained within the stack. Use
+DescribeStackDriftDetectionStatus to monitor the progress of a detect
+stack drift operation. Once the drift detection operation has completed,
+use DescribeStackResourceDrifts to return drift information about the
+stack and its resources.
+When detecting drift on a stack, AWS CloudFormation does not detect
+drift on any nested stacks belonging to that stack. Perform
+DetectStackDrift directly on the nested stack itself." />
 
 
 
@@ -84,7 +98,7 @@ template configurations. For more information, see Detecting Unregulated Configu
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -92,7 +106,7 @@ template configurations. For more information, see Detecting Unregulated Configu
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -104,7 +118,7 @@ template configurations. For more information, see Detecting Unregulated Configu
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,16 +135,16 @@ template configurations. For more information, see Detecting Unregulated Configu
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Detects whether a stack's actual configuration differs, or has
-<em>drifted</em>, from it's expected configuration, as defined in the stack
-template and any values specified as template parameters</h1>
+    <h1>Detects whether a stack's actual configuration differs, or has drifted,
+from it's expected configuration, as defined in the stack template and
+any values specified as template parameters</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/cloudformation_operations.R'><code>R/cloudformation_operations.R</code></a></small>
     <div class="hidden name"><code>cloudformation_detect_stack_drift.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Detects whether a stack\'s actual configuration differs, or has
-<em>drifted</em>, from it\'s expected configuration, as defined in the stack
+    <p>Detects whether a stack's actual configuration differs, or has
+<em>drifted</em>, from it's expected configuration, as defined in the stack
 template and any values specified as template parameters. For each
 resource in the stack that supports drift detection, AWS CloudFormation
 compares the actual configuration of the resource with its expected
@@ -138,9 +152,23 @@ template configuration. Only resource properties explicitly defined in
 the stack template are checked for drift. A stack is considered to have
 drifted if one or more of its resources differ from their expected
 template configurations. For more information, see <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html'>Detecting Unregulated Configuration Changes to Stacks and Resources</a>.</p>
+<p>Use <code>DetectStackDrift</code> to detect drift on all supported resources for a
+given stack, or DetectStackResourceDrift to detect drift on individual
+resources.</p>
+<p>For a list of stack resources that currently support drift detection,
+see <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resource-import-supported-resources.html'>Resources that Support Drift Detection</a>.</p>
+<p><code>DetectStackDrift</code> can take up to several minutes, depending on the
+number of resources contained within the stack. Use
+DescribeStackDriftDetectionStatus to monitor the progress of a detect
+stack drift operation. Once the drift detection operation has completed,
+use DescribeStackResourceDrifts to return drift information about the
+stack and its resources.</p>
+<p>When detecting drift on a stack, AWS CloudFormation does not detect
+drift on any nested stacks belonging to that stack. Perform
+<code>DetectStackDrift</code> directly on the nested stack itself.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloudformation_detect_stack_drift</span>(<span class='no'>StackName</span>, <span class='no'>LogicalResourceIds</span>)</pre>
+    <pre class="usage"><span class='fu'>cloudformation_detect_stack_drift</span><span class='op'>(</span><span class='va'>StackName</span>, <span class='va'>LogicalResourceIds</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,31 +183,16 @@ template configurations. For more information, see <a href='https://docs.aws.ama
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Use <code>DetectStackDrift</code> to detect drift on all supported resources for a
-given stack, or DetectStackResourceDrift to detect drift on individual
-resources.</p>
-<p>For a list of stack resources that currently support drift detection,
-see <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html'>Resources that Support Drift Detection</a>.</p>
-<p><code>DetectStackDrift</code> can take up to several minutes, depending on the
-number of resources contained within the stack. Use
-DescribeStackDriftDetectionStatus to monitor the progress of a detect
-stack drift operation. Once the drift detection operation has completed,
-use DescribeStackResourceDrifts to return drift information about the
-stack and its resources.</p>
-<p>When detecting drift on a stack, AWS CloudFormation does not detect
-drift on any nested stacks belonging to that stack. Perform
-<code>DetectStackDrift</code> directly on the nested stack itself.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>detect_stack_drift</span>(
-  <span class='kw'>StackName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LogicalResourceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>detect_stack_drift</span><span class='op'>(</span>
+  StackName <span class='op'>=</span> <span class='st'>"string"</span>,
+  LogicalResourceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -197,7 +210,7 @@ drift on any nested stacks belonging to that stack. Perform
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

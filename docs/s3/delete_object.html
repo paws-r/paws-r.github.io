@@ -44,7 +44,28 @@ delete marker, which becomes the latest version of the object — s3_delete_obje
 delete marker, which becomes the latest version of the object — s3_delete_object" />
 <meta property="og:description" content="Removes the null version (if there is one) of an object and inserts a
 delete marker, which becomes the latest version of the object. If there
-isn\'t a null version, Amazon S3 does not remove any objects." />
+isn't a null version, Amazon S3 does not remove any objects.
+To remove a specific version, you must be the bucket owner and you must
+use the version Id subresource. Using this subresource permanently
+deletes the version. If the object deleted is a delete marker, Amazon S3
+sets the response header, x-amz-delete-marker, to true.
+If the object you want to delete is in a bucket where the bucket
+versioning configuration is MFA Delete enabled, you must include the
+x-amz-mfa request header in the DELETE versionId request. Requests
+that include x-amz-mfa must use HTTPS.
+For more information about MFA Delete, see Using MFA Delete.
+To see sample requests that use versioning, see Sample Request.
+You can delete objects by explicitly calling the DELETE Object API or
+configure its lifecycle
+(PutBucketLifecycle)
+to enable Amazon S3 to remove them for you. If you want to block users
+or accounts from removing or deleting objects from your bucket, you must
+deny them the s3:DeleteObject, s3:DeleteObjectVersion, and
+s3:PutLifeCycleConfiguration actions.
+The following operation is related to DeleteObject:
+PutObject
+
+" />
 
 
 
@@ -76,7 +97,7 @@ isn\'t a null version, Amazon S3 does not remove any objects." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +105,7 @@ isn\'t a null version, Amazon S3 does not remove any objects." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +117,7 @@ isn\'t a null version, Amazon S3 does not remove any objects." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,11 +143,32 @@ delete marker, which becomes the latest version of the object</h1>
     <div class="ref-description">
     <p>Removes the null version (if there is one) of an object and inserts a
 delete marker, which becomes the latest version of the object. If there
-isn\'t a null version, Amazon S3 does not remove any objects.</p>
+isn't a null version, Amazon S3 does not remove any objects.</p>
+<p>To remove a specific version, you must be the bucket owner and you must
+use the version Id subresource. Using this subresource permanently
+deletes the version. If the object deleted is a delete marker, Amazon S3
+sets the response header, <code>x-amz-delete-marker</code>, to true.</p>
+<p>If the object you want to delete is in a bucket where the bucket
+versioning configuration is MFA Delete enabled, you must include the
+<code>x-amz-mfa</code> request header in the DELETE <code>versionId</code> request. Requests
+that include <code>x-amz-mfa</code> must use HTTPS.</p>
+<p>For more information about MFA Delete, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMFADelete.html'>Using MFA Delete</a>.
+To see sample requests that use versioning, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html#ExampleVersionObjectDelete'>Sample Request</a>.</p>
+<p>You can delete objects by explicitly calling the DELETE Object API or
+configure its lifecycle
+(<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html'>PutBucketLifecycle</a>)
+to enable Amazon S3 to remove them for you. If you want to block users
+or accounts from removing or deleting objects from your bucket, you must
+deny them the <code>s3:DeleteObject</code>, <code>s3:DeleteObjectVersion</code>, and
+<code>s3:PutLifeCycleConfiguration</code> actions.</p>
+<p>The following operation is related to <code>DeleteObject</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html'>PutObject</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_delete_object</span>(<span class='no'>Bucket</span>, <span class='no'>Key</span>, <span class='no'>MFA</span>, <span class='no'>VersionId</span>, <span class='no'>RequestPayer</span>,
-  <span class='no'>BypassGovernanceRetention</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_delete_object</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Key</span>, <span class='va'>MFA</span>, <span class='va'>VersionId</span>, <span class='va'>RequestPayer</span>,
+  <span class='va'>BypassGovernanceRetention</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,9 +179,17 @@ isn\'t a null version, Amazon S3 does not remove any objects.</p>
 <p>When using this API with an access point, you must direct requests to
 the access point hostname. The access point hostname takes the form
 <em>AccessPointName</em>-<em>AccountId</em>.s3-accesspoint.<em>Region</em>.amazonaws.com.
-When using this operation using an access point through the AWS SDKs,
-you provide the access point ARN in place of the bucket name. For more
+When using this operation with an access point through the AWS SDKs, you
+provide the access point ARN in place of the bucket name. For more
 information about access point ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html'>Using Access Points</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>When using this API with Amazon S3 on Outposts, you must direct requests
+to the S3 on Outposts hostname. The S3 on Outposts hostname takes the
+form
+<em>AccessPointName</em>-<em>AccountId</em>.<em>outpostID</em>.s3-outposts.<em>Region</em>.amazonaws.com.
+When using this operation using S3 on Outposts through the AWS SDKs, you
+provide the Outposts bucket ARN in place of the bucket name. For more
+information about S3 on Outposts ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html'>Using S3 on Outposts</a>
 in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
@@ -148,10 +198,10 @@ in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
       <th>MFA</th>
-      <td><p>The concatenation of the authentication device\'s serial number, a
-space, and the value that is displayed on your authentication device.
-Required to permanently delete a versioned object if versioning is
-configured with MFA delete enabled.</p></td>
+      <td><p>The concatenation of the authentication device's serial number, a space,
+and the value that is displayed on your authentication device. Required
+to permanently delete a versioned object if versioning is configured
+with MFA delete enabled.</p></td>
     </tr>
     <tr>
       <th>VersionId</th>
@@ -166,57 +216,45 @@ configured with MFA delete enabled.</p></td>
       <td><p>Indicates whether S3 Object Lock should bypass Governance-mode
 restrictions to process this operation.</p></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To remove a specific version, you must be the bucket owner and you must
-use the version Id subresource. Using this subresource permanently
-deletes the version. If the object deleted is a delete marker, Amazon S3
-sets the response header, <code>x-amz-delete-marker</code>, to true.</p>
-<p>If the object you want to delete is in a bucket where the bucket
-versioning configuration is MFA Delete enabled, you must include the
-<code>x-amz-mfa</code> request header in the DELETE <code>versionId</code> request. Requests
-that include <code>x-amz-mfa</code> must use HTTPS.</p>
-<p>For more information about MFA Delete, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMFADelete.html'>Using MFA Delete</a>.
-To see sample requests that use versioning, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectDELETE.html#ExampleVersionObjectDelete'>Sample Request</a>.</p>
-<p>You can delete objects by explicitly calling the DELETE Object API or
-configure its lifecycle (PutBucketLifecycle) to enable Amazon S3 to
-remove them for you. If you want to block users or accounts from
-removing or deleting objects from your bucket, you must deny them the
-<code>s3:DeleteObject</code>, <code>s3:DeleteObjectVersion</code>, and
-<code>s3:PutLifeCycleConfiguration</code> actions.</p>
-<p>The following operation is related to <code>DeleteObject</code>:</p><ul>
-<li><p>PutObject</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>delete_object</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MFA</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VersionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RequestPayer</span> <span class='kw'>=</span> <span class='st'>"requester"</span>,
-  <span class='kw'>BypassGovernanceRetention</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_object</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Key <span class='op'>=</span> <span class='st'>"string"</span>,
+  MFA <span class='op'>=</span> <span class='st'>"string"</span>,
+  VersionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  RequestPayer <span class='op'>=</span> <span class='st'>"requester"</span>,
+  BypassGovernanceRetention <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example deletes an object from an S3 bucket.</span>
-<span class='no'>svc</span>$<span class='fu'>delete_object</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"objectkey.jpg"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_object</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  Key <span class='op'>=</span> <span class='st'>"objectkey.jpg"</span>
+<span class='op'>)</span>
 
 <span class='co'># The following example deletes an object from a non-versioned bucket.</span>
-<span class='no'>svc</span>$<span class='fu'>delete_object</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"ExampleBucket"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"HappyFace.jpg"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_object</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"ExampleBucket"</span>,
+  Key <span class='op'>=</span> <span class='st'>"HappyFace.jpg"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -232,7 +270,7 @@ removing or deleting objects from your bucket, you must deny them the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

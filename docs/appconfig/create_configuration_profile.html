@@ -43,7 +43,16 @@
 <meta property="og:description" content="Information that enables AppConfig to access the configuration source.
 Valid configuration sources include Systems Manager (SSM) documents, SSM
 Parameter Store parameters, and Amazon S3 objects. A configuration
-profile includes the following information." />
+profile includes the following information.
+The Uri location of the configuration data.
+The AWS Identity and Access Management (IAM) role that provides
+access to the configuration data.
+A validator for the configuration data. Available validators include
+either a JSON Schema or an AWS Lambda function.
+
+
+For more information, see Create a Configuration and a Configuration Profile
+in the AWS AppConfig User Guide." />
 
 
 
@@ -75,7 +84,7 @@ profile includes the following information." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +92,7 @@ profile includes the following information." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +104,7 @@ profile includes the following information." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,11 +130,20 @@ profile includes the following information." />
     <p>Information that enables AppConfig to access the configuration source.
 Valid configuration sources include Systems Manager (SSM) documents, SSM
 Parameter Store parameters, and Amazon S3 objects. A configuration
-profile includes the following information.</p>
+profile includes the following information.</p><ul>
+<li><p>The Uri location of the configuration data.</p></li>
+<li><p>The AWS Identity and Access Management (IAM) role that provides
+access to the configuration data.</p></li>
+<li><p>A validator for the configuration data. Available validators include
+either a JSON Schema or an AWS Lambda function.</p></li>
+</ul>
+
+<p>For more information, see <a href='https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile.html'>Create a Configuration and a Configuration Profile</a>
+in the <em>AWS AppConfig User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>appconfig_create_configuration_profile</span>(<span class='no'>ApplicationId</span>, <span class='no'>Name</span>, <span class='no'>Description</span>,
-  <span class='no'>LocationUri</span>, <span class='no'>RetrievalRoleArn</span>, <span class='no'>Validators</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>appconfig_create_configuration_profile</span><span class='op'>(</span><span class='va'>ApplicationId</span>, <span class='va'>Name</span>, <span class='va'>Description</span>,
+  <span class='va'>LocationUri</span>, <span class='va'>RetrievalRoleArn</span>, <span class='va'>Validators</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,38 +189,26 @@ optional value, both of which you define.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>The Uri location of the configuration data.</p></li>
-<li><p>The AWS Identity and Access Management (IAM) role that provides
-access to the configuration data.</p></li>
-<li><p>A validator for the configuration data. Available validators include
-either a JSON Schema or an AWS Lambda function.</p></li>
-</ul>
-
-<p>For more information, see <a href='http://docs.aws.amazon.com/systems-manager/latest/userguide/appconfig-creating-configuration-and-profile.html'>Create a Configuration and a Configuration Profile</a>
-in the <em>AWS AppConfig User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_configuration_profile</span>(
-  <span class='kw'>ApplicationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LocationUri</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RetrievalRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Validators</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"JSON_SCHEMA"</span><span class='kw'>|</span><span class='st'>"LAMBDA"</span>,
-      <span class='kw'>Content</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_configuration_profile</span><span class='op'>(</span>
+  ApplicationId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  LocationUri <span class='op'>=</span> <span class='st'>"string"</span>,
+  RetrievalRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Validators <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"JSON_SCHEMA"</span><span class='op'>|</span><span class='st'>"LAMBDA"</span>,
+      Content <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -220,7 +226,7 @@ in the <em>AWS AppConfig User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

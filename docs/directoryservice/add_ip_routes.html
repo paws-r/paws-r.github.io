@@ -49,7 +49,11 @@ addressable IP address, you must add a CIDR address block to correctly
 route traffic to and from your Microsoft AD on Amazon Web Services.
 AddIpRoutes adds this address block. You can also use AddIpRoutes to
 facilitate routing traffic that uses public IP ranges from your
-Microsoft AD on AWS to a peer VPC." />
+Microsoft AD on AWS to a peer VPC.
+Before you call AddIpRoutes, ensure that all of the required
+permissions have been explicitly granted through a policy. For details
+about what permissions are required to run the AddIpRoutes operation,
+see AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference." />
 
 
 
@@ -81,7 +85,7 @@ Microsoft AD on AWS to a peer VPC." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -89,7 +93,7 @@ Microsoft AD on AWS to a peer VPC." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +105,7 @@ Microsoft AD on AWS to a peer VPC." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,10 +136,14 @@ route traffic to and from your Microsoft AD on Amazon Web Services.
 <em>AddIpRoutes</em> adds this address block. You can also use <em>AddIpRoutes</em> to
 facilitate routing traffic that uses public IP ranges from your
 Microsoft AD on AWS to a peer VPC.</p>
+<p>Before you call <em>AddIpRoutes</em>, ensure that all of the required
+permissions have been explicitly granted through a policy. For details
+about what permissions are required to run the <em>AddIpRoutes</em> operation,
+see <a href='https://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html'>AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>directoryservice_add_ip_routes</span>(<span class='no'>DirectoryId</span>, <span class='no'>IpRoutes</span>,
-  <span class='no'>UpdateSecurityGroupForDirectoryControllers</span>)</pre>
+    <pre class="usage"><span class='fu'>directoryservice_add_ip_routes</span><span class='op'>(</span><span class='va'>DirectoryId</span>, <span class='va'>IpRoutes</span>,
+  <span class='va'>UpdateSecurityGroupForDirectoryControllers</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,8 +161,8 @@ domain.</p></td>
     <tr>
       <th>UpdateSecurityGroupForDirectoryControllers</th>
       <td><p>If set to true, updates the inbound and outbound rules of the security
-group that has the description: \"AWS created security group for
-<em>directory ID</em> directory controllers.\" Following are the new rules:</p>
+group that has the description: "AWS created security group for
+<em>directory ID</em> directory controllers." Following are the new rules:</p>
 <p>Inbound:</p><ul>
 <li><p>Type: Custom UDP Rule, Protocol: UDP, Range: 88, Source: 0.0.0.0/0</p></li>
 <li><p>Type: Custom UDP Rule, Protocol: UDP, Range: 123, Source: 0.0.0.0/0</p></li>
@@ -186,25 +194,20 @@ exposed publicly.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Before you call <em>AddIpRoutes</em>, ensure that all of the required
-permissions have been explicitly granted through a policy. For details
-about what permissions are required to run the <em>AddIpRoutes</em> operation,
-see <a href='http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html'>AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>add_ip_routes</span>(
-  <span class='kw'>DirectoryId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IpRoutes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CidrIp</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>UpdateSecurityGroupForDirectoryControllers</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>add_ip_routes</span><span class='op'>(</span>
+  DirectoryId <span class='op'>=</span> <span class='st'>"string"</span>,
+  IpRoutes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CidrIp <span class='op'>=</span> <span class='st'>"string"</span>,
+      Description <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  UpdateSecurityGroupForDirectoryControllers <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -222,7 +225,7 @@ see <a href='http://docs.aws.amazon.com/directoryservice/latest/admin-guide/Usin
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

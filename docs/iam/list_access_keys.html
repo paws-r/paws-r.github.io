@@ -44,7 +44,16 @@ specified IAM user — iam_list_access_keys • paws</title>
 specified IAM user — iam_list_access_keys" />
 <meta property="og:description" content="Returns information about the access key IDs associated with the
 specified IAM user. If there is none, the operation returns an empty
-list." />
+list.
+Although each user is limited to a small number of keys, you can still
+paginate the results using the MaxItems and Marker parameters.
+If the UserName field is not specified, the user name is determined
+implicitly based on the AWS access key ID used to sign the request. This
+operation works for access keys under the AWS account. Consequently, you
+can use this operation to manage AWS account root user credentials even
+if the AWS account has no associated users.
+To ensure the security of your AWS account, the secret access key is
+accessible only during key and user creation." />
 
 
 
@@ -76,7 +85,7 @@ list." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +93,7 @@ list." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +105,7 @@ list." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,9 +132,18 @@ specified IAM user</h1>
     <p>Returns information about the access key IDs associated with the
 specified IAM user. If there is none, the operation returns an empty
 list.</p>
+<p>Although each user is limited to a small number of keys, you can still
+paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+<p>If the <code>UserName</code> field is not specified, the user name is determined
+implicitly based on the AWS access key ID used to sign the request. This
+operation works for access keys under the AWS account. Consequently, you
+can use this operation to manage AWS account root user credentials even
+if the AWS account has no associated users.</p>
+<p>To ensure the security of your AWS account, the secret access key is
+accessible only during key and user creation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iam_list_access_keys</span>(<span class='no'>UserName</span>, <span class='no'>Marker</span>, <span class='no'>MaxItems</span>)</pre>
+    <pre class="usage"><span class='fu'>iam_list_access_keys</span><span class='op'>(</span><span class='va'>UserName</span>, <span class='va'>Marker</span>, <span class='va'>MaxItems</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,7 +151,7 @@ list.</p>
     <tr>
       <th>UserName</th>
       <td><p>The name of the user.</p>
-<p>This parameter allows (through its <a href='http://wikipedia.org/wiki/regex'>regex pattern</a>) a string of characters
+<p>This parameter allows (through its <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a>) a string of characters
 consisting of upper and lowercase alphanumeric characters with no
 spaces. You can also include any of the following characters: \_+=,.@-</p></td>
     </tr>
@@ -157,35 +175,27 @@ subsequent call that tells the service where to continue from.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Although each user is limited to a small number of keys, you can still
-paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-<p>If the <code>UserName</code> field is not specified, the user name is determined
-implicitly based on the AWS access key ID used to sign the request. This
-operation works for access keys under the AWS account. Consequently, you
-can use this operation to manage AWS account root user credentials even
-if the AWS account has no associated users.</p>
-<p>To ensure the security of your AWS account, the secret access key is
-accessible only during key and user creation.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_access_keys</span>(
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Marker</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxItems</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_access_keys</span><span class='op'>(</span>
+  UserName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Marker <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxItems <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following command lists the access keys IDs for the IAM user named</span>
 <span class='co'># Alice.</span>
-<span class='no'>svc</span>$<span class='fu'>list_access_keys</span>(
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"Alice"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_access_keys</span><span class='op'>(</span>
+  UserName <span class='op'>=</span> <span class='st'>"Alice"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -201,7 +211,7 @@ accessible only during key and user creation.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,14 @@
 
 
 <meta property="og:title" content="Cancels the specified Spot Fleet requests — ec2_cancel_spot_fleet_requests" />
-<meta property="og:description" content="Cancels the specified Spot Fleet requests." />
+<meta property="og:description" content="Cancels the specified Spot Fleet requests.
+After you cancel a Spot Fleet request, the Spot Fleet launches no new
+Spot Instances. You must specify whether the Spot Fleet should also
+terminate its Spot Instances. If you terminate the instances, the Spot
+Fleet request enters the cancelled_terminating state. Otherwise, the
+Spot Fleet request enters the cancelled_running state and the
+instances continue to run until they are interrupted or you terminate
+them manually." />
 
 
 
@@ -72,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +87,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +99,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +123,17 @@
 
     <div class="ref-description">
     <p>Cancels the specified Spot Fleet requests.</p>
+<p>After you cancel a Spot Fleet request, the Spot Fleet launches no new
+Spot Instances. You must specify whether the Spot Fleet should also
+terminate its Spot Instances. If you terminate the instances, the Spot
+Fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the
+Spot Fleet request enters the <code>cancelled_running</code> state and the
+instances continue to run until they are interrupted or you terminate
+them manually.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_cancel_spot_fleet_requests</span>(<span class='no'>DryRun</span>, <span class='no'>SpotFleetRequestIds</span>,
-  <span class='no'>TerminateInstances</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_cancel_spot_fleet_requests</span><span class='op'>(</span><span class='va'>DryRun</span>, <span class='va'>SpotFleetRequestIds</span>,
+  <span class='va'>TerminateInstances</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,47 +156,41 @@ is canceled successfully.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>After you cancel a Spot Fleet request, the Spot Fleet launches no new
-Spot Instances. You must specify whether the Spot Fleet should also
-terminate its Spot Instances. If you terminate the instances, the Spot
-Fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the
-Spot Fleet request enters the <code>cancelled_running</code> state and the
-instances continue to run until they are interrupted or you terminate
-them manually.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>cancel_spot_fleet_requests</span>(
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>SpotFleetRequestIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>cancel_spot_fleet_requests</span><span class='op'>(</span>
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  SpotFleetRequestIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>TerminateInstances</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+  <span class='op'>)</span>,
+  TerminateInstances <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example cancels the specified Spot fleet request and terminates its</span>
 <span class='co'># associated Spot Instances.</span>
-<span class='no'>svc</span>$<span class='fu'>cancel_spot_fleet_requests</span>(
-  <span class='kw'>SpotFleetRequestIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>cancel_spot_fleet_requests</span><span class='op'>(</span>
+  SpotFleetRequestIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE"</span>
-  ),
-  <span class='kw'>TerminateInstances</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)
+  <span class='op'>)</span>,
+  TerminateInstances <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
 <span class='co'># This example cancels the specified Spot fleet request without</span>
 <span class='co'># terminating its associated Spot Instances.</span>
-<span class='no'>svc</span>$<span class='fu'>cancel_spot_fleet_requests</span>(
-  <span class='kw'>SpotFleetRequestIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>cancel_spot_fleet_requests</span><span class='op'>(</span>
+  SpotFleetRequestIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE"</span>
-  ),
-  <span class='kw'>TerminateInstances</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
-}</pre>
+  <span class='op'>)</span>,
+  TerminateInstances <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -198,7 +206,7 @@ them manually.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

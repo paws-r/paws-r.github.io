@@ -42,7 +42,10 @@
 <meta property="og:title" content="Creates one or more virtual tapes — storagegateway_create_tapes" />
 <meta property="og:description" content="Creates one or more virtual tapes. You write data to the virtual tapes
 and then archive the tapes. This operation is only supported in the tape
-gateway type." />
+gateway type.
+Cache storage must be allocated to the gateway before you can create
+virtual tapes. Use the AddCache operation to add cache storage to a
+gateway." />
 
 
 
@@ -74,7 +77,7 @@ gateway type." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +85,7 @@ gateway type." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +97,7 @@ gateway type." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +123,14 @@ gateway type." />
     <p>Creates one or more virtual tapes. You write data to the virtual tapes
 and then archive the tapes. This operation is only supported in the tape
 gateway type.</p>
+<p>Cache storage must be allocated to the gateway before you can create
+virtual tapes. Use the AddCache operation to add cache storage to a
+gateway.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>storagegateway_create_tapes</span>(<span class='no'>GatewayARN</span>, <span class='no'>TapeSizeInBytes</span>, <span class='no'>ClientToken</span>,
-  <span class='no'>NumTapesToCreate</span>, <span class='no'>TapeBarcodePrefix</span>, <span class='no'>KMSEncrypted</span>, <span class='no'>KMSKey</span>, <span class='no'>PoolId</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>storagegateway_create_tapes</span><span class='op'>(</span><span class='va'>GatewayARN</span>, <span class='va'>TapeSizeInBytes</span>, <span class='va'>ClientToken</span>,
+  <span class='va'>NumTapesToCreate</span>, <span class='va'>TapeBarcodePrefix</span>, <span class='va'>KMSEncrypted</span>, <span class='va'>KMSKey</span>, <span class='va'>PoolId</span>, <span class='va'>Worm</span>,
+  <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,7 +168,7 @@ uppercase letters from A to Z.</p></td>
       <th>KMSEncrypted</th>
       <td><p>Set to <code>true</code> to use Amazon S3 server-side encryption with your own AWS
 KMS key, or <code>false</code> to use a key managed by Amazon S3. Optional.</p>
-<p>Valid Values: <code>true</code> \| <code>false</code></p></td>
+<p>Valid Values: <code>true</code> | <code>false</code></p></td>
     </tr>
     <tr>
       <th>KMSKey</th>
@@ -177,7 +184,12 @@ tape in this pool is archived in the S3 storage class that is associated
 with the pool. When you use your backup application to eject the tape,
 the tape is archived directly into the storage class (S3 Glacier or S3
 Glacier Deep Archive) that corresponds to the pool.</p>
-<p>Valid Values: <code>GLACIER</code> \| <code>DEEP_ARCHIVE</code></p></td>
+<p>Valid Values: <code>GLACIER</code> | <code>DEEP_ARCHIVE</code></p></td>
+    </tr>
+    <tr>
+      <th>Worm</th>
+      <td><p>Set to <code>TRUE</code> if the tape you are creating is to be configured as a
+write-once-read-many (WORM) tape.</p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -185,48 +197,47 @@ Glacier Deep Archive) that corresponds to the pool.</p>
 is a key-value pair.</p>
 <p>Valid characters for key and value are letters, spaces, and numbers
 representable in UTF-8 format, and the following special characters: + -
-= . \_ : / @. The maximum length of a tag\'s key is 128 characters, and
-the maximum length for a tag\'s value is 256.</p></td>
+= . \_ : / @. The maximum length of a tag's key is 128 characters, and
+the maximum length for a tag's value is 256.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Cache storage must be allocated to the gateway before you can create
-virtual tapes. Use the AddCache operation to add cache storage to a
-gateway.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_tapes</span>(
-  <span class='kw'>GatewayARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TapeSizeInBytes</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NumTapesToCreate</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>TapeBarcodePrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>KMSEncrypted</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>KMSKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PoolId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_tapes</span><span class='op'>(</span>
+  GatewayARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  TapeSizeInBytes <span class='op'>=</span> <span class='fl'>123</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  NumTapesToCreate <span class='op'>=</span> <span class='fl'>123</span>,
+  TapeBarcodePrefix <span class='op'>=</span> <span class='st'>"string"</span>,
+  KMSEncrypted <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  KMSKey <span class='op'>=</span> <span class='st'>"string"</span>,
+  PoolId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Worm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Creates one or more virtual tapes.</span>
-<span class='no'>svc</span>$<span class='fu'>create_tapes</span>(
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"77777"</span>,
-  <span class='kw'>GatewayARN</span> <span class='kw'>=</span> <span class='st'>"arn:aws:storagegateway:us-east-1:999999999999:gateway/sgw-12A3456B"</span>,
-  <span class='kw'>NumTapesToCreate</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
-  <span class='kw'>TapeBarcodePrefix</span> <span class='kw'>=</span> <span class='st'>"TEST"</span>,
-  <span class='kw'>TapeSizeInBytes</span> <span class='kw'>=</span> <span class='fl'>107374182400</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_tapes</span><span class='op'>(</span>
+  ClientToken <span class='op'>=</span> <span class='st'>"77777"</span>,
+  GatewayARN <span class='op'>=</span> <span class='st'>"arn:aws:storagegateway:us-east-1:999999999999:gateway/sgw-12A3456B"</span>,
+  NumTapesToCreate <span class='op'>=</span> <span class='fl'>3L</span>,
+  TapeBarcodePrefix <span class='op'>=</span> <span class='st'>"TEST"</span>,
+  TapeSizeInBytes <span class='op'>=</span> <span class='fl'>107374182400</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -242,7 +253,7 @@ gateway.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

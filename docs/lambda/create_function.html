@@ -42,9 +42,45 @@
 <meta property="og:title" content="Creates a Lambda function — lambda_create_function" />
 <meta property="og:description" content="Creates a Lambda function. To create a function, you need a deployment package
 and an execution role.
-The deployment package contains your function code. The execution role
-grants the function permission to use AWS services, such as Amazon
-CloudWatch Logs for log streaming and AWS X-Ray for request tracing." />
+The deployment package is a .zip file archive or container image that
+contains your function code. The execution role grants the function
+permission to use AWS services, such as Amazon CloudWatch Logs for log
+streaming and AWS X-Ray for request tracing.
+When you create a function, Lambda provisions an instance of the
+function and its supporting resources. If your function connects to a
+VPC, this process can take a minute or so. During this time, you can't
+invoke or modify the function. The State, StateReason, and
+StateReasonCode fields in the response from GetFunctionConfiguration
+indicate when the function is ready to invoke. For more information, see
+Function States.
+A function has an unpublished version, and can have published versions
+and aliases. The unpublished version changes when you update your
+function's code and configuration. A published version is a snapshot of
+your function code and configuration that can't be changed. An alias is
+a named resource that maps to a version, and can be changed to map to a
+different version. Use the Publish parameter to create version 1 of
+your function from its initial configuration.
+The other parameters let you configure version-specific and
+function-level settings. You can modify version-specific settings later
+with UpdateFunctionConfiguration. Function-level settings apply to both
+the unpublished and published versions of the function, and include tags
+(TagResource) and per-function concurrency limits
+(PutFunctionConcurrency).
+You can use code signing if your deployment package is a .zip file
+archive. To enable code signing for this function, specify the ARN of a
+code-signing configuration. When a user attempts to deploy a code
+package with UpdateFunctionCode, Lambda checks that the code package has
+a valid signature from a trusted publisher. The code-signing
+configuration includes set set of signing profiles, which define the
+trusted publishers for this function.
+If another account or an AWS service invokes your function, use
+AddPermission to grant permission by creating a resource-based IAM
+policy. You can grant permissions at the function level, on a version,
+or on an alias.
+To invoke your function directly, use Invoke. To invoke your function in
+response to events in other AWS services, create an event source mapping
+(CreateEventSourceMapping), or configure a function trigger in the other
+service. For more information, see Invoking Functions." />
 
 
 
@@ -76,7 +112,7 @@ CloudWatch Logs for log streaming and AWS X-Ray for request tracing." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +120,7 @@ CloudWatch Logs for log streaming and AWS X-Ray for request tracing." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +132,7 @@ CloudWatch Logs for log streaming and AWS X-Ray for request tracing." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,16 +155,53 @@ CloudWatch Logs for log streaming and AWS X-Ray for request tracing." />
     </div>
 
     <div class="ref-description">
-    <p>Creates a Lambda function. To create a function, you need a <a href='https://docs.aws.amazon.com/lambda/latest/dg/deployment-package-v2.html'>deployment package</a>
-and an <a href='https://docs.aws.amazon.com/lambda/latest/dg/intro-permission-model.html#lambda-intro-execution-role'>execution role</a>.
-The deployment package contains your function code. The execution role
-grants the function permission to use AWS services, such as Amazon
-CloudWatch Logs for log streaming and AWS X-Ray for request tracing.</p>
+    <p>Creates a Lambda function. To create a function, you need a <a href='https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html'>deployment package</a>
+and an <a href='https://docs.aws.amazon.com/lambda/latest/dg/lambda-permissions.html#lambda-intro-execution-role'>execution role</a>.
+The deployment package is a .zip file archive or container image that
+contains your function code. The execution role grants the function
+permission to use AWS services, such as Amazon CloudWatch Logs for log
+streaming and AWS X-Ray for request tracing.</p>
+<p>When you create a function, Lambda provisions an instance of the
+function and its supporting resources. If your function connects to a
+VPC, this process can take a minute or so. During this time, you can't
+invoke or modify the function. The <code>State</code>, <code>StateReason</code>, and
+<code>StateReasonCode</code> fields in the response from GetFunctionConfiguration
+indicate when the function is ready to invoke. For more information, see
+<a href='https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html'>Function States</a>.</p>
+<p>A function has an unpublished version, and can have published versions
+and aliases. The unpublished version changes when you update your
+function's code and configuration. A published version is a snapshot of
+your function code and configuration that can't be changed. An alias is
+a named resource that maps to a version, and can be changed to map to a
+different version. Use the <code>Publish</code> parameter to create version <code>1</code> of
+your function from its initial configuration.</p>
+<p>The other parameters let you configure version-specific and
+function-level settings. You can modify version-specific settings later
+with UpdateFunctionConfiguration. Function-level settings apply to both
+the unpublished and published versions of the function, and include tags
+(TagResource) and per-function concurrency limits
+(PutFunctionConcurrency).</p>
+<p>You can use code signing if your deployment package is a .zip file
+archive. To enable code signing for this function, specify the ARN of a
+code-signing configuration. When a user attempts to deploy a code
+package with UpdateFunctionCode, Lambda checks that the code package has
+a valid signature from a trusted publisher. The code-signing
+configuration includes set set of signing profiles, which define the
+trusted publishers for this function.</p>
+<p>If another account or an AWS service invokes your function, use
+AddPermission to grant permission by creating a resource-based IAM
+policy. You can grant permissions at the function level, on a version,
+or on an alias.</p>
+<p>To invoke your function directly, use Invoke. To invoke your function in
+response to events in other AWS services, create an event source mapping
+(CreateEventSourceMapping), or configure a function trigger in the other
+service. For more information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html'>Invoking Functions</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lambda_create_function</span>(<span class='no'>FunctionName</span>, <span class='no'>Runtime</span>, <span class='no'>Role</span>, <span class='no'>Handler</span>, <span class='no'>Code</span>,
-  <span class='no'>Description</span>, <span class='no'>Timeout</span>, <span class='no'>MemorySize</span>, <span class='no'>Publish</span>, <span class='no'>VpcConfig</span>, <span class='no'>DeadLetterConfig</span>,
-  <span class='no'>Environment</span>, <span class='no'>KMSKeyArn</span>, <span class='no'>TracingConfig</span>, <span class='no'>Tags</span>, <span class='no'>Layers</span>, <span class='no'>FileSystemConfigs</span>)</pre>
+    <pre class="usage"><span class='fu'>lambda_create_function</span><span class='op'>(</span><span class='va'>FunctionName</span>, <span class='va'>Runtime</span>, <span class='va'>Role</span>, <span class='va'>Handler</span>, <span class='va'>Code</span>,
+  <span class='va'>Description</span>, <span class='va'>Timeout</span>, <span class='va'>MemorySize</span>, <span class='va'>Publish</span>, <span class='va'>VpcConfig</span>, <span class='va'>PackageType</span>,
+  <span class='va'>DeadLetterConfig</span>, <span class='va'>Environment</span>, <span class='va'>KMSKeyArn</span>, <span class='va'>TracingConfig</span>, <span class='va'>Tags</span>, <span class='va'>Layers</span>,
+  <span class='va'>FileSystemConfigs</span>, <span class='va'>ImageConfig</span>, <span class='va'>CodeSigningConfigArn</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,19 +221,19 @@ the function name, it is limited to 64 characters in length.</p></td>
     </tr>
     <tr>
       <th>Runtime</th>
-      <td><p>[required] The identifier of the function\'s
+      <td><p>The identifier of the function's
 <a href='https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html'>runtime</a>.</p></td>
     </tr>
     <tr>
       <th>Role</th>
-      <td><p>[required] The Amazon Resource Name (ARN) of the function\'s execution role.</p></td>
+      <td><p>[required] The Amazon Resource Name (ARN) of the function's execution role.</p></td>
     </tr>
     <tr>
       <th>Handler</th>
-      <td><p>[required] The name of the method within your code that Lambda calls to execute
+      <td><p>The name of the method within your code that Lambda calls to execute
 your function. The format includes the file name. It can also include
 namespaces and other qualifiers, depending on the runtime. For more
-information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/programming-model-v2.html'>Programming Model</a>.</p></td>
+information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-features.html'>Programming Model</a>.</p></td>
     </tr>
     <tr>
       <th>Code</th>
@@ -177,9 +250,9 @@ it. The default is 3 seconds. The maximum allowed value is 900 seconds.</p></td>
     </tr>
     <tr>
       <th>MemorySize</th>
-      <td><p>The amount of memory that your function has access to. Increasing the
-function\'s memory also increases its CPU allocation. The default value
-is 128 MB. The value must be a multiple of 64 MB.</p></td>
+      <td><p>The amount of memory available to the function at runtime. Increasing
+the function's memory also increases its CPU allocation. The default
+value is 128 MB. The value can be any multiple of 1 MB.</p></td>
     </tr>
     <tr>
       <th>Publish</th>
@@ -194,6 +267,11 @@ VPC, it can only access resources and the internet through that VPC. For
 more information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html'>VPC Settings</a>.</p></td>
     </tr>
     <tr>
+      <th>PackageType</th>
+      <td><p>The type of deployment package. Set to <code>Image</code> for container image and
+set <code>Zip</code> for ZIP archive.</p></td>
+    </tr>
+    <tr>
       <th>DeadLetterConfig</th>
       <td><p>A dead letter queue configuration that specifies the queue or topic
 where Lambda sends asynchronous events when they fail processing. For
@@ -206,9 +284,9 @@ execution.</p></td>
     </tr>
     <tr>
       <th>KMSKeyArn</th>
-      <td><p>The ARN of the AWS Key Management Service (AWS KMS) key that\'s used to
-encrypt your function\'s environment variables. If it\'s not provided,
-AWS Lambda uses a default service key.</p></td>
+      <td><p>The ARN of the AWS Key Management Service (AWS KMS) key that's used to
+encrypt your function's environment variables. If it's not provided, AWS
+Lambda uses a default service key.</p></td>
     </tr>
     <tr>
       <th>TracingConfig</th>
@@ -218,136 +296,132 @@ with AWS X-Ray.</p></td>
     <tr>
       <th>Tags</th>
       <td><p>A list of
-<a href='https://docs.aws.amazon.com/lambda/latest/dg/tagging.html'>tags</a> to
-apply to the function.</p></td>
+<a href='https://docs.aws.amazon.com/lambda/latest/dg/configuration-tags.html'>tags</a>
+to apply to the function.</p></td>
     </tr>
     <tr>
       <th>Layers</th>
       <td><p>A list of <a href='https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html'>function layers</a>
-to add to the function\'s execution environment. Specify each layer by
+to add to the function's execution environment. Specify each layer by
 its ARN, including the version.</p></td>
     </tr>
     <tr>
       <th>FileSystemConfigs</th>
       <td><p>Connection settings for an Amazon EFS file system.</p></td>
     </tr>
+    <tr>
+      <th>ImageConfig</th>
+      <td><p>Configuration values that override the container image Dockerfile.</p></td>
+    </tr>
+    <tr>
+      <th>CodeSigningConfigArn</th>
+      <td><p>To enable code signing for this function, specify the ARN of a
+code-signing configuration. A code-signing configuration includes a set
+of signing profiles, which define the trusted publishers for this
+function.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you create a function, Lambda provisions an instance of the
-function and its supporting resources. If your function connects to a
-VPC, this process can take a minute or so. During this time, you can\'t
-invoke or modify the function. The <code>State</code>, <code>StateReason</code>, and
-<code>StateReasonCode</code> fields in the response from GetFunctionConfiguration
-indicate when the function is ready to invoke. For more information, see
-<a href='https://docs.aws.amazon.com/lambda/latest/dg/functions-states.html'>Function States</a>.</p>
-<p>A function has an unpublished version, and can have published versions
-and aliases. The unpublished version changes when you update your
-function\'s code and configuration. A published version is a snapshot of
-your function code and configuration that can\'t be changed. An alias is
-a named resource that maps to a version, and can be changed to map to a
-different version. Use the <code>Publish</code> parameter to create version <code>1</code> of
-your function from its initial configuration.</p>
-<p>The other parameters let you configure version-specific and
-function-level settings. You can modify version-specific settings later
-with UpdateFunctionConfiguration. Function-level settings apply to both
-the unpublished and published versions of the function, and include tags
-(TagResource) and per-function concurrency limits
-(PutFunctionConcurrency).</p>
-<p>If another account or an AWS service invokes your function, use
-AddPermission to grant permission by creating a resource-based IAM
-policy. You can grant permissions at the function level, on a version,
-or on an alias.</p>
-<p>To invoke your function directly, use Invoke. To invoke your function in
-response to events in other AWS services, create an event source mapping
-(CreateEventSourceMapping), or configure a function trigger in the other
-service. For more information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/lambda-invocation.html'>Invoking Functions</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_function</span>(
-  <span class='kw'>FunctionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Runtime</span> <span class='kw'>=</span> <span class='st'>"nodejs"</span><span class='kw'>|</span><span class='st'>"nodejs4.3"</span><span class='kw'>|</span><span class='st'>"nodejs6.10"</span><span class='kw'>|</span><span class='st'>"nodejs8.10"</span><span class='kw'>|</span><span class='st'>"nodejs10.x"</span><span class='kw'>|</span><span class='st'>"nodejs12.x"</span><span class='kw'>|</span><span class='st'>"java8"</span><span class='kw'>|</span><span class='st'>"java11"</span><span class='kw'>|</span><span class='st'>"python2.7"</span><span class='kw'>|</span><span class='st'>"python3.6"</span><span class='kw'>|</span><span class='st'>"python3.7"</span><span class='kw'>|</span><span class='st'>"python3.8"</span><span class='kw'>|</span><span class='st'>"dotnetcore1.0"</span><span class='kw'>|</span><span class='st'>"dotnetcore2.0"</span><span class='kw'>|</span><span class='st'>"dotnetcore2.1"</span><span class='kw'>|</span><span class='st'>"dotnetcore3.1"</span><span class='kw'>|</span><span class='st'>"nodejs4.3-edge"</span><span class='kw'>|</span><span class='st'>"go1.x"</span><span class='kw'>|</span><span class='st'>"ruby2.5"</span><span class='kw'>|</span><span class='st'>"ruby2.7"</span><span class='kw'>|</span><span class='st'>"provided"</span>,
-  <span class='kw'>Role</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Handler</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Code</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ZipFile</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-    <span class='kw'>S3Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>S3Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>S3ObjectVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Timeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MemorySize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Publish</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>VpcConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_function</span><span class='op'>(</span>
+  FunctionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Runtime <span class='op'>=</span> <span class='st'>"nodejs"</span><span class='op'>|</span><span class='st'>"nodejs4.3"</span><span class='op'>|</span><span class='st'>"nodejs6.10"</span><span class='op'>|</span><span class='st'>"nodejs8.10"</span><span class='op'>|</span><span class='st'>"nodejs10.x"</span><span class='op'>|</span><span class='st'>"nodejs12.x"</span><span class='op'>|</span><span class='st'>"java8"</span><span class='op'>|</span><span class='st'>"java8.al2"</span><span class='op'>|</span><span class='st'>"java11"</span><span class='op'>|</span><span class='st'>"python2.7"</span><span class='op'>|</span><span class='st'>"python3.6"</span><span class='op'>|</span><span class='st'>"python3.7"</span><span class='op'>|</span><span class='st'>"python3.8"</span><span class='op'>|</span><span class='st'>"dotnetcore1.0"</span><span class='op'>|</span><span class='st'>"dotnetcore2.0"</span><span class='op'>|</span><span class='st'>"dotnetcore2.1"</span><span class='op'>|</span><span class='st'>"dotnetcore3.1"</span><span class='op'>|</span><span class='st'>"nodejs4.3-edge"</span><span class='op'>|</span><span class='st'>"go1.x"</span><span class='op'>|</span><span class='st'>"ruby2.5"</span><span class='op'>|</span><span class='st'>"ruby2.7"</span><span class='op'>|</span><span class='st'>"provided"</span><span class='op'>|</span><span class='st'>"provided.al2"</span>,
+  Role <span class='op'>=</span> <span class='st'>"string"</span>,
+  Handler <span class='op'>=</span> <span class='st'>"string"</span>,
+  Code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ZipFile <span class='op'>=</span> <span class='va'>raw</span>,
+    S3Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+    S3Key <span class='op'>=</span> <span class='st'>"string"</span>,
+    S3ObjectVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+    ImageUri <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  Timeout <span class='op'>=</span> <span class='fl'>123</span>,
+  MemorySize <span class='op'>=</span> <span class='fl'>123</span>,
+  Publish <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  VpcConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>DeadLetterConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>TargetArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Environment</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  PackageType <span class='op'>=</span> <span class='st'>"Zip"</span><span class='op'>|</span><span class='st'>"Image"</span>,
+  DeadLetterConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    TargetArn <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Variables <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>KMSKeyArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TracingConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Mode</span> <span class='kw'>=</span> <span class='st'>"Active"</span><span class='kw'>|</span><span class='st'>"PassThrough"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  KMSKeyArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  TracingConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Mode <span class='op'>=</span> <span class='st'>"Active"</span><span class='op'>|</span><span class='st'>"PassThrough"</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Layers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Layers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>FileSystemConfigs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Arn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>LocalMountPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  FileSystemConfigs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Arn <span class='op'>=</span> <span class='st'>"string"</span>,
+      LocalMountPath <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ImageConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    EntryPoint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    Command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    WorkingDirectory <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  CodeSigningConfigArn <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example creates a function with a deployment package in</span>
 <span class='co'># Amazon S3 and enables X-Ray tracing and environment variable encryption.</span>
-<span class='no'>svc</span>$<span class='fu'>create_function</span>(
-  <span class='kw'>Code</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Bucket</span> <span class='kw'>=</span> <span class='st'>"my-bucket-1xpuxmplzrlbh"</span>,
-    <span class='kw'>S3Key</span> <span class='kw'>=</span> <span class='st'>"function.zip"</span>
-  ),
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"Process image objects from Amazon S3."</span>,
-  <span class='kw'>Environment</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>BUCKET</span> <span class='kw'>=</span> <span class='st'>"my-bucket-1xpuxmplzrlbh"</span>,
-      <span class='kw'>PREFIX</span> <span class='kw'>=</span> <span class='st'>"inbound"</span>
-    )
-  ),
-  <span class='kw'>FunctionName</span> <span class='kw'>=</span> <span class='st'>"my-function"</span>,
-  <span class='kw'>Handler</span> <span class='kw'>=</span> <span class='st'>"index.handler"</span>,
-  <span class='kw'>KMSKeyArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:kms:us-west-2:123456789012:key/b0844d6c-xmpl-4463-97a4-d49f50839966"</span>,
-  <span class='kw'>MemorySize</span> <span class='kw'>=</span> <span class='fl'>256L</span>,
-  <span class='kw'>Publish</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>Role</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/lambda-role"</span>,
-  <span class='kw'>Runtime</span> <span class='kw'>=</span> <span class='st'>"nodejs12.x"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DEPARTMENT</span> <span class='kw'>=</span> <span class='st'>"Assets"</span>
-  ),
-  <span class='kw'>Timeout</span> <span class='kw'>=</span> <span class='fl'>15L</span>,
-  <span class='kw'>TracingConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Mode</span> <span class='kw'>=</span> <span class='st'>"Active"</span>
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_function</span><span class='op'>(</span>
+  Code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Bucket <span class='op'>=</span> <span class='st'>"my-bucket-1xpuxmplzrlbh"</span>,
+    S3Key <span class='op'>=</span> <span class='st'>"function.zip"</span>
+  <span class='op'>)</span>,
+  Description <span class='op'>=</span> <span class='st'>"Process image objects from Amazon S3."</span>,
+  Environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Variables <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      BUCKET <span class='op'>=</span> <span class='st'>"my-bucket-1xpuxmplzrlbh"</span>,
+      PREFIX <span class='op'>=</span> <span class='st'>"inbound"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  FunctionName <span class='op'>=</span> <span class='st'>"my-function"</span>,
+  Handler <span class='op'>=</span> <span class='st'>"index.handler"</span>,
+  KMSKeyArn <span class='op'>=</span> <span class='st'>"arn:aws:kms:us-west-2:123456789012:key/b0844d6c-xmpl-4463-97a4-d49f50839966"</span>,
+  MemorySize <span class='op'>=</span> <span class='fl'>256L</span>,
+  Publish <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  Role <span class='op'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/lambda-role"</span>,
+  Runtime <span class='op'>=</span> <span class='st'>"nodejs12.x"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DEPARTMENT <span class='op'>=</span> <span class='st'>"Assets"</span>
+  <span class='op'>)</span>,
+  Timeout <span class='op'>=</span> <span class='fl'>15L</span>,
+  TracingConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Mode <span class='op'>=</span> <span class='st'>"Active"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -363,7 +437,7 @@ service. For more information, see <a href='https://docs.aws.amazon.com/lambda/l
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

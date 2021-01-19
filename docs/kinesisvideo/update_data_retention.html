@@ -42,11 +42,27 @@ that you specify — kinesisvideo_update_data_retention • paws</title>
 
 <meta property="og:title" content="Increases or decreases the stream's data retention period by the value
 that you specify — kinesisvideo_update_data_retention" />
-<meta property="og:description" content="Increases or decreases the stream\'s data retention period by the value
+<meta property="og:description" content="Increases or decreases the stream's data retention period by the value
 that you specify. To indicate whether you want to increase or decrease
 the data retention period, specify the Operation parameter in the
 request body. In the request, you must specify either the StreamName
-or the StreamARN." />
+or the StreamARN.
+The retention period that you specify replaces the current value.
+This operation requires permission for the
+KinesisVideo:UpdateDataRetention action.
+Changing the data retention period affects the data in the stream as
+follows:
+If the data retention period is increased, existing data is retained
+for the new retention period. For example, if the data retention
+period is increased from one hour to seven hours, all existing data
+is retained for seven hours.
+If the data retention period is decreased, existing data is retained
+for the new retention period. For example, if the data retention
+period is decreased from seven hours to one hour, all existing data
+is retained for one hour, and any data older than one hour is
+deleted immediately.
+
+" />
 
 
 
@@ -78,7 +94,7 @@ or the StreamARN." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +102,7 @@ or the StreamARN." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +114,7 @@ or the StreamARN." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,15 +138,31 @@ that you specify</h1>
     </div>
 
     <div class="ref-description">
-    <p>Increases or decreases the stream\'s data retention period by the value
+    <p>Increases or decreases the stream's data retention period by the value
 that you specify. To indicate whether you want to increase or decrease
 the data retention period, specify the <code>Operation</code> parameter in the
 request body. In the request, you must specify either the <code>StreamName</code>
 or the <code>StreamARN</code>.</p>
+<p>The retention period that you specify replaces the current value.</p>
+<p>This operation requires permission for the
+<code>KinesisVideo:UpdateDataRetention</code> action.</p>
+<p>Changing the data retention period affects the data in the stream as
+follows:</p><ul>
+<li><p>If the data retention period is increased, existing data is retained
+for the new retention period. For example, if the data retention
+period is increased from one hour to seven hours, all existing data
+is retained for seven hours.</p></li>
+<li><p>If the data retention period is decreased, existing data is retained
+for the new retention period. For example, if the data retention
+period is decreased from seven hours to one hour, all existing data
+is retained for one hour, and any data older than one hour is
+deleted immediately.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>kinesisvideo_update_data_retention</span>(<span class='no'>StreamName</span>, <span class='no'>StreamARN</span>,
-  <span class='no'>CurrentVersion</span>, <span class='no'>Operation</span>, <span class='no'>DataRetentionChangeInHours</span>)</pre>
+    <pre class="usage"><span class='fu'>kinesisvideo_update_data_retention</span><span class='op'>(</span><span class='va'>StreamName</span>, <span class='va'>StreamARN</span>,
+  <span class='va'>CurrentVersion</span>, <span class='va'>Operation</span>, <span class='va'>DataRetentionChangeInHours</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,34 +194,17 @@ years).</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The retention period that you specify replaces the current value.</p>
-<p>This operation requires permission for the
-<code>KinesisVideo:UpdateDataRetention</code> action.</p>
-<p>Changing the data retention period affects the data in the stream as
-follows:</p><ul>
-<li><p>If the data retention period is increased, existing data is retained
-for the new retention period. For example, if the data retention
-period is increased from one hour to seven hours, all existing data
-is retained for seven hours.</p></li>
-<li><p>If the data retention period is decreased, existing data is retained
-for the new retention period. For example, if the data retention
-period is decreased from seven hours to one hour, all existing data
-is retained for one hour, and any data older than one hour is
-deleted immediately.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_data_retention</span>(
-  <span class='kw'>StreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StreamARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CurrentVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Operation</span> <span class='kw'>=</span> <span class='st'>"INCREASE_DATA_RETENTION"</span><span class='kw'>|</span><span class='st'>"DECREASE_DATA_RETENTION"</span>,
-  <span class='kw'>DataRetentionChangeInHours</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_data_retention</span><span class='op'>(</span>
+  StreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  StreamARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  CurrentVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  Operation <span class='op'>=</span> <span class='st'>"INCREASE_DATA_RETENTION"</span><span class='op'>|</span><span class='st'>"DECREASE_DATA_RETENTION"</span>,
+  DataRetentionChangeInHours <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -207,7 +222,7 @@ deleted immediately.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

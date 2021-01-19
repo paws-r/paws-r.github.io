@@ -46,7 +46,14 @@ replacement of all previously launched instances in the Auto Scaling
 group with a new group of instances — autoscaling_start_instance_refresh" />
 <meta property="og:description" content="Starts a new instance refresh operation, which triggers a rolling
 replacement of all previously launched instances in the Auto Scaling
-group with a new group of instances." />
+group with a new group of instances.
+If successful, this call creates a new instance refresh request with a
+unique ID that you can use to track its progress. To query its status,
+call the DescribeInstanceRefreshes API. To describe the instance
+refreshes that have already run, call the DescribeInstanceRefreshes API.
+To cancel an instance refresh operation in progress, use the
+CancelInstanceRefresh API.
+For more information, see Replacing Auto Scaling Instances Based on an Instance Refresh." />
 
 
 
@@ -78,7 +85,7 @@ group with a new group of instances." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +93,7 @@ group with a new group of instances." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +105,7 @@ group with a new group of instances." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,10 +133,17 @@ group with a new group of instances</h1>
     <p>Starts a new instance refresh operation, which triggers a rolling
 replacement of all previously launched instances in the Auto Scaling
 group with a new group of instances.</p>
+<p>If successful, this call creates a new instance refresh request with a
+unique ID that you can use to track its progress. To query its status,
+call the DescribeInstanceRefreshes API. To describe the instance
+refreshes that have already run, call the DescribeInstanceRefreshes API.
+To cancel an instance refresh operation in progress, use the
+CancelInstanceRefresh API.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html'>Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>autoscaling_start_instance_refresh</span>(<span class='no'>AutoScalingGroupName</span>, <span class='no'>Strategy</span>,
-  <span class='no'>Preferences</span>)</pre>
+    <pre class="usage"><span class='fu'>autoscaling_start_instance_refresh</span><span class='op'>(</span><span class='va'>AutoScalingGroupName</span>, <span class='va'>Strategy</span>,
+  <span class='va'>Preferences</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,40 +176,34 @@ in the <em>Amazon EC2 Auto Scaling API Reference</em>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If successful, this call creates a new instance refresh request with a
-unique ID that you can use to track its progress. To query its status,
-call the DescribeInstanceRefreshes API. To describe the instance
-refreshes that have already run, call the DescribeInstanceRefreshes API.
-To cancel an instance refresh operation in progress, use the
-CancelInstanceRefresh API.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html'>Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>start_instance_refresh</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Strategy</span> <span class='kw'>=</span> <span class='st'>"Rolling"</span>,
-  <span class='kw'>Preferences</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>MinHealthyPercentage</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>InstanceWarmup</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>start_instance_refresh</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Strategy <span class='op'>=</span> <span class='st'>"Rolling"</span>,
+  Preferences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    MinHealthyPercentage <span class='op'>=</span> <span class='fl'>123</span>,
+    InstanceWarmup <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example starts an instance refresh for the specified Auto Scaling</span>
 <span class='co'># group.</span>
-<span class='no'>svc</span>$<span class='fu'>start_instance_refresh</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
-  <span class='kw'>Preferences</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>InstanceWarmup</span> <span class='kw'>=</span> <span class='fl'>400L</span>,
-    <span class='kw'>MinHealthyPercentage</span> <span class='kw'>=</span> <span class='fl'>50L</span>
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>start_instance_refresh</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
+  Preferences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    InstanceWarmup <span class='op'>=</span> <span class='fl'>400L</span>,
+    MinHealthyPercentage <span class='op'>=</span> <span class='fl'>50L</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -211,7 +219,7 @@ CancelInstanceRefresh API.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

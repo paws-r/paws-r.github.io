@@ -62,10 +62,14 @@ only in the us-west-2 Region. Security Hub must be enabled for the
 member account in the same Region that the invitation was sent from.
 The following throttling limits apply to using Security Hub API
 operations.
+&amp;lt;a&amp;gt;BatchEnableStandards&amp;lt;/a&amp;gt; - RateLimit of 1 request per
+second, BurstLimit of 1 request per second.
 &amp;lt;a&amp;gt;GetFindings&amp;lt;/a&amp;gt; - RateLimit of 3 requests per second.
 BurstLimit of 6 requests per second.
 &amp;lt;a&amp;gt;UpdateFindings&amp;lt;/a&amp;gt; - RateLimit of 1 request per second.
 BurstLimit of 5 requests per second.
+&amp;lt;a&amp;gt;UpdateStandardsControl&amp;lt;/a&amp;gt; - RateLimit of 1 request per
+second, BurstLimit of 5 requests per second.
 All other operations - RateLimit of 10 requests per second.
 BurstLimit of 30 requests per second.
 
@@ -101,7 +105,7 @@ BurstLimit of 30 requests per second.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -109,7 +113,7 @@ BurstLimit of 30 requests per second.
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -121,7 +125,7 @@ BurstLimit of 30 requests per second.
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -166,17 +170,21 @@ only in the <code>us-west-2</code> Region. Security Hub must be enabled for the
 member account in the same Region that the invitation was sent from.</p>
 <p>The following throttling limits apply to using Security Hub API
 operations.</p><ul>
+<li><p><code>&lt;a&gt;BatchEnableStandards&lt;/a&gt;</code> - <code>RateLimit</code> of 1 request per
+second, <code>BurstLimit</code> of 1 request per second.</p></li>
 <li><p><code>&lt;a&gt;GetFindings&lt;/a&gt;</code> - <code>RateLimit</code> of 3 requests per second.
 <code>BurstLimit</code> of 6 requests per second.</p></li>
 <li><p><code>&lt;a&gt;UpdateFindings&lt;/a&gt;</code> - <code>RateLimit</code> of 1 request per second.
 <code>BurstLimit</code> of 5 requests per second.</p></li>
+<li><p><code>&lt;a&gt;UpdateStandardsControl&lt;/a&gt;</code> - <code>RateLimit</code> of 1 request per
+second, <code>BurstLimit</code> of 5 requests per second.</p></li>
 <li><p>All other operations - <code>RateLimit</code> of 10 requests per second.
 <code>BurstLimit</code> of 30 requests per second.</p></li>
 </ul>
 
     </div>
 
-    <pre class="usage"><span class='fu'>securityhub</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>securityhub</span><span class='op'>(</span>config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,20 +198,21 @@ operations.</p><ul>
     <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
 
     
-<pre><span class='no'>svc</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>securityhub</span>(
-  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>creds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>access_key_id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>secret_access_key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>session_token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>profile</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>securityhub</span><span class='op'>(</span>
+  config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    credentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        access_key_id <span class='op'>=</span> <span class='st'>"string"</span>,
+        secret_access_key <span class='op'>=</span> <span class='st'>"string"</span>,
+        session_token <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      profile <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    endpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    region <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
@@ -225,14 +234,17 @@ operations.</p><ul>
 <tr><td><a href='delete_members.html'>delete_members</a></td><td>Deletes the specified member accounts from Security Hub</td></tr>
 <tr><td><a href='describe_action_targets.html'>describe_action_targets</a></td><td>Returns a list of the custom action targets in Security Hub in your account</td></tr>
 <tr><td><a href='describe_hub.html'>describe_hub</a></td><td>Returns details about the Hub resource in your account, including the HubArn and the time when you enabled Security Hub</td></tr>
+<tr><td><a href='describe_organization_configuration.html'>describe_organization_configuration</a></td><td>Returns information about the Organizations configuration for Security Hub</td></tr>
 <tr><td><a href='describe_products.html'>describe_products</a></td><td>Returns information about the available products that you can subscribe to and integrate with Security Hub in order to consolidate findings</td></tr>
 <tr><td><a href='describe_standards.html'>describe_standards</a></td><td>Returns a list of the available standards in Security Hub</td></tr>
 <tr><td><a href='describe_standards_controls.html'>describe_standards_controls</a></td><td>Returns a list of security standards controls</td></tr>
 <tr><td><a href='disable_import_findings_for_product.html'>disable_import_findings_for_product</a></td><td>Disables the integration of the specified product with Security Hub</td></tr>
+<tr><td><a href='disable_organization_admin_account.html'>disable_organization_admin_account</a></td><td>Disables a Security Hub administrator account</td></tr>
 <tr><td><a href='disable_security_hub.html'>disable_security_hub</a></td><td>Disables Security Hub in your account only in the current Region</td></tr>
 <tr><td><a href='disassociate_from_master_account.html'>disassociate_from_master_account</a></td><td>Disassociates the current Security Hub member account from the associated master account</td></tr>
 <tr><td><a href='disassociate_members.html'>disassociate_members</a></td><td>Disassociates the specified member accounts from the associated master account</td></tr>
 <tr><td><a href='enable_import_findings_for_product.html'>enable_import_findings_for_product</a></td><td>Enables the integration of a partner product with Security Hub</td></tr>
+<tr><td><a href='enable_organization_admin_account.html'>enable_organization_admin_account</a></td><td>Designates the Security Hub administrator account for an organization</td></tr>
 <tr><td><a href='enable_security_hub.html'>enable_security_hub</a></td><td>Enables Security Hub for your account in the current Region or the Region you specify in the request</td></tr>
 <tr><td><a href='get_enabled_standards.html'>get_enabled_standards</a></td><td>Returns a list of the standards that are currently enabled</td></tr>
 <tr><td><a href='get_findings.html'>get_findings</a></td><td>Returns a list of findings that match the specified criteria</td></tr>
@@ -245,24 +257,29 @@ operations.</p><ul>
 <tr><td><a href='list_enabled_products_for_import.html'>list_enabled_products_for_import</a></td><td>Lists all findings-generating solutions (products) that you are subscribed to receive findings from in Security Hub</td></tr>
 <tr><td><a href='list_invitations.html'>list_invitations</a></td><td>Lists all Security Hub membership invitations that were sent to the current AWS account</td></tr>
 <tr><td><a href='list_members.html'>list_members</a></td><td>Lists details about all member accounts for the current Security Hub master account</td></tr>
+<tr><td><a href='list_organization_admin_accounts.html'>list_organization_admin_accounts</a></td><td>Lists the Security Hub administrator accounts</td></tr>
 <tr><td><a href='list_tags_for_resource.html'>list_tags_for_resource</a></td><td>Returns a list of tags associated with a resource</td></tr>
 <tr><td><a href='tag_resource.html'>tag_resource</a></td><td>Adds one or more tags to a resource</td></tr>
 <tr><td><a href='untag_resource.html'>untag_resource</a></td><td>Removes one or more tags from a resource</td></tr>
 <tr><td><a href='update_action_target.html'>update_action_target</a></td><td>Updates the name and description of a custom action target in Security Hub</td></tr>
 <tr><td><a href='update_findings.html'>update_findings</a></td><td>UpdateFindings is deprecated</td></tr>
 <tr><td><a href='update_insight.html'>update_insight</a></td><td>Updates the Security Hub insight identified by the specified insight ARN</td></tr>
+<tr><td><a href='update_organization_configuration.html'>update_organization_configuration</a></td><td>Used to update the configuration related to Organizations</td></tr>
+<tr><td><a href='update_security_hub_configuration.html'>update_security_hub_configuration</a></td><td>Updates configuration options for Security Hub</td></tr>
 <tr><td><a href='update_standards_control.html'>update_standards_control</a></td><td>Used to control whether an individual security standard control is enabled or disabled</td></tr>
 </table>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>securityhub</span>()
-<span class='no'>svc</span>$<span class='fu'>accept_invitation</span>(
-  <span class='kw'>Foo</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)
-}</pre>
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>securityhub</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>accept_invitation</span><span class='op'>(</span>
+  Foo <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -278,7 +295,7 @@ operations.</p><ul>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

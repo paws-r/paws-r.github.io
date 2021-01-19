@@ -42,7 +42,15 @@
 <meta property="og:title" content="Creates a dataset group, which holds a collection of related datasets — forecastservice_create_dataset_group" />
 <meta property="og:description" content="Creates a dataset group, which holds a collection of related datasets.
 You can add datasets to the dataset group when you create the dataset
-group, or later by using the UpdateDatasetGroup operation." />
+group, or later by using the UpdateDatasetGroup operation.
+After creating a dataset group and adding datasets, you use the dataset
+group when you create a predictor. For more information, see
+howitworks-datasets-groups.
+To get a list of all your datasets groups, use the ListDatasetGroups
+operation.
+The Status of a dataset group must be ACTIVE before you can use the
+dataset group to create a predictor. To get the status, use the
+DescribeDatasetGroup operation." />
 
 
 
@@ -74,7 +82,7 @@ group, or later by using the UpdateDatasetGroup operation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +90,7 @@ group, or later by using the UpdateDatasetGroup operation." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +102,7 @@ group, or later by using the UpdateDatasetGroup operation." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +128,18 @@ group, or later by using the UpdateDatasetGroup operation." />
     <p>Creates a dataset group, which holds a collection of related datasets.
 You can add datasets to the dataset group when you create the dataset
 group, or later by using the UpdateDatasetGroup operation.</p>
+<p>After creating a dataset group and adding datasets, you use the dataset
+group when you create a predictor. For more information, see
+howitworks-datasets-groups.</p>
+<p>To get a list of all your datasets groups, use the ListDatasetGroups
+operation.</p>
+<p>The <code>Status</code> of a dataset group must be <code>ACTIVE</code> before you can use the
+dataset group to create a predictor. To get the status, use the
+DescribeDatasetGroup operation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>forecastservice_create_dataset_group</span>(<span class='no'>DatasetGroupName</span>, <span class='no'>Domain</span>,
-  <span class='no'>DatasetArns</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>forecastservice_create_dataset_group</span><span class='op'>(</span><span class='va'>DatasetGroupName</span>, <span class='va'>Domain</span>,
+  <span class='va'>DatasetArns</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,32 +193,23 @@ count against your tags per resource limit.</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>After creating a dataset group and adding datasets, you use the dataset
-group when you create a predictor. For more information, see
-howitworks-datasets-groups.</p>
-<p>To get a list of all your datasets groups, use the ListDatasetGroups
-operation.</p>
-<p>The <code>Status</code> of a dataset group must be <code>ACTIVE</code> before you can create
-use the dataset group to create a predictor. To get the status, use the
-DescribeDatasetGroup operation.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_dataset_group</span>(
-  <span class='kw'>DatasetGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Domain</span> <span class='kw'>=</span> <span class='st'>"RETAIL"</span><span class='kw'>|</span><span class='st'>"CUSTOM"</span><span class='kw'>|</span><span class='st'>"INVENTORY_PLANNING"</span><span class='kw'>|</span><span class='st'>"EC2_CAPACITY"</span><span class='kw'>|</span><span class='st'>"WORK_FORCE"</span><span class='kw'>|</span><span class='st'>"WEB_TRAFFIC"</span><span class='kw'>|</span><span class='st'>"METRICS"</span>,
-  <span class='kw'>DatasetArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_dataset_group</span><span class='op'>(</span>
+  DatasetGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Domain <span class='op'>=</span> <span class='st'>"RETAIL"</span><span class='op'>|</span><span class='st'>"CUSTOM"</span><span class='op'>|</span><span class='st'>"INVENTORY_PLANNING"</span><span class='op'>|</span><span class='st'>"EC2_CAPACITY"</span><span class='op'>|</span><span class='st'>"WORK_FORCE"</span><span class='op'>|</span><span class='st'>"WEB_TRAFFIC"</span><span class='op'>|</span><span class='st'>"METRICS"</span>,
+  DatasetArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -220,7 +227,7 @@ DescribeDatasetGroup operation.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +118,10 @@
     <p>Creates a dataset.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>quicksight_create_data_set</span>(<span class='no'>AwsAccountId</span>, <span class='no'>DataSetId</span>, <span class='no'>Name</span>,
-  <span class='no'>PhysicalTableMap</span>, <span class='no'>LogicalTableMap</span>, <span class='no'>ImportMode</span>, <span class='no'>ColumnGroups</span>,
-  <span class='no'>Permissions</span>, <span class='no'>RowLevelPermissionDataSet</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>quicksight_create_data_set</span><span class='op'>(</span><span class='va'>AwsAccountId</span>, <span class='va'>DataSetId</span>, <span class='va'>Name</span>,
+  <span class='va'>PhysicalTableMap</span>, <span class='va'>LogicalTableMap</span>, <span class='va'>ImportMode</span>, <span class='va'>ColumnGroups</span>,
+  <span class='va'>Permissions</span>, <span class='va'>RowLevelPermissionDataSet</span>, <span class='va'>ColumnLevelPermissionRules</span>,
+  <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,6 +168,11 @@ Currently, only geospatial hierarchy is supported.</p></td>
 create.</p></td>
     </tr>
     <tr>
+      <th>ColumnLevelPermissionRules</th>
+      <td><p>A set of one or more definitions of a
+<code>&lt;a&gt;ColumnLevelPermissionRule&lt;/a&gt;</code>.</p></td>
+    </tr>
+    <tr>
       <th>Tags</th>
       <td><p>Contains a map of the key-value pairs for the resource tag or tags
 assigned to the dataset.</p></td>
@@ -176,135 +182,157 @@ assigned to the dataset.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_data_set</span>(
-  <span class='kw'>AwsAccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DataSetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PhysicalTableMap</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>RelationalTable</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>DataSourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Schema</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>InputColumns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"STRING"</span><span class='kw'>|</span><span class='st'>"INTEGER"</span><span class='kw'>|</span><span class='st'>"DECIMAL"</span><span class='kw'>|</span><span class='st'>"DATETIME"</span><span class='kw'>|</span><span class='st'>"BIT"</span><span class='kw'>|</span><span class='st'>"BOOLEAN"</span><span class='kw'>|</span><span class='st'>"JSON"</span>
-          )
-        )
-      ),
-      <span class='kw'>CustomSql</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>DataSourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>SqlQuery</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Columns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"STRING"</span><span class='kw'>|</span><span class='st'>"INTEGER"</span><span class='kw'>|</span><span class='st'>"DECIMAL"</span><span class='kw'>|</span><span class='st'>"DATETIME"</span><span class='kw'>|</span><span class='st'>"BIT"</span><span class='kw'>|</span><span class='st'>"BOOLEAN"</span><span class='kw'>|</span><span class='st'>"JSON"</span>
-          )
-        )
-      ),
-      <span class='kw'>S3Source</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>DataSourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>UploadSettings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Format</span> <span class='kw'>=</span> <span class='st'>"CSV"</span><span class='kw'>|</span><span class='st'>"TSV"</span><span class='kw'>|</span><span class='st'>"CLF"</span><span class='kw'>|</span><span class='st'>"ELF"</span><span class='kw'>|</span><span class='st'>"XLSX"</span><span class='kw'>|</span><span class='st'>"JSON"</span>,
-          <span class='kw'>StartFromRow</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>ContainsHeader</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-          <span class='kw'>TextQualifier</span> <span class='kw'>=</span> <span class='st'>"DOUBLE_QUOTE"</span><span class='kw'>|</span><span class='st'>"SINGLE_QUOTE"</span>,
-          <span class='kw'>Delimiter</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        ),
-        <span class='kw'>InputColumns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"STRING"</span><span class='kw'>|</span><span class='st'>"INTEGER"</span><span class='kw'>|</span><span class='st'>"DECIMAL"</span><span class='kw'>|</span><span class='st'>"DATETIME"</span><span class='kw'>|</span><span class='st'>"BIT"</span><span class='kw'>|</span><span class='st'>"BOOLEAN"</span><span class='kw'>|</span><span class='st'>"JSON"</span>
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>LogicalTableMap</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Alias</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DataTransforms</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>ProjectOperation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>ProjectedColumns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_data_set</span><span class='op'>(</span>
+  AwsAccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DataSetId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  PhysicalTableMap <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      RelationalTable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        DataSourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        Catalog <span class='op'>=</span> <span class='st'>"string"</span>,
+        Schema <span class='op'>=</span> <span class='st'>"string"</span>,
+        Name <span class='op'>=</span> <span class='st'>"string"</span>,
+        InputColumns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Name <span class='op'>=</span> <span class='st'>"string"</span>,
+            Type <span class='op'>=</span> <span class='st'>"STRING"</span><span class='op'>|</span><span class='st'>"INTEGER"</span><span class='op'>|</span><span class='st'>"DECIMAL"</span><span class='op'>|</span><span class='st'>"DATETIME"</span><span class='op'>|</span><span class='st'>"BIT"</span><span class='op'>|</span><span class='st'>"BOOLEAN"</span><span class='op'>|</span><span class='st'>"JSON"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      CustomSql <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        DataSourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        Name <span class='op'>=</span> <span class='st'>"string"</span>,
+        SqlQuery <span class='op'>=</span> <span class='st'>"string"</span>,
+        Columns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Name <span class='op'>=</span> <span class='st'>"string"</span>,
+            Type <span class='op'>=</span> <span class='st'>"STRING"</span><span class='op'>|</span><span class='st'>"INTEGER"</span><span class='op'>|</span><span class='st'>"DECIMAL"</span><span class='op'>|</span><span class='st'>"DATETIME"</span><span class='op'>|</span><span class='st'>"BIT"</span><span class='op'>|</span><span class='st'>"BOOLEAN"</span><span class='op'>|</span><span class='st'>"JSON"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      S3Source <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        DataSourceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        UploadSettings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Format <span class='op'>=</span> <span class='st'>"CSV"</span><span class='op'>|</span><span class='st'>"TSV"</span><span class='op'>|</span><span class='st'>"CLF"</span><span class='op'>|</span><span class='st'>"ELF"</span><span class='op'>|</span><span class='st'>"XLSX"</span><span class='op'>|</span><span class='st'>"JSON"</span>,
+          StartFromRow <span class='op'>=</span> <span class='fl'>123</span>,
+          ContainsHeader <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+          TextQualifier <span class='op'>=</span> <span class='st'>"DOUBLE_QUOTE"</span><span class='op'>|</span><span class='st'>"SINGLE_QUOTE"</span>,
+          Delimiter <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>,
+        InputColumns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Name <span class='op'>=</span> <span class='st'>"string"</span>,
+            Type <span class='op'>=</span> <span class='st'>"STRING"</span><span class='op'>|</span><span class='st'>"INTEGER"</span><span class='op'>|</span><span class='st'>"DECIMAL"</span><span class='op'>|</span><span class='st'>"DATETIME"</span><span class='op'>|</span><span class='st'>"BIT"</span><span class='op'>|</span><span class='st'>"BOOLEAN"</span><span class='op'>|</span><span class='st'>"JSON"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  LogicalTableMap <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Alias <span class='op'>=</span> <span class='st'>"string"</span>,
+      DataTransforms <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          ProjectOperation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            ProjectedColumns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            )
-          ),
-          <span class='kw'>FilterOperation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>ConditionExpression</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          ),
-          <span class='kw'>CreateColumnsOperation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Columns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>ColumnName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>ColumnId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                <span class='kw'>Expression</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-              )
-            )
-          ),
-          <span class='kw'>RenameColumnOperation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>ColumnName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>NewColumnName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          ),
-          <span class='kw'>CastColumnTypeOperation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>ColumnName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>NewColumnType</span> <span class='kw'>=</span> <span class='st'>"STRING"</span><span class='kw'>|</span><span class='st'>"INTEGER"</span><span class='kw'>|</span><span class='st'>"DECIMAL"</span><span class='kw'>|</span><span class='st'>"DATETIME"</span>,
-            <span class='kw'>Format</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          ),
-          <span class='kw'>TagColumnOperation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>ColumnName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='kw'>ColumnGeographicRole</span> <span class='kw'>=</span> <span class='st'>"COUNTRY"</span><span class='kw'>|</span><span class='st'>"STATE"</span><span class='kw'>|</span><span class='st'>"COUNTY"</span><span class='kw'>|</span><span class='st'>"CITY"</span><span class='kw'>|</span><span class='st'>"POSTCODE"</span><span class='kw'>|</span><span class='st'>"LONGITUDE"</span><span class='kw'>|</span><span class='st'>"LATITUDE"</span>
-              )
-            )
-          )
-        )
-      ),
-      <span class='kw'>Source</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>JoinInstruction</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>LeftOperand</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>RightOperand</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"INNER"</span><span class='kw'>|</span><span class='st'>"OUTER"</span><span class='kw'>|</span><span class='st'>"LEFT"</span><span class='kw'>|</span><span class='st'>"RIGHT"</span>,
-          <span class='kw'>OnClause</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        ),
-        <span class='kw'>PhysicalTableId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>ImportMode</span> <span class='kw'>=</span> <span class='st'>"SPICE"</span><span class='kw'>|</span><span class='st'>"DIRECT_QUERY"</span>,
-  <span class='kw'>ColumnGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>GeoSpatialColumnGroup</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>CountryCode</span> <span class='kw'>=</span> <span class='st'>"US"</span>,
-        <span class='kw'>Columns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          FilterOperation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            ConditionExpression <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          CreateColumnsOperation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Columns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                ColumnName <span class='op'>=</span> <span class='st'>"string"</span>,
+                ColumnId <span class='op'>=</span> <span class='st'>"string"</span>,
+                Expression <span class='op'>=</span> <span class='st'>"string"</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>,
+          RenameColumnOperation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            ColumnName <span class='op'>=</span> <span class='st'>"string"</span>,
+            NewColumnName <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          CastColumnTypeOperation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            ColumnName <span class='op'>=</span> <span class='st'>"string"</span>,
+            NewColumnType <span class='op'>=</span> <span class='st'>"STRING"</span><span class='op'>|</span><span class='st'>"INTEGER"</span><span class='op'>|</span><span class='st'>"DECIMAL"</span><span class='op'>|</span><span class='st'>"DATETIME"</span>,
+            Format <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          TagColumnOperation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            ColumnName <span class='op'>=</span> <span class='st'>"string"</span>,
+            Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                ColumnGeographicRole <span class='op'>=</span> <span class='st'>"COUNTRY"</span><span class='op'>|</span><span class='st'>"STATE"</span><span class='op'>|</span><span class='st'>"COUNTY"</span><span class='op'>|</span><span class='st'>"CITY"</span><span class='op'>|</span><span class='st'>"POSTCODE"</span><span class='op'>|</span><span class='st'>"LONGITUDE"</span><span class='op'>|</span><span class='st'>"LATITUDE"</span>,
+                ColumnDescription <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  Text <span class='op'>=</span> <span class='st'>"string"</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      Source <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        JoinInstruction <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          LeftOperand <span class='op'>=</span> <span class='st'>"string"</span>,
+          RightOperand <span class='op'>=</span> <span class='st'>"string"</span>,
+          LeftJoinKeyProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            UniqueKey <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+          <span class='op'>)</span>,
+          RightJoinKeyProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            UniqueKey <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+          <span class='op'>)</span>,
+          Type <span class='op'>=</span> <span class='st'>"INNER"</span><span class='op'>|</span><span class='st'>"OUTER"</span><span class='op'>|</span><span class='st'>"LEFT"</span><span class='op'>|</span><span class='st'>"RIGHT"</span>,
+          OnClause <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>,
+        PhysicalTableId <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ImportMode <span class='op'>=</span> <span class='st'>"SPICE"</span><span class='op'>|</span><span class='st'>"DIRECT_QUERY"</span>,
+  ColumnGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      GeoSpatialColumnGroup <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Name <span class='op'>=</span> <span class='st'>"string"</span>,
+        CountryCode <span class='op'>=</span> <span class='st'>"US"</span>,
+        Columns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>Permissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Principal</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Actions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Permissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Principal <span class='op'>=</span> <span class='st'>"string"</span>,
+      Actions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>RowLevelPermissionDataSet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Arn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>PermissionPolicy</span> <span class='kw'>=</span> <span class='st'>"GRANT_ACCESS"</span><span class='kw'>|</span><span class='st'>"DENY_ACCESS"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  RowLevelPermissionDataSet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+    Arn <span class='op'>=</span> <span class='st'>"string"</span>,
+    PermissionPolicy <span class='op'>=</span> <span class='st'>"GRANT_ACCESS"</span><span class='op'>|</span><span class='st'>"DENY_ACCESS"</span>
+  <span class='op'>)</span>,
+  ColumnLevelPermissionRules <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Principals <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      ColumnNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -322,7 +350,7 @@ assigned to the dataset.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -43,7 +43,14 @@ or all of the images available to you — ec2_describe_images • paws</title>
 <meta property="og:title" content="Describes the specified images (AMIs, AKIs, and ARIs) available to you
 or all of the images available to you — ec2_describe_images" />
 <meta property="og:description" content="Describes the specified images (AMIs, AKIs, and ARIs) available to you
-or all of the images available to you." />
+or all of the images available to you.
+The images available to you include public images, private images that
+you own, and private images owned by other AWS accounts for which you
+have explicit launch permissions.
+Recently deregistered images appear in the returned results for a short
+interval and then return empty results. After all instances that
+reference a deregistered AMI are terminated, specifying the ID of the
+image results in an error indicating that the AMI ID cannot be found." />
 
 
 
@@ -75,7 +82,7 @@ or all of the images available to you." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +90,7 @@ or all of the images available to you." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +102,7 @@ or all of the images available to you." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,9 +128,16 @@ or all of the images available to you</h1>
     <div class="ref-description">
     <p>Describes the specified images (AMIs, AKIs, and ARIs) available to you
 or all of the images available to you.</p>
+<p>The images available to you include public images, private images that
+you own, and private images owned by other AWS accounts for which you
+have explicit launch permissions.</p>
+<p>Recently deregistered images appear in the returned results for a short
+interval and then return empty results. After all instances that
+reference a deregistered AMI are terminated, specifying the ID of the
+image results in an error indicating that the AMI ID cannot be found.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_describe_images</span>(<span class='no'>ExecutableUsers</span>, <span class='no'>Filters</span>, <span class='no'>ImageIds</span>, <span class='no'>Owners</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_describe_images</span><span class='op'>(</span><span class='va'>ExecutableUsers</span>, <span class='va'>Filters</span>, <span class='va'>ImageIds</span>, <span class='va'>Owners</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,7 +151,7 @@ AMIs).</p></td>
     <tr>
       <th>Filters</th>
       <td><p>The filters.</p><ul>
-<li><p><code>architecture</code> - The image architecture (<code>i386</code> \| <code>x86_64</code> \|
+<li><p><code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code> |
 <code>arm64</code>).</p></li>
 <li><p><code>block-device-mapping.delete-on-termination</code> - A Boolean value that
 indicates whether the Amazon EBS volume is deleted on instance
@@ -149,22 +163,22 @@ the EBS volume.</p></li>
 <li><p><code>block-device-mapping.volume-size</code> - The volume size of the EBS
 volume, in GiB.</p></li>
 <li><p><code>block-device-mapping.volume-type</code> - The volume type of the EBS
-volume (<code>gp2</code> \| <code>io1</code> \| <code>st1 </code>\| <code>sc1</code> \| <code>standard</code>).</p></li>
+volume (<code>gp2</code> | <code>io1</code> | <code>io2</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p></li>
 <li><p><code>block-device-mapping.encrypted</code> - A Boolean that indicates whether
 the EBS volume is encrypted.</p></li>
 <li><p><code>description</code> - The description of the image (provided during image
 creation).</p></li>
 <li><p><code>ena-support</code> - A Boolean that indicates whether enhanced networking
 with ENA is enabled.</p></li>
-<li><p><code>hypervisor</code> - The hypervisor type (<code>ovm</code> \| <code>xen</code>).</p></li>
+<li><p><code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p></li>
 <li><p><code>image-id</code> - The ID of the image.</p></li>
-<li><p><code>image-type</code> - The image type (<code>machine</code> \| <code>kernel</code> \| <code>ramdisk</code>).</p></li>
+<li><p><code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p></li>
 <li><p><code>is-public</code> - A Boolean that indicates whether the image is public.</p></li>
 <li><p><code>kernel-id</code> - The kernel ID.</p></li>
 <li><p><code>manifest-location</code> - The location of the image manifest.</p></li>
 <li><p><code>name</code> - The name of the AMI (provided during image creation).</p></li>
 <li><p><code>owner-alias</code> - The owner alias, from an Amazon-maintained list
-(<code>amazon</code> \| <code>aws-marketplace</code>). This is not the user-configured AWS
+(<code>amazon</code> | <code>aws-marketplace</code>). This is not the user-configured AWS
 account alias set using the IAM console. We recommend that you use
 the related parameter instead of this filter.</p></li>
 <li><p><code>owner-id</code> - The AWS account ID of the owner. We recommend that you
@@ -172,28 +186,28 @@ use the related parameter instead of this filter.</p></li>
 <li><p><code>platform</code> - The platform. To only list Windows-based AMIs, use
 <code>windows</code>.</p></li>
 <li><p><code>product-code</code> - The product code.</p></li>
-<li><p><code>product-code.type</code> - The type of the product code (<code>devpay</code> \|
+<li><p><code>product-code.type</code> - The type of the product code (<code>devpay</code> |
 <code>marketplace</code>).</p></li>
 <li><p><code>ramdisk-id</code> - The RAM disk ID.</p></li>
 <li><p><code>root-device-name</code> - The device name of the root device volume (for
 example, <code>/dev/sda1</code>).</p></li>
-<li><p><code>root-device-type</code> - The type of the root device volume (<code>ebs</code> \|
+<li><p><code>root-device-type</code> - The type of the root device volume (<code>ebs</code> |
 <code>instance-store</code>).</p></li>
-<li><p><code>state</code> - The state of the image (<code>available</code> \| <code>pending</code> \|
+<li><p><code>state</code> - The state of the image (<code>available</code> | <code>pending</code> |
 <code>failed</code>).</p></li>
 <li><p><code>state-reason-code</code> - The reason code for the state change.</p></li>
 <li><p><code>state-reason-message</code> - The message for the state change.</p></li>
 <li><p><code>sriov-net-support</code> - A value of <code>simple</code> indicates that enhanced
 networking with the Intel 82599 VF interface is enabled.</p></li>
-<li><p><code>tag</code>:\&lt;key\&gt; - The key/value combination of a tag assigned to the
-resource. Use the tag key in the filter name and the tag value as
-the filter value. For example, to find all resources that have a tag
-with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for
-the filter name and <code>TeamA</code> for the filter value.</p></li>
+<li><p><code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to
+the resource. Use the tag key in the filter name and the tag value
+as the filter value. For example, to find all resources that have a
+tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code>
+for the filter name and <code>TeamA</code> for the filter value.</p></li>
 <li><p><code>tag-key</code> - The key of a tag assigned to the resource. Use this
 filter to find all resources assigned a tag with a specific key,
 regardless of the tag value.</p></li>
-<li><p><code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> \|
+<li><p><code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> |
 <code>hvm</code>).</p></li>
 </ul></td>
     </tr>
@@ -218,49 +232,43 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The images available to you include public images, private images that
-you own, and private images owned by other AWS accounts for which you
-have explicit launch permissions.</p>
-<p>Recently deregistered images appear in the returned results for a short
-interval and then return empty results. After all instances that
-reference a deregistered AMI are terminated, specifying the ID of the
-image results in an error indicating that the AMI ID cannot be found.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_images</span>(
-  <span class='kw'>ExecutableUsers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_images</span><span class='op'>(</span>
+  ExecutableUsers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>ImageIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ImageIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Owners</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Owners <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+  <span class='op'>)</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example describes the specified AMI.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_images</span>(
-  <span class='kw'>ImageIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_images</span><span class='op'>(</span>
+  ImageIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"ami-5731123e"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -276,7 +284,7 @@ image results in an error indicating that the AMI ID cannot be found.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

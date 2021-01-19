@@ -50,7 +50,13 @@ information. The CRL configuration specifies the CRL expiration period
 in days (the validity period of the CRL), the Amazon S3 bucket that will
 contain the CRL, and a CNAME alias for the S3 bucket that is included in
 certificates issued by the CA. If successful, this action returns the
-Amazon Resource Name (ARN) of the CA." />
+Amazon Resource Name (ARN) of the CA.
+ACM Private CAA assets that are stored in Amazon S3 can be protected
+with encryption. For more information, see Encrypting Your CRLs.
+Both PCA and the IAM principal must have permission to write to the S3
+bucket that you specify. If the IAM principal making the call does not
+have permission to write to the bucket, then an exception is thrown. For
+more information, see Configure Access to ACM Private CA." />
 
 
 
@@ -82,7 +88,7 @@ Amazon Resource Name (ARN) of the CA." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -90,7 +96,7 @@ Amazon Resource Name (ARN) of the CA." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -102,7 +108,7 @@ Amazon Resource Name (ARN) of the CA." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -136,11 +142,17 @@ in days (the validity period of the CRL), the Amazon S3 bucket that will
 contain the CRL, and a CNAME alias for the S3 bucket that is included in
 certificates issued by the CA. If successful, this action returns the
 Amazon Resource Name (ARN) of the CA.</p>
+<p>ACM Private CAA assets that are stored in Amazon S3 can be protected
+with encryption. For more information, see <a href='https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaCreateCa.html#crl-encryption'>Encrypting Your CRLs</a>.</p>
+<p>Both PCA and the IAM principal must have permission to write to the S3
+bucket that you specify. If the IAM principal making the call does not
+have permission to write to the bucket, then an exception is thrown. For
+more information, see <a href='https://docs.aws.amazon.com/acm-pca/latest/userguide/'>Configure Access to ACM Private CA</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>acmpca_create_certificate_authority</span>(<span class='no'>CertificateAuthorityConfiguration</span>,
-  <span class='no'>RevocationConfiguration</span>, <span class='no'>CertificateAuthorityType</span>, <span class='no'>IdempotencyToken</span>,
-  <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>acmpca_create_certificate_authority</span><span class='op'>(</span><span class='va'>CertificateAuthorityConfiguration</span>,
+  <span class='va'>RevocationConfiguration</span>, <span class='va'>CertificateAuthorityType</span>, <span class='va'>IdempotencyToken</span>,
+  <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,7 +169,8 @@ revocation list (CRL) for the CA, the name of the S3 bucket to which ACM
 Private CA will write the CRL, and an optional CNAME alias that you can
 use to hide the name of your bucket in the <strong>CRL Distribution Points</strong>
 extension of your CA certificate. For more information, see the
-CrlConfiguration structure.</p></td>
+<a href='https://docs.aws.amazon.com/acm-pca/latest/APIReference/API_CrlConfiguration.html'>CrlConfiguration</a>
+structure.</p></td>
     </tr>
     <tr>
       <th>CertificateAuthorityType</th>
@@ -166,64 +179,114 @@ CrlConfiguration structure.</p></td>
     <tr>
       <th>IdempotencyToken</th>
       <td><p>Alphanumeric string that can be used to distinguish between calls to
-<strong>CreateCertificateAuthority</strong>. Idempotency tokens time out after five
-minutes. Therefore, if you call <strong>CreateCertificateAuthority</strong> multiple
-times with the same idempotency token within a five minute period, ACM
-Private CA recognizes that you are requesting only one certificate. As a
-result, ACM Private CA issues only one. If you change the idempotency
-token for each call, however, ACM Private CA recognizes that you are
-requesting multiple certificates.</p></td>
+<strong>CreateCertificateAuthority</strong>. For a given token, ACM Private CA
+creates exactly one CA. If you issue a subsequent call using the same
+token, ACM Private CA returns the ARN of the existing CA and takes no
+further action. If you change the idempotency token across multiple
+calls, ACM Private CA creates a unique CA for each unique token.</p></td>
     </tr>
     <tr>
       <th>Tags</th>
       <td><p>Key-value pairs that will be attached to the new private CA. You can
 associate up to 50 tags with a private CA. For information using tags
-with</p>
-<p>IAM to manage permissions, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html'>Controlling Access Using IAM Tags</a>.</p></td>
+with IAM to manage permissions, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html'>Controlling Access Using IAM Tags</a>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_certificate_authority</span>(
-  <span class='kw'>CertificateAuthorityConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>KeyAlgorithm</span> <span class='kw'>=</span> <span class='st'>"RSA_2048"</span><span class='kw'>|</span><span class='st'>"RSA_4096"</span><span class='kw'>|</span><span class='st'>"EC_prime256v1"</span><span class='kw'>|</span><span class='st'>"EC_secp384r1"</span>,
-    <span class='kw'>SigningAlgorithm</span> <span class='kw'>=</span> <span class='st'>"SHA256WITHECDSA"</span><span class='kw'>|</span><span class='st'>"SHA384WITHECDSA"</span><span class='kw'>|</span><span class='st'>"SHA512WITHECDSA"</span><span class='kw'>|</span><span class='st'>"SHA256WITHRSA"</span><span class='kw'>|</span><span class='st'>"SHA384WITHRSA"</span><span class='kw'>|</span><span class='st'>"SHA512WITHRSA"</span>,
-    <span class='kw'>Subject</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Country</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Organization</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>OrganizationalUnit</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DistinguishedNameQualifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>State</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>CommonName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>SerialNumber</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Locality</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Title</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Surname</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>GivenName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Initials</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Pseudonym</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>GenerationQualifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>RevocationConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CrlConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>ExpirationInDays</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>CustomCname</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>S3BucketName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>CertificateAuthorityType</span> <span class='kw'>=</span> <span class='st'>"ROOT"</span><span class='kw'>|</span><span class='st'>"SUBORDINATE"</span>,
-  <span class='kw'>IdempotencyToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_certificate_authority</span><span class='op'>(</span>
+  CertificateAuthorityConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    KeyAlgorithm <span class='op'>=</span> <span class='st'>"RSA_2048"</span><span class='op'>|</span><span class='st'>"RSA_4096"</span><span class='op'>|</span><span class='st'>"EC_prime256v1"</span><span class='op'>|</span><span class='st'>"EC_secp384r1"</span>,
+    SigningAlgorithm <span class='op'>=</span> <span class='st'>"SHA256WITHECDSA"</span><span class='op'>|</span><span class='st'>"SHA384WITHECDSA"</span><span class='op'>|</span><span class='st'>"SHA512WITHECDSA"</span><span class='op'>|</span><span class='st'>"SHA256WITHRSA"</span><span class='op'>|</span><span class='st'>"SHA384WITHRSA"</span><span class='op'>|</span><span class='st'>"SHA512WITHRSA"</span>,
+    Subject <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Country <span class='op'>=</span> <span class='st'>"string"</span>,
+      Organization <span class='op'>=</span> <span class='st'>"string"</span>,
+      OrganizationalUnit <span class='op'>=</span> <span class='st'>"string"</span>,
+      DistinguishedNameQualifier <span class='op'>=</span> <span class='st'>"string"</span>,
+      State <span class='op'>=</span> <span class='st'>"string"</span>,
+      CommonName <span class='op'>=</span> <span class='st'>"string"</span>,
+      SerialNumber <span class='op'>=</span> <span class='st'>"string"</span>,
+      Locality <span class='op'>=</span> <span class='st'>"string"</span>,
+      Title <span class='op'>=</span> <span class='st'>"string"</span>,
+      Surname <span class='op'>=</span> <span class='st'>"string"</span>,
+      GivenName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Initials <span class='op'>=</span> <span class='st'>"string"</span>,
+      Pseudonym <span class='op'>=</span> <span class='st'>"string"</span>,
+      GenerationQualifier <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    CsrExtensions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      KeyUsage <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        DigitalSignature <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        NonRepudiation <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        KeyEncipherment <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        DataEncipherment <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        KeyAgreement <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        KeyCertSign <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        CRLSign <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        EncipherOnly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        DecipherOnly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+      <span class='op'>)</span>,
+      SubjectInformationAccess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AccessMethod <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            CustomObjectIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+            AccessMethodType <span class='op'>=</span> <span class='st'>"CA_REPOSITORY"</span><span class='op'>|</span><span class='st'>"RESOURCE_PKI_MANIFEST"</span><span class='op'>|</span><span class='st'>"RESOURCE_PKI_NOTIFY"</span>
+          <span class='op'>)</span>,
+          AccessLocation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            OtherName <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              TypeId <span class='op'>=</span> <span class='st'>"string"</span>,
+              Value <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>,
+            Rfc822Name <span class='op'>=</span> <span class='st'>"string"</span>,
+            DnsName <span class='op'>=</span> <span class='st'>"string"</span>,
+            DirectoryName <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              Country <span class='op'>=</span> <span class='st'>"string"</span>,
+              Organization <span class='op'>=</span> <span class='st'>"string"</span>,
+              OrganizationalUnit <span class='op'>=</span> <span class='st'>"string"</span>,
+              DistinguishedNameQualifier <span class='op'>=</span> <span class='st'>"string"</span>,
+              State <span class='op'>=</span> <span class='st'>"string"</span>,
+              CommonName <span class='op'>=</span> <span class='st'>"string"</span>,
+              SerialNumber <span class='op'>=</span> <span class='st'>"string"</span>,
+              Locality <span class='op'>=</span> <span class='st'>"string"</span>,
+              Title <span class='op'>=</span> <span class='st'>"string"</span>,
+              Surname <span class='op'>=</span> <span class='st'>"string"</span>,
+              GivenName <span class='op'>=</span> <span class='st'>"string"</span>,
+              Initials <span class='op'>=</span> <span class='st'>"string"</span>,
+              Pseudonym <span class='op'>=</span> <span class='st'>"string"</span>,
+              GenerationQualifier <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>,
+            EdiPartyName <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              PartyName <span class='op'>=</span> <span class='st'>"string"</span>,
+              NameAssigner <span class='op'>=</span> <span class='st'>"string"</span>
+            <span class='op'>)</span>,
+            UniformResourceIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+            IpAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+            RegisteredId <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  RevocationConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CrlConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      ExpirationInDays <span class='op'>=</span> <span class='fl'>123</span>,
+      CustomCname <span class='op'>=</span> <span class='st'>"string"</span>,
+      S3BucketName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  CertificateAuthorityType <span class='op'>=</span> <span class='st'>"ROOT"</span><span class='op'>|</span><span class='st'>"SUBORDINATE"</span>,
+  IdempotencyToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -241,7 +304,7 @@ with</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

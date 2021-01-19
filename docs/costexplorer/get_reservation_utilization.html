@@ -40,11 +40,11 @@
 
 
 <meta property="og:title" content="Retrieves the reservation utilization for your account — costexplorer_get_reservation_utilization" />
-<meta property="og:description" content="Retrieves the reservation utilization for your account. Master accounts
-in an organization have access to member accounts. You can filter data
-by dimensions in a time period. You can use GetDimensionValues to
-determine the possible dimension values. Currently, you can group only
-by SUBSCRIPTION_ID." />
+<meta property="og:description" content="Retrieves the reservation utilization for your account. Management
+account in an organization have access to member accounts. You can
+filter data by dimensions in a time period. You can use
+GetDimensionValues to determine the possible dimension values.
+Currently, you can group only by SUBSCRIPTION_ID." />
 
 
 
@@ -76,7 +76,7 @@ by SUBSCRIPTION_ID." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@ by SUBSCRIPTION_ID." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +96,7 @@ by SUBSCRIPTION_ID." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,15 +119,15 @@ by SUBSCRIPTION_ID." />
     </div>
 
     <div class="ref-description">
-    <p>Retrieves the reservation utilization for your account. Master accounts
-in an organization have access to member accounts. You can filter data
-by dimensions in a time period. You can use <code>GetDimensionValues</code> to
-determine the possible dimension values. Currently, you can group only
-by <code>SUBSCRIPTION_ID</code>.</p>
+    <p>Retrieves the reservation utilization for your account. Management
+account in an organization have access to member accounts. You can
+filter data by dimensions in a time period. You can use
+<code>GetDimensionValues</code> to determine the possible dimension values.
+Currently, you can group only by <code>SUBSCRIPTION_ID</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>costexplorer_get_reservation_utilization</span>(<span class='no'>TimePeriod</span>, <span class='no'>GroupBy</span>,
-  <span class='no'>Granularity</span>, <span class='no'>Filter</span>, <span class='no'>NextPageToken</span>)</pre>
+    <pre class="usage"><span class='fu'>costexplorer_get_reservation_utilization</span><span class='op'>(</span><span class='va'>TimePeriod</span>, <span class='va'>GroupBy</span>,
+  <span class='va'>Granularity</span>, <span class='va'>Filter</span>, <span class='va'>SortBy</span>, <span class='va'>NextPageToken</span>, <span class='va'>MaxResults</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,9 +146,9 @@ usage data is retrieved from <code>2017-01-01</code> up to and including
     </tr>
     <tr>
       <th>Granularity</th>
-      <td><p>If <code>GroupBy</code> is set, <code>Granularity</code> can\'t be set. If <code>Granularity</code>
-isn\'t set, the response object doesn\'t include <code>Granularity</code>, either
-<code>MONTHLY</code> or <code>DAILY</code>. If both <code>GroupBy</code> and <code>Granularity</code> aren\'t set,
+      <td><p>If <code>GroupBy</code> is set, <code>Granularity</code> can't be set. If <code>Granularity</code> isn't
+set, the response object doesn't include <code>Granularity</code>, either <code>MONTHLY</code>
+or <code>DAILY</code>. If both <code>GroupBy</code> and <code>Granularity</code> aren't set,
 <code>GetReservationUtilization</code> defaults to <code>DAILY</code>.</p>
 <p>The <code>GetReservationUtilization</code> operation supports only <code>DAILY</code> and
 <code>MONTHLY</code> granularities.</p></td>
@@ -174,7 +174,32 @@ dimensions:</p><ul>
 <a href='https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html'>Expression</a>
 object as the other operations, but only <code>AND</code> is supported among each
 dimension, and nesting is supported up to only one level deep. If there
-are multiple values for a dimension, they are OR\'d together.</p></td>
+are multiple values for a dimension, they are OR'd together.</p></td>
+    </tr>
+    <tr>
+      <th>SortBy</th>
+      <td><p>The value by which you want to sort the data.</p>
+<p>The following values are supported for <code>Key</code>:</p><ul>
+<li><p><code>UtilizationPercentage</code></p></li>
+<li><p><code>UtilizationPercentageInUnits</code></p></li>
+<li><p><code>PurchasedHours</code></p></li>
+<li><p><code>PurchasedUnits</code></p></li>
+<li><p><code>TotalActualHours</code></p></li>
+<li><p><code>TotalActualUnits</code></p></li>
+<li><p><code>UnusedHours</code></p></li>
+<li><p><code>UnusedUnits</code></p></li>
+<li><p><code>OnDemandCostOfRIHoursUsed</code></p></li>
+<li><p><code>NetRISavings</code></p></li>
+<li><p><code>TotalPotentialRISavings</code></p></li>
+<li><p><code>AmortizedUpfrontFee</code></p></li>
+<li><p><code>AmortizedRecurringFee</code></p></li>
+<li><p><code>TotalAmortizedFee</code></p></li>
+<li><p><code>RICostForUnusedHours</code></p></li>
+<li><p><code>RealizedSavings</code></p></li>
+<li><p><code>UnrealizedSavings</code></p></li>
+</ul>
+
+<p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p></td>
     </tr>
     <tr>
       <th>NextPageToken</th>
@@ -182,58 +207,74 @@ are multiple values for a dimension, they are OR\'d together.</p></td>
 when the response from a previous call has more results than the maximum
 page size.</p></td>
     </tr>
+    <tr>
+      <th>MaxResults</th>
+      <td><p>The maximum number of objects that you returned for this request. If
+more objects are available, in the response, AWS provides a
+NextPageToken value that you can use in a subsequent call to get the
+next batch of objects.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_reservation_utilization</span>(
-  <span class='kw'>TimePeriod</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Start</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>End</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>GroupBy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"DIMENSION"</span><span class='kw'>|</span><span class='st'>"TAG"</span><span class='kw'>|</span><span class='st'>"COST_CATEGORY"</span>,
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Granularity</span> <span class='kw'>=</span> <span class='st'>"DAILY"</span><span class='kw'>|</span><span class='st'>"MONTHLY"</span><span class='kw'>|</span><span class='st'>"HOURLY"</span>,
-  <span class='kw'>Filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Or</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-    ),
-    <span class='kw'>And</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-    ),
-    <span class='kw'>Not</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>Dimensions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"AZ"</span><span class='kw'>|</span><span class='st'>"INSTANCE_TYPE"</span><span class='kw'>|</span><span class='st'>"LINKED_ACCOUNT"</span><span class='kw'>|</span><span class='st'>"LINKED_ACCOUNT_NAME"</span><span class='kw'>|</span><span class='st'>"OPERATION"</span><span class='kw'>|</span><span class='st'>"PURCHASE_TYPE"</span><span class='kw'>|</span><span class='st'>"REGION"</span><span class='kw'>|</span><span class='st'>"SERVICE"</span><span class='kw'>|</span><span class='st'>"SERVICE_CODE"</span><span class='kw'>|</span><span class='st'>"USAGE_TYPE"</span><span class='kw'>|</span><span class='st'>"USAGE_TYPE_GROUP"</span><span class='kw'>|</span><span class='st'>"RECORD_TYPE"</span><span class='kw'>|</span><span class='st'>"OPERATING_SYSTEM"</span><span class='kw'>|</span><span class='st'>"TENANCY"</span><span class='kw'>|</span><span class='st'>"SCOPE"</span><span class='kw'>|</span><span class='st'>"PLATFORM"</span><span class='kw'>|</span><span class='st'>"SUBSCRIPTION_ID"</span><span class='kw'>|</span><span class='st'>"LEGAL_ENTITY_NAME"</span><span class='kw'>|</span><span class='st'>"DEPLOYMENT_OPTION"</span><span class='kw'>|</span><span class='st'>"DATABASE_ENGINE"</span><span class='kw'>|</span><span class='st'>"CACHE_ENGINE"</span><span class='kw'>|</span><span class='st'>"INSTANCE_TYPE_FAMILY"</span><span class='kw'>|</span><span class='st'>"BILLING_ENTITY"</span><span class='kw'>|</span><span class='st'>"RESERVATION_ID"</span><span class='kw'>|</span><span class='st'>"RESOURCE_ID"</span><span class='kw'>|</span><span class='st'>"RIGHTSIZING_TYPE"</span><span class='kw'>|</span><span class='st'>"SAVINGS_PLANS_TYPE"</span><span class='kw'>|</span><span class='st'>"SAVINGS_PLAN_ARN"</span><span class='kw'>|</span><span class='st'>"PAYMENT_OPTION"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_reservation_utilization</span><span class='op'>(</span>
+  TimePeriod <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Start <span class='op'>=</span> <span class='st'>"string"</span>,
+    End <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  GroupBy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"DIMENSION"</span><span class='op'>|</span><span class='st'>"TAG"</span><span class='op'>|</span><span class='st'>"COST_CATEGORY"</span>,
+      Key <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Granularity <span class='op'>=</span> <span class='st'>"DAILY"</span><span class='op'>|</span><span class='st'>"MONTHLY"</span><span class='op'>|</span><span class='st'>"HOURLY"</span>,
+  Filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Or <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    And <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    Not <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    Dimensions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"AZ"</span><span class='op'>|</span><span class='st'>"INSTANCE_TYPE"</span><span class='op'>|</span><span class='st'>"LINKED_ACCOUNT"</span><span class='op'>|</span><span class='st'>"LINKED_ACCOUNT_NAME"</span><span class='op'>|</span><span class='st'>"OPERATION"</span><span class='op'>|</span><span class='st'>"PURCHASE_TYPE"</span><span class='op'>|</span><span class='st'>"REGION"</span><span class='op'>|</span><span class='st'>"SERVICE"</span><span class='op'>|</span><span class='st'>"SERVICE_CODE"</span><span class='op'>|</span><span class='st'>"USAGE_TYPE"</span><span class='op'>|</span><span class='st'>"USAGE_TYPE_GROUP"</span><span class='op'>|</span><span class='st'>"RECORD_TYPE"</span><span class='op'>|</span><span class='st'>"OPERATING_SYSTEM"</span><span class='op'>|</span><span class='st'>"TENANCY"</span><span class='op'>|</span><span class='st'>"SCOPE"</span><span class='op'>|</span><span class='st'>"PLATFORM"</span><span class='op'>|</span><span class='st'>"SUBSCRIPTION_ID"</span><span class='op'>|</span><span class='st'>"LEGAL_ENTITY_NAME"</span><span class='op'>|</span><span class='st'>"DEPLOYMENT_OPTION"</span><span class='op'>|</span><span class='st'>"DATABASE_ENGINE"</span><span class='op'>|</span><span class='st'>"CACHE_ENGINE"</span><span class='op'>|</span><span class='st'>"INSTANCE_TYPE_FAMILY"</span><span class='op'>|</span><span class='st'>"BILLING_ENTITY"</span><span class='op'>|</span><span class='st'>"RESERVATION_ID"</span><span class='op'>|</span><span class='st'>"RESOURCE_ID"</span><span class='op'>|</span><span class='st'>"RIGHTSIZING_TYPE"</span><span class='op'>|</span><span class='st'>"SAVINGS_PLANS_TYPE"</span><span class='op'>|</span><span class='st'>"SAVINGS_PLAN_ARN"</span><span class='op'>|</span><span class='st'>"PAYMENT_OPTION"</span><span class='op'>|</span><span class='st'>"AGREEMENT_END_DATE_TIME_AFTER"</span><span class='op'>|</span><span class='st'>"AGREEMENT_END_DATE_TIME_BEFORE"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>MatchOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='st'>"EQUALS"</span><span class='kw'>|</span><span class='st'>"STARTS_WITH"</span><span class='kw'>|</span><span class='st'>"ENDS_WITH"</span><span class='kw'>|</span><span class='st'>"CONTAINS"</span><span class='kw'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='kw'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
-      )
-    ),
-    <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      MatchOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"EQUALS"</span><span class='op'>|</span><span class='st'>"ABSENT"</span><span class='op'>|</span><span class='st'>"STARTS_WITH"</span><span class='op'>|</span><span class='st'>"ENDS_WITH"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span><span class='op'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='op'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>MatchOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='st'>"EQUALS"</span><span class='kw'>|</span><span class='st'>"STARTS_WITH"</span><span class='kw'>|</span><span class='st'>"ENDS_WITH"</span><span class='kw'>|</span><span class='st'>"CONTAINS"</span><span class='kw'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='kw'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
-      )
-    ),
-    <span class='kw'>CostCategories</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      MatchOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"EQUALS"</span><span class='op'>|</span><span class='st'>"ABSENT"</span><span class='op'>|</span><span class='st'>"STARTS_WITH"</span><span class='op'>|</span><span class='st'>"ENDS_WITH"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span><span class='op'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='op'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    CostCategories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>NextPageToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+      <span class='op'>)</span>,
+      MatchOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"EQUALS"</span><span class='op'>|</span><span class='st'>"ABSENT"</span><span class='op'>|</span><span class='st'>"STARTS_WITH"</span><span class='op'>|</span><span class='st'>"ENDS_WITH"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span><span class='op'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='op'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  SortBy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Key <span class='op'>=</span> <span class='st'>"string"</span>,
+    SortOrder <span class='op'>=</span> <span class='st'>"ASCENDING"</span><span class='op'>|</span><span class='st'>"DESCENDING"</span>
+  <span class='op'>)</span>,
+  NextPageToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -251,7 +292,7 @@ page size.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -49,7 +49,29 @@ their password to sign-in. If the user to disable is a linked external
 IdP user, any link between that user and an existing user is removed.
 The next time the external user (no longer attached to the previously
 linked DestinationUser) signs in, they must create a new user account.
-See ." />
+See
+AdminLinkProviderForUser.
+This action is enabled only for admin access and requires developer
+credentials.
+The ProviderName must match the value specified when creating an IdP
+for the pool.
+To disable a native username + password user, the ProviderName value
+must be Cognito and the ProviderAttributeName must be
+Cognito_Subject, with the ProviderAttributeValue being the name that
+is used in the user pool for the user.
+The ProviderAttributeName must always be Cognito_Subject for social
+identity providers. The ProviderAttributeValue must always be the
+exact subject that was used when the user was originally linked as a
+source user.
+For de-linking a SAML identity, there are two scenarios. If the linked
+identity has not yet been used to sign-in, the ProviderAttributeName
+and ProviderAttributeValue must be the same values that were used for
+the SourceUser when the identities were originally linked using
+ AdminLinkProviderForUser call. (If the linking was done with
+ProviderAttributeName set to Cognito_Subject, the same applies
+here). However, if the user has already signed in, the
+ProviderAttributeName must be Cognito_Subject and
+ProviderAttributeValue must be the subject of the SAML assertion." />
 
 
 
@@ -81,7 +103,7 @@ See ." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -89,7 +111,7 @@ See ." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +123,7 @@ See ." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,28 +154,9 @@ their password to sign-in. If the user to disable is a linked external
 IdP user, any link between that user and an existing user is removed.
 The next time the external user (no longer attached to the previously
 linked <code>DestinationUser</code>) signs in, they must create a new user account.
-See .</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>cognitoidentityprovider_admin_disable_provider_for_user</span>(<span class='no'>UserPoolId</span>,
-  <span class='no'>User</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>UserPoolId</th>
-      <td><p>[required] The user pool ID for the user pool.</p></td>
-    </tr>
-    <tr>
-      <th>User</th>
-      <td><p>[required] The user to be disabled.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This action is enabled only for admin access and requires developer
+See
+<a href='https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminLinkProviderForUser.html'>AdminLinkProviderForUser</a>.</p>
+<p>This action is enabled only for admin access and requires developer
 credentials.</p>
 <p>The <code>ProviderName</code> must match the value specified when creating an IdP
 for the pool.</p>
@@ -168,22 +171,42 @@ source user.</p>
 <p>For de-linking a SAML identity, there are two scenarios. If the linked
 identity has not yet been used to sign-in, the <code>ProviderAttributeName</code>
 and <code>ProviderAttributeValue</code> must be the same values that were used for
-the <code>SourceUser</code> when the identities were originally linked in the call.
-(If the linking was done with <code>ProviderAttributeName</code> set to
-<code>Cognito_Subject</code>, the same applies here). However, if the user has
-already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>
-and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
+the <code>SourceUser</code> when the identities were originally linked using
+<code> AdminLinkProviderForUser</code> call. (If the linking was done with
+<code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies
+here). However, if the user has already signed in, the
+<code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and
+<code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>cognitoidentityprovider_admin_disable_provider_for_user</span><span class='op'>(</span><span class='va'>UserPoolId</span>,
+  <span class='va'>User</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>UserPoolId</th>
+      <td><p>[required] The user pool ID for the user pool.</p></td>
+    </tr>
+    <tr>
+      <th>User</th>
+      <td><p>[required] The user to be disabled.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>admin_disable_provider_for_user</span>(
-  <span class='kw'>UserPoolId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>User</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ProviderName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ProviderAttributeName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ProviderAttributeValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>admin_disable_provider_for_user</span><span class='op'>(</span>
+  UserPoolId <span class='op'>=</span> <span class='st'>"string"</span>,
+  User <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ProviderName <span class='op'>=</span> <span class='st'>"string"</span>,
+    ProviderAttributeName <span class='op'>=</span> <span class='st'>"string"</span>,
+    ProviderAttributeValue <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -201,7 +224,7 @@ and <code>ProviderAttributeValue</code> must be the subject of the SAML assertio
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,10 @@
 
 
 <meta property="og:title" content="Creates an endpoint for an Amazon S3 bucket — datasync_create_location_s3" />
-<meta property="og:description" content="Creates an endpoint for an Amazon S3 bucket." />
+<meta property="og:description" content="Creates an endpoint for an Amazon S3 bucket.
+For more information, see
+https://docs.aws.amazon.com/datasync/latest/userguide/create-locations-cli.html\#create-location-s3-cli
+in the AWS DataSync User Guide." />
 
 
 
@@ -72,7 +75,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +83,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +95,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,10 +119,13 @@
 
     <div class="ref-description">
     <p>Creates an endpoint for an Amazon S3 bucket.</p>
+<p>For more information, see
+https://docs.aws.amazon.com/datasync/latest/userguide/create-locations-cli.html\#create-location-s3-cli
+in the <em>AWS DataSync User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datasync_create_location_s3</span>(<span class='no'>Subdirectory</span>, <span class='no'>S3BucketArn</span>, <span class='no'>S3StorageClass</span>,
-  <span class='no'>S3Config</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>datasync_create_location_s3</span><span class='op'>(</span><span class='va'>Subdirectory</span>, <span class='va'>S3BucketArn</span>, <span class='va'>S3StorageClass</span>,
+  <span class='va'>S3Config</span>, <span class='va'>AgentArns</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,20 +138,29 @@ destination.</p></td>
     </tr>
     <tr>
       <th>S3BucketArn</th>
-      <td><p>[required] The Amazon Resource Name (ARN) of the Amazon S3 bucket.</p></td>
+      <td><p>[required] The ARN of the Amazon S3 bucket. If the bucket is on an AWS Outpost,
+this must be an access point ARN.</p></td>
     </tr>
     <tr>
       <th>S3StorageClass</th>
       <td><p>The Amazon S3 storage class that you want to store your files in when
-this location is used as a task destination. For more information about
-S3 storage classes, see <a href='https://aws.amazon.com/s3/storage-classes/'>Amazon S3 Storage Classes</a> in the <em>Amazon
-Simple Storage Service Developer Guide</em>. Some storage classes have
-behaviors that can affect your S3 storage cost. For detailed
-information, see using-storage-classes.</p></td>
+this location is used as a task destination. For buckets in AWS Regions,
+the storage class defaults to Standard. For buckets on AWS Outposts, the
+storage class defaults to AWS S3 Outposts.</p>
+<p>For more information about S3 storage classes, see <a href='https://aws.amazon.com/s3/storage-classes/'>Amazon S3 Storage Classes</a>. Some storage
+classes have behaviors that can affect your S3 storage cost. For
+detailed information, see using-storage-classes.</p></td>
     </tr>
     <tr>
       <th>S3Config</th>
       <td><p>[required]</p></td>
+    </tr>
+    <tr>
+      <th>AgentArns</th>
+      <td><p>If you are using DataSync on an AWS Outpost, specify the Amazon Resource
+Names (ARNs) of the DataSync agents deployed on your Outpost. For more
+information about launching a DataSync agent on an AWS Outpost, see
+outposts-agent.</p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -155,33 +170,27 @@ name your resources.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For AWS DataSync to access a destination S3 bucket, it needs an AWS
-Identity and Access Management (IAM) role that has the required
-permissions. You can set up the required permissions by creating an IAM
-policy that grants the required permissions and attaching the policy to
-the role. An example of such a policy is shown in the examples section.</p>
-<p>For more information, see
-https://docs.aws.amazon.com/datasync/latest/userguide/working-with-locations.html\#create-s3-location
-in the <em>AWS DataSync User Guide.</em></p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_location_s3</span>(
-  <span class='kw'>Subdirectory</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>S3BucketArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>S3StorageClass</span> <span class='kw'>=</span> <span class='st'>"STANDARD"</span><span class='kw'>|</span><span class='st'>"STANDARD_IA"</span><span class='kw'>|</span><span class='st'>"ONEZONE_IA"</span><span class='kw'>|</span><span class='st'>"INTELLIGENT_TIERING"</span><span class='kw'>|</span><span class='st'>"GLACIER"</span><span class='kw'>|</span><span class='st'>"DEEP_ARCHIVE"</span>,
-  <span class='kw'>S3Config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>BucketAccessRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_location_s3</span><span class='op'>(</span>
+  Subdirectory <span class='op'>=</span> <span class='st'>"string"</span>,
+  S3BucketArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  S3StorageClass <span class='op'>=</span> <span class='st'>"STANDARD"</span><span class='op'>|</span><span class='st'>"STANDARD_IA"</span><span class='op'>|</span><span class='st'>"ONEZONE_IA"</span><span class='op'>|</span><span class='st'>"INTELLIGENT_TIERING"</span><span class='op'>|</span><span class='st'>"GLACIER"</span><span class='op'>|</span><span class='st'>"DEEP_ARCHIVE"</span><span class='op'>|</span><span class='st'>"OUTPOSTS"</span>,
+  S3Config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    BucketAccessRoleArn <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  AgentArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -199,7 +208,7 @@ in the <em>AWS DataSync User Guide.</em></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

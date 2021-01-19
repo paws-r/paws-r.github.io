@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Imports the specified Windows 7 or Windows 10 Bring Your Own License
-(BYOL) image into Amazon WorkSpaces — workspaces_import_workspace_image • paws</title>
+<title>Imports the specified Windows 10 Bring Your Own License (BYOL) image
+into Amazon WorkSpaces — workspaces_import_workspace_image • paws</title>
 
 
 <!-- jquery -->
@@ -40,12 +40,12 @@
 
 
 
-<meta property="og:title" content="Imports the specified Windows 7 or Windows 10 Bring Your Own License
-(BYOL) image into Amazon WorkSpaces — workspaces_import_workspace_image" />
-<meta property="og:description" content="Imports the specified Windows 7 or Windows 10 Bring Your Own License
-(BYOL) image into Amazon WorkSpaces. The image must be an already
-licensed EC2 image that is in your AWS account, and you must own the
-image." />
+<meta property="og:title" content="Imports the specified Windows 10 Bring Your Own License (BYOL) image
+into Amazon WorkSpaces — workspaces_import_workspace_image" />
+<meta property="og:description" content="Imports the specified Windows 10 Bring Your Own License (BYOL) image
+into Amazon WorkSpaces. The image must be an already licensed Amazon EC2
+image that is in your AWS account, and you must own the image. For more
+information about creating BYOL images, see Bring Your Own Windows Desktop Licenses." />
 
 
 
@@ -77,7 +77,7 @@ image." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@ image." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +97,7 @@ image." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -114,21 +114,21 @@ image." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Imports the specified Windows 7 or Windows 10 Bring Your Own License
-(BYOL) image into Amazon WorkSpaces</h1>
+    <h1>Imports the specified Windows 10 Bring Your Own License (BYOL) image
+into Amazon WorkSpaces</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/workspaces_operations.R'><code>R/workspaces_operations.R</code></a></small>
     <div class="hidden name"><code>workspaces_import_workspace_image.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Imports the specified Windows 7 or Windows 10 Bring Your Own License
-(BYOL) image into Amazon WorkSpaces. The image must be an already
-licensed EC2 image that is in your AWS account, and you must own the
-image.</p>
+    <p>Imports the specified Windows 10 Bring Your Own License (BYOL) image
+into Amazon WorkSpaces. The image must be an already licensed Amazon EC2
+image that is in your AWS account, and you must own the image. For more
+information about creating BYOL images, see <a href='https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html'>Bring Your Own Windows Desktop Licenses</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>workspaces_import_workspace_image</span>(<span class='no'>Ec2ImageId</span>, <span class='no'>IngestionProcess</span>,
-  <span class='no'>ImageName</span>, <span class='no'>ImageDescription</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>workspaces_import_workspace_image</span><span class='op'>(</span><span class='va'>Ec2ImageId</span>, <span class='va'>IngestionProcess</span>,
+  <span class='va'>ImageName</span>, <span class='va'>ImageDescription</span>, <span class='va'>Tags</span>, <span class='va'>Applications</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,7 +139,14 @@ image.</p>
     </tr>
     <tr>
       <th>IngestionProcess</th>
-      <td><p>[required] The ingestion process to be used when importing the image.</p></td>
+      <td><p>[required] The ingestion process to be used when importing the image, depending on
+which protocol you want to use for your BYOL Workspace image, either
+PCoIP or WorkSpaces Streaming Protocol (WSP). To use WSP, specify a
+value that ends in <code>_WSP</code>. To use PCoIP, specify a value that does not
+end in <code>_WSP</code>.</p>
+<p>For non-GPU-enabled bundles (bundles other than Graphics or
+GraphicsPro), specify <code>BYOL_REGULAR</code> or <code>BYOL_REGULAR_WSP</code>, depending on
+the protocol.</p></td>
     </tr>
     <tr>
       <th>ImageName</th>
@@ -153,23 +160,35 @@ image.</p>
       <th>Tags</th>
       <td><p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p></td>
     </tr>
+    <tr>
+      <th>Applications</th>
+      <td><p>If specified, the version of Microsoft Office to subscribe to. Valid
+only for Windows 10 BYOL images. For more information about subscribing
+to Office for BYOL images, see <a href='https://docs.aws.amazon.com/workspaces/latest/adminguide/byol-windows-images.html'>Bring Your Own Windows Desktop Licenses</a>.</p>
+<p>Although this parameter is an array, only one item is allowed at this
+time.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>import_workspace_image</span>(
-  <span class='kw'>Ec2ImageId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>IngestionProcess</span> <span class='kw'>=</span> <span class='st'>"BYOL_REGULAR"</span><span class='kw'>|</span><span class='st'>"BYOL_GRAPHICS"</span><span class='kw'>|</span><span class='st'>"BYOL_GRAPHICSPRO"</span>,
-  <span class='kw'>ImageName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ImageDescription</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>import_workspace_image</span><span class='op'>(</span>
+  Ec2ImageId <span class='op'>=</span> <span class='st'>"string"</span>,
+  IngestionProcess <span class='op'>=</span> <span class='st'>"BYOL_REGULAR"</span><span class='op'>|</span><span class='st'>"BYOL_GRAPHICS"</span><span class='op'>|</span><span class='st'>"BYOL_GRAPHICSPRO"</span><span class='op'>|</span><span class='st'>"BYOL_REGULAR_WSP"</span>,
+  ImageName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ImageDescription <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Applications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"Microsoft_Office_2016"</span><span class='op'>|</span><span class='st'>"Microsoft_Office_2019"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -187,7 +206,7 @@ image.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

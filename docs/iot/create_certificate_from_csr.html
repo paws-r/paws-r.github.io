@@ -41,7 +41,37 @@
 
 <meta property="og:title" content="Creates an X — iot_create_certificate_from_csr" />
 <meta property="og:description" content="Creates an X.509 certificate using the specified certificate signing
-request." />
+request.
+Note: The CSR must include a public key that is either an RSA key
+with a length of at least 2048 bits or an ECC key from NIST P-256 or
+NIST P-384 curves.
+Note: Reusing the same certificate signing request (CSR) results in
+a distinct certificate.
+You can create multiple certificates in a batch by creating a directory,
+copying multiple .csr files into that directory, and then specifying
+that directory on the command line. The following commands show how to
+create a batch of certificates given a batch of CSRs.
+Assuming a set of CSRs are located inside of the directory
+my-csr-directory:
+On Linux and OS X, the command is:
+$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr
+--certificate-signing-request file://my-csr-directory/{}
+This command lists all of the CSRs in my-csr-directory and pipes each
+CSR file name to the aws iot create-certificate-from-csr AWS CLI command
+to create a certificate for the corresponding CSR.
+The aws iot create-certificate-from-csr part of the command can also be
+run in parallel to speed up the certificate creation process:
+$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot
+create-certificate-from-csr --certificate-signing-request
+file://my-csr-directory/{}
+On Windows PowerShell, the command to create certificates for all CSRs
+in my-csr-directory is:
+&amp;gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr
+--certificate-signing-request file://my-csr-directory/$\_}
+On a Windows command prompt, the command to create certificates for all
+CSRs in my-csr-directory is:
+&amp;gt; forfiles /p my-csr-directory /c &quot;cmd /c aws iot
+create-certificate-from-csr --certificate-signing-request file://@path&quot;" />
 
 
 
@@ -73,7 +103,7 @@ request." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +111,7 @@ request." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +123,7 @@ request." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +148,39 @@ request." />
     <div class="ref-description">
     <p>Creates an X.509 certificate using the specified certificate signing
 request.</p>
+<p><strong>Note:</strong> The CSR must include a public key that is either an RSA key
+with a length of at least 2048 bits or an ECC key from NIST P-256 or
+NIST P-384 curves.</p>
+<p><strong>Note:</strong> Reusing the same certificate signing request (CSR) results in
+a distinct certificate.</p>
+<p>You can create multiple certificates in a batch by creating a directory,
+copying multiple .csr files into that directory, and then specifying
+that directory on the command line. The following commands show how to
+create a batch of certificates given a batch of CSRs.</p>
+<p>Assuming a set of CSRs are located inside of the directory
+my-csr-directory:</p>
+<p>On Linux and OS X, the command is:</p>
+<p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr
+--certificate-signing-request file://my-csr-directory/{}</p>
+<p>This command lists all of the CSRs in my-csr-directory and pipes each
+CSR file name to the aws iot create-certificate-from-csr AWS CLI command
+to create a certificate for the corresponding CSR.</p>
+<p>The aws iot create-certificate-from-csr part of the command can also be
+run in parallel to speed up the certificate creation process:</p>
+<p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot
+create-certificate-from-csr --certificate-signing-request
+file://my-csr-directory/{}</p>
+<p>On Windows PowerShell, the command to create certificates for all CSRs
+in my-csr-directory is:</p>
+<p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr
+--certificate-signing-request file://my-csr-directory/$\_}</p>
+<p>On a Windows command prompt, the command to create certificates for all
+CSRs in my-csr-directory is:</p>
+<p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot
+create-certificate-from-csr --certificate-signing-request file://@path"</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iot_create_certificate_from_csr</span>(<span class='no'>certificateSigningRequest</span>, <span class='no'>setAsActive</span>)</pre>
+    <pre class="usage"><span class='fu'>iot_create_certificate_from_csr</span><span class='op'>(</span><span class='va'>certificateSigningRequest</span>, <span class='va'>setAsActive</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,47 +195,14 @@ request.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><strong>Note:</strong> The CSR must include a public key that is either an RSA key
-with a length of at least 2048 bits or an ECC key from NIST P-256 or
-NIST P-384 curves.</p>
-<p><strong>Note:</strong> Reusing the same certificate signing request (CSR) results in
-a distinct certificate.</p>
-<p>You can create multiple certificates in a batch by creating a directory,
-copying multiple .csr files into that directory, and then specifying
-that directory on the command line. The following commands show how to
-create a batch of certificates given a batch of CSRs.</p>
-<p>Assuming a set of CSRs are located inside of the directory
-my-csr-directory:</p>
-<p>On Linux and OS X, the command is:</p>
-<p>\$ ls my-csr-directory/ \| xargs -I {} aws iot
-create-certificate-from-csr \--certificate-signing-request
-file://my-csr-directory/{}</p>
-<p>This command lists all of the CSRs in my-csr-directory and pipes each
-CSR file name to the aws iot create-certificate-from-csr AWS CLI command
-to create a certificate for the corresponding CSR.</p>
-<p>The aws iot create-certificate-from-csr part of the command can also be
-run in parallel to speed up the certificate creation process:</p>
-<p>\$ ls my-csr-directory/ \| xargs -P 10 -I {} aws iot
-create-certificate-from-csr \--certificate-signing-request
-file://my-csr-directory/{}</p>
-<p>On Windows PowerShell, the command to create certificates for all CSRs
-in my-csr-directory is:</p>
-<p>\&gt; ls -Name my-csr-directory \| %{aws iot create-certificate-from-csr
-\--certificate-signing-request file://my-csr-directory/\$\_}</p>
-<p>On a Windows command prompt, the command to create certificates for all
-CSRs in my-csr-directory is:</p>
-<p>\&gt; forfiles /p my-csr-directory /c \"cmd /c aws iot
-create-certificate-from-csr \--certificate-signing-request
-file://\@path\"</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_certificate_from_csr</span>(
-  <span class='kw'>certificateSigningRequest</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>setAsActive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_certificate_from_csr</span><span class='op'>(</span>
+  certificateSigningRequest <span class='op'>=</span> <span class='st'>"string"</span>,
+  setAsActive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -193,7 +220,7 @@ file://\@path\"</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Creates a new bucket — s3_create_bucket • paws</title>
+<title>Creates a new S3 bucket — s3_create_bucket • paws</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,77 @@
 
 
 
-<meta property="og:title" content="Creates a new bucket — s3_create_bucket" />
-<meta property="og:description" content="Creates a new bucket. To create a bucket, you must register with Amazon
-S3 and have a valid AWS Access Key ID to authenticate requests.
+<meta property="og:title" content="Creates a new S3 bucket — s3_create_bucket" />
+<meta property="og:description" content="Creates a new S3 bucket. To create a bucket, you must register with
+Amazon S3 and have a valid AWS Access Key ID to authenticate requests.
 Anonymous requests are never allowed to create buckets. By creating the
-bucket, you become the bucket owner." />
+bucket, you become the bucket owner.
+Not every string is an acceptable bucket name. For information about
+bucket naming restrictions, see Working with Amazon S3 buckets.
+If you want to create an Amazon S3 on Outposts bucket, see Create Bucket.
+By default, the bucket is created in the US East (N. Virginia) Region.
+You can optionally specify a Region in the request body. You might
+choose a Region to optimize latency, minimize costs, or address
+regulatory requirements. For example, if you reside in Europe, you will
+probably find it advantageous to create buckets in the Europe (Ireland)
+Region. For more information, see Accessing a bucket.
+If you send your create bucket request to the s3.amazonaws.com
+endpoint, the request goes to the us-east-1 Region. Accordingly, the
+signature calculations in Signature Version 4 must use us-east-1 as the
+Region, even if the location constraint in the request specifies another
+Region where the bucket is to be created. If you create a bucket in a
+Region other than US East (N. Virginia), your application must be able
+to handle 307 redirect. For more information, see Virtual hosting of buckets.
+When creating a bucket using this operation, you can optionally specify
+the accounts or groups that should be granted specific permissions on
+the bucket. There are two ways to grant the appropriate permissions
+using the request headers.
+Specify a canned ACL using the x-amz-acl request header. Amazon S3
+supports a set of predefined ACLs, known as canned ACLs. Each
+canned ACL has a predefined set of grantees and permissions. For
+more information, see Canned ACL.
+Specify access permissions explicitly using the x-amz-grant-read,
+x-amz-grant-write, x-amz-grant-read-acp,
+x-amz-grant-write-acp, and x-amz-grant-full-control headers.
+These headers map to the set of permissions Amazon S3 supports in an
+ACL. For more information, see Access control list (ACL) overview.
+You specify each grantee as a type=value pair, where the type is one
+of the following:
+id – if the value specified is the canonical user ID of an AWS
+account
+uri – if you are granting permissions to a predefined group
+emailAddress – if the value specified is the email address of
+an AWS account
+Using email addresses to specify a grantee is only supported in
+the following AWS Regions:
+US East (N. Virginia)
+US West (N. California)
+US West (Oregon)
+Asia Pacific (Singapore)
+Asia Pacific (Sydney)
+Asia Pacific (Tokyo)
+Europe (Ireland)
+South America (São Paulo)
+
+
+For a list of all the Amazon S3 supported Regions and endpoints,
+see Regions and Endpoints
+in the AWS General Reference.
+
+
+For example, the following x-amz-grant-read header grants the AWS
+accounts identified by account IDs permissions to read object data
+and its metadata:
+x-amz-grant-read: id=&quot;11112222333&quot;, id=&quot;444455556666&quot; 
+
+
+You can use either a canned ACL or specify access permissions
+explicitly. You cannot do both.
+The following operations are related to CreateBucket:
+PutObject
+DeleteBucket
+
+" />
 
 
 
@@ -75,7 +141,7 @@ bucket, you become the bucket owner." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +149,7 @@ bucket, you become the bucket owner." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +161,7 @@ bucket, you become the bucket owner." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,21 +178,87 @@ bucket, you become the bucket owner." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Creates a new bucket</h1>
+    <h1>Creates a new S3 bucket</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/s3_operations.R'><code>R/s3_operations.R</code></a></small>
     <div class="hidden name"><code>s3_create_bucket.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates a new bucket. To create a bucket, you must register with Amazon
-S3 and have a valid AWS Access Key ID to authenticate requests.
+    <p>Creates a new S3 bucket. To create a bucket, you must register with
+Amazon S3 and have a valid AWS Access Key ID to authenticate requests.
 Anonymous requests are never allowed to create buckets. By creating the
 bucket, you become the bucket owner.</p>
+<p>Not every string is an acceptable bucket name. For information about
+bucket naming restrictions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html'>Working with Amazon S3 buckets</a>.</p>
+<p>If you want to create an Amazon S3 on Outposts bucket, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_CreateBucket.html'>Create Bucket</a>.</p>
+<p>By default, the bucket is created in the US East (N. Virginia) Region.
+You can optionally specify a Region in the request body. You might
+choose a Region to optimize latency, minimize costs, or address
+regulatory requirements. For example, if you reside in Europe, you will
+probably find it advantageous to create buckets in the Europe (Ireland)
+Region. For more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro'>Accessing a bucket</a>.</p>
+<p>If you send your create bucket request to the <code>s3.amazonaws.com</code>
+endpoint, the request goes to the us-east-1 Region. Accordingly, the
+signature calculations in Signature Version 4 must use us-east-1 as the
+Region, even if the location constraint in the request specifies another
+Region where the bucket is to be created. If you create a bucket in a
+Region other than US East (N. Virginia), your application must be able
+to handle 307 redirect. For more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html'>Virtual hosting of buckets</a>.</p>
+<p>When creating a bucket using this operation, you can optionally specify
+the accounts or groups that should be granted specific permissions on
+the bucket. There are two ways to grant the appropriate permissions
+using the request headers.</p><ul>
+<li><p>Specify a canned ACL using the <code>x-amz-acl</code> request header. Amazon S3
+supports a set of predefined ACLs, known as <em>canned ACLs</em>. Each
+canned ACL has a predefined set of grantees and permissions. For
+more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL'>Canned ACL</a>.</p></li>
+<li><p>Specify access permissions explicitly using the <code>x-amz-grant-read</code>,
+<code>x-amz-grant-write</code>, <code>x-amz-grant-read-acp</code>,
+<code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers.
+These headers map to the set of permissions Amazon S3 supports in an
+ACL. For more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html'>Access control list (ACL) overview</a>.</p>
+<p>You specify each grantee as a type=value pair, where the type is one
+of the following:</p><ul>
+<li><p><code>id</code> – if the value specified is the canonical user ID of an AWS
+account</p></li>
+<li><p><code>uri</code> – if you are granting permissions to a predefined group</p></li>
+<li><p><code>emailAddress</code> – if the value specified is the email address of
+an AWS account</p>
+<p>Using email addresses to specify a grantee is only supported in
+the following AWS Regions:</p><ul>
+<li><p>US East (N. Virginia)</p></li>
+<li><p>US West (N. California)</p></li>
+<li><p>US West (Oregon)</p></li>
+<li><p>Asia Pacific (Singapore)</p></li>
+<li><p>Asia Pacific (Sydney)</p></li>
+<li><p>Asia Pacific (Tokyo)</p></li>
+<li><p>Europe (Ireland)</p></li>
+<li><p>South America (São Paulo)</p></li>
+</ul>
+
+<p>For a list of all the Amazon S3 supported Regions and endpoints,
+see <a href='https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region'>Regions and Endpoints</a>
+in the AWS General Reference.</p></li>
+</ul>
+
+<p>For example, the following <code>x-amz-grant-read</code> header grants the AWS
+accounts identified by account IDs permissions to read object data
+and its metadata:</p>
+<p><code>x-amz-grant-read: id="11112222333", id="444455556666" </code></p></li>
+</ul>
+
+<p>You can use either a canned ACL or specify access permissions
+explicitly. You cannot do both.</p>
+<p>The following operations are related to <code>CreateBucket</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html'>PutObject</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucket.html'>DeleteBucket</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_create_bucket</span>(<span class='no'>ACL</span>, <span class='no'>Bucket</span>, <span class='no'>CreateBucketConfiguration</span>,
-  <span class='no'>GrantFullControl</span>, <span class='no'>GrantRead</span>, <span class='no'>GrantReadACP</span>, <span class='no'>GrantWrite</span>, <span class='no'>GrantWriteACP</span>,
-  <span class='no'>ObjectLockEnabledForBucket</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_create_bucket</span><span class='op'>(</span><span class='va'>ACL</span>, <span class='va'>Bucket</span>, <span class='va'>CreateBucketConfiguration</span>,
+  <span class='va'>GrantFullControl</span>, <span class='va'>GrantRead</span>, <span class='va'>GrantReadACP</span>, <span class='va'>GrantWrite</span>, <span class='va'>GrantWriteACP</span>,
+  <span class='va'>ObjectLockEnabledForBucket</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,107 +304,43 @@ bucket.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Not every string is an acceptable bucket name. For information on bucket
-naming restrictions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html'>Working with Amazon S3 Buckets</a>.</p>
-<p>By default, the bucket is created in the US East (N. Virginia) Region.
-You can optionally specify a Region in the request body. You might
-choose a Region to optimize latency, minimize costs, or address
-regulatory requirements. For example, if you reside in Europe, you will
-probably find it advantageous to create buckets in the Europe (Ireland)
-Region. For more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro'>How to Select a Region for Your Buckets</a>.</p>
-<p>If you send your create bucket request to the <code>s3.amazonaws.com</code>
-endpoint, the request goes to the us-east-1 Region. Accordingly, the
-signature calculations in Signature Version 4 must use us-east-1 as the
-Region, even if the location constraint in the request specifies another
-Region where the bucket is to be created. If you create a bucket in a
-Region other than US East (N. Virginia), your application must be able
-to handle 307 redirect. For more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html'>Virtual Hosting of Buckets</a>.</p>
-<p>When creating a bucket using this operation, you can optionally specify
-the accounts or groups that should be granted specific permissions on
-the bucket. There are two ways to grant the appropriate permissions
-using the request headers.</p><ul>
-<li><p>Specify a canned ACL using the <code>x-amz-acl</code> request header. Amazon S3
-supports a set of predefined ACLs, known as <em>canned ACLs</em>. Each
-canned ACL has a predefined set of grantees and permissions. For
-more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL'>Canned ACL</a>.</p></li>
-<li><p>Specify access permissions explicitly using the <code>x-amz-grant-read</code>,
-<code>x-amz-grant-write</code>, <code>x-amz-grant-read-acp</code>,
-<code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers.
-These headers map to the set of permissions Amazon S3 supports in an
-ACL. For more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html'>Access Control List (ACL) Overview</a>.</p>
-<p>You specify each grantee as a type=value pair, where the type is one
-of the following:</p><ul>
-<li><p><code>id</code> -- if the value specified is the canonical user ID of an
-AWS account</p></li>
-<li><p><code>uri</code> -- if you are granting permissions to a predefined group</p></li>
-<li><p><code>emailAddress</code> -- if the value specified is the email address of
-an AWS account</p>
-<p>Using email addresses to specify a grantee is only supported in
-the following AWS Regions:</p><ul>
-<li><p>US East (N. Virginia)</p></li>
-<li><p>US West (N. California)</p></li>
-<li><p>US West (Oregon)</p></li>
-<li><p>Asia Pacific (Singapore)</p></li>
-<li><p>Asia Pacific (Sydney)</p></li>
-<li><p>Asia Pacific (Tokyo)</p></li>
-<li><p>Europe (Ireland)</p></li>
-<li><p>South America (SÃ£o Paulo)</p></li>
-</ul>
-
-<p>For a list of all the Amazon S3 supported Regions and endpoints,
-see <a href='https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region'>Regions and Endpoints</a>
-in the AWS General Reference.</p></li>
-</ul>
-
-<p>For example, the following <code>x-amz-grant-read</code> header grants the AWS
-accounts identified by account IDs permissions to read object data
-and its metadata:</p>
-<p><code>x-amz-grant-read: id="11112222333", id="444455556666" </code></p></li>
-</ul>
-
-<p>You can use either a canned ACL or specify access permissions
-explicitly. You cannot do both.</p>
-<p>The following operations are related to <code>CreateBucket</code>:</p><ul>
-<li><p>PutObject</p></li>
-<li><p>DeleteBucket</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_bucket</span>(
-  <span class='kw'>ACL</span> <span class='kw'>=</span> <span class='st'>"private"</span><span class='kw'>|</span><span class='st'>"public-read"</span><span class='kw'>|</span><span class='st'>"public-read-write"</span><span class='kw'>|</span><span class='st'>"authenticated-read"</span>,
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CreateBucketConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>LocationConstraint</span> <span class='kw'>=</span> <span class='st'>"EU"</span><span class='kw'>|</span><span class='st'>"eu-west-1"</span><span class='kw'>|</span><span class='st'>"us-west-1"</span><span class='kw'>|</span><span class='st'>"us-west-2"</span><span class='kw'>|</span><span class='st'>"ap-south-1"</span><span class='kw'>|</span><span class='st'>"ap-southeast-1"</span><span class='kw'>|</span><span class='st'>"ap-southeast-2"</span><span class='kw'>|</span><span class='st'>"ap-northeast-1"</span><span class='kw'>|</span><span class='st'>"sa-east-1"</span><span class='kw'>|</span><span class='st'>"cn-north-1"</span><span class='kw'>|</span><span class='st'>"eu-central-1"</span>
-  ),
-  <span class='kw'>GrantFullControl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GrantRead</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GrantReadACP</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GrantWrite</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GrantWriteACP</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ObjectLockEnabledForBucket</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_bucket</span><span class='op'>(</span>
+  ACL <span class='op'>=</span> <span class='st'>"private"</span><span class='op'>|</span><span class='st'>"public-read"</span><span class='op'>|</span><span class='st'>"public-read-write"</span><span class='op'>|</span><span class='st'>"authenticated-read"</span>,
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  CreateBucketConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    LocationConstraint <span class='op'>=</span> <span class='st'>"af-south-1"</span><span class='op'>|</span><span class='st'>"ap-east-1"</span><span class='op'>|</span><span class='st'>"ap-northeast-1"</span><span class='op'>|</span><span class='st'>"ap-northeast-2"</span><span class='op'>|</span><span class='st'>"ap-northeast-3"</span><span class='op'>|</span><span class='st'>"ap-south-1"</span><span class='op'>|</span><span class='st'>"ap-southeast-1"</span><span class='op'>|</span><span class='st'>"ap-southeast-2"</span><span class='op'>|</span><span class='st'>"ca-central-1"</span><span class='op'>|</span><span class='st'>"cn-north-1"</span><span class='op'>|</span><span class='st'>"cn-northwest-1"</span><span class='op'>|</span><span class='st'>"EU"</span><span class='op'>|</span><span class='st'>"eu-central-1"</span><span class='op'>|</span><span class='st'>"eu-north-1"</span><span class='op'>|</span><span class='st'>"eu-south-1"</span><span class='op'>|</span><span class='st'>"eu-west-1"</span><span class='op'>|</span><span class='st'>"eu-west-2"</span><span class='op'>|</span><span class='st'>"eu-west-3"</span><span class='op'>|</span><span class='st'>"me-south-1"</span><span class='op'>|</span><span class='st'>"sa-east-1"</span><span class='op'>|</span><span class='st'>"us-east-2"</span><span class='op'>|</span><span class='st'>"us-gov-east-1"</span><span class='op'>|</span><span class='st'>"us-gov-west-1"</span><span class='op'>|</span><span class='st'>"us-west-1"</span><span class='op'>|</span><span class='st'>"us-west-2"</span>
+  <span class='op'>)</span>,
+  GrantFullControl <span class='op'>=</span> <span class='st'>"string"</span>,
+  GrantRead <span class='op'>=</span> <span class='st'>"string"</span>,
+  GrantReadACP <span class='op'>=</span> <span class='st'>"string"</span>,
+  GrantWrite <span class='op'>=</span> <span class='st'>"string"</span>,
+  GrantWriteACP <span class='op'>=</span> <span class='st'>"string"</span>,
+  ObjectLockEnabledForBucket <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example creates a bucket.</span>
-<span class='no'>svc</span>$<span class='fu'>create_bucket</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_bucket</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>
+<span class='op'>)</span>
 
 <span class='co'># The following example creates a bucket. The request specifies an AWS</span>
 <span class='co'># region where to create the bucket.</span>
-<span class='no'>svc</span>$<span class='fu'>create_bucket</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>CreateBucketConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>LocationConstraint</span> <span class='kw'>=</span> <span class='st'>"eu-west-1"</span>
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_bucket</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  CreateBucketConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    LocationConstraint <span class='op'>=</span> <span class='st'>"eu-west-1"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -288,7 +356,7 @@ explicitly. You cannot do both.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

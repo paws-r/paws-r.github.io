@@ -43,12 +43,44 @@ sessions — gamelift_create_game_session_queue • paws</title>
 <meta property="og:title" content="Establishes a new queue for processing requests to place new game
 sessions — gamelift_create_game_session_queue" />
 <meta property="og:description" content="Establishes a new queue for processing requests to place new game
-sessions. A queue identifies where new game sessions can be hosted \--
-by specifying a list of destinations (fleets or aliases) \-- and how
-long requests can wait in the queue before timing out. You can set up a
-queue to try to place game sessions on fleets in multiple Regions. To
-add placement requests to a queue, call StartGameSessionPlacement and
-reference the queue name." />
+sessions. A queue identifies where new game sessions can be hosted -- by
+specifying a list of destinations (fleets or aliases) -- and how long
+requests can wait in the queue before timing out. You can set up a queue
+to try to place game sessions on fleets in multiple Regions. To add
+placement requests to a queue, call StartGameSessionPlacement and
+reference the queue name.
+Destination order. When processing a request for a game session,
+Amazon GameLift tries each destination in order until it finds one with
+available resources to host the new game session. A queue's default
+order is determined by how destinations are listed. The default order is
+overridden when a game session placement request provides player latency
+information. Player latency information enables Amazon GameLift to
+prioritize destinations where players report the lowest average latency,
+as a result placing the new game session where the majority of players
+will have the best possible gameplay experience.
+Player latency policies. For placement requests containing player
+latency information, use player latency policies to protect individual
+players from very high latencies. With a latency cap, even when a
+destination can deliver a low latency for most players, the game is not
+placed where any individual player is reporting latency higher than a
+policy's maximum. A queue can have multiple latency policies, which are
+enforced consecutively starting with the policy with the lowest latency
+cap. Use multiple policies to gradually relax latency controls; for
+example, you might set a policy with a low latency cap for the first 60
+seconds, a second policy with a higher cap for the next 60 seconds, etc.
+To create a new queue, provide a name, timeout value, a list of
+destinations and, if desired, a set of latency policies. If successful,
+a new queue object is returned.
+Learn more
+Design a Game Session Queue
+Create a Game Session Queue
+Related operations
+CreateGameSessionQueue
+DescribeGameSessionQueues
+UpdateGameSessionQueue
+DeleteGameSessionQueue
+
+" />
 
 
 
@@ -80,7 +112,7 @@ reference the queue name." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +120,7 @@ reference the queue name." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +132,7 @@ reference the queue name." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,16 +157,48 @@ sessions</h1>
 
     <div class="ref-description">
     <p>Establishes a new queue for processing requests to place new game
-sessions. A queue identifies where new game sessions can be hosted \--
-by specifying a list of destinations (fleets or aliases) \-- and how
-long requests can wait in the queue before timing out. You can set up a
-queue to try to place game sessions on fleets in multiple Regions. To
-add placement requests to a queue, call StartGameSessionPlacement and
+sessions. A queue identifies where new game sessions can be hosted -- by
+specifying a list of destinations (fleets or aliases) -- and how long
+requests can wait in the queue before timing out. You can set up a queue
+to try to place game sessions on fleets in multiple Regions. To add
+placement requests to a queue, call StartGameSessionPlacement and
 reference the queue name.</p>
+<p><strong>Destination order.</strong> When processing a request for a game session,
+Amazon GameLift tries each destination in order until it finds one with
+available resources to host the new game session. A queue's default
+order is determined by how destinations are listed. The default order is
+overridden when a game session placement request provides player latency
+information. Player latency information enables Amazon GameLift to
+prioritize destinations where players report the lowest average latency,
+as a result placing the new game session where the majority of players
+will have the best possible gameplay experience.</p>
+<p><strong>Player latency policies.</strong> For placement requests containing player
+latency information, use player latency policies to protect individual
+players from very high latencies. With a latency cap, even when a
+destination can deliver a low latency for most players, the game is not
+placed where any individual player is reporting latency higher than a
+policy's maximum. A queue can have multiple latency policies, which are
+enforced consecutively starting with the policy with the lowest latency
+cap. Use multiple policies to gradually relax latency controls; for
+example, you might set a policy with a low latency cap for the first 60
+seconds, a second policy with a higher cap for the next 60 seconds, etc.</p>
+<p>To create a new queue, provide a name, timeout value, a list of
+destinations and, if desired, a set of latency policies. If successful,
+a new queue object is returned.</p>
+<p><strong>Learn more</strong></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/queues-design.html'>Design a Game Session Queue</a></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/queues-creating.html'>Create a Game Session Queue</a></p>
+<p><strong>Related operations</strong></p><ul>
+<li><p>CreateGameSessionQueue</p></li>
+<li><p>DescribeGameSessionQueues</p></li>
+<li><p>UpdateGameSessionQueue</p></li>
+<li><p>DeleteGameSessionQueue</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_create_game_session_queue</span>(<span class='no'>Name</span>, <span class='no'>TimeoutInSeconds</span>,
-  <span class='no'>PlayerLatencyPolicies</span>, <span class='no'>Destinations</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_create_game_session_queue</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>TimeoutInSeconds</span>,
+  <span class='va'>PlayerLatencyPolicies</span>, <span class='va'>Destinations</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,64 +247,31 @@ AWS General Reference for actual tagging limits.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><strong>Destination order.</strong> When processing a request for a game session,
-Amazon GameLift tries each destination in order until it finds one with
-available resources to host the new game session. A queue\'s default
-order is determined by how destinations are listed. The default order is
-overridden when a game session placement request provides player latency
-information. Player latency information enables Amazon GameLift to
-prioritize destinations where players report the lowest average latency,
-as a result placing the new game session where the majority of players
-will have the best possible gameplay experience.</p>
-<p><strong>Player latency policies.</strong> For placement requests containing player
-latency information, use player latency policies to protect individual
-players from very high latencies. With a latency cap, even when a
-destination can deliver a low latency for most players, the game is not
-placed where any individual player is reporting latency higher than a
-policy\'s maximum. A queue can have multiple latency policies, which are
-enforced consecutively starting with the policy with the lowest latency
-cap. Use multiple policies to gradually relax latency controls; for
-example, you might set a policy with a low latency cap for the first 60
-seconds, a second policy with a higher cap for the next 60 seconds, etc.</p>
-<p>To create a new queue, provide a name, timeout value, a list of
-destinations and, if desired, a set of latency policies. If successful,
-a new queue object is returned.</p>
-<p><strong>Learn more</strong></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/queues-design.html'>Design a Game Session Queue</a></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/queues-creating.html'>Create a Game Session Queue</a></p>
-<p><strong>Related operations</strong></p><ul>
-<li><p>CreateGameSessionQueue</p></li>
-<li><p>DescribeGameSessionQueues</p></li>
-<li><p>UpdateGameSessionQueue</p></li>
-<li><p>DeleteGameSessionQueue</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_game_session_queue</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TimeoutInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>PlayerLatencyPolicies</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>MaximumIndividualPlayerLatencyMilliseconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>PolicyDurationSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  ),
-  <span class='kw'>Destinations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DestinationArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_game_session_queue</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  TimeoutInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  PlayerLatencyPolicies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      MaximumIndividualPlayerLatencyMilliseconds <span class='op'>=</span> <span class='fl'>123</span>,
+      PolicyDurationSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Destinations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DestinationArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -258,7 +289,7 @@ a new queue object is returned.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

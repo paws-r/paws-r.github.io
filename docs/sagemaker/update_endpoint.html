@@ -49,7 +49,19 @@ loss) — sagemaker_update_endpoint" />
 <meta property="og:description" content="Deploys the new EndpointConfig specified in the request, switches to
 using newly created endpoint, and then deletes resources provisioned for
 the endpoint using the previous EndpointConfig (there is no
-availability loss)." />
+availability loss).
+When Amazon SageMaker receives the request, it sets the endpoint status
+to Updating. After updating the endpoint, it sets the status to
+InService. To check the status of an endpoint, use the
+DescribeEndpoint API.
+You must not delete an EndpointConfig in use by an endpoint that is
+live or while the UpdateEndpoint or CreateEndpoint operations are
+being performed on the endpoint. To update an endpoint, you must create
+a new EndpointConfig.
+If you delete the EndpointConfig of an endpoint that is active or
+being created or updated you may lose visibility into the instance type
+the endpoint is using. The endpoint must be deleted in order to stop
+incurring charges." />
 
 
 
@@ -81,7 +93,7 @@ availability loss)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -89,7 +101,7 @@ availability loss)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +113,7 @@ availability loss)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -131,10 +143,23 @@ loss)</h1>
 using newly created endpoint, and then deletes resources provisioned for
 the endpoint using the previous <code>EndpointConfig</code> (there is no
 availability loss).</p>
+<p>When Amazon SageMaker receives the request, it sets the endpoint status
+to <code>Updating</code>. After updating the endpoint, it sets the status to
+<code>InService</code>. To check the status of an endpoint, use the
+DescribeEndpoint API.</p>
+<p>You must not delete an <code>EndpointConfig</code> in use by an endpoint that is
+live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are
+being performed on the endpoint. To update an endpoint, you must create
+a new <code>EndpointConfig</code>.</p>
+<p>If you delete the <code>EndpointConfig</code> of an endpoint that is active or
+being created or updated you may lose visibility into the instance type
+the endpoint is using. The endpoint must be deleted in order to stop
+incurring charges.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sagemaker_update_endpoint</span>(<span class='no'>EndpointName</span>, <span class='no'>EndpointConfigName</span>,
-  <span class='no'>RetainAllVariantProperties</span>, <span class='no'>ExcludeRetainedVariantProperties</span>)</pre>
+    <pre class="usage"><span class='fu'>sagemaker_update_endpoint</span><span class='op'>(</span><span class='va'>EndpointName</span>, <span class='va'>EndpointConfigName</span>,
+  <span class='va'>RetainAllVariantProperties</span>, <span class='va'>ExcludeRetainedVariantProperties</span>,
+  <span class='va'>DeploymentConfig</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,50 +175,63 @@ availability loss).</p>
     <tr>
       <th>RetainAllVariantProperties</th>
       <td><p>When updating endpoint resources, enables or disables the retention of
-variant properties, such as the instance count or the variant weight. To
-retain the variant properties of an endpoint when updating it, set
+<a href='https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_VariantProperty.html'>variant properties</a>,
+such as the instance count or the variant weight. To retain the variant
+properties of an endpoint when updating it, set
 <code>RetainAllVariantProperties</code> to <code>true</code>. To use the variant properties
 specified in a new <code>EndpointConfig</code> call when updating an endpoint, set
-<code>RetainAllVariantProperties</code> to <code>false</code>.</p></td>
+<code>RetainAllVariantProperties</code> to <code>false</code>. The default is <code>false</code>.</p></td>
     </tr>
     <tr>
       <th>ExcludeRetainedVariantProperties</th>
       <td><p>When you are updating endpoint resources with
-UpdateEndpointInput\$RetainAllVariantProperties, whose value is set to
+UpdateEndpointInput$RetainAllVariantProperties, whose value is set to
 <code>true</code>, <code>ExcludeRetainedVariantProperties</code> specifies the list of type
 VariantProperty to override with the values provided by
-<code>EndpointConfig</code>. If you don\'t specify a value for
+<code>EndpointConfig</code>. If you don't specify a value for
 <code>ExcludeAllVariantProperties</code>, no variant properties are overridden.</p></td>
+    </tr>
+    <tr>
+      <th>DeploymentConfig</th>
+      <td><p>The deployment configuration for the endpoint to be updated.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When Amazon SageMaker receives the request, it sets the endpoint status
-to <code>Updating</code>. After updating the endpoint, it sets the status to
-<code>InService</code>. To check the status of an endpoint, use the
-DescribeEndpoint API.</p>
-<p>You must not delete an <code>EndpointConfig</code> in use by an endpoint that is
-live or while the <code>UpdateEndpoint</code> or <code>CreateEndpoint</code> operations are
-being performed on the endpoint. To update an endpoint, you must create
-a new <code>EndpointConfig</code>.</p>
-<p>If you delete the <code>EndpointConfig</code> of an endpoint that is active or
-being created or updated you may lose visibility into the instance type
-the endpoint is using. The endpoint must be deleted in order to stop
-incurring charges.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_endpoint</span>(
-  <span class='kw'>EndpointName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EndpointConfigName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RetainAllVariantProperties</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>ExcludeRetainedVariantProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>VariantPropertyType</span> <span class='kw'>=</span> <span class='st'>"DesiredInstanceCount"</span><span class='kw'>|</span><span class='st'>"DesiredWeight"</span><span class='kw'>|</span><span class='st'>"DataCaptureConfig"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_endpoint</span><span class='op'>(</span>
+  EndpointName <span class='op'>=</span> <span class='st'>"string"</span>,
+  EndpointConfigName <span class='op'>=</span> <span class='st'>"string"</span>,
+  RetainAllVariantProperties <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  ExcludeRetainedVariantProperties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      VariantPropertyType <span class='op'>=</span> <span class='st'>"DesiredInstanceCount"</span><span class='op'>|</span><span class='st'>"DesiredWeight"</span><span class='op'>|</span><span class='st'>"DataCaptureConfig"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DeploymentConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    BlueGreenUpdatePolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      TrafficRoutingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Type <span class='op'>=</span> <span class='st'>"ALL_AT_ONCE"</span><span class='op'>|</span><span class='st'>"CANARY"</span>,
+        WaitIntervalInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+        CanarySize <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Type <span class='op'>=</span> <span class='st'>"INSTANCE_COUNT"</span><span class='op'>|</span><span class='st'>"CAPACITY_PERCENT"</span>,
+          Value <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      TerminationWaitInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+      MaximumExecutionTimeoutInSeconds <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    AutoRollbackConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Alarms <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          AlarmName <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -211,7 +249,7 @@ incurring charges.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

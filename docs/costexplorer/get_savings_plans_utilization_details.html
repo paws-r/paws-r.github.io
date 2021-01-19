@@ -43,12 +43,14 @@ data for a given time period — costexplorer_get_savings_plans_utilization_deta
 <meta property="og:title" content="Retrieves attribute data along with aggregate utilization and savings
 data for a given time period — costexplorer_get_savings_plans_utilization_details" />
 <meta property="og:description" content="Retrieves attribute data along with aggregate utilization and savings
-data for a given time period. This doesn\'t support granular or grouped
-data (daily/monthly) in response. You can\'t retrieve data by dates in a
+data for a given time period. This doesn't support granular or grouped
+data (daily/monthly) in response. You can't retrieve data by dates in a
 single response similar to GetSavingsPlanUtilization, but you have the
 option to make multiple calls to GetSavingsPlanUtilizationDetails by
 providing individual dates. You can use GetDimensionValues in
-SAVINGS_PLANS to determine the possible dimension values." />
+SAVINGS_PLANS to determine the possible dimension values.
+GetSavingsPlanUtilizationDetails internally groups data by
+SavingsPlansArn." />
 
 
 
@@ -80,7 +82,7 @@ SAVINGS_PLANS to determine the possible dimension values." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +90,7 @@ SAVINGS_PLANS to determine the possible dimension values." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +102,7 @@ SAVINGS_PLANS to determine the possible dimension values." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,16 +127,18 @@ data for a given time period</h1>
 
     <div class="ref-description">
     <p>Retrieves attribute data along with aggregate utilization and savings
-data for a given time period. This doesn\'t support granular or grouped
-data (daily/monthly) in response. You can\'t retrieve data by dates in a
+data for a given time period. This doesn't support granular or grouped
+data (daily/monthly) in response. You can't retrieve data by dates in a
 single response similar to <code>GetSavingsPlanUtilization</code>, but you have the
 option to make multiple calls to <code>GetSavingsPlanUtilizationDetails</code> by
 providing individual dates. You can use <code>GetDimensionValues</code> in
 <code>SAVINGS_PLANS</code> to determine the possible dimension values.</p>
+<p><code>GetSavingsPlanUtilizationDetails</code> internally groups data by
+<code>SavingsPlansArn</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>costexplorer_get_savings_plans_utilization_details</span>(<span class='no'>TimePeriod</span>, <span class='no'>Filter</span>,
-  <span class='no'>NextToken</span>, <span class='no'>MaxResults</span>)</pre>
+    <pre class="usage"><span class='fu'>costexplorer_get_savings_plans_utilization_details</span><span class='op'>(</span><span class='va'>TimePeriod</span>, <span class='va'>Filter</span>,
+  <span class='va'>DataType</span>, <span class='va'>NextToken</span>, <span class='va'>MaxResults</span>, <span class='va'>SortBy</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,7 +147,7 @@ providing individual dates. You can use <code>GetDimensionValues</code> in
       <th>TimePeriod</th>
       <td><p>[required] The time period that you want the usage and costs for. The <code>Start</code> date
 must be within 13 months. The <code>End</code> date must be after the <code>Start</code> date,
-and before the current date. Future dates can\'t be used as an <code>End</code>
+and before the current date. Future dates can't be used as an <code>End</code>
 date.</p></td>
     </tr>
     <tr>
@@ -163,6 +167,10 @@ object as the other operations, but only <code>AND</code> is supported among eac
 dimension.</p></td>
     </tr>
     <tr>
+      <th>DataType</th>
+      <td><p>The data type.</p></td>
+    </tr>
+    <tr>
       <th>NextToken</th>
       <td><p>The token to retrieve the next set of results. Amazon Web Services
 provides the token when the response from a previous call has more
@@ -173,56 +181,78 @@ results than the maximum page size.</p></td>
       <td><p>The number of items to be returned in a response. The default is <code>20</code>,
 with a minimum value of <code>1</code>.</p></td>
     </tr>
+    <tr>
+      <th>SortBy</th>
+      <td><p>The value by which you want to sort the data.</p>
+<p>The following values are supported for <code>Key</code>:</p><ul>
+<li><p><code>UtilizationPercentage</code></p></li>
+<li><p><code>TotalCommitment</code></p></li>
+<li><p><code>UsedCommitment</code></p></li>
+<li><p><code>UnusedCommitment</code></p></li>
+<li><p><code>NetSavings</code></p></li>
+<li><p><code>AmortizedRecurringCommitment</code></p></li>
+<li><p><code>AmortizedUpfrontCommitment</code></p></li>
+</ul>
+
+<p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>GetSavingsPlanUtilizationDetails</code> internally groups data by
-<code>SavingsPlansArn</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_savings_plans_utilization_details</span>(
-  <span class='kw'>TimePeriod</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Start</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>End</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Filter</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Or</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-    ),
-    <span class='kw'>And</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-    ),
-    <span class='kw'>Not</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>Dimensions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"AZ"</span><span class='kw'>|</span><span class='st'>"INSTANCE_TYPE"</span><span class='kw'>|</span><span class='st'>"LINKED_ACCOUNT"</span><span class='kw'>|</span><span class='st'>"LINKED_ACCOUNT_NAME"</span><span class='kw'>|</span><span class='st'>"OPERATION"</span><span class='kw'>|</span><span class='st'>"PURCHASE_TYPE"</span><span class='kw'>|</span><span class='st'>"REGION"</span><span class='kw'>|</span><span class='st'>"SERVICE"</span><span class='kw'>|</span><span class='st'>"SERVICE_CODE"</span><span class='kw'>|</span><span class='st'>"USAGE_TYPE"</span><span class='kw'>|</span><span class='st'>"USAGE_TYPE_GROUP"</span><span class='kw'>|</span><span class='st'>"RECORD_TYPE"</span><span class='kw'>|</span><span class='st'>"OPERATING_SYSTEM"</span><span class='kw'>|</span><span class='st'>"TENANCY"</span><span class='kw'>|</span><span class='st'>"SCOPE"</span><span class='kw'>|</span><span class='st'>"PLATFORM"</span><span class='kw'>|</span><span class='st'>"SUBSCRIPTION_ID"</span><span class='kw'>|</span><span class='st'>"LEGAL_ENTITY_NAME"</span><span class='kw'>|</span><span class='st'>"DEPLOYMENT_OPTION"</span><span class='kw'>|</span><span class='st'>"DATABASE_ENGINE"</span><span class='kw'>|</span><span class='st'>"CACHE_ENGINE"</span><span class='kw'>|</span><span class='st'>"INSTANCE_TYPE_FAMILY"</span><span class='kw'>|</span><span class='st'>"BILLING_ENTITY"</span><span class='kw'>|</span><span class='st'>"RESERVATION_ID"</span><span class='kw'>|</span><span class='st'>"RESOURCE_ID"</span><span class='kw'>|</span><span class='st'>"RIGHTSIZING_TYPE"</span><span class='kw'>|</span><span class='st'>"SAVINGS_PLANS_TYPE"</span><span class='kw'>|</span><span class='st'>"SAVINGS_PLAN_ARN"</span><span class='kw'>|</span><span class='st'>"PAYMENT_OPTION"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_savings_plans_utilization_details</span><span class='op'>(</span>
+  TimePeriod <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Start <span class='op'>=</span> <span class='st'>"string"</span>,
+    End <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Or <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    And <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    Not <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    Dimensions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"AZ"</span><span class='op'>|</span><span class='st'>"INSTANCE_TYPE"</span><span class='op'>|</span><span class='st'>"LINKED_ACCOUNT"</span><span class='op'>|</span><span class='st'>"LINKED_ACCOUNT_NAME"</span><span class='op'>|</span><span class='st'>"OPERATION"</span><span class='op'>|</span><span class='st'>"PURCHASE_TYPE"</span><span class='op'>|</span><span class='st'>"REGION"</span><span class='op'>|</span><span class='st'>"SERVICE"</span><span class='op'>|</span><span class='st'>"SERVICE_CODE"</span><span class='op'>|</span><span class='st'>"USAGE_TYPE"</span><span class='op'>|</span><span class='st'>"USAGE_TYPE_GROUP"</span><span class='op'>|</span><span class='st'>"RECORD_TYPE"</span><span class='op'>|</span><span class='st'>"OPERATING_SYSTEM"</span><span class='op'>|</span><span class='st'>"TENANCY"</span><span class='op'>|</span><span class='st'>"SCOPE"</span><span class='op'>|</span><span class='st'>"PLATFORM"</span><span class='op'>|</span><span class='st'>"SUBSCRIPTION_ID"</span><span class='op'>|</span><span class='st'>"LEGAL_ENTITY_NAME"</span><span class='op'>|</span><span class='st'>"DEPLOYMENT_OPTION"</span><span class='op'>|</span><span class='st'>"DATABASE_ENGINE"</span><span class='op'>|</span><span class='st'>"CACHE_ENGINE"</span><span class='op'>|</span><span class='st'>"INSTANCE_TYPE_FAMILY"</span><span class='op'>|</span><span class='st'>"BILLING_ENTITY"</span><span class='op'>|</span><span class='st'>"RESERVATION_ID"</span><span class='op'>|</span><span class='st'>"RESOURCE_ID"</span><span class='op'>|</span><span class='st'>"RIGHTSIZING_TYPE"</span><span class='op'>|</span><span class='st'>"SAVINGS_PLANS_TYPE"</span><span class='op'>|</span><span class='st'>"SAVINGS_PLAN_ARN"</span><span class='op'>|</span><span class='st'>"PAYMENT_OPTION"</span><span class='op'>|</span><span class='st'>"AGREEMENT_END_DATE_TIME_AFTER"</span><span class='op'>|</span><span class='st'>"AGREEMENT_END_DATE_TIME_BEFORE"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>MatchOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='st'>"EQUALS"</span><span class='kw'>|</span><span class='st'>"STARTS_WITH"</span><span class='kw'>|</span><span class='st'>"ENDS_WITH"</span><span class='kw'>|</span><span class='st'>"CONTAINS"</span><span class='kw'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='kw'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
-      )
-    ),
-    <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      MatchOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"EQUALS"</span><span class='op'>|</span><span class='st'>"ABSENT"</span><span class='op'>|</span><span class='st'>"STARTS_WITH"</span><span class='op'>|</span><span class='st'>"ENDS_WITH"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span><span class='op'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='op'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>MatchOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='st'>"EQUALS"</span><span class='kw'>|</span><span class='st'>"STARTS_WITH"</span><span class='kw'>|</span><span class='st'>"ENDS_WITH"</span><span class='kw'>|</span><span class='st'>"CONTAINS"</span><span class='kw'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='kw'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
-      )
-    ),
-    <span class='kw'>CostCategories</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      MatchOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"EQUALS"</span><span class='op'>|</span><span class='st'>"ABSENT"</span><span class='op'>|</span><span class='st'>"STARTS_WITH"</span><span class='op'>|</span><span class='st'>"ENDS_WITH"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span><span class='op'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='op'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    CostCategories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+      <span class='op'>)</span>,
+      MatchOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"EQUALS"</span><span class='op'>|</span><span class='st'>"ABSENT"</span><span class='op'>|</span><span class='st'>"STARTS_WITH"</span><span class='op'>|</span><span class='st'>"ENDS_WITH"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span><span class='op'>|</span><span class='st'>"CASE_SENSITIVE"</span><span class='op'>|</span><span class='st'>"CASE_INSENSITIVE"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  DataType <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"ATTRIBUTES"</span><span class='op'>|</span><span class='st'>"UTILIZATION"</span><span class='op'>|</span><span class='st'>"AMORTIZED_COMMITMENT"</span><span class='op'>|</span><span class='st'>"SAVINGS"</span>
+  <span class='op'>)</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  SortBy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Key <span class='op'>=</span> <span class='st'>"string"</span>,
+    SortOrder <span class='op'>=</span> <span class='st'>"ASCENDING"</span><span class='op'>|</span><span class='st'>"DESCENDING"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -240,7 +270,7 @@ with a minimum value of <code>1</code>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

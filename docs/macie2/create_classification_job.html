@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +118,9 @@
     <p>&lt;p&gt;Creates and defines the settings for a classification job.&lt;/p&gt;</p>
     </div>
 
-    <pre class="usage"><span class='fu'>macie2_create_classification_job</span>(<span class='no'>clientToken</span>, <span class='no'>customDataIdentifierIds</span>,
-  <span class='no'>description</span>, <span class='no'>initialRun</span>, <span class='no'>jobType</span>, <span class='no'>name</span>, <span class='no'>s3JobDefinition</span>,
-  <span class='no'>samplingPercentage</span>, <span class='no'>scheduleFrequency</span>, <span class='no'>tags</span>)</pre>
+    <pre class="usage"><span class='fu'>macie2_create_classification_job</span><span class='op'>(</span><span class='va'>clientToken</span>, <span class='va'>customDataIdentifierIds</span>,
+  <span class='va'>description</span>, <span class='va'>initialRun</span>, <span class='va'>jobType</span>, <span class='va'>name</span>, <span class='va'>s3JobDefinition</span>,
+  <span class='va'>samplingPercentage</span>, <span class='va'>scheduleFrequency</span>, <span class='va'>tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,12 +141,13 @@ idempotency of the request.</p></td>
     </tr>
     <tr>
       <th>initialRun</th>
-      <td><p>Specifies whether to run the job immediately, after it\'s created.</p></td>
+      <td><p>Specifies whether to analyze all existing, eligible objects immediately
+after the job is created.</p></td>
     </tr>
     <tr>
       <th>jobType</th>
       <td><p>[required] The schedule for running the job. Valid values are:</p><ul>
-<li><p>ONE\_TIME - Run the job only once. If you specify this value, don\'t
+<li><p>ONE\_TIME - Run the job only once. If you specify this value, don't
 specify a value for the scheduleFrequency property.</p></li>
 <li><p>SCHEDULED - Run the job on a daily, weekly, or monthly basis. If you
 specify this value, use the scheduleFrequency property to define the
@@ -167,21 +168,22 @@ that analysis.</p></td>
       <th>samplingPercentage</th>
       <td><p>The sampling depth, as a percentage, to apply when processing objects.
 This value determines the percentage of eligible objects that the job
-analyzes. If the value is less than 100, Amazon Macie randomly selects
-the objects to analyze, up to the specified percentage.</p></td>
+analyzes. If this value is less than 100, Amazon Macie selects the
+objects to analyze at random, up to the specified percentage, and
+analyzes all the data in those objects.</p></td>
     </tr>
     <tr>
       <th>scheduleFrequency</th>
       <td><p>The recurrence pattern for running the job. To run the job only once,
-don\'t specify a value for this property and set the value of the
+don't specify a value for this property and set the value for the
 jobType property to ONE\_TIME.</p></td>
     </tr>
     <tr>
       <th>tags</th>
       <td><p>A map of key-value pairs that specifies the tags to associate with the
 job.</p>
-<p>A job can have a maximum of 50 tags. Each tag consists of a required tag
-key and an associated tag value. The maximum length of a tag key is 128
+<p>A job can have a maximum of 50 tags. Each tag consists of a tag key and
+an associated tag value. The maximum length of a tag key is 128
 characters. The maximum length of a tag value is 256 characters.</p></td>
     </tr>
     </table>
@@ -189,89 +191,90 @@ characters. The maximum length of a tag value is 256 characters.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_classification_job</span>(
-  <span class='kw'>clientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>customDataIdentifierIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_classification_job</span><span class='op'>(</span>
+  clientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  customDataIdentifierIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>initialRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>jobType</span> <span class='kw'>=</span> <span class='st'>"ONE_TIME"</span><span class='kw'>|</span><span class='st'>"SCHEDULED"</span>,
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>s3JobDefinition</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>bucketDefinitions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>accountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>buckets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  description <span class='op'>=</span> <span class='st'>"string"</span>,
+  initialRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  jobType <span class='op'>=</span> <span class='st'>"ONE_TIME"</span><span class='op'>|</span><span class='st'>"SCHEDULED"</span>,
+  name <span class='op'>=</span> <span class='st'>"string"</span>,
+  s3JobDefinition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    bucketDefinitions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        accountId <span class='op'>=</span> <span class='st'>"string"</span>,
+        buckets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>scoping</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>excludes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>and</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>simpleScopeTerm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"EQ"</span><span class='kw'>|</span><span class='st'>"GT"</span><span class='kw'>|</span><span class='st'>"GTE"</span><span class='kw'>|</span><span class='st'>"LT"</span><span class='kw'>|</span><span class='st'>"LTE"</span><span class='kw'>|</span><span class='st'>"NE"</span><span class='kw'>|</span><span class='st'>"CONTAINS"</span>,
-              <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"BUCKET_CREATION_DATE"</span><span class='kw'>|</span><span class='st'>"OBJECT_EXTENSION"</span><span class='kw'>|</span><span class='st'>"OBJECT_LAST_MODIFIED_DATE"</span><span class='kw'>|</span><span class='st'>"OBJECT_SIZE"</span><span class='kw'>|</span><span class='st'>"TAG"</span>,
-              <span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    scoping <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      excludes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        and <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            simpleScopeTerm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              comparator <span class='op'>=</span> <span class='st'>"EQ"</span><span class='op'>|</span><span class='st'>"GT"</span><span class='op'>|</span><span class='st'>"GTE"</span><span class='op'>|</span><span class='st'>"LT"</span><span class='op'>|</span><span class='st'>"LTE"</span><span class='op'>|</span><span class='st'>"NE"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span>,
+              key <span class='op'>=</span> <span class='st'>"BUCKET_CREATION_DATE"</span><span class='op'>|</span><span class='st'>"OBJECT_EXTENSION"</span><span class='op'>|</span><span class='st'>"OBJECT_LAST_MODIFIED_DATE"</span><span class='op'>|</span><span class='st'>"OBJECT_SIZE"</span><span class='op'>|</span><span class='st'>"TAG"</span>,
+              values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                 <span class='st'>"string"</span>
-              )
-            ),
-            <span class='kw'>tagScopeTerm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"EQ"</span><span class='kw'>|</span><span class='st'>"GT"</span><span class='kw'>|</span><span class='st'>"GTE"</span><span class='kw'>|</span><span class='st'>"LT"</span><span class='kw'>|</span><span class='st'>"LTE"</span><span class='kw'>|</span><span class='st'>"NE"</span><span class='kw'>|</span><span class='st'>"CONTAINS"</span>,
-              <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>tagValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                  <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-                )
-              ),
-              <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"S3_OBJECT"</span>
-            )
-          )
-        )
-      ),
-      <span class='kw'>includes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>and</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>simpleScopeTerm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"EQ"</span><span class='kw'>|</span><span class='st'>"GT"</span><span class='kw'>|</span><span class='st'>"GTE"</span><span class='kw'>|</span><span class='st'>"LT"</span><span class='kw'>|</span><span class='st'>"LTE"</span><span class='kw'>|</span><span class='st'>"NE"</span><span class='kw'>|</span><span class='st'>"CONTAINS"</span>,
-              <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"BUCKET_CREATION_DATE"</span><span class='kw'>|</span><span class='st'>"OBJECT_EXTENSION"</span><span class='kw'>|</span><span class='st'>"OBJECT_LAST_MODIFIED_DATE"</span><span class='kw'>|</span><span class='st'>"OBJECT_SIZE"</span><span class='kw'>|</span><span class='st'>"TAG"</span>,
-              <span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+              <span class='op'>)</span>
+            <span class='op'>)</span>,
+            tagScopeTerm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              comparator <span class='op'>=</span> <span class='st'>"EQ"</span><span class='op'>|</span><span class='st'>"GT"</span><span class='op'>|</span><span class='st'>"GTE"</span><span class='op'>|</span><span class='st'>"LT"</span><span class='op'>|</span><span class='st'>"LTE"</span><span class='op'>|</span><span class='st'>"NE"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span>,
+              key <span class='op'>=</span> <span class='st'>"string"</span>,
+              tagValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  key <span class='op'>=</span> <span class='st'>"string"</span>,
+                  value <span class='op'>=</span> <span class='st'>"string"</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>,
+              target <span class='op'>=</span> <span class='st'>"S3_OBJECT"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      includes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        and <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            simpleScopeTerm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              comparator <span class='op'>=</span> <span class='st'>"EQ"</span><span class='op'>|</span><span class='st'>"GT"</span><span class='op'>|</span><span class='st'>"GTE"</span><span class='op'>|</span><span class='st'>"LT"</span><span class='op'>|</span><span class='st'>"LTE"</span><span class='op'>|</span><span class='st'>"NE"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span>,
+              key <span class='op'>=</span> <span class='st'>"BUCKET_CREATION_DATE"</span><span class='op'>|</span><span class='st'>"OBJECT_EXTENSION"</span><span class='op'>|</span><span class='st'>"OBJECT_LAST_MODIFIED_DATE"</span><span class='op'>|</span><span class='st'>"OBJECT_SIZE"</span><span class='op'>|</span><span class='st'>"TAG"</span>,
+              values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
                 <span class='st'>"string"</span>
-              )
-            ),
-            <span class='kw'>tagScopeTerm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='kw'>comparator</span> <span class='kw'>=</span> <span class='st'>"EQ"</span><span class='kw'>|</span><span class='st'>"GT"</span><span class='kw'>|</span><span class='st'>"GTE"</span><span class='kw'>|</span><span class='st'>"LT"</span><span class='kw'>|</span><span class='st'>"LTE"</span><span class='kw'>|</span><span class='st'>"NE"</span><span class='kw'>|</span><span class='st'>"CONTAINS"</span>,
-              <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-              <span class='kw'>tagValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-                  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-                  <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-                )
-              ),
-              <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"S3_OBJECT"</span>
-            )
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>samplingPercentage</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>scheduleFrequency</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>dailySchedule</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>monthlySchedule</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>dayOfMonth</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>weeklySchedule</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>dayOfWeek</span> <span class='kw'>=</span> <span class='st'>"SUNDAY"</span><span class='kw'>|</span><span class='st'>"MONDAY"</span><span class='kw'>|</span><span class='st'>"TUESDAY"</span><span class='kw'>|</span><span class='st'>"WEDNESDAY"</span><span class='kw'>|</span><span class='st'>"THURSDAY"</span><span class='kw'>|</span><span class='st'>"FRIDAY"</span><span class='kw'>|</span><span class='st'>"SATURDAY"</span>
-    )
-  ),
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+              <span class='op'>)</span>
+            <span class='op'>)</span>,
+            tagScopeTerm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              comparator <span class='op'>=</span> <span class='st'>"EQ"</span><span class='op'>|</span><span class='st'>"GT"</span><span class='op'>|</span><span class='st'>"GTE"</span><span class='op'>|</span><span class='st'>"LT"</span><span class='op'>|</span><span class='st'>"LTE"</span><span class='op'>|</span><span class='st'>"NE"</span><span class='op'>|</span><span class='st'>"CONTAINS"</span>,
+              key <span class='op'>=</span> <span class='st'>"string"</span>,
+              tagValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                  key <span class='op'>=</span> <span class='st'>"string"</span>,
+                  value <span class='op'>=</span> <span class='st'>"string"</span>
+                <span class='op'>)</span>
+              <span class='op'>)</span>,
+              target <span class='op'>=</span> <span class='st'>"S3_OBJECT"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  samplingPercentage <span class='op'>=</span> <span class='fl'>123</span>,
+  scheduleFrequency <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    dailySchedule <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    monthlySchedule <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      dayOfMonth <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    weeklySchedule <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      dayOfWeek <span class='op'>=</span> <span class='st'>"SUNDAY"</span><span class='op'>|</span><span class='st'>"MONDAY"</span><span class='op'>|</span><span class='st'>"TUESDAY"</span><span class='op'>|</span><span class='st'>"WEDNESDAY"</span><span class='op'>|</span><span class='st'>"THURSDAY"</span><span class='op'>|</span><span class='st'>"FRIDAY"</span><span class='op'>|</span><span class='st'>"SATURDAY"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -289,7 +292,7 @@ characters. The maximum length of a tag value is 256 characters.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

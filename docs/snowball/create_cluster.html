@@ -74,7 +74,7 @@ The cluster does not ship until these five node jobs have been created." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@ The cluster does not ship until these five node jobs have been created." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +94,7 @@ The cluster does not ship until these five node jobs have been created." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,9 +122,9 @@ CreateJob action separately to create the jobs for each of these nodes.
 The cluster does not ship until these five node jobs have been created.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>snowball_create_cluster</span>(<span class='no'>JobType</span>, <span class='no'>Resources</span>, <span class='no'>Description</span>, <span class='no'>AddressId</span>,
-  <span class='no'>KmsKeyARN</span>, <span class='no'>RoleARN</span>, <span class='no'>SnowballType</span>, <span class='no'>ShippingOption</span>, <span class='no'>Notification</span>,
-  <span class='no'>ForwardingAddressId</span>, <span class='no'>TaxDocuments</span>)</pre>
+    <pre class="usage"><span class='fu'>snowball_create_cluster</span><span class='op'>(</span><span class='va'>JobType</span>, <span class='va'>Resources</span>, <span class='va'>Description</span>, <span class='va'>AddressId</span>,
+  <span class='va'>KmsKeyARN</span>, <span class='va'>RoleARN</span>, <span class='va'>SnowballType</span>, <span class='va'>ShippingOption</span>, <span class='va'>Notification</span>,
+  <span class='va'>ForwardingAddressId</span>, <span class='va'>TaxDocuments</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,23 +165,23 @@ API action in AWS Identity and Access Management (IAM).</p></td>
     </tr>
     <tr>
       <th>SnowballType</th>
-      <td><p>The type of AWS Snowball device to use for this cluster.</p>
-<p>For cluster jobs, AWS Snowball currently supports only the <code>EDGE</code> device
-type.</p></td>
+      <td><p>The type of AWS Snow Family device to use for this cluster.</p>
+<p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code>
+device type.</p></td>
     </tr>
     <tr>
       <th>ShippingOption</th>
-      <td><p>[required] The shipping speed for each node in this cluster. This speed doesn\'t
-dictate how soon you\'ll get each Snowball Edge device, rather it
+      <td><p>[required] The shipping speed for each node in this cluster. This speed doesn't
+dictate how soon you'll get each Snowball Edge device, rather it
 represents how quickly each device moves to its destination while in
 transit. Regional shipping speeds are as follows:</p><ul>
-<li><p>In Australia, you have access to express shipping. Typically,
-Snowballs shipped express are delivered in about a day.</p></li>
+<li><p>In Australia, you have access to express shipping. Typically, Snow
+devices shipped express are delivered in about a day.</p></li>
 <li><p>In the European Union (EU), you have access to express shipping.
-Typically, Snowballs shipped express are delivered in about a day.
-In addition, most countries in the EU have access to standard
+Typically, Snow devices shipped express are delivered in about a
+day. In addition, most countries in the EU have access to standard
 shipping, which typically takes less than a week, one way.</p></li>
-<li><p>In India, Snowballs are delivered in one to seven days.</p></li>
+<li><p>In India, Snow device are delivered in one to seven days.</p></li>
 <li><p>In the United States of America (US), you have access to one-day
 shipping and two-day shipping.</p></li>
 </ul><p>&lt;!-- --&gt;</p>
@@ -189,10 +189,10 @@ shipping and two-day shipping.</p></li>
 <li><p>In Australia, you have access to express shipping. Typically,
 devices shipped express are delivered in about a day.</p></li>
 <li><p>In the European Union (EU), you have access to express shipping.
-Typically, Snowball Edges shipped express are delivered in about a
+Typically, Snow devices shipped express are delivered in about a
 day. In addition, most countries in the EU have access to standard
 shipping, which typically takes less than a week, one way.</p></li>
-<li><p>In India, Snowball Edges are delivered in one to seven days.</p></li>
+<li><p>In India, Snow device are delivered in one to seven days.</p></li>
 <li><p>In the US, you have access to one-day shipping and two-day shipping.</p></li>
 </ul></td>
     </tr>
@@ -215,89 +215,92 @@ most regions.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_cluster</span>(
-  <span class='kw'>JobType</span> <span class='kw'>=</span> <span class='st'>"IMPORT"</span><span class='kw'>|</span><span class='st'>"EXPORT"</span><span class='kw'>|</span><span class='st'>"LOCAL_USE"</span>,
-  <span class='kw'>Resources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Resources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>BucketArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>KeyRange</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>BeginMarker</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>EndMarker</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>LambdaResources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>LambdaArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>EventTriggers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>EventResourceARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      )
-    ),
-    <span class='kw'>Ec2AmiResources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>AmiId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>SnowballAmiId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AddressId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>KmsKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SnowballType</span> <span class='kw'>=</span> <span class='st'>"STANDARD"</span><span class='kw'>|</span><span class='st'>"EDGE"</span><span class='kw'>|</span><span class='st'>"EDGE_C"</span><span class='kw'>|</span><span class='st'>"EDGE_CG"</span><span class='kw'>|</span><span class='st'>"EDGE_S"</span><span class='kw'>|</span><span class='st'>"SNC1_HDD"</span>,
-  <span class='kw'>ShippingOption</span> <span class='kw'>=</span> <span class='st'>"SECOND_DAY"</span><span class='kw'>|</span><span class='st'>"NEXT_DAY"</span><span class='kw'>|</span><span class='st'>"EXPRESS"</span><span class='kw'>|</span><span class='st'>"STANDARD"</span>,
-  <span class='kw'>Notification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SnsTopicARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>JobStatesToNotify</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='st'>"New"</span><span class='kw'>|</span><span class='st'>"PreparingAppliance"</span><span class='kw'>|</span><span class='st'>"PreparingShipment"</span><span class='kw'>|</span><span class='st'>"InTransitToCustomer"</span><span class='kw'>|</span><span class='st'>"WithCustomer"</span><span class='kw'>|</span><span class='st'>"InTransitToAWS"</span><span class='kw'>|</span><span class='st'>"WithAWSSortingFacility"</span><span class='kw'>|</span><span class='st'>"WithAWS"</span><span class='kw'>|</span><span class='st'>"InProgress"</span><span class='kw'>|</span><span class='st'>"Complete"</span><span class='kw'>|</span><span class='st'>"Cancelled"</span><span class='kw'>|</span><span class='st'>"Listing"</span><span class='kw'>|</span><span class='st'>"Pending"</span>
-    ),
-    <span class='kw'>NotifyAll</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>ForwardingAddressId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TaxDocuments</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>IND</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>GSTIN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_cluster</span><span class='op'>(</span>
+  JobType <span class='op'>=</span> <span class='st'>"IMPORT"</span><span class='op'>|</span><span class='st'>"EXPORT"</span><span class='op'>|</span><span class='st'>"LOCAL_USE"</span>,
+  Resources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Resources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        BucketArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        KeyRange <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          BeginMarker <span class='op'>=</span> <span class='st'>"string"</span>,
+          EndMarker <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    LambdaResources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        LambdaArn <span class='op'>=</span> <span class='st'>"string"</span>,
+        EventTriggers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            EventResourceARN <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    Ec2AmiResources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        AmiId <span class='op'>=</span> <span class='st'>"string"</span>,
+        SnowballAmiId <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  AddressId <span class='op'>=</span> <span class='st'>"string"</span>,
+  KmsKeyARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  SnowballType <span class='op'>=</span> <span class='st'>"STANDARD"</span><span class='op'>|</span><span class='st'>"EDGE"</span><span class='op'>|</span><span class='st'>"EDGE_C"</span><span class='op'>|</span><span class='st'>"EDGE_CG"</span><span class='op'>|</span><span class='st'>"EDGE_S"</span><span class='op'>|</span><span class='st'>"SNC1_HDD"</span>,
+  ShippingOption <span class='op'>=</span> <span class='st'>"SECOND_DAY"</span><span class='op'>|</span><span class='st'>"NEXT_DAY"</span><span class='op'>|</span><span class='st'>"EXPRESS"</span><span class='op'>|</span><span class='st'>"STANDARD"</span>,
+  Notification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SnsTopicARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    JobStatesToNotify <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"New"</span><span class='op'>|</span><span class='st'>"PreparingAppliance"</span><span class='op'>|</span><span class='st'>"PreparingShipment"</span><span class='op'>|</span><span class='st'>"InTransitToCustomer"</span><span class='op'>|</span><span class='st'>"WithCustomer"</span><span class='op'>|</span><span class='st'>"InTransitToAWS"</span><span class='op'>|</span><span class='st'>"WithAWSSortingFacility"</span><span class='op'>|</span><span class='st'>"WithAWS"</span><span class='op'>|</span><span class='st'>"InProgress"</span><span class='op'>|</span><span class='st'>"Complete"</span><span class='op'>|</span><span class='st'>"Cancelled"</span><span class='op'>|</span><span class='st'>"Listing"</span><span class='op'>|</span><span class='st'>"Pending"</span>
+    <span class='op'>)</span>,
+    NotifyAll <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  ForwardingAddressId <span class='op'>=</span> <span class='st'>"string"</span>,
+  TaxDocuments <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    IND <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      GSTIN <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Creates an empty cluster. Each cluster supports five nodes. You use the</span>
 <span class='co'># CreateJob action separately to create the jobs for each of these nodes.</span>
 <span class='co'># The cluster does not ship until these five node jobs have been created.</span>
-<span class='no'>svc</span>$<span class='fu'>create_cluster</span>(
-  <span class='kw'>AddressId</span> <span class='kw'>=</span> <span class='st'>"ADID1234ab12-3eec-4eb3-9be6-9374c10eb51b"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"MyCluster"</span>,
-  <span class='kw'>JobType</span> <span class='kw'>=</span> <span class='st'>"LOCAL_USE"</span>,
-  <span class='kw'>KmsKeyARN</span> <span class='kw'>=</span> <span class='st'>"arn:aws:kms:us-east-1:123456789012:key/abcd1234-12ab-34cd-56ef-123456123456"</span>,
-  <span class='kw'>Notification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>JobStatesToNotify</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>NotifyAll</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>Resources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Resources</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>BucketArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:s3:::MyBucket"</span>,
-        <span class='kw'>KeyRange</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-          <span class='kw'>.Names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_cluster</span><span class='op'>(</span>
+  AddressId <span class='op'>=</span> <span class='st'>"ADID1234ab12-3eec-4eb3-9be6-9374c10eb51b"</span>,
+  Description <span class='op'>=</span> <span class='st'>"MyCluster"</span>,
+  JobType <span class='op'>=</span> <span class='st'>"LOCAL_USE"</span>,
+  KmsKeyARN <span class='op'>=</span> <span class='st'>"arn:aws:kms:us-east-1:123456789012:key/abcd1234-12ab-34cd-56ef-123456123456"</span>,
+  Notification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    JobStatesToNotify <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    NotifyAll <span class='op'>=</span> <span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  Resources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Resources <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        BucketArn <span class='op'>=</span> <span class='st'>"arn:aws:s3:::MyBucket"</span>,
+        KeyRange <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+          .Names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span>
             <span class='fl'>0</span>
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/snowball-import-S3-role"</span>,
-  <span class='kw'>ShippingOption</span> <span class='kw'>=</span> <span class='st'>"SECOND_DAY"</span>,
-  <span class='kw'>SnowballType</span> <span class='kw'>=</span> <span class='st'>"EDGE"</span>
-)
-}</pre>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  RoleARN <span class='op'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/snowball-import-S3-role"</span>,
+  ShippingOption <span class='op'>=</span> <span class='st'>"SECOND_DAY"</span>,
+  SnowballType <span class='op'>=</span> <span class='st'>"EDGE"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -313,7 +316,7 @@ most regions.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

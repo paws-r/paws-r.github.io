@@ -46,7 +46,43 @@ reused by multiple hosted zones that were created by the same AWS
 account — route53_create_reusable_delegation_set" />
 <meta property="og:description" content="Creates a delegation set (a group of four name servers) that can be
 reused by multiple hosted zones that were created by the same AWS
-account." />
+account.
+You can also create a reusable delegation set that uses the four name
+servers that are associated with an existing hosted zone. Specify the
+hosted zone ID in the CreateReusableDelegationSet request.
+You can't associate a reusable delegation set with a private hosted
+zone.
+For information about using a reusable delegation set to configure white
+label name servers, see Configuring White Label Name Servers.
+The process for migrating existing hosted zones to use a reusable
+delegation set is comparable to the process for configuring white label
+name servers. You need to perform the following steps:
+Create a reusable delegation set.
+Recreate hosted zones, and reduce the TTL to 60 seconds or less.
+Recreate resource record sets in the new hosted zones.
+Change the registrar's name servers to use the name servers for the
+new hosted zones.
+Monitor traffic for the website or application.
+Change TTLs back to their original values.
+
+
+If you want to migrate existing hosted zones to use a reusable
+delegation set, the existing hosted zones can't use any of the name
+servers that are assigned to the reusable delegation set. If one or more
+hosted zones do use one or more name servers that are assigned to the
+reusable delegation set, you can do one of the following:
+For small numbers of hosted zones—up to a few hundred—it's
+relatively easy to create reusable delegation sets until you get one
+that has four name servers that don't overlap with any of the name
+servers in your hosted zones.
+For larger numbers of hosted zones, the easiest solution is to use
+more than one reusable delegation set.
+For larger numbers of hosted zones, you can also migrate hosted
+zones that have overlapping name servers to hosted zones that don't
+have overlapping name servers, then migrate the hosted zones again
+to use the reusable delegation set.
+
+" />
 
 
 
@@ -78,7 +114,7 @@ account." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +122,7 @@ account." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +134,7 @@ account." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,9 +162,45 @@ account</h1>
     <p>Creates a delegation set (a group of four name servers) that can be
 reused by multiple hosted zones that were created by the same AWS
 account.</p>
+<p>You can also create a reusable delegation set that uses the four name
+servers that are associated with an existing hosted zone. Specify the
+hosted zone ID in the <code>CreateReusableDelegationSet</code> request.</p>
+<p>You can't associate a reusable delegation set with a private hosted
+zone.</p>
+<p>For information about using a reusable delegation set to configure white
+label name servers, see <a href='https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html'>Configuring White Label Name Servers</a>.</p>
+<p>The process for migrating existing hosted zones to use a reusable
+delegation set is comparable to the process for configuring white label
+name servers. You need to perform the following steps:</p><ol>
+<li><p>Create a reusable delegation set.</p></li>
+<li><p>Recreate hosted zones, and reduce the TTL to 60 seconds or less.</p></li>
+<li><p>Recreate resource record sets in the new hosted zones.</p></li>
+<li><p>Change the registrar's name servers to use the name servers for the
+new hosted zones.</p></li>
+<li><p>Monitor traffic for the website or application.</p></li>
+<li><p>Change TTLs back to their original values.</p></li>
+</ol>
+
+<p>If you want to migrate existing hosted zones to use a reusable
+delegation set, the existing hosted zones can't use any of the name
+servers that are assigned to the reusable delegation set. If one or more
+hosted zones do use one or more name servers that are assigned to the
+reusable delegation set, you can do one of the following:</p><ul>
+<li><p>For small numbers of hosted zones—up to a few hundred—it's
+relatively easy to create reusable delegation sets until you get one
+that has four name servers that don't overlap with any of the name
+servers in your hosted zones.</p></li>
+<li><p>For larger numbers of hosted zones, the easiest solution is to use
+more than one reusable delegation set.</p></li>
+<li><p>For larger numbers of hosted zones, you can also migrate hosted
+zones that have overlapping name servers to hosted zones that don't
+have overlapping name servers, then migrate the hosted zones again
+to use the reusable delegation set.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>route53_create_reusable_delegation_set</span>(<span class='no'>CallerReference</span>, <span class='no'>HostedZoneId</span>)</pre>
+    <pre class="usage"><span class='fu'>route53_create_reusable_delegation_set</span><span class='op'>(</span><span class='va'>CallerReference</span>, <span class='va'>HostedZoneId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,51 +221,14 @@ reusable, the ID for that hosted zone.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can also create a reusable delegation set that uses the four name
-servers that are associated with an existing hosted zone. Specify the
-hosted zone ID in the <code>CreateReusableDelegationSet</code> request.</p>
-<p>You can\'t associate a reusable delegation set with a private hosted
-zone.</p>
-<p>For information about using a reusable delegation set to configure white
-label name servers, see <a href='https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html'>Configuring White Label Name Servers</a>.</p>
-<p>The process for migrating existing hosted zones to use a reusable
-delegation set is comparable to the process for configuring white label
-name servers. You need to perform the following steps:</p><ol>
-<li><p>Create a reusable delegation set.</p></li>
-<li><p>Recreate hosted zones, and reduce the TTL to 60 seconds or less.</p></li>
-<li><p>Recreate resource record sets in the new hosted zones.</p></li>
-<li><p>Change the registrar\'s name servers to use the name servers for the
-new hosted zones.</p></li>
-<li><p>Monitor traffic for the website or application.</p></li>
-<li><p>Change TTLs back to their original values.</p></li>
-</ol>
-
-<p>If you want to migrate existing hosted zones to use a reusable
-delegation set, the existing hosted zones can\'t use any of the name
-servers that are assigned to the reusable delegation set. If one or more
-hosted zones do use one or more name servers that are assigned to the
-reusable delegation set, you can do one of the following:</p><ul>
-<li><p>For small numbers of hosted zones---up to a few hundred---it\'s
-relatively easy to create reusable delegation sets until you get one
-that has four name servers that don\'t overlap with any of the name
-servers in your hosted zones.</p></li>
-<li><p>For larger numbers of hosted zones, the easiest solution is to use
-more than one reusable delegation set.</p></li>
-<li><p>For larger numbers of hosted zones, you can also migrate hosted
-zones that have overlapping name servers to hosted zones that don\'t
-have overlapping name servers, then migrate the hosted zones again
-to use the reusable delegation set.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_reusable_delegation_set</span>(
-  <span class='kw'>CallerReference</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HostedZoneId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_reusable_delegation_set</span><span class='op'>(</span>
+  CallerReference <span class='op'>=</span> <span class='st'>"string"</span>,
+  HostedZoneId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -211,7 +246,7 @@ to use the reusable delegation set.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

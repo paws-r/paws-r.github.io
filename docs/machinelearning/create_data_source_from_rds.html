@@ -44,7 +44,17 @@
 (Amazon RDS) — machinelearning_create_data_source_from_rds" />
 <meta property="og:description" content="Creates a DataSource object from an Amazon Relational Database Service (Amazon RDS). A DataSource
 references data that can be used to perform CreateMLModel,
-CreateEvaluation, or CreateBatchPrediction operations." />
+CreateEvaluation, or CreateBatchPrediction operations.
+CreateDataSourceFromRDS is an asynchronous operation. In response to
+CreateDataSourceFromRDS, Amazon Machine Learning (Amazon ML)
+immediately returns and sets the DataSource status to PENDING. After
+the DataSource is created and ready for use, Amazon ML sets the
+Status parameter to COMPLETED. DataSource in the COMPLETED or
+PENDING state can be used only to perform &amp;amp;gt;CreateMLModel&amp;gt;,
+CreateEvaluation, or CreateBatchPrediction operations.
+If Amazon ML cannot accept the input source, it sets the Status
+parameter to FAILED and includes an error message in the Message
+attribute of the GetDataSource operation response." />
 
 
 
@@ -76,7 +86,7 @@ CreateEvaluation, or CreateBatchPrediction operations." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +94,7 @@ CreateEvaluation, or CreateBatchPrediction operations." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +106,7 @@ CreateEvaluation, or CreateBatchPrediction operations." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,13 +130,23 @@ CreateEvaluation, or CreateBatchPrediction operations." />
     </div>
 
     <div class="ref-description">
-    <p>Creates a <code>DataSource</code> object from an <a href='http://aws.amazon.com/rds/'>Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code>
+    <p>Creates a <code>DataSource</code> object from an <a href='https://aws.amazon.com/rds/'>Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code>
 references data that can be used to perform <code>CreateMLModel</code>,
 <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p>
+<p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to
+<code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML)
+immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After
+the <code>DataSource</code> is created and ready for use, Amazon ML sets the
+<code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or
+<code>PENDING</code> state can be used only to perform <code>&amp;gt;CreateMLModel</code>&gt;,
+<code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p>
+<p>If Amazon ML cannot accept the input source, it sets the <code>Status</code>
+parameter to <code>FAILED</code> and includes an error message in the <code>Message</code>
+attribute of the <code>GetDataSource</code> operation response.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>machinelearning_create_data_source_from_rds</span>(<span class='no'>DataSourceId</span>,
-  <span class='no'>DataSourceName</span>, <span class='no'>RDSData</span>, <span class='no'>RoleARN</span>, <span class='no'>ComputeStatistics</span>)</pre>
+    <pre class="usage"><span class='fu'>machinelearning_create_data_source_from_rds</span><span class='op'>(</span><span class='va'>DataSourceId</span>,
+  <span class='va'>DataSourceName</span>, <span class='va'>RDSData</span>, <span class='va'>RoleARN</span>, <span class='va'>ComputeStatistics</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,11 +172,11 @@ database instance.</p></li>
 credentials that are used to connect to the Amazon RDS database.</p></li>
 <li><p>ResourceRole - A role (DataPipelineDefaultResourceRole) assumed by
 an EC2 instance to carry out the copy task from Amazon RDS to Amazon
-Simple Storage Service (Amazon S3). For more information, see <a href='http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html'>Role templates</a>
+Simple Storage Service (Amazon S3). For more information, see <a href='https://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html'>Role templates</a>
 for data pipelines.</p></li>
 <li><p>ServiceRole - A role (DataPipelineDefaultRole) assumed by the AWS
 Data Pipeline service to monitor the progress of the copy task from
-Amazon RDS to Amazon S3. For more information, see <a href='http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html'>Role templates</a>
+Amazon RDS to Amazon S3. For more information, see <a href='https://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html'>Role templates</a>
 for data pipelines.</p></li>
 <li><p>SecurityInfo - The security information to use to access an RDS DB
 instance. You need to set up appropriate ingress rules for the
@@ -173,7 +193,6 @@ stored in this location.</p></li>
 required if <code>DataSchemaUri</code> is specified.</p></li>
 <li><p>DataRearrangement - A JSON string that represents the splitting and
 rearrangement requirements for the <code>Datasource</code>.</p>
-<p>\</p>
 <p>Sample -
 <code> "\{\"splitting\":\{\"percentBegin\":10,\"percentEnd\":60\}\}"</code></p></li>
 </ul></td>
@@ -181,7 +200,7 @@ rearrangement requirements for the <code>Datasource</code>.</p>
     <tr>
       <th>RoleARN</th>
       <td><p>[required] The role that Amazon ML assumes on behalf of the user to create and
-activate a data pipeline in the user\'s account and copy data using the
+activate a data pipeline in the user's account and copy data using the
 <code>SelectSqlQuery</code> query from Amazon RDS to Amazon S3.</p></td>
     </tr>
     <tr>
@@ -194,48 +213,37 @@ training.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to
-<code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML)
-immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After
-the <code>DataSource</code> is created and ready for use, Amazon ML sets the
-<code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or
-<code>PENDING</code> state can be used only to perform <code>&amp;gt;CreateMLModel</code>\&gt;,
-<code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p>
-<p>If Amazon ML cannot accept the input source, it sets the <code>Status</code>
-parameter to <code>FAILED</code> and includes an error message in the <code>Message</code>
-attribute of the <code>GetDataSource</code> operation response.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_data_source_from_rds</span>(
-  <span class='kw'>DataSourceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DataSourceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RDSData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DatabaseInformation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>InstanceIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DatabaseName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>SelectSqlQuery</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DatabaseCredentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Username</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Password</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>S3StagingLocation</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DataRearrangement</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DataSchema</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DataSchemaUri</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ResourceRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ServiceRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SubnetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_data_source_from_rds</span><span class='op'>(</span>
+  DataSourceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DataSourceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  RDSData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DatabaseInformation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      InstanceIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+      DatabaseName <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    SelectSqlQuery <span class='op'>=</span> <span class='st'>"string"</span>,
+    DatabaseCredentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Username <span class='op'>=</span> <span class='st'>"string"</span>,
+      Password <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    S3StagingLocation <span class='op'>=</span> <span class='st'>"string"</span>,
+    DataRearrangement <span class='op'>=</span> <span class='st'>"string"</span>,
+    DataSchema <span class='op'>=</span> <span class='st'>"string"</span>,
+    DataSchemaUri <span class='op'>=</span> <span class='st'>"string"</span>,
+    ResourceRole <span class='op'>=</span> <span class='st'>"string"</span>,
+    ServiceRole <span class='op'>=</span> <span class='st'>"string"</span>,
+    SubnetId <span class='op'>=</span> <span class='st'>"string"</span>,
+    SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>RoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ComputeStatistics</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  RoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  ComputeStatistics <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -253,7 +261,7 @@ attribute of the <code>GetDataSource</code> operation response.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -44,7 +44,21 @@ accounts in the behavior graph — detective_create_members • paws</title>
 accounts in the behavior graph — detective_create_members" />
 <meta property="og:description" content="Sends a request to invite the specified AWS accounts to be member
 accounts in the behavior graph. This operation can only be called by the
-master account for a behavior graph." />
+master account for a behavior graph.
+CreateMembers verifies the accounts and then sends invitations to the
+verified accounts.
+The request provides the behavior graph ARN and the list of accounts to
+invite.
+The response separates the requested accounts into two lists:
+The accounts that CreateMembers was able to start the verification
+for. This list includes member accounts that are being verified,
+that have passed verification and are being sent an invitation, and
+that have failed verification.
+The accounts that CreateMembers was unable to process. This list
+includes accounts that were already invited to be member accounts in
+the behavior graph.
+
+" />
 
 
 
@@ -76,7 +90,7 @@ master account for a behavior graph." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +98,7 @@ master account for a behavior graph." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +110,7 @@ master account for a behavior graph." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,9 +137,23 @@ accounts in the behavior graph</h1>
     <p>Sends a request to invite the specified AWS accounts to be member
 accounts in the behavior graph. This operation can only be called by the
 master account for a behavior graph.</p>
+<p><code>CreateMembers</code> verifies the accounts and then sends invitations to the
+verified accounts.</p>
+<p>The request provides the behavior graph ARN and the list of accounts to
+invite.</p>
+<p>The response separates the requested accounts into two lists:</p><ul>
+<li><p>The accounts that <code>CreateMembers</code> was able to start the verification
+for. This list includes member accounts that are being verified,
+that have passed verification and are being sent an invitation, and
+that have failed verification.</p></li>
+<li><p>The accounts that <code>CreateMembers</code> was unable to process. This list
+includes accounts that were already invited to be member accounts in
+the behavior graph.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>detective_create_members</span>(<span class='no'>GraphArn</span>, <span class='no'>Message</span>, <span class='no'>Accounts</span>)</pre>
+    <pre class="usage"><span class='fu'>detective_create_members</span><span class='op'>(</span><span class='va'>GraphArn</span>, <span class='va'>Message</span>, <span class='va'>Accounts</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,35 +176,20 @@ account identifier and the AWS account root user email address.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>CreateMembers</code> verifies the accounts and then sends invitations to the
-verified accounts.</p>
-<p>The request provides the behavior graph ARN and the list of accounts to
-invite.</p>
-<p>The response separates the requested accounts into two lists:</p><ul>
-<li><p>The accounts that <code>CreateMembers</code> was able to start the verification
-for. This list includes member accounts that are being verified,
-that have passed verification and are being sent an invitation, and
-that have failed verification.</p></li>
-<li><p>The accounts that <code>CreateMembers</code> was unable to process. This list
-includes accounts that were already invited to be member accounts in
-the behavior graph.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_members</span>(
-  <span class='kw'>GraphArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Message</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Accounts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>AccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>EmailAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_members</span><span class='op'>(</span>
+  GraphArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Message <span class='op'>=</span> <span class='st'>"string"</span>,
+  Accounts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      AccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+      EmailAddress <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -194,7 +207,7 @@ the behavior graph.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

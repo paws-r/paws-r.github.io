@@ -46,7 +46,15 @@ QueryExecutionId from the Athena query results location in Amazon S3 — athena_
 QueryExecutionId from the Athena query results location in Amazon S3.
 For more information, see Query Results in
 the Amazon Athena User Guide. This request does not execute the query
-but returns results. Use StartQueryExecution to run a query." />
+but returns results. Use StartQueryExecution to run a query.
+To stream query results successfully, the IAM principal with permission
+to call GetQueryResults also must have permissions to the Amazon S3
+GetObject action for the Athena query results location.
+IAM principals with permission to the Amazon S3 GetObject action for
+the query results location are able to retrieve query results from
+Amazon S3 even if permission to the GetQueryResults action is denied.
+To restrict user or role access, ensure that Amazon S3 permissions to
+the Athena query location are denied." />
 
 
 
@@ -78,7 +86,7 @@ but returns results. Use StartQueryExecution to run a query." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +94,7 @@ but returns results. Use StartQueryExecution to run a query." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +106,7 @@ but returns results. Use StartQueryExecution to run a query." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,9 +135,17 @@ QueryExecutionId from the Athena query results location in Amazon S3</h1>
 For more information, see <a href='https://docs.aws.amazon.com/athena/latest/ug/querying.html'>Query Results</a> in
 the <em>Amazon Athena User Guide</em>. This request does not execute the query
 but returns results. Use StartQueryExecution to run a query.</p>
+<p>To stream query results successfully, the IAM principal with permission
+to call <code>GetQueryResults</code> also must have permissions to the Amazon S3
+<code>GetObject</code> action for the Athena query results location.</p>
+<p>IAM principals with permission to the Amazon S3 <code>GetObject</code> action for
+the query results location are able to retrieve query results from
+Amazon S3 even if permission to the <code>GetQueryResults</code> action is denied.
+To restrict user or role access, ensure that Amazon S3 permissions to
+the Athena query location are denied.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>athena_get_query_results</span>(<span class='no'>QueryExecutionId</span>, <span class='no'>NextToken</span>, <span class='no'>MaxResults</span>)</pre>
+    <pre class="usage"><span class='fu'>athena_get_query_results</span><span class='op'>(</span><span class='va'>QueryExecutionId</span>, <span class='va'>NextToken</span>, <span class='va'>MaxResults</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,24 +167,15 @@ previous page call.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To stream query results successfully, the IAM principal with permission
-to call <code>GetQueryResults</code> also must have permissions to the Amazon S3
-<code>GetObject</code> action for the Athena query results location.</p>
-<p>IAM principals with permission to the Amazon S3 <code>GetObject</code> action for
-the query results location are able to retrieve query results from
-Amazon S3 even if permission to the <code>GetQueryResults</code> action is denied.
-To restrict user or role access, ensure that Amazon S3 permissions to
-the Athena query location are denied.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_query_results</span>(
-  <span class='kw'>QueryExecutionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_query_results</span><span class='op'>(</span>
+  QueryExecutionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -186,7 +193,7 @@ the Athena query location are denied.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

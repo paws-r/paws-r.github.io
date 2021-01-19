@@ -40,7 +40,34 @@
 
 
 <meta property="og:title" content="Creates a new Amazon FSx file system from an existing Amazon FSx backup — fsx_create_file_system_from_backup" />
-<meta property="og:description" content="Creates a new Amazon FSx file system from an existing Amazon FSx backup." />
+<meta property="og:description" content="Creates a new Amazon FSx file system from an existing Amazon FSx backup.
+If a file system with the specified client request token exists and the
+parameters match, this operation returns the description of the file
+system. If a client request token specified by the file system exists
+and the parameters don't match, this call returns
+IncompatibleParameterError. If a file system with the specified client
+request token doesn't exist, this operation does the following:
+Creates a new Amazon FSx file system from backup with an assigned
+ID, and an initial lifecycle state of CREATING.
+Returns the description of the file system.
+
+
+Parameters like Active Directory, default share name, automatic backup,
+and backup settings default to the parameters of the file system that
+was backed up, unless overridden. You can explicitly supply other
+settings.
+By using the idempotent operation, you can retry a
+CreateFileSystemFromBackup call without the risk of creating an extra
+file system. This approach can be useful when an initial call fails in a
+way that makes it unclear whether a file system was created. Examples
+are if a transport level timeout occurred, or your connection was reset.
+If you use the same client request token and the initial call created a
+file system, the client receives success as long as the parameters are
+the same.
+The CreateFileSystemFromBackup call returns while the file system's
+lifecycle state is still CREATING. You can check the file-system
+creation status by calling the DescribeFileSystems operation, which
+returns the file system state along with other information." />
 
 
 
@@ -72,7 +99,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +107,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +119,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +143,38 @@
 
     <div class="ref-description">
     <p>Creates a new Amazon FSx file system from an existing Amazon FSx backup.</p>
+<p>If a file system with the specified client request token exists and the
+parameters match, this operation returns the description of the file
+system. If a client request token specified by the file system exists
+and the parameters don't match, this call returns
+<code>IncompatibleParameterError</code>. If a file system with the specified client
+request token doesn't exist, this operation does the following:</p><ul>
+<li><p>Creates a new Amazon FSx file system from backup with an assigned
+ID, and an initial lifecycle state of <code>CREATING</code>.</p></li>
+<li><p>Returns the description of the file system.</p></li>
+</ul>
+
+<p>Parameters like Active Directory, default share name, automatic backup,
+and backup settings default to the parameters of the file system that
+was backed up, unless overridden. You can explicitly supply other
+settings.</p>
+<p>By using the idempotent operation, you can retry a
+<code>CreateFileSystemFromBackup</code> call without the risk of creating an extra
+file system. This approach can be useful when an initial call fails in a
+way that makes it unclear whether a file system was created. Examples
+are if a transport level timeout occurred, or your connection was reset.
+If you use the same client request token and the initial call created a
+file system, the client receives success as long as the parameters are
+the same.</p>
+<p>The <code>CreateFileSystemFromBackup</code> call returns while the file system's
+lifecycle state is still <code>CREATING</code>. You can check the file-system
+creation status by calling the DescribeFileSystems operation, which
+returns the file system state along with other information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fsx_create_file_system_from_backup</span>(<span class='no'>BackupId</span>, <span class='no'>ClientRequestToken</span>,
-  <span class='no'>SubnetIds</span>, <span class='no'>SecurityGroupIds</span>, <span class='no'>Tags</span>, <span class='no'>WindowsConfiguration</span>,
-  <span class='no'>LustreConfiguration</span>, <span class='no'>StorageType</span>)</pre>
+    <pre class="usage"><span class='fu'>fsx_create_file_system_from_backup</span><span class='op'>(</span><span class='va'>BackupId</span>, <span class='va'>ClientRequestToken</span>,
+  <span class='va'>SubnetIds</span>, <span class='va'>SecurityGroupIds</span>, <span class='va'>Tags</span>, <span class='va'>WindowsConfiguration</span>,
+  <span class='va'>LustreConfiguration</span>, <span class='va'>StorageType</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,13 +199,13 @@ preferred subnet using the <code>WindowsConfiguration &amp;gt; PreferredSubnetID
 property.</p>
 <p>For Windows <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> deployment types and Lustre
 file systems, provide exactly one subnet ID. The file server is launched
-in that subnet\'s Availability Zone.</p></td>
+in that subnet's Availability Zone.</p></td>
     </tr>
     <tr>
       <th>SecurityGroupIds</th>
       <td><p>A list of IDs for the security groups that apply to the specified
 network interfaces created for file system access. These security groups
-apply to all network interfaces. This value isn\'t returned in later
+apply to all network interfaces. This value isn't returned in later
 DescribeFileSystem requests.</p></td>
     </tr>
     <tr>
@@ -170,8 +224,8 @@ name.</p></td>
     </tr>
     <tr>
       <th>StorageType</th>
-      <td><p>Sets the storage type for the Windows file system you\'re creating from
-a backup. Valid values are <code>SSD</code> and <code>HDD</code>.</p><ul>
+      <td><p>Sets the storage type for the Windows file system you're creating from a
+backup. Valid values are <code>SSD</code> and <code>HDD</code>.</p><ul>
 <li><p>Set to <code>SSD</code> to use solid state drive storage. Supported on all
 Windows deployment types.</p></li>
 <li><p>Set to <code>HDD</code> to use hard disk drive storage. Supported on
@@ -180,7 +234,7 @@ Windows deployment types.</p></li>
 
 <p>Default value is <code>SSD</code>.</p>
 <p>HDD and SSD storage types have different minimum storage capacity
-requirements. A restored file system\'s storage capacity is tied to the
+requirements. A restored file system's storage capacity is tied to the
 file system that was backed up. You can create a file system that uses
 HDD storage from a backup of a file system that used SSD storage only if
 the original SSD file system had a storage capacity of at least 2000
@@ -188,111 +242,90 @@ GiB.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If a file system with the specified client request token exists and the
-parameters match, this operation returns the description of the file
-system. If a client request token specified by the file system exists
-and the parameters don\'t match, this call returns
-<code>IncompatibleParameterError</code>. If a file system with the specified client
-request token doesn\'t exist, this operation does the following:</p><ul>
-<li><p>Creates a new Amazon FSx file system from backup with an assigned
-ID, and an initial lifecycle state of <code>CREATING</code>.</p></li>
-<li><p>Returns the description of the file system.</p></li>
-</ul>
-
-<p>Parameters like Active Directory, default share name, automatic backup,
-and backup settings default to the parameters of the file system that
-was backed up, unless overridden. You can explicitly supply other
-settings.</p>
-<p>By using the idempotent operation, you can retry a
-<code>CreateFileSystemFromBackup</code> call without the risk of creating an extra
-file system. This approach can be useful when an initial call fails in a
-way that makes it unclear whether a file system was created. Examples
-are if a transport level timeout occurred, or your connection was reset.
-If you use the same client request token and the initial call created a
-file system, the client receives success as long as the parameters are
-the same.</p>
-<p>The <code>CreateFileSystemFromBackup</code> call returns while the file system\'s
-lifecycle state is still <code>CREATING</code>. You can check the file-system
-creation status by calling the DescribeFileSystems operation, which
-returns the file system state along with other information.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_file_system_from_backup</span>(
-  <span class='kw'>BackupId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_file_system_from_backup</span><span class='op'>(</span>
+  BackupId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>WindowsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ActiveDirectoryId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SelfManagedActiveDirectoryConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DomainName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>OrganizationalUnitDistinguishedName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>FileSystemAdministratorsGroup</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Password</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DnsIps</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  WindowsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ActiveDirectoryId <span class='op'>=</span> <span class='st'>"string"</span>,
+    SelfManagedActiveDirectoryConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DomainName <span class='op'>=</span> <span class='st'>"string"</span>,
+      OrganizationalUnitDistinguishedName <span class='op'>=</span> <span class='st'>"string"</span>,
+      FileSystemAdministratorsGroup <span class='op'>=</span> <span class='st'>"string"</span>,
+      UserName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Password <span class='op'>=</span> <span class='st'>"string"</span>,
+      DnsIps <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>DeploymentType</span> <span class='kw'>=</span> <span class='st'>"MULTI_AZ_1"</span><span class='kw'>|</span><span class='st'>"SINGLE_AZ_1"</span><span class='kw'>|</span><span class='st'>"SINGLE_AZ_2"</span>,
-    <span class='kw'>PreferredSubnetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ThroughputCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>WeeklyMaintenanceStartTime</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DailyAutomaticBackupStartTime</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>AutomaticBackupRetentionDays</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>CopyTagsToBackups</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>LustreConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>WeeklyMaintenanceStartTime</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ImportPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ExportPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ImportedFileChunkSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>DeploymentType</span> <span class='kw'>=</span> <span class='st'>"SCRATCH_1"</span><span class='kw'>|</span><span class='st'>"SCRATCH_2"</span><span class='kw'>|</span><span class='st'>"PERSISTENT_1"</span>,
-    <span class='kw'>PerUnitStorageThroughput</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>DailyAutomaticBackupStartTime</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>AutomaticBackupRetentionDays</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>CopyTagsToBackups</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>StorageType</span> <span class='kw'>=</span> <span class='st'>"SSD"</span><span class='kw'>|</span><span class='st'>"HDD"</span>
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    DeploymentType <span class='op'>=</span> <span class='st'>"MULTI_AZ_1"</span><span class='op'>|</span><span class='st'>"SINGLE_AZ_1"</span><span class='op'>|</span><span class='st'>"SINGLE_AZ_2"</span>,
+    PreferredSubnetId <span class='op'>=</span> <span class='st'>"string"</span>,
+    ThroughputCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+    WeeklyMaintenanceStartTime <span class='op'>=</span> <span class='st'>"string"</span>,
+    DailyAutomaticBackupStartTime <span class='op'>=</span> <span class='st'>"string"</span>,
+    AutomaticBackupRetentionDays <span class='op'>=</span> <span class='fl'>123</span>,
+    CopyTagsToBackups <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    Aliases <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  LustreConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    WeeklyMaintenanceStartTime <span class='op'>=</span> <span class='st'>"string"</span>,
+    ImportPath <span class='op'>=</span> <span class='st'>"string"</span>,
+    ExportPath <span class='op'>=</span> <span class='st'>"string"</span>,
+    ImportedFileChunkSize <span class='op'>=</span> <span class='fl'>123</span>,
+    DeploymentType <span class='op'>=</span> <span class='st'>"SCRATCH_1"</span><span class='op'>|</span><span class='st'>"SCRATCH_2"</span><span class='op'>|</span><span class='st'>"PERSISTENT_1"</span>,
+    AutoImportPolicy <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"NEW"</span><span class='op'>|</span><span class='st'>"NEW_CHANGED"</span>,
+    PerUnitStorageThroughput <span class='op'>=</span> <span class='fl'>123</span>,
+    DailyAutomaticBackupStartTime <span class='op'>=</span> <span class='st'>"string"</span>,
+    AutomaticBackupRetentionDays <span class='op'>=</span> <span class='fl'>123</span>,
+    CopyTagsToBackups <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    DriveCacheType <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"READ"</span>
+  <span class='op'>)</span>,
+  StorageType <span class='op'>=</span> <span class='st'>"SSD"</span><span class='op'>|</span><span class='st'>"HDD"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This operation creates a new file system from backup.</span>
-<span class='no'>svc</span>$<span class='fu'>create_file_system_from_backup</span>(
-  <span class='kw'>BackupId</span> <span class='kw'>=</span> <span class='st'>"backup-03e3c82e0183b7b6b"</span>,
-  <span class='kw'>ClientRequestToken</span> <span class='kw'>=</span> <span class='st'>"f4c94ed7-238d-4c46-93db-48cd62ec33b7"</span>,
-  <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_file_system_from_backup</span><span class='op'>(</span>
+  BackupId <span class='op'>=</span> <span class='st'>"backup-03e3c82e0183b7b6b"</span>,
+  ClientRequestToken <span class='op'>=</span> <span class='st'>"f4c94ed7-238d-4c46-93db-48cd62ec33b7"</span>,
+  SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"sg-edcd9784"</span>
-  ),
-  <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"subnet-1234abcd"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Name"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"MyFileSystem"</span>
-    )
-  ),
-  <span class='kw'>WindowsConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ThroughputCapacity</span> <span class='kw'>=</span> <span class='fl'>8L</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Name"</span>,
+      Value <span class='op'>=</span> <span class='st'>"MyFileSystem"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  WindowsConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ThroughputCapacity <span class='op'>=</span> <span class='fl'>8L</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -308,7 +341,7 @@ returns the file system state along with other information.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

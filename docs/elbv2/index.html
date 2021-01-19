@@ -51,16 +51,17 @@ configure a target group with a protocol and port number for connections
 from the load balancer to the targets, and with health check settings to
 be used when checking the health status of the targets.
 Elastic Load Balancing supports the following types of load balancers:
-Application Load Balancers, Network Load Balancers, and Classic Load
-Balancers. This reference covers Application Load Balancers and Network
-Load Balancers.
-An Application Load Balancer makes routing and load balancing decisions
-at the application layer (HTTP/HTTPS). A Network Load Balancer makes
-routing and load balancing decisions at the transport layer (TCP/TLS).
-Both Application Load Balancers and Network Load Balancers can route
-requests to one or more ports on each EC2 instance or container instance
-in your virtual private cloud (VPC). For more information, see the
-Elastic Load Balancing User Guide.
+Application Load Balancers, Network Load Balancers, Gateway Load
+Balancers, and Classic Load Balancers. This reference covers the
+following load balancer types:
+Application Load Balancer - Operates at the application layer
+(layer 7) and supports HTTP and HTTPS.
+Network Load Balancer - Operates at the transport layer (layer 4)
+and supports TCP, TLS, and UDP.
+Gateway Load Balancer - Operates at the network layer (layer 3).
+
+
+For more information, see the Elastic Load Balancing User Guide.
 All Elastic Load Balancing operations are idempotent, which means that
 they complete at most one time. If you repeat an operation, it succeeds." />
 
@@ -94,7 +95,7 @@ they complete at most one time. If you repeat an operation, it succeeds." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -102,7 +103,7 @@ they complete at most one time. If you repeat an operation, it succeeds." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,7 +115,7 @@ they complete at most one time. If you repeat an operation, it succeeds." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -148,21 +149,22 @@ configure a target group with a protocol and port number for connections
 from the load balancer to the targets, and with health check settings to
 be used when checking the health status of the targets.</p>
 <p>Elastic Load Balancing supports the following types of load balancers:
-Application Load Balancers, Network Load Balancers, and Classic Load
-Balancers. This reference covers Application Load Balancers and Network
-Load Balancers.</p>
-<p>An Application Load Balancer makes routing and load balancing decisions
-at the application layer (HTTP/HTTPS). A Network Load Balancer makes
-routing and load balancing decisions at the transport layer (TCP/TLS).
-Both Application Load Balancers and Network Load Balancers can route
-requests to one or more ports on each EC2 instance or container instance
-in your virtual private cloud (VPC). For more information, see the
-<a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/'>Elastic Load Balancing User Guide</a>.</p>
+Application Load Balancers, Network Load Balancers, Gateway Load
+Balancers, and Classic Load Balancers. This reference covers the
+following load balancer types:</p><ul>
+<li><p>Application Load Balancer - Operates at the application layer
+(layer 7) and supports HTTP and HTTPS.</p></li>
+<li><p>Network Load Balancer - Operates at the transport layer (layer 4)
+and supports TCP, TLS, and UDP.</p></li>
+<li><p>Gateway Load Balancer - Operates at the network layer (layer 3).</p></li>
+</ul>
+
+<p>For more information, see the <a href='https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/'>Elastic Load Balancing User Guide</a>.</p>
 <p>All Elastic Load Balancing operations are idempotent, which means that
 they complete at most one time. If you repeat an operation, it succeeds.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>elbv2</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>elbv2</span><span class='op'>(</span>config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,20 +178,21 @@ they complete at most one time. If you repeat an operation, it succeeds.</p>
     <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
 
     
-<pre><span class='no'>svc</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>elbv2</span>(
-  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>creds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>access_key_id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>secret_access_key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>session_token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>profile</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>elbv2</span><span class='op'>(</span>
+  config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    credentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        access_key_id <span class='op'>=</span> <span class='st'>"string"</span>,
+        secret_access_key <span class='op'>=</span> <span class='st'>"string"</span>,
+        session_token <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      profile <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    endpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    region <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
@@ -198,62 +201,64 @@ they complete at most one time. If you repeat an operation, it succeeds.</p>
 <table class='table'>
 <tr><td><a href='add_listener_certificates.html'>add_listener_certificates</a></td><td>Adds the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener</td></tr>
 <tr><td><a href='add_tags.html'>add_tags</a></td><td>Adds the specified tags to the specified Elastic Load Balancing resource</td></tr>
-<tr><td><a href='create_listener.html'>create_listener</a></td><td>Creates a listener for the specified Application Load Balancer or Network Load Balancer</td></tr>
-<tr><td><a href='create_load_balancer.html'>create_load_balancer</a></td><td>Creates an Application Load Balancer or a Network Load Balancer</td></tr>
+<tr><td><a href='create_listener.html'>create_listener</a></td><td>Creates a listener for the specified Application Load Balancer, Network Load Balancer</td></tr>
+<tr><td><a href='create_load_balancer.html'>create_load_balancer</a></td><td>Creates an Application Load Balancer, Network Load Balancer, or Gateway Load Balancer</td></tr>
 <tr><td><a href='create_rule.html'>create_rule</a></td><td>Creates a rule for the specified listener</td></tr>
 <tr><td><a href='create_target_group.html'>create_target_group</a></td><td>Creates a target group</td></tr>
 <tr><td><a href='delete_listener.html'>delete_listener</a></td><td>Deletes the specified listener</td></tr>
-<tr><td><a href='delete_load_balancer.html'>delete_load_balancer</a></td><td>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners</td></tr>
+<tr><td><a href='delete_load_balancer.html'>delete_load_balancer</a></td><td>Deletes the specified Application Load Balancer, Network Load Balancer, or Gateway Load Balancer</td></tr>
 <tr><td><a href='delete_rule.html'>delete_rule</a></td><td>Deletes the specified rule</td></tr>
 <tr><td><a href='delete_target_group.html'>delete_target_group</a></td><td>Deletes the specified target group</td></tr>
 <tr><td><a href='deregister_targets.html'>deregister_targets</a></td><td>Deregisters the specified targets from the specified target group</td></tr>
 <tr><td><a href='describe_account_limits.html'>describe_account_limits</a></td><td>Describes the current Elastic Load Balancing resource limits for your AWS account</td></tr>
 <tr><td><a href='describe_listener_certificates.html'>describe_listener_certificates</a></td><td>Describes the default certificate and the certificate list for the specified HTTPS or TLS listener</td></tr>
-<tr><td><a href='describe_listeners.html'>describe_listeners</a></td><td>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer</td></tr>
-<tr><td><a href='describe_load_balancer_attributes.html'>describe_load_balancer_attributes</a></td><td>Describes the attributes for the specified Application Load Balancer or Network Load Balancer</td></tr>
+<tr><td><a href='describe_listeners.html'>describe_listeners</a></td><td>Describes the specified listeners or the listeners for the specified Application Load Balancer, Network Load Balancer, or Gateway Load Balancer</td></tr>
+<tr><td><a href='describe_load_balancer_attributes.html'>describe_load_balancer_attributes</a></td><td>Describes the attributes for the specified Application Load Balancer, Network Load Balancer, or Gateway Load Balancer</td></tr>
 <tr><td><a href='describe_load_balancers.html'>describe_load_balancers</a></td><td>Describes the specified load balancers or all of your load balancers</td></tr>
 <tr><td><a href='describe_rules.html'>describe_rules</a></td><td>Describes the specified rules or the rules for the specified listener</td></tr>
 <tr><td><a href='describe_ssl_policies.html'>describe_ssl_policies</a></td><td>Describes the specified policies or all policies used for SSL negotiation</td></tr>
-<tr><td><a href='describe_tags.html'>describe_tags</a></td><td>Describes the tags for the specified resources</td></tr>
+<tr><td><a href='describe_tags.html'>describe_tags</a></td><td>Describes the tags for the specified Elastic Load Balancing resources</td></tr>
 <tr><td><a href='describe_target_group_attributes.html'>describe_target_group_attributes</a></td><td>Describes the attributes for the specified target group</td></tr>
 <tr><td><a href='describe_target_groups.html'>describe_target_groups</a></td><td>Describes the specified target groups or all of your target groups</td></tr>
 <tr><td><a href='describe_target_health.html'>describe_target_health</a></td><td>Describes the health of the specified targets or all of your targets</td></tr>
 <tr><td><a href='modify_listener.html'>modify_listener</a></td><td>Replaces the specified properties of the specified listener</td></tr>
-<tr><td><a href='modify_load_balancer_attributes.html'>modify_load_balancer_attributes</a></td><td>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer</td></tr>
+<tr><td><a href='modify_load_balancer_attributes.html'>modify_load_balancer_attributes</a></td><td>Modifies the specified attributes of the specified Application Load Balancer, Network Load Balancer, or Gateway Load Balancer</td></tr>
 <tr><td><a href='modify_rule.html'>modify_rule</a></td><td>Replaces the specified properties of the specified rule</td></tr>
 <tr><td><a href='modify_target_group.html'>modify_target_group</a></td><td>Modifies the health checks used when evaluating the health state of the targets in the specified target group</td></tr>
 <tr><td><a href='modify_target_group_attributes.html'>modify_target_group_attributes</a></td><td>Modifies the specified attributes of the specified target group</td></tr>
 <tr><td><a href='register_targets.html'>register_targets</a></td><td>Registers the specified targets with the specified target group</td></tr>
 <tr><td><a href='remove_listener_certificates.html'>remove_listener_certificates</a></td><td>Removes the specified certificate from the certificate list for the specified HTTPS or TLS listener</td></tr>
-<tr><td><a href='remove_tags.html'>remove_tags</a></td><td>Removes the specified tags from the specified Elastic Load Balancing resource</td></tr>
+<tr><td><a href='remove_tags.html'>remove_tags</a></td><td>Removes the specified tags from the specified Elastic Load Balancing resources</td></tr>
 <tr><td><a href='set_ip_address_type.html'>set_ip_address_type</a></td><td>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer</td></tr>
 <tr><td><a href='set_rule_priorities.html'>set_rule_priorities</a></td><td>Sets the priorities of the specified rules</td></tr>
 <tr><td><a href='set_security_groups.html'>set_security_groups</a></td><td>Associates the specified security groups with the specified Application Load Balancer</td></tr>
-<tr><td><a href='set_subnets.html'>set_subnets</a></td><td>Enables the Availability Zones for the specified public subnets for the specified load balancer</td></tr>
+<tr><td><a href='set_subnets.html'>set_subnets</a></td><td>Enables the Availability Zones for the specified public subnets for the specified Application Load Balancer or Network Load Balancer</td></tr>
 </table>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>elbv2</span>()
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>elbv2</span><span class='op'>(</span><span class='op'>)</span>
 <span class='co'># This example adds the specified tags to the specified load balancer.</span>
-<span class='no'>svc</span>$<span class='fu'>add_tags</span>(
-  <span class='kw'>ResourceArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>add_tags</span><span class='op'>(</span>
+  ResourceArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"arn:aws:elasticloadbalancing:us-west-2:123456789012:loadbalancer/app/my-load-balancer/5..."</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"project"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"lima"</span>
-    ),
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"department"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"digital-media"</span>
-    )
-  )
-)
-}</pre>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"project"</span>,
+      Value <span class='op'>=</span> <span class='st'>"lima"</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"department"</span>,
+      Value <span class='op'>=</span> <span class='st'>"digital-media"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -269,7 +274,7 @@ they complete at most one time. If you repeat an operation, it succeeds.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

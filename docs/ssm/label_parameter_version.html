@@ -46,7 +46,27 @@ versions of a parameter — ssm_label_parameter_version" />
 versions of a parameter. When you modify a parameter, Systems Manager
 automatically saves a new version and increments the version number by
 one. A label can help you remember the purpose of a parameter when there
-are multiple versions." />
+are multiple versions.
+Parameter labels have the following requirements and restrictions.
+A version of a parameter can have a maximum of 10 labels.
+You can't attach the same label to different versions of the same
+parameter. For example, if version 1 has the label Production, then
+you can't attach Production to version 2.
+You can move a label from one version of a parameter to another.
+You can't create a label when you create a new parameter. You must
+attach a label to a specific version of a parameter.
+You can't delete a parameter label. If you no longer want to use a
+parameter label, then you must move it to a different version of a
+parameter.
+A label can have a maximum of 100 characters.
+Labels can contain letters (case sensitive), numbers, periods (.),
+hyphens (-), or underscores (\_).
+Labels can't begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case
+sensitive). If a label fails to meet these requirements, then the
+label is not associated with a parameter and the system displays it
+in the list of InvalidLabels.
+
+" />
 
 
 
@@ -78,7 +98,7 @@ are multiple versions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +106,7 @@ are multiple versions." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +118,7 @@ are multiple versions." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,9 +147,29 @@ versions of a parameter. When you modify a parameter, Systems Manager
 automatically saves a new version and increments the version number by
 one. A label can help you remember the purpose of a parameter when there
 are multiple versions.</p>
+<p>Parameter labels have the following requirements and restrictions.</p><ul>
+<li><p>A version of a parameter can have a maximum of 10 labels.</p></li>
+<li><p>You can't attach the same label to different versions of the same
+parameter. For example, if version 1 has the label Production, then
+you can't attach Production to version 2.</p></li>
+<li><p>You can move a label from one version of a parameter to another.</p></li>
+<li><p>You can't create a label when you create a new parameter. You must
+attach a label to a specific version of a parameter.</p></li>
+<li><p>You can't delete a parameter label. If you no longer want to use a
+parameter label, then you must move it to a different version of a
+parameter.</p></li>
+<li><p>A label can have a maximum of 100 characters.</p></li>
+<li><p>Labels can contain letters (case sensitive), numbers, periods (.),
+hyphens (-), or underscores (\_).</p></li>
+<li><p>Labels can't begin with a number, "aws," or "ssm" (not case
+sensitive). If a label fails to meet these requirements, then the
+label is not associated with a parameter and the system displays it
+in the list of InvalidLabels.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_label_parameter_version</span>(<span class='no'>Name</span>, <span class='no'>ParameterVersion</span>, <span class='no'>Labels</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_label_parameter_version</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>ParameterVersion</span>, <span class='va'>Labels</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,38 +190,17 @@ to the latest version.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Parameter labels have the following requirements and restrictions.</p><ul>
-<li><p>A version of a parameter can have a maximum of 10 labels.</p></li>
-<li><p>You can\'t attach the same label to different versions of the same
-parameter. For example, if version 1 has the label Production, then
-you can\'t attach Production to version 2.</p></li>
-<li><p>You can move a label from one version of a parameter to another.</p></li>
-<li><p>You can\'t create a label when you create a new parameter. You must
-attach a label to a specific version of a parameter.</p></li>
-<li><p>You can\'t delete a parameter label. If you no longer want to use a
-parameter label, then you must move it to a different version of a
-parameter.</p></li>
-<li><p>A label can have a maximum of 100 characters.</p></li>
-<li><p>Labels can contain letters (case sensitive), numbers, periods (.),
-hyphens (-), or underscores (\_).</p></li>
-<li><p>Labels can\'t begin with a number, \"aws,\" or \"ssm\" (not case
-sensitive). If a label fails to meet these requirements, then the
-label is not associated with a parameter and the system displays it
-in the list of InvalidLabels.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>label_parameter_version</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ParameterVersion</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>label_parameter_version</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  ParameterVersion <span class='op'>=</span> <span class='fl'>123</span>,
+  Labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -199,7 +218,7 @@ in the list of InvalidLabels.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

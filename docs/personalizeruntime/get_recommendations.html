@@ -42,7 +42,13 @@
 <meta property="og:title" content="Returns a list of recommended items — personalizeruntime_get_recommendations" />
 <meta property="og:description" content="Returns a list of recommended items. The required input depends on the
 recipe type used to create the solution backing the campaign, as
-follows:" />
+follows:
+RELATED\_ITEMS - itemId required, userId not used
+USER\_PERSONALIZATION - itemId optional, userId required
+
+
+Campaigns that are backed by a solution created using a recipe of type
+PERSONALIZED\_RANKING use the API." />
 
 
 
@@ -74,7 +80,7 @@ follows:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +88,7 @@ follows:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +100,7 @@ follows:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,11 +125,17 @@ follows:" />
     <div class="ref-description">
     <p>Returns a list of recommended items. The required input depends on the
 recipe type used to create the solution backing the campaign, as
-follows:</p>
+follows:</p><ul>
+<li><p>RELATED\_ITEMS - <code>itemId</code> required, <code>userId</code> not used</p></li>
+<li><p>USER\_PERSONALIZATION - <code>itemId</code> optional, <code>userId</code> required</p></li>
+</ul>
+
+<p>Campaigns that are backed by a solution created using a recipe of type
+PERSONALIZED\_RANKING use the API.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>personalizeruntime_get_recommendations</span>(<span class='no'>campaignArn</span>, <span class='no'>itemId</span>, <span class='no'>userId</span>,
-  <span class='no'>numResults</span>, <span class='no'>context</span>, <span class='no'>filterArn</span>)</pre>
+    <pre class="usage"><span class='fu'>personalizeruntime_get_recommendations</span><span class='op'>(</span><span class='va'>campaignArn</span>, <span class='va'>itemId</span>, <span class='va'>userId</span>,
+  <span class='va'>numResults</span>, <span class='va'>context</span>, <span class='va'>filterArn</span>, <span class='va'>filterValues</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,39 +163,48 @@ recommendations.</p></td>
       <th>context</th>
       <td><p>The contextual metadata to use when getting recommendations. Contextual
 metadata includes any interaction information that might be relevant
-when getting a user\'s recommendations, such as the user\'s current
+when getting a user's recommendations, such as the user's current
 location or device type.</p></td>
     </tr>
     <tr>
       <th>filterArn</th>
       <td><p>The ARN of the filter to apply to the returned recommendations. For more
-information, see Using Filters with Amazon Personalize.</p></td>
+information, see <a href='https://docs.aws.amazon.com/personalize/latest/dg/filter.html'>Filtering Recommendations</a>.</p>
+<p>When using this parameter, be sure the filter resource is <code>ACTIVE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>filterValues</th>
+      <td><p>The values to use when filtering recommendations. For each placeholder
+parameter in your filter expression, provide the parameter name (in
+matching case) as a key and the filter value(s) as the corresponding
+value. Separate multiple values for one parameter with a comma.</p>
+<p>For filter expressions that use an <code>INCLUDE</code> element to include items,
+you must provide values for all parameters that are defined in the
+expression. For filters with expressions that use an <code>EXCLUDE</code> element
+to exclude items, you can omit the <code>filter-values</code>.In this case, Amazon
+Personalize doesn't use that portion of the expression to filter
+recommendations.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/personalize/latest/dg/filter.html'>Filtering Recommendations</a>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>RELATED\_ITEMS - <code>itemId</code> required, <code>userId</code> not used</p></li>
-<li><p>USER\_PERSONALIZATION - <code>itemId</code> optional, <code>userId</code> required</p></li>
-</ul>
-
-<p>Campaigns that are backed by a solution created using a recipe of type
-PERSONALIZED\_RANKING use the API.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_recommendations</span>(
-  <span class='kw'>campaignArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>itemId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>userId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>numResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>context</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_recommendations</span><span class='op'>(</span>
+  campaignArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  itemId <span class='op'>=</span> <span class='st'>"string"</span>,
+  userId <span class='op'>=</span> <span class='st'>"string"</span>,
+  numResults <span class='op'>=</span> <span class='fl'>123</span>,
+  context <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>filterArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  filterArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  filterValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -201,7 +222,7 @@ PERSONALIZED\_RANKING use the API.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

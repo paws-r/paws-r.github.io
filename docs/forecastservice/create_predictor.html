@@ -40,7 +40,44 @@
 
 
 <meta property="og:title" content="Creates an Amazon Forecast predictor — forecastservice_create_predictor" />
-<meta property="og:description" content="Creates an Amazon Forecast predictor." />
+<meta property="og:description" content="Creates an Amazon Forecast predictor.
+In the request, provide a dataset group and either specify an algorithm
+or let Amazon Forecast choose an algorithm for you using AutoML. If you
+specify an algorithm, you also can override algorithm-specific
+hyperparameters.
+Amazon Forecast uses the algorithm to train a predictor using the latest
+version of the datasets in the specified dataset group. You can then
+generate a forecast using the CreateForecast operation.
+To see the evaluation metrics, use the GetAccuracyMetrics operation.
+You can specify a featurization configuration to fill and aggregate the
+data fields in the TARGET_TIME_SERIES dataset to improve model
+training. For more information, see FeaturizationConfig.
+For RELATED\_TIME\_SERIES datasets, CreatePredictor verifies that the
+DataFrequency specified when the dataset was created matches the
+ForecastFrequency. TARGET\_TIME\_SERIES datasets don't have this
+restriction. Amazon Forecast also verifies the delimiter and timestamp
+format. For more information, see howitworks-datasets-groups.
+By default, predictors are trained and evaluated at the 0.1 (P10), 0.5
+(P50), and 0.9 (P90) quantiles. You can choose custom forecast types to
+train and evaluate your predictor by setting the ForecastTypes.
+AutoML
+If you want Amazon Forecast to evaluate each algorithm and choose the
+one that minimizes the objective function, set PerformAutoML to
+true. The objective function is defined as the mean of the weighted
+losses over the forecast types. By default, these are the p10, p50, and
+p90 quantile losses. For more information, see EvaluationResult.
+When AutoML is enabled, the following properties are disallowed:
+AlgorithmArn
+HPOConfig
+PerformHPO
+TrainingParameters
+
+
+To get a list of all of your predictors, use the ListPredictors
+operation.
+Before you can use the predictor to create a forecast, the Status of
+the predictor must be ACTIVE, signifying that training has completed.
+To get the status, use the DescribePredictor operation." />
 
 
 
@@ -72,7 +109,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +117,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +129,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,12 +153,49 @@
 
     <div class="ref-description">
     <p>Creates an Amazon Forecast predictor.</p>
+<p>In the request, provide a dataset group and either specify an algorithm
+or let Amazon Forecast choose an algorithm for you using AutoML. If you
+specify an algorithm, you also can override algorithm-specific
+hyperparameters.</p>
+<p>Amazon Forecast uses the algorithm to train a predictor using the latest
+version of the datasets in the specified dataset group. You can then
+generate a forecast using the CreateForecast operation.</p>
+<p>To see the evaluation metrics, use the GetAccuracyMetrics operation.</p>
+<p>You can specify a featurization configuration to fill and aggregate the
+data fields in the <code>TARGET_TIME_SERIES</code> dataset to improve model
+training. For more information, see FeaturizationConfig.</p>
+<p>For RELATED\_TIME\_SERIES datasets, <code>CreatePredictor</code> verifies that the
+<code>DataFrequency</code> specified when the dataset was created matches the
+<code>ForecastFrequency</code>. TARGET\_TIME\_SERIES datasets don't have this
+restriction. Amazon Forecast also verifies the delimiter and timestamp
+format. For more information, see howitworks-datasets-groups.</p>
+<p>By default, predictors are trained and evaluated at the 0.1 (P10), 0.5
+(P50), and 0.9 (P90) quantiles. You can choose custom forecast types to
+train and evaluate your predictor by setting the <code>ForecastTypes</code>.</p>
+<p><strong>AutoML</strong></p>
+<p>If you want Amazon Forecast to evaluate each algorithm and choose the
+one that minimizes the <code>objective function</code>, set <code>PerformAutoML</code> to
+<code>true</code>. The <code>objective function</code> is defined as the mean of the weighted
+losses over the forecast types. By default, these are the p10, p50, and
+p90 quantile losses. For more information, see EvaluationResult.</p>
+<p>When AutoML is enabled, the following properties are disallowed:</p><ul>
+<li><p><code>AlgorithmArn</code></p></li>
+<li><p><code>HPOConfig</code></p></li>
+<li><p><code>PerformHPO</code></p></li>
+<li><p><code>TrainingParameters</code></p></li>
+</ul>
+
+<p>To get a list of all of your predictors, use the ListPredictors
+operation.</p>
+<p>Before you can use the predictor to create a forecast, the <code>Status</code> of
+the predictor must be <code>ACTIVE</code>, signifying that training has completed.
+To get the status, use the DescribePredictor operation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>forecastservice_create_predictor</span>(<span class='no'>PredictorName</span>, <span class='no'>AlgorithmArn</span>,
-  <span class='no'>ForecastHorizon</span>, <span class='no'>PerformAutoML</span>, <span class='no'>PerformHPO</span>, <span class='no'>TrainingParameters</span>,
-  <span class='no'>EvaluationParameters</span>, <span class='no'>HPOConfig</span>, <span class='no'>InputDataConfig</span>, <span class='no'>FeaturizationConfig</span>,
-  <span class='no'>EncryptionConfig</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>forecastservice_create_predictor</span><span class='op'>(</span><span class='va'>PredictorName</span>, <span class='va'>AlgorithmArn</span>,
+  <span class='va'>ForecastHorizon</span>, <span class='va'>ForecastTypes</span>, <span class='va'>PerformAutoML</span>, <span class='va'>PerformHPO</span>,
+  <span class='va'>TrainingParameters</span>, <span class='va'>EvaluationParameters</span>, <span class='va'>HPOConfig</span>, <span class='va'>InputDataConfig</span>,
+  <span class='va'>FeaturizationConfig</span>, <span class='va'>EncryptionConfig</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,8 +210,8 @@
 training. Required if <code>PerformAutoML</code> is not set to <code>true</code>.</p>
 <p><strong>Supported algorithms:</strong></p><ul>
 <li><p><code>arn:aws:forecast:::algorithm/ARIMA</code></p></li>
-<li><p><code>arn:aws:forecast:::algorithm/Deep_AR_Plus</code></p>
-<p>Supports hyperparameter optimization (HPO)</p></li>
+<li><p><code>arn:aws:forecast:::algorithm/CNN-QR</code></p></li>
+<li><p><code>arn:aws:forecast:::algorithm/Deep_AR_Plus</code></p></li>
 <li><p><code>arn:aws:forecast:::algorithm/ETS</code></p></li>
 <li><p><code>arn:aws:forecast:::algorithm/NPTS</code></p></li>
 <li><p><code>arn:aws:forecast:::algorithm/Prophet</code></p></li>
@@ -154,6 +228,14 @@ the forecast horizon to 10, the model returns predictions for 10 days.</p>
 the TARGET\_TIME\_SERIES dataset length.</p></td>
     </tr>
     <tr>
+      <th>ForecastTypes</th>
+      <td><p>Specifies the forecast types used to train a predictor. You can specify
+up to five forecast types. Forecast types can be quantiles from 0.01 to
+0.99, by increments of 0.01 or higher. You can also specify the mean
+forecast with <code>mean</code>.</p>
+<p>The default value is <code>\\["0.10", "0.50", "0.9"\\]</code>.</p></td>
+    </tr>
+    <tr>
       <th>PerformAutoML</th>
       <td><p>Whether to perform AutoML. When Amazon Forecast performs AutoML, it
 evaluates the algorithms it provides and chooses the best algorithm and
@@ -161,8 +243,8 @@ configuration for your training dataset.</p>
 <p>The default value is <code>false</code>. In this case, you are required to specify
 an algorithm.</p>
 <p>Set <code>PerformAutoML</code> to <code>true</code> to have Amazon Forecast perform AutoML.
-This is a good option if you aren\'t sure which algorithm is suitable
-for your training data. In this case, <code>PerformHPO</code> must be false.</p></td>
+This is a good option if you aren't sure which algorithm is suitable for
+your training data. In this case, <code>PerformHPO</code> must be false.</p></td>
     </tr>
     <tr>
       <th>PerformHPO</th>
@@ -177,8 +259,9 @@ job specifies a metric to optimize, which hyperparameters participate in
 tuning, and the valid range for each tunable hyperparameter. In this
 case, you are required to specify an algorithm and <code>PerformAutoML</code> must
 be false.</p>
-<p>The following algorithm supports HPO:</p><ul>
+<p>The following algorithms support HPO:</p><ul>
 <li><p>DeepAR+</p></li>
+<li><p>CNN-QR</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -196,7 +279,7 @@ how to perform the split and the number of iterations.</p></td>
     </tr>
     <tr>
       <th>HPOConfig</th>
-      <td><p>Provides hyperparameter override values for the algorithm. If you don\'t
+      <td><p>Provides hyperparameter override values for the algorithm. If you don't
 provide this parameter, Amazon Forecast uses default values. The
 individual algorithms specify which hyperparameters support
 hyperparameter optimization (HPO). For more information, see
@@ -246,129 +329,93 @@ count against your tags per resource limit.</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>In the request, you provide a dataset group and either specify an
-algorithm or let Amazon Forecast choose the algorithm for you using
-AutoML. If you specify an algorithm, you also can override
-algorithm-specific hyperparameters.</p>
-<p>Amazon Forecast uses the chosen algorithm to train a model using the
-latest version of the datasets in the specified dataset group. The
-result is called a predictor. You then generate a forecast using the
-CreateForecast operation.</p>
-<p>After training a model, the <code>CreatePredictor</code> operation also evaluates
-it. To see the evaluation metrics, use the GetAccuracyMetrics operation.
-Always review the evaluation metrics before deciding to use the
-predictor to generate a forecast.</p>
-<p>Optionally, you can specify a featurization configuration to fill and
-aggregate the data fields in the <code>TARGET_TIME_SERIES</code> dataset to improve
-model training. For more information, see FeaturizationConfig.</p>
-<p>For RELATED\_TIME\_SERIES datasets, <code>CreatePredictor</code> verifies that the
-<code>DataFrequency</code> specified when the dataset was created matches the
-<code>ForecastFrequency</code>. TARGET\_TIME\_SERIES datasets don\'t have this
-restriction. Amazon Forecast also verifies the delimiter and timestamp
-format. For more information, see howitworks-datasets-groups.</p>
-<p><strong>AutoML</strong></p>
-<p>If you want Amazon Forecast to evaluate each algorithm and choose the
-one that minimizes the <code>objective function</code>, set <code>PerformAutoML</code> to
-<code>true</code>. The <code>objective function</code> is defined as the mean of the weighted
-p10, p50, and p90 quantile losses. For more information, see
-EvaluationResult.</p>
-<p>When AutoML is enabled, the following properties are disallowed:</p><ul>
-<li><p><code>AlgorithmArn</code></p></li>
-<li><p><code>HPOConfig</code></p></li>
-<li><p><code>PerformHPO</code></p></li>
-<li><p><code>TrainingParameters</code></p></li>
-</ul>
-
-<p>To get a list of all of your predictors, use the ListPredictors
-operation.</p>
-<p>Before you can use the predictor to create a forecast, the <code>Status</code> of
-the predictor must be <code>ACTIVE</code>, signifying that training has completed.
-To get the status, use the DescribePredictor operation.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_predictor</span>(
-  <span class='kw'>PredictorName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AlgorithmArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ForecastHorizon</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>PerformAutoML</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>PerformHPO</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>TrainingParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_predictor</span><span class='op'>(</span>
+  PredictorName <span class='op'>=</span> <span class='st'>"string"</span>,
+  AlgorithmArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  ForecastHorizon <span class='op'>=</span> <span class='fl'>123</span>,
+  ForecastTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>EvaluationParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>NumberOfBacktestWindows</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>BackTestWindowOffset</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>HPOConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ParameterRanges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CategoricalParameterRanges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  PerformAutoML <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  PerformHPO <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  TrainingParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  EvaluationParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    NumberOfBacktestWindows <span class='op'>=</span> <span class='fl'>123</span>,
+    BackTestWindowOffset <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  HPOConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ParameterRanges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CategoricalParameterRanges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Name <span class='op'>=</span> <span class='st'>"string"</span>,
+          Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='st'>"string"</span>
-          )
-        )
-      ),
-      <span class='kw'>ContinuousParameterRanges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>MaxValue</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-          <span class='kw'>MinValue</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-          <span class='kw'>ScalingType</span> <span class='kw'>=</span> <span class='st'>"Auto"</span><span class='kw'>|</span><span class='st'>"Linear"</span><span class='kw'>|</span><span class='st'>"Logarithmic"</span><span class='kw'>|</span><span class='st'>"ReverseLogarithmic"</span>
-        )
-      ),
-      <span class='kw'>IntegerParameterRanges</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>MaxValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>MinValue</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>ScalingType</span> <span class='kw'>=</span> <span class='st'>"Auto"</span><span class='kw'>|</span><span class='st'>"Linear"</span><span class='kw'>|</span><span class='st'>"Logarithmic"</span><span class='kw'>|</span><span class='st'>"ReverseLogarithmic"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>InputDataConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DatasetGroupArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SupplementaryFeatures</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>FeaturizationConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ForecastFrequency</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ForecastDimensions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      ContinuousParameterRanges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Name <span class='op'>=</span> <span class='st'>"string"</span>,
+          MaxValue <span class='op'>=</span> <span class='fl'>123.0</span>,
+          MinValue <span class='op'>=</span> <span class='fl'>123.0</span>,
+          ScalingType <span class='op'>=</span> <span class='st'>"Auto"</span><span class='op'>|</span><span class='st'>"Linear"</span><span class='op'>|</span><span class='st'>"Logarithmic"</span><span class='op'>|</span><span class='st'>"ReverseLogarithmic"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      IntegerParameterRanges <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Name <span class='op'>=</span> <span class='st'>"string"</span>,
+          MaxValue <span class='op'>=</span> <span class='fl'>123</span>,
+          MinValue <span class='op'>=</span> <span class='fl'>123</span>,
+          ScalingType <span class='op'>=</span> <span class='st'>"Auto"</span><span class='op'>|</span><span class='st'>"Linear"</span><span class='op'>|</span><span class='st'>"Logarithmic"</span><span class='op'>|</span><span class='st'>"ReverseLogarithmic"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  InputDataConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DatasetGroupArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    SupplementaryFeatures <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        Name <span class='op'>=</span> <span class='st'>"string"</span>,
+        Value <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  FeaturizationConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ForecastFrequency <span class='op'>=</span> <span class='st'>"string"</span>,
+    ForecastDimensions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>Featurizations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>AttributeName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>FeaturizationPipeline</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>FeaturizationMethodName</span> <span class='kw'>=</span> <span class='st'>"filling"</span>,
-            <span class='kw'>FeaturizationMethodParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    Featurizations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        AttributeName <span class='op'>=</span> <span class='st'>"string"</span>,
+        FeaturizationPipeline <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            FeaturizationMethodName <span class='op'>=</span> <span class='st'>"filling"</span>,
+            FeaturizationMethodParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            )
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>EncryptionConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>KMSKeyArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  EncryptionConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    RoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    KMSKeyArn <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -386,7 +433,7 @@ To get the status, use the DescribePredictor operation.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

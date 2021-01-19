@@ -46,7 +46,14 @@ operating system platform, the version of SSM Agent installed on the
 instance, instance status, and so on — ssm_describe_instance_information" />
 <meta property="og:description" content="Describes one or more of your instances, including information about the
 operating system platform, the version of SSM Agent installed on the
-instance, instance status, and so on." />
+instance, instance status, and so on.
+If you specify one or more instance IDs, it returns information for
+those instances. If you do not specify instance IDs, it returns
+information for all your instances. If you specify an instance ID that
+is not valid or an instance that you do not own, you receive an error.
+The IamRole field for this API action is the Amazon Identity and Access
+Management (IAM) role assigned to on-premises instances. This call does
+not return the IAM role for EC2 instances." />
 
 
 
@@ -78,7 +85,7 @@ instance, instance status, and so on." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +93,7 @@ instance, instance status, and so on." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +105,7 @@ instance, instance status, and so on." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,17 +133,24 @@ instance, instance status, and so on</h1>
     <p>Describes one or more of your instances, including information about the
 operating system platform, the version of SSM Agent installed on the
 instance, instance status, and so on.</p>
+<p>If you specify one or more instance IDs, it returns information for
+those instances. If you do not specify instance IDs, it returns
+information for all your instances. If you specify an instance ID that
+is not valid or an instance that you do not own, you receive an error.</p>
+<p>The IamRole field for this API action is the Amazon Identity and Access
+Management (IAM) role assigned to on-premises instances. This call does
+not return the IAM role for EC2 instances.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_describe_instance_information</span>(<span class='no'>InstanceInformationFilterList</span>,
-  <span class='no'>Filters</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_describe_instance_information</span><span class='op'>(</span><span class='va'>InstanceInformationFilterList</span>,
+  <span class='va'>Filters</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>InstanceInformationFilterList</th>
-      <td><p>This is a legacy method. We recommend that you don\'t use this method.
+      <td><p>This is a legacy method. We recommend that you don't use this method.
 Instead, use the <code>Filters</code> data type. <code>Filters</code> enables you to return
 instance information by filtering based on tags applied to managed
 instances.</p>
@@ -163,38 +177,30 @@ from a previous call.)</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you specify one or more instance IDs, it returns information for
-those instances. If you do not specify instance IDs, it returns
-information for all your instances. If you specify an instance ID that
-is not valid or an instance that you do not own, you receive an error.</p>
-<p>The IamRole field for this API action is the Amazon Identity and Access
-Management (IAM) role assigned to on-premises instances. This call does
-not return the IAM role for EC2 instances.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_instance_information</span>(
-  <span class='kw'>InstanceInformationFilterList</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"InstanceIds"</span><span class='kw'>|</span><span class='st'>"AgentVersion"</span><span class='kw'>|</span><span class='st'>"PingStatus"</span><span class='kw'>|</span><span class='st'>"PlatformTypes"</span><span class='kw'>|</span><span class='st'>"ActivationIds"</span><span class='kw'>|</span><span class='st'>"IamRole"</span><span class='kw'>|</span><span class='st'>"ResourceType"</span><span class='kw'>|</span><span class='st'>"AssociationStatus"</span>,
-      <span class='kw'>valueSet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_instance_information</span><span class='op'>(</span>
+  InstanceInformationFilterList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"InstanceIds"</span><span class='op'>|</span><span class='st'>"AgentVersion"</span><span class='op'>|</span><span class='st'>"PingStatus"</span><span class='op'>|</span><span class='st'>"PlatformTypes"</span><span class='op'>|</span><span class='st'>"ActivationIds"</span><span class='op'>|</span><span class='st'>"IamRole"</span><span class='op'>|</span><span class='st'>"ResourceType"</span><span class='op'>|</span><span class='st'>"AssociationStatus"</span>,
+      valueSet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -212,7 +218,7 @@ not return the IAM role for EC2 instances.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

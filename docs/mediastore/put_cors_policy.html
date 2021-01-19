@@ -46,8 +46,15 @@ container so that the container can service cross-origin requests — mediastore
 container so that the container can service cross-origin requests. For
 example, you might want to enable a request whose origin is
 http://www.example.com to access your AWS Elemental MediaStore container
-at my.example.container.com by using the browser\'s XMLHttpRequest
-capability." />
+at my.example.container.com by using the browser's XMLHttpRequest
+capability.
+To enable CORS on a container, you attach a CORS policy to the
+container. In the CORS policy, you configure rules that identify origins
+and the HTTP methods that can be executed on your container. The policy
+can contain up to 398,000 characters. You can add up to 100 rules to a
+CORS policy. If more than one rule applies, the service uses the first
+applicable rule listed.
+To learn more about CORS, see Cross-Origin Resource Sharing (CORS) in AWS Elemental MediaStore." />
 
 
 
@@ -79,7 +86,7 @@ capability." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +94,7 @@ capability." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +106,7 @@ capability." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,11 +134,18 @@ container so that the container can service cross-origin requests</h1>
 container so that the container can service cross-origin requests. For
 example, you might want to enable a request whose origin is
 http://www.example.com to access your AWS Elemental MediaStore container
-at my.example.container.com by using the browser\'s XMLHttpRequest
+at my.example.container.com by using the browser's XMLHttpRequest
 capability.</p>
+<p>To enable CORS on a container, you attach a CORS policy to the
+container. In the CORS policy, you configure rules that identify origins
+and the HTTP methods that can be executed on your container. The policy
+can contain up to 398,000 characters. You can add up to 100 rules to a
+CORS policy. If more than one rule applies, the service uses the first
+applicable rule listed.</p>
+<p>To learn more about CORS, see <a href='https://docs.aws.amazon.com/mediastore/latest/ug/cors-policy.html'>Cross-Origin Resource Sharing (CORS) in AWS Elemental MediaStore</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mediastore_put_cors_policy</span>(<span class='no'>ContainerName</span>, <span class='no'>CorsPolicy</span>)</pre>
+    <pre class="usage"><span class='fu'>mediastore_put_cors_policy</span><span class='op'>(</span><span class='va'>ContainerName</span>, <span class='va'>CorsPolicy</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,38 +160,30 @@ capability.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To enable CORS on a container, you attach a CORS policy to the
-container. In the CORS policy, you configure rules that identify origins
-and the HTTP methods that can be executed on your container. The policy
-can contain up to 398,000 characters. You can add up to 100 rules to a
-CORS policy. If more than one rule applies, the service uses the first
-applicable rule listed.</p>
-<p>To learn more about CORS, see <a href='https://docs.aws.amazon.com/mediastore/latest/ug/cors-policy.html'>Cross-Origin Resource Sharing (CORS) in AWS Elemental MediaStore</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_cors_policy</span>(
-  <span class='kw'>ContainerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CorsPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>AllowedOrigins</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_cors_policy</span><span class='op'>(</span>
+  ContainerName <span class='op'>=</span> <span class='st'>"string"</span>,
+  CorsPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      AllowedOrigins <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>AllowedMethods</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='st'>"PUT"</span><span class='kw'>|</span><span class='st'>"GET"</span><span class='kw'>|</span><span class='st'>"DELETE"</span><span class='kw'>|</span><span class='st'>"HEAD"</span>
-      ),
-      <span class='kw'>AllowedHeaders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      AllowedMethods <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"PUT"</span><span class='op'>|</span><span class='st'>"GET"</span><span class='op'>|</span><span class='st'>"DELETE"</span><span class='op'>|</span><span class='st'>"HEAD"</span>
+      <span class='op'>)</span>,
+      AllowedHeaders <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>MaxAgeSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>ExposeHeaders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      MaxAgeSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+      ExposeHeaders <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  )
-)</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -195,7 +201,7 @@ applicable rule listed.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

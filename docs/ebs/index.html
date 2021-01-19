@@ -40,15 +40,22 @@
 
 
 <meta property="og:title" content="Amazon Elastic Block Store — ebs" />
-<meta property="og:description" content="You can use the Amazon Elastic Block Store (EBS) direct APIs to directly
-read the data on your EBS snapshots, and identify the difference between
-two snapshots. You can view the details of blocks in an EBS snapshot,
-compare the block difference between two snapshots, and directly access
-the data in a snapshot. If you\'re an independent software vendor (ISV)
-who offers backup services for EBS, the EBS direct APIs make it easier
-and more cost-effective to track incremental changes on your EBS volumes
-via EBS snapshots. This can be done without having to create new volumes
-from EBS snapshots.
+<meta property="og:description" content="You can use the Amazon Elastic Block Store (Amazon EBS) direct APIs to
+create EBS snapshots, write data directly to your snapshots, read data
+on your snapshots, and identify the differences or changes between two
+snapshots. If you’re an independent software vendor (ISV) who offers
+backup services for Amazon EBS, the EBS direct APIs make it more
+efficient and cost-effective to track incremental changes on your EBS
+volumes through snapshots. This can be done without having to create new
+volumes from snapshots, and then use Amazon Elastic Compute Cloud
+(Amazon EC2) instances to compare the differences.
+You can create incremental snapshots directly from data on-premises into
+EBS volumes and the cloud to use for quick disaster recovery. With the
+ability to write and read snapshots, you can write your on-premises data
+to an EBS snapshot during a disaster. Then after recovery, you can
+restore it back to AWS or on-premises from the snapshot. You no longer
+need to build and maintain complex mechanisms to copy data to and from
+Amazon EBS.
 This API reference provides detailed information about the actions, data
 types, parameters, and errors of the EBS direct APIs. For more
 information about the elements that make up the EBS direct APIs, and
@@ -88,7 +95,7 @@ in the AWS General Reference." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -96,7 +103,7 @@ in the AWS General Reference." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -108,7 +115,7 @@ in the AWS General Reference." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -131,15 +138,22 @@ in the AWS General Reference." />
     </div>
 
     <div class="ref-description">
-    <p>You can use the Amazon Elastic Block Store (EBS) direct APIs to directly
-read the data on your EBS snapshots, and identify the difference between
-two snapshots. You can view the details of blocks in an EBS snapshot,
-compare the block difference between two snapshots, and directly access
-the data in a snapshot. If you\'re an independent software vendor (ISV)
-who offers backup services for EBS, the EBS direct APIs make it easier
-and more cost-effective to track incremental changes on your EBS volumes
-via EBS snapshots. This can be done without having to create new volumes
-from EBS snapshots.</p>
+    <p>You can use the Amazon Elastic Block Store (Amazon EBS) direct APIs to
+create EBS snapshots, write data directly to your snapshots, read data
+on your snapshots, and identify the differences or changes between two
+snapshots. If you’re an independent software vendor (ISV) who offers
+backup services for Amazon EBS, the EBS direct APIs make it more
+efficient and cost-effective to track incremental changes on your EBS
+volumes through snapshots. This can be done without having to create new
+volumes from snapshots, and then use Amazon Elastic Compute Cloud
+(Amazon EC2) instances to compare the differences.</p>
+<p>You can create incremental snapshots directly from data on-premises into
+EBS volumes and the cloud to use for quick disaster recovery. With the
+ability to write and read snapshots, you can write your on-premises data
+to an EBS snapshot during a disaster. Then after recovery, you can
+restore it back to AWS or on-premises from the snapshot. You no longer
+need to build and maintain complex mechanisms to copy data to and from
+Amazon EBS.</p>
 <p>This API reference provides detailed information about the actions, data
 types, parameters, and errors of the EBS direct APIs. For more
 information about the elements that make up the EBS direct APIs, and
@@ -150,7 +164,7 @@ EBS direct APIs, see <a href='https://docs.aws.amazon.com/general/latest/gr/ebs-
 in the <em>AWS General Reference</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ebs</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>ebs</span><span class='op'>(</span>config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,20 +178,21 @@ in the <em>AWS General Reference</em>.</p>
     <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
 
     
-<pre><span class='no'>svc</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>ebs</span>(
-  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>creds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>access_key_id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>secret_access_key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>session_token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>profile</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>ebs</span><span class='op'>(</span>
+  config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    credentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        access_key_id <span class='op'>=</span> <span class='st'>"string"</span>,
+        secret_access_key <span class='op'>=</span> <span class='st'>"string"</span>,
+        session_token <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      profile <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    endpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    region <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
@@ -186,21 +201,23 @@ in the <em>AWS General Reference</em>.</p>
 <table class='table'>
 <tr><td><a href='complete_snapshot.html'>complete_snapshot</a></td><td>Seals and completes the snapshot after all of the required blocks of data have been written to it</td></tr>
 <tr><td><a href='get_snapshot_block.html'>get_snapshot_block</a></td><td>Returns the data in a block in an Amazon Elastic Block Store snapshot</td></tr>
-<tr><td><a href='list_changed_blocks.html'>list_changed_blocks</a></td><td>Returns the block indexes and block tokens for blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage</td></tr>
-<tr><td><a href='list_snapshot_blocks.html'>list_snapshot_blocks</a></td><td>Returns the block indexes and block tokens for blocks in an Amazon Elastic Block Store snapshot</td></tr>
-<tr><td><a href='put_snapshot_block.html'>put_snapshot_block</a></td><td>Writes a block of data to a block in the snapshot</td></tr>
+<tr><td><a href='list_changed_blocks.html'>list_changed_blocks</a></td><td>Returns information about the blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage</td></tr>
+<tr><td><a href='list_snapshot_blocks.html'>list_snapshot_blocks</a></td><td>Returns information about the blocks in an Amazon Elastic Block Store snapshot</td></tr>
+<tr><td><a href='put_snapshot_block.html'>put_snapshot_block</a></td><td>Writes a block of data to a snapshot</td></tr>
 <tr><td><a href='start_snapshot.html'>start_snapshot</a></td><td>Creates a new Amazon EBS snapshot</td></tr>
 </table>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>ebs</span>()
-<span class='no'>svc</span>$<span class='fu'>complete_snapshot</span>(
-  <span class='kw'>Foo</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)
-}</pre>
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>ebs</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>complete_snapshot</span><span class='op'>(</span>
+  Foo <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -216,7 +233,7 @@ in the <em>AWS General Reference</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

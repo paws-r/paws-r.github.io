@@ -47,7 +47,39 @@ taskList. A decision task may be returned for any open workflow
 execution that is using the specified task list. The task includes a
 paginated view of the history of the workflow execution. The decider
 should use the workflow type and the history to determine how to
-properly handle the task." />
+properly handle the task.
+This action initiates a long poll, where the service holds the HTTP
+connection open and responds as soon a task becomes available. If no
+decision task is available in the specified task list before the timeout
+of 60 seconds expires, an empty result is returned. An empty result, in
+this context, means that a DecisionTask is returned, but that the value
+of taskToken is an empty string.
+Deciders should set their client side socket timeout to at least 70
+seconds (10 seconds higher than the timeout).
+Because the number of workflow history events for a single workflow
+execution might be very large, the result returned might be split up
+across a number of pages. To retrieve subsequent pages, make additional
+calls to PollForDecisionTask using the nextPageToken returned by the
+initial call. Note that you do not call GetWorkflowExecutionHistory
+with this nextPageToken. Instead, call PollForDecisionTask again.
+Access Control
+You can use IAM policies to control this action's access to Amazon SWF
+resources as follows:
+Use a Resource element with the domain name to limit the action to
+only specified domains.
+Use an Action element to allow or deny permission to call this
+action.
+Constrain the taskList.name parameter by using a Condition
+element with the swf:taskList.name key to allow the action to
+access only certain task lists.
+
+
+If the caller doesn't have sufficient permissions to invoke the action,
+or the parameter values fall outside the specified constraints, the
+action fails. The associated event attribute's cause parameter is set
+to OPERATION_NOT_PERMITTED. For details and example IAM policies, see
+Using IAM to Manage Access to Amazon SWF Workflows
+in the Amazon SWF Developer Guide." />
 
 
 
@@ -79,7 +111,7 @@ properly handle the task." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +119,7 @@ properly handle the task." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +131,7 @@ properly handle the task." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,10 +161,42 @@ execution that is using the specified task list. The task includes a
 paginated view of the history of the workflow execution. The decider
 should use the workflow type and the history to determine how to
 properly handle the task.</p>
+<p>This action initiates a long poll, where the service holds the HTTP
+connection open and responds as soon a task becomes available. If no
+decision task is available in the specified task list before the timeout
+of 60 seconds expires, an empty result is returned. An empty result, in
+this context, means that a DecisionTask is returned, but that the value
+of taskToken is an empty string.</p>
+<p>Deciders should set their client side socket timeout to at least 70
+seconds (10 seconds higher than the timeout).</p>
+<p>Because the number of workflow history events for a single workflow
+execution might be very large, the result returned might be split up
+across a number of pages. To retrieve subsequent pages, make additional
+calls to <code>PollForDecisionTask</code> using the <code>nextPageToken</code> returned by the
+initial call. Note that you do <em>not</em> call <code>GetWorkflowExecutionHistory</code>
+with this <code>nextPageToken</code>. Instead, call <code>PollForDecisionTask</code> again.</p>
+<p><strong>Access Control</strong></p>
+<p>You can use IAM policies to control this action's access to Amazon SWF
+resources as follows:</p><ul>
+<li><p>Use a <code>Resource</code> element with the domain name to limit the action to
+only specified domains.</p></li>
+<li><p>Use an <code>Action</code> element to allow or deny permission to call this
+action.</p></li>
+<li><p>Constrain the <code>taskList.name</code> parameter by using a <code>Condition</code>
+element with the <code>swf:taskList.name</code> key to allow the action to
+access only certain task lists.</p></li>
+</ul>
+
+<p>If the caller doesn't have sufficient permissions to invoke the action,
+or the parameter values fall outside the specified constraints, the
+action fails. The associated event attribute's <code>cause</code> parameter is set
+to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see
+<a href='https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html'>Using IAM to Manage Access to Amazon SWF Workflows</a>
+in the <em>Amazon SWF Developer Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>swf_poll_for_decision_task</span>(<span class='no'>domain</span>, <span class='no'>taskList</span>, <span class='no'>identity</span>, <span class='no'>nextPageToken</span>,
-  <span class='no'>maximumPageSize</span>, <span class='no'>reverseOrder</span>)</pre>
+    <pre class="usage"><span class='fu'>swf_poll_for_decision_task</span><span class='op'>(</span><span class='va'>domain</span>, <span class='va'>taskList</span>, <span class='va'>identity</span>, <span class='va'>nextPageToken</span>,
+  <span class='va'>maximumPageSize</span>, <span class='va'>reverseOrder</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,8 +209,8 @@ properly handle the task.</p>
       <th>taskList</th>
       <td><p>[required] Specifies the task list to poll for decision tasks.</p>
 <p>The specified string must not start or end with whitespace. It must not
-contain a <code>:</code> (colon), <code>/</code> (slash), <code>|</code> (vertical bar), or any control
-characters (<code>U+0000`-`U+001f</code> \| <code>U+007f`-`U+009f</code>). Also, it must not <em>be</em>
+contain a <code><a href='https://rdrr.io/r/base/Colon.html'>:</a></code> (colon), <code><a href='https://rdrr.io/r/base/Arithmetic.html'>/</a></code> (slash), <code><a href='https://rdrr.io/r/base/Logic.html'>|</a></code> (vertical bar), or any control
+characters (<code>U+0000`-`U+001f</code> | <code>U+007f`-`U+009f</code>). Also, it must not <em>be</em>
 the literal string <code>arn</code>.</p></td>
     </tr>
     <tr>
@@ -163,14 +227,14 @@ value of <code>NextPageToken</code> is a unique pagination token for each page.
 Make the call again using the returned token to retrieve the next page.
 Keep all other arguments unchanged. Each pagination token expires after
 60 seconds. Using an expired pagination token will return a <code>400</code> error:
-\"<code>Specified token has exceeded its maximum lifetime</code>\".</p>
+"<code>Specified token has exceeded its maximum lifetime</code>".</p>
 <p>The configured <code>maximumPageSize</code> determines how many results can be
 returned in a single call.</p>
 <p>The <code>nextPageToken</code> returned by this action cannot be used with
 GetWorkflowExecutionHistory to get the next page. You must call
 PollForDecisionTask again (with the <code>nextPageToken</code>) to retrieve the
 next page of history records. Calling PollForDecisionTask with a
-<code>nextPageToken</code> doesn\'t return a new decision task.</p></td>
+<code>nextPageToken</code> doesn't return a new decision task.</p></td>
     </tr>
     <tr>
       <th>maximumPageSize</th>
@@ -187,53 +251,20 @@ events.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This action initiates a long poll, where the service holds the HTTP
-connection open and responds as soon a task becomes available. If no
-decision task is available in the specified task list before the timeout
-of 60 seconds expires, an empty result is returned. An empty result, in
-this context, means that a DecisionTask is returned, but that the value
-of taskToken is an empty string.</p>
-<p>Deciders should set their client side socket timeout to at least 70
-seconds (10 seconds higher than the timeout).</p>
-<p>Because the number of workflow history events for a single workflow
-execution might be very large, the result returned might be split up
-across a number of pages. To retrieve subsequent pages, make additional
-calls to <code>PollForDecisionTask</code> using the <code>nextPageToken</code> returned by the
-initial call. Note that you do <em>not</em> call <code>GetWorkflowExecutionHistory</code>
-with this <code>nextPageToken</code>. Instead, call <code>PollForDecisionTask</code> again.</p>
-<p><strong>Access Control</strong></p>
-<p>You can use IAM policies to control this action\'s access to Amazon SWF
-resources as follows:</p><ul>
-<li><p>Use a <code>Resource</code> element with the domain name to limit the action to
-only specified domains.</p></li>
-<li><p>Use an <code>Action</code> element to allow or deny permission to call this
-action.</p></li>
-<li><p>Constrain the <code>taskList.name</code> parameter by using a <code>Condition</code>
-element with the <code>swf:taskList.name</code> key to allow the action to
-access only certain task lists.</p></li>
-</ul>
-
-<p>If the caller doesn\'t have sufficient permissions to invoke the action,
-or the parameter values fall outside the specified constraints, the
-action fails. The associated event attribute\'s <code>cause</code> parameter is set
-to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see
-<a href='https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html'>Using IAM to Manage Access to Amazon SWF Workflows</a>
-in the <em>Amazon SWF Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>poll_for_decision_task</span>(
-  <span class='kw'>domain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>taskList</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>identity</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>nextPageToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>maximumPageSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>reverseOrder</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>poll_for_decision_task</span><span class='op'>(</span>
+  domain <span class='op'>=</span> <span class='st'>"string"</span>,
+  taskList <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    name <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  identity <span class='op'>=</span> <span class='st'>"string"</span>,
+  nextPageToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  maximumPageSize <span class='op'>=</span> <span class='fl'>123</span>,
+  reverseOrder <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -251,7 +282,7 @@ in the <em>Amazon SWF Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

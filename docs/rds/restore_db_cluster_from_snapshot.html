@@ -41,7 +41,19 @@
 
 <meta property="og:title" content="Creates a new DB cluster from a DB snapshot or DB cluster snapshot — rds_restore_db_cluster_from_snapshot" />
 <meta property="og:description" content="Creates a new DB cluster from a DB snapshot or DB cluster snapshot. This
-action only applies to Aurora DB clusters." />
+action only applies to Aurora DB clusters.
+The target DB cluster is created from the source snapshot with a default
+configuration. If you don't specify a security group, the new DB cluster
+is associated with the default security group.
+This action only restores the DB cluster, not the DB instances for that
+DB cluster. You must invoke the CreateDBInstance action to create DB
+instances for the restored DB cluster, specifying the identifier of the
+restored DB cluster in DBClusterIdentifier. You can create DB
+instances only after the RestoreDBClusterFromSnapshot action has
+completed and the DB cluster is available.
+For more information on Amazon Aurora, see What Is Amazon Aurora?
+in the Amazon Aurora User Guide.
+This action only applies to Aurora DB clusters." />
 
 
 
@@ -73,7 +85,7 @@ action only applies to Aurora DB clusters." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +93,7 @@ action only applies to Aurora DB clusters." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +105,7 @@ action only applies to Aurora DB clusters." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,15 +130,27 @@ action only applies to Aurora DB clusters." />
     <div class="ref-description">
     <p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot. This
 action only applies to Aurora DB clusters.</p>
+<p>The target DB cluster is created from the source snapshot with a default
+configuration. If you don't specify a security group, the new DB cluster
+is associated with the default security group.</p>
+<p>This action only restores the DB cluster, not the DB instances for that
+DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB
+instances for the restored DB cluster, specifying the identifier of the
+restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB
+instances only after the <code>RestoreDBClusterFromSnapshot</code> action has
+completed and the DB cluster is available.</p>
+<p>For more information on Amazon Aurora, see <a href='https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html'>What Is Amazon Aurora?</a>
+in the <em>Amazon Aurora User Guide.</em></p>
+<p>This action only applies to Aurora DB clusters.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rds_restore_db_cluster_from_snapshot</span>(<span class='no'>AvailabilityZones</span>,
-  <span class='no'>DBClusterIdentifier</span>, <span class='no'>SnapshotIdentifier</span>, <span class='no'>Engine</span>, <span class='no'>EngineVersion</span>, <span class='no'>Port</span>,
-  <span class='no'>DBSubnetGroupName</span>, <span class='no'>DatabaseName</span>, <span class='no'>OptionGroupName</span>, <span class='no'>VpcSecurityGroupIds</span>,
-  <span class='no'>Tags</span>, <span class='no'>KmsKeyId</span>, <span class='no'>EnableIAMDatabaseAuthentication</span>, <span class='no'>BacktrackWindow</span>,
-  <span class='no'>EnableCloudwatchLogsExports</span>, <span class='no'>EngineMode</span>, <span class='no'>ScalingConfiguration</span>,
-  <span class='no'>DBClusterParameterGroupName</span>, <span class='no'>DeletionProtection</span>, <span class='no'>CopyTagsToSnapshot</span>,
-  <span class='no'>Domain</span>, <span class='no'>DomainIAMRoleName</span>)</pre>
+    <pre class="usage"><span class='fu'>rds_restore_db_cluster_from_snapshot</span><span class='op'>(</span><span class='va'>AvailabilityZones</span>,
+  <span class='va'>DBClusterIdentifier</span>, <span class='va'>SnapshotIdentifier</span>, <span class='va'>Engine</span>, <span class='va'>EngineVersion</span>, <span class='va'>Port</span>,
+  <span class='va'>DBSubnetGroupName</span>, <span class='va'>DatabaseName</span>, <span class='va'>OptionGroupName</span>, <span class='va'>VpcSecurityGroupIds</span>,
+  <span class='va'>Tags</span>, <span class='va'>KmsKeyId</span>, <span class='va'>EnableIAMDatabaseAuthentication</span>, <span class='va'>BacktrackWindow</span>,
+  <span class='va'>EnableCloudwatchLogsExports</span>, <span class='va'>EngineMode</span>, <span class='va'>ScalingConfiguration</span>,
+  <span class='va'>DBClusterParameterGroupName</span>, <span class='va'>DeletionProtection</span>, <span class='va'>CopyTagsToSnapshot</span>,
+  <span class='va'>Domain</span>, <span class='va'>DomainIAMRoleName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,11 +163,11 @@ restored DB cluster can be created.</p></td>
     <tr>
       <th>DBClusterIdentifier</th>
       <td><p>[required] The name of the DB cluster to create from the DB snapshot or DB cluster
-snapshot. This parameter isn\'t case-sensitive.</p>
+snapshot. This parameter isn't case-sensitive.</p>
 <p>Constraints:</p><ul>
 <li><p>Must contain from 1 to 63 letters, numbers, or hyphens</p></li>
 <li><p>First character must be a letter</p></li>
-<li><p>Can\'t end with a hyphen or contain two consecutive hyphens</p></li>
+<li><p>Can't end with a hyphen or contain two consecutive hyphens</p></li>
 </ul>
 
 <p>Example: <code>my-snapshot-id</code></p></td>
@@ -177,7 +201,7 @@ MySQL 5.7-compatible Aurora), use the following command:</p>
 <p>To list all of the available engine versions for <code>aurora-postgresql</code>,
 use the following command:</p>
 <p><code>aws rds describe-db-engine-versions --engine aurora-postgresql --query "DBEngineVersions\\[\\].EngineVersion"</code></p>
-<p>If you aren\'t using the default engine version, then you must specify
+<p>If you aren't using the default engine version, then you must specify
 the engine version.</p>
 <p><strong>Aurora MySQL</strong></p>
 <p>Example: <code>5.6.10a</code>, <code>5.6.mysql_aurora.1.19.2</code>, <code>5.7.12</code>,
@@ -218,18 +242,17 @@ group.</p>
       <th>KmsKeyId</th>
       <td><p>The AWS KMS key identifier to use when restoring an encrypted DB cluster
 from a DB snapshot or DB cluster snapshot.</p>
-<p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS
-encryption key. If you are restoring a DB cluster with the same AWS
-account that owns the KMS encryption key used to encrypt the new DB
-cluster, then you can use the KMS key alias instead of the ARN for the
-KMS encryption key.</p>
-<p>If you don\'t specify a value for the <code>KmsKeyId</code> parameter, then the
+<p>The AWS KMS key identifier is the key ARN, key ID, alias ARN, or alias
+name for the AWS KMS customer master key (CMK). To use a CMK in a
+different AWS account, specify the key ARN or alias ARN.</p>
+<p>When you don't specify a value for the <code>KmsKeyId</code> parameter, then the
 following occurs:</p><ul>
 <li><p>If the DB snapshot or DB cluster snapshot in <code>SnapshotIdentifier</code> is
-encrypted, then the restored DB cluster is encrypted using the KMS
-key that was used to encrypt the DB snapshot or DB cluster snapshot.</p></li>
+encrypted, then the restored DB cluster is encrypted using the AWS
+KMS CMK that was used to encrypt the DB snapshot or DB cluster
+snapshot.</p></li>
 <li><p>If the DB snapshot or DB cluster snapshot in <code>SnapshotIdentifier</code>
-isn\'t encrypted, then the restored DB cluster isn\'t encrypted.</p></li>
+isn't encrypted, then the restored DB cluster isn't encrypted.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -261,7 +284,9 @@ in the <em>Amazon Aurora User Guide</em>.</p></td>
     <tr>
       <th>EngineMode</th>
       <td><p>The DB engine mode of the DB cluster, either <code>provisioned</code>,
-<code>serverless</code>, <code>parallelquery</code>, <code>global</code>, or <code>multimaster</code>.</p></td>
+<code>serverless</code>, <code>parallelquery</code>, <code>global</code>, or <code>multimaster</code>.</p>
+<p>For more information, see
+<a href='https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_CreateDBCluster.html'>CreateDBCluster</a>.</p></td>
     </tr>
     <tr>
       <th>ScalingConfiguration</th>
@@ -278,13 +303,13 @@ group for the specified engine is used.</p>
 parameter group.</p></li>
 <li><p>Must be 1 to 255 letters, numbers, or hyphens.</p></li>
 <li><p>First character must be a letter.</p></li>
-<li><p>Can\'t end with a hyphen or contain two consecutive hyphens.</p></li>
+<li><p>Can't end with a hyphen or contain two consecutive hyphens.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>DeletionProtection</th>
       <td><p>A value that indicates whether the DB cluster has deletion protection
-enabled. The database can\'t be deleted when deletion protection is
+enabled. The database can't be deleted when deletion protection is
 enabled. By default, deletion protection is disabled.</p></td>
     </tr>
     <tr>
@@ -296,7 +321,11 @@ copy them.</p></td>
     <tr>
       <th>Domain</th>
       <td><p>Specify the Active Directory directory ID to restore the DB cluster in.
-The domain must be created prior to this operation.</p></td>
+The domain must be created prior to this operation. Currently, only
+MySQL, Microsoft SQL Server, Oracle, and PostgreSQL DB instances can be
+created in an Active Directory Domain.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/database-authentication.html'>Kerberos Authentication</a>
+in the <em>Amazon RDS User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>DomainIAMRoleName</th>
@@ -305,64 +334,51 @@ Directory Service.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The target DB cluster is created from the source snapshot with a default
-configuration. If you don\'t specify a security group, the new DB
-cluster is associated with the default security group.</p>
-<p>This action only restores the DB cluster, not the DB instances for that
-DB cluster. You must invoke the <code>CreateDBInstance</code> action to create DB
-instances for the restored DB cluster, specifying the identifier of the
-restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB
-instances only after the <code>RestoreDBClusterFromSnapshot</code> action has
-completed and the DB cluster is available.</p>
-<p>For more information on Amazon Aurora, see <a href='https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html'>What Is Amazon Aurora?</a>
-in the <em>Amazon Aurora User Guide.</em></p>
-<p>This action only applies to Aurora DB clusters.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>restore_db_cluster_from_snapshot</span>(
-  <span class='kw'>AvailabilityZones</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>restore_db_cluster_from_snapshot</span><span class='op'>(</span>
+  AvailabilityZones <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DBClusterIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SnapshotIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Engine</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EngineVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Port</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>DBSubnetGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DatabaseName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OptionGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VpcSecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  DBClusterIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  SnapshotIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  Engine <span class='op'>=</span> <span class='st'>"string"</span>,
+  EngineVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  Port <span class='op'>=</span> <span class='fl'>123</span>,
+  DBSubnetGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  DatabaseName <span class='op'>=</span> <span class='st'>"string"</span>,
+  OptionGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  VpcSecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EnableIAMDatabaseAuthentication</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>BacktrackWindow</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>EnableCloudwatchLogsExports</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  EnableIAMDatabaseAuthentication <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  BacktrackWindow <span class='op'>=</span> <span class='fl'>123</span>,
+  EnableCloudwatchLogsExports <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>EngineMode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ScalingConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>MinCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>MaxCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>AutoPause</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>SecondsUntilAutoPause</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>TimeoutAction</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DBClusterParameterGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DeletionProtection</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>CopyTagsToSnapshot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Domain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DomainIAMRoleName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  EngineMode <span class='op'>=</span> <span class='st'>"string"</span>,
+  ScalingConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    MinCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+    MaxCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+    AutoPause <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    SecondsUntilAutoPause <span class='op'>=</span> <span class='fl'>123</span>,
+    TimeoutAction <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  DBClusterParameterGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  DeletionProtection <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  CopyTagsToSnapshot <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Domain <span class='op'>=</span> <span class='st'>"string"</span>,
+  DomainIAMRoleName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -380,7 +396,7 @@ in the <em>Amazon Aurora User Guide.</em></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

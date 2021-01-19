@@ -42,7 +42,11 @@
 <meta property="og:title" content="Creates a new capacity provider — ecs_create_capacity_provider" />
 <meta property="og:description" content="Creates a new capacity provider. Capacity providers are associated with
 an Amazon ECS cluster and are used in capacity provider strategies to
-facilitate cluster auto scaling." />
+facilitate cluster auto scaling.
+Only capacity providers using an Auto Scaling group can be created.
+Amazon ECS tasks on AWS Fargate use the FARGATE and FARGATE_SPOT
+capacity providers which are already created and available to all
+accounts in Regions supported by AWS Fargate." />
 
 
 
@@ -74,7 +78,7 @@ facilitate cluster auto scaling." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +86,7 @@ facilitate cluster auto scaling." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +98,7 @@ facilitate cluster auto scaling." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,9 +124,13 @@ facilitate cluster auto scaling." />
     <p>Creates a new capacity provider. Capacity providers are associated with
 an Amazon ECS cluster and are used in capacity provider strategies to
 facilitate cluster auto scaling.</p>
+<p>Only capacity providers using an Auto Scaling group can be created.
+Amazon ECS tasks on AWS Fargate use the <code>FARGATE</code> and <code>FARGATE_SPOT</code>
+capacity providers which are already created and available to all
+accounts in Regions supported by AWS Fargate.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ecs_create_capacity_provider</span>(<span class='no'>name</span>, <span class='no'>autoScalingGroupProvider</span>, <span class='no'>tags</span>)</pre>
+    <pre class="usage"><span class='fu'>ecs_create_capacity_provider</span><span class='op'>(</span><span class='va'>name</span>, <span class='va'>autoScalingGroupProvider</span>, <span class='va'>tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -131,8 +139,8 @@ facilitate cluster auto scaling.</p>
       <th>name</th>
       <td><p>[required] The name of the capacity provider. Up to 255 characters are allowed,
 including letters (upper and lowercase), numbers, underscores, and
-hyphens. The name cannot be prefixed with \"<code>aws</code>\", \"<code>ecs</code>\", or
-\"<code>fargate</code>\".</p></td>
+hyphens. The name cannot be prefixed with "<code>aws</code>", "<code>ecs</code>", or
+"<code>fargate</code>".</p></td>
     </tr>
     <tr>
       <th>autoScalingGroupProvider</th>
@@ -164,34 +172,30 @@ limit.</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Only capacity providers using an Auto Scaling group can be created.
-Amazon ECS tasks on AWS Fargate use the <code>FARGATE</code> and <code>FARGATE_SPOT</code>
-capacity providers which are already created and available to all
-accounts in Regions supported by AWS Fargate.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_capacity_provider</span>(
-  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>autoScalingGroupProvider</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>autoScalingGroupArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>managedScaling</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>status</span> <span class='kw'>=</span> <span class='st'>"ENABLED"</span><span class='kw'>|</span><span class='st'>"DISABLED"</span>,
-      <span class='kw'>targetCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>minimumScalingStepSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>maximumScalingStepSize</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    ),
-    <span class='kw'>managedTerminationProtection</span> <span class='kw'>=</span> <span class='st'>"ENABLED"</span><span class='kw'>|</span><span class='st'>"DISABLED"</span>
-  ),
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_capacity_provider</span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"string"</span>,
+  autoScalingGroupProvider <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    autoScalingGroupArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    managedScaling <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      status <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>,
+      targetCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+      minimumScalingStepSize <span class='op'>=</span> <span class='fl'>123</span>,
+      maximumScalingStepSize <span class='op'>=</span> <span class='fl'>123</span>,
+      instanceWarmupPeriod <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>,
+    managedTerminationProtection <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -209,7 +213,7 @@ accounts in Regions supported by AWS Fargate.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

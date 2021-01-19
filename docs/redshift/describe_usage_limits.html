@@ -42,7 +42,19 @@
 <meta property="og:title" content="Shows usage limits on a cluster — redshift_describe_usage_limits" />
 <meta property="og:description" content="Shows usage limits on a cluster. Results are filtered based on the
 combination of input usage limit identifier, cluster identifier, and
-feature type parameters:" />
+feature type parameters:
+If usage limit identifier, cluster identifier, and feature type are
+not provided, then all usage limit objects for the current account
+in the current region are returned.
+If usage limit identifier is provided, then the corresponding usage
+limit object is returned.
+If cluster identifier is provided, then all usage limit objects for
+the specified cluster are returned.
+If cluster identifier and feature type are provided, then all usage
+limit objects for the combination of cluster and feature are
+returned.
+
+" />
 
 
 
@@ -74,7 +86,7 @@ feature type parameters:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +94,7 @@ feature type parameters:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +106,7 @@ feature type parameters:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,11 +131,23 @@ feature type parameters:" />
     <div class="ref-description">
     <p>Shows usage limits on a cluster. Results are filtered based on the
 combination of input usage limit identifier, cluster identifier, and
-feature type parameters:</p>
+feature type parameters:</p><ul>
+<li><p>If usage limit identifier, cluster identifier, and feature type are
+not provided, then all usage limit objects for the current account
+in the current region are returned.</p></li>
+<li><p>If usage limit identifier is provided, then the corresponding usage
+limit object is returned.</p></li>
+<li><p>If cluster identifier is provided, then all usage limit objects for
+the specified cluster are returned.</p></li>
+<li><p>If cluster identifier and feature type are provided, then all usage
+limit objects for the combination of cluster and feature are
+returned.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>redshift_describe_usage_limits</span>(<span class='no'>UsageLimitId</span>, <span class='no'>ClusterIdentifier</span>,
-  <span class='no'>FeatureType</span>, <span class='no'>MaxRecords</span>, <span class='no'>Marker</span>, <span class='no'>TagKeys</span>, <span class='no'>TagValues</span>)</pre>
+    <pre class="usage"><span class='fu'>redshift_describe_usage_limits</span><span class='op'>(</span><span class='va'>UsageLimitId</span>, <span class='va'>ClusterIdentifier</span>,
+  <span class='va'>FeatureType</span>, <span class='va'>MaxRecords</span>, <span class='va'>Marker</span>, <span class='va'>TagKeys</span>, <span class='va'>TagValues</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,38 +205,23 @@ associated with them.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>If usage limit identifier, cluster identifier, and feature type are
-not provided, then all usage limit objects for the current account
-in the current region are returned.</p></li>
-<li><p>If usage limit identifier is provided, then the corresponding usage
-limit object is returned.</p></li>
-<li><p>If cluster identifier is provided, then all usage limit objects for
-the specified cluster are returned.</p></li>
-<li><p>If cluster identifier and feature type are provided, then all usage
-limit objects for the combination of cluster and feature are
-returned.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_usage_limits</span>(
-  <span class='kw'>UsageLimitId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClusterIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>FeatureType</span> <span class='kw'>=</span> <span class='st'>"spectrum"</span><span class='kw'>|</span><span class='st'>"concurrency-scaling"</span>,
-  <span class='kw'>MaxRecords</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Marker</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TagKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_usage_limits</span><span class='op'>(</span>
+  UsageLimitId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClusterIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  FeatureType <span class='op'>=</span> <span class='st'>"spectrum"</span><span class='op'>|</span><span class='st'>"concurrency-scaling"</span>,
+  MaxRecords <span class='op'>=</span> <span class='fl'>123</span>,
+  Marker <span class='op'>=</span> <span class='st'>"string"</span>,
+  TagKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>TagValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  TagValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -230,7 +239,7 @@ returned.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

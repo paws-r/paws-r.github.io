@@ -48,7 +48,14 @@ type, ID, and (if available) the custom resource name. The results
 consist of resources that AWS Config has discovered, including those
 that AWS Config is not currently recording. You can narrow the results
 to include only resources that have specific resource IDs or a resource
-name." />
+name.
+You can specify either resource IDs or a resource name, but not both, in
+the same request.
+The response is paginated. By default, AWS Config lists 100 resource
+identifiers on each page. You can customize this number with the limit
+parameter. The response includes a nextToken string. To get the next
+page of results, run the request again and specify the string for the
+nextToken parameter." />
 
 
 
@@ -80,7 +87,7 @@ name." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +95,7 @@ name." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +107,7 @@ name." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -131,10 +138,17 @@ consist of resources that AWS Config has discovered, including those
 that AWS Config is not currently recording. You can narrow the results
 to include only resources that have specific resource IDs or a resource
 name.</p>
+<p>You can specify either resource IDs or a resource name, but not both, in
+the same request.</p>
+<p>The response is paginated. By default, AWS Config lists 100 resource
+identifiers on each page. You can customize this number with the <code>limit</code>
+parameter. The response includes a <code>nextToken</code> string. To get the next
+page of results, run the request again and specify the string for the
+<code>nextToken</code> parameter.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>configservice_list_discovered_resources</span>(<span class='no'>resourceType</span>, <span class='no'>resourceIds</span>,
-  <span class='no'>resourceName</span>, <span class='no'>limit</span>, <span class='no'>includeDeletedResources</span>, <span class='no'>nextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>configservice_list_discovered_resources</span><span class='op'>(</span><span class='va'>resourceType</span>, <span class='va'>resourceIds</span>,
+  <span class='va'>resourceName</span>, <span class='va'>limit</span>, <span class='va'>includeDeletedResources</span>, <span class='va'>nextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,28 +187,20 @@ the next page of results in a paginated response.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can specify either resource IDs or a resource name, but not both, in
-the same request.</p>
-<p>The response is paginated. By default, AWS Config lists 100 resource
-identifiers on each page. You can customize this number with the <code>limit</code>
-parameter. The response includes a <code>nextToken</code> string. To get the next
-page of results, run the request again and specify the string for the
-<code>nextToken</code> parameter.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_discovered_resources</span>(
-  <span class='kw'>resourceType</span> <span class='kw'>=</span> <span class='st'>"AWS::EC2::CustomerGateway"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::EIP"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::Host"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::Instance"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::InternetGateway"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::NetworkAcl"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::NetworkInterface"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::RouteTable"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::SecurityGroup"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::Subnet"</span><span class='kw'>|</span><span class='st'>"AWS::CloudTrail::Trail"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::Volume"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::VPC"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::VPNConnection"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::VPNGateway"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::RegisteredHAInstance"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::NatGateway"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::EgressOnlyInternetGateway"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::VPCEndpoint"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::VPCEndpointService"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::FlowLog"</span><span class='kw'>|</span><span class='st'>"AWS::EC2::VPCPeeringConnection"</span><span class='kw'>|</span><span class='st'>"AWS::Elasticsearch::Domain"</span><span class='kw'>|</span><span class='st'>"AWS::IAM::Group"</span><span class='kw'>|</span><span class='st'>"AWS::IAM::Policy"</span><span class='kw'>|</span><span class='st'>"AWS::IAM::Role"</span><span class='kw'>|</span><span class='st'>"AWS::IAM::User"</span><span class='kw'>|</span><span class='st'>"AWS::ElasticLoadBalancingV2::LoadBalancer"</span><span class='kw'>|</span><span class='st'>"AWS::ACM::Certificate"</span><span class='kw'>|</span><span class='st'>"AWS::RDS::DBInstance"</span><span class='kw'>|</span><span class='st'>"AWS::RDS::DBSubnetGroup"</span><span class='kw'>|</span><span class='st'>"AWS::RDS::DBSecurityGroup"</span><span class='kw'>|</span><span class='st'>"AWS::RDS::DBSnapshot"</span><span class='kw'>|</span><span class='st'>"AWS::RDS::DBCluster"</span><span class='kw'>|</span><span class='st'>"AWS::RDS::DBClusterSnapshot"</span><span class='kw'>|</span><span class='st'>"AWS::RDS::EventSubscription"</span><span class='kw'>|</span><span class='st'>"AWS::S3::Bucket"</span><span class='kw'>|</span><span class='st'>"AWS::S3::AccountPublicAccessBlock"</span><span class='kw'>|</span><span class='st'>"AWS::Redshift::Cluster"</span><span class='kw'>|</span><span class='st'>"AWS::Redshift::ClusterSnapshot"</span><span class='kw'>|</span><span class='st'>"AWS::Redshift::ClusterParameterGroup"</span><span class='kw'>|</span><span class='st'>"AWS::Redshift::ClusterSecurityGroup"</span><span class='kw'>|</span><span class='st'>"AWS::Redshift::ClusterSubnetGroup"</span><span class='kw'>|</span><span class='st'>"AWS::Redshift::EventSubscription"</span><span class='kw'>|</span><span class='st'>"AWS::SSM::ManagedInstanceInventory"</span><span class='kw'>|</span><span class='st'>"AWS::CloudWatch::Alarm"</span><span class='kw'>|</span><span class='st'>"AWS::CloudFormation::Stack"</span><span class='kw'>|</span><span class='st'>"AWS::ElasticLoadBalancing::LoadBalancer"</span><span class='kw'>|</span><span class='st'>"AWS::AutoScaling::AutoScalingGroup"</span><span class='kw'>|</span><span class='st'>"AWS::AutoScaling::LaunchConfiguration"</span><span class='kw'>|</span><span class='st'>"AWS::AutoScaling::ScalingPolicy"</span><span class='kw'>|</span><span class='st'>"AWS::AutoScaling::ScheduledAction"</span><span class='kw'>|</span><span class='st'>"AWS::DynamoDB::Table"</span><span class='kw'>|</span><span class='st'>"AWS::CodeBuild::Project"</span><span class='kw'>|</span><span class='st'>"AWS::WAF::RateBasedRule"</span><span class='kw'>|</span><span class='st'>"AWS::WAF::Rule"</span><span class='kw'>|</span><span class='st'>"AWS::WAF::RuleGroup"</span><span class='kw'>|</span><span class='st'>"AWS::WAF::WebACL"</span><span class='kw'>|</span><span class='st'>"AWS::WAFRegional::RateBasedRule"</span><span class='kw'>|</span><span class='st'>"AWS::WAFRegional::Rule"</span><span class='kw'>|</span><span class='st'>"AWS::WAFRegional::RuleGroup"</span><span class='kw'>|</span><span class='st'>"AWS::WAFRegional::WebACL"</span><span class='kw'>|</span><span class='st'>"AWS::CloudFront::Distribution"</span><span class='kw'>|</span><span class='st'>"AWS::CloudFront::StreamingDistribution"</span><span class='kw'>|</span><span class='st'>"AWS::Lambda::Function"</span><span class='kw'>|</span><span class='st'>"AWS::ElasticBeanstalk::Application"</span><span class='kw'>|</span><span class='st'>"AWS::ElasticBeanstalk::ApplicationVersion"</span><span class='kw'>|</span><span class='st'>"AWS::ElasticBeanstalk::Environment"</span><span class='kw'>|</span><span class='st'>"AWS::WAFv2::WebACL"</span><span class='kw'>|</span><span class='st'>"AWS::WAFv2::RuleGroup"</span><span class='kw'>|</span><span class='st'>"AWS::WAFv2::IPSet"</span><span class='kw'>|</span><span class='st'>"AWS::WAFv2::RegexPatternSet"</span><span class='kw'>|</span><span class='st'>"AWS::WAFv2::ManagedRuleSet"</span><span class='kw'>|</span><span class='st'>"AWS::XRay::EncryptionConfig"</span><span class='kw'>|</span><span class='st'>"AWS::SSM::AssociationCompliance"</span><span class='kw'>|</span><span class='st'>"AWS::SSM::PatchCompliance"</span><span class='kw'>|</span><span class='st'>"AWS::Shield::Protection"</span><span class='kw'>|</span><span class='st'>"AWS::ShieldRegional::Protection"</span><span class='kw'>|</span><span class='st'>"AWS::Config::ResourceCompliance"</span><span class='kw'>|</span><span class='st'>"AWS::ApiGateway::Stage"</span><span class='kw'>|</span><span class='st'>"AWS::ApiGateway::RestApi"</span><span class='kw'>|</span><span class='st'>"AWS::ApiGatewayV2::Stage"</span><span class='kw'>|</span><span class='st'>"AWS::ApiGatewayV2::Api"</span><span class='kw'>|</span><span class='st'>"AWS::CodePipeline::Pipeline"</span><span class='kw'>|</span><span class='st'>"AWS::ServiceCatalog::CloudFormationProvisionedProduct"</span><span class='kw'>|</span><span class='st'>"AWS::ServiceCatalog::CloudFormationProduct"</span><span class='kw'>|</span><span class='st'>"AWS::ServiceCatalog::Portfolio"</span><span class='kw'>|</span><span class='st'>"AWS::SQS::Queue"</span><span class='kw'>|</span><span class='st'>"AWS::KMS::Key"</span><span class='kw'>|</span><span class='st'>"AWS::QLDB::Ledger"</span>,
-  <span class='kw'>resourceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_discovered_resources</span><span class='op'>(</span>
+  resourceType <span class='op'>=</span> <span class='st'>"AWS::EC2::CustomerGateway"</span><span class='op'>|</span><span class='st'>"AWS::EC2::EIP"</span><span class='op'>|</span><span class='st'>"AWS::EC2::Host"</span><span class='op'>|</span><span class='st'>"AWS::EC2::Instance"</span><span class='op'>|</span><span class='st'>"AWS::EC2::InternetGateway"</span><span class='op'>|</span><span class='st'>"AWS::EC2::NetworkAcl"</span><span class='op'>|</span><span class='st'>"AWS::EC2::NetworkInterface"</span><span class='op'>|</span><span class='st'>"AWS::EC2::RouteTable"</span><span class='op'>|</span><span class='st'>"AWS::EC2::SecurityGroup"</span><span class='op'>|</span><span class='st'>"AWS::EC2::Subnet"</span><span class='op'>|</span><span class='st'>"AWS::CloudTrail::Trail"</span><span class='op'>|</span><span class='st'>"AWS::EC2::Volume"</span><span class='op'>|</span><span class='st'>"AWS::EC2::VPC"</span><span class='op'>|</span><span class='st'>"AWS::EC2::VPNConnection"</span><span class='op'>|</span><span class='st'>"AWS::EC2::VPNGateway"</span><span class='op'>|</span><span class='st'>"AWS::EC2::RegisteredHAInstance"</span><span class='op'>|</span><span class='st'>"AWS::EC2::NatGateway"</span><span class='op'>|</span><span class='st'>"AWS::EC2::EgressOnlyInternetGateway"</span><span class='op'>|</span><span class='st'>"AWS::EC2::VPCEndpoint"</span><span class='op'>|</span><span class='st'>"AWS::EC2::VPCEndpointService"</span><span class='op'>|</span><span class='st'>"AWS::EC2::FlowLog"</span><span class='op'>|</span><span class='st'>"AWS::EC2::VPCPeeringConnection"</span><span class='op'>|</span><span class='st'>"AWS::Elasticsearch::Domain"</span><span class='op'>|</span><span class='st'>"AWS::IAM::Group"</span><span class='op'>|</span><span class='st'>"AWS::IAM::Policy"</span><span class='op'>|</span><span class='st'>"AWS::IAM::Role"</span><span class='op'>|</span><span class='st'>"AWS::IAM::User"</span><span class='op'>|</span><span class='st'>"AWS::ElasticLoadBalancingV2::LoadBalancer"</span><span class='op'>|</span><span class='st'>"AWS::ACM::Certificate"</span><span class='op'>|</span><span class='st'>"AWS::RDS::DBInstance"</span><span class='op'>|</span><span class='st'>"AWS::RDS::DBSubnetGroup"</span><span class='op'>|</span><span class='st'>"AWS::RDS::DBSecurityGroup"</span><span class='op'>|</span><span class='st'>"AWS::RDS::DBSnapshot"</span><span class='op'>|</span><span class='st'>"AWS::RDS::DBCluster"</span><span class='op'>|</span><span class='st'>"AWS::RDS::DBClusterSnapshot"</span><span class='op'>|</span><span class='st'>"AWS::RDS::EventSubscription"</span><span class='op'>|</span><span class='st'>"AWS::S3::Bucket"</span><span class='op'>|</span><span class='st'>"AWS::S3::AccountPublicAccessBlock"</span><span class='op'>|</span><span class='st'>"AWS::Redshift::Cluster"</span><span class='op'>|</span><span class='st'>"AWS::Redshift::ClusterSnapshot"</span><span class='op'>|</span><span class='st'>"AWS::Redshift::ClusterParameterGroup"</span><span class='op'>|</span><span class='st'>"AWS::Redshift::ClusterSecurityGroup"</span><span class='op'>|</span><span class='st'>"AWS::Redshift::ClusterSubnetGroup"</span><span class='op'>|</span><span class='st'>"AWS::Redshift::EventSubscription"</span><span class='op'>|</span><span class='st'>"AWS::SSM::ManagedInstanceInventory"</span><span class='op'>|</span><span class='st'>"AWS::CloudWatch::Alarm"</span><span class='op'>|</span><span class='st'>"AWS::CloudFormation::Stack"</span><span class='op'>|</span><span class='st'>"AWS::ElasticLoadBalancing::LoadBalancer"</span><span class='op'>|</span><span class='st'>"AWS::AutoScaling::AutoScalingGroup"</span><span class='op'>|</span><span class='st'>"AWS::AutoScaling::LaunchConfiguration"</span><span class='op'>|</span><span class='st'>"AWS::AutoScaling::ScalingPolicy"</span><span class='op'>|</span><span class='st'>"AWS::AutoScaling::ScheduledAction"</span><span class='op'>|</span><span class='st'>"AWS::DynamoDB::Table"</span><span class='op'>|</span><span class='st'>"AWS::CodeBuild::Project"</span><span class='op'>|</span><span class='st'>"AWS::WAF::RateBasedRule"</span><span class='op'>|</span><span class='st'>"AWS::WAF::Rule"</span><span class='op'>|</span><span class='st'>"AWS::WAF::RuleGroup"</span><span class='op'>|</span><span class='st'>"AWS::WAF::WebACL"</span><span class='op'>|</span><span class='st'>"AWS::WAFRegional::RateBasedRule"</span><span class='op'>|</span><span class='st'>"AWS::WAFRegional::Rule"</span><span class='op'>|</span><span class='st'>"AWS::WAFRegional::RuleGroup"</span><span class='op'>|</span><span class='st'>"AWS::WAFRegional::WebACL"</span><span class='op'>|</span><span class='st'>"AWS::CloudFront::Distribution"</span><span class='op'>|</span><span class='st'>"AWS::CloudFront::StreamingDistribution"</span><span class='op'>|</span><span class='st'>"AWS::Lambda::Function"</span><span class='op'>|</span><span class='st'>"AWS::NetworkFirewall::Firewall"</span><span class='op'>|</span><span class='st'>"AWS::NetworkFirewall::FirewallPolicy"</span><span class='op'>|</span><span class='st'>"AWS::NetworkFirewall::RuleGroup"</span><span class='op'>|</span><span class='st'>"AWS::ElasticBeanstalk::Application"</span><span class='op'>|</span><span class='st'>"AWS::ElasticBeanstalk::ApplicationVersion"</span><span class='op'>|</span><span class='st'>"AWS::ElasticBeanstalk::Environment"</span><span class='op'>|</span><span class='st'>"AWS::WAFv2::WebACL"</span><span class='op'>|</span><span class='st'>"AWS::WAFv2::RuleGroup"</span><span class='op'>|</span><span class='st'>"AWS::WAFv2::IPSet"</span><span class='op'>|</span><span class='st'>"AWS::WAFv2::RegexPatternSet"</span><span class='op'>|</span><span class='st'>"AWS::WAFv2::ManagedRuleSet"</span><span class='op'>|</span><span class='st'>"AWS::XRay::EncryptionConfig"</span><span class='op'>|</span><span class='st'>"AWS::SSM::AssociationCompliance"</span><span class='op'>|</span><span class='st'>"AWS::SSM::PatchCompliance"</span><span class='op'>|</span><span class='st'>"AWS::Shield::Protection"</span><span class='op'>|</span><span class='st'>"AWS::ShieldRegional::Protection"</span><span class='op'>|</span><span class='st'>"AWS::Config::ResourceCompliance"</span><span class='op'>|</span><span class='st'>"AWS::ApiGateway::Stage"</span><span class='op'>|</span><span class='st'>"AWS::ApiGateway::RestApi"</span><span class='op'>|</span><span class='st'>"AWS::ApiGatewayV2::Stage"</span><span class='op'>|</span><span class='st'>"AWS::ApiGatewayV2::Api"</span><span class='op'>|</span><span class='st'>"AWS::CodePipeline::Pipeline"</span><span class='op'>|</span><span class='st'>"AWS::ServiceCatalog::CloudFormationProvisionedProduct"</span><span class='op'>|</span><span class='st'>"AWS::ServiceCatalog::CloudFormationProduct"</span><span class='op'>|</span><span class='st'>"AWS::ServiceCatalog::Portfolio"</span><span class='op'>|</span><span class='st'>"AWS::SQS::Queue"</span><span class='op'>|</span><span class='st'>"AWS::KMS::Key"</span><span class='op'>|</span><span class='st'>"AWS::QLDB::Ledger"</span><span class='op'>|</span><span class='st'>"AWS::SecretsManager::Secret"</span><span class='op'>|</span><span class='st'>"AWS::SNS::Topic"</span><span class='op'>|</span><span class='st'>"AWS::SSM::FileData"</span>,
+  resourceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>resourceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>limit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>includeDeletedResources</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>nextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  resourceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  limit <span class='op'>=</span> <span class='fl'>123</span>,
+  includeDeletedResources <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  nextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -212,7 +218,7 @@ page of results, run the request again and specify the string for the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

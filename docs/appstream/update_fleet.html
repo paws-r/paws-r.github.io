@@ -40,7 +40,13 @@
 
 
 <meta property="og:title" content="Updates the specified fleet — appstream_update_fleet" />
-<meta property="og:description" content="Updates the specified fleet." />
+<meta property="og:description" content="Updates the specified fleet.
+If the fleet is in the STOPPED state, you can update any attribute
+except the fleet name. If the fleet is in the RUNNING state, you can
+update the DisplayName, ComputeCapacity, ImageARN, ImageName,
+IdleDisconnectTimeoutInSeconds, and DisconnectTimeoutInSeconds
+attributes. If the fleet is in the STARTING or STOPPING state, you
+can't update it." />
 
 
 
@@ -72,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +86,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +98,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,13 +122,20 @@
 
     <div class="ref-description">
     <p>Updates the specified fleet.</p>
+<p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute
+except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can
+update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>,
+<code>IdleDisconnectTimeoutInSeconds</code>, and <code>DisconnectTimeoutInSeconds</code>
+attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you
+can't update it.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>appstream_update_fleet</span>(<span class='no'>ImageName</span>, <span class='no'>ImageArn</span>, <span class='no'>Name</span>, <span class='no'>InstanceType</span>,
-  <span class='no'>ComputeCapacity</span>, <span class='no'>VpcConfig</span>, <span class='no'>MaxUserDurationInSeconds</span>,
-  <span class='no'>DisconnectTimeoutInSeconds</span>, <span class='no'>DeleteVpcConfig</span>, <span class='no'>Description</span>, <span class='no'>DisplayName</span>,
-  <span class='no'>EnableDefaultInternetAccess</span>, <span class='no'>DomainJoinInfo</span>,
-  <span class='no'>IdleDisconnectTimeoutInSeconds</span>, <span class='no'>AttributesToDelete</span>, <span class='no'>IamRoleArn</span>)</pre>
+    <pre class="usage"><span class='fu'>appstream_update_fleet</span><span class='op'>(</span><span class='va'>ImageName</span>, <span class='va'>ImageArn</span>, <span class='va'>Name</span>, <span class='va'>InstanceType</span>,
+  <span class='va'>ComputeCapacity</span>, <span class='va'>VpcConfig</span>, <span class='va'>MaxUserDurationInSeconds</span>,
+  <span class='va'>DisconnectTimeoutInSeconds</span>, <span class='va'>DeleteVpcConfig</span>, <span class='va'>Description</span>, <span class='va'>DisplayName</span>,
+  <span class='va'>EnableDefaultInternetAccess</span>, <span class='va'>DomainJoinInfo</span>,
+  <span class='va'>IdleDisconnectTimeoutInSeconds</span>, <span class='va'>AttributesToDelete</span>, <span class='va'>IamRoleArn</span>,
+  <span class='va'>StreamView</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,11 +168,23 @@ instance types are available:</p><ul>
 <li><p>stream.memory.2xlarge</p></li>
 <li><p>stream.memory.4xlarge</p></li>
 <li><p>stream.memory.8xlarge</p></li>
+<li><p>stream.memory.z1d.large</p></li>
+<li><p>stream.memory.z1d.xlarge</p></li>
+<li><p>stream.memory.z1d.2xlarge</p></li>
+<li><p>stream.memory.z1d.3xlarge</p></li>
+<li><p>stream.memory.z1d.6xlarge</p></li>
+<li><p>stream.memory.z1d.12xlarge</p></li>
 <li><p>stream.graphics-design.large</p></li>
 <li><p>stream.graphics-design.xlarge</p></li>
 <li><p>stream.graphics-design.2xlarge</p></li>
 <li><p>stream.graphics-design.4xlarge</p></li>
 <li><p>stream.graphics-desktop.2xlarge</p></li>
+<li><p>stream.graphics.g4dn.xlarge</p></li>
+<li><p>stream.graphics.g4dn.2xlarge</p></li>
+<li><p>stream.graphics.g4dn.4xlarge</p></li>
+<li><p>stream.graphics.g4dn.8xlarge</p></li>
+<li><p>stream.graphics.g4dn.12xlarge</p></li>
+<li><p>stream.graphics.g4dn.16xlarge</p></li>
 <li><p>stream.graphics-pro.4xlarge</p></li>
 <li><p>stream.graphics-pro.8xlarge</p></li>
 <li><p>stream.graphics-pro.16xlarge</p></li>
@@ -230,7 +255,7 @@ value of 0. Otherwise, specify a value between 60 and 3600. The default
 value is 0.</p>
 <p>If you enable this feature, we recommend that you specify a value that
 corresponds exactly to a whole number of minutes (for example, 60, 120,
-and 180). If you don\'t do this, the value is rounded to the nearest
+and 180). If you don't do this, the value is rounded to the nearest
 minute. For example, if you specify a value of 70, users are
 disconnected after 1 minute of inactivity. If you specify a value that
 is at the midpoint between two different minutes, the value is rounded
@@ -248,55 +273,57 @@ assume a role, a fleet instance calls the AWS Security Token Service
 (STS) <code>AssumeRole</code> API operation and passes the ARN of the role to use.
 The operation creates a new session with temporary credentials.
 AppStream 2.0 retrieves the temporary credentials and creates the
-<strong>AppStream\_Machine\_Role</strong> credential profile on the instance.</p>
+<strong>appstream\_machine\_role</strong> credential profile on the instance.</p>
 <p>For more information, see <a href='https://docs.aws.amazon.com/appstream2/latest/developerguide/using-iam-roles-to-grant-permissions-to-applications-scripts-streaming-instances.html'>Using an IAM Role to Grant Permissions to Applications and Scripts Running on AppStream 2.0 Streaming Instances</a>
 in the <em>Amazon AppStream 2.0 Administration Guide</em>.</p></td>
     </tr>
+    <tr>
+      <th>StreamView</th>
+      <td><p>The AppStream 2.0 view that is displayed to your users when they stream
+from the fleet. When <code>APP</code> is specified, only the windows of
+applications opened by users display. When <code>DESKTOP</code> is specified, the
+standard desktop that is provided by the operating system displays.</p>
+<p>The default value is <code>APP</code>.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute
-except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can
-update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>,
-<code>IdleDisconnectTimeoutInSeconds</code>, and <code>DisconnectTimeoutInSeconds</code>
-attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you
-can\'t update it.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_fleet</span>(
-  <span class='kw'>ImageName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ImageArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ComputeCapacity</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DesiredInstances</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>VpcConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_fleet</span><span class='op'>(</span>
+  ImageName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ImageArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  InstanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+  ComputeCapacity <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DesiredInstances <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  VpcConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>MaxUserDurationInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>DisconnectTimeoutInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>DeleteVpcConfig</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DisplayName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EnableDefaultInternetAccess</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>DomainJoinInfo</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DirectoryName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>OrganizationalUnitDistinguishedName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>IdleDisconnectTimeoutInSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>AttributesToDelete</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"VPC_CONFIGURATION"</span><span class='kw'>|</span><span class='st'>"VPC_CONFIGURATION_SECURITY_GROUP_IDS"</span><span class='kw'>|</span><span class='st'>"DOMAIN_JOIN_INFO"</span><span class='kw'>|</span><span class='st'>"IAM_ROLE_ARN"</span>
-  ),
-  <span class='kw'>IamRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MaxUserDurationInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  DisconnectTimeoutInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  DeleteVpcConfig <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  DisplayName <span class='op'>=</span> <span class='st'>"string"</span>,
+  EnableDefaultInternetAccess <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  DomainJoinInfo <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DirectoryName <span class='op'>=</span> <span class='st'>"string"</span>,
+    OrganizationalUnitDistinguishedName <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  IdleDisconnectTimeoutInSeconds <span class='op'>=</span> <span class='fl'>123</span>,
+  AttributesToDelete <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"VPC_CONFIGURATION"</span><span class='op'>|</span><span class='st'>"VPC_CONFIGURATION_SECURITY_GROUP_IDS"</span><span class='op'>|</span><span class='st'>"DOMAIN_JOIN_INFO"</span><span class='op'>|</span><span class='st'>"IAM_ROLE_ARN"</span>
+  <span class='op'>)</span>,
+  IamRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  StreamView <span class='op'>=</span> <span class='st'>"APP"</span><span class='op'>|</span><span class='st'>"DESKTOP"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -314,7 +341,7 @@ can\'t update it.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

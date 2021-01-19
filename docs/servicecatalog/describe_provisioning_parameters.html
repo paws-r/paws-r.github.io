@@ -43,7 +43,14 @@ specified product using the specified provisioning artifact — servicecatalog_d
 <meta property="og:title" content="Gets information about the configuration required to provision the
 specified product using the specified provisioning artifact — servicecatalog_describe_provisioning_parameters" />
 <meta property="og:description" content="Gets information about the configuration required to provision the
-specified product using the specified provisioning artifact." />
+specified product using the specified provisioning artifact.
+If the output contains a TagOption key with an empty list of values,
+there is a TagOption conflict for that key. The end user cannot take
+action to fix the conflict, and launch is not blocked. In subsequent
+calls to ProvisionProduct, do not include conflicted TagOption keys as
+tags, or this causes the error &quot;Parameter validation failed: Missing
+required parameter in Tags[N]:Value&quot;. Tag the provisioned product
+with the value sc-tagoption-conflict-portfolioId-productId." />
 
 
 
@@ -75,7 +82,7 @@ specified product using the specified provisioning artifact." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +90,7 @@ specified product using the specified provisioning artifact." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +102,7 @@ specified product using the specified provisioning artifact." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +128,18 @@ specified product using the specified provisioning artifact</h1>
     <div class="ref-description">
     <p>Gets information about the configuration required to provision the
 specified product using the specified provisioning artifact.</p>
+<p>If the output contains a TagOption key with an empty list of values,
+there is a TagOption conflict for that key. The end user cannot take
+action to fix the conflict, and launch is not blocked. In subsequent
+calls to ProvisionProduct, do not include conflicted TagOption keys as
+tags, or this causes the error "Parameter validation failed: Missing
+required parameter in Tags[<em>N</em>]:<em>Value</em>". Tag the provisioned product
+with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>servicecatalog_describe_provisioning_parameters</span>(<span class='no'>AcceptLanguage</span>,
-  <span class='no'>ProductId</span>, <span class='no'>ProvisioningArtifactId</span>, <span class='no'>PathId</span>)</pre>
+    <pre class="usage"><span class='fu'>servicecatalog_describe_provisioning_parameters</span><span class='op'>(</span><span class='va'>AcceptLanguage</span>,
+  <span class='va'>ProductId</span>, <span class='va'>ProductName</span>, <span class='va'>ProvisioningArtifactId</span>,
+  <span class='va'>ProvisioningArtifactName</span>, <span class='va'>PathId</span>, <span class='va'>PathName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,38 +154,49 @@ specified product using the specified provisioning artifact.</p>
     </tr>
     <tr>
       <th>ProductId</th>
-      <td><p>[required] The product identifier.</p></td>
+      <td><p>The product identifier. You must provide the product name or ID, but not
+both.</p></td>
+    </tr>
+    <tr>
+      <th>ProductName</th>
+      <td><p>The name of the product. You must provide the name or ID, but not both.</p></td>
     </tr>
     <tr>
       <th>ProvisioningArtifactId</th>
-      <td><p>[required] The identifier of the provisioning artifact.</p></td>
+      <td><p>The identifier of the provisioning artifact. You must provide the name
+or ID, but not both.</p></td>
+    </tr>
+    <tr>
+      <th>ProvisioningArtifactName</th>
+      <td><p>The name of the provisioning artifact. You must provide the name or ID,
+but not both.</p></td>
     </tr>
     <tr>
       <th>PathId</th>
       <td><p>The path identifier of the product. This value is optional if the
 product has a default path, and required if the product has more than
-one path. To list the paths for a product, use ListLaunchPaths.</p></td>
+one path. To list the paths for a product, use ListLaunchPaths. You must
+provide the name or ID, but not both.</p></td>
+    </tr>
+    <tr>
+      <th>PathName</th>
+      <td><p>The name of the path. You must provide the name or ID, but not both.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If the output contains a TagOption key with an empty list of values,
-there is a TagOption conflict for that key. The end user cannot take
-action to fix the conflict, and launch is not blocked. In subsequent
-calls to ProvisionProduct, do not include conflicted TagOption keys as
-tags, or this causes the error \"Parameter validation failed: Missing
-required parameter in Tags[<em>N</em>]:<em>Value</em>\". Tag the provisioned product
-with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_provisioning_parameters</span>(
-  <span class='kw'>AcceptLanguage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProductId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProvisioningArtifactId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PathId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_provisioning_parameters</span><span class='op'>(</span>
+  AcceptLanguage <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProductId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProductName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProvisioningArtifactId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProvisioningArtifactName <span class='op'>=</span> <span class='st'>"string"</span>,
+  PathId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PathName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -188,7 +214,7 @@ with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

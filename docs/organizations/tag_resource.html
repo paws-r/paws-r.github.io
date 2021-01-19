@@ -40,7 +40,17 @@
 
 
 <meta property="og:title" content="Adds one or more tags to the specified resource — organizations_tag_resource" />
-<meta property="og:description" content="Adds one or more tags to the specified resource." />
+<meta property="og:description" content="Adds one or more tags to the specified resource.
+Currently, you can attach tags to the following resources in AWS
+Organizations.
+AWS account
+Organization root
+Organizational unit (OU)
+Policy (any type)
+
+
+This operation can be called only from the organization's management
+account." />
 
 
 
@@ -72,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +90,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +102,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,9 +126,19 @@
 
     <div class="ref-description">
     <p>Adds one or more tags to the specified resource.</p>
+<p>Currently, you can attach tags to the following resources in AWS
+Organizations.</p><ul>
+<li><p>AWS account</p></li>
+<li><p>Organization root</p></li>
+<li><p>Organizational unit (OU)</p></li>
+<li><p>Policy (any type)</p></li>
+</ul>
+
+<p>This operation can be called only from the organization's management
+account.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>organizations_tag_resource</span>(<span class='no'>ResourceId</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>organizations_tag_resource</span><span class='op'>(</span><span class='va'>ResourceId</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,29 +149,39 @@
     </tr>
     <tr>
       <th>Tags</th>
-      <td><p>[required] The tag to add to the specified resource. You must specify both a tag
-key and value. You can set the value of a tag to an empty string, but
-you can\'t set it to null.</p></td>
+      <td><p>[required] A list of tags to add to the specified resource.</p>
+<p>You can specify any of the following taggable resources.</p><ul>
+<li><p>AWS account – specify the account ID number.</p></li>
+<li><p>Organizational unit – specify the OU ID that begins with <code>ou-</code> and
+looks similar to: <code>ou-&lt;i&gt;1a2b-34uvwxyz&lt;/i&gt; </code></p></li>
+<li><p>Root – specify the root ID that begins with <code>r-</code> and looks similar
+to: <code>r-&lt;i&gt;1a2b&lt;/i&gt; </code></p></li>
+<li><p>Policy – specify the policy ID that begins with <code>p-</code> andlooks
+similar to: <code>p-&lt;i&gt;12abcdefg3&lt;/i&gt; </code></p></li>
+</ul>
+
+<p>For each tag in the list, you must specify both a tag key and a value.
+You can set the value to an empty string, but you can't set it to
+<code>null</code>.</p>
+<p>If any one of the tags is invalid or if you exceed the allowed number of
+tags for an account user, then the entire request fails and the account
+is not created.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Currently, you can tag and untag accounts in AWS Organizations.</p>
-<p>This operation can be called only from the organization\'s master
-account.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>tag_resource</span>(
-  <span class='kw'>ResourceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>tag_resource</span><span class='op'>(</span>
+  ResourceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -169,7 +199,7 @@ account.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,77 +40,11 @@
 
 
 <meta property="og:title" content="AWS Security Token Service — sts" />
-<meta property="og:description" content="The AWS Security Token Service (STS) is a web service that enables you
-to request temporary, limited-privilege credentials for AWS Identity and
-Access Management (IAM) users or for users that you authenticate
-(federated users). This guide provides descriptions of the STS API. For
-more detailed information about using this service, go to Temporary Security Credentials.
-For information about setting up signatures and authorization through
-the API, go to Signing AWS API Requests
-in the AWS General Reference. For general information about the Query
-API, go to Making Query Requests
-in Using IAM. For information about using security tokens with other
-AWS products, go to AWS Services That Work with IAM
-in the IAM User Guide.
-If you\'re new to AWS and need additional technical information about a
-specific AWS product, you can find the product\'s technical
-documentation at http://aws.amazon.com/documentation/.
-Endpoints
-By default, AWS Security Token Service (STS) is available as a global
-service, and all AWS STS requests go to a single endpoint at
-https://sts.amazonaws.com. Global requests map to the US East (N.
-Virginia) region. AWS recommends using Regional AWS STS endpoints
-instead of the global endpoint to reduce latency, build in redundancy,
-and increase session token validity. For more information, see Managing AWS STS in an AWS Region
-in the IAM User Guide.
-Most AWS Regions are enabled for operations in all AWS services by
-default. Those Regions are automatically activated for use with AWS STS.
-Some Regions, such as Asia Pacific (Hong Kong), must be manually
-enabled. To learn more about enabling and disabling AWS Regions, see
-Managing AWS Regions
-in the AWS General Reference. When you enable these AWS Regions, they
-are automatically activated for use with AWS STS. You cannot activate
-the STS endpoint for a Region that is disabled. Tokens that are valid in
-all AWS Regions are longer than tokens that are valid in Regions that
-are enabled by default. Changing this setting might affect existing
-systems where you temporarily store tokens. For more information, see
-Managing Global Endpoint Session Tokens
-in the IAM User Guide.
-After you activate a Region for use with AWS STS, you can direct AWS STS
-API calls to that Region. AWS STS recommends that you provide both the
-Region and endpoint when you make calls to a Regional endpoint. You can
-provide the Region alone for manually enabled Regions, such as Asia
-Pacific (Hong Kong). In this case, the calls are directed to the STS
-Regional endpoint. However, if you provide the Region alone for Regions
-enabled by default, the calls are directed to the global endpoint of
-https://sts.amazonaws.com.
-To view the list of AWS STS endpoints and whether they are active by
-default, see Writing Code to Use AWS STS Regions
-in the IAM User Guide.
-Recording API requests
-STS supports AWS CloudTrail, which is a service that records AWS calls
-for your AWS account and delivers log files to an Amazon S3 bucket. By
-using information collected by CloudTrail, you can determine what
-requests were successfully made to STS, who made the request, when it
-was made, and so on.
-If you activate AWS STS endpoints in Regions other than the default
-global endpoint, then you must also turn on CloudTrail logging in those
-Regions. This is necessary to record any AWS STS API calls that are made
-in those Regions. For more information, see Turning On CloudTrail in Additional Regions
-in the AWS CloudTrail User Guide.
-AWS Security Token Service (STS) is a global service with a single
-endpoint at https://sts.amazonaws.com. Calls to this endpoint are
-logged as calls to a global service. However, because this endpoint is
-physically located in the US East (N. Virginia) Region, your logs list
-us-east-1 as the event Region. CloudTrail does not write these logs to
-the US East (Ohio) Region unless you choose to include global service
-logs in that Region. CloudTrail writes calls to all Regional endpoints
-to their respective Regions. For example, calls to
-sts.us-east-2.amazonaws.com are published to the US East (Ohio) Region
-and calls to sts.eu-central-1.amazonaws.com are published to the EU
-(Frankfurt) Region.
-To learn more about CloudTrail, including how to turn it on and find
-your log files, see the AWS CloudTrail User Guide." />
+<meta property="og:description" content="AWS Security Token Service (STS) enables you to request temporary,
+limited-privilege credentials for AWS Identity and Access Management
+(IAM) users or for users that you authenticate (federated users). This
+guide provides descriptions of the STS API. For more information about
+using this service, see Temporary Security Credentials." />
 
 
 
@@ -142,7 +76,7 @@ your log files, see the AWS CloudTrail User Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -150,7 +84,7 @@ your log files, see the AWS CloudTrail User Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -162,7 +96,7 @@ your log files, see the AWS CloudTrail User Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -185,80 +119,14 @@ your log files, see the AWS CloudTrail User Guide." />
     </div>
 
     <div class="ref-description">
-    <p>The AWS Security Token Service (STS) is a web service that enables you
-to request temporary, limited-privilege credentials for AWS Identity and
-Access Management (IAM) users or for users that you authenticate
-(federated users). This guide provides descriptions of the STS API. For
-more detailed information about using this service, go to <a href='credentials_temp.html'>Temporary Security Credentials</a>.</p>
-<p>For information about setting up signatures and authorization through
-the API, go to <a href='aws_api_requests.html'>Signing AWS API Requests</a>
-in the <em>AWS General Reference</em>. For general information about the Query
-API, go to <a href='UsingQueryAPI.html'>Making Query Requests</a>
-in <em>Using IAM</em>. For information about using security tokens with other
-AWS products, go to <a href='aws-services-that-work-with-iam.html'>AWS Services That Work with IAM</a>
-in the <em>IAM User Guide</em>.</p>
-<p>If you\'re new to AWS and need additional technical information about a
-specific AWS product, you can find the product\'s technical
-documentation at <a href='http://aws.amazon.com/documentation/'>http://aws.amazon.com/documentation/</a>.</p>
-<p><strong>Endpoints</strong></p>
-<p>By default, AWS Security Token Service (STS) is available as a global
-service, and all AWS STS requests go to a single endpoint at
-<code>https://sts.amazonaws.com</code>. Global requests map to the US East (N.
-Virginia) region. AWS recommends using Regional AWS STS endpoints
-instead of the global endpoint to reduce latency, build in redundancy,
-and increase session token validity. For more information, see <a href='credentials_temp_enable-regions.html'>Managing AWS STS in an AWS Region</a>
-in the <em>IAM User Guide</em>.</p>
-<p>Most AWS Regions are enabled for operations in all AWS services by
-default. Those Regions are automatically activated for use with AWS STS.
-Some Regions, such as Asia Pacific (Hong Kong), must be manually
-enabled. To learn more about enabling and disabling AWS Regions, see
-<a href='https://docs.aws.amazon.com/general/latest/gr/rande-manage.html'>Managing AWS Regions</a>
-in the <em>AWS General Reference</em>. When you enable these AWS Regions, they
-are automatically activated for use with AWS STS. You cannot activate
-the STS endpoint for a Region that is disabled. Tokens that are valid in
-all AWS Regions are longer than tokens that are valid in Regions that
-are enabled by default. Changing this setting might affect existing
-systems where you temporarily store tokens. For more information, see
-<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html#sts-regions-manage-tokens'>Managing Global Endpoint Session Tokens</a>
-in the <em>IAM User Guide</em>.</p>
-<p>After you activate a Region for use with AWS STS, you can direct AWS STS
-API calls to that Region. AWS STS recommends that you provide both the
-Region and endpoint when you make calls to a Regional endpoint. You can
-provide the Region alone for manually enabled Regions, such as Asia
-Pacific (Hong Kong). In this case, the calls are directed to the STS
-Regional endpoint. However, if you provide the Region alone for Regions
-enabled by default, the calls are directed to the global endpoint of
-<code>https://sts.amazonaws.com</code>.</p>
-<p>To view the list of AWS STS endpoints and whether they are active by
-default, see <a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html#id_credentials_temp_enable-regions_writing_code'>Writing Code to Use AWS STS Regions</a>
-in the <em>IAM User Guide</em>.</p>
-<p><strong>Recording API requests</strong></p>
-<p>STS supports AWS CloudTrail, which is a service that records AWS calls
-for your AWS account and delivers log files to an Amazon S3 bucket. By
-using information collected by CloudTrail, you can determine what
-requests were successfully made to STS, who made the request, when it
-was made, and so on.</p>
-<p>If you activate AWS STS endpoints in Regions other than the default
-global endpoint, then you must also turn on CloudTrail logging in those
-Regions. This is necessary to record any AWS STS API calls that are made
-in those Regions. For more information, see <a href='logs_regions_turn_on_ct.html'>Turning On CloudTrail in Additional Regions</a>
-in the <em>AWS CloudTrail User Guide</em>.</p>
-<p>AWS Security Token Service (STS) is a global service with a single
-endpoint at <code>https://sts.amazonaws.com</code>. Calls to this endpoint are
-logged as calls to a global service. However, because this endpoint is
-physically located in the US East (N. Virginia) Region, your logs list
-<code>us-east-1</code> as the event Region. CloudTrail does not write these logs to
-the US East (Ohio) Region unless you choose to include global service
-logs in that Region. CloudTrail writes calls to all Regional endpoints
-to their respective Regions. For example, calls to
-sts.us-east-2.amazonaws.com are published to the US East (Ohio) Region
-and calls to sts.eu-central-1.amazonaws.com are published to the EU
-(Frankfurt) Region.</p>
-<p>To learn more about CloudTrail, including how to turn it on and find
-your log files, see the <a href='is_cloud_trail_top_level.html'>AWS CloudTrail User Guide</a>.</p>
+    <p>AWS Security Token Service (STS) enables you to request temporary,
+limited-privilege credentials for AWS Identity and Access Management
+(IAM) users or for users that you authenticate (federated users). This
+guide provides descriptions of the STS API. For more information about
+using this service, see <a href='credentials_temp.html'>Temporary Security Credentials</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sts</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>sts</span><span class='op'>(</span>config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -272,20 +140,21 @@ your log files, see the <a href='is_cloud_trail_top_level.html'>AWS CloudTrail U
     <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
 
     
-<pre><span class='no'>svc</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>sts</span>(
-  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>creds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>access_key_id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>secret_access_key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>session_token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>profile</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>sts</span><span class='op'>(</span>
+  config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    credentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        access_key_id <span class='op'>=</span> <span class='st'>"string"</span>,
+        secret_access_key <span class='op'>=</span> <span class='st'>"string"</span>,
+        session_token <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      profile <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    endpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    region <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
@@ -305,34 +174,36 @@ your log files, see the <a href='is_cloud_trail_top_level.html'>AWS CloudTrail U
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>sts</span>()
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>sts</span><span class='op'>(</span><span class='op'>)</span>
 <span class='co'># </span>
-<span class='no'>svc</span>$<span class='fu'>assume_role</span>(
-  <span class='kw'>ExternalId</span> <span class='kw'>=</span> <span class='st'>"123ABC"</span>,
-  <span class='kw'>Policy</span> <span class='kw'>=</span> <span class='st'>"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":..."</span>,
-  <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/demo"</span>,
-  <span class='kw'>RoleSessionName</span> <span class='kw'>=</span> <span class='st'>"testAssumeRoleSession"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Project"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"Unicorn"</span>
-    ),
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Team"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"Automation"</span>
-    ),
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Cost-Center"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"12345"</span>
-    )
-  ),
-  <span class='kw'>TransitiveTagKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>assume_role</span><span class='op'>(</span>
+  ExternalId <span class='op'>=</span> <span class='st'>"123ABC"</span>,
+  Policy <span class='op'>=</span> <span class='st'>"{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":..."</span>,
+  RoleArn <span class='op'>=</span> <span class='st'>"arn:aws:iam::123456789012:role/demo"</span>,
+  RoleSessionName <span class='op'>=</span> <span class='st'>"testAssumeRoleSession"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Project"</span>,
+      Value <span class='op'>=</span> <span class='st'>"Unicorn"</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Team"</span>,
+      Value <span class='op'>=</span> <span class='st'>"Automation"</span>
+    <span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Cost-Center"</span>,
+      Value <span class='op'>=</span> <span class='st'>"12345"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TransitiveTagKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"Project"</span>,
     <span class='st'>"Cost-Center"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -348,7 +219,7 @@ your log files, see the <a href='is_cloud_trail_top_level.html'>AWS CloudTrail U
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

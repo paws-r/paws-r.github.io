@@ -43,7 +43,34 @@ Custom Labels model — rekognition_detect_custom_labels • paws</title>
 <meta property="og:title" content="Detects custom labels in a supplied image by using an Amazon Rekognition
 Custom Labels model — rekognition_detect_custom_labels" />
 <meta property="og:description" content="Detects custom labels in a supplied image by using an Amazon Rekognition
-Custom Labels model." />
+Custom Labels model.
+You specify which version of a model version to use by using the
+ProjectVersionArn input parameter.
+You pass the input image as base64-encoded image bytes or as a reference
+to an image in an Amazon S3 bucket. If you use the AWS CLI to call
+Amazon Rekognition operations, passing image bytes is not supported. The
+image must be either a PNG or JPEG formatted file.
+For each object that the model version detects on an image, the API
+returns a (CustomLabel) object in an array (CustomLabels). Each
+CustomLabel object provides the label name (Name), the level of
+confidence that the image contains the object (Confidence), and object
+location information, if it exists, for the label on the image
+(Geometry).
+During training model calculates a threshold value that determines if a
+prediction for a label is true. By default, DetectCustomLabels doesn't
+return labels whose confidence value is below the model's calculated
+threshold value. To filter labels that are returned, specify a value for
+MinConfidence that is higher than the model's calculated threshold.
+You can get the model's calculated threshold from the model's training
+results shown in the Amazon Rekognition Custom Labels console. To get
+all labels, regardless of confidence, specify a MinConfidence value of
+0.
+You can also add the MaxResults parameter to limit the number of
+labels returned.
+This is a stateless API operation. That is, the operation does not
+persist any data.
+This operation requires permissions to perform the
+rekognition:DetectCustomLabels action." />
 
 
 
@@ -75,7 +102,7 @@ Custom Labels model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +110,7 @@ Custom Labels model." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +122,7 @@ Custom Labels model." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +148,37 @@ Custom Labels model</h1>
     <div class="ref-description">
     <p>Detects custom labels in a supplied image by using an Amazon Rekognition
 Custom Labels model.</p>
+<p>You specify which version of a model version to use by using the
+<code>ProjectVersionArn</code> input parameter.</p>
+<p>You pass the input image as base64-encoded image bytes or as a reference
+to an image in an Amazon S3 bucket. If you use the AWS CLI to call
+Amazon Rekognition operations, passing image bytes is not supported. The
+image must be either a PNG or JPEG formatted file.</p>
+<p>For each object that the model version detects on an image, the API
+returns a (<code>CustomLabel</code>) object in an array (<code>CustomLabels</code>). Each
+<code>CustomLabel</code> object provides the label name (<code>Name</code>), the level of
+confidence that the image contains the object (<code>Confidence</code>), and object
+location information, if it exists, for the label on the image
+(<code>Geometry</code>).</p>
+<p>During training model calculates a threshold value that determines if a
+prediction for a label is true. By default, <code>DetectCustomLabels</code> doesn't
+return labels whose confidence value is below the model's calculated
+threshold value. To filter labels that are returned, specify a value for
+<code>MinConfidence</code> that is higher than the model's calculated threshold.
+You can get the model's calculated threshold from the model's training
+results shown in the Amazon Rekognition Custom Labels console. To get
+all labels, regardless of confidence, specify a <code>MinConfidence</code> value of
+0.</p>
+<p>You can also add the <code>MaxResults</code> parameter to limit the number of
+labels returned.</p>
+<p>This is a stateless API operation. That is, the operation does not
+persist any data.</p>
+<p>This operation requires permissions to perform the
+<code>rekognition:DetectCustomLabels</code> action.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_detect_custom_labels</span>(<span class='no'>ProjectVersionArn</span>, <span class='no'>Image</span>, <span class='no'>MaxResults</span>,
-  <span class='no'>MinConfidence</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_detect_custom_labels</span><span class='op'>(</span><span class='va'>ProjectVersionArn</span>, <span class='va'>Image</span>, <span class='va'>MaxResults</span>,
+  <span class='va'>MinConfidence</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,57 +200,29 @@ labels ranked from highest confidence to lowest.</p></td>
     <tr>
       <th>MinConfidence</th>
       <td><p>Specifies the minimum confidence level for the labels to return. Amazon
-Rekognition doesn\'t return any labels with a confidence lower than this
+Rekognition doesn't return any labels with a confidence lower than this
 specified value. If you specify a value of 0, all labels are return,
 regardless of the default thresholds that the model version applies.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You specify which version of a model version to use by using the
-<code>ProjectVersionArn</code> input parameter.</p>
-<p>You pass the input image as base64-encoded image bytes or as a reference
-to an image in an Amazon S3 bucket. If you use the AWS CLI to call
-Amazon Rekognition operations, passing image bytes is not supported. The
-image must be either a PNG or JPEG formatted file.</p>
-<p>For each object that the model version detects on an image, the API
-returns a (<code>CustomLabel</code>) object in an array (<code>CustomLabels</code>). Each
-<code>CustomLabel</code> object provides the label name (<code>Name</code>), the level of
-confidence that the image contains the object (<code>Confidence</code>), and object
-location information, if it exists, for the label on the image
-(<code>Geometry</code>).</p>
-<p>During training model calculates a threshold value that determines if a
-prediction for a label is true. By default, <code>DetectCustomLabels</code>
-doesn\'t return labels whose confidence value is below the model\'s
-calculated threshold value. To filter labels that are returned, specify
-a value for <code>MinConfidence</code> that is higher than the model\'s calculated
-threshold. You can get the model\'s calculated threshold from the
-model\'s training results shown in the Amazon Rekognition Custom Labels
-console. To get all labels, regardless of confidence, specify a
-<code>MinConfidence</code> value of 0.</p>
-<p>You can also add the <code>MaxResults</code> parameter to limit the number of
-labels returned.</p>
-<p>This is a stateless API operation. That is, the operation does not
-persist any data.</p>
-<p>This operation requires permissions to perform the
-<code>rekognition:DetectCustomLabels</code> action.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>detect_custom_labels</span>(
-  <span class='kw'>ProjectVersionArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Image</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Bytes</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-    <span class='kw'>S3Object</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MinConfidence</span> <span class='kw'>=</span> <span class='fl'>123.0</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>detect_custom_labels</span><span class='op'>(</span>
+  ProjectVersionArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  Image <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Bytes <span class='op'>=</span> <span class='va'>raw</span>,
+    S3Object <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Version <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  MinConfidence <span class='op'>=</span> <span class='fl'>123.0</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -214,7 +240,7 @@ persist any data.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

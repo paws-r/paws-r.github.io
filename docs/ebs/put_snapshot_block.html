@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Writes a block of data to a block in the snapshot — ebs_put_snapshot_block • paws</title>
+<title>Writes a block of data to a snapshot — ebs_put_snapshot_block • paws</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,11 @@
 
 
 
-<meta property="og:title" content="Writes a block of data to a block in the snapshot — ebs_put_snapshot_block" />
-<meta property="og:description" content="Writes a block of data to a block in the snapshot. If the specified
-block contains data, the existing data is overwritten. The target
-snapshot must be in the pending state." />
+<meta property="og:title" content="Writes a block of data to a snapshot — ebs_put_snapshot_block" />
+<meta property="og:description" content="Writes a block of data to a snapshot. If the specified block contains
+data, the existing data is overwritten. The target snapshot must be in
+the pending state.
+Data written to a snapshot must be aligned with 512-byte sectors." />
 
 
 
@@ -74,7 +75,7 @@ snapshot must be in the pending state." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +83,7 @@ snapshot must be in the pending state." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +95,7 @@ snapshot must be in the pending state." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,19 +112,20 @@ snapshot must be in the pending state." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Writes a block of data to a block in the snapshot</h1>
+    <h1>Writes a block of data to a snapshot</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/ebs_operations.R'><code>R/ebs_operations.R</code></a></small>
     <div class="hidden name"><code>ebs_put_snapshot_block.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Writes a block of data to a block in the snapshot. If the specified
-block contains data, the existing data is overwritten. The target
-snapshot must be in the <code>pending</code> state.</p>
+    <p>Writes a block of data to a snapshot. If the specified block contains
+data, the existing data is overwritten. The target snapshot must be in
+the <code>pending</code> state.</p>
+<p>Data written to a snapshot must be aligned with 512-byte sectors.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ebs_put_snapshot_block</span>(<span class='no'>SnapshotId</span>, <span class='no'>BlockIndex</span>, <span class='no'>BlockData</span>, <span class='no'>DataLength</span>,
-  <span class='no'>Progress</span>, <span class='no'>Checksum</span>, <span class='no'>ChecksumAlgorithm</span>)</pre>
+    <pre class="usage"><span class='fu'>ebs_put_snapshot_block</span><span class='op'>(</span><span class='va'>SnapshotId</span>, <span class='va'>BlockIndex</span>, <span class='va'>BlockData</span>, <span class='va'>DataLength</span>,
+  <span class='va'>Progress</span>, <span class='va'>Checksum</span>, <span class='va'>ChecksumAlgorithm</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,10 +137,10 @@ snapshot must be in the <code>pending</code> state.</p>
     <tr>
       <th>BlockIndex</th>
       <td><p>[required] The block index of the block in which to write the data. A block index
-is the offset position of a block within a snapshot, and it is used to
-identify the block. To identify the logical offset of the data in the
-logical volume, multiply the block index with the block size (Block
-index * 512 bytes).</p></td>
+is a logical index in units of <code>512</code> KiB blocks. To identify the block
+index, divide the logical offset of the data in the logical volume by
+the block size (logical offset of data/<code>524288</code>). The logical offset of
+the data must be <code>512</code> KiB aligned.</p></td>
     </tr>
     <tr>
       <th>BlockData</th>
@@ -176,21 +178,19 @@ supported algorithm is <code>SHA256</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Data written to a snapshot must be aligned with 512-byte sectors.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_snapshot_block</span>(
-  <span class='kw'>SnapshotId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>BlockIndex</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>BlockData</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-  <span class='kw'>DataLength</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Progress</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Checksum</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ChecksumAlgorithm</span> <span class='kw'>=</span> <span class='st'>"SHA256"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_snapshot_block</span><span class='op'>(</span>
+  SnapshotId <span class='op'>=</span> <span class='st'>"string"</span>,
+  BlockIndex <span class='op'>=</span> <span class='fl'>123</span>,
+  BlockData <span class='op'>=</span> <span class='va'>raw</span>,
+  DataLength <span class='op'>=</span> <span class='fl'>123</span>,
+  Progress <span class='op'>=</span> <span class='fl'>123</span>,
+  Checksum <span class='op'>=</span> <span class='st'>"string"</span>,
+  ChecksumAlgorithm <span class='op'>=</span> <span class='st'>"SHA256"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -208,7 +208,7 @@ supported algorithm is <code>SHA256</code>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

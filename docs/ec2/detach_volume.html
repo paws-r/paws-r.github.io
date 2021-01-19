@@ -46,8 +46,12 @@ volume. Failure to do so can result in the volume becoming stuck in the
 busy state while detaching. If this happens, detachment can be delayed
 indefinitely until you unmount the volume, force detachment, reboot the
 instance, or all three. If an EBS volume is the root device of an
-instance, it can\'t be detached while the instance is running. To detach
-the root volume, stop the instance first." />
+instance, it can't be detached while the instance is running. To detach
+the root volume, stop the instance first.
+When a volume with an AWS Marketplace product code is detached from an
+instance, the product code is no longer associated with the instance.
+For more information, see Detaching an Amazon EBS volume
+in the Amazon Elastic Compute Cloud User Guide." />
 
 
 
@@ -79,7 +83,7 @@ the root volume, stop the instance first." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +91,7 @@ the root volume, stop the instance first." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +103,7 @@ the root volume, stop the instance first." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -128,11 +132,15 @@ volume. Failure to do so can result in the volume becoming stuck in the
 <code>busy</code> state while detaching. If this happens, detachment can be delayed
 indefinitely until you unmount the volume, force detachment, reboot the
 instance, or all three. If an EBS volume is the root device of an
-instance, it can\'t be detached while the instance is running. To detach
+instance, it can't be detached while the instance is running. To detach
 the root volume, stop the instance first.</p>
+<p>When a volume with an AWS Marketplace product code is detached from an
+instance, the product code is no longer associated with the instance.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-detaching-volume.html'>Detaching an Amazon EBS volume</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_detach_volume</span>(<span class='no'>Device</span>, <span class='no'>Force</span>, <span class='no'>InstanceId</span>, <span class='no'>VolumeId</span>, <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_detach_volume</span><span class='op'>(</span><span class='va'>Device</span>, <span class='va'>Force</span>, <span class='va'>InstanceId</span>, <span class='va'>VolumeId</span>, <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,8 +155,8 @@ the root volume, stop the instance first.</p>
 cleanly (for example, logging into an instance, unmounting the volume,
 and detaching normally). This option can lead to data loss or a
 corrupted file system. Use this option only as a last resort to detach a
-volume from a failed instance. The instance won\'t have an opportunity
-to flush file system caches or file system metadata. If you use this
+volume from a failed instance. The instance won't have an opportunity to
+flush file system caches or file system metadata. If you use this
 option, you must perform file system check and repair procedures.</p></td>
     </tr>
     <tr>
@@ -169,32 +177,29 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When a volume with an AWS Marketplace product code is detached from an
-instance, the product code is no longer associated with the instance.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-detaching-volume.html'>Detaching an Amazon EBS Volume</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>detach_volume</span>(
-  <span class='kw'>Device</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Force</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>InstanceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VolumeId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>detach_volume</span><span class='op'>(</span>
+  Device <span class='op'>=</span> <span class='st'>"string"</span>,
+  Force <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  InstanceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  VolumeId <span class='op'>=</span> <span class='st'>"string"</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example detaches the volume (`vol-049df61146c4d7901`) from the</span>
 <span class='co'># instance it is attached to.</span>
-<span class='no'>svc</span>$<span class='fu'>detach_volume</span>(
-  <span class='kw'>VolumeId</span> <span class='kw'>=</span> <span class='st'>"vol-1234567890abcdef0"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>detach_volume</span><span class='op'>(</span>
+  VolumeId <span class='op'>=</span> <span class='st'>"vol-1234567890abcdef0"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -210,7 +215,7 @@ in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

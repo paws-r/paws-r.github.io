@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Cancels a classification job — macie2_update_classification_job • paws</title>
+<title>Changes the status of a classification job — macie2_update_classification_job • paws</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Cancels a classification job — macie2_update_classification_job" />
-<meta property="og:description" content="Cancels a classification job." />
+<meta property="og:title" content="Changes the status of a classification job — macie2_update_classification_job" />
+<meta property="og:description" content="Changes the status of a classification job." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -109,16 +109,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Cancels a classification job</h1>
+    <h1>Changes the status of a classification job</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/macie2_operations.R'><code>R/macie2_operations.R</code></a></small>
     <div class="hidden name"><code>macie2_update_classification_job.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Cancels a classification job.</p>
+    <p>Changes the status of a classification job.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>macie2_update_classification_job</span>(<span class='no'>jobId</span>, <span class='no'>jobStatus</span>)</pre>
+    <pre class="usage"><span class='fu'>macie2_update_classification_job</span><span class='op'>(</span><span class='va'>jobId</span>, <span class='va'>jobStatus</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,18 +129,42 @@
     </tr>
     <tr>
       <th>jobStatus</th>
-      <td><p>[required] The status to change the job\'s status to. The only supported value is
-CANCELLED, which cancels the job completely.</p></td>
+      <td><p>[required] The new status for the job. Valid values are:</p><ul>
+<li><p>CANCELLED - Stops the job permanently and cancels it. This value is
+valid only if the job's current status is IDLE, PAUSED, RUNNING, or
+USER\_PAUSED.</p>
+<p>If you specify this value and the job's current status is RUNNING,
+Amazon Macie immediately begins to stop all processing tasks for the
+job. You can't resume or restart a job after you cancel it.</p></li>
+<li><p>RUNNING - Resumes the job. This value is valid only if the job's
+current status is USER\_PAUSED.</p>
+<p>If you paused the job while it was actively running and you specify
+this value less than 30 days after you paused the job, Macie
+immediately resumes processing from the point where you paused the
+job. Otherwise, Macie resumes the job according to the schedule and
+other settings for the job.</p></li>
+<li><p>USER\_PAUSED - Pauses the job temporarily. This value is valid only
+if the job's current status is IDLE or RUNNING. If you specify this
+value and the job's current status is RUNNING, Macie immediately
+begins to pause all processing tasks for the job.</p>
+<p>If you pause a one-time job and you don't resume it within 30 days,
+the job expires and Macie cancels the job. If you pause a recurring
+job when its status is RUNNING and you don't resume it within 30
+days, the job run expires and Macie cancels the run. To check the
+expiration date, refer to the UserPausedDetails.jobExpiresAt
+property.</p></li>
+</ul></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_classification_job</span>(
-  <span class='kw'>jobId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>jobStatus</span> <span class='kw'>=</span> <span class='st'>"RUNNING"</span><span class='kw'>|</span><span class='st'>"PAUSED"</span><span class='kw'>|</span><span class='st'>"CANCELLED"</span><span class='kw'>|</span><span class='st'>"COMPLETE"</span><span class='kw'>|</span><span class='st'>"IDLE"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_classification_job</span><span class='op'>(</span>
+  jobId <span class='op'>=</span> <span class='st'>"string"</span>,
+  jobStatus <span class='op'>=</span> <span class='st'>"RUNNING"</span><span class='op'>|</span><span class='st'>"PAUSED"</span><span class='op'>|</span><span class='st'>"CANCELLED"</span><span class='op'>|</span><span class='st'>"COMPLETE"</span><span class='op'>|</span><span class='st'>"IDLE"</span><span class='op'>|</span><span class='st'>"USER_PAUSED"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -158,7 +182,7 @@ CANCELLED, which cancels the job completely.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -41,7 +41,13 @@
 
 <meta property="og:title" content="Declines a handshake request — organizations_decline_handshake" />
 <meta property="og:description" content="Declines a handshake request. This sets the handshake state to
-DECLINED and effectively deactivates the request." />
+DECLINED and effectively deactivates the request.
+This operation can be called only from the account that received the
+handshake. The originator of the handshake can use CancelHandshake
+instead. The originator can't reactivate a declined request, but can
+reinitiate the process with a new handshake request.
+After you decline a handshake, it continues to appear in the results of
+relevant APIs for only 30 days. After that, it's deleted." />
 
 
 
@@ -73,7 +79,7 @@ DECLINED and effectively deactivates the request." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +87,7 @@ DECLINED and effectively deactivates the request." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +99,7 @@ DECLINED and effectively deactivates the request." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +124,15 @@ DECLINED and effectively deactivates the request." />
     <div class="ref-description">
     <p>Declines a handshake request. This sets the handshake state to
 <code>DECLINED</code> and effectively deactivates the request.</p>
+<p>This operation can be called only from the account that received the
+handshake. The originator of the handshake can use CancelHandshake
+instead. The originator can't reactivate a declined request, but can
+reinitiate the process with a new handshake request.</p>
+<p>After you decline a handshake, it continues to appear in the results of
+relevant APIs for only 30 days. After that, it's deleted.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>organizations_decline_handshake</span>(<span class='no'>HandshakeId</span>)</pre>
+    <pre class="usage"><span class='fu'>organizations_decline_handshake</span><span class='op'>(</span><span class='va'>HandshakeId</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,37 +141,32 @@ DECLINED and effectively deactivates the request." />
       <th>HandshakeId</th>
       <td><p>[required] The unique identifier (ID) of the handshake that you want to decline.
 You can get the ID from the ListHandshakesForAccount operation.</p>
-<p>The <a href='http://wikipedia.org/wiki/regex'>regex pattern</a> for handshake ID
-string requires \"h-\" followed by from 8 to 32 lowercase letters or
+<p>The <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a> for handshake
+ID string requires "h-" followed by from 8 to 32 lowercase letters or
 digits.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation can be called only from the account that received the
-handshake. The originator of the handshake can use CancelHandshake
-instead. The originator can\'t reactivate a declined request, but can
-reinitiate the process with a new handshake request.</p>
-<p>After you decline a handshake, it continues to appear in the results of
-relevant APIs for only 30 days. After that, it\'s deleted.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>decline_handshake</span>(
-  <span class='kw'>HandshakeId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>decline_handshake</span><span class='op'>(</span>
+  HandshakeId <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example shows Susan declining an invitation to join Bill's</span>
 <span class='co'># organization. The DeclineHandshake operation returns a handshake object,</span>
 <span class='co'># showing that the state is now DECLINED:</span>
-<span class='no'>svc</span>$<span class='fu'>decline_handshake</span>(
-  <span class='kw'>HandshakeId</span> <span class='kw'>=</span> <span class='st'>"h-examplehandshakeid111"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>decline_handshake</span><span class='op'>(</span>
+  HandshakeId <span class='op'>=</span> <span class='st'>"h-examplehandshakeid111"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -175,7 +182,7 @@ relevant APIs for only 30 days. After that, it\'s deleted.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

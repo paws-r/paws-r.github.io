@@ -45,7 +45,41 @@ who can view and modify the logging parameters — s3_put_bucket_logging" />
 <meta property="og:description" content="Set the logging parameters for a bucket and to specify permissions for
 who can view and modify the logging parameters. All logs are saved to
 buckets in the same AWS Region as the source bucket. To set the logging
-status of a bucket, you must be the bucket owner." />
+status of a bucket, you must be the bucket owner.
+The bucket owner is automatically granted FULL\_CONTROL to all logs. You
+use the Grantee request element to grant access to other people. The
+Permissions request element specifies the kind of access the grantee
+has to the logs.
+Grantee Values
+You can specify the person (grantee) to whom you're assigning access
+rights (using request elements) in the following ways:
+By the person's ID:
+&amp;amp;lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&amp;amp;gt;&amp;amp;lt;ID&amp;amp;gt;&amp;amp;lt;&amp;amp;gt;ID&amp;amp;lt;&amp;amp;gt;&amp;amp;lt;/ID&amp;amp;gt;&amp;amp;lt;DisplayName&amp;amp;gt;&amp;amp;lt;&amp;amp;gt;GranteesEmail&amp;amp;lt;&amp;amp;gt;&amp;amp;lt;/DisplayName&amp;amp;gt; &amp;amp;lt;/Grantee&amp;amp;gt;
+DisplayName is optional and ignored in the request.
+By Email address:
+ &amp;amp;lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&amp;amp;gt;&amp;amp;lt;EmailAddress&amp;amp;gt;&amp;amp;lt;&amp;amp;gt;Grantees@email.com&amp;amp;lt;&amp;amp;gt;&amp;amp;lt;/EmailAddress&amp;amp;gt;&amp;amp;lt;/Grantee&amp;amp;gt;
+The grantee is resolved to the CanonicalUser and, in a response to a
+GET Object acl request, appears as the CanonicalUser.
+By URI:
+&amp;amp;lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&amp;amp;gt;&amp;amp;lt;URI&amp;amp;gt;&amp;amp;lt;&amp;amp;gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&amp;amp;lt;&amp;amp;gt;&amp;amp;lt;/URI&amp;amp;gt;&amp;amp;lt;/Grantee&amp;amp;gt;
+
+
+To enable logging, you use LoggingEnabled and its children request
+elements. To disable logging, you use an empty BucketLoggingStatus
+request element:
+&amp;amp;lt;BucketLoggingStatus xmlns=&quot;http://doc.s3.amazonaws.com/2006-03-01&quot; /&amp;amp;gt;
+For more information about server access logging, see Server Access Logging.
+For more information about creating a bucket, see
+CreateBucket.
+For more information about returning the logging status of a bucket, see
+GetBucketLogging.
+The following operations are related to PutBucketLogging:
+PutObject
+DeleteBucket
+CreateBucket
+GetBucketLogging
+
+" />
 
 
 
@@ -77,7 +111,7 @@ status of a bucket, you must be the bucket owner." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +119,7 @@ status of a bucket, you must be the bucket owner." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +131,7 @@ status of a bucket, you must be the bucket owner." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,37 +159,14 @@ who can view and modify the logging parameters</h1>
 who can view and modify the logging parameters. All logs are saved to
 buckets in the same AWS Region as the source bucket. To set the logging
 status of a bucket, you must be the bucket owner.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>s3_put_bucket_logging</span>(<span class='no'>Bucket</span>, <span class='no'>BucketLoggingStatus</span>, <span class='no'>ContentMD5</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Bucket</th>
-      <td><p>[required] The name of the bucket for which to set the logging parameters.</p></td>
-    </tr>
-    <tr>
-      <th>BucketLoggingStatus</th>
-      <td><p>[required] Container for logging status information.</p></td>
-    </tr>
-    <tr>
-      <th>ContentMD5</th>
-      <td><p>The MD5 hash of the <code>PutBucketLogging</code> request body.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The bucket owner is automatically granted FULL\_CONTROL to all logs. You
+<p>The bucket owner is automatically granted FULL\_CONTROL to all logs. You
 use the <code>Grantee</code> request element to grant access to other people. The
 <code>Permissions</code> request element specifies the kind of access the grantee
 has to the logs.</p>
 <p><strong>Grantee Values</strong></p>
-<p>You can specify the person (grantee) to whom you\'re assigning access
+<p>You can specify the person (grantee) to whom you're assigning access
 rights (using request elements) in the following ways:</p><ul>
-<li><p>By the person\'s ID:</p>
+<li><p>By the person's ID:</p>
 <p><code>&amp;lt;Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"&amp;gt;&amp;lt;ID&amp;gt;&amp;lt;&amp;gt;ID&amp;lt;&amp;gt;&amp;lt;/ID&amp;gt;&amp;lt;DisplayName&amp;gt;&amp;lt;&amp;gt;GranteesEmail&amp;lt;&amp;gt;&amp;lt;/DisplayName&amp;gt; &amp;lt;/Grantee&amp;gt;</code></p>
 <p>DisplayName is optional and ignored in the request.</p></li>
 <li><p>By Email address:</p>
@@ -171,67 +182,102 @@ elements. To disable logging, you use an empty BucketLoggingStatus
 request element:</p>
 <p><code>&amp;lt;BucketLoggingStatus xmlns="http://doc.s3.amazonaws.com/2006-03-01" /&amp;gt;</code></p>
 <p>For more information about server access logging, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerLogs.html'>Server Access Logging</a>.</p>
-<p>For more information about creating a bucket, see CreateBucket. For more
-information about returning the logging status of a bucket, see
-GetBucketLogging.</p>
+<p>For more information about creating a bucket, see
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html'>CreateBucket</a>.
+For more information about returning the logging status of a bucket, see
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLogging.html'>GetBucketLogging</a>.</p>
 <p>The following operations are related to <code>PutBucketLogging</code>:</p><ul>
-<li><p>PutObject</p></li>
-<li><p>DeleteBucket</p></li>
-<li><p>CreateBucket</p></li>
-<li><p>GetBucketLogging</p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html'>PutObject</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucket.html'>DeleteBucket</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html'>CreateBucket</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLogging.html'>GetBucketLogging</a></p></li>
 </ul>
+
+    </div>
+
+    <pre class="usage"><span class='fu'>s3_put_bucket_logging</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>BucketLoggingStatus</span>, <span class='va'>ContentMD5</span>,
+  <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Bucket</th>
+      <td><p>[required] The name of the bucket for which to set the logging parameters.</p></td>
+    </tr>
+    <tr>
+      <th>BucketLoggingStatus</th>
+      <td><p>[required] Container for logging status information.</p></td>
+    </tr>
+    <tr>
+      <th>ContentMD5</th>
+      <td><p>The MD5 hash of the <code>PutBucketLogging</code> request body.</p>
+<p>For requests made using the AWS Command Line Interface (CLI) or AWS
+SDKs, this field is calculated automatically.</p></td>
+    </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_bucket_logging</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>BucketLoggingStatus</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>LoggingEnabled</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>TargetBucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>TargetGrants</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Grantee</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>DisplayName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>EmailAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>ID</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"CanonicalUser"</span><span class='kw'>|</span><span class='st'>"AmazonCustomerByEmail"</span><span class='kw'>|</span><span class='st'>"Group"</span>,
-            <span class='kw'>URI</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          ),
-          <span class='kw'>Permission</span> <span class='kw'>=</span> <span class='st'>"FULL_CONTROL"</span><span class='kw'>|</span><span class='st'>"READ"</span><span class='kw'>|</span><span class='st'>"WRITE"</span>
-        )
-      ),
-      <span class='kw'>TargetPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ContentMD5</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_logging</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  BucketLoggingStatus <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    LoggingEnabled <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      TargetBucket <span class='op'>=</span> <span class='st'>"string"</span>,
+      TargetGrants <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Grantee <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            DisplayName <span class='op'>=</span> <span class='st'>"string"</span>,
+            EmailAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+            ID <span class='op'>=</span> <span class='st'>"string"</span>,
+            Type <span class='op'>=</span> <span class='st'>"CanonicalUser"</span><span class='op'>|</span><span class='st'>"AmazonCustomerByEmail"</span><span class='op'>|</span><span class='st'>"Group"</span>,
+            URI <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>,
+          Permission <span class='op'>=</span> <span class='st'>"FULL_CONTROL"</span><span class='op'>|</span><span class='st'>"READ"</span><span class='op'>|</span><span class='st'>"WRITE"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      TargetPrefix <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ContentMD5 <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example sets logging policy on a bucket. For the Log</span>
 <span class='co'># Delivery group to deliver logs to the destination bucket, it needs</span>
 <span class='co'># permission for the READ_ACP action which the policy grants.</span>
-<span class='no'>svc</span>$<span class='fu'>put_bucket_logging</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"sourcebucket"</span>,
-  <span class='kw'>BucketLoggingStatus</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>LoggingEnabled</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>TargetBucket</span> <span class='kw'>=</span> <span class='st'>"targetbucket"</span>,
-      <span class='kw'>TargetGrants</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Grantee</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"Group"</span>,
-            <span class='kw'>URI</span> <span class='kw'>=</span> <span class='st'>"http://acs.amazonaws.com/groups/global/AllUsers"</span>
-          ),
-          <span class='kw'>Permission</span> <span class='kw'>=</span> <span class='st'>"READ"</span>
-        )
-      ),
-      <span class='kw'>TargetPrefix</span> <span class='kw'>=</span> <span class='st'>"MyBucketLogs/"</span>
-    )
-  )
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_bucket_logging</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"sourcebucket"</span>,
+  BucketLoggingStatus <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    LoggingEnabled <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      TargetBucket <span class='op'>=</span> <span class='st'>"targetbucket"</span>,
+      TargetGrants <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Grantee <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Type <span class='op'>=</span> <span class='st'>"Group"</span>,
+            URI <span class='op'>=</span> <span class='st'>"http://acs.amazonaws.com/groups/global/AllUsers"</span>
+          <span class='op'>)</span>,
+          Permission <span class='op'>=</span> <span class='st'>"READ"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      TargetPrefix <span class='op'>=</span> <span class='st'>"MyBucketLogs/"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -247,7 +293,7 @@ GetBucketLogging.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

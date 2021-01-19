@@ -40,30 +40,37 @@
 
 
 <meta property="og:title" content="Amazon Route 53 Resolver — route53resolver" />
-<meta property="og:description" content="Here\'s how you set up to query an Amazon Route 53 private hosted zone
-from your network:
-Connect your network to a VPC using AWS Direct Connect or a VPN.
-Run the following AWS CLI command to create a Resolver endpoint:
-create-resolver-endpoint --name \\[endpoint_name\\] --direction INBOUND --creator-request-id \\[unique_string\\] --security-group-ids \\[security_group_with_inbound_rules\\] --ip-addresses SubnetId=\\[subnet_id\\] SubnetId=\\[subnet_id_in_different_AZ\\]
-Note the resolver endpoint ID that appears in the response. You\'ll
-use it in step 3.
-Get the IP addresses for the Resolver endpoints:
-get-resolver-endpoint --resolver-endpoint-id \\[resolver_endpoint_id\\]
-In your network configuration, define the IP addresses that you got
-in step 3 as DNS servers.
-You can now query instance names in your VPCs and the names of
-records in your private hosted zone.
-
-
-You can also perform the following operations using the AWS CLI:
-list-resolver-endpoints: List all endpoints. The syntax includes
-options for pagination and filtering.
-update-resolver-endpoints: Add IP addresses to an endpoint or
-remove IP addresses from an endpoint.
-
-
-To delete an endpoint, use the following AWS CLI command:
-delete-resolver-endpoint --resolver-endpoint-id \\[resolver_endpoint_id\\]" />
+<meta property="og:description" content="When you create a VPC using Amazon VPC, you automatically get DNS
+resolution within the VPC from Route 53 Resolver. By default, Resolver
+answers DNS queries for VPC domain names such as domain names for EC2
+instances or ELB load balancers. Resolver performs recursive lookups
+against public name servers for all other domain names.
+You can also configure DNS resolution between your VPC and your network
+over a Direct Connect or VPN connection:
+Forward DNS queries from resolvers on your network to Route 53
+Resolver
+DNS resolvers on your network can forward DNS queries to Resolver in a
+specified VPC. This allows your DNS resolvers to easily resolve domain
+names for AWS resources such as EC2 instances or records in a Route 53
+private hosted zone. For more information, see How DNS Resolvers on Your Network Forward DNS Queries to Route 53 Resolver
+in the Amazon Route 53 Developer Guide.
+Conditionally forward queries from a VPC to resolvers on your
+network
+You can configure Resolver to forward queries that it receives from EC2
+instances in your VPCs to DNS resolvers on your network. To forward
+selected queries, you create Resolver rules that specify the domain
+names for the DNS queries that you want to forward (such as
+example.com), and the IP addresses of the DNS resolvers on your network
+that you want to forward the queries to. If a query matches multiple
+rules (example.com, acme.example.com), Resolver chooses the rule with
+the most specific match (acme.example.com) and forwards the query to the
+IP addresses that you specified in that rule. For more information, see
+How Route 53 Resolver Forwards DNS Queries from Your VPCs to Your Network
+in the Amazon Route 53 Developer Guide.
+Like Amazon VPC, Resolver is regional. In each region where you have
+VPCs, you can choose whether to forward queries from your VPCs to your
+network (outbound queries), from your network to your VPCs (inbound
+queries), or both." />
 
 
 
@@ -95,7 +102,7 @@ delete-resolver-endpoint --resolver-endpoint-id \\[resolver_endpoint_id\\]" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -103,7 +110,7 @@ delete-resolver-endpoint --resolver-endpoint-id \\[resolver_endpoint_id\\]" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +122,7 @@ delete-resolver-endpoint --resolver-endpoint-id \\[resolver_endpoint_id\\]" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,33 +145,40 @@ delete-resolver-endpoint --resolver-endpoint-id \\[resolver_endpoint_id\\]" />
     </div>
 
     <div class="ref-description">
-    <p>Here\'s how you set up to query an Amazon Route 53 private hosted zone
-from your network:</p><ol>
-<li><p>Connect your network to a VPC using AWS Direct Connect or a VPN.</p></li>
-<li><p>Run the following AWS CLI command to create a Resolver endpoint:</p>
-<p><code>create-resolver-endpoint --name \\[endpoint_name\\] --direction INBOUND --creator-request-id \\[unique_string\\] --security-group-ids \\[security_group_with_inbound_rules\\] --ip-addresses SubnetId=\\[subnet_id\\] SubnetId=\\[subnet_id_in_different_AZ\\]</code></p>
-<p>Note the resolver endpoint ID that appears in the response. You\'ll
-use it in step 3.</p></li>
-<li><p>Get the IP addresses for the Resolver endpoints:</p>
-<p><code>get-resolver-endpoint --resolver-endpoint-id \\[resolver_endpoint_id\\]</code></p></li>
-<li><p>In your network configuration, define the IP addresses that you got
-in step 3 as DNS servers.</p>
-<p>You can now query instance names in your VPCs and the names of
-records in your private hosted zone.</p></li>
-</ol>
-
-<p>You can also perform the following operations using the AWS CLI:</p><ul>
-<li><p><code>list-resolver-endpoints</code>: List all endpoints. The syntax includes
-options for pagination and filtering.</p></li>
-<li><p><code>update-resolver-endpoints</code>: Add IP addresses to an endpoint or
-remove IP addresses from an endpoint.</p></li>
-</ul>
-
-<p>To delete an endpoint, use the following AWS CLI command:</p>
-<p><code>delete-resolver-endpoint --resolver-endpoint-id \\[resolver_endpoint_id\\]</code></p>
+    <p>When you create a VPC using Amazon VPC, you automatically get DNS
+resolution within the VPC from Route 53 Resolver. By default, Resolver
+answers DNS queries for VPC domain names such as domain names for EC2
+instances or ELB load balancers. Resolver performs recursive lookups
+against public name servers for all other domain names.</p>
+<p>You can also configure DNS resolution between your VPC and your network
+over a Direct Connect or VPN connection:</p>
+<p><strong>Forward DNS queries from resolvers on your network to Route 53
+Resolver</strong></p>
+<p>DNS resolvers on your network can forward DNS queries to Resolver in a
+specified VPC. This allows your DNS resolvers to easily resolve domain
+names for AWS resources such as EC2 instances or records in a Route 53
+private hosted zone. For more information, see <a href='https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html#resolver-overview-forward-network-to-vpc'>How DNS Resolvers on Your Network Forward DNS Queries to Route 53 Resolver</a>
+in the <em>Amazon Route 53 Developer Guide</em>.</p>
+<p><strong>Conditionally forward queries from a VPC to resolvers on your
+network</strong></p>
+<p>You can configure Resolver to forward queries that it receives from EC2
+instances in your VPCs to DNS resolvers on your network. To forward
+selected queries, you create Resolver rules that specify the domain
+names for the DNS queries that you want to forward (such as
+example.com), and the IP addresses of the DNS resolvers on your network
+that you want to forward the queries to. If a query matches multiple
+rules (example.com, acme.example.com), Resolver chooses the rule with
+the most specific match (acme.example.com) and forwards the query to the
+IP addresses that you specified in that rule. For more information, see
+<a href='https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html#resolver-overview-forward-vpc-to-network'>How Route 53 Resolver Forwards DNS Queries from Your VPCs to Your Network</a>
+in the <em>Amazon Route 53 Developer Guide</em>.</p>
+<p>Like Amazon VPC, Resolver is regional. In each region where you have
+VPCs, you can choose whether to forward queries from your VPCs to your
+network (outbound queries), from your network to your VPCs (inbound
+queries), or both.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>route53resolver</span>(<span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>route53resolver</span><span class='op'>(</span>config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,59 +192,75 @@ remove IP addresses from an endpoint.</p></li>
     <h2 class="hasAnchor" id="service-syntax"><a class="anchor" href="#service-syntax"></a>Service syntax</h2>
 
     
-<pre><span class='no'>svc</span> <span class='kw'>&amp;</span><span class='no'>lt</span>;- <span class='fu'>route53resolver</span>(
-  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>creds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>access_key_id</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>secret_access_key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>session_token</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>profile</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>route53resolver</span><span class='op'>(</span>
+  config <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    credentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        access_key_id <span class='op'>=</span> <span class='st'>"string"</span>,
+        secret_access_key <span class='op'>=</span> <span class='st'>"string"</span>,
+        session_token <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      profile <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    endpoint <span class='op'>=</span> <span class='st'>"string"</span>,
+    region <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
     <h2 class="hasAnchor" id="operations"><a class="anchor" href="#operations"></a>Operations</h2>
 
     
 
 <table class='table'>
-<tr><td><a href='associate_resolver_endpoint_ip_address.html'>associate_resolver_endpoint_ip_address</a></td><td>Adds IP addresses to an inbound or an outbound resolver endpoint</td></tr>
-<tr><td><a href='associate_resolver_rule.html'>associate_resolver_rule</a></td><td>Associates a resolver rule with a VPC</td></tr>
-<tr><td><a href='create_resolver_endpoint.html'>create_resolver_endpoint</a></td><td>Creates a resolver endpoint</td></tr>
-<tr><td><a href='create_resolver_rule.html'>create_resolver_rule</a></td><td>For DNS queries that originate in your VPCs, specifies which resolver endpoint the queries pass through, one domain name that you want to forward to your network, and the IP addresses of the DNS resolvers in your network</td></tr>
-<tr><td><a href='delete_resolver_endpoint.html'>delete_resolver_endpoint</a></td><td>Deletes a resolver endpoint</td></tr>
-<tr><td><a href='delete_resolver_rule.html'>delete_resolver_rule</a></td><td>Deletes a resolver rule</td></tr>
-<tr><td><a href='disassociate_resolver_endpoint_ip_address.html'>disassociate_resolver_endpoint_ip_address</a></td><td>Removes IP addresses from an inbound or an outbound resolver endpoint</td></tr>
-<tr><td><a href='disassociate_resolver_rule.html'>disassociate_resolver_rule</a></td><td>Removes the association between a specified resolver rule and a specified VPC</td></tr>
-<tr><td><a href='get_resolver_endpoint.html'>get_resolver_endpoint</a></td><td>Gets information about a specified resolver endpoint, such as whether it's an inbound or an outbound resolver endpoint, and the current status of the endpoint</td></tr>
-<tr><td><a href='get_resolver_rule.html'>get_resolver_rule</a></td><td>Gets information about a specified resolver rule, such as the domain name that the rule forwards DNS queries for and the ID of the outbound resolver endpoint that the rule is associated with</td></tr>
-<tr><td><a href='get_resolver_rule_association.html'>get_resolver_rule_association</a></td><td>Gets information about an association between a specified resolver rule and a VPC</td></tr>
-<tr><td><a href='get_resolver_rule_policy.html'>get_resolver_rule_policy</a></td><td>Gets information about a resolver rule policy</td></tr>
-<tr><td><a href='list_resolver_endpoint_ip_addresses.html'>list_resolver_endpoint_ip_addresses</a></td><td>Gets the IP addresses for a specified resolver endpoint</td></tr>
-<tr><td><a href='list_resolver_endpoints.html'>list_resolver_endpoints</a></td><td>Lists all the resolver endpoints that were created using the current AWS account</td></tr>
-<tr><td><a href='list_resolver_rule_associations.html'>list_resolver_rule_associations</a></td><td>Lists the associations that were created between resolver rules and VPCs using the current AWS account</td></tr>
-<tr><td><a href='list_resolver_rules.html'>list_resolver_rules</a></td><td>Lists the resolver rules that were created using the current AWS account</td></tr>
+<tr><td><a href='associate_resolver_endpoint_ip_address.html'>associate_resolver_endpoint_ip_address</a></td><td>Adds IP addresses to an inbound or an outbound Resolver endpoint</td></tr>
+<tr><td><a href='associate_resolver_query_log_config.html'>associate_resolver_query_log_config</a></td><td>Associates an Amazon VPC with a specified query logging configuration</td></tr>
+<tr><td><a href='associate_resolver_rule.html'>associate_resolver_rule</a></td><td>Associates a Resolver rule with a VPC</td></tr>
+<tr><td><a href='create_resolver_endpoint.html'>create_resolver_endpoint</a></td><td>Creates a Resolver endpoint</td></tr>
+<tr><td><a href='create_resolver_query_log_config.html'>create_resolver_query_log_config</a></td><td>Creates a Resolver query logging configuration, which defines where you want Resolver to save DNS query logs that originate in your VPCs</td></tr>
+<tr><td><a href='create_resolver_rule.html'>create_resolver_rule</a></td><td>For DNS queries that originate in your VPCs, specifies which Resolver endpoint the queries pass through, one domain name that you want to forward to your network, and the IP addresses of the DNS resolvers in your network</td></tr>
+<tr><td><a href='delete_resolver_endpoint.html'>delete_resolver_endpoint</a></td><td>Deletes a Resolver endpoint</td></tr>
+<tr><td><a href='delete_resolver_query_log_config.html'>delete_resolver_query_log_config</a></td><td>Deletes a query logging configuration</td></tr>
+<tr><td><a href='delete_resolver_rule.html'>delete_resolver_rule</a></td><td>Deletes a Resolver rule</td></tr>
+<tr><td><a href='disassociate_resolver_endpoint_ip_address.html'>disassociate_resolver_endpoint_ip_address</a></td><td>Removes IP addresses from an inbound or an outbound Resolver endpoint</td></tr>
+<tr><td><a href='disassociate_resolver_query_log_config.html'>disassociate_resolver_query_log_config</a></td><td>Disassociates a VPC from a query logging configuration</td></tr>
+<tr><td><a href='disassociate_resolver_rule.html'>disassociate_resolver_rule</a></td><td>Removes the association between a specified Resolver rule and a specified VPC</td></tr>
+<tr><td><a href='get_resolver_dnssec_config.html'>get_resolver_dnssec_config</a></td><td>Gets DNSSEC validation information for a specified resource</td></tr>
+<tr><td><a href='get_resolver_endpoint.html'>get_resolver_endpoint</a></td><td>Gets information about a specified Resolver endpoint, such as whether it's an inbound or an outbound Resolver endpoint, and the current status of the endpoint</td></tr>
+<tr><td><a href='get_resolver_query_log_config.html'>get_resolver_query_log_config</a></td><td>Gets information about a specified Resolver query logging configuration, such as the number of VPCs that the configuration is logging queries for and the location that logs are sent to</td></tr>
+<tr><td><a href='get_resolver_query_log_config_association.html'>get_resolver_query_log_config_association</a></td><td>Gets information about a specified association between a Resolver query logging configuration and an Amazon VPC</td></tr>
+<tr><td><a href='get_resolver_query_log_config_policy.html'>get_resolver_query_log_config_policy</a></td><td>Gets information about a query logging policy</td></tr>
+<tr><td><a href='get_resolver_rule.html'>get_resolver_rule</a></td><td>Gets information about a specified Resolver rule, such as the domain name that the rule forwards DNS queries for and the ID of the outbound Resolver endpoint that the rule is associated with</td></tr>
+<tr><td><a href='get_resolver_rule_association.html'>get_resolver_rule_association</a></td><td>Gets information about an association between a specified Resolver rule and a VPC</td></tr>
+<tr><td><a href='get_resolver_rule_policy.html'>get_resolver_rule_policy</a></td><td>Gets information about the Resolver rule policy for a specified rule</td></tr>
+<tr><td><a href='list_resolver_dnssec_configs.html'>list_resolver_dnssec_configs</a></td><td>Lists the configurations for DNSSEC validation that are associated with the current AWS account</td></tr>
+<tr><td><a href='list_resolver_endpoint_ip_addresses.html'>list_resolver_endpoint_ip_addresses</a></td><td>Gets the IP addresses for a specified Resolver endpoint</td></tr>
+<tr><td><a href='list_resolver_endpoints.html'>list_resolver_endpoints</a></td><td>Lists all the Resolver endpoints that were created using the current AWS account</td></tr>
+<tr><td><a href='list_resolver_query_log_config_associations.html'>list_resolver_query_log_config_associations</a></td><td>Lists information about associations between Amazon VPCs and query logging configurations</td></tr>
+<tr><td><a href='list_resolver_query_log_configs.html'>list_resolver_query_log_configs</a></td><td>Lists information about the specified query logging configurations</td></tr>
+<tr><td><a href='list_resolver_rule_associations.html'>list_resolver_rule_associations</a></td><td>Lists the associations that were created between Resolver rules and VPCs using the current AWS account</td></tr>
+<tr><td><a href='list_resolver_rules.html'>list_resolver_rules</a></td><td>Lists the Resolver rules that were created using the current AWS account</td></tr>
 <tr><td><a href='list_tags_for_resource.html'>list_tags_for_resource</a></td><td>Lists the tags that you associated with the specified resource</td></tr>
-<tr><td><a href='put_resolver_rule_policy.html'>put_resolver_rule_policy</a></td><td>Specifies the Resolver operations and resources that you want to allow another AWS account to be able to use</td></tr>
+<tr><td><a href='put_resolver_query_log_config_policy.html'>put_resolver_query_log_config_policy</a></td><td>Specifies an AWS account that you want to share a query logging configuration with, the query logging configuration that you want to share, and the operations that you want the account to be able to perform on the configuration</td></tr>
+<tr><td><a href='put_resolver_rule_policy.html'>put_resolver_rule_policy</a></td><td>Specifies an AWS rule that you want to share with another account, the account that you want to share the rule with, and the operations that you want the account to be able to perform on the rule</td></tr>
 <tr><td><a href='tag_resource.html'>tag_resource</a></td><td>Adds one or more tags to a specified resource</td></tr>
 <tr><td><a href='untag_resource.html'>untag_resource</a></td><td>Removes one or more tags from a specified resource</td></tr>
-<tr><td><a href='update_resolver_endpoint.html'>update_resolver_endpoint</a></td><td>Updates the name of an inbound or an outbound resolver endpoint</td></tr>
-<tr><td><a href='update_resolver_rule.html'>update_resolver_rule</a></td><td>Updates settings for a specified resolver rule</td></tr>
+<tr><td><a href='update_resolver_dnssec_config.html'>update_resolver_dnssec_config</a></td><td>Updates an existing DNSSEC validation configuration</td></tr>
+<tr><td><a href='update_resolver_endpoint.html'>update_resolver_endpoint</a></td><td>Updates the name of an inbound or an outbound Resolver endpoint</td></tr>
+<tr><td><a href='update_resolver_rule.html'>update_resolver_rule</a></td><td>Updates settings for a specified Resolver rule</td></tr>
 </table>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>svc</span> <span class='kw'>&lt;-</span> <span class='fu'>route53resolver</span>()
-<span class='no'>svc</span>$<span class='fu'>associate_resolver_endpoint_ip_address</span>(
-  <span class='kw'>Foo</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)
-}</pre>
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>svc</span> <span class='op'>&lt;-</span> <span class='fu'>route53resolver</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>associate_resolver_endpoint_ip_address</span><span class='op'>(</span>
+  Foo <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -246,7 +276,7 @@ remove IP addresses from an endpoint.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

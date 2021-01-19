@@ -43,7 +43,20 @@ sources — machinelearning_create_ml_model • paws</title>
 <meta property="og:title" content="Creates a new MLModel using the DataSource and the recipe as information
 sources — machinelearning_create_ml_model" />
 <meta property="og:description" content="Creates a new MLModel using the DataSource and the recipe as
-information sources." />
+information sources.
+An MLModel is nearly immutable. Users can update only the
+MLModelName and the ScoreThreshold in an MLModel without creating
+a new MLModel.
+CreateMLModel is an asynchronous operation. In response to
+CreateMLModel, Amazon Machine Learning (Amazon ML) immediately returns
+and sets the MLModel status to PENDING. After the MLModel has been
+created and ready is for use, Amazon ML sets the status to COMPLETED.
+You can use the GetMLModel operation to check the progress of the
+MLModel during the creation operation.
+CreateMLModel requires a DataSource with computed statistics, which
+can be created by setting ComputeStatistics to true in
+CreateDataSourceFromRDS, CreateDataSourceFromS3, or
+CreateDataSourceFromRedshift operations." />
 
 
 
@@ -75,7 +88,7 @@ information sources." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +96,7 @@ information sources." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +108,7 @@ information sources." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,10 +134,23 @@ sources</h1>
     <div class="ref-description">
     <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as
 information sources.</p>
+<p>An <code>MLModel</code> is nearly immutable. Users can update only the
+<code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating
+a new <code>MLModel</code>.</p>
+<p><code>CreateMLModel</code> is an asynchronous operation. In response to
+<code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns
+and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been
+created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>.</p>
+<p>You can use the <code>GetMLModel</code> operation to check the progress of the
+<code>MLModel</code> during the creation operation.</p>
+<p><code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which
+can be created by setting <code>ComputeStatistics</code> to <code>true</code> in
+<code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or
+<code>CreateDataSourceFromRedshift</code> operations.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>machinelearning_create_ml_model</span>(<span class='no'>MLModelId</span>, <span class='no'>MLModelName</span>, <span class='no'>MLModelType</span>,
-  <span class='no'>Parameters</span>, <span class='no'>TrainingDataSourceId</span>, <span class='no'>Recipe</span>, <span class='no'>RecipeUri</span>)</pre>
+    <pre class="usage"><span class='fu'>machinelearning_create_ml_model</span><span class='op'>(</span><span class='va'>MLModelId</span>, <span class='va'>MLModelName</span>, <span class='va'>MLModelType</span>,
+  <span class='va'>Parameters</span>, <span class='va'>TrainingDataSourceId</span>, <span class='va'>Recipe</span>, <span class='va'>RecipeUri</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,7 +174,7 @@ numeric value.</p></li>
 values.</p></li>
 </ul>
 
-<p>For more information, see the <a href='http://docs.aws.amazon.com/machine-learning/latest/dg'>Amazon Machine Learning Developer Guide</a>.</p></td>
+<p>For more information, see the <a href='https://docs.aws.amazon.com/machine-learning/latest/dg/'>Amazon Machine Learning Developer Guide</a>.</p></td>
     </tr>
     <tr>
       <th>Parameters</th>
@@ -164,7 +190,7 @@ The default value is <code>33554432</code>.</p></li>
 traverses the observations to build the <code>MLModel</code>. The value is an
 integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li>
 <li><p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data.
-Shuffling the data improves a model\'s ability to find the optimal
+Shuffling the data improves a model's ability to find the optimal
 solution for a variety of data types. The valid values are <code>auto</code>
 and <code>none</code>. The default value is <code>none</code>. We strongly recommend that
 you shuffle your data.</p></li>
@@ -174,16 +200,16 @@ coefficients. This tends to drive coefficients to zero, resulting in
 a sparse feature set. If you use this parameter, start by specifying
 a small value, such as <code>1.0E-08</code>.</p>
 <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The
-default is to not use L1 normalization. This parameter can\'t be
-used when <code>L2</code> is specified. Use this parameter sparingly.</p></li>
+default is to not use L1 normalization. This parameter can't be used
+when <code>L2</code> is specified. Use this parameter sparingly.</p></li>
 <li><p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2
 norm. It controls overfitting the data by penalizing large
 coefficients. This tends to drive coefficients to small, nonzero
 values. If you use this parameter, start by specifying a small
 value, such as <code>1.0E-08</code>.</p>
 <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The
-default is to not use L2 normalization. This parameter can\'t be
-used when <code>L1</code> is specified. Use this parameter sparingly.</p></li>
+default is to not use L2 normalization. This parameter can't be used
+when <code>L1</code> is specified. Use this parameter sparingly.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -193,47 +219,33 @@ used when <code>L1</code> is specified. Use this parameter sparingly.</p></li>
     <tr>
       <th>Recipe</th>
       <td><p>The data recipe for creating the <code>MLModel</code>. You must specify either the
-recipe or its URI. If you don\'t specify a recipe or its URI, Amazon ML
+recipe or its URI. If you don't specify a recipe or its URI, Amazon ML
 creates a default.</p></td>
     </tr>
     <tr>
       <th>RecipeUri</th>
       <td><p>The Amazon Simple Storage Service (Amazon S3) location and file name
 that contains the <code>MLModel</code> recipe. You must specify either the recipe
-or its URI. If you don\'t specify a recipe or its URI, Amazon ML creates
+or its URI. If you don't specify a recipe or its URI, Amazon ML creates
 a default.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>An <code>MLModel</code> is nearly immutable. Users can update only the
-<code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating
-a new <code>MLModel</code>.</p>
-<p><code>CreateMLModel</code> is an asynchronous operation. In response to
-<code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns
-and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been
-created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>.</p>
-<p>You can use the <code>GetMLModel</code> operation to check the progress of the
-<code>MLModel</code> during the creation operation.</p>
-<p><code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which
-can be created by setting <code>ComputeStatistics</code> to <code>true</code> in
-<code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or
-<code>CreateDataSourceFromRedshift</code> operations.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_ml_model</span>(
-  <span class='kw'>MLModelId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MLModelName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MLModelType</span> <span class='kw'>=</span> <span class='st'>"REGRESSION"</span><span class='kw'>|</span><span class='st'>"BINARY"</span><span class='kw'>|</span><span class='st'>"MULTICLASS"</span>,
-  <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_ml_model</span><span class='op'>(</span>
+  MLModelId <span class='op'>=</span> <span class='st'>"string"</span>,
+  MLModelName <span class='op'>=</span> <span class='st'>"string"</span>,
+  MLModelType <span class='op'>=</span> <span class='st'>"REGRESSION"</span><span class='op'>|</span><span class='st'>"BINARY"</span><span class='op'>|</span><span class='st'>"MULTICLASS"</span>,
+  Parameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>TrainingDataSourceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Recipe</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RecipeUri</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  TrainingDataSourceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Recipe <span class='op'>=</span> <span class='st'>"string"</span>,
+  RecipeUri <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -251,7 +263,7 @@ can be created by setting <code>ComputeStatistics</code> to <code>true</code> in
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

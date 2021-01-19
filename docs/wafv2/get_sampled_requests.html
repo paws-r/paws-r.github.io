@@ -44,7 +44,18 @@ November, 2019 — wafv2_get_sampled_requests • paws</title>
 November, 2019 — wafv2_get_sampled_requests" />
 <meta property="og:description" content="This is the latest version of AWS WAF, named AWS WAFV2, released in
 November, 2019. For information, including how to migrate your AWS WAF
-resources from the prior release, see the AWS WAF Developer Guide." />
+resources from the prior release, see the AWS WAF Developer Guide.
+Gets detailed information about a specified number of requests--a
+sample--that AWS WAF randomly selects from among the first 5,000
+requests that your AWS resource received during a time range that you
+choose. You can specify a sample size of up to 500 requests, and you can
+specify any time range in the previous three hours.
+GetSampledRequests returns a time range, which is usually the time
+range that you specified. However, if your resource (such as a
+CloudFront distribution) received 5,000 requests before the specified
+time range elapsed, GetSampledRequests returns an updated time range.
+This new time range indicates the actual period during which AWS WAF
+selected the requests in the sample." />
 
 
 
@@ -76,7 +87,7 @@ resources from the prior release, see the AWS WAF Developer Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +95,7 @@ resources from the prior release, see the AWS WAF Developer Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +107,7 @@ resources from the prior release, see the AWS WAF Developer Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +134,21 @@ November, 2019</h1>
     <p>This is the latest version of <strong>AWS WAF</strong>, named AWS WAFV2, released in
 November, 2019. For information, including how to migrate your AWS WAF
 resources from the prior release, see the <a href='https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html'>AWS WAF Developer Guide</a>.</p>
+<p>Gets detailed information about a specified number of requests--a
+sample--that AWS WAF randomly selects from among the first 5,000
+requests that your AWS resource received during a time range that you
+choose. You can specify a sample size of up to 500 requests, and you can
+specify any time range in the previous three hours.</p>
+<p><code>GetSampledRequests</code> returns a time range, which is usually the time
+range that you specified. However, if your resource (such as a
+CloudFront distribution) received 5,000 requests before the specified
+time range elapsed, <code>GetSampledRequests</code> returns an updated time range.
+This new time range indicates the actual period during which AWS WAF
+selected the requests in the sample.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wafv2_get_sampled_requests</span>(<span class='no'>WebAclArn</span>, <span class='no'>RuleMetricName</span>, <span class='no'>Scope</span>, <span class='no'>TimeWindow</span>,
-  <span class='no'>MaxItems</span>)</pre>
+    <pre class="usage"><span class='fu'>wafv2_get_sampled_requests</span><span class='op'>(</span><span class='va'>WebAclArn</span>, <span class='va'>RuleMetricName</span>, <span class='va'>Scope</span>, <span class='va'>TimeWindow</span>,
+  <span class='va'>MaxItems</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,7 +167,7 @@ a sample of requests.</p></td>
       <th>Scope</th>
       <td><p>[required] Specifies whether this is for an AWS CloudFront distribution or for a
 regional application. A regional application can be an Application Load
-Balancer (ALB) or an API Gateway stage.</p>
+Balancer (ALB), an API Gateway REST API, or an AppSync GraphQL API.</p>
 <p>To work with CloudFront, you must also specify the Region US East (N.
 Virginia) as follows:</p><ul>
 <li><p>CLI - Specify the Region when you use the CloudFront scope:
@@ -171,36 +193,24 @@ range. If your resource received fewer requests than the value of
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Gets detailed information about a specified number of requests\--a
-sample\--that AWS WAF randomly selects from among the first 5,000
-requests that your AWS resource received during a time range that you
-choose. You can specify a sample size of up to 500 requests, and you can
-specify any time range in the previous three hours.</p>
-<p><code>GetSampledRequests</code> returns a time range, which is usually the time
-range that you specified. However, if your resource (such as a
-CloudFront distribution) received 5,000 requests before the specified
-time range elapsed, <code>GetSampledRequests</code> returns an updated time range.
-This new time range indicates the actual period during which AWS WAF
-selected the requests in the sample.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_sampled_requests</span>(
-  <span class='kw'>WebAclArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RuleMetricName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Scope</span> <span class='kw'>=</span> <span class='st'>"CLOUDFRONT"</span><span class='kw'>|</span><span class='st'>"REGIONAL"</span>,
-  <span class='kw'>TimeWindow</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>StartTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_sampled_requests</span><span class='op'>(</span>
+  WebAclArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  RuleMetricName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Scope <span class='op'>=</span> <span class='st'>"CLOUDFRONT"</span><span class='op'>|</span><span class='st'>"REGIONAL"</span>,
+  TimeWindow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    StartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
       <span class='st'>"2015-01-01"</span>
-    ),
-    <span class='kw'>EndTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+    <span class='op'>)</span>,
+    EndTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
       <span class='st'>"2015-01-01"</span>
-    )
-  ),
-  <span class='kw'>MaxItems</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MaxItems <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -218,7 +228,7 @@ selected the requests in the sample.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -46,6 +46,20 @@ containerDefinitions — ecs_register_task_definition" />
 containerDefinitions. Optionally, you can add data volumes to your
 containers with the volumes parameter. For more information about task
 definition parameters and defaults, see Amazon ECS Task Definitions
+in the Amazon Elastic Container Service Developer Guide.
+You can specify an IAM role for your task with the taskRoleArn
+parameter. When you specify an IAM role for a task, its containers can
+then use the latest versions of the AWS CLI or SDKs to make API requests
+to the AWS services that are specified in the IAM policy associated with
+the role. For more information, see IAM Roles for Tasks
+in the Amazon Elastic Container Service Developer Guide.
+You can specify a Docker networking mode for the containers in your task
+definition with the networkMode parameter. The available network modes
+correspond to those described in Network settings
+in the Docker run reference. If you specify the awsvpc network mode,
+the task is allocated an elastic network interface, and you must specify
+a NetworkConfiguration when you create a service or run a task with the
+task definition. For more information, see Task Networking
 in the Amazon Elastic Container Service Developer Guide." />
 
 
@@ -78,7 +92,7 @@ in the Amazon Elastic Container Service Developer Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +100,7 @@ in the Amazon Elastic Container Service Developer Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +112,7 @@ in the Amazon Elastic Container Service Developer Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,14 +139,28 @@ containerDefinitions</h1>
     <p>Registers a new task definition from the supplied <code>family</code> and
 <code>containerDefinitions</code>. Optionally, you can add data volumes to your
 containers with the <code>volumes</code> parameter. For more information about task
-definition parameters and defaults, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html'>Amazon ECS Task Definitions</a>
+definition parameters and defaults, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html'>Amazon ECS Task Definitions</a>
+in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
+<p>You can specify an IAM role for your task with the <code>taskRoleArn</code>
+parameter. When you specify an IAM role for a task, its containers can
+then use the latest versions of the AWS CLI or SDKs to make API requests
+to the AWS services that are specified in the IAM policy associated with
+the role. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html'>IAM Roles for Tasks</a>
+in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
+<p>You can specify a Docker networking mode for the containers in your task
+definition with the <code>networkMode</code> parameter. The available network modes
+correspond to those described in <a href='https://docs.docker.com/engine/reference/run/#/network-settings'>Network settings</a>
+in the Docker run reference. If you specify the <code>awsvpc</code> network mode,
+the task is allocated an elastic network interface, and you must specify
+a NetworkConfiguration when you create a service or run a task with the
+task definition. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html'>Task Networking</a>
 in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ecs_register_task_definition</span>(<span class='no'>family</span>, <span class='no'>taskRoleArn</span>, <span class='no'>executionRoleArn</span>,
-  <span class='no'>networkMode</span>, <span class='no'>containerDefinitions</span>, <span class='no'>volumes</span>, <span class='no'>placementConstraints</span>,
-  <span class='no'>requiresCompatibilities</span>, <span class='no'>cpu</span>, <span class='no'>memory</span>, <span class='no'>tags</span>, <span class='no'>pidMode</span>, <span class='no'>ipcMode</span>,
-  <span class='no'>proxyConfiguration</span>, <span class='no'>inferenceAccelerators</span>)</pre>
+    <pre class="usage"><span class='fu'>ecs_register_task_definition</span><span class='op'>(</span><span class='va'>family</span>, <span class='va'>taskRoleArn</span>, <span class='va'>executionRoleArn</span>,
+  <span class='va'>networkMode</span>, <span class='va'>containerDefinitions</span>, <span class='va'>volumes</span>, <span class='va'>placementConstraints</span>,
+  <span class='va'>requiresCompatibilities</span>, <span class='va'>cpu</span>, <span class='va'>memory</span>, <span class='va'>tags</span>, <span class='va'>pidMode</span>, <span class='va'>ipcMode</span>,
+  <span class='va'>proxyConfiguration</span>, <span class='va'>inferenceAccelerators</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,20 +191,24 @@ in the <em>Amazon Elastic Container Service Developer Guide</em>.</p></td>
     <tr>
       <th>networkMode</th>
       <td><p>The Docker networking mode to use for the containers in the task. The
-valid values are <code>none</code>, <code>bridge</code>, <code>awsvpc</code>, and <code>host</code>. The default
-Docker network mode is <code>bridge</code>. If you are using the Fargate launch
-type, the <code>awsvpc</code> network mode is required. If you are using the EC2
-launch type, any network mode can be used. If the network mode is set to
-<code>none</code>, you cannot specify port mappings in your container definitions,
-and the tasks containers do not have external connectivity. The <code>host</code>
-and <code>awsvpc</code> network modes offer the highest networking performance for
-containers because they use the EC2 network stack instead of the
-virtualized network stack provided by the <code>bridge</code> mode.</p>
+valid values are <code>none</code>, <code>bridge</code>, <code>awsvpc</code>, and <code>host</code>. If no network
+mode is specified, the default is <code>bridge</code>.</p>
+<p>For Amazon ECS tasks on Fargate, the <code>awsvpc</code> network mode is required.
+For Amazon ECS tasks on Amazon EC2 instances, any network mode can be
+used. If the network mode is set to <code>none</code>, you cannot specify port
+mappings in your container definitions, and the tasks containers do not
+have external connectivity. The <code>host</code> and <code>awsvpc</code> network modes offer
+the highest networking performance for containers because they use the
+EC2 network stack instead of the virtualized network stack provided by
+the <code>bridge</code> mode.</p>
 <p>With the <code>host</code> and <code>awsvpc</code> network modes, exposed container ports are
 mapped directly to the corresponding host port (for the <code>host</code> network
 mode) or the attached elastic network interface port (for the <code>awsvpc</code>
 network mode), so you cannot take advantage of dynamic host port
 mappings.</p>
+<p>When using the <code>host</code> network mode, you should not run containers using
+the root user (UID 0). It is considered best practice to use a non-root
+user.</p>
 <p>If the network mode is <code>awsvpc</code>, the task is allocated an elastic
 network interface, and you must specify a NetworkConfiguration value
 when you create a service or run a task with the task definition. For
@@ -214,8 +246,10 @@ constraints in the task definition and those specified at runtime).</p></td>
     </tr>
     <tr>
       <th>requiresCompatibilities</th>
-      <td><p>The launch type required by the task. If no value is specified, it
-defaults to <code>EC2</code>.</p></td>
+      <td><p>The task launch type that Amazon ECS should validate the task definition
+against. This ensures that the task definition parameters are compatible
+with the specified launch type. If no value is specified, it defaults to
+<code>EC2</code>.</p></td>
     </tr>
     <tr>
       <th>cpu</th>
@@ -351,291 +385,286 @@ task.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can specify an IAM role for your task with the <code>taskRoleArn</code>
-parameter. When you specify an IAM role for a task, its containers can
-then use the latest versions of the AWS CLI or SDKs to make API requests
-to the AWS services that are specified in the IAM policy associated with
-the role. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html'>IAM Roles for Tasks</a>
-in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
-<p>You can specify a Docker networking mode for the containers in your task
-definition with the <code>networkMode</code> parameter. The available network modes
-correspond to those described in <a href='https://docs.docker.com/engine/reference/run/#/network-settings'>Network settings</a>
-in the Docker run reference. If you specify the <code>awsvpc</code> network mode,
-the task is allocated an elastic network interface, and you must specify
-a NetworkConfiguration when you create a service or run a task with the
-task definition. For more information, see <a href='https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html'>Task Networking</a>
-in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>register_task_definition</span>(
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>taskRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>executionRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>networkMode</span> <span class='kw'>=</span> <span class='st'>"bridge"</span><span class='kw'>|</span><span class='st'>"host"</span><span class='kw'>|</span><span class='st'>"awsvpc"</span><span class='kw'>|</span><span class='st'>"none"</span>,
-  <span class='kw'>containerDefinitions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>image</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>repositoryCredentials</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>credentialsParameter</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>cpu</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>memoryReservation</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>links</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>register_task_definition</span><span class='op'>(</span>
+  family <span class='op'>=</span> <span class='st'>"string"</span>,
+  taskRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  executionRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  networkMode <span class='op'>=</span> <span class='st'>"bridge"</span><span class='op'>|</span><span class='st'>"host"</span><span class='op'>|</span><span class='st'>"awsvpc"</span><span class='op'>|</span><span class='st'>"none"</span>,
+  containerDefinitions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      name <span class='op'>=</span> <span class='st'>"string"</span>,
+      image <span class='op'>=</span> <span class='st'>"string"</span>,
+      repositoryCredentials <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        credentialsParameter <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      cpu <span class='op'>=</span> <span class='fl'>123</span>,
+      memory <span class='op'>=</span> <span class='fl'>123</span>,
+      memoryReservation <span class='op'>=</span> <span class='fl'>123</span>,
+      links <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>portMappings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>containerPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>hostPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>protocol</span> <span class='kw'>=</span> <span class='st'>"tcp"</span><span class='kw'>|</span><span class='st'>"udp"</span>
-        )
-      ),
-      <span class='kw'>essential</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>entryPoint</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      portMappings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          containerPort <span class='op'>=</span> <span class='fl'>123</span>,
+          hostPort <span class='op'>=</span> <span class='fl'>123</span>,
+          protocol <span class='op'>=</span> <span class='st'>"tcp"</span><span class='op'>|</span><span class='st'>"udp"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      essential <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      entryPoint <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>command</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>environment</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>environmentFiles</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"s3"</span>
-        )
-      ),
-      <span class='kw'>mountPoints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>sourceVolume</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>containerPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>readOnly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-        )
-      ),
-      <span class='kw'>volumesFrom</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>sourceContainer</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>readOnly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-        )
-      ),
-      <span class='kw'>linuxParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>capabilities</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>add</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          name <span class='op'>=</span> <span class='st'>"string"</span>,
+          value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      environmentFiles <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          value <span class='op'>=</span> <span class='st'>"string"</span>,
+          type <span class='op'>=</span> <span class='st'>"s3"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      mountPoints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          sourceVolume <span class='op'>=</span> <span class='st'>"string"</span>,
+          containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+          readOnly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      volumesFrom <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          sourceContainer <span class='op'>=</span> <span class='st'>"string"</span>,
+          readOnly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      linuxParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        capabilities <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          add <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='st'>"string"</span>
-          ),
-          <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+          <span class='op'>)</span>,
+          drop <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
             <span class='st'>"string"</span>
-          )
-        ),
-        <span class='kw'>devices</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>hostPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>containerPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>permissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-              <span class='st'>"read"</span><span class='kw'>|</span><span class='st'>"write"</span><span class='kw'>|</span><span class='st'>"mknod"</span>
-            )
-          )
-        ),
-        <span class='kw'>initProcessEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>sharedMemorySize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>tmpfs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>containerPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-            <span class='kw'>mountOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        devices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            hostPath <span class='op'>=</span> <span class='st'>"string"</span>,
+            containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+            permissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+              <span class='st'>"read"</span><span class='op'>|</span><span class='st'>"write"</span><span class='op'>|</span><span class='st'>"mknod"</span>
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        initProcessEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        sharedMemorySize <span class='op'>=</span> <span class='fl'>123</span>,
+        tmpfs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            containerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+            size <span class='op'>=</span> <span class='fl'>123</span>,
+            mountOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
               <span class='st'>"string"</span>
-            )
-          )
-        ),
-        <span class='kw'>maxSwap</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>swappiness</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      ),
-      <span class='kw'>secrets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>valueFrom</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>dependsOn</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>containerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>condition</span> <span class='kw'>=</span> <span class='st'>"START"</span><span class='kw'>|</span><span class='st'>"COMPLETE"</span><span class='kw'>|</span><span class='st'>"SUCCESS"</span><span class='kw'>|</span><span class='st'>"HEALTHY"</span>
-        )
-      ),
-      <span class='kw'>startTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>stopTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>hostname</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>user</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>workingDirectory</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>disableNetworking</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>privileged</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>readonlyRootFilesystem</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>dnsServers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+            <span class='op'>)</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>,
+        maxSwap <span class='op'>=</span> <span class='fl'>123</span>,
+        swappiness <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      secrets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          name <span class='op'>=</span> <span class='st'>"string"</span>,
+          valueFrom <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      dependsOn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          containerName <span class='op'>=</span> <span class='st'>"string"</span>,
+          condition <span class='op'>=</span> <span class='st'>"START"</span><span class='op'>|</span><span class='st'>"COMPLETE"</span><span class='op'>|</span><span class='st'>"SUCCESS"</span><span class='op'>|</span><span class='st'>"HEALTHY"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      startTimeout <span class='op'>=</span> <span class='fl'>123</span>,
+      stopTimeout <span class='op'>=</span> <span class='fl'>123</span>,
+      hostname <span class='op'>=</span> <span class='st'>"string"</span>,
+      user <span class='op'>=</span> <span class='st'>"string"</span>,
+      workingDirectory <span class='op'>=</span> <span class='st'>"string"</span>,
+      disableNetworking <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      privileged <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      readonlyRootFilesystem <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      dnsServers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>dnsSearchDomains</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      dnsSearchDomains <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>extraHosts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>hostname</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>ipAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>dockerSecurityOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      extraHosts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          hostname <span class='op'>=</span> <span class='st'>"string"</span>,
+          ipAddress <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      dockerSecurityOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>interactive</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>pseudoTerminal</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-      <span class='kw'>dockerLabels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      interactive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      pseudoTerminal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+      dockerLabels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>ulimits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"core"</span><span class='kw'>|</span><span class='st'>"cpu"</span><span class='kw'>|</span><span class='st'>"data"</span><span class='kw'>|</span><span class='st'>"fsize"</span><span class='kw'>|</span><span class='st'>"locks"</span><span class='kw'>|</span><span class='st'>"memlock"</span><span class='kw'>|</span><span class='st'>"msgqueue"</span><span class='kw'>|</span><span class='st'>"nice"</span><span class='kw'>|</span><span class='st'>"nofile"</span><span class='kw'>|</span><span class='st'>"nproc"</span><span class='kw'>|</span><span class='st'>"rss"</span><span class='kw'>|</span><span class='st'>"rtprio"</span><span class='kw'>|</span><span class='st'>"rttime"</span><span class='kw'>|</span><span class='st'>"sigpending"</span><span class='kw'>|</span><span class='st'>"stack"</span>,
-          <span class='kw'>softLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-          <span class='kw'>hardLimit</span> <span class='kw'>=</span> <span class='fl'>123</span>
-        )
-      ),
-      <span class='kw'>logConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>logDriver</span> <span class='kw'>=</span> <span class='st'>"json-file"</span><span class='kw'>|</span><span class='st'>"syslog"</span><span class='kw'>|</span><span class='st'>"journald"</span><span class='kw'>|</span><span class='st'>"gelf"</span><span class='kw'>|</span><span class='st'>"fluentd"</span><span class='kw'>|</span><span class='st'>"awslogs"</span><span class='kw'>|</span><span class='st'>"splunk"</span><span class='kw'>|</span><span class='st'>"awsfirelens"</span>,
-        <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      ulimits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          name <span class='op'>=</span> <span class='st'>"core"</span><span class='op'>|</span><span class='st'>"cpu"</span><span class='op'>|</span><span class='st'>"data"</span><span class='op'>|</span><span class='st'>"fsize"</span><span class='op'>|</span><span class='st'>"locks"</span><span class='op'>|</span><span class='st'>"memlock"</span><span class='op'>|</span><span class='st'>"msgqueue"</span><span class='op'>|</span><span class='st'>"nice"</span><span class='op'>|</span><span class='st'>"nofile"</span><span class='op'>|</span><span class='st'>"nproc"</span><span class='op'>|</span><span class='st'>"rss"</span><span class='op'>|</span><span class='st'>"rtprio"</span><span class='op'>|</span><span class='st'>"rttime"</span><span class='op'>|</span><span class='st'>"sigpending"</span><span class='op'>|</span><span class='st'>"stack"</span>,
+          softLimit <span class='op'>=</span> <span class='fl'>123</span>,
+          hardLimit <span class='op'>=</span> <span class='fl'>123</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      logConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        logDriver <span class='op'>=</span> <span class='st'>"json-file"</span><span class='op'>|</span><span class='st'>"syslog"</span><span class='op'>|</span><span class='st'>"journald"</span><span class='op'>|</span><span class='st'>"gelf"</span><span class='op'>|</span><span class='st'>"fluentd"</span><span class='op'>|</span><span class='st'>"awslogs"</span><span class='op'>|</span><span class='st'>"splunk"</span><span class='op'>|</span><span class='st'>"awsfirelens"</span>,
+        options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>secretOptions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>valueFrom</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      ),
-      <span class='kw'>healthCheck</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>command</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        secretOptions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            name <span class='op'>=</span> <span class='st'>"string"</span>,
+            valueFrom <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      healthCheck <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>interval</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>timeout</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>retries</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>startPeriod</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      ),
-      <span class='kw'>systemControls</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>resourceRequirements</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"GPU"</span><span class='kw'>|</span><span class='st'>"InferenceAccelerator"</span>
-        )
-      ),
-      <span class='kw'>firelensConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"fluentd"</span><span class='kw'>|</span><span class='st'>"fluentbit"</span>,
-        <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        interval <span class='op'>=</span> <span class='fl'>123</span>,
+        timeout <span class='op'>=</span> <span class='fl'>123</span>,
+        retries <span class='op'>=</span> <span class='fl'>123</span>,
+        startPeriod <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>,
+      systemControls <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+          value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      resourceRequirements <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          value <span class='op'>=</span> <span class='st'>"string"</span>,
+          type <span class='op'>=</span> <span class='st'>"GPU"</span><span class='op'>|</span><span class='st'>"InferenceAccelerator"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      firelensConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        type <span class='op'>=</span> <span class='st'>"fluentd"</span><span class='op'>|</span><span class='st'>"fluentbit"</span>,
+        options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>volumes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>host</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>sourcePath</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>dockerVolumeConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>scope</span> <span class='kw'>=</span> <span class='st'>"task"</span><span class='kw'>|</span><span class='st'>"shared"</span>,
-        <span class='kw'>autoprovision</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-        <span class='kw'>driver</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>driverOpts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  volumes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      name <span class='op'>=</span> <span class='st'>"string"</span>,
+      host <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        sourcePath <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      dockerVolumeConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        scope <span class='op'>=</span> <span class='st'>"task"</span><span class='op'>|</span><span class='st'>"shared"</span>,
+        autoprovision <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+        driver <span class='op'>=</span> <span class='st'>"string"</span>,
+        driverOpts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        ),
-        <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+        <span class='op'>)</span>,
+        labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>efsVolumeConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>fileSystemId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>rootDirectory</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>transitEncryption</span> <span class='kw'>=</span> <span class='st'>"ENABLED"</span><span class='kw'>|</span><span class='st'>"DISABLED"</span>,
-        <span class='kw'>transitEncryptionPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-        <span class='kw'>authorizationConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>accessPointId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>iam</span> <span class='kw'>=</span> <span class='st'>"ENABLED"</span><span class='kw'>|</span><span class='st'>"DISABLED"</span>
-        )
-      )
-    )
-  ),
-  <span class='kw'>placementConstraints</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"memberOf"</span>,
-      <span class='kw'>expression</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>requiresCompatibilities</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"EC2"</span><span class='kw'>|</span><span class='st'>"FARGATE"</span>
-  ),
-  <span class='kw'>cpu</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>memory</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>pidMode</span> <span class='kw'>=</span> <span class='st'>"host"</span><span class='kw'>|</span><span class='st'>"task"</span>,
-  <span class='kw'>ipcMode</span> <span class='kw'>=</span> <span class='st'>"host"</span><span class='kw'>|</span><span class='st'>"task"</span><span class='kw'>|</span><span class='st'>"none"</span>,
-  <span class='kw'>proxyConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"APPMESH"</span>,
-    <span class='kw'>containerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>properties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>inferenceAccelerators</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>deviceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>deviceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      efsVolumeConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        fileSystemId <span class='op'>=</span> <span class='st'>"string"</span>,
+        rootDirectory <span class='op'>=</span> <span class='st'>"string"</span>,
+        transitEncryption <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>,
+        transitEncryptionPort <span class='op'>=</span> <span class='fl'>123</span>,
+        authorizationConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          accessPointId <span class='op'>=</span> <span class='st'>"string"</span>,
+          iam <span class='op'>=</span> <span class='st'>"ENABLED"</span><span class='op'>|</span><span class='st'>"DISABLED"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      fsxWindowsFileServerVolumeConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        fileSystemId <span class='op'>=</span> <span class='st'>"string"</span>,
+        rootDirectory <span class='op'>=</span> <span class='st'>"string"</span>,
+        authorizationConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          credentialsParameter <span class='op'>=</span> <span class='st'>"string"</span>,
+          domain <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  placementConstraints <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      type <span class='op'>=</span> <span class='st'>"memberOf"</span>,
+      expression <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  requiresCompatibilities <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"EC2"</span><span class='op'>|</span><span class='st'>"FARGATE"</span>
+  <span class='op'>)</span>,
+  cpu <span class='op'>=</span> <span class='st'>"string"</span>,
+  memory <span class='op'>=</span> <span class='st'>"string"</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      key <span class='op'>=</span> <span class='st'>"string"</span>,
+      value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  pidMode <span class='op'>=</span> <span class='st'>"host"</span><span class='op'>|</span><span class='st'>"task"</span>,
+  ipcMode <span class='op'>=</span> <span class='st'>"host"</span><span class='op'>|</span><span class='st'>"task"</span><span class='op'>|</span><span class='st'>"none"</span>,
+  proxyConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    type <span class='op'>=</span> <span class='st'>"APPMESH"</span>,
+    containerName <span class='op'>=</span> <span class='st'>"string"</span>,
+    properties <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        name <span class='op'>=</span> <span class='st'>"string"</span>,
+        value <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  inferenceAccelerators <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      deviceName <span class='op'>=</span> <span class='st'>"string"</span>,
+      deviceType <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example registers a task definition to the specified family.</span>
-<span class='no'>svc</span>$<span class='fu'>register_task_definition</span>(
-  <span class='kw'>containerDefinitions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"sleep"</span>,
-      <span class='kw'>command</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>register_task_definition</span><span class='op'>(</span>
+  containerDefinitions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      name <span class='op'>=</span> <span class='st'>"sleep"</span>,
+      command <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"sleep"</span>,
         <span class='st'>"360"</span>
-      ),
-      <span class='kw'>cpu</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-      <span class='kw'>essential</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-      <span class='kw'>image</span> <span class='kw'>=</span> <span class='st'>"busybox"</span>,
-      <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>10L</span>
-    )
-  ),
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"sleep360"</span>,
-  <span class='kw'>taskRoleArn</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>volumes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-)
-}</pre>
+      <span class='op'>)</span>,
+      cpu <span class='op'>=</span> <span class='fl'>10L</span>,
+      essential <span class='op'>=</span> <span class='cn'>TRUE</span>,
+      image <span class='op'>=</span> <span class='st'>"busybox"</span>,
+      memory <span class='op'>=</span> <span class='fl'>10L</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  family <span class='op'>=</span> <span class='st'>"sleep360"</span>,
+  taskRoleArn <span class='op'>=</span> <span class='st'>""</span>,
+  volumes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -651,7 +680,7 @@ in the <em>Amazon Elastic Container Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

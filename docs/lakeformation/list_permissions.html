@@ -45,7 +45,11 @@ the permissions of the caller — lakeformation_list_permissions" />
 <meta property="og:description" content="Returns a list of the principal permissions on the resource, filtered by
 the permissions of the caller. For example, if you are granted an ALTER
 permission, you are able to see only the principal permissions for
-ALTER." />
+ALTER.
+This operation returns only those permissions that have been explicitly
+granted.
+For information about permissions, see Security and Access Control to
+Metadata and Data." />
 
 
 
@@ -77,7 +81,7 @@ ALTER." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +89,7 @@ ALTER." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +101,7 @@ ALTER." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,10 +129,14 @@ the permissions of the caller</h1>
 the permissions of the caller. For example, if you are granted an ALTER
 permission, you are able to see only the principal permissions for
 ALTER.</p>
+<p>This operation returns only those permissions that have been explicitly
+granted.</p>
+<p>For information about permissions, see Security and Access Control to
+Metadata and Data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lakeformation_list_permissions</span>(<span class='no'>CatalogId</span>, <span class='no'>Principal</span>, <span class='no'>ResourceType</span>,
-  <span class='no'>Resource</span>, <span class='no'>NextToken</span>, <span class='no'>MaxResults</span>)</pre>
+    <pre class="usage"><span class='fu'>lakeformation_list_permissions</span><span class='op'>(</span><span class='va'>CatalogId</span>, <span class='va'>Principal</span>, <span class='va'>ResourceType</span>,
+  <span class='va'>Resource</span>, <span class='va'>NextToken</span>, <span class='va'>MaxResults</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,54 +174,49 @@ list.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation returns only those permissions that have been explicitly
-granted.</p>
-<p>For information about permissions, see Security and Access Control to
-Metadata and Data.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_permissions</span>(
-  <span class='kw'>CatalogId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Principal</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>DataLakePrincipalIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"CATALOG"</span><span class='kw'>|</span><span class='st'>"DATABASE"</span><span class='kw'>|</span><span class='st'>"TABLE"</span><span class='kw'>|</span><span class='st'>"DATA_LOCATION"</span>,
-  <span class='kw'>Resource</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Catalog</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>Database</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CatalogId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>Table</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CatalogId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DatabaseName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>TableWildcard</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-    ),
-    <span class='kw'>TableWithColumns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CatalogId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DatabaseName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ColumnNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_permissions</span><span class='op'>(</span>
+  CatalogId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Principal <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    DataLakePrincipalIdentifier <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  ResourceType <span class='op'>=</span> <span class='st'>"CATALOG"</span><span class='op'>|</span><span class='st'>"DATABASE"</span><span class='op'>|</span><span class='st'>"TABLE"</span><span class='op'>|</span><span class='st'>"DATA_LOCATION"</span>,
+  Resource <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Catalog <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    Database <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CatalogId <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    Table <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CatalogId <span class='op'>=</span> <span class='st'>"string"</span>,
+      DatabaseName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      TableWildcard <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='op'>)</span>,
+    TableWithColumns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CatalogId <span class='op'>=</span> <span class='st'>"string"</span>,
+      DatabaseName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      ColumnNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      ),
-      <span class='kw'>ColumnWildcard</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>ExcludedColumnNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      ColumnWildcard <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        ExcludedColumnNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
           <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>DataLocation</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>CatalogId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>ResourceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    DataLocation <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      CatalogId <span class='op'>=</span> <span class='st'>"string"</span>,
+      ResourceArn <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -231,7 +234,7 @@ Metadata and Data.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

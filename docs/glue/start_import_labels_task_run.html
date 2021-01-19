@@ -47,7 +47,26 @@ to teach the machine learning transform and improve its quality. This
 API operation is generally used as part of the active learning workflow
 that starts with the StartMLLabelingSetGenerationTaskRun call and that
 ultimately results in improving the quality of your machine learning
-transform." />
+transform.
+After the StartMLLabelingSetGenerationTaskRun finishes, AWS Glue
+machine learning will have generated a series of questions for humans to
+answer. (Answering these questions is often called 'labeling' in the
+machine learning workflows). In the case of the FindMatches transform,
+these questions are of the form, “What is the correct way to group these
+rows together into groups composed entirely of matching records?” After
+the labeling process is finished, users upload their answers/labels with
+a call to StartImportLabelsTaskRun. After StartImportLabelsTaskRun
+finishes, all future runs of the machine learning transform use the new
+and improved labels and perform a higher-quality transformation.
+By default, StartMLLabelingSetGenerationTaskRun continually learns
+from and combines all labels that you upload unless you set Replace to
+true. If you set Replace to true, StartImportLabelsTaskRun deletes
+and forgets all previously uploaded labels and learns only from the
+exact set that you upload. Replacing labels can be helpful if you
+realize that you previously uploaded incorrect labels, and you believe
+that they are having a negative effect on your transform quality.
+You can check on the status of your task run by calling the
+GetMLTaskRun operation." />
 
 
 
@@ -79,7 +98,7 @@ transform." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +106,7 @@ transform." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +118,7 @@ transform." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,10 +148,29 @@ API operation is generally used as part of the active learning workflow
 that starts with the <code>StartMLLabelingSetGenerationTaskRun</code> call and that
 ultimately results in improving the quality of your machine learning
 transform.</p>
+<p>After the <code>StartMLLabelingSetGenerationTaskRun</code> finishes, AWS Glue
+machine learning will have generated a series of questions for humans to
+answer. (Answering these questions is often called 'labeling' in the
+machine learning workflows). In the case of the <code>FindMatches</code> transform,
+these questions are of the form, “What is the correct way to group these
+rows together into groups composed entirely of matching records?” After
+the labeling process is finished, users upload their answers/labels with
+a call to <code>StartImportLabelsTaskRun</code>. After <code>StartImportLabelsTaskRun</code>
+finishes, all future runs of the machine learning transform use the new
+and improved labels and perform a higher-quality transformation.</p>
+<p>By default, <code>StartMLLabelingSetGenerationTaskRun</code> continually learns
+from and combines all labels that you upload unless you set <code>Replace</code> to
+true. If you set <code>Replace</code> to true, <code>StartImportLabelsTaskRun</code> deletes
+and forgets all previously uploaded labels and learns only from the
+exact set that you upload. Replacing labels can be helpful if you
+realize that you previously uploaded incorrect labels, and you believe
+that they are having a negative effect on your transform quality.</p>
+<p>You can check on the status of your task run by calling the
+<code>GetMLTaskRun</code> operation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>glue_start_import_labels_task_run</span>(<span class='no'>TransformId</span>, <span class='no'>InputS3Path</span>,
-  <span class='no'>ReplaceAllLabels</span>)</pre>
+    <pre class="usage"><span class='fu'>glue_start_import_labels_task_run</span><span class='op'>(</span><span class='va'>TransformId</span>, <span class='va'>InputS3Path</span>,
+  <span class='va'>ReplaceAllLabels</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,35 +190,15 @@ the labels.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>After the <code>StartMLLabelingSetGenerationTaskRun</code> finishes, AWS Glue
-machine learning will have generated a series of questions for humans to
-answer. (Answering these questions is often called \'labeling\' in the
-machine learning workflows). In the case of the <code>FindMatches</code> transform,
-these questions are of the form, "What is the correct way to group these
-rows together into groups composed entirely of matching records?" After
-the labeling process is finished, users upload their answers/labels with
-a call to <code>StartImportLabelsTaskRun</code>. After <code>StartImportLabelsTaskRun</code>
-finishes, all future runs of the machine learning transform use the new
-and improved labels and perform a higher-quality transformation.</p>
-<p>By default, <code>StartMLLabelingSetGenerationTaskRun</code> continually learns
-from and combines all labels that you upload unless you set <code>Replace</code> to
-true. If you set <code>Replace</code> to true, <code>StartImportLabelsTaskRun</code> deletes
-and forgets all previously uploaded labels and learns only from the
-exact set that you upload. Replacing labels can be helpful if you
-realize that you previously uploaded incorrect labels, and you believe
-that they are having a negative effect on your transform quality.</p>
-<p>You can check on the status of your task run by calling the
-<code>GetMLTaskRun</code> operation.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>start_import_labels_task_run</span>(
-  <span class='kw'>TransformId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InputS3Path</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReplaceAllLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>start_import_labels_task_run</span><span class='op'>(</span>
+  TransformId <span class='op'>=</span> <span class='st'>"string"</span>,
+  InputS3Path <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReplaceAllLabels <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -198,7 +216,7 @@ that they are having a negative effect on your transform quality.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

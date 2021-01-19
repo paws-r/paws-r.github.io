@@ -46,7 +46,48 @@ new value — sqs_change_message_visibility" />
 new value. The default visibility timeout for a message is 30 seconds.
 The minimum is 0 seconds. The maximum is 12 hours. For more information,
 see Visibility Timeout
-in the Amazon Simple Queue Service Developer Guide." />
+in the Amazon Simple Queue Service Developer Guide.
+For example, you have a message with a visibility timeout of 5 minutes.
+After 3 minutes, you call ChangeMessageVisibility with a timeout of 10
+minutes. You can continue to call ChangeMessageVisibility to extend
+the visibility timeout to the maximum allowed time. If you try to extend
+the visibility timeout beyond the maximum, your request is rejected.
+An Amazon SQS message has three basic states:
+Sent to a queue by a producer.
+Received from the queue by a consumer.
+Deleted from the queue.
+
+
+A message is considered to be stored after it is sent to a queue by a
+producer, but not yet received from the queue by a consumer (that is,
+between states 1 and 2). There is no limit to the number of stored
+messages. A message is considered to be in flight after it is received
+from a queue by a consumer, but not yet deleted from the queue (that is,
+between states 2 and 3). There is a limit to the number of inflight
+messages.
+Limits that apply to inflight messages are unrelated to the unlimited
+number of stored messages.
+For most standard queues (depending on queue traffic and message
+backlog), there can be a maximum of approximately 120,000 inflight
+messages (received from a queue by a consumer, but not yet deleted from
+the queue). If you reach this limit, Amazon SQS returns the OverLimit
+error message. To avoid reaching the limit, you should delete messages
+from the queue after they're processed. You can also increase the number
+of queues you use to process your messages. To request a limit increase,
+file a support request.
+For FIFO queues, there can be a maximum of 20,000 inflight messages
+(received from a queue by a consumer, but not yet deleted from the
+queue). If you reach this limit, Amazon SQS returns no error messages.
+If you attempt to set the VisibilityTimeout to a value greater than
+the maximum time left, Amazon SQS returns an error. Amazon SQS doesn't
+automatically recalculate and increase the timeout to the maximum
+remaining time.
+Unlike with a queue, when you change the visibility timeout for a
+specific message the timeout value is applied immediately but isn't
+saved in memory for that message. If you don't delete a message after it
+is received, the visibility timeout for the message reverts to the
+original timeout value (not to the value you set using the
+ChangeMessageVisibility action) the next time the message is received." />
 
 
 
@@ -78,7 +119,7 @@ in the Amazon Simple Queue Service Developer Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +127,7 @@ in the Amazon Simple Queue Service Developer Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +139,7 @@ in the Amazon Simple Queue Service Developer Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,35 +168,7 @@ new value. The default visibility timeout for a message is 30 seconds.
 The minimum is 0 seconds. The maximum is 12 hours. For more information,
 see <a href='https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html'>Visibility Timeout</a>
 in the <em>Amazon Simple Queue Service Developer Guide</em>.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>sqs_change_message_visibility</span>(<span class='no'>QueueUrl</span>, <span class='no'>ReceiptHandle</span>,
-  <span class='no'>VisibilityTimeout</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>QueueUrl</th>
-      <td><p>[required] The URL of the Amazon SQS queue whose message\'s visibility is changed.</p>
-<p>Queue URLs and names are case-sensitive.</p></td>
-    </tr>
-    <tr>
-      <th>ReceiptHandle</th>
-      <td><p>[required] The receipt handle associated with the message whose visibility timeout
-is changed. This parameter is returned by the <code>&lt;a&gt;ReceiveMessage&lt;/a&gt;</code>
-action.</p></td>
-    </tr>
-    <tr>
-      <th>VisibilityTimeout</th>
-      <td><p>[required] The new value for the message\'s visibility timeout (in seconds). Values
-values: <code>0</code> to <code>43200</code>. Maximum: 12 hours.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For example, you have a message with a visibility timeout of 5 minutes.
+<p>For example, you have a message with a visibility timeout of 5 minutes.
 After 3 minutes, you call <code>ChangeMessageVisibility</code> with a timeout of 10
 minutes. You can continue to call <code>ChangeMessageVisibility</code> to extend
 the visibility timeout to the maximum allowed time. If you try to extend
@@ -180,30 +193,57 @@ backlog), there can be a maximum of approximately 120,000 inflight
 messages (received from a queue by a consumer, but not yet deleted from
 the queue). If you reach this limit, Amazon SQS returns the <code>OverLimit</code>
 error message. To avoid reaching the limit, you should delete messages
-from the queue after they\'re processed. You can also increase the
-number of queues you use to process your messages. To request a limit
-increase, <a href='https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-sqs'>file a support request</a>.</p>
+from the queue after they're processed. You can also increase the number
+of queues you use to process your messages. To request a limit increase,
+file a support request.</p>
 <p>For FIFO queues, there can be a maximum of 20,000 inflight messages
 (received from a queue by a consumer, but not yet deleted from the
 queue). If you reach this limit, Amazon SQS returns no error messages.</p>
 <p>If you attempt to set the <code>VisibilityTimeout</code> to a value greater than
-the maximum time left, Amazon SQS returns an error. Amazon SQS doesn\'t
+the maximum time left, Amazon SQS returns an error. Amazon SQS doesn't
 automatically recalculate and increase the timeout to the maximum
 remaining time.</p>
 <p>Unlike with a queue, when you change the visibility timeout for a
-specific message the timeout value is applied immediately but isn\'t
-saved in memory for that message. If you don\'t delete a message after
-it is received, the visibility timeout for the message reverts to the
+specific message the timeout value is applied immediately but isn't
+saved in memory for that message. If you don't delete a message after it
+is received, the visibility timeout for the message reverts to the
 original timeout value (not to the value you set using the
 <code>ChangeMessageVisibility</code> action) the next time the message is received.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>sqs_change_message_visibility</span><span class='op'>(</span><span class='va'>QueueUrl</span>, <span class='va'>ReceiptHandle</span>,
+  <span class='va'>VisibilityTimeout</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>QueueUrl</th>
+      <td><p>[required] The URL of the Amazon SQS queue whose message's visibility is changed.</p>
+<p>Queue URLs and names are case-sensitive.</p></td>
+    </tr>
+    <tr>
+      <th>ReceiptHandle</th>
+      <td><p>[required] The receipt handle associated with the message whose visibility timeout
+is changed. This parameter is returned by the <code>&lt;a&gt;ReceiveMessage&lt;/a&gt;</code>
+action.</p></td>
+    </tr>
+    <tr>
+      <th>VisibilityTimeout</th>
+      <td><p>[required] The new value for the message's visibility timeout (in seconds). Values
+range: <code>0</code> to <code>43200</code>. Maximum: 12 hours.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>change_message_visibility</span>(
-  <span class='kw'>QueueUrl</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReceiptHandle</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VisibilityTimeout</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>change_message_visibility</span><span class='op'>(</span>
+  QueueUrl <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReceiptHandle <span class='op'>=</span> <span class='st'>"string"</span>,
+  VisibilityTimeout <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -221,7 +261,7 @@ original timeout value (not to the value you set using the
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

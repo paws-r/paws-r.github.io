@@ -48,7 +48,56 @@ single records — firehose_put_record_batch" />
 which can achieve higher throughput per producer than when writing
 single records. To write single data records into a delivery stream, use
 PutRecord. Applications using these operations are referred to as
-producers." />
+producers.
+For information about service quota, see Amazon Kinesis Data Firehose Quota.
+Each PutRecordBatch request supports up to 500 records. Each record in
+the request can be as large as 1,000 KB (before 64-bit encoding), up to
+a limit of 4 MB for the entire request. These limits cannot be changed.
+You must specify the name of the delivery stream and the data record
+when using PutRecord. The data record consists of a data blob that can
+be up to 1,000 KB in size, and any kind of data. For example, it could
+be a segment from a log file, geographic location data, website
+clickstream data, and so on.
+Kinesis Data Firehose buffers records before delivering them to the
+destination. To disambiguate the data blobs at the destination, a common
+solution is to use delimiters in the data, such as a newline (\\n) or
+some other character unique within the data. This allows the consumer
+application to parse individual data items when reading the data from
+the destination.
+The PutRecordBatch response includes a count of failed records,
+FailedPutCount, and an array of responses, RequestResponses. Even if
+the PutRecordBatch call succeeds, the value of FailedPutCount may be
+greater than 0, indicating that there are records for which the
+operation didn't succeed. Each entry in the RequestResponses array
+provides additional information about the processed record. It directly
+correlates with a record in the request array using the same ordering,
+from the top to the bottom. The response array always includes the same
+number of records as the request array. RequestResponses includes both
+successfully and unsuccessfully processed records. Kinesis Data Firehose
+tries to process all records in each PutRecordBatch request. A single
+record failure does not stop the processing of subsequent records.
+A successfully processed record includes a RecordId value, which is
+unique for the record. An unsuccessfully processed record includes
+ErrorCode and ErrorMessage values. ErrorCode reflects the type of
+error, and is one of the following values: ServiceUnavailableException
+or InternalFailure. ErrorMessage provides more detailed information
+about the error.
+If there is an internal server error or a timeout, the write might have
+completed or it might have failed. If FailedPutCount is greater than
+0, retry the request, resending only those records that might have
+failed processing. This minimizes the possible duplicate records and
+also reduces the total bytes sent (and corresponding charges). We
+recommend that you handle any duplicates at the destination.
+If PutRecordBatch throws ServiceUnavailableException, back off and
+retry. If the exception persists, it is possible that the throughput
+limits have been exceeded for the delivery stream.
+Data records sent to Kinesis Data Firehose are stored for 24 hours from
+the time they are added to a delivery stream as it attempts to send the
+records to the destination. If the destination is unreachable for more
+than 24 hours, the data is no longer available.
+Don't concatenate two or more base64 strings to form the data fields of
+your records. Instead, concatenate the raw data, then perform base64
+encoding." />
 
 
 
@@ -80,7 +129,7 @@ producers." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +137,7 @@ producers." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +149,7 @@ producers." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -130,30 +179,7 @@ which can achieve higher throughput per producer than when writing
 single records. To write single data records into a delivery stream, use
 PutRecord. Applications using these operations are referred to as
 producers.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>firehose_put_record_batch</span>(<span class='no'>DeliveryStreamName</span>, <span class='no'>Records</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>DeliveryStreamName</th>
-      <td><p>[required] The name of the delivery stream.</p></td>
-    </tr>
-    <tr>
-      <th>Records</th>
-      <td><p>[required] One or more records.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>By default, each delivery stream can take in up to 2,000 transactions
-per second, 5,000 records per second, or 5 MB per second. If you use
-PutRecord and PutRecordBatch, the limits are an aggregate across these
-two operations for each delivery stream. For more information about
-limits, see <a href='https://docs.aws.amazon.com/firehose/latest/dev/limits.html'>Amazon Kinesis Data Firehose Limits</a>.</p>
+<p>For information about service quota, see <a href='https://docs.aws.amazon.com/firehose/latest/dev/limits.html'>Amazon Kinesis Data Firehose Quota</a>.</p>
 <p>Each PutRecordBatch request supports up to 500 records. Each record in
 the request can be as large as 1,000 KB (before 64-bit encoding), up to
 a limit of 4 MB for the entire request. These limits cannot be changed.</p>
@@ -172,7 +198,7 @@ the destination.</p>
 <code>FailedPutCount</code>, and an array of responses, <code>RequestResponses</code>. Even if
 the PutRecordBatch call succeeds, the value of <code>FailedPutCount</code> may be
 greater than 0, indicating that there are records for which the
-operation didn\'t succeed. Each entry in the <code>RequestResponses</code> array
+operation didn't succeed. Each entry in the <code>RequestResponses</code> array
 provides additional information about the processed record. It directly
 correlates with a record in the request array using the same ordering,
 from the top to the bottom. The response array always includes the same
@@ -199,20 +225,38 @@ limits have been exceeded for the delivery stream.</p>
 the time they are added to a delivery stream as it attempts to send the
 records to the destination. If the destination is unreachable for more
 than 24 hours, the data is no longer available.</p>
-<p>Don\'t concatenate two or more base64 strings to form the data fields of
+<p>Don't concatenate two or more base64 strings to form the data fields of
 your records. Instead, concatenate the raw data, then perform base64
 encoding.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>firehose_put_record_batch</span><span class='op'>(</span><span class='va'>DeliveryStreamName</span>, <span class='va'>Records</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>DeliveryStreamName</th>
+      <td><p>[required] The name of the delivery stream.</p></td>
+    </tr>
+    <tr>
+      <th>Records</th>
+      <td><p>[required] One or more records.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_record_batch</span>(
-  <span class='kw'>DeliveryStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Records</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Data</span> <span class='kw'>=</span> <span class='no'>raw</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_record_batch</span><span class='op'>(</span>
+  DeliveryStreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Records <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Data <span class='op'>=</span> <span class='va'>raw</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -230,7 +274,7 @@ encoding.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

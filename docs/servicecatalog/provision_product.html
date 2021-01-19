@@ -40,7 +40,15 @@
 
 
 <meta property="og:title" content="Provisions the specified product — servicecatalog_provision_product" />
-<meta property="og:description" content="Provisions the specified product." />
+<meta property="og:description" content="Provisions the specified product.
+A provisioned product is a resourced instance of a product. For example,
+provisioning a product based on a CloudFormation template launches a
+CloudFormation stack and its underlying resources. You can check the
+status of this request using DescribeRecord.
+If the request contains a tag key with an empty list of values, there is
+a tag conflict for that key. Do not include conflicted keys as tags, or
+this causes the error &quot;Parameter validation failed: Missing required
+parameter in Tags[N]:Value&quot;." />
 
 
 
@@ -72,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +100,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,12 +124,20 @@
 
     <div class="ref-description">
     <p>Provisions the specified product.</p>
+<p>A provisioned product is a resourced instance of a product. For example,
+provisioning a product based on a CloudFormation template launches a
+CloudFormation stack and its underlying resources. You can check the
+status of this request using DescribeRecord.</p>
+<p>If the request contains a tag key with an empty list of values, there is
+a tag conflict for that key. Do not include conflicted keys as tags, or
+this causes the error "Parameter validation failed: Missing required
+parameter in Tags[<em>N</em>]:<em>Value</em>".</p>
     </div>
 
-    <pre class="usage"><span class='fu'>servicecatalog_provision_product</span>(<span class='no'>AcceptLanguage</span>, <span class='no'>ProductId</span>,
-  <span class='no'>ProvisioningArtifactId</span>, <span class='no'>PathId</span>, <span class='no'>ProvisionedProductName</span>,
-  <span class='no'>ProvisioningParameters</span>, <span class='no'>ProvisioningPreferences</span>, <span class='no'>Tags</span>, <span class='no'>NotificationArns</span>,
-  <span class='no'>ProvisionToken</span>)</pre>
+    <pre class="usage"><span class='fu'>servicecatalog_provision_product</span><span class='op'>(</span><span class='va'>AcceptLanguage</span>, <span class='va'>ProductId</span>, <span class='va'>ProductName</span>,
+  <span class='va'>ProvisioningArtifactId</span>, <span class='va'>ProvisioningArtifactName</span>, <span class='va'>PathId</span>, <span class='va'>PathName</span>,
+  <span class='va'>ProvisionedProductName</span>, <span class='va'>ProvisioningParameters</span>, <span class='va'>ProvisioningPreferences</span>,
+  <span class='va'>Tags</span>, <span class='va'>NotificationArns</span>, <span class='va'>ProvisionToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,17 +152,32 @@
     </tr>
     <tr>
       <th>ProductId</th>
-      <td><p>[required] The product identifier.</p></td>
+      <td><p>The product identifier. You must provide the name or ID, but not both.</p></td>
+    </tr>
+    <tr>
+      <th>ProductName</th>
+      <td><p>The name of the product. You must provide the name or ID, but not both.</p></td>
     </tr>
     <tr>
       <th>ProvisioningArtifactId</th>
-      <td><p>[required] The identifier of the provisioning artifact.</p></td>
+      <td><p>The identifier of the provisioning artifact. You must provide the name
+or ID, but not both.</p></td>
+    </tr>
+    <tr>
+      <th>ProvisioningArtifactName</th>
+      <td><p>The name of the provisioning artifact. You must provide the name or ID,
+but not both.</p></td>
     </tr>
     <tr>
       <th>PathId</th>
       <td><p>The path identifier of the product. This value is optional if the
 product has a default path, and required if the product has more than
-one path. To list the paths for a product, use ListLaunchPaths.</p></td>
+one path. To list the paths for a product, use ListLaunchPaths. You must
+provide the name or ID, but not both.</p></td>
+    </tr>
+    <tr>
+      <th>PathName</th>
+      <td><p>The name of the path. You must provide the name or ID, but not both.</p></td>
     </tr>
     <tr>
       <th>ProvisionedProductName</th>
@@ -179,54 +210,48 @@ stack-related events.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A provisioned product is a resourced instance of a product. For example,
-provisioning a product based on a CloudFormation template launches a
-CloudFormation stack and its underlying resources. You can check the
-status of this request using DescribeRecord.</p>
-<p>If the request contains a tag key with an empty list of values, there is
-a tag conflict for that key. Do not include conflicted keys as tags, or
-this causes the error \"Parameter validation failed: Missing required
-parameter in Tags[<em>N</em>]:<em>Value</em>\".</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>provision_product</span>(
-  <span class='kw'>AcceptLanguage</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProductId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProvisioningArtifactId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PathId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProvisionedProductName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ProvisioningParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ProvisioningPreferences</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>StackSetAccounts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>provision_product</span><span class='op'>(</span>
+  AcceptLanguage <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProductId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProductName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProvisioningArtifactId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProvisioningArtifactName <span class='op'>=</span> <span class='st'>"string"</span>,
+  PathId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PathName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProvisionedProductName <span class='op'>=</span> <span class='st'>"string"</span>,
+  ProvisioningParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ProvisioningPreferences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    StackSetAccounts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>StackSetRegions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    StackSetRegions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>StackSetFailureToleranceCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>StackSetFailureTolerancePercentage</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>StackSetMaxConcurrencyCount</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>StackSetMaxConcurrencyPercentage</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>NotificationArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>,
+    StackSetFailureToleranceCount <span class='op'>=</span> <span class='fl'>123</span>,
+    StackSetFailureTolerancePercentage <span class='op'>=</span> <span class='fl'>123</span>,
+    StackSetMaxConcurrencyCount <span class='op'>=</span> <span class='fl'>123</span>,
+    StackSetMaxConcurrencyPercentage <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  NotificationArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ProvisionToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  ProvisionToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -244,7 +269,7 @@ parameter in Tags[<em>N</em>]:<em>Value</em>\".</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

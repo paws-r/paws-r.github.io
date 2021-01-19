@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +118,9 @@
     <p>Updates the status of one or more versions of a package.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>codeartifact_update_package_versions_status</span>(<span class='no'>domain</span>, <span class='no'>domainOwner</span>,
-  <span class='no'>repository</span>, <span class='no'>format</span>, <span class='no'>namespace</span>, <span class='no'>package</span>, <span class='no'>versions</span>, <span class='no'>versionRevisions</span>,
-  <span class='no'>expectedStatus</span>, <span class='no'>targetStatus</span>)</pre>
+    <pre class="usage"><span class='fu'>codeartifact_update_package_versions_status</span><span class='op'>(</span><span class='va'>domain</span>, <span class='va'>domainOwner</span>,
+  <span class='va'>repository</span>, <span class='va'>format</span>, <span class='va'>namespace</span>, <span class='va'>package</span>, <span class='va'>versions</span>, <span class='va'>versionRevisions</span>,
+  <span class='va'>expectedStatus</span>, <span class='va'>targetStatus</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,6 +147,7 @@ update. The valid values are:</p><ul>
 <li><p><code>npm</code></p></li>
 <li><p><code>pypi</code></p></li>
 <li><p><code>maven</code></p></li>
+<li><p><code>nuget</code></p></li>
 </ul></td>
     </tr>
     <tr>
@@ -157,6 +158,8 @@ namespace depends on its type. For example:</p><ul>
 <li><p>The namespace of an npm package is its <code>scope</code>.</p></li>
 <li><p>A Python package does not contain a corresponding component, so
 Python packages do not have a namespace.</p></li>
+<li><p>A NuGet package does not contain a corresponding component, so NuGet
+packages do not have a namespace.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -176,8 +179,8 @@ the package version revision.</p></td>
     </tr>
     <tr>
       <th>expectedStatus</th>
-      <td><p>The package version's expected status before it is updated. If
-<code>expectedStatus</code> is provided, the package version\'s status is updated
+      <td><p>The package version’s expected status before it is updated. If
+<code>expectedStatus</code> is provided, the package version's status is updated
 only if its status at the time <code>UpdatePackageVersionsStatus</code> is called
 matches <code>expectedStatus</code>.</p></td>
     </tr>
@@ -190,22 +193,23 @@ matches <code>expectedStatus</code>.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_package_versions_status</span>(
-  <span class='kw'>domain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>domainOwner</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>repository</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"npm"</span><span class='kw'>|</span><span class='st'>"pypi"</span><span class='kw'>|</span><span class='st'>"maven"</span>,
-  <span class='kw'>namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>versions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_package_versions_status</span><span class='op'>(</span>
+  domain <span class='op'>=</span> <span class='st'>"string"</span>,
+  domainOwner <span class='op'>=</span> <span class='st'>"string"</span>,
+  repository <span class='op'>=</span> <span class='st'>"string"</span>,
+  format <span class='op'>=</span> <span class='st'>"npm"</span><span class='op'>|</span><span class='st'>"pypi"</span><span class='op'>|</span><span class='st'>"maven"</span><span class='op'>|</span><span class='st'>"nuget"</span>,
+  namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+  package <span class='op'>=</span> <span class='st'>"string"</span>,
+  versions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>versionRevisions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  versionRevisions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>expectedStatus</span> <span class='kw'>=</span> <span class='st'>"Published"</span><span class='kw'>|</span><span class='st'>"Unfinished"</span><span class='kw'>|</span><span class='st'>"Unlisted"</span><span class='kw'>|</span><span class='st'>"Archived"</span><span class='kw'>|</span><span class='st'>"Disposed"</span><span class='kw'>|</span><span class='st'>"Deleted"</span>,
-  <span class='kw'>targetStatus</span> <span class='kw'>=</span> <span class='st'>"Published"</span><span class='kw'>|</span><span class='st'>"Unfinished"</span><span class='kw'>|</span><span class='st'>"Unlisted"</span><span class='kw'>|</span><span class='st'>"Archived"</span><span class='kw'>|</span><span class='st'>"Disposed"</span><span class='kw'>|</span><span class='st'>"Deleted"</span>
-)</pre>
+  <span class='op'>)</span>,
+  expectedStatus <span class='op'>=</span> <span class='st'>"Published"</span><span class='op'>|</span><span class='st'>"Unfinished"</span><span class='op'>|</span><span class='st'>"Unlisted"</span><span class='op'>|</span><span class='st'>"Archived"</span><span class='op'>|</span><span class='st'>"Disposed"</span><span class='op'>|</span><span class='st'>"Deleted"</span>,
+  targetStatus <span class='op'>=</span> <span class='st'>"Published"</span><span class='op'>|</span><span class='st'>"Unfinished"</span><span class='op'>|</span><span class='st'>"Unlisted"</span><span class='op'>|</span><span class='st'>"Archived"</span><span class='op'>|</span><span class='st'>"Disposed"</span><span class='op'>|</span><span class='st'>"Deleted"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -223,7 +227,7 @@ matches <code>expectedStatus</code>.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

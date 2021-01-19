@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>THIS ACTION IS PART OF AMAZON GAMELIFT FLEETIQ WITH GAME SERVER GROUPS,
-WHICH IS IN PREVIEW RELEASE AND IS SUBJECT TO CHANGE — gamelift_claim_game_server • paws</title>
+<title>This operation is used with the Amazon GameLift FleetIQ solution and
+game server groups — gamelift_claim_game_server • paws</title>
 
 
 <!-- jquery -->
@@ -40,10 +40,51 @@ WHICH IS IN PREVIEW RELEASE AND IS SUBJECT TO CHANGE — gamelift_claim_game_ser
 
 
 
-<meta property="og:title" content="THIS ACTION IS PART OF AMAZON GAMELIFT FLEETIQ WITH GAME SERVER GROUPS,
-WHICH IS IN PREVIEW RELEASE AND IS SUBJECT TO CHANGE — gamelift_claim_game_server" />
-<meta property="og:description" content="This action is part of Amazon GameLift FleetIQ with game server
-groups, which is in preview release and is subject to change." />
+<meta property="og:title" content="This operation is used with the Amazon GameLift FleetIQ solution and
+game server groups — gamelift_claim_game_server" />
+<meta property="og:description" content="This operation is used with the Amazon GameLift FleetIQ solution and
+game server groups.
+Locates an available game server and temporarily reserves it to host
+gameplay and players. This operation is called from a game client or
+client service (such as a matchmaker) to request hosting resources for a
+new game session. In response, GameLift FleetIQ locates an available
+game server, places it in CLAIMED status for 60 seconds, and returns
+connection information that players can use to connect to the game
+server.
+To claim a game server, identify a game server group. You can also
+specify a game server ID, although this approach bypasses GameLift
+FleetIQ placement optimization. Optionally, include game data to pass to
+the game server at the start of a game session, such as a game map or
+player information.
+When a game server is successfully claimed, connection information is
+returned. A claimed game server's utilization status remains AVAILABLE
+while the claim status is set to CLAIMED for up to 60 seconds. This
+time period gives the game server time to update its status to
+UTILIZED (using UpdateGameServer) once players join. If the game
+server's status is not updated within 60 seconds, the game server
+reverts to unclaimed status and is available to be claimed by another
+request. The claim time period is a fixed value and is not configurable.
+If you try to claim a specific game server, this request will fail in
+the following cases:
+If the game server utilization status is UTILIZED.
+If the game server claim status is CLAIMED.
+
+
+When claiming a specific game server, this request will succeed even if
+the game server is running on an instance in DRAINING status. To avoid
+this, first check the instance status by calling
+DescribeGameServerInstances.
+Learn more
+GameLift FleetIQ Guide
+Related operations
+RegisterGameServer
+ListGameServers
+ClaimGameServer
+DescribeGameServer
+UpdateGameServer
+DeregisterGameServer
+
+" />
 
 
 
@@ -75,7 +116,7 @@ groups, which is in preview release and is subject to change." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +124,7 @@ groups, which is in preview release and is subject to change." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +136,7 @@ groups, which is in preview release and is subject to change." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,30 +153,70 @@ groups, which is in preview release and is subject to change." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>THIS ACTION IS PART OF AMAZON GAMELIFT FLEETIQ WITH GAME SERVER GROUPS,
-WHICH IS IN PREVIEW RELEASE AND IS SUBJECT TO CHANGE</h1>
+    <h1>This operation is used with the Amazon GameLift FleetIQ solution and
+game server groups</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/gamelift_operations.R'><code>R/gamelift_operations.R</code></a></small>
     <div class="hidden name"><code>gamelift_claim_game_server.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><strong>This action is part of Amazon GameLift FleetIQ with game server
-groups, which is in preview release and is subject to change.</strong></p>
+    <p><strong>This operation is used with the Amazon GameLift FleetIQ solution and
+game server groups.</strong></p>
+<p>Locates an available game server and temporarily reserves it to host
+gameplay and players. This operation is called from a game client or
+client service (such as a matchmaker) to request hosting resources for a
+new game session. In response, GameLift FleetIQ locates an available
+game server, places it in <code>CLAIMED</code> status for 60 seconds, and returns
+connection information that players can use to connect to the game
+server.</p>
+<p>To claim a game server, identify a game server group. You can also
+specify a game server ID, although this approach bypasses GameLift
+FleetIQ placement optimization. Optionally, include game data to pass to
+the game server at the start of a game session, such as a game map or
+player information.</p>
+<p>When a game server is successfully claimed, connection information is
+returned. A claimed game server's utilization status remains <code>AVAILABLE</code>
+while the claim status is set to <code>CLAIMED</code> for up to 60 seconds. This
+time period gives the game server time to update its status to
+<code>UTILIZED</code> (using UpdateGameServer) once players join. If the game
+server's status is not updated within 60 seconds, the game server
+reverts to unclaimed status and is available to be claimed by another
+request. The claim time period is a fixed value and is not configurable.</p>
+<p>If you try to claim a specific game server, this request will fail in
+the following cases:</p><ul>
+<li><p>If the game server utilization status is <code>UTILIZED</code>.</p></li>
+<li><p>If the game server claim status is <code>CLAIMED</code>.</p></li>
+</ul>
+
+<p>When claiming a specific game server, this request will succeed even if
+the game server is running on an instance in <code>DRAINING</code> status. To avoid
+this, first check the instance status by calling
+DescribeGameServerInstances.</p>
+<p><strong>Learn more</strong></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/fleetiqguide/gsg-intro.html'>GameLift FleetIQ Guide</a></p>
+<p><strong>Related operations</strong></p><ul>
+<li><p>RegisterGameServer</p></li>
+<li><p>ListGameServers</p></li>
+<li><p>ClaimGameServer</p></li>
+<li><p>DescribeGameServer</p></li>
+<li><p>UpdateGameServer</p></li>
+<li><p>DeregisterGameServer</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_claim_game_server</span>(<span class='no'>GameServerGroupName</span>, <span class='no'>GameServerId</span>,
-  <span class='no'>GameServerData</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_claim_game_server</span><span class='op'>(</span><span class='va'>GameServerGroupName</span>, <span class='va'>GameServerId</span>,
+  <span class='va'>GameServerData</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>GameServerGroupName</th>
-      <td><p>[required] An identifier for the game server group. When claiming a specific game
-server, this is the game server group whether the game server is
-located. When requesting that GameLift FleetIQ locate an available game
-server, this is the game server group to search on. You can use either
-the GameServerGroup name or ARN value.</p></td>
+      <td><p>[required] A unique identifier for the game server group where the game server is
+running. Use either the GameServerGroup name or ARN value.. If you are
+not specifying a game server to claim, this value identifies where you
+want GameLift FleetIQ to look for an available game server to claim.</p></td>
     </tr>
     <tr>
       <th>GameServerId</th>
@@ -146,62 +227,20 @@ game server in the specified game server group.</p></td>
     <tr>
       <th>GameServerData</th>
       <td><p>A set of custom game server properties, formatted as a single string
-value, to be passed to the claimed game server.</p></td>
+value. This data is passed to a game client or service when it requests
+information on game servers using ListGameServers or ClaimGameServer.</p></td>
     </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Locates an available game server and temporarily reserves it to host
-gameplay and players. This action is called by a game client or client
-service (such as a matchmaker) to request hosting resources for a new
-game session. In response, GameLift FleetIQ searches for an available
-game server in the specified game server group, places the game server
-in \"claimed\" status for 60 seconds, and returns connection information
-back to the requester so that players can connect to the game server.</p>
-<p>There are two ways you can claim a game server. For the first option,
-you provide a game server group ID only, which prompts GameLift FleetIQ
-to search for an available game server in the specified group and claim
-it. With this option, GameLift FleetIQ attempts to consolidate gameplay
-on as few instances as possible to minimize hosting costs. For the
-second option, you request a specific game server by its ID. This option
-results in a less efficient claiming process because it does not take
-advantage of consolidation and may fail if the requested game server is
-unavailable.</p>
-<p>To claim a game server, identify a game server group and (optionally) a
-game server ID. If your game requires that game data be provided to the
-game server at the start of a game, such as a game map or player
-information, you can provide it in your claim request.</p>
-<p>When a game server is successfully claimed, connection information is
-returned. A claimed game server\'s utilization status remains AVAILABLE,
-while the claim status is set to CLAIMED for up to 60 seconds. This time
-period allows the game server to be prompted to update its status to
-UTILIZED (using UpdateGameServer). If the game server\'s status is not
-updated within 60 seconds, the game server reverts to unclaimed status
-and is available to be claimed by another request.</p>
-<p>If you try to claim a specific game server, this request will fail in
-the following cases: (1) if the game server utilization status is
-UTILIZED, (2) if the game server claim status is CLAIMED, or (3) if the
-instance that the game server is running on is flagged as draining.</p>
-<p><strong>Learn more</strong></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/gsg-intro.html'>GameLift FleetIQ Guide</a></p>
-<p><strong>Related operations</strong></p><ul>
-<li><p>RegisterGameServer</p></li>
-<li><p>ListGameServers</p></li>
-<li><p>ClaimGameServer</p></li>
-<li><p>DescribeGameServer</p></li>
-<li><p>UpdateGameServer</p></li>
-<li><p>DeregisterGameServer</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>claim_game_server</span>(
-  <span class='kw'>GameServerGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameServerId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GameServerData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>claim_game_server</span><span class='op'>(</span>
+  GameServerGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameServerId <span class='op'>=</span> <span class='st'>"string"</span>,
+  GameServerData <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -219,7 +258,7 @@ instance that the game server is running on is flagged as draining.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

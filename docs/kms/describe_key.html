@@ -42,7 +42,48 @@
 <meta property="og:title" content="Provides detailed information about a customer master key (CMK) — kms_describe_key" />
 <meta property="og:description" content="Provides detailed information about a customer master key (CMK). You can
 run DescribeKey on a customer managed CMK
-or an AWS managed CMK." />
+or an AWS managed CMK.
+This detailed information includes the key ARN, creation date (and
+deletion date, if applicable), the key state, and the origin and
+expiration date (if any) of the key material. For CMKs in custom key
+stores, it includes information about the custom key store, such as the
+key store ID and the AWS CloudHSM cluster ID. It includes fields, like
+KeySpec, that help you distinguish symmetric from asymmetric CMKs. It
+also provides information that is particularly important to asymmetric
+CMKs, such as the key usage (encryption or signing) and the encryption
+algorithms or signing algorithms that the CMK supports.
+DescribeKey does not return the following information:
+Aliases associated with the CMK. To get this information, use
+ListAliases.
+Whether automatic key rotation is enabled on the CMK. To get this
+information, use GetKeyRotationStatus. Also, some key states prevent
+a CMK from being automatically rotated. For details, see How Automatic Key Rotation Works
+in AWS Key Management Service Developer Guide.
+Tags on the CMK. To get this information, use ListResourceTags.
+Key policies and grants on the CMK. To get this information, use
+GetKeyPolicy and ListGrants.
+
+
+If you call the DescribeKey operation on a predefined AWS alias,
+that is, an AWS alias with no key ID, AWS KMS creates an AWS managed CMK.
+Then, it associates the alias with the new CMK, and returns the KeyId
+and Arn of the new CMK in the response.
+Cross-account use: Yes. To perform this operation with a CMK in a
+different AWS account, specify the key ARN or alias ARN in the value of
+the KeyId parameter.
+Required permissions:
+kms:DescribeKey
+(key policy)
+Related operations:
+GetKeyPolicy
+GetKeyRotationStatus
+ListAliases
+ListGrants
+ListKeys
+ListResourceTags
+ListRetirableGrants
+
+" />
 
 
 
@@ -74,7 +115,7 @@ or an AWS managed CMK." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +123,7 @@ or an AWS managed CMK." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +135,7 @@ or an AWS managed CMK." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,9 +161,50 @@ or an AWS managed CMK." />
     <p>Provides detailed information about a customer master key (CMK). You can
 run <code>DescribeKey</code> on a <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk'>customer managed CMK</a>
 or an <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk'>AWS managed CMK</a>.</p>
+<p>This detailed information includes the key ARN, creation date (and
+deletion date, if applicable), the key state, and the origin and
+expiration date (if any) of the key material. For CMKs in custom key
+stores, it includes information about the custom key store, such as the
+key store ID and the AWS CloudHSM cluster ID. It includes fields, like
+<code>KeySpec</code>, that help you distinguish symmetric from asymmetric CMKs. It
+also provides information that is particularly important to asymmetric
+CMKs, such as the key usage (encryption or signing) and the encryption
+algorithms or signing algorithms that the CMK supports.</p>
+<p><code>DescribeKey</code> does not return the following information:</p><ul>
+<li><p>Aliases associated with the CMK. To get this information, use
+ListAliases.</p></li>
+<li><p>Whether automatic key rotation is enabled on the CMK. To get this
+information, use GetKeyRotationStatus. Also, some key states prevent
+a CMK from being automatically rotated. For details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html#rotate-keys-how-it-works'>How Automatic Key Rotation Works</a>
+in <em>AWS Key Management Service Developer Guide</em>.</p></li>
+<li><p>Tags on the CMK. To get this information, use ListResourceTags.</p></li>
+<li><p>Key policies and grants on the CMK. To get this information, use
+GetKeyPolicy and ListGrants.</p></li>
+</ul>
+
+<p>If you call the <code>DescribeKey</code> operation on a <em>predefined AWS alias</em>,
+that is, an AWS alias with no key ID, AWS KMS creates an <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys'>AWS managed CMK</a>.
+Then, it associates the alias with the new CMK, and returns the <code>KeyId</code>
+and <code>Arn</code> of the new CMK in the response.</p>
+<p><strong>Cross-account use</strong>: Yes. To perform this operation with a CMK in a
+different AWS account, specify the key ARN or alias ARN in the value of
+the <code>KeyId</code> parameter.</p>
+<p><strong>Required permissions</strong>:
+<a href='https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html'>kms:DescribeKey</a>
+(key policy)</p>
+<p><strong>Related operations:</strong></p><ul>
+<li><p>GetKeyPolicy</p></li>
+<li><p>GetKeyRotationStatus</p></li>
+<li><p>ListAliases</p></li>
+<li><p>ListGrants</p></li>
+<li><p>ListKeys</p></li>
+<li><p>ListResourceTags</p></li>
+<li><p>ListRetirableGrants</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>kms_describe_key</span>(<span class='no'>KeyId</span>, <span class='no'>GrantTokens</span>)</pre>
+    <pre class="usage"><span class='fu'>kms_describe_key</span><span class='op'>(</span><span class='va'>KeyId</span>, <span class='va'>GrantTokens</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,54 +238,28 @@ in the <em>AWS Key Management Service Developer Guide</em>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This detailed information includes the key ARN, creation date (and
-deletion date, if applicable), the key state, and the origin and
-expiration date (if any) of the key material. For CMKs in custom key
-stores, it includes information about the custom key store, such as the
-key store ID and the AWS CloudHSM cluster ID. It includes fields, like
-<code>KeySpec</code>, that help you distinguish symmetric from asymmetric CMKs. It
-also provides information that is particularly important to asymmetric
-CMKs, such as the key usage (encryption or signing) and the encryption
-algorithms or signing algorithms that the CMK supports.</p>
-<p><code>DescribeKey</code> does not return the following information:</p><ul>
-<li><p>Aliases associated with the CMK. To get this information, use
-ListAliases.</p></li>
-<li><p>Whether automatic key rotation is enabled on the CMK. To get this
-information, use GetKeyRotationStatus. Also, some key states prevent
-a CMK from being automatically rotated. For details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html#rotate-keys-how-it-works'>How Automatic Key Rotation Works</a>
-in <em>AWS Key Management Service Developer Guide</em>.</p></li>
-<li><p>Tags on the CMK. To get this information, use ListResourceTags.</p></li>
-<li><p>Key policies and grants on the CMK. To get this information, use
-GetKeyPolicy and ListGrants.</p></li>
-</ul>
-
-<p>If you call the <code>DescribeKey</code> operation on a <em>predefined AWS alias</em>,
-that is, an AWS alias with no key ID, AWS KMS creates an <a href='https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys'>AWS managed CMK</a>.
-Then, it associates the alias with the new CMK, and returns the <code>KeyId</code>
-and <code>Arn</code> of the new CMK in the response.</p>
-<p>To perform this operation on a CMK in a different AWS account, specify
-the key ARN or alias ARN in the value of the KeyId parameter.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_key</span>(
-  <span class='kw'>KeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>GrantTokens</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_key</span><span class='op'>(</span>
+  KeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  GrantTokens <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example returns information (metadata) about the specified</span>
 <span class='co'># CMK.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_key</span>(
-  <span class='kw'>KeyId</span> <span class='kw'>=</span> <span class='st'>"1234abcd-12ab-34cd-56ef-1234567890ab"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_key</span><span class='op'>(</span>
+  KeyId <span class='op'>=</span> <span class='st'>"1234abcd-12ab-34cd-56ef-1234567890ab"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -219,7 +275,7 @@ the key ARN or alias ARN in the value of the KeyId parameter.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

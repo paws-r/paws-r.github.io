@@ -41,7 +41,20 @@
 
 <meta property="og:title" content="Returns the tag-set of an object — s3_get_object_tagging" />
 <meta property="og:description" content="Returns the tag-set of an object. You send the GET request against the
-tagging subresource associated with the object." />
+tagging subresource associated with the object.
+To use this operation, you must have permission to perform the
+s3:GetObjectTagging action. By default, the GET operation returns
+information about current version of an object. For a versioned bucket,
+you can have multiple versions of an object in your bucket. To retrieve
+tags of any other version, use the versionId query parameter. You also
+need permission for the s3:GetObjectVersionTagging action.
+By default, the bucket owner has this permission and can grant this
+permission to others.
+For information about the Amazon S3 object tagging feature, see Object Tagging.
+The following operation is related to GetObjectTagging:
+PutObjectTagging
+
+" />
 
 
 
@@ -73,7 +86,7 @@ tagging subresource associated with the object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +94,7 @@ tagging subresource associated with the object." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +106,7 @@ tagging subresource associated with the object." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +131,22 @@ tagging subresource associated with the object." />
     <div class="ref-description">
     <p>Returns the tag-set of an object. You send the GET request against the
 tagging subresource associated with the object.</p>
+<p>To use this operation, you must have permission to perform the
+<code>s3:GetObjectTagging</code> action. By default, the GET operation returns
+information about current version of an object. For a versioned bucket,
+you can have multiple versions of an object in your bucket. To retrieve
+tags of any other version, use the versionId query parameter. You also
+need permission for the <code>s3:GetObjectVersionTagging</code> action.</p>
+<p>By default, the bucket owner has this permission and can grant this
+permission to others.</p>
+<p>For information about the Amazon S3 object tagging feature, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html'>Object Tagging</a>.</p>
+<p>The following operation is related to <code>GetObjectTagging</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectTagging.html'>PutObjectTagging</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_get_object_tagging</span>(<span class='no'>Bucket</span>, <span class='no'>Key</span>, <span class='no'>VersionId</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_get_object_tagging</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Key</span>, <span class='va'>VersionId</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,9 +158,17 @@ information.</p>
 <p>When using this API with an access point, you must direct requests to
 the access point hostname. The access point hostname takes the form
 <em>AccessPointName</em>-<em>AccountId</em>.s3-accesspoint.<em>Region</em>.amazonaws.com.
-When using this operation using an access point through the AWS SDKs,
-you provide the access point ARN in place of the bucket name. For more
+When using this operation with an access point through the AWS SDKs, you
+provide the access point ARN in place of the bucket name. For more
 information about access point ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html'>Using Access Points</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>When using this API with Amazon S3 on Outposts, you must direct requests
+to the S3 on Outposts hostname. The S3 on Outposts hostname takes the
+form
+<em>AccessPointName</em>-<em>AccountId</em>.<em>outpostID</em>.s3-outposts.<em>Region</em>.amazonaws.com.
+When using this operation using S3 on Outposts through the AWS SDKs, you
+provide the Outposts bucket ARN in place of the bucket name. For more
+information about S3 on Outposts ARNs, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html'>Using S3 on Outposts</a>
 in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
@@ -145,49 +179,44 @@ in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></td>
       <th>VersionId</th>
       <td><p>The versionId of the object for which to get the tagging information.</p></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To use this operation, you must have permission to perform the
-<code>s3:GetObjectTagging</code> action. By default, the GET operation returns
-information about current version of an object. For a versioned bucket,
-you can have multiple versions of an object in your bucket. To retrieve
-tags of any other version, use the versionId query parameter. You also
-need permission for the <code>s3:GetObjectVersionTagging</code> action.</p>
-<p>By default, the bucket owner has this permission and can grant this
-permission to others.</p>
-<p>For information about the Amazon S3 object tagging feature, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html'>Object Tagging</a>.</p>
-<p>The following operation is related to <code>GetObjectTagging</code>:</p><ul>
-<li><p>PutObjectTagging</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_object_tagging</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VersionId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_object_tagging</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Key <span class='op'>=</span> <span class='st'>"string"</span>,
+  VersionId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example retrieves tag set of an object.</span>
-<span class='no'>svc</span>$<span class='fu'>get_object_tagging</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"HappyFace.jpg"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_object_tagging</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  Key <span class='op'>=</span> <span class='st'>"HappyFace.jpg"</span>
+<span class='op'>)</span>
 
 <span class='co'># The following example retrieves tag set of an object. The request</span>
 <span class='co'># specifies object version.</span>
-<span class='no'>svc</span>$<span class='fu'>get_object_tagging</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"examplebucket"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"exampleobject"</span>,
-  <span class='kw'>VersionId</span> <span class='kw'>=</span> <span class='st'>"ydlaNkwWm0SfKJR.T1b1fIdPRbldTYRI"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_object_tagging</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"examplebucket"</span>,
+  Key <span class='op'>=</span> <span class='st'>"exampleobject"</span>,
+  VersionId <span class='op'>=</span> <span class='st'>"ydlaNkwWm0SfKJR.T1b1fIdPRbldTYRI"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -203,7 +232,7 @@ permission to others.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

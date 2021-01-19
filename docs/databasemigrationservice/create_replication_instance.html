@@ -40,7 +40,11 @@
 
 
 <meta property="og:title" content="Creates the replication instance using the specified parameters — databasemigrationservice_create_replication_instance" />
-<meta property="og:description" content="Creates the replication instance using the specified parameters." />
+<meta property="og:description" content="Creates the replication instance using the specified parameters.
+AWS DMS requires that your account have certain roles with appropriate
+permissions before you can create a replication instance. For
+information on the required roles, see Creating the IAM Roles to Use With the AWS CLI and AWS DMS API.
+For information on the required permissions, see IAM Permissions Needed to Use AWS DMS." />
 
 
 
@@ -72,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +84,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +96,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,14 +120,18 @@
 
     <div class="ref-description">
     <p>Creates the replication instance using the specified parameters.</p>
+<p>AWS DMS requires that your account have certain roles with appropriate
+permissions before you can create a replication instance. For
+information on the required roles, see <a href='https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.APIRole'>Creating the IAM Roles to Use With the AWS CLI and AWS DMS API</a>.
+For information on the required permissions, see <a href='https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#CHAP_Security.IAMPermissions'>IAM Permissions Needed to Use AWS DMS</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>databasemigrationservice_create_replication_instance</span>(
-  <span class='no'>ReplicationInstanceIdentifier</span>, <span class='no'>AllocatedStorage</span>,
-  <span class='no'>ReplicationInstanceClass</span>, <span class='no'>VpcSecurityGroupIds</span>, <span class='no'>AvailabilityZone</span>,
-  <span class='no'>ReplicationSubnetGroupIdentifier</span>, <span class='no'>PreferredMaintenanceWindow</span>, <span class='no'>MultiAZ</span>,
-  <span class='no'>EngineVersion</span>, <span class='no'>AutoMinorVersionUpgrade</span>, <span class='no'>Tags</span>, <span class='no'>KmsKeyId</span>,
-  <span class='no'>PubliclyAccessible</span>, <span class='no'>DnsNameServers</span>)</pre>
+    <pre class="usage"><span class='fu'>databasemigrationservice_create_replication_instance</span><span class='op'>(</span>
+  <span class='va'>ReplicationInstanceIdentifier</span>, <span class='va'>AllocatedStorage</span>,
+  <span class='va'>ReplicationInstanceClass</span>, <span class='va'>VpcSecurityGroupIds</span>, <span class='va'>AvailabilityZone</span>,
+  <span class='va'>ReplicationSubnetGroupIdentifier</span>, <span class='va'>PreferredMaintenanceWindow</span>, <span class='va'>MultiAZ</span>,
+  <span class='va'>EngineVersion</span>, <span class='va'>AutoMinorVersionUpgrade</span>, <span class='va'>Tags</span>, <span class='va'>KmsKeyId</span>,
+  <span class='va'>PubliclyAccessible</span>, <span class='va'>DnsNameServers</span>, <span class='va'>ResourceIdentifier</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,7 +143,7 @@ lowercase string.</p>
 <p>Constraints:</p><ul>
 <li><p>Must contain 1-63 alphanumeric characters or hyphens.</p></li>
 <li><p>First character must be a letter.</p></li>
-<li><p>Can\'t end with a hyphen or contain two consecutive hyphens.</p></li>
+<li><p>Can't end with a hyphen or contain two consecutive hyphens.</p></li>
 </ul>
 
 <p>Example: <code>myrepinstance</code></p></td>
@@ -163,7 +171,7 @@ replication instance.</p></td>
       <th>AvailabilityZone</th>
       <td><p>The Availability Zone where the replication instance will be created.
 The default value is a random, system-chosen Availability Zone in the
-endpoint\'s AWS Region, for example: <code>us-east-1d</code></p></td>
+endpoint's AWS Region, for example: <code>us-east-1d</code></p></td>
     </tr>
     <tr>
       <th>ReplicationSubnetGroupIdentifier</th>
@@ -182,12 +190,14 @@ time per AWS Region, occurring on a random day of the week.</p>
     <tr>
       <th>MultiAZ</th>
       <td><p>Specifies whether the replication instance is a Multi-AZ deployment. You
-can\'t set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is
+can't set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is
 set to <code>true</code>.</p></td>
     </tr>
     <tr>
       <th>EngineVersion</th>
-      <td><p>The engine version number of the replication instance.</p></td>
+      <td><p>The engine version number of the replication instance.</p>
+<p>If an engine version number is not specified when a replication instance
+is created, the default is the latest engine version available.</p></td>
     </tr>
     <tr>
       <th>AutoMinorVersionUpgrade</th>
@@ -204,7 +214,7 @@ This parameter defaults to <code>true</code>.</p>
       <th>KmsKeyId</th>
       <td><p>An AWS KMS key identifier that is used to encrypt the data on the
 replication instance.</p>
-<p>If you don\'t specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS
+<p>If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS
 uses your default encryption key.</p>
 <p>AWS KMS creates the default encryption key for your AWS account. Your
 AWS account has a different default encryption key for each AWS Region.</p></td>
@@ -225,66 +235,77 @@ specify a comma-separated list of internet addresses for up to four
 on-premise DNS name servers. For example:
 <code>"1.1.1.1,2.2.2.2,3.3.3.3,4.4.4.4"</code></p></td>
     </tr>
+    <tr>
+      <th>ResourceIdentifier</th>
+      <td><p>A friendly name for the resource identifier at the end of the
+<code>EndpointArn</code> response parameter that is returned in the created
+<code>Endpoint</code> object. The value for this parameter can have up to 31
+characters. It can contain only ASCII letters, digits, and hyphen ('-').
+Also, it can't end with a hyphen or contain two consecutive hyphens, and
+can only begin with a letter, such as <code>Example-App-ARN1</code>. For example,
+this value might result in the <code>EndpointArn</code> value
+<code>arn:aws:dms:eu-west-1:012345678901:rep:Example-App-ARN1</code>. If you don't
+specify a <code>ResourceIdentifier</code> value, AWS DMS generates a default
+identifier value for the end of <code>EndpointArn</code>.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>AWS DMS requires that your account have certain roles with appropriate
-permissions before you can create a replication instance. For
-information on the required roles, see <a href='https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.APIRole.html'>Creating the IAM Roles to Use With the AWS CLI and AWS DMS API</a>.
-For information on the required permissions, see <a href='https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.IAMPermissions.html'>IAM Permissions Needed to Use AWS DMS</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_replication_instance</span>(
-  <span class='kw'>ReplicationInstanceIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AllocatedStorage</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>ReplicationInstanceClass</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VpcSecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_replication_instance</span><span class='op'>(</span>
+  ReplicationInstanceIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  AllocatedStorage <span class='op'>=</span> <span class='fl'>123</span>,
+  ReplicationInstanceClass <span class='op'>=</span> <span class='st'>"string"</span>,
+  VpcSecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AvailabilityZone</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReplicationSubnetGroupIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PreferredMaintenanceWindow</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MultiAZ</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>EngineVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AutoMinorVersionUpgrade</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PubliclyAccessible</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>DnsNameServers</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  AvailabilityZone <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReplicationSubnetGroupIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  PreferredMaintenanceWindow <span class='op'>=</span> <span class='st'>"string"</span>,
+  MultiAZ <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  EngineVersion <span class='op'>=</span> <span class='st'>"string"</span>,
+  AutoMinorVersionUpgrade <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PubliclyAccessible <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  DnsNameServers <span class='op'>=</span> <span class='st'>"string"</span>,
+  ResourceIdentifier <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Creates the replication instance using the specified parameters.</span>
-<span class='no'>svc</span>$<span class='fu'>create_replication_instance</span>(
-  <span class='kw'>AllocatedStorage</span> <span class='kw'>=</span> <span class='fl'>123L</span>,
-  <span class='kw'>AutoMinorVersionUpgrade</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>AvailabilityZone</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>EngineVersion</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>MultiAZ</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>PreferredMaintenanceWindow</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>PubliclyAccessible</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>ReplicationInstanceClass</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>ReplicationInstanceIdentifier</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>ReplicationSubnetGroupIdentifier</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>VpcSecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_replication_instance</span><span class='op'>(</span>
+  AllocatedStorage <span class='op'>=</span> <span class='fl'>123L</span>,
+  AutoMinorVersionUpgrade <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  AvailabilityZone <span class='op'>=</span> <span class='st'>""</span>,
+  EngineVersion <span class='op'>=</span> <span class='st'>""</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>""</span>,
+  MultiAZ <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  PreferredMaintenanceWindow <span class='op'>=</span> <span class='st'>""</span>,
+  PubliclyAccessible <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  ReplicationInstanceClass <span class='op'>=</span> <span class='st'>""</span>,
+  ReplicationInstanceIdentifier <span class='op'>=</span> <span class='st'>""</span>,
+  ReplicationSubnetGroupIdentifier <span class='op'>=</span> <span class='st'>""</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  VpcSecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -300,7 +321,7 @@ For information on the required permissions, see <a href='https://docs.aws.amazo
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

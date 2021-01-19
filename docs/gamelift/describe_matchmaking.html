@@ -41,9 +41,29 @@
 
 <meta property="og:title" content="Retrieves one or more matchmaking tickets — gamelift_describe_matchmaking" />
 <meta property="og:description" content="Retrieves one or more matchmaking tickets. Use this operation to
-retrieve ticket information, including status and\--once a successful
-match is made\--acquire connection information for the resulting new
-game session." />
+retrieve ticket information, including--after a successful match is
+made--connection information for the resulting new game session.
+To request matchmaking tickets, provide a list of up to 10 ticket IDs.
+If the request is successful, a ticket object is returned for each
+requested ID that currently exists.
+This operation is not designed to be continually called to track
+matchmaking ticket status. This practice can cause you to exceed your
+API limit, which results in errors. Instead, as a best practice, set up
+an Amazon Simple Notification Service (SNS) to receive notifications,
+and provide the topic ARN in the matchmaking configuration. Continuously
+poling ticket status with DescribeMatchmaking should only be used for
+games in development with low matchmaking usage.
+Learn more
+Add FlexMatch to a Game Client
+Set Up FlexMatch Event Notification
+Related operations
+StartMatchmaking
+DescribeMatchmaking
+StopMatchmaking
+AcceptMatch
+StartMatchBackfill
+
+" />
 
 
 
@@ -75,7 +95,7 @@ game session." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +103,7 @@ game session." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +115,7 @@ game session." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,12 +139,32 @@ game session." />
 
     <div class="ref-description">
     <p>Retrieves one or more matchmaking tickets. Use this operation to
-retrieve ticket information, including status and\--once a successful
-match is made\--acquire connection information for the resulting new
-game session.</p>
+retrieve ticket information, including--after a successful match is
+made--connection information for the resulting new game session.</p>
+<p>To request matchmaking tickets, provide a list of up to 10 ticket IDs.
+If the request is successful, a ticket object is returned for each
+requested ID that currently exists.</p>
+<p>This operation is not designed to be continually called to track
+matchmaking ticket status. This practice can cause you to exceed your
+API limit, which results in errors. Instead, as a best practice, set up
+an Amazon Simple Notification Service (SNS) to receive notifications,
+and provide the topic ARN in the matchmaking configuration. Continuously
+poling ticket status with DescribeMatchmaking should only be used for
+games in development with low matchmaking usage.</p>
+<p><strong>Learn more</strong></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-client.html'>Add FlexMatch to a Game Client</a></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/flexmatchguide/match-notification.html'>Set Up FlexMatch Event Notification</a></p>
+<p><strong>Related operations</strong></p><ul>
+<li><p>StartMatchmaking</p></li>
+<li><p>DescribeMatchmaking</p></li>
+<li><p>StopMatchmaking</p></li>
+<li><p>AcceptMatch</p></li>
+<li><p>StartMatchBackfill</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_describe_matchmaking</span>(<span class='no'>TicketIds</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_describe_matchmaking</span><span class='op'>(</span><span class='va'>TicketIds</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,34 +176,15 @@ ID values.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can use this operation to track the progress of matchmaking requests
-(through polling) as an alternative to using event notifications. See
-more details on tracking matchmaking requests through polling or
-notifications in StartMatchmaking.</p>
-<p>To request matchmaking tickets, provide a list of up to 10 ticket IDs.
-If the request is successful, a ticket object is returned for each
-requested ID that currently exists.</p>
-<p><strong>Learn more</strong></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/match-client.html'>Add FlexMatch to a Game Client</a></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html'>Set Up FlexMatch Event Notification</a></p>
-<p><strong>Related operations</strong></p><ul>
-<li><p>StartMatchmaking</p></li>
-<li><p>DescribeMatchmaking</p></li>
-<li><p>StopMatchmaking</p></li>
-<li><p>AcceptMatch</p></li>
-<li><p>StartMatchBackfill</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_matchmaking</span>(
-  <span class='kw'>TicketIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_matchmaking</span><span class='op'>(</span>
+  TicketIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -181,7 +202,7 @@ requested ID that currently exists.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

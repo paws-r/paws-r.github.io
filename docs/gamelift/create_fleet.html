@@ -45,7 +45,42 @@ game builds or Realtime Servers with game-specific script. A fleet is a
 set of Amazon Elastic Compute Cloud (Amazon EC2) instances, each of
 which can host multiple game sessions. When creating a fleet, you choose
 the hardware specifications, set some configuration options, and specify
-the game server to deploy on the new fleet." />
+the game server to deploy on the new fleet.
+To create a new fleet, provide the following: (1) a fleet name, (2) an
+EC2 instance type and fleet type (spot or on-demand), (3) the build ID
+for your game build or script ID if using Realtime Servers, and (4) a
+runtime configuration, which determines how game servers will run on
+each instance in the fleet.
+If the CreateFleet call is successful, Amazon GameLift performs the
+following tasks. You can track the process of a fleet by checking the
+fleet status or by monitoring fleet creation events:
+Creates a fleet resource. Status: NEW.
+Begins writing events to the fleet event log, which can be accessed
+in the Amazon GameLift console.
+Sets the fleet's target capacity to 1 (desired instances), which
+triggers Amazon GameLift to start one new EC2 instance.
+Downloads the game build or Realtime script to the new instance and
+installs it. Statuses: DOWNLOADING, VALIDATING, BUILDING.
+Starts launching server processes on the instance. If the fleet is
+configured to run multiple server processes per instance, Amazon
+GameLift staggers each process launch by a few seconds. Status:
+ACTIVATING.
+Sets the fleet's status to ACTIVE as soon as one server process is
+ready to host a game session.
+
+
+Learn more
+Setting Up Fleets
+Debug Fleet Creation Issues
+Related operations
+CreateFleet
+ListFleets
+DeleteFleet
+DescribeFleetAttributes
+UpdateFleetAttributes
+StartFleetActions or StopFleetActions
+
+" />
 
 
 
@@ -77,7 +112,7 @@ the game server to deploy on the new fleet." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +120,7 @@ the game server to deploy on the new fleet." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +132,7 @@ the game server to deploy on the new fleet." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,14 +161,49 @@ set of Amazon Elastic Compute Cloud (Amazon EC2) instances, each of
 which can host multiple game sessions. When creating a fleet, you choose
 the hardware specifications, set some configuration options, and specify
 the game server to deploy on the new fleet.</p>
+<p>To create a new fleet, provide the following: (1) a fleet name, (2) an
+EC2 instance type and fleet type (spot or on-demand), (3) the build ID
+for your game build or script ID if using Realtime Servers, and (4) a
+runtime configuration, which determines how game servers will run on
+each instance in the fleet.</p>
+<p>If the <code>CreateFleet</code> call is successful, Amazon GameLift performs the
+following tasks. You can track the process of a fleet by checking the
+fleet status or by monitoring fleet creation events:</p><ul>
+<li><p>Creates a fleet resource. Status: <code>NEW</code>.</p></li>
+<li><p>Begins writing events to the fleet event log, which can be accessed
+in the Amazon GameLift console.</p></li>
+<li><p>Sets the fleet's target capacity to 1 (desired instances), which
+triggers Amazon GameLift to start one new EC2 instance.</p></li>
+<li><p>Downloads the game build or Realtime script to the new instance and
+installs it. Statuses: <code>DOWNLOADING</code>, <code>VALIDATING</code>, <code>BUILDING</code>.</p></li>
+<li><p>Starts launching server processes on the instance. If the fleet is
+configured to run multiple server processes per instance, Amazon
+GameLift staggers each process launch by a few seconds. Status:
+<code>ACTIVATING</code>.</p></li>
+<li><p>Sets the fleet's status to <code>ACTIVE</code> as soon as one server process is
+ready to host a game session.</p></li>
+</ul>
+
+<p><strong>Learn more</strong></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html'>Setting Up Fleets</a></p>
+<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-creating-debug.html#fleets-creating-debug-creation'>Debug Fleet Creation Issues</a></p>
+<p><strong>Related operations</strong></p><ul>
+<li><p>CreateFleet</p></li>
+<li><p>ListFleets</p></li>
+<li><p>DeleteFleet</p></li>
+<li><p>DescribeFleetAttributes</p></li>
+<li><p>UpdateFleetAttributes</p></li>
+<li><p>StartFleetActions or StopFleetActions</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>gamelift_create_fleet</span>(<span class='no'>Name</span>, <span class='no'>Description</span>, <span class='no'>BuildId</span>, <span class='no'>ScriptId</span>,
-  <span class='no'>ServerLaunchPath</span>, <span class='no'>ServerLaunchParameters</span>, <span class='no'>LogPaths</span>, <span class='no'>EC2InstanceType</span>,
-  <span class='no'>EC2InboundPermissions</span>, <span class='no'>NewGameSessionProtectionPolicy</span>,
-  <span class='no'>RuntimeConfiguration</span>, <span class='no'>ResourceCreationLimitPolicy</span>, <span class='no'>MetricGroups</span>,
-  <span class='no'>PeerVpcAwsAccountId</span>, <span class='no'>PeerVpcId</span>, <span class='no'>FleetType</span>, <span class='no'>InstanceRoleArn</span>,
-  <span class='no'>CertificateConfiguration</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>gamelift_create_fleet</span><span class='op'>(</span><span class='va'>Name</span>, <span class='va'>Description</span>, <span class='va'>BuildId</span>, <span class='va'>ScriptId</span>,
+  <span class='va'>ServerLaunchPath</span>, <span class='va'>ServerLaunchParameters</span>, <span class='va'>LogPaths</span>, <span class='va'>EC2InstanceType</span>,
+  <span class='va'>EC2InboundPermissions</span>, <span class='va'>NewGameSessionProtectionPolicy</span>,
+  <span class='va'>RuntimeConfiguration</span>, <span class='va'>ResourceCreationLimitPolicy</span>, <span class='va'>MetricGroups</span>,
+  <span class='va'>PeerVpcAwsAccountId</span>, <span class='va'>PeerVpcId</span>, <span class='va'>FleetType</span>, <span class='va'>InstanceRoleArn</span>,
+  <span class='va'>CertificateConfiguration</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,14 +250,14 @@ configuration will continue to work.)</p></td>
       <td><p>This parameter is no longer used. Instead, to specify where Amazon
 GameLift should store log files once a server process shuts down, use
 the Amazon GameLift server API <code>ProcessReady()</code> and specify one or more
-directory paths in <code>logParameters</code>. See more information in the <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api-ref.html#gamelift-sdk-server-api-ref-dataypes-process'>Server API Reference</a>.</p></td>
+directory paths in <code>logParameters</code>. See more information in the <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/#gamelift-sdk-server-api-ref-dataypes-process'>Server API Reference</a>.</p></td>
     </tr>
     <tr>
       <th>EC2InstanceType</th>
       <td><p>[required] The name of an EC2 instance type that is supported in Amazon GameLift. A
 fleet instance type determines the computing resources of each instance
 in the fleet, including CPU, memory, storage, and networking capacity.
-Amazon GameLift supports the following EC2 instance types. See <a href='http://aws.amazon.com/ec2/instance-types/'>Amazon EC2 Instance Types</a> for
+Amazon GameLift supports the following EC2 instance types. See <a href='https://aws.amazon.com/ec2/instance-types/'>Amazon EC2 Instance Types</a> for
 detailed descriptions.</p></td>
     </tr>
     <tr>
@@ -204,7 +274,7 @@ add more by updating the fleet.</p></td>
       <th>NewGameSessionProtectionPolicy</th>
       <td><p>A game session protection policy to apply to all instances in this
 fleet. If this parameter is not set, instances in this fleet default to
-no protection. You can change a fleet\'s protection policy using
+no protection. You can change a fleet's protection policy using
 UpdateFleetAttributes, but this change will only affect sessions created
 after the policy change. You can also set protection for individual
 instances using UpdateGameSession.</p><ul>
@@ -254,8 +324,8 @@ the AWS Management Console under account settings.</p></td>
       <th>PeerVpcId</th>
       <td><p>A unique identifier for a VPC with resources to be accessed by your
 Amazon GameLift fleet. The VPC must be in the same Region as your fleet.
-To look up a VPC ID, use the <a href='https://console.aws.amazon.com/vpc/'>VPC Dashboard</a> in the AWS Management
-Console. Learn more about VPC peering in <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html'>VPC Peering with Amazon GameLift Fleets</a>.</p></td>
+To look up a VPC ID, use the <a href='https://console.aws.amazon.com/vpc/home'>VPC Dashboard</a> in the AWS
+Management Console. Learn more about VPC peering in <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html'>VPC Peering with Amazon GameLift Fleets</a>.</p></td>
     </tr>
     <tr>
       <th>FleetType</th>
@@ -267,12 +337,11 @@ instance type selected for this fleet. Learn more about <a href='https://docs.aw
     <tr>
       <th>InstanceRoleArn</th>
       <td><p>A unique identifier for an AWS IAM role that manages access to your AWS
-services. With an instance role ARN set, any application that runs on an
-instance in this fleet can assume the role, including install scripts,
-server processes, and daemons (background processes). Create a role or
-look up a role\'s ARN from the <a href='https://console.aws.amazon.com/iam/'>IAM dashboard</a> in the AWS Management
-Console. Learn more about using on-box credentials for your game servers
-at <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html'>Access external resources from a game server</a>.</p></td>
+services. Fleets with an instance role ARN allow applications that are
+running on the fleet's instances to assume the role. Learn more about
+using on-box credentials for your game servers at <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html'>Access external resources from a game server</a>.
+To call this operation with instance role ARN, you must have IAM
+PassRole permissions. See <a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-iam-policy-examples.html'>IAM policy examples for GameLift</a>.</p></td>
     </tr>
     <tr>
       <th>CertificateConfiguration</th>
@@ -305,98 +374,62 @@ AWS General Reference for actual tagging limits.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To create a new fleet, provide the following: (1) a fleet name, (2) an
-EC2 instance type and fleet type (spot or on-demand), (3) the build ID
-for your game build or script ID if using Realtime Servers, and (4) a
-runtime configuration, which determines how game servers will run on
-each instance in the fleet.</p>
-<p>If the <code>CreateFleet</code> call is successful, Amazon GameLift performs the
-following tasks. You can track the process of a fleet by checking the
-fleet status or by monitoring fleet creation events:</p><ul>
-<li><p>Creates a fleet resource. Status: <code>NEW</code>.</p></li>
-<li><p>Begins writing events to the fleet event log, which can be accessed
-in the Amazon GameLift console.</p></li>
-<li><p>Sets the fleet\'s target capacity to 1 (desired instances), which
-triggers Amazon GameLift to start one new EC2 instance.</p></li>
-<li><p>Downloads the game build or Realtime script to the new instance and
-installs it. Statuses: <code>DOWNLOADING</code>, <code>VALIDATING</code>, <code>BUILDING</code>.</p></li>
-<li><p>Starts launching server processes on the instance. If the fleet is
-configured to run multiple server processes per instance, Amazon
-GameLift staggers each process launch by a few seconds. Status:
-<code>ACTIVATING</code>.</p></li>
-<li><p>Sets the fleet\'s status to <code>ACTIVE</code> as soon as one server process
-is ready to host a game session.</p></li>
-</ul>
-
-<p><strong>Learn more</strong></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html'>Setting Up Fleets</a></p>
-<p><a href='https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-creating-debug.html#fleets-creating-debug-creation'>Debug Fleet Creation Issues</a></p>
-<p><strong>Related operations</strong></p><ul>
-<li><p>CreateFleet</p></li>
-<li><p>ListFleets</p></li>
-<li><p>DeleteFleet</p></li>
-<li><p>DescribeFleetAttributes</p></li>
-<li><p>UpdateFleetAttributes</p></li>
-<li><p>StartFleetActions or StopFleetActions</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_fleet</span>(
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Description</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>BuildId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ScriptId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServerLaunchPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServerLaunchParameters</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LogPaths</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_fleet</span><span class='op'>(</span>
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Description <span class='op'>=</span> <span class='st'>"string"</span>,
+  BuildId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ScriptId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServerLaunchPath <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServerLaunchParameters <span class='op'>=</span> <span class='st'>"string"</span>,
+  LogPaths <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>EC2InstanceType</span> <span class='kw'>=</span> <span class='st'>"t2.micro"</span><span class='kw'>|</span><span class='st'>"t2.small"</span><span class='kw'>|</span><span class='st'>"t2.medium"</span><span class='kw'>|</span><span class='st'>"t2.large"</span><span class='kw'>|</span><span class='st'>"c3.large"</span><span class='kw'>|</span><span class='st'>"c3.xlarge"</span><span class='kw'>|</span><span class='st'>"c3.2xlarge"</span><span class='kw'>|</span><span class='st'>"c3.4xlarge"</span><span class='kw'>|</span><span class='st'>"c3.8xlarge"</span><span class='kw'>|</span><span class='st'>"c4.large"</span><span class='kw'>|</span><span class='st'>"c4.xlarge"</span><span class='kw'>|</span><span class='st'>"c4.2xlarge"</span><span class='kw'>|</span><span class='st'>"c4.4xlarge"</span><span class='kw'>|</span><span class='st'>"c4.8xlarge"</span><span class='kw'>|</span><span class='st'>"c5.large"</span><span class='kw'>|</span><span class='st'>"c5.xlarge"</span><span class='kw'>|</span><span class='st'>"c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"c5.12xlarge"</span><span class='kw'>|</span><span class='st'>"c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"c5.24xlarge"</span><span class='kw'>|</span><span class='st'>"r3.large"</span><span class='kw'>|</span><span class='st'>"r3.xlarge"</span><span class='kw'>|</span><span class='st'>"r3.2xlarge"</span><span class='kw'>|</span><span class='st'>"r3.4xlarge"</span><span class='kw'>|</span><span class='st'>"r3.8xlarge"</span><span class='kw'>|</span><span class='st'>"r4.large"</span><span class='kw'>|</span><span class='st'>"r4.xlarge"</span><span class='kw'>|</span><span class='st'>"r4.2xlarge"</span><span class='kw'>|</span><span class='st'>"r4.4xlarge"</span><span class='kw'>|</span><span class='st'>"r4.8xlarge"</span><span class='kw'>|</span><span class='st'>"r4.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5.large"</span><span class='kw'>|</span><span class='st'>"r5.xlarge"</span><span class='kw'>|</span><span class='st'>"r5.2xlarge"</span><span class='kw'>|</span><span class='st'>"r5.4xlarge"</span><span class='kw'>|</span><span class='st'>"r5.8xlarge"</span><span class='kw'>|</span><span class='st'>"r5.12xlarge"</span><span class='kw'>|</span><span class='st'>"r5.16xlarge"</span><span class='kw'>|</span><span class='st'>"r5.24xlarge"</span><span class='kw'>|</span><span class='st'>"m3.medium"</span><span class='kw'>|</span><span class='st'>"m3.large"</span><span class='kw'>|</span><span class='st'>"m3.xlarge"</span><span class='kw'>|</span><span class='st'>"m3.2xlarge"</span><span class='kw'>|</span><span class='st'>"m4.large"</span><span class='kw'>|</span><span class='st'>"m4.xlarge"</span><span class='kw'>|</span><span class='st'>"m4.2xlarge"</span><span class='kw'>|</span><span class='st'>"m4.4xlarge"</span><span class='kw'>|</span><span class='st'>"m4.10xlarge"</span><span class='kw'>|</span><span class='st'>"m5.large"</span><span class='kw'>|</span><span class='st'>"m5.xlarge"</span><span class='kw'>|</span><span class='st'>"m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"m5.8xlarge"</span><span class='kw'>|</span><span class='st'>"m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"m5.16xlarge"</span><span class='kw'>|</span><span class='st'>"m5.24xlarge"</span>,
-  <span class='kw'>EC2InboundPermissions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>FromPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>ToPort</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>IpRange</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Protocol</span> <span class='kw'>=</span> <span class='st'>"TCP"</span><span class='kw'>|</span><span class='st'>"UDP"</span>
-    )
-  ),
-  <span class='kw'>NewGameSessionProtectionPolicy</span> <span class='kw'>=</span> <span class='st'>"NoProtection"</span><span class='kw'>|</span><span class='st'>"FullProtection"</span>,
-  <span class='kw'>RuntimeConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ServerProcesses</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>LaunchPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Parameters</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>ConcurrentExecutions</span> <span class='kw'>=</span> <span class='fl'>123</span>
-      )
-    ),
-    <span class='kw'>MaxConcurrentGameSessionActivations</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>GameSessionActivationTimeoutSeconds</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>ResourceCreationLimitPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>NewGameSessionsPerCreator</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>PolicyPeriodInMinutes</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>MetricGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  EC2InstanceType <span class='op'>=</span> <span class='st'>"t2.micro"</span><span class='op'>|</span><span class='st'>"t2.small"</span><span class='op'>|</span><span class='st'>"t2.medium"</span><span class='op'>|</span><span class='st'>"t2.large"</span><span class='op'>|</span><span class='st'>"c3.large"</span><span class='op'>|</span><span class='st'>"c3.xlarge"</span><span class='op'>|</span><span class='st'>"c3.2xlarge"</span><span class='op'>|</span><span class='st'>"c3.4xlarge"</span><span class='op'>|</span><span class='st'>"c3.8xlarge"</span><span class='op'>|</span><span class='st'>"c4.large"</span><span class='op'>|</span><span class='st'>"c4.xlarge"</span><span class='op'>|</span><span class='st'>"c4.2xlarge"</span><span class='op'>|</span><span class='st'>"c4.4xlarge"</span><span class='op'>|</span><span class='st'>"c4.8xlarge"</span><span class='op'>|</span><span class='st'>"c5.large"</span><span class='op'>|</span><span class='st'>"c5.xlarge"</span><span class='op'>|</span><span class='st'>"c5.2xlarge"</span><span class='op'>|</span><span class='st'>"c5.4xlarge"</span><span class='op'>|</span><span class='st'>"c5.9xlarge"</span><span class='op'>|</span><span class='st'>"c5.12xlarge"</span><span class='op'>|</span><span class='st'>"c5.18xlarge"</span><span class='op'>|</span><span class='st'>"c5.24xlarge"</span><span class='op'>|</span><span class='st'>"c5a.large"</span><span class='op'>|</span><span class='st'>"c5a.xlarge"</span><span class='op'>|</span><span class='st'>"c5a.2xlarge"</span><span class='op'>|</span><span class='st'>"c5a.4xlarge"</span><span class='op'>|</span><span class='st'>"c5a.8xlarge"</span><span class='op'>|</span><span class='st'>"c5a.12xlarge"</span><span class='op'>|</span><span class='st'>"c5a.16xlarge"</span><span class='op'>|</span><span class='st'>"c5a.24xlarge"</span><span class='op'>|</span><span class='st'>"r3.large"</span><span class='op'>|</span><span class='st'>"r3.xlarge"</span><span class='op'>|</span><span class='st'>"r3.2xlarge"</span><span class='op'>|</span><span class='st'>"r3.4xlarge"</span><span class='op'>|</span><span class='st'>"r3.8xlarge"</span><span class='op'>|</span><span class='st'>"r4.large"</span><span class='op'>|</span><span class='st'>"r4.xlarge"</span><span class='op'>|</span><span class='st'>"r4.2xlarge"</span><span class='op'>|</span><span class='st'>"r4.4xlarge"</span><span class='op'>|</span><span class='st'>"r4.8xlarge"</span><span class='op'>|</span><span class='st'>"r4.16xlarge"</span><span class='op'>|</span><span class='st'>"r5.large"</span><span class='op'>|</span><span class='st'>"r5.xlarge"</span><span class='op'>|</span><span class='st'>"r5.2xlarge"</span><span class='op'>|</span><span class='st'>"r5.4xlarge"</span><span class='op'>|</span><span class='st'>"r5.8xlarge"</span><span class='op'>|</span><span class='st'>"r5.12xlarge"</span><span class='op'>|</span><span class='st'>"r5.16xlarge"</span><span class='op'>|</span><span class='st'>"r5.24xlarge"</span><span class='op'>|</span><span class='st'>"r5a.large"</span><span class='op'>|</span><span class='st'>"r5a.xlarge"</span><span class='op'>|</span><span class='st'>"r5a.2xlarge"</span><span class='op'>|</span><span class='st'>"r5a.4xlarge"</span><span class='op'>|</span><span class='st'>"r5a.8xlarge"</span><span class='op'>|</span><span class='st'>"r5a.12xlarge"</span><span class='op'>|</span><span class='st'>"r5a.16xlarge"</span><span class='op'>|</span><span class='st'>"r5a.24xlarge"</span><span class='op'>|</span><span class='st'>"m3.medium"</span><span class='op'>|</span><span class='st'>"m3.large"</span><span class='op'>|</span><span class='st'>"m3.xlarge"</span><span class='op'>|</span><span class='st'>"m3.2xlarge"</span><span class='op'>|</span><span class='st'>"m4.large"</span><span class='op'>|</span><span class='st'>"m4.xlarge"</span><span class='op'>|</span><span class='st'>"m4.2xlarge"</span><span class='op'>|</span><span class='st'>"m4.4xlarge"</span><span class='op'>|</span><span class='st'>"m4.10xlarge"</span><span class='op'>|</span><span class='st'>"m5.large"</span><span class='op'>|</span><span class='st'>"m5.xlarge"</span><span class='op'>|</span><span class='st'>"m5.2xlarge"</span><span class='op'>|</span><span class='st'>"m5.4xlarge"</span><span class='op'>|</span><span class='st'>"m5.8xlarge"</span><span class='op'>|</span><span class='st'>"m5.12xlarge"</span><span class='op'>|</span><span class='st'>"m5.16xlarge"</span><span class='op'>|</span><span class='st'>"m5.24xlarge"</span><span class='op'>|</span><span class='st'>"m5a.large"</span><span class='op'>|</span><span class='st'>"m5a.xlarge"</span><span class='op'>|</span><span class='st'>"m5a.2xlarge"</span><span class='op'>|</span><span class='st'>"m5a.4xlarge"</span><span class='op'>|</span><span class='st'>"m5a.8xlarge"</span><span class='op'>|</span><span class='st'>"m5a.12xlarge"</span><span class='op'>|</span><span class='st'>"m5a.16xlarge"</span><span class='op'>|</span><span class='st'>"m5a.24xlarge"</span>,
+  EC2InboundPermissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      FromPort <span class='op'>=</span> <span class='fl'>123</span>,
+      ToPort <span class='op'>=</span> <span class='fl'>123</span>,
+      IpRange <span class='op'>=</span> <span class='st'>"string"</span>,
+      Protocol <span class='op'>=</span> <span class='st'>"TCP"</span><span class='op'>|</span><span class='st'>"UDP"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  NewGameSessionProtectionPolicy <span class='op'>=</span> <span class='st'>"NoProtection"</span><span class='op'>|</span><span class='st'>"FullProtection"</span>,
+  RuntimeConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ServerProcesses <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        LaunchPath <span class='op'>=</span> <span class='st'>"string"</span>,
+        Parameters <span class='op'>=</span> <span class='st'>"string"</span>,
+        ConcurrentExecutions <span class='op'>=</span> <span class='fl'>123</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    MaxConcurrentGameSessionActivations <span class='op'>=</span> <span class='fl'>123</span>,
+    GameSessionActivationTimeoutSeconds <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  ResourceCreationLimitPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    NewGameSessionsPerCreator <span class='op'>=</span> <span class='fl'>123</span>,
+    PolicyPeriodInMinutes <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  MetricGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>PeerVpcAwsAccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PeerVpcId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>FleetType</span> <span class='kw'>=</span> <span class='st'>"ON_DEMAND"</span><span class='kw'>|</span><span class='st'>"SPOT"</span>,
-  <span class='kw'>InstanceRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CertificateConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CertificateType</span> <span class='kw'>=</span> <span class='st'>"DISABLED"</span><span class='kw'>|</span><span class='st'>"GENERATED"</span>
-  ),
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  PeerVpcAwsAccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PeerVpcId <span class='op'>=</span> <span class='st'>"string"</span>,
+  FleetType <span class='op'>=</span> <span class='st'>"ON_DEMAND"</span><span class='op'>|</span><span class='st'>"SPOT"</span>,
+  InstanceRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  CertificateConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CertificateType <span class='op'>=</span> <span class='st'>"DISABLED"</span><span class='op'>|</span><span class='st'>"GENERATED"</span>
+  <span class='op'>)</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -414,7 +447,7 @@ is ready to host a game session.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

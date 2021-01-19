@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +92,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,11 +118,11 @@
     <p>Creates a replication task using the specified parameters.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>databasemigrationservice_create_replication_task</span>(
-  <span class='no'>ReplicationTaskIdentifier</span>, <span class='no'>SourceEndpointArn</span>, <span class='no'>TargetEndpointArn</span>,
-  <span class='no'>ReplicationInstanceArn</span>, <span class='no'>MigrationType</span>, <span class='no'>TableMappings</span>,
-  <span class='no'>ReplicationTaskSettings</span>, <span class='no'>CdcStartTime</span>, <span class='no'>CdcStartPosition</span>,
-  <span class='no'>CdcStopPosition</span>, <span class='no'>Tags</span>, <span class='no'>TaskData</span>)</pre>
+    <pre class="usage"><span class='fu'>databasemigrationservice_create_replication_task</span><span class='op'>(</span>
+  <span class='va'>ReplicationTaskIdentifier</span>, <span class='va'>SourceEndpointArn</span>, <span class='va'>TargetEndpointArn</span>,
+  <span class='va'>ReplicationInstanceArn</span>, <span class='va'>MigrationType</span>, <span class='va'>TableMappings</span>,
+  <span class='va'>ReplicationTaskSettings</span>, <span class='va'>CdcStartTime</span>, <span class='va'>CdcStartPosition</span>,
+  <span class='va'>CdcStopPosition</span>, <span class='va'>Tags</span>, <span class='va'>TaskData</span>, <span class='va'>ResourceIdentifier</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,7 +152,7 @@ endpoint.</p></td>
     </tr>
     <tr>
       <th>MigrationType</th>
-      <td><p>[required] The migration type. Valid values: <code>full-load</code> \| <code>cdc</code> \|
+      <td><p>[required] The migration type. Valid values: <code>full-load</code> | <code>cdc</code> |
 <code>full-load-and-cdc</code></p></td>
     </tr>
     <tr>
@@ -172,7 +172,7 @@ in the <em>AWS Database Migration User Guide.</em></p></td>
       <td><p>Indicates the start time for a change data capture (CDC) operation. Use
 either CdcStartTime or CdcStartPosition to specify when you want a CDC
 operation to start. Specifying both values results in an error.</p>
-<p>Timestamp Example: \--cdc-start-time "2018-03-08T12:12:12"</p></td>
+<p>Timestamp Example: --cdc-start-time “2018-03-08T12:12:12”</p></td>
     </tr>
     <tr>
       <th>CdcStartPosition</th>
@@ -180,10 +180,10 @@ operation to start. Specifying both values results in an error.</p>
 Use either CdcStartPosition or CdcStartTime to specify when you want a
 CDC operation to start. Specifying both values results in an error.</p>
 <p>The value can be in date, checkpoint, or LSN/SCN format.</p>
-<p>Date Example: \--cdc-start-position "2018-03-08T12:12:12"</p>
-<p>Checkpoint Example: \--cdc-start-position
-\"checkpoint:V1\#27\#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876\#0\#0\#*\#0\#93\"</p>
-<p>LSN Example: \--cdc-start-position "mysql-bin-changelog.000024:373"</p>
+<p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p>
+<p>Checkpoint Example: --cdc-start-position
+"checkpoint:V1\#27\#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876\#0\#0\#*\#0\#93"</p>
+<p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>
 <p>When you use this task setting with a source PostgreSQL database, a
 logical replication slot should already be created and associated with
 the source endpoint. You can verify this by setting the <code>slotName</code> extra
@@ -194,10 +194,10 @@ more information, see <a href='https://docs.aws.amazon.com/dms/latest/userguide/
       <th>CdcStopPosition</th>
       <td><p>Indicates when you want a change data capture (CDC) operation to stop.
 The value can be either server time or commit time.</p>
-<p>Server time example: \--cdc-stop-position
-"server\_time:3018-02-09T12:12:12"</p>
-<p>Commit time example: \--cdc-stop-position "commit\_time:
-3018-02-09T12:12:12 "</p></td>
+<p>Server time example: --cdc-stop-position
+“server\_time:2018-02-09T12:12:12”</p>
+<p>Commit time example: --cdc-stop-position “commit\_time:
+2018-02-09T12:12:12 “</p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -210,54 +210,71 @@ certain source and target endpoints. For more information, see
 <a href='https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.TaskData.html'>Specifying Supplemental Data for Task Settings</a>
 in the <em>AWS Database Migration Service User Guide.</em></p></td>
     </tr>
+    <tr>
+      <th>ResourceIdentifier</th>
+      <td><p>A friendly name for the resource identifier at the end of the
+<code>EndpointArn</code> response parameter that is returned in the created
+<code>Endpoint</code> object. The value for this parameter can have up to 31
+characters. It can contain only ASCII letters, digits, and hyphen ('-').
+Also, it can't end with a hyphen or contain two consecutive hyphens, and
+can only begin with a letter, such as <code>Example-App-ARN1</code>. For example,
+this value might result in the <code>EndpointArn</code> value
+<code>arn:aws:dms:eu-west-1:012345678901:rep:Example-App-ARN1</code>. If you don't
+specify a <code>ResourceIdentifier</code> value, AWS DMS generates a default
+identifier value for the end of <code>EndpointArn</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_replication_task</span>(
-  <span class='kw'>ReplicationTaskIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceEndpointArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TargetEndpointArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReplicationInstanceArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MigrationType</span> <span class='kw'>=</span> <span class='st'>"full-load"</span><span class='kw'>|</span><span class='st'>"cdc"</span><span class='kw'>|</span><span class='st'>"full-load-and-cdc"</span>,
-  <span class='kw'>TableMappings</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ReplicationTaskSettings</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CdcStartTime</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_replication_task</span><span class='op'>(</span>
+  ReplicationTaskIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceEndpointArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  TargetEndpointArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReplicationInstanceArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  MigrationType <span class='op'>=</span> <span class='st'>"full-load"</span><span class='op'>|</span><span class='st'>"cdc"</span><span class='op'>|</span><span class='st'>"full-load-and-cdc"</span>,
+  TableMappings <span class='op'>=</span> <span class='st'>"string"</span>,
+  ReplicationTaskSettings <span class='op'>=</span> <span class='st'>"string"</span>,
+  CdcStartTime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
     <span class='st'>"2015-01-01"</span>
-  ),
-  <span class='kw'>CdcStartPosition</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CdcStopPosition</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>TaskData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  CdcStartPosition <span class='op'>=</span> <span class='st'>"string"</span>,
+  CdcStopPosition <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TaskData <span class='op'>=</span> <span class='st'>"string"</span>,
+  ResourceIdentifier <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Creates a replication task using the specified parameters.</span>
-<span class='no'>svc</span>$<span class='fu'>create_replication_task</span>(
-  <span class='kw'>CdcStartTime</span> <span class='kw'>=</span> <span class='st'>"2016-12-14T18:25:43Z"</span>,
-  <span class='kw'>MigrationType</span> <span class='kw'>=</span> <span class='st'>"full-load"</span>,
-  <span class='kw'>ReplicationInstanceArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:dms:us-east-1:123456789012:rep:6UTDJGBOUS3VI3SUWA66XFJCJ..."</span>,
-  <span class='kw'>ReplicationTaskIdentifier</span> <span class='kw'>=</span> <span class='st'>"task1"</span>,
-  <span class='kw'>ReplicationTaskSettings</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>SourceEndpointArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:dms:us-east-1:123456789012:endpoint:ZW5UAN6P4E77EC7YWHK4RZZ3B..."</span>,
-  <span class='kw'>TableMappings</span> <span class='kw'>=</span> <span class='st'>"file://mappingfile.json"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"Acount"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"24352226"</span>
-    )
-  ),
-  <span class='kw'>TargetEndpointArn</span> <span class='kw'>=</span> <span class='st'>"arn:aws:dms:us-east-1:123456789012:endpoint:ASXWXJZLNWNT5HTWCGV2BUJQ7..."</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_replication_task</span><span class='op'>(</span>
+  CdcStartTime <span class='op'>=</span> <span class='st'>"2016-12-14T18:25:43Z"</span>,
+  MigrationType <span class='op'>=</span> <span class='st'>"full-load"</span>,
+  ReplicationInstanceArn <span class='op'>=</span> <span class='st'>"arn:aws:dms:us-east-1:123456789012:rep:6UTDJGBOUS3VI3SUWA66XFJCJ..."</span>,
+  ReplicationTaskIdentifier <span class='op'>=</span> <span class='st'>"task1"</span>,
+  ReplicationTaskSettings <span class='op'>=</span> <span class='st'>""</span>,
+  SourceEndpointArn <span class='op'>=</span> <span class='st'>"arn:aws:dms:us-east-1:123456789012:endpoint:ZW5UAN6P4E77EC7YWHK4RZZ3B..."</span>,
+  TableMappings <span class='op'>=</span> <span class='st'>"file://mappingfile.json"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"Acount"</span>,
+      Value <span class='op'>=</span> <span class='st'>"24352226"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TargetEndpointArn <span class='op'>=</span> <span class='st'>"arn:aws:dms:us-east-1:123456789012:endpoint:ASXWXJZLNWNT5HTWCGV2BUJQ7..."</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -273,7 +290,7 @@ in the <em>AWS Database Migration Service User Guide.</em></p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -44,7 +44,26 @@ single location — ssm_create_resource_data_sync • paws</title>
 single location — ssm_create_resource_data_sync" />
 <meta property="og:description" content="A resource data sync helps you view data from multiple sources in a
 single location. Systems Manager offers two types of resource data sync:
-SyncToDestination and SyncFromSource." />
+SyncToDestination and SyncFromSource.
+You can configure Systems Manager Inventory to use the
+SyncToDestination type to synchronize Inventory data from multiple AWS
+Regions to a single S3 bucket. For more information, see Configuring Resource Data Sync for Inventory
+in the AWS Systems Manager User Guide.
+You can configure Systems Manager Explorer to use the SyncFromSource
+type to synchronize operational work items (OpsItems) and operational
+data (OpsData) from multiple AWS Regions to a single S3 bucket. This
+type can synchronize OpsItems and OpsData from multiple AWS accounts and
+Regions or EntireOrganization by using AWS Organizations. For more
+information, see Setting up Systems Manager Explorer to display data from multiple accounts and Regions
+in the AWS Systems Manager User Guide.
+A resource data sync is an asynchronous operation that returns
+immediately. After a successful initial sync is completed, the system
+continuously syncs data. To check the status of a sync, use the
+ListResourceDataSync.
+By default, data is not encrypted in Amazon S3. We strongly recommend
+that you enable encryption in Amazon S3 to ensure secure data storage.
+We also recommend that you secure access to the Amazon S3 bucket by
+creating a restrictive bucket policy." />
 
 
 
@@ -76,7 +95,7 @@ SyncToDestination and SyncFromSource." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +103,7 @@ SyncToDestination and SyncFromSource." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +115,7 @@ SyncToDestination and SyncFromSource." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,10 +142,29 @@ single location</h1>
     <p>A resource data sync helps you view data from multiple sources in a
 single location. Systems Manager offers two types of resource data sync:
 <code>SyncToDestination</code> and <code>SyncFromSource</code>.</p>
+<p>You can configure Systems Manager Inventory to use the
+<code>SyncToDestination</code> type to synchronize Inventory data from multiple AWS
+Regions to a single S3 bucket. For more information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html'>Configuring Resource Data Sync for Inventory</a>
+in the <em>AWS Systems Manager User Guide</em>.</p>
+<p>You can configure Systems Manager Explorer to use the <code>SyncFromSource</code>
+type to synchronize operational work items (OpsItems) and operational
+data (OpsData) from multiple AWS Regions to a single S3 bucket. This
+type can synchronize OpsItems and OpsData from multiple AWS accounts and
+Regions or <code>EntireOrganization</code> by using AWS Organizations. For more
+information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resource-data-sync.html'>Setting up Systems Manager Explorer to display data from multiple accounts and Regions</a>
+in the <em>AWS Systems Manager User Guide</em>.</p>
+<p>A resource data sync is an asynchronous operation that returns
+immediately. After a successful initial sync is completed, the system
+continuously syncs data. To check the status of a sync, use the
+ListResourceDataSync.</p>
+<p>By default, data is not encrypted in Amazon S3. We strongly recommend
+that you enable encryption in Amazon S3 to ensure secure data storage.
+We also recommend that you secure access to the Amazon S3 bucket by
+creating a restrictive bucket policy.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ssm_create_resource_data_sync</span>(<span class='no'>SyncName</span>, <span class='no'>S3Destination</span>, <span class='no'>SyncType</span>,
-  <span class='no'>SyncSource</span>)</pre>
+    <pre class="usage"><span class='fu'>ssm_create_resource_data_sync</span><span class='op'>(</span><span class='va'>SyncName</span>, <span class='va'>S3Destination</span>, <span class='va'>SyncType</span>,
+  <span class='va'>SyncSource</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,59 +196,39 @@ parameter is required if the <code>SyncType</code> value is SyncFromSource.</p><
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can configure Systems Manager Inventory to use the
-<code>SyncToDestination</code> type to synchronize Inventory data from multiple AWS
-Regions to a single S3 bucket. For more information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html'>Configuring Resource Data Sync for Inventory</a>
-in the <em>AWS Systems Manager User Guide</em>.</p>
-<p>You can configure Systems Manager Explorer to use the <code>SyncFromSource</code>
-type to synchronize operational work items (OpsItems) and operational
-data (OpsData) from multiple AWS Regions to a single S3 bucket. This
-type can synchronize OpsItems and OpsData from multiple AWS accounts and
-Regions or <code>EntireOrganization</code> by using AWS Organizations. For more
-information, see <a href='https://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resource-data-sync.html'>Setting up Systems Manager Explorer to display data from multiple accounts and Regions</a>
-in the <em>AWS Systems Manager User Guide</em>.</p>
-<p>A resource data sync is an asynchronous operation that returns
-immediately. After a successful initial sync is completed, the system
-continuously syncs data. To check the status of a sync, use the
-ListResourceDataSync.</p>
-<p>By default, data is not encrypted in Amazon S3. We strongly recommend
-that you enable encryption in Amazon S3 to ensure secure data storage.
-We also recommend that you secure access to the Amazon S3 bucket by
-creating a restrictive bucket policy.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_resource_data_sync</span>(
-  <span class='kw'>SyncName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>S3Destination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>BucketName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Prefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>SyncFormat</span> <span class='kw'>=</span> <span class='st'>"JsonSerDe"</span>,
-    <span class='kw'>Region</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>AWSKMSKeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DestinationDataSharing</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DestinationDataSharingType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>SyncType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SyncSource</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>SourceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>AwsOrganizationsSource</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>OrganizationSourceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>OrganizationalUnits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>OrganizationalUnitId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>SourceRegions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_resource_data_sync</span><span class='op'>(</span>
+  SyncName <span class='op'>=</span> <span class='st'>"string"</span>,
+  S3Destination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    BucketName <span class='op'>=</span> <span class='st'>"string"</span>,
+    Prefix <span class='op'>=</span> <span class='st'>"string"</span>,
+    SyncFormat <span class='op'>=</span> <span class='st'>"JsonSerDe"</span>,
+    Region <span class='op'>=</span> <span class='st'>"string"</span>,
+    AWSKMSKeyARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    DestinationDataSharing <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DestinationDataSharingType <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  SyncType <span class='op'>=</span> <span class='st'>"string"</span>,
+  SyncSource <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    SourceType <span class='op'>=</span> <span class='st'>"string"</span>,
+    AwsOrganizationsSource <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      OrganizationSourceType <span class='op'>=</span> <span class='st'>"string"</span>,
+      OrganizationalUnits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          OrganizationalUnitId <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    SourceRegions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    ),
-    <span class='kw'>IncludeFutureRegions</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  )
-)</pre>
+    <span class='op'>)</span>,
+    IncludeFutureRegions <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -228,7 +246,7 @@ creating a restrictive bucket policy.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

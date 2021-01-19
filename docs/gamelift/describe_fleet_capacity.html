@@ -41,9 +41,38 @@
 
 <meta property="og:title" content="Retrieves the current capacity statistics for one or more fleets — gamelift_describe_fleet_capacity" />
 <meta property="og:description" content="Retrieves the current capacity statistics for one or more fleets. These
-statistics present a snapshot of the fleet\'s instances and provide
+statistics present a snapshot of the fleet's instances and provide
 insight on current or imminent scaling activity. To get statistics on
-game hosting activity in the fleet, see DescribeFleetUtilization." />
+game hosting activity in the fleet, see DescribeFleetUtilization.
+You can request capacity for all fleets or specify a list of one or more
+fleet identifiers. When requesting multiple fleets, use the pagination
+parameters to retrieve results as a set of sequential pages. If
+successful, a FleetCapacity object is returned for each requested fleet
+ID. When a list of fleet IDs is provided, attribute objects are returned
+only for fleets that currently exist.
+Some API operations may limit the number of fleet IDs allowed in one
+request. If a request exceeds this limit, the request fails and the
+error message includes the maximum allowed.
+Learn more
+Setting up GameLift Fleets
+GameLift Metrics for Fleets
+Related operations
+CreateFleet
+ListFleets
+DeleteFleet
+Describe fleets:
+DescribeFleetAttributes
+DescribeFleetCapacity
+DescribeFleetPortSettings
+DescribeFleetUtilization
+DescribeRuntimeConfiguration
+DescribeEC2InstanceLimits
+DescribeFleetEvents
+
+UpdateFleetAttributes
+StartFleetActions or StopFleetActions
+
+" />
 
 
 
@@ -75,7 +104,7 @@ game hosting activity in the fleet, see DescribeFleetUtilization." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +112,7 @@ game hosting activity in the fleet, see DescribeFleetUtilization." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +124,7 @@ game hosting activity in the fleet, see DescribeFleetUtilization." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,46 +148,16 @@ game hosting activity in the fleet, see DescribeFleetUtilization." />
 
     <div class="ref-description">
     <p>Retrieves the current capacity statistics for one or more fleets. These
-statistics present a snapshot of the fleet\'s instances and provide
+statistics present a snapshot of the fleet's instances and provide
 insight on current or imminent scaling activity. To get statistics on
 game hosting activity in the fleet, see DescribeFleetUtilization.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>gamelift_describe_fleet_capacity</span>(<span class='no'>FleetIds</span>, <span class='no'>Limit</span>, <span class='no'>NextToken</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>FleetIds</th>
-      <td><p>A unique identifier for a fleet(s) to retrieve capacity information for.
-You can use either the fleet ID or ARN value.</p></td>
-    </tr>
-    <tr>
-      <th>Limit</th>
-      <td><p>The maximum number of results to return. Use this parameter with
-<code>NextToken</code> to get results as a set of sequential pages. This parameter
-is ignored when the request specifies one or a list of fleet IDs.</p></td>
-    </tr>
-    <tr>
-      <th>NextToken</th>
-      <td><p>Token that indicates the start of the next sequential page of results.
-Use the token that is returned with a previous call to this action. To
-start at the beginning of the result set, do not specify a value. This
-parameter is ignored when the request specifies one or a list of fleet
-IDs.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can request capacity for all fleets or specify a list of one or more
+<p>You can request capacity for all fleets or specify a list of one or more
 fleet identifiers. When requesting multiple fleets, use the pagination
 parameters to retrieve results as a set of sequential pages. If
 successful, a FleetCapacity object is returned for each requested fleet
 ID. When a list of fleet IDs is provided, attribute objects are returned
 only for fleets that currently exist.</p>
-<p>Some API actions may limit the number of fleet IDs allowed in one
+<p>Some API operations may limit the number of fleet IDs allowed in one
 request. If a request exceeds this limit, the request fails and the
 error message includes the maximum allowed.</p>
 <p><strong>Learn more</strong></p>
@@ -181,16 +180,45 @@ error message includes the maximum allowed.</p>
 <li><p>StartFleetActions or StopFleetActions</p></li>
 </ul>
 
+    </div>
+
+    <pre class="usage"><span class='fu'>gamelift_describe_fleet_capacity</span><span class='op'>(</span><span class='va'>FleetIds</span>, <span class='va'>Limit</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>FleetIds</th>
+      <td><p>A unique identifier for a fleet(s) to retrieve capacity information for.
+You can use either the fleet ID or ARN value.</p></td>
+    </tr>
+    <tr>
+      <th>Limit</th>
+      <td><p>The maximum number of results to return. Use this parameter with
+<code>NextToken</code> to get results as a set of sequential pages. This parameter
+is ignored when the request specifies one or a list of fleet IDs.</p></td>
+    </tr>
+    <tr>
+      <th>NextToken</th>
+      <td><p>Token that indicates the start of the next sequential page of results.
+Use the token that is returned with a previous call to this operation.
+To start at the beginning of the result set, do not specify a value.
+This parameter is ignored when the request specifies one or a list of
+fleet IDs.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_fleet_capacity</span>(
-  <span class='kw'>FleetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_fleet_capacity</span><span class='op'>(</span>
+  FleetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Limit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  Limit <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -208,7 +236,7 @@ error message includes the maximum allowed.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

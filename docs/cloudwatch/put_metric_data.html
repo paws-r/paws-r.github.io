@@ -45,7 +45,47 @@ the data points with the specified metric. If the specified metric does
 not exist, CloudWatch creates the metric. When CloudWatch creates a
 metric, it can take up to fifteen minutes for the metric to appear in
 calls to
-ListMetrics." />
+ListMetrics.
+You can publish either individual data points in the Value field, or
+arrays of values and the number of times each value occurred during the
+period by using the Values and Counts fields in the MetricDatum
+structure. Using the Values and Counts method enables you to publish
+up to 150 values per metric with one PutMetricData request, and
+supports retrieving percentile statistics on this data.
+Each PutMetricData request is limited to 40 KB in size for HTTP POST
+requests. You can send a payload compressed by gzip. Each request is
+also limited to no more than 20 different metrics.
+Although the Value parameter accepts numbers of type Double,
+CloudWatch rejects values that are either too small or too large. Values
+must be in the range of -2^360 to 2^360. In addition, special values
+(for example, NaN, +Infinity, -Infinity) are not supported.
+You can use up to 10 dimensions per metric to further clarify what data
+the metric collects. Each dimension consists of a Name and Value pair.
+For more information about specifying dimensions, see Publishing Metrics
+in the Amazon CloudWatch User Guide.
+You specify the time stamp to be associated with each data point. You
+can specify time stamps that are as much as two weeks before the current
+date, and as much as 2 hours after the current day and time.
+Data points with time stamps from 24 hours ago or longer can take at
+least 48 hours to become available for
+GetMetricData
+or
+GetMetricStatistics
+from the time they are submitted. Data points with time stamps between 3
+and 24 hours ago can take as much as 2 hours to become available for for
+GetMetricData
+or
+GetMetricStatistics.
+CloudWatch needs raw data points to calculate percentile statistics. If
+you publish data using a statistic set instead, you can only retrieve
+percentile statistics for this data if one of the following conditions
+is true:
+The SampleCount value of the statistic set is 1 and Min, Max,
+and Sum are all equal.
+The Min and Max are equal, and Sum is equal to Min
+multiplied by SampleCount.
+
+" />
 
 
 
@@ -77,7 +117,7 @@ ListMetrics." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +125,7 @@ ListMetrics." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +137,7 @@ ListMetrics." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,29 +166,7 @@ not exist, CloudWatch creates the metric. When CloudWatch creates a
 metric, it can take up to fifteen minutes for the metric to appear in
 calls to
 <a href='https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_ListMetrics.html'>ListMetrics</a>.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>cloudwatch_put_metric_data</span>(<span class='no'>Namespace</span>, <span class='no'>MetricData</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Namespace</th>
-      <td><p>[required] The namespace for the metric data.</p>
-<p>To avoid conflicts with AWS service namespaces, you should not specify a
-namespace that begins with <code>AWS/</code></p></td>
-    </tr>
-    <tr>
-      <th>MetricData</th>
-      <td><p>[required] The data for the metric. The array can include no more than 20 metrics
-per call.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can publish either individual data points in the <code>Value</code> field, or
+<p>You can publish either individual data points in the <code>Value</code> field, or
 arrays of values and the number of times each value occurred during the
 period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code>
 structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish
@@ -159,12 +177,15 @@ requests. You can send a payload compressed by gzip. Each request is
 also limited to no more than 20 different metrics.</p>
 <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>,
 CloudWatch rejects values that are either too small or too large. Values
-must be in the range of -2\^360 to 2\^360. In addition, special values
+must be in the range of -2^360 to 2^360. In addition, special values
 (for example, NaN, +Infinity, -Infinity) are not supported.</p>
 <p>You can use up to 10 dimensions per metric to further clarify what data
 the metric collects. Each dimension consists of a Name and Value pair.
 For more information about specifying dimensions, see <a href='https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html'>Publishing Metrics</a>
 in the <em>Amazon CloudWatch User Guide</em>.</p>
+<p>You specify the time stamp to be associated with each data point. You
+can specify time stamps that are as much as two weeks before the current
+date, and as much as 2 hours after the current day and time.</p>
 <p>Data points with time stamps from 24 hours ago or longer can take at
 least 48 hours to become available for
 <a href='https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html'>GetMetricData</a>
@@ -185,41 +206,62 @@ and <code>Sum</code> are all equal.</p></li>
 multiplied by <code>SampleCount</code>.</p></li>
 </ul>
 
+    </div>
+
+    <pre class="usage"><span class='fu'>cloudwatch_put_metric_data</span><span class='op'>(</span><span class='va'>Namespace</span>, <span class='va'>MetricData</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Namespace</th>
+      <td><p>[required] The namespace for the metric data.</p>
+<p>To avoid conflicts with AWS service namespaces, you should not specify a
+namespace that begins with <code>AWS/</code></p></td>
+    </tr>
+    <tr>
+      <th>MetricData</th>
+      <td><p>[required] The data for the metric. The array can include no more than 20 metrics
+per call.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_metric_data</span>(
-  <span class='kw'>Namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MetricData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>MetricName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Dimensions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      ),
-      <span class='kw'>Timestamp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_metric_data</span><span class='op'>(</span>
+  Namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+  MetricData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      MetricName <span class='op'>=</span> <span class='st'>"string"</span>,
+      Dimensions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Name <span class='op'>=</span> <span class='st'>"string"</span>,
+          Value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>,
+      Timestamp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span>
         <span class='st'>"2015-01-01"</span>
-      ),
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-      <span class='kw'>StatisticValues</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>SampleCount</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-        <span class='kw'>Sum</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-        <span class='kw'>Minimum</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-        <span class='kw'>Maximum</span> <span class='kw'>=</span> <span class='fl'>123.0</span>
-      ),
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      Value <span class='op'>=</span> <span class='fl'>123.0</span>,
+      StatisticValues <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        SampleCount <span class='op'>=</span> <span class='fl'>123.0</span>,
+        Sum <span class='op'>=</span> <span class='fl'>123.0</span>,
+        Minimum <span class='op'>=</span> <span class='fl'>123.0</span>,
+        Maximum <span class='op'>=</span> <span class='fl'>123.0</span>
+      <span class='op'>)</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='fl'>123.0</span>
-      ),
-      <span class='kw'>Counts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>,
+      Counts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='fl'>123.0</span>
-      ),
-      <span class='kw'>Unit</span> <span class='kw'>=</span> <span class='st'>"Seconds"</span><span class='kw'>|</span><span class='st'>"Microseconds"</span><span class='kw'>|</span><span class='st'>"Milliseconds"</span><span class='kw'>|</span><span class='st'>"Bytes"</span><span class='kw'>|</span><span class='st'>"Kilobytes"</span><span class='kw'>|</span><span class='st'>"Megabytes"</span><span class='kw'>|</span><span class='st'>"Gigabytes"</span><span class='kw'>|</span><span class='st'>"Terabytes"</span><span class='kw'>|</span><span class='st'>"Bits"</span><span class='kw'>|</span><span class='st'>"Kilobits"</span><span class='kw'>|</span><span class='st'>"Megabits"</span><span class='kw'>|</span><span class='st'>"Gigabits"</span><span class='kw'>|</span><span class='st'>"Terabits"</span><span class='kw'>|</span><span class='st'>"Percent"</span><span class='kw'>|</span><span class='st'>"Count"</span><span class='kw'>|</span><span class='st'>"Bytes/Second"</span><span class='kw'>|</span><span class='st'>"Kilobytes/Second"</span><span class='kw'>|</span><span class='st'>"Megabytes/Second"</span><span class='kw'>|</span><span class='st'>"Gigabytes/Second"</span><span class='kw'>|</span><span class='st'>"Terabytes/Second"</span><span class='kw'>|</span><span class='st'>"Bits/Second"</span><span class='kw'>|</span><span class='st'>"Kilobits/Second"</span><span class='kw'>|</span><span class='st'>"Megabits/Second"</span><span class='kw'>|</span><span class='st'>"Gigabits/Second"</span><span class='kw'>|</span><span class='st'>"Terabits/Second"</span><span class='kw'>|</span><span class='st'>"Count/Second"</span><span class='kw'>|</span><span class='st'>"None"</span>,
-      <span class='kw'>StorageResolution</span> <span class='kw'>=</span> <span class='fl'>123</span>
-    )
-  )
-)</pre>
+      <span class='op'>)</span>,
+      Unit <span class='op'>=</span> <span class='st'>"Seconds"</span><span class='op'>|</span><span class='st'>"Microseconds"</span><span class='op'>|</span><span class='st'>"Milliseconds"</span><span class='op'>|</span><span class='st'>"Bytes"</span><span class='op'>|</span><span class='st'>"Kilobytes"</span><span class='op'>|</span><span class='st'>"Megabytes"</span><span class='op'>|</span><span class='st'>"Gigabytes"</span><span class='op'>|</span><span class='st'>"Terabytes"</span><span class='op'>|</span><span class='st'>"Bits"</span><span class='op'>|</span><span class='st'>"Kilobits"</span><span class='op'>|</span><span class='st'>"Megabits"</span><span class='op'>|</span><span class='st'>"Gigabits"</span><span class='op'>|</span><span class='st'>"Terabits"</span><span class='op'>|</span><span class='st'>"Percent"</span><span class='op'>|</span><span class='st'>"Count"</span><span class='op'>|</span><span class='st'>"Bytes/Second"</span><span class='op'>|</span><span class='st'>"Kilobytes/Second"</span><span class='op'>|</span><span class='st'>"Megabytes/Second"</span><span class='op'>|</span><span class='st'>"Gigabytes/Second"</span><span class='op'>|</span><span class='st'>"Terabytes/Second"</span><span class='op'>|</span><span class='st'>"Bits/Second"</span><span class='op'>|</span><span class='st'>"Kilobits/Second"</span><span class='op'>|</span><span class='st'>"Megabits/Second"</span><span class='op'>|</span><span class='st'>"Gigabits/Second"</span><span class='op'>|</span><span class='st'>"Terabits/Second"</span><span class='op'>|</span><span class='st'>"Count/Second"</span><span class='op'>|</span><span class='st'>"None"</span>,
+      StorageResolution <span class='op'>=</span> <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -237,7 +279,7 @@ multiplied by <code>SampleCount</code>.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

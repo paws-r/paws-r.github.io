@@ -46,7 +46,7 @@ protocol-enabled server — transfer_create_user" />
 protocol-enabled server. You can only create and associate users with
 servers that have the IdentityProviderType set to SERVICE_MANAGED.
 Using parameters for CreateUser, you can specify the user name, set
-the home directory, store the user\'s public key, and assign the user\'s
+the home directory, store the user's public key, and assign the user's
 AWS Identity and Access Management (IAM) role. You can also optionally
 add a scope-down policy, and assign metadata with tags that can be used
 to group and search for users." />
@@ -81,7 +81,7 @@ to group and search for users." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -89,7 +89,7 @@ to group and search for users." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +101,7 @@ to group and search for users." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,57 +129,56 @@ protocol-enabled server</h1>
 protocol-enabled server. You can only create and associate users with
 servers that have the <code>IdentityProviderType</code> set to <code>SERVICE_MANAGED</code>.
 Using parameters for <code>CreateUser</code>, you can specify the user name, set
-the home directory, store the user\'s public key, and assign the user\'s
+the home directory, store the user's public key, and assign the user's
 AWS Identity and Access Management (IAM) role. You can also optionally
 add a scope-down policy, and assign metadata with tags that can be used
 to group and search for users.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>transfer_create_user</span>(<span class='no'>HomeDirectory</span>, <span class='no'>HomeDirectoryType</span>,
-  <span class='no'>HomeDirectoryMappings</span>, <span class='no'>Policy</span>, <span class='no'>Role</span>, <span class='no'>ServerId</span>, <span class='no'>SshPublicKeyBody</span>, <span class='no'>Tags</span>,
-  <span class='no'>UserName</span>)</pre>
+    <pre class="usage"><span class='fu'>transfer_create_user</span><span class='op'>(</span><span class='va'>HomeDirectory</span>, <span class='va'>HomeDirectoryType</span>,
+  <span class='va'>HomeDirectoryMappings</span>, <span class='va'>Policy</span>, <span class='va'>PosixProfile</span>, <span class='va'>Role</span>, <span class='va'>ServerId</span>,
+  <span class='va'>SshPublicKeyBody</span>, <span class='va'>Tags</span>, <span class='va'>UserName</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>HomeDirectory</th>
-      <td><p>The landing directory (folder) for a user when they log in to the file
-transfer protocol-enabled server using the client.</p>
+      <td><p>The landing directory (folder) for a user when they log in to the server
+using the client.</p>
 <p>An example is <em><code>your-Amazon-S3-bucket-name&amp;gt;/home/username</code></em> .</p></td>
     </tr>
     <tr>
       <th>HomeDirectoryType</th>
-      <td><p>The type of landing directory (folder) you want your users\' home
-directory to be when they log into the file transfer protocol-enabled
-server. If you set it to <code>PATH</code>, the user will see the absolute Amazon
-S3 bucket paths as is in their file transfer protocol clients. If you
-set it <code>LOGICAL</code>, you will need to provide mappings in the
-<code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible
-to your users.</p></td>
+      <td><p>The type of landing directory (folder) you want your users' home
+directory to be when they log into the server. If you set it to <code>PATH</code>,
+the user will see the absolute Amazon S3 bucket paths as is in their
+file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need
+to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to
+make Amazon S3 paths visible to your users.</p></td>
     </tr>
     <tr>
       <th>HomeDirectoryMappings</th>
       <td><p>Logical directory mappings that specify what Amazon S3 paths and keys
 should be visible to your user and how you want to make them visible.
-You will need to specify the \"<code>Entry</code>\" and \"<code>Target</code>\" pair, where
+You will need to specify the "<code>Entry</code>" and "<code>Target</code>" pair, where
 <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual
 Amazon S3 path. If you only specify a target, it will be displayed as
 is. You will need to also make sure that your IAM role provides access
 to paths in <code>Target</code>. The following is an example.</p>
 <p><code>'\\[ "/bucket2/documentation", \{ "Entry": "your-personal-report.pdf", "Target": "/bucket3/customized-reports/$\{transfer:UserName\}.pdf" \} \\]'</code></p>
 <p>In most cases, you can use this value instead of the scope-down policy
-to lock your user down to the designated home directory (\"chroot\"). To
-do this, you can set <code>Entry</code> to \'/\' and set <code>Target</code> to the
+to lock your user down to the designated home directory ("chroot"). To
+do this, you can set <code>Entry</code> to '/' and set <code>Target</code> to the
 HomeDirectory parameter value.</p>
 <p>If the target of a logical directory entry does not exist in Amazon S3,
 the entry will be ignored. As a workaround, you can use the Amazon S3
-api to create 0 byte objects as place holders for your directory. If
+API to create 0 byte objects as place holders for your directory. If
 using the CLI, use the <code>s3api</code> call instead of <code>s3</code> so you can use the
 put-object operation. For example, you use the following:
 <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make
-sure that the end of the key name ends in a \'/\' for it to be
-considered a folder.</p></td>
+sure that the end of the key name ends in a '/' for it to be considered
+a folder.</p></td>
     </tr>
     <tr>
       <th>Policy</th>
@@ -197,24 +196,27 @@ the policy as a JSON blob and pass it in the <code>Policy</code> argument.</p>
 in the <em>AWS Security Token Service API Reference</em>.</p></td>
     </tr>
     <tr>
+      <th>PosixProfile</th>
+      <td></td>
+    </tr>
+    <tr>
       <th>Role</th>
-      <td><p>[required] The IAM role that controls your users\' access to your Amazon S3 bucket.
+      <td><p>[required] The IAM role that controls your users' access to your Amazon S3 bucket.
 The policies attached to this role will determine the level of access
 you want to provide your users when transferring files into and out of
 your Amazon S3 bucket or buckets. The IAM role should also contain a
-trust relationship that allows the file transfer protocol-enabled server
-to access your resources when servicing your users\' transfer requests.</p></td>
+trust relationship that allows the server to access your resources when
+servicing your users' transfer requests.</p></td>
     </tr>
     <tr>
       <th>ServerId</th>
-      <td><p>[required] A system-assigned unique identifier for a file transfer protocol-enabled
-server instance. This is the specific server that you added your user
-to.</p></td>
+      <td><p>[required] A system-assigned unique identifier for a server instance. This is the
+specific server that you added your user to.</p></td>
     </tr>
     <tr>
       <th>SshPublicKeyBody</th>
       <td><p>The public portion of the Secure Shell (SSH) key used to authenticate
-the user to the file transfer protocol-enabled server.</p></td>
+the user to the server.</p></td>
     </tr>
     <tr>
       <th>Tags</th>
@@ -223,38 +225,46 @@ metadata attached to users for any purpose.</p></td>
     </tr>
     <tr>
       <th>UserName</th>
-      <td><p>[required] A unique string that identifies a user and is associated with a file
-transfer protocol-enabled server as specified by the <code>ServerId</code>. This
-user name must be a minimum of 3 and a maximum of 32 characters long.
-The following are valid characters: a-z, A-Z, 0-9, underscore, and
-hyphen. The user name can\'t start with a hyphen.</p></td>
+      <td><p>[required] A unique string that identifies a user and is associated with a as
+specified by the <code>ServerId</code>. This user name must be a minimum of 3 and a
+maximum of 100 characters long. The following are valid characters: a-z,
+A-Z, 0-9, underscore '\_', hyphen '-', period '.', and at sign '@'. The
+user name can't start with a hyphen, period, or at sign.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_user</span>(
-  <span class='kw'>HomeDirectory</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HomeDirectoryType</span> <span class='kw'>=</span> <span class='st'>"PATH"</span><span class='kw'>|</span><span class='st'>"LOGICAL"</span>,
-  <span class='kw'>HomeDirectoryMappings</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Entry</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Target</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>Policy</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Role</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServerId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SshPublicKeyBody</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_user</span><span class='op'>(</span>
+  HomeDirectory <span class='op'>=</span> <span class='st'>"string"</span>,
+  HomeDirectoryType <span class='op'>=</span> <span class='st'>"PATH"</span><span class='op'>|</span><span class='st'>"LOGICAL"</span>,
+  HomeDirectoryMappings <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Entry <span class='op'>=</span> <span class='st'>"string"</span>,
+      Target <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Policy <span class='op'>=</span> <span class='st'>"string"</span>,
+  PosixProfile <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Uid <span class='op'>=</span> <span class='fl'>123</span>,
+    Gid <span class='op'>=</span> <span class='fl'>123</span>,
+    SecondaryGids <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fl'>123</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  Role <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServerId <span class='op'>=</span> <span class='st'>"string"</span>,
+  SshPublicKeyBody <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  UserName <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -272,7 +282,7 @@ hyphen. The user name can\'t start with a hyphen.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

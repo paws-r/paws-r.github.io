@@ -42,7 +42,39 @@
 <meta property="og:title" content="Invokes a Lambda function — lambda_invoke" />
 <meta property="og:description" content="Invokes a Lambda function. You can invoke a function synchronously (and
 wait for the response), or asynchronously. To invoke a function
-asynchronously, set InvocationType to Event." />
+asynchronously, set InvocationType to Event.
+For synchronous invocation,
+details about the function response, including errors, are included in
+the response body and headers. For either invocation type, you can find
+more information in the execution log
+and
+trace.
+When an error occurs, your function may be invoked multiple times. Retry
+behavior varies by error type, client, event source, and invocation
+type. For example, if you invoke a function asynchronously and it
+returns an error, Lambda executes the function up to two more times. For
+more information, see Retry Behavior.
+For asynchronous invocation,
+Lambda adds events to a queue before sending them to your function. If
+your function does not have enough capacity to keep up with the queue,
+events may be lost. Occasionally, your function may receive the same
+event multiple times, even if no error occurs. To retain events that
+were not processed, configure your function with a dead-letter queue.
+The status code in the API response doesn't reflect function errors.
+Error codes are reserved for errors that prevent your function from
+executing, such as permissions errors, limit errors,
+or issues with your function's code and configuration. For example,
+Lambda returns TooManyRequestsException if executing the function
+would cause you to exceed a concurrency limit at either the account
+level (ConcurrentInvocationLimitExceeded) or function level
+(ReservedFunctionConcurrentInvocationLimitExceeded).
+For functions with a long timeout, your client might be disconnected
+during synchronous invocation while it waits for a response. Configure
+your HTTP client, SDK, firewall, proxy, or operating system to allow for
+long connections with timeout or keep-alive settings.
+This operation requires permission for the
+lambda:InvokeFunction
+action." />
 
 
 
@@ -74,7 +106,7 @@ asynchronously, set InvocationType to Event." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +114,7 @@ asynchronously, set InvocationType to Event." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +126,7 @@ asynchronously, set InvocationType to Event." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +152,42 @@ asynchronously, set InvocationType to Event." />
     <p>Invokes a Lambda function. You can invoke a function synchronously (and
 wait for the response), or asynchronously. To invoke a function
 asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p>
+<p>For <a href='https://docs.aws.amazon.com/lambda/latest/dg/invocation-sync.html'>synchronous invocation</a>,
+details about the function response, including errors, are included in
+the response body and headers. For either invocation type, you can find
+more information in the <a href='https://docs.aws.amazon.com/lambda/latest/dg/lambda-monitoring.html'>execution log</a>
+and
+<a href='https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html'>trace</a>.</p>
+<p>When an error occurs, your function may be invoked multiple times. Retry
+behavior varies by error type, client, event source, and invocation
+type. For example, if you invoke a function asynchronously and it
+returns an error, Lambda executes the function up to two more times. For
+more information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/invocation-retries.html'>Retry Behavior</a>.</p>
+<p>For <a href='https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html'>asynchronous invocation</a>,
+Lambda adds events to a queue before sending them to your function. If
+your function does not have enough capacity to keep up with the queue,
+events may be lost. Occasionally, your function may receive the same
+event multiple times, even if no error occurs. To retain events that
+were not processed, configure your function with a <a href='https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq'>dead-letter queue</a>.</p>
+<p>The status code in the API response doesn't reflect function errors.
+Error codes are reserved for errors that prevent your function from
+executing, such as permissions errors, <a href='https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html'>limit errors</a>,
+or issues with your function's code and configuration. For example,
+Lambda returns <code>TooManyRequestsException</code> if executing the function
+would cause you to exceed a concurrency limit at either the account
+level (<code>ConcurrentInvocationLimitExceeded</code>) or function level
+(<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p>
+<p>For functions with a long timeout, your client might be disconnected
+during synchronous invocation while it waits for a response. Configure
+your HTTP client, SDK, firewall, proxy, or operating system to allow for
+long connections with timeout or keep-alive settings.</p>
+<p>This operation requires permission for the
+<a href='https://docs.aws.amazon.com/service-authorization/latest/reference/list_awslambda.html'>lambda:InvokeFunction</a>
+action.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lambda_invoke</span>(<span class='no'>FunctionName</span>, <span class='no'>InvocationType</span>, <span class='no'>LogType</span>, <span class='no'>ClientContext</span>,
-  <span class='no'>Payload</span>, <span class='no'>Qualifier</span>)</pre>
+    <pre class="usage"><span class='fu'>lambda_invoke</span><span class='op'>(</span><span class='va'>FunctionName</span>, <span class='va'>InvocationType</span>, <span class='va'>LogType</span>, <span class='va'>ClientContext</span>,
+  <span class='va'>Payload</span>, <span class='va'>Qualifier</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,7 +215,7 @@ Keep the connection open until the function returns a response or
 times out. The API response includes the function response and
 additional data.</p></li>
 <li><p><code>Event</code> - Invoke the function asynchronously. Send events that fail
-multiple times to the function\'s dead-letter queue (if it\'s
+multiple times to the function's dead-letter queue (if it's
 configured). The API response only includes a status code.</p></li>
 <li><p><code>DryRun</code> - Validate parameter values and verify that the user or
 role has permission to invoke the function.</p></li>
@@ -177,72 +241,41 @@ function.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For <a href='https://docs.aws.amazon.com/lambda/latest/dg/invocation-sync.html'>synchronous invocation</a>,
-details about the function response, including errors, are included in
-the response body and headers. For either invocation type, you can find
-more information in the <a href='https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html'>execution log</a>
-and
-<a href='https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html'>trace</a>.</p>
-<p>When an error occurs, your function may be invoked multiple times. Retry
-behavior varies by error type, client, event source, and invocation
-type. For example, if you invoke a function asynchronously and it
-returns an error, Lambda executes the function up to two more times. For
-more information, see <a href='https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html'>Retry Behavior</a>.</p>
-<p>For <a href='https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html'>asynchronous invocation</a>,
-Lambda adds events to a queue before sending them to your function. If
-your function does not have enough capacity to keep up with the queue,
-events may be lost. Occasionally, your function may receive the same
-event multiple times, even if no error occurs. To retain events that
-were not processed, configure your function with a <a href='https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#dlq'>dead-letter queue</a>.</p>
-<p>The status code in the API response doesn\'t reflect function errors.
-Error codes are reserved for errors that prevent your function from
-executing, such as permissions errors, <a href='https://docs.aws.amazon.com/lambda/latest/dg/limits.html'>limit errors</a>, or
-issues with your function\'s code and configuration. For example, Lambda
-returns <code>TooManyRequestsException</code> if executing the function would cause
-you to exceed a concurrency limit at either the account level
-(<code>ConcurrentInvocationLimitExceeded</code>) or function level
-(<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p>
-<p>For functions with a long timeout, your client might be disconnected
-during synchronous invocation while it waits for a response. Configure
-your HTTP client, SDK, firewall, proxy, or operating system to allow for
-long connections with timeout or keep-alive settings.</p>
-<p>This operation requires permission for the
-<a href='https://docs.aws.amazon.com/IAM/latest/UserGuide/list_awslambda.html'>lambda:InvokeFunction</a>
-action.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>invoke</span>(
-  <span class='kw'>FunctionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InvocationType</span> <span class='kw'>=</span> <span class='st'>"Event"</span><span class='kw'>|</span><span class='st'>"RequestResponse"</span><span class='kw'>|</span><span class='st'>"DryRun"</span>,
-  <span class='kw'>LogType</span> <span class='kw'>=</span> <span class='st'>"None"</span><span class='kw'>|</span><span class='st'>"Tail"</span>,
-  <span class='kw'>ClientContext</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Payload</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-  <span class='kw'>Qualifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>invoke</span><span class='op'>(</span>
+  FunctionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  InvocationType <span class='op'>=</span> <span class='st'>"Event"</span><span class='op'>|</span><span class='st'>"RequestResponse"</span><span class='op'>|</span><span class='st'>"DryRun"</span>,
+  LogType <span class='op'>=</span> <span class='st'>"None"</span><span class='op'>|</span><span class='st'>"Tail"</span>,
+  ClientContext <span class='op'>=</span> <span class='st'>"string"</span>,
+  Payload <span class='op'>=</span> <span class='va'>raw</span>,
+  Qualifier <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example invokes version 1 of a function named my-function</span>
 <span class='co'># with an empty event payload.</span>
-<span class='no'>svc</span>$<span class='fu'>invoke</span>(
-  <span class='kw'>FunctionName</span> <span class='kw'>=</span> <span class='st'>"my-function"</span>,
-  <span class='kw'>Payload</span> <span class='kw'>=</span> <span class='st'>"{}"</span>,
-  <span class='kw'>Qualifier</span> <span class='kw'>=</span> <span class='st'>"1"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>invoke</span><span class='op'>(</span>
+  FunctionName <span class='op'>=</span> <span class='st'>"my-function"</span>,
+  Payload <span class='op'>=</span> <span class='st'>"{}"</span>,
+  Qualifier <span class='op'>=</span> <span class='st'>"1"</span>
+<span class='op'>)</span>
 
 <span class='co'># The following example invokes version 1 of a function named my-function</span>
 <span class='co'># asynchronously.</span>
-<span class='no'>svc</span>$<span class='fu'>invoke</span>(
-  <span class='kw'>FunctionName</span> <span class='kw'>=</span> <span class='st'>"my-function"</span>,
-  <span class='kw'>InvocationType</span> <span class='kw'>=</span> <span class='st'>"Event"</span>,
-  <span class='kw'>Payload</span> <span class='kw'>=</span> <span class='st'>"{}"</span>,
-  <span class='kw'>Qualifier</span> <span class='kw'>=</span> <span class='st'>"1"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>invoke</span><span class='op'>(</span>
+  FunctionName <span class='op'>=</span> <span class='st'>"my-function"</span>,
+  InvocationType <span class='op'>=</span> <span class='st'>"Event"</span>,
+  Payload <span class='op'>=</span> <span class='st'>"{}"</span>,
+  Qualifier <span class='op'>=</span> <span class='st'>"1"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -258,7 +291,7 @@ action.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

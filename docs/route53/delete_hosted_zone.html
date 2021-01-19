@@ -40,7 +40,50 @@
 
 
 <meta property="og:title" content="Deletes a hosted zone — route53_delete_hosted_zone" />
-<meta property="og:description" content="Deletes a hosted zone." />
+<meta property="og:description" content="Deletes a hosted zone.
+If the hosted zone was created by another service, such as AWS Cloud
+Map, see Deleting Public Hosted Zones That Were Created by Another Service
+in the Amazon Route 53 Developer Guide for information about how to
+delete it. (The process is the same for public and private hosted zones
+that were created by another service.)
+If you want to keep your domain registration but you want to stop
+routing internet traffic to your website or web application, we
+recommend that you delete resource record sets in the hosted zone
+instead of deleting the hosted zone.
+If you delete a hosted zone, you can't undelete it. You must create a
+new hosted zone and update the name servers for your domain
+registration, which can require up to 48 hours to take effect. (If you
+delegated responsibility for a subdomain to a hosted zone and you delete
+the child hosted zone, you must update the name servers in the parent
+hosted zone.) In addition, if you delete a hosted zone, someone could
+hijack the domain and route traffic to their own resources using your
+domain name.
+If you want to avoid the monthly charge for the hosted zone, you can
+transfer DNS service for the domain to a free DNS service. When you
+transfer DNS service, you have to update the name servers for the domain
+registration. If the domain is registered with Route 53, see
+UpdateDomainNameservers
+for information about how to replace Route 53 name servers with name
+servers for the new DNS service. If the domain is registered with
+another registrar, use the method provided by the registrar to update
+name servers for the domain registration. For more information, perform
+an internet search on &quot;free DNS service.&quot;
+You can delete a hosted zone only if it contains only the default SOA
+record and NS resource record sets. If the hosted zone contains other
+resource record sets, you must delete them before you can delete the
+hosted zone. If you try to delete a hosted zone that contains other
+resource record sets, the request fails, and Route 53 returns a
+HostedZoneNotEmpty error. For information about deleting records from
+your hosted zone, see
+ChangeResourceRecordSets.
+To verify that the hosted zone has been deleted, do one of the
+following:
+Use the GetHostedZone action to request information about the
+hosted zone.
+Use the ListHostedZones action to get a list of the hosted zones
+associated with the current AWS account.
+
+" />
 
 
 
@@ -72,7 +115,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +123,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +135,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,22 +159,7 @@
 
     <div class="ref-description">
     <p>Deletes a hosted zone.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>route53_delete_hosted_zone</span>(<span class='no'>Id</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Id</th>
-      <td><p>[required] The ID of the hosted zone you want to delete.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If the hosted zone was created by another service, such as AWS Cloud
+<p>If the hosted zone was created by another service, such as AWS Cloud
 Map, see <a href='https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DeleteHostedZone.html#delete-public-hosted-zone-created-by-another-service'>Deleting Public Hosted Zones That Were Created by Another Service</a>
 in the <em>Amazon Route 53 Developer Guide</em> for information about how to
 delete it. (The process is the same for public and private hosted zones
@@ -140,7 +168,7 @@ that were created by another service.)</p>
 routing internet traffic to your website or web application, we
 recommend that you delete resource record sets in the hosted zone
 instead of deleting the hosted zone.</p>
-<p>If you delete a hosted zone, you can\'t undelete it. You must create a
+<p>If you delete a hosted zone, you can't undelete it. You must create a
 new hosted zone and update the name servers for your domain
 registration, which can require up to 48 hours to take effect. (If you
 delegated responsibility for a subdomain to a hosted zone and you delete
@@ -157,7 +185,7 @@ for information about how to replace Route 53 name servers with name
 servers for the new DNS service. If the domain is registered with
 another registrar, use the method provided by the registrar to update
 name servers for the domain registration. For more information, perform
-an internet search on \"free DNS service.\"</p>
+an internet search on "free DNS service."</p>
 <p>You can delete a hosted zone only if it contains only the default SOA
 record and NS resource record sets. If the hosted zone contains other
 resource record sets, you must delete them before you can delete the
@@ -174,12 +202,26 @@ hosted zone.</p></li>
 associated with the current AWS account.</p></li>
 </ul>
 
+    </div>
+
+    <pre class="usage"><span class='fu'>route53_delete_hosted_zone</span><span class='op'>(</span><span class='va'>Id</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>Id</th>
+      <td><p>[required] The ID of the hosted zone you want to delete.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>delete_hosted_zone</span>(
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>delete_hosted_zone</span><span class='op'>(</span>
+  Id <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -197,7 +239,7 @@ associated with the current AWS account.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -41,9 +41,12 @@
 
 <meta property="og:title" content="Modifies the attributes of your VPC endpoint service configuration — ec2_modify_vpc_endpoint_service_configuration" />
 <meta property="og:description" content="Modifies the attributes of your VPC endpoint service configuration. You
-can change the Network Load Balancers for your service, and you can
-specify whether acceptance is required for requests to connect to your
-endpoint service through an interface VPC endpoint." />
+can change the Network Load Balancers or Gateway Load Balancers for your
+service, and you can specify whether acceptance is required for requests
+to connect to your endpoint service through an interface VPC endpoint.
+If you set or modify the private DNS name, you must prove that you own
+the private DNS domain name. For more information, see VPC Endpoint Service Private DNS Name Verification
+in the Amazon Virtual Private Cloud User Guide." />
 
 
 
@@ -75,7 +78,7 @@ endpoint service through an interface VPC endpoint." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +86,7 @@ endpoint service through an interface VPC endpoint." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +98,7 @@ endpoint service through an interface VPC endpoint." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -119,14 +122,18 @@ endpoint service through an interface VPC endpoint." />
 
     <div class="ref-description">
     <p>Modifies the attributes of your VPC endpoint service configuration. You
-can change the Network Load Balancers for your service, and you can
-specify whether acceptance is required for requests to connect to your
-endpoint service through an interface VPC endpoint.</p>
+can change the Network Load Balancers or Gateway Load Balancers for your
+service, and you can specify whether acceptance is required for requests
+to connect to your endpoint service through an interface VPC endpoint.</p>
+<p>If you set or modify the private DNS name, you must prove that you own
+the private DNS domain name. For more information, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-services-dns-validation.html'>VPC Endpoint Service Private DNS Name Verification</a>
+in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_modify_vpc_endpoint_service_configuration</span>(<span class='no'>DryRun</span>, <span class='no'>ServiceId</span>,
-  <span class='no'>PrivateDnsName</span>, <span class='no'>RemovePrivateDnsName</span>, <span class='no'>AcceptanceRequired</span>,
-  <span class='no'>AddNetworkLoadBalancerArns</span>, <span class='no'>RemoveNetworkLoadBalancerArns</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_modify_vpc_endpoint_service_configuration</span><span class='op'>(</span><span class='va'>DryRun</span>, <span class='va'>ServiceId</span>,
+  <span class='va'>PrivateDnsName</span>, <span class='va'>RemovePrivateDnsName</span>, <span class='va'>AcceptanceRequired</span>,
+  <span class='va'>AddNetworkLoadBalancerArns</span>, <span class='va'>RemoveNetworkLoadBalancerArns</span>,
+  <span class='va'>AddGatewayLoadBalancerArns</span>, <span class='va'>RemoveGatewayLoadBalancerArns</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,11 +151,13 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     <tr>
       <th>PrivateDnsName</th>
-      <td><p>The private DNS name to assign to the endpoint service.</p></td>
+      <td><p>(Interface endpoint configuration) The private DNS name to assign to the
+endpoint service.</p></td>
     </tr>
     <tr>
       <th>RemovePrivateDnsName</th>
-      <td><p>Removes the private DNS name of the endpoint service.</p></td>
+      <td><p>(Interface endpoint configuration) Removes the private DNS name of the
+endpoint service.</p></td>
     </tr>
     <tr>
       <th>AcceptanceRequired</th>
@@ -165,29 +174,41 @@ your service configuration.</p></td>
       <td><p>The Amazon Resource Names (ARNs) of Network Load Balancers to remove
 from your service configuration.</p></td>
     </tr>
+    <tr>
+      <th>AddGatewayLoadBalancerArns</th>
+      <td><p>The Amazon Resource Names (ARNs) of Gateway Load Balancers to add to
+your service configuration.</p></td>
+    </tr>
+    <tr>
+      <th>RemoveGatewayLoadBalancerArns</th>
+      <td><p>The Amazon Resource Names (ARNs) of Gateway Load Balancers to remove
+from your service configuration.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If you set or modify the private DNS name, you must prove that you own
-the private DNS domain name. For more information, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-services-dns-validation.html'>VPC Endpoint Service Private DNS Name Verification</a>
-in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>modify_vpc_endpoint_service_configuration</span>(
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>ServiceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PrivateDnsName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RemovePrivateDnsName</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>AcceptanceRequired</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>AddNetworkLoadBalancerArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>modify_vpc_endpoint_service_configuration</span><span class='op'>(</span>
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  ServiceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PrivateDnsName <span class='op'>=</span> <span class='st'>"string"</span>,
+  RemovePrivateDnsName <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  AcceptanceRequired <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  AddNetworkLoadBalancerArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>RemoveNetworkLoadBalancerArns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  RemoveNetworkLoadBalancerArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>,
+  AddGatewayLoadBalancerArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  RemoveGatewayLoadBalancerArns <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -205,7 +226,7 @@ in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

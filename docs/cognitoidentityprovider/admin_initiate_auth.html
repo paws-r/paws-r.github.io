@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Initiates the authentication flow, as an administrator — cognitoidentityprovider_admin_initiate_auth" />
-<meta property="og:description" content="Initiates the authentication flow, as an administrator." />
+<meta property="og:description" content="Initiates the authentication flow, as an administrator.
+Calling this action requires developer credentials." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +93,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,11 +117,12 @@
 
     <div class="ref-description">
     <p>Initiates the authentication flow, as an administrator.</p>
+<p>Calling this action requires developer credentials.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cognitoidentityprovider_admin_initiate_auth</span>(<span class='no'>UserPoolId</span>, <span class='no'>ClientId</span>,
-  <span class='no'>AuthFlow</span>, <span class='no'>AuthParameters</span>, <span class='no'>ClientMetadata</span>, <span class='no'>AnalyticsMetadata</span>,
-  <span class='no'>ContextData</span>)</pre>
+    <pre class="usage"><span class='fu'>cognitoidentityprovider_admin_initiate_auth</span><span class='op'>(</span><span class='va'>UserPoolId</span>, <span class='va'>ClientId</span>,
+  <span class='va'>AuthFlow</span>, <span class='va'>AuthParameters</span>, <span class='va'>ClientMetadata</span>, <span class='va'>AnalyticsMetadata</span>,
+  <span class='va'>ContextData</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,15 +174,17 @@ instead of using the SRP process to verify passwords.</p></li>
 value of <code>AuthFlow</code>:</p><ul>
 <li><p>For <code>USER_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SRP_A</code> (required),
 <code>SECRET_HASH</code> (required if the app client is configured with a
-client secret), <code>DEVICE_KEY</code></p></li>
+client secret), <code>DEVICE_KEY</code>.</p></li>
 <li><p>For <code>REFRESH_TOKEN_AUTH/REFRESH_TOKEN</code>: <code>REFRESH_TOKEN</code> (required),
 <code>SECRET_HASH</code> (required if the app client is configured with a
-client secret), <code>DEVICE_KEY</code></p></li>
+client secret), <code>DEVICE_KEY</code>.</p></li>
 <li><p>For <code>ADMIN_NO_SRP_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if
 app client is configured with client secret), <code>PASSWORD</code> (required),
-<code>DEVICE_KEY</code></p></li>
+<code>DEVICE_KEY</code>.</p></li>
 <li><p>For <code>CUSTOM_AUTH</code>: <code>USERNAME</code> (required), <code>SECRET_HASH</code> (if app
-client is configured with client secret), <code>DEVICE_KEY</code></p></li>
+client is configured with client secret), <code>DEVICE_KEY</code>. To start the
+authentication flow with password verification, include
+<code>ChallengeName: SRP_A</code> and <code>SRP_A: (The SRP_A Value)</code>.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -225,7 +229,7 @@ does not include triggers, the ClientMetadata parameter serves no
 purpose.</p></li>
 <li><p>Amazon Cognito does not validate the ClientMetadata value.</p></li>
 <li><p>Amazon Cognito does not encrypt the the ClientMetadata value, so
-don\'t use it to provide sensitive information.</p></li>
+don't use it to provide sensitive information.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -235,44 +239,42 @@ don\'t use it to provide sensitive information.</p></li>
     </tr>
     <tr>
       <th>ContextData</th>
-      <td><p>Contextual data such as the user\'s device fingerprint, IP address, or
+      <td><p>Contextual data such as the user's device fingerprint, IP address, or
 location used for evaluating the risk of an unexpected event by Amazon
 Cognito advanced security.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Calling this action requires developer credentials.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>admin_initiate_auth</span>(
-  <span class='kw'>UserPoolId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ClientId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AuthFlow</span> <span class='kw'>=</span> <span class='st'>"USER_SRP_AUTH"</span><span class='kw'>|</span><span class='st'>"REFRESH_TOKEN_AUTH"</span><span class='kw'>|</span><span class='st'>"REFRESH_TOKEN"</span><span class='kw'>|</span><span class='st'>"CUSTOM_AUTH"</span><span class='kw'>|</span><span class='st'>"ADMIN_NO_SRP_AUTH"</span><span class='kw'>|</span><span class='st'>"USER_PASSWORD_AUTH"</span><span class='kw'>|</span><span class='st'>"ADMIN_USER_PASSWORD_AUTH"</span>,
-  <span class='kw'>AuthParameters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>admin_initiate_auth</span><span class='op'>(</span>
+  UserPoolId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ClientId <span class='op'>=</span> <span class='st'>"string"</span>,
+  AuthFlow <span class='op'>=</span> <span class='st'>"USER_SRP_AUTH"</span><span class='op'>|</span><span class='st'>"REFRESH_TOKEN_AUTH"</span><span class='op'>|</span><span class='st'>"REFRESH_TOKEN"</span><span class='op'>|</span><span class='st'>"CUSTOM_AUTH"</span><span class='op'>|</span><span class='st'>"ADMIN_NO_SRP_AUTH"</span><span class='op'>|</span><span class='st'>"USER_PASSWORD_AUTH"</span><span class='op'>|</span><span class='st'>"ADMIN_USER_PASSWORD_AUTH"</span>,
+  AuthParameters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ClientMetadata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  ClientMetadata <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>AnalyticsMetadata</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>AnalyticsEndpointId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ContextData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>IpAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ServerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ServerPath</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>HttpHeaders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>headerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>headerValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      )
-    ),
-    <span class='kw'>EncodedData</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>,
+  AnalyticsMetadata <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    AnalyticsEndpointId <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  ContextData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    IpAddress <span class='op'>=</span> <span class='st'>"string"</span>,
+    ServerName <span class='op'>=</span> <span class='st'>"string"</span>,
+    ServerPath <span class='op'>=</span> <span class='st'>"string"</span>,
+    HttpHeaders <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        headerName <span class='op'>=</span> <span class='st'>"string"</span>,
+        headerValue <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    EncodedData <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -290,7 +292,7 @@ Cognito advanced security.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

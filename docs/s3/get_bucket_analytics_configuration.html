@@ -46,7 +46,21 @@ configuration (identified by the analytics configuration ID) from the
 bucket — s3_get_bucket_analytics_configuration" />
 <meta property="og:description" content="This implementation of the GET operation returns an analytics
 configuration (identified by the analytics configuration ID) from the
-bucket." />
+bucket.
+To use this operation, you must have permissions to perform the
+s3:GetAnalyticsConfiguration action. The bucket owner has this
+permission by default. The bucket owner can grant this permission to
+others. For more information about permissions, see Permissions Related to Bucket Subresource Operations
+and Managing Access Permissions to Your Amazon S3 Resources
+in the Amazon Simple Storage Service Developer Guide.
+For information about Amazon S3 analytics feature, see Amazon S3 Analytics – Storage Class Analysis
+in the Amazon Simple Storage Service Developer Guide.
+Related Resources
+DeleteBucketAnalyticsConfiguration
+ListBucketAnalyticsConfigurations
+PutBucketAnalyticsConfiguration
+
+" />
 
 
 
@@ -78,7 +92,7 @@ bucket." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -86,7 +100,7 @@ bucket." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,7 +112,7 @@ bucket." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,9 +140,23 @@ bucket</h1>
     <p>This implementation of the GET operation returns an analytics
 configuration (identified by the analytics configuration ID) from the
 bucket.</p>
+<p>To use this operation, you must have permissions to perform the
+<code>s3:GetAnalyticsConfiguration</code> action. The bucket owner has this
+permission by default. The bucket owner can grant this permission to
+others. For more information about permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources'>Permissions Related to Bucket Subresource Operations</a>
+and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html'>Managing Access Permissions to Your Amazon S3 Resources</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>For information about Amazon S3 analytics feature, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html'>Amazon S3 Analytics – Storage Class Analysis</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p><strong>Related Resources</strong></p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketAnalyticsConfiguration.html'>DeleteBucketAnalyticsConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBucketAnalyticsConfigurations.html'>ListBucketAnalyticsConfigurations</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAnalyticsConfiguration.html'>PutBucketAnalyticsConfiguration</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_get_bucket_analytics_configuration</span>(<span class='no'>Bucket</span>, <span class='no'>Id</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_get_bucket_analytics_configuration</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Id</span>, <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,26 +170,23 @@ retrieved.</p></td>
       <th>Id</th>
       <td><p>[required] The ID that identifies the analytics configuration.</p></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To use this operation, you must have permissions to perform the
-<code>s3:GetAnalyticsConfiguration</code> action. The bucket owner has this
-permission by default. The bucket owner can grant this permission to
-others. For more information about permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources'>Permissions Related to Bucket Subresource Operations</a>
-and <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html'>Managing Access Permissions to Your Amazon S3 Resources</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
-<p>For information about Amazon S3 analytics feature, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html'>Amazon S3 Analytics -- Storage Class Analysis</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
-<p><strong>Related Resources</strong></p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>get_bucket_analytics_configuration</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Id</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>get_bucket_analytics_configuration</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Id <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -179,7 +204,7 @@ in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

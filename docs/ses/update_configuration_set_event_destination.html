@@ -45,7 +45,12 @@ are associated with configuration sets, which enable you to publish
 email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or
 Amazon Simple Notification Service (Amazon SNS). For information about
 using configuration sets, see Monitoring Your Amazon SES Sending Activity
-in the Amazon SES Developer Guide." />
+in the Amazon SES Developer Guide.
+When you create or update an event destination, you must provide one,
+and only one, destination. The destination can be Amazon CloudWatch,
+Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon
+SNS).
+You can execute this operation no more than once per second." />
 
 
 
@@ -77,7 +82,7 @@ in the Amazon SES Developer Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +90,7 @@ in the Amazon SES Developer Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +102,7 @@ in the Amazon SES Developer Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,10 +131,15 @@ email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or
 Amazon Simple Notification Service (Amazon SNS). For information about
 using configuration sets, see <a href='https://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html'>Monitoring Your Amazon SES Sending Activity</a>
 in the <em>Amazon SES Developer Guide.</em></p>
+<p>When you create or update an event destination, you must provide one,
+and only one, destination. The destination can be Amazon CloudWatch,
+Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon
+SNS).</p>
+<p>You can execute this operation no more than once per second.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ses_update_configuration_set_event_destination</span>(<span class='no'>ConfigurationSetName</span>,
-  <span class='no'>EventDestination</span>)</pre>
+    <pre class="usage"><span class='fu'>ses_update_configuration_set_event_destination</span><span class='op'>(</span><span class='va'>ConfigurationSetName</span>,
+  <span class='va'>EventDestination</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,42 +156,36 @@ configuration set.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When you create or update an event destination, you must provide one,
-and only one, destination. The destination can be Amazon CloudWatch,
-Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon
-SNS).</p>
-<p>You can execute this operation no more than once per second.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_configuration_set_event_destination</span>(
-  <span class='kw'>ConfigurationSetName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EventDestination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>MatchingEventTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='st'>"send"</span><span class='kw'>|</span><span class='st'>"reject"</span><span class='kw'>|</span><span class='st'>"bounce"</span><span class='kw'>|</span><span class='st'>"complaint"</span><span class='kw'>|</span><span class='st'>"delivery"</span><span class='kw'>|</span><span class='st'>"open"</span><span class='kw'>|</span><span class='st'>"click"</span><span class='kw'>|</span><span class='st'>"renderingFailure"</span>
-    ),
-    <span class='kw'>KinesisFirehoseDestination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>IAMRoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>DeliveryStreamARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>CloudWatchDestination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>DimensionConfigurations</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>DimensionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>DimensionValueSource</span> <span class='kw'>=</span> <span class='st'>"messageTag"</span><span class='kw'>|</span><span class='st'>"emailHeader"</span><span class='kw'>|</span><span class='st'>"linkTag"</span>,
-          <span class='kw'>DefaultDimensionValue</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>SNSDestination</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>TopicARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_configuration_set_event_destination</span><span class='op'>(</span>
+  ConfigurationSetName <span class='op'>=</span> <span class='st'>"string"</span>,
+  EventDestination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Name <span class='op'>=</span> <span class='st'>"string"</span>,
+    Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    MatchingEventTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='st'>"send"</span><span class='op'>|</span><span class='st'>"reject"</span><span class='op'>|</span><span class='st'>"bounce"</span><span class='op'>|</span><span class='st'>"complaint"</span><span class='op'>|</span><span class='st'>"delivery"</span><span class='op'>|</span><span class='st'>"open"</span><span class='op'>|</span><span class='st'>"click"</span><span class='op'>|</span><span class='st'>"renderingFailure"</span>
+    <span class='op'>)</span>,
+    KinesisFirehoseDestination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      IAMRoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+      DeliveryStreamARN <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    CloudWatchDestination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      DimensionConfigurations <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          DimensionName <span class='op'>=</span> <span class='st'>"string"</span>,
+          DimensionValueSource <span class='op'>=</span> <span class='st'>"messageTag"</span><span class='op'>|</span><span class='st'>"emailHeader"</span><span class='op'>|</span><span class='st'>"linkTag"</span>,
+          DefaultDimensionValue <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    SNSDestination <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      TopicARN <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -199,7 +203,7 @@ SNS).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

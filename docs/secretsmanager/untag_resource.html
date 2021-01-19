@@ -40,7 +40,24 @@
 
 
 <meta property="og:title" content="Removes one or more tags from the specified secret — secretsmanager_untag_resource" />
-<meta property="og:description" content="Removes one or more tags from the specified secret." />
+<meta property="og:description" content="Removes one or more tags from the specified secret.
+This operation is idempotent. If a requested tag is not attached to the
+secret, no error is returned and the secret metadata is unchanged.
+If you use tags as part of your security strategy, then removing a tag
+can change permissions. If successfully completing this operation would
+result in you losing your permissions for this secret, then the
+operation is blocked and returns an Access Denied error.
+Minimum permissions
+To run this command, you must have the following permissions:
+secretsmanager:UntagResource
+
+
+Related operations
+To add one or more tags to the collection attached to a secret, use
+TagResource.
+To view the list of tags attached to a secret, use DescribeSecret.
+
+" />
 
 
 
@@ -72,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +97,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +109,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,50 +133,7 @@
 
     <div class="ref-description">
     <p>Removes one or more tags from the specified secret.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>secretsmanager_untag_resource</span>(<span class='no'>SecretId</span>, <span class='no'>TagKeys</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>SecretId</th>
-      <td><p>[required] The identifier for the secret that you want to remove tags from. You can
-specify either the Amazon Resource Name (ARN) or the friendly name of
-the secret.</p>
-<p>If you specify an ARN, we generally recommend that you specify a
-complete ARN. You can specify a partial ARN too---for example, if you
-don't include the final hyphen and six random characters that Secrets
-Manager adds at the end of the ARN when you created the secret. A
-partial ARN match can work as long as it uniquely matches only one
-secret. However, if your secret has a name that ends in a hyphen
-followed by six characters (before Secrets Manager adds the hyphen and
-six characters to the ARN) and you try to use that as a partial ARN,
-then those characters cause Secrets Manager to assume that you're
-specifying a complete ARN. This confusion can cause unexpected results.
-To avoid this situation, we recommend that you don't create secret names
-ending with a hyphen followed by six characters.</p>
-<p>If you specify an incomplete ARN without the random suffix, and instead
-provide the \'friendly name\', you <em>must</em> not include the random suffix.
-If you do include the random suffix added by Secrets Manager, you
-receive either a <em>ResourceNotFoundException</em> or an
-<em>AccessDeniedException</em> error, depending on your permissions.</p></td>
-    </tr>
-    <tr>
-      <th>TagKeys</th>
-      <td><p>[required] A list of tag key names to remove from the secret. You don\'t specify
-the value. Both the key and its associated value are removed.</p>
-<p>This parameter to the API requires a JSON text string argument. For
-information on how to format a JSON parameter for the various command
-line tool environments, see <a href='https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json'>Using JSON for Parameters</a>
-in the <em>AWS CLI User Guide</em>.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation is idempotent. If a requested tag is not attached to the
+<p>This operation is idempotent. If a requested tag is not attached to the
 secret, no error is returned and the secret metadata is unchanged.</p>
 <p>If you use tags as part of your security strategy, then removing a tag
 can change permissions. If successfully completing this operation would
@@ -176,31 +150,75 @@ TagResource.</p></li>
 <li><p>To view the list of tags attached to a secret, use DescribeSecret.</p></li>
 </ul>
 
+    </div>
+
+    <pre class="usage"><span class='fu'>secretsmanager_untag_resource</span><span class='op'>(</span><span class='va'>SecretId</span>, <span class='va'>TagKeys</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>SecretId</th>
+      <td><p>[required] The identifier for the secret that you want to remove tags from. You can
+specify either the Amazon Resource Name (ARN) or the friendly name of
+the secret.</p>
+<p>If you specify an ARN, we generally recommend that you specify a
+complete ARN. You can specify a partial ARN too—for example, if you
+don’t include the final hyphen and six random characters that Secrets
+Manager adds at the end of the ARN when you created the secret. A
+partial ARN match can work as long as it uniquely matches only one
+secret. However, if your secret has a name that ends in a hyphen
+followed by six characters (before Secrets Manager adds the hyphen and
+six characters to the ARN) and you try to use that as a partial ARN,
+then those characters cause Secrets Manager to assume that you’re
+specifying a complete ARN. This confusion can cause unexpected results.
+To avoid this situation, we recommend that you don’t create secret names
+ending with a hyphen followed by six characters.</p>
+<p>If you specify an incomplete ARN without the random suffix, and instead
+provide the 'friendly name', you <em>must</em> not include the random suffix.
+If you do include the random suffix added by Secrets Manager, you
+receive either a <em>ResourceNotFoundException</em> or an
+<em>AccessDeniedException</em> error, depending on your permissions.</p></td>
+    </tr>
+    <tr>
+      <th>TagKeys</th>
+      <td><p>[required] A list of tag key names to remove from the secret. You don't specify the
+value. Both the key and its associated value are removed.</p>
+<p>This parameter to the API requires a JSON text string argument. For
+information on how to format a JSON parameter for the various command
+line tool environments, see <a href='https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-parameters.html#cli-using-param-json'>Using JSON for Parameters</a>
+in the <em>AWS CLI User Guide</em>.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>untag_resource</span>(
-  <span class='kw'>SecretId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TagKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>untag_resource</span><span class='op'>(</span>
+  SecretId <span class='op'>=</span> <span class='st'>"string"</span>,
+  TagKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example shows how to remove two tags from a secret's</span>
 <span class='co'># metadata. For each, both the tag and the associated value are removed.</span>
 <span class='co'># There is no output from this API. To see the result, use the</span>
 <span class='co'># DescribeSecret operation.</span>
-<span class='no'>svc</span>$<span class='fu'>untag_resource</span>(
-  <span class='kw'>SecretId</span> <span class='kw'>=</span> <span class='st'>"MyTestDatabaseSecret"</span>,
-  <span class='kw'>TagKeys</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>untag_resource</span><span class='op'>(</span>
+  SecretId <span class='op'>=</span> <span class='st'>"MyTestDatabaseSecret"</span>,
+  TagKeys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"FirstTag"</span>,
     <span class='st'>"SecondTag"</span>
-  )
-)
-}</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -216,7 +234,7 @@ TagResource.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

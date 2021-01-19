@@ -47,7 +47,32 @@ this operation is successful, the key state of the CMK changes to
 PendingDeletion. Before the waiting period ends, you can use
 CancelKeyDeletion to cancel the deletion of the CMK. After the waiting
 period ends, AWS KMS deletes the CMK and all AWS KMS data associated
-with it, including all aliases that refer to it." />
+with it, including all aliases that refer to it.
+Deleting a CMK is a destructive and potentially dangerous operation.
+When a CMK is deleted, all data that was encrypted under the CMK is
+unrecoverable. To prevent the use of a CMK without deleting it, use
+DisableKey.
+If you schedule deletion of a CMK from a custom key store,
+when the waiting period expires, ScheduleKeyDeletion deletes the CMK
+from AWS KMS. Then AWS KMS makes a best effort to delete the key
+material from the associated AWS CloudHSM cluster. However, you might
+need to manually delete the orphaned key material
+from the cluster and its backups.
+For more information about scheduling a CMK for deletion, see Deleting Customer Master Keys
+in the AWS Key Management Service Developer Guide.
+The CMK that you use for this operation must be in a compatible key
+state. For details, see How Key State Affects Use of a Customer Master Key
+in the AWS Key Management Service Developer Guide.
+Cross-account use: No. You cannot perform this operation on a CMK in
+a different AWS account.
+Required permissions:
+kms:ScheduleKeyDeletion
+(key policy)
+Related operations
+CancelKeyDeletion
+DisableKey
+
+" />
 
 
 
@@ -79,7 +104,7 @@ with it, including all aliases that refer to it." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +112,7 @@ with it, including all aliases that refer to it." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +124,7 @@ with it, including all aliases that refer to it." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -130,9 +155,34 @@ this operation is successful, the key state of the CMK changes to
 CancelKeyDeletion to cancel the deletion of the CMK. After the waiting
 period ends, AWS KMS deletes the CMK and all AWS KMS data associated
 with it, including all aliases that refer to it.</p>
+<p>Deleting a CMK is a destructive and potentially dangerous operation.
+When a CMK is deleted, all data that was encrypted under the CMK is
+unrecoverable. To prevent the use of a CMK without deleting it, use
+DisableKey.</p>
+<p>If you schedule deletion of a CMK from a <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key store</a>,
+when the waiting period expires, <code>ScheduleKeyDeletion</code> deletes the CMK
+from AWS KMS. Then AWS KMS makes a best effort to delete the key
+material from the associated AWS CloudHSM cluster. However, you might
+need to manually <a href='https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#fix-keystore-orphaned-key'>delete the orphaned key material</a>
+from the cluster and its backups.</p>
+<p>For more information about scheduling a CMK for deletion, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html'>Deleting Customer Master Keys</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p>The CMK that you use for this operation must be in a compatible key
+state. For details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html'>How Key State Affects Use of a Customer Master Key</a>
+in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p><strong>Cross-account use</strong>: No. You cannot perform this operation on a CMK in
+a different AWS account.</p>
+<p><strong>Required permissions</strong>:
+<a href='https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html'>kms:ScheduleKeyDeletion</a>
+(key policy)</p>
+<p><strong>Related operations</strong></p><ul>
+<li><p>CancelKeyDeletion</p></li>
+<li><p>DisableKey</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>kms_schedule_key_deletion</span>(<span class='no'>KeyId</span>, <span class='no'>PendingWindowInDays</span>)</pre>
+    <pre class="usage"><span class='fu'>kms_schedule_key_deletion</span><span class='op'>(</span><span class='va'>KeyId</span>, <span class='va'>PendingWindowInDays</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,41 +208,26 @@ period ends, AWS KMS deletes the customer master key (CMK).</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Deleting a CMK is a destructive and potentially dangerous operation.
-When a CMK is deleted, all data that was encrypted under the CMK is
-unrecoverable. To prevent the use of a CMK without deleting it, use
-DisableKey.</p>
-<p>If you schedule deletion of a CMK from a <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key store</a>,
-when the waiting period expires, <code>ScheduleKeyDeletion</code> deletes the CMK
-from AWS KMS. Then AWS KMS makes a best effort to delete the key
-material from the associated AWS CloudHSM cluster. However, you might
-need to manually <a href='https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#fix-keystore-orphaned-key'>delete the orphaned key material</a>
-from the cluster and its backups.</p>
-<p>You cannot perform this operation on a CMK in a different AWS account.</p>
-<p>For more information about scheduling a CMK for deletion, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html'>Deleting Customer Master Keys</a>
-in the <em>AWS Key Management Service Developer Guide</em>.</p>
-<p>The CMK that you use for this operation must be in a compatible key
-state. For details, see <a href='https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html'>How Key State Affects Use of a Customer Master Key</a>
-in the <em>AWS Key Management Service Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>schedule_key_deletion</span>(
-  <span class='kw'>KeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PendingWindowInDays</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>schedule_key_deletion</span><span class='op'>(</span>
+  KeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PendingWindowInDays <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following example schedules the specified CMK for deletion.</span>
-<span class='no'>svc</span>$<span class='fu'>schedule_key_deletion</span>(
-  <span class='kw'>KeyId</span> <span class='kw'>=</span> <span class='st'>"1234abcd-12ab-34cd-56ef-1234567890ab"</span>,
-  <span class='kw'>PendingWindowInDays</span> <span class='kw'>=</span> <span class='fl'>7L</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>schedule_key_deletion</span><span class='op'>(</span>
+  KeyId <span class='op'>=</span> <span class='st'>"1234abcd-12ab-34cd-56ef-1234567890ab"</span>,
+  PendingWindowInDays <span class='op'>=</span> <span class='fl'>7L</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -208,7 +243,7 @@ in the <em>AWS Key Management Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

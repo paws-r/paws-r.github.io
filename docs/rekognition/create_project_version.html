@@ -44,7 +44,15 @@
 as part of an Amazon Rekognition Custom Labels project. You can specify
 one training dataset and one testing dataset. The response from
 CreateProjectVersion is an Amazon Resource Name (ARN) for the version
-of the model." />
+of the model.
+Training takes a while to complete. You can get the current status by
+calling DescribeProjectVersions.
+Once training has successfully completed, call DescribeProjectVersions
+to get the training results and evaluate the model.
+After evaluating the model, you start the model by calling
+StartProjectVersion.
+This operation requires permissions to perform the
+rekognition:CreateProjectVersion action." />
 
 
 
@@ -76,7 +84,7 @@ of the model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +92,7 @@ of the model." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +104,7 @@ of the model." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,10 +132,18 @@ as part of an Amazon Rekognition Custom Labels project. You can specify
 one training dataset and one testing dataset. The response from
 <code>CreateProjectVersion</code> is an Amazon Resource Name (ARN) for the version
 of the model.</p>
+<p>Training takes a while to complete. You can get the current status by
+calling DescribeProjectVersions.</p>
+<p>Once training has successfully completed, call DescribeProjectVersions
+to get the training results and evaluate the model.</p>
+<p>After evaluating the model, you start the model by calling
+StartProjectVersion.</p>
+<p>This operation requires permissions to perform the
+<code>rekognition:CreateProjectVersion</code> action.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_create_project_version</span>(<span class='no'>ProjectArn</span>, <span class='no'>VersionName</span>,
-  <span class='no'>OutputConfig</span>, <span class='no'>TrainingData</span>, <span class='no'>TestingData</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_create_project_version</span><span class='op'>(</span><span class='va'>ProjectArn</span>, <span class='va'>VersionName</span>,
+  <span class='va'>OutputConfig</span>, <span class='va'>TrainingData</span>, <span class='va'>TestingData</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,54 +171,45 @@ model that you want to train.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Training takes a while to complete. You can get the current status by
-calling DescribeProjectVersions.</p>
-<p>Once training has successfully completed, call DescribeProjectVersions
-to get the training results and evaluate the model.</p>
-<p>After evaluating the model, you start the model by calling
-StartProjectVersion.</p>
-<p>This operation requires permissions to perform the
-<code>rekognition:CreateProjectVersion</code> action.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_project_version</span>(
-  <span class='kw'>ProjectArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VersionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>OutputConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>S3KeyPrefix</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>TrainingData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Assets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>GroundTruthManifest</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>S3Object</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      )
-    )
-  ),
-  <span class='kw'>TestingData</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Assets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>GroundTruthManifest</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>S3Object</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-            <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-            <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-          )
-        )
-      )
-    ),
-    <span class='kw'>AutoCreate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_project_version</span><span class='op'>(</span>
+  ProjectArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  VersionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  OutputConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+    S3KeyPrefix <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  TrainingData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Assets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        GroundTruthManifest <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          S3Object <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+            Name <span class='op'>=</span> <span class='st'>"string"</span>,
+            Version <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  TestingData <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Assets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        GroundTruthManifest <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          S3Object <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+            Name <span class='op'>=</span> <span class='st'>"string"</span>,
+            Version <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    AutoCreate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -220,7 +227,7 @@ StartProjectVersion.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

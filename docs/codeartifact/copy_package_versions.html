@@ -43,7 +43,9 @@ same domain — codeartifact_copy_package_versions • paws</title>
 <meta property="og:title" content="Copies package versions from one repository to another repository in the
 same domain — codeartifact_copy_package_versions" />
 <meta property="og:description" content="Copies package versions from one repository to another repository in the
-same domain." />
+same domain.
+You must specify versions or versionRevisions. You cannot specify
+both." />
 
 
 
@@ -75,7 +77,7 @@ same domain." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +85,7 @@ same domain." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +97,7 @@ same domain." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -121,11 +123,13 @@ same domain</h1>
     <div class="ref-description">
     <p>Copies package versions from one repository to another repository in the
 same domain.</p>
+<p>You must specify <code>versions</code> or <code>versionRevisions</code>. You cannot specify
+both.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>codeartifact_copy_package_versions</span>(<span class='no'>domain</span>, <span class='no'>domainOwner</span>,
-  <span class='no'>sourceRepository</span>, <span class='no'>destinationRepository</span>, <span class='no'>format</span>, <span class='no'>namespace</span>, <span class='no'>package</span>,
-  <span class='no'>versions</span>, <span class='no'>versionRevisions</span>, <span class='no'>allowOverwrite</span>, <span class='no'>includeFromUpstream</span>)</pre>
+    <pre class="usage"><span class='fu'>codeartifact_copy_package_versions</span><span class='op'>(</span><span class='va'>domain</span>, <span class='va'>domainOwner</span>,
+  <span class='va'>sourceRepository</span>, <span class='va'>destinationRepository</span>, <span class='va'>format</span>, <span class='va'>namespace</span>, <span class='va'>package</span>,
+  <span class='va'>versions</span>, <span class='va'>versionRevisions</span>, <span class='va'>allowOverwrite</span>, <span class='va'>includeFromUpstream</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,6 +159,7 @@ does not include dashes or spaces.</p></td>
 <li><p><code>pypi</code>: A Python Package Index (PyPI) package.</p></li>
 <li><p><code>maven</code>: A Maven package that contains compiled code in a
 distributable format, such as a JAR file.</p></li>
+<li><p><code>nuget</code>: A NuGet package.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -165,6 +170,8 @@ namespace depends on its type. For example:</p><ul>
 <li><p>The namespace of an npm package is its <code>scope</code>.</p></li>
 <li><p>A Python package does not contain a corresponding component, so
 Python packages do not have a namespace.</p></li>
+<li><p>A NuGet package does not contain a corresponding component, so NuGet
+packages do not have a namespace.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -202,30 +209,27 @@ is false. For more information, see <a href='https://docs.aws.amazon.com/codeart
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You must specify <code>versions</code> or <code>versionRevisions</code>. You cannot specify
-both.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>copy_package_versions</span>(
-  <span class='kw'>domain</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>domainOwner</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>sourceRepository</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>destinationRepository</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"npm"</span><span class='kw'>|</span><span class='st'>"pypi"</span><span class='kw'>|</span><span class='st'>"maven"</span>,
-  <span class='kw'>namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>versions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>copy_package_versions</span><span class='op'>(</span>
+  domain <span class='op'>=</span> <span class='st'>"string"</span>,
+  domainOwner <span class='op'>=</span> <span class='st'>"string"</span>,
+  sourceRepository <span class='op'>=</span> <span class='st'>"string"</span>,
+  destinationRepository <span class='op'>=</span> <span class='st'>"string"</span>,
+  format <span class='op'>=</span> <span class='st'>"npm"</span><span class='op'>|</span><span class='st'>"pypi"</span><span class='op'>|</span><span class='st'>"maven"</span><span class='op'>|</span><span class='st'>"nuget"</span>,
+  namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+  package <span class='op'>=</span> <span class='st'>"string"</span>,
+  versions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>versionRevisions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  versionRevisions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>allowOverwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>includeFromUpstream</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+  <span class='op'>)</span>,
+  allowOverwrite <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  includeFromUpstream <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -243,7 +247,7 @@ both.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

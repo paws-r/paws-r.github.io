@@ -41,7 +41,21 @@
 
 <meta property="og:title" content="Associates a new node with the server — opsworkscm_associate_node" />
 <meta property="og:description" content="Associates a new node with the server. For more information about how to
-disassociate a node, see DisassociateNode." />
+disassociate a node, see DisassociateNode.
+On a Chef server: This command is an alternative to knife bootstrap.
+Example (Chef):
+aws opsworks-cm associate-node --server-name &amp;lt;i&amp;gt;MyServer&amp;lt;/i&amp;gt; --node-name &amp;lt;i&amp;gt;MyManagedNode&amp;lt;/i&amp;gt; --engine-attributes &quot;Name=&amp;lt;i&amp;gt;CHEF_ORGANIZATION&amp;lt;/i&amp;gt;,Value=default&quot; &quot;Name=&amp;lt;i&amp;gt;CHEF_NODE_PUBLIC_KEY&amp;lt;/i&amp;gt;,Value=&amp;lt;i&amp;gt;public-key-pem&amp;lt;/i&amp;gt;&quot;
+On a Puppet server, this command is an alternative to the
+puppet cert sign command that signs a Puppet node CSR.
+Example (Puppet):
+aws opsworks-cm associate-node --server-name &amp;lt;i&amp;gt;MyServer&amp;lt;/i&amp;gt; --node-name &amp;lt;i&amp;gt;MyManagedNode&amp;lt;/i&amp;gt; --engine-attributes &quot;Name=&amp;lt;i&amp;gt;PUPPET_NODE_CSR&amp;lt;/i&amp;gt;,Value=&amp;lt;i&amp;gt;csr-pem&amp;lt;/i&amp;gt;&quot;
+A node can can only be associated with servers that are in a HEALTHY
+state. Otherwise, an InvalidStateException is thrown. A
+ResourceNotFoundException is thrown when the server does not exist. A
+ValidationException is raised when parameters of the request are not
+valid. The AssociateNode API call can be integrated into Auto Scaling
+configurations, AWS Cloudformation templates, or the user data of a
+server's instance." />
 
 
 
@@ -73,7 +87,7 @@ disassociate a node, see DisassociateNode." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +95,7 @@ disassociate a node, see DisassociateNode." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +107,7 @@ disassociate a node, see DisassociateNode." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,9 +132,23 @@ disassociate a node, see DisassociateNode." />
     <div class="ref-description">
     <p>Associates a new node with the server. For more information about how to
 disassociate a node, see DisassociateNode.</p>
+<p>On a Chef server: This command is an alternative to <code>knife bootstrap</code>.</p>
+<p>Example (Chef):
+<code>aws opsworks-cm associate-node --server-name &lt;i&gt;MyServer&lt;/i&gt; --node-name &lt;i&gt;MyManagedNode&lt;/i&gt; --engine-attributes "Name=&lt;i&gt;CHEF_ORGANIZATION&lt;/i&gt;,Value=default" "Name=&lt;i&gt;CHEF_NODE_PUBLIC_KEY&lt;/i&gt;,Value=&lt;i&gt;public-key-pem&lt;/i&gt;"</code></p>
+<p>On a Puppet server, this command is an alternative to the
+<code>puppet cert sign</code> command that signs a Puppet node CSR.</p>
+<p>Example (Puppet):
+<code>aws opsworks-cm associate-node --server-name &lt;i&gt;MyServer&lt;/i&gt; --node-name &lt;i&gt;MyManagedNode&lt;/i&gt; --engine-attributes "Name=&lt;i&gt;PUPPET_NODE_CSR&lt;/i&gt;,Value=&lt;i&gt;csr-pem&lt;/i&gt;"</code></p>
+<p>A node can can only be associated with servers that are in a <code>HEALTHY</code>
+state. Otherwise, an <code>InvalidStateException</code> is thrown. A
+<code>ResourceNotFoundException</code> is thrown when the server does not exist. A
+<code>ValidationException</code> is raised when parameters of the request are not
+valid. The AssociateNode API call can be integrated into Auto Scaling
+configurations, AWS Cloudformation templates, or the user data of a
+server's instance.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>opsworkscm_associate_node</span>(<span class='no'>ServerName</span>, <span class='no'>NodeName</span>, <span class='no'>EngineAttributes</span>)</pre>
+    <pre class="usage"><span class='fu'>opsworkscm_associate_node</span><span class='op'>(</span><span class='va'>ServerName</span>, <span class='va'>NodeName</span>, <span class='va'>EngineAttributes</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,35 +179,20 @@ that is created by the node.</p></li>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>On a Chef server: This command is an alternative to <code>knife bootstrap</code>.</p>
-<p>Example (Chef):
-<code>aws opsworks-cm associate-node --server-name &lt;i&gt;MyServer&lt;/i&gt; --node-name &lt;i&gt;MyManagedNode&lt;/i&gt; --engine-attributes "Name=&lt;i&gt;CHEF_ORGANIZATION&lt;/i&gt;,Value=default" "Name=&lt;i&gt;CHEF_NODE_PUBLIC_KEY&lt;/i&gt;,Value=&lt;i&gt;public-key-pem&lt;/i&gt;"</code></p>
-<p>On a Puppet server, this command is an alternative to the
-<code>puppet cert sign</code> command that signs a Puppet node CSR.</p>
-<p>Example (Puppet):
-<code>aws opsworks-cm associate-node --server-name &lt;i&gt;MyServer&lt;/i&gt; --node-name &lt;i&gt;MyManagedNode&lt;/i&gt; --engine-attributes "Name=&lt;i&gt;PUPPET_NODE_CSR&lt;/i&gt;,Value=&lt;i&gt;csr-pem&lt;/i&gt;"</code></p>
-<p>A node can can only be associated with servers that are in a <code>HEALTHY</code>
-state. Otherwise, an <code>InvalidStateException</code> is thrown. A
-<code>ResourceNotFoundException</code> is thrown when the server does not exist. A
-<code>ValidationException</code> is raised when parameters of the request are not
-valid. The AssociateNode API call can be integrated into Auto Scaling
-configurations, AWS Cloudformation templates, or the user data of a
-server\'s instance.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>associate_node</span>(
-  <span class='kw'>ServerName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>NodeName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EngineAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>associate_node</span><span class='op'>(</span>
+  ServerName <span class='op'>=</span> <span class='st'>"string"</span>,
+  NodeName <span class='op'>=</span> <span class='st'>"string"</span>,
+  EngineAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -197,7 +210,7 @@ server\'s instance.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

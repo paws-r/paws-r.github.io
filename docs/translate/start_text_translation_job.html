@@ -42,7 +42,13 @@
 <meta property="og:title" content="Starts an asynchronous batch translation job — translate_start_text_translation_job" />
 <meta property="og:description" content="Starts an asynchronous batch translation job. Batch translation jobs can
 be used to translate large volumes of text across multiple documents at
-once. For more information, see async." />
+once. For more information, see async.
+Batch translation jobs can be described with the
+DescribeTextTranslationJob operation, listed with the
+ListTextTranslationJobs operation, and stopped with the
+StopTextTranslationJob operation.
+Amazon Translate does not support batch translation of multiple source
+languages at once." />
 
 
 
@@ -74,7 +80,7 @@ once. For more information, see async." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +88,7 @@ once. For more information, see async." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +100,7 @@ once. For more information, see async." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,11 +126,17 @@ once. For more information, see async." />
     <p>Starts an asynchronous batch translation job. Batch translation jobs can
 be used to translate large volumes of text across multiple documents at
 once. For more information, see async.</p>
+<p>Batch translation jobs can be described with the
+DescribeTextTranslationJob operation, listed with the
+ListTextTranslationJobs operation, and stopped with the
+StopTextTranslationJob operation.</p>
+<p>Amazon Translate does not support batch translation of multiple source
+languages at once.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>translate_start_text_translation_job</span>(<span class='no'>JobName</span>, <span class='no'>InputDataConfig</span>,
-  <span class='no'>OutputDataConfig</span>, <span class='no'>DataAccessRoleArn</span>, <span class='no'>SourceLanguageCode</span>,
-  <span class='no'>TargetLanguageCodes</span>, <span class='no'>TerminologyNames</span>, <span class='no'>ClientToken</span>)</pre>
+    <pre class="usage"><span class='fu'>translate_start_text_translation_job</span><span class='op'>(</span><span class='va'>JobName</span>, <span class='va'>InputDataConfig</span>,
+  <span class='va'>OutputDataConfig</span>, <span class='va'>DataAccessRoleArn</span>, <span class='va'>SourceLanguageCode</span>,
+  <span class='va'>TargetLanguageCodes</span>, <span class='va'>TerminologyNames</span>, <span class='va'>ParallelDataNames</span>, <span class='va'>ClientToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,46 +177,44 @@ batch translation jobs.</p></td>
 list of available terminologies, use the ListTerminologies operation.</p></td>
     </tr>
     <tr>
+      <th>ParallelDataNames</th>
+      <td><p>The names of the parallel data resources to use in the batch translation
+job. For a list of available parallel data resources, use the
+ListParallelData operation.</p></td>
+    </tr>
+    <tr>
       <th>ClientToken</th>
-      <td><p>[required] The client token of the EC2 instance calling the request. This token is
-auto-generated when using the Amazon Translate SDK. Otherwise, use the
-<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html'>DescribeInstances</a>
-EC2 operation to retreive an instance\'s client token. For more
-information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html#client-tokens'>Client Tokens</a>
-in the EC2 User Guide.</p></td>
+      <td><p>[required] A unique identifier for the request. This token is auto-generated when
+using the Amazon Translate SDK.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Batch translation jobs can be described with the
-DescribeTextTranslationJob operation, listed with the
-ListTextTranslationJobs operation, and stopped with the
-StopTextTranslationJob operation.</p>
-<p>Amazon Translate does not support batch translation of multiple source
-languages at once.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>start_text_translation_job</span>(
-  <span class='kw'>JobName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InputDataConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Uri</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>ContentType</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>OutputDataConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>S3Uri</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DataAccessRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceLanguageCode</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TargetLanguageCodes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>start_text_translation_job</span><span class='op'>(</span>
+  JobName <span class='op'>=</span> <span class='st'>"string"</span>,
+  InputDataConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Uri <span class='op'>=</span> <span class='st'>"string"</span>,
+    ContentType <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  OutputDataConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    S3Uri <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  DataAccessRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceLanguageCode <span class='op'>=</span> <span class='st'>"string"</span>,
+  TargetLanguageCodes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>TerminologyNames</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  TerminologyNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  ParallelDataNames <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -222,7 +232,7 @@ languages at once.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

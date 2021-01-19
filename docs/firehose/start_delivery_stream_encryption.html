@@ -40,7 +40,47 @@
 
 
 <meta property="og:title" content="Enables server-side encryption (SSE) for the delivery stream — firehose_start_delivery_stream_encryption" />
-<meta property="og:description" content="Enables server-side encryption (SSE) for the delivery stream." />
+<meta property="og:description" content="Enables server-side encryption (SSE) for the delivery stream.
+This operation is asynchronous. It returns immediately. When you invoke
+it, Kinesis Data Firehose first sets the encryption status of the stream
+to ENABLING, and then to ENABLED. The encryption status of a
+delivery stream is the Status property in
+DeliveryStreamEncryptionConfiguration. If the operation fails, the
+encryption status changes to ENABLING_FAILED. You can continue to read
+and write data to your delivery stream while the encryption status is
+ENABLING, but the data is not encrypted. It can take up to 5 seconds
+after the encryption status changes to ENABLED before all records
+written to the delivery stream are encrypted. To find out whether a
+record or a batch of records was encrypted, check the response elements
+PutRecordOutput$Encrypted and PutRecordBatchOutput$Encrypted,
+respectively.
+To check the encryption status of a delivery stream, use
+DescribeDeliveryStream.
+Even if encryption is currently enabled for a delivery stream, you can
+still invoke this operation on it to change the ARN of the CMK or both
+its type and ARN. If you invoke this method to change the CMK, and the
+old CMK is of type CUSTOMER_MANAGED_CMK, Kinesis Data Firehose
+schedules the grant it had on the old CMK for retirement. If the new CMK
+is of type CUSTOMER_MANAGED_CMK, Kinesis Data Firehose creates a grant
+that enables it to use the new CMK to encrypt and decrypt data and to
+manage the grant.
+If a delivery stream already has encryption enabled and then you invoke
+this operation to change the ARN of the CMK or both its type and ARN and
+you get ENABLING_FAILED, this only means that the attempt to change
+the CMK failed. In this case, encryption remains enabled with the old
+CMK.
+If the encryption status of your delivery stream is ENABLING_FAILED,
+you can invoke this operation again with a valid CMK. The CMK must be
+enabled and the key policy mustn't explicitly deny the permission for
+Kinesis Data Firehose to invoke KMS encrypt and decrypt operations.
+You can enable SSE for a delivery stream only if it's a delivery stream
+that uses DirectPut as its source.
+The StartDeliveryStreamEncryption and StopDeliveryStreamEncryption
+operations have a combined limit of 25 calls per delivery stream per 24
+hours. For example, you reach the limit if you call
+StartDeliveryStreamEncryption 13 times and
+StopDeliveryStreamEncryption 12 times for the same delivery stream in
+a 24-hour period." />
 
 
 
@@ -72,7 +112,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +120,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +132,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -116,29 +156,7 @@
 
     <div class="ref-description">
     <p>Enables server-side encryption (SSE) for the delivery stream.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>firehose_start_delivery_stream_encryption</span>(<span class='no'>DeliveryStreamName</span>,
-  <span class='no'>DeliveryStreamEncryptionConfigurationInput</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>DeliveryStreamName</th>
-      <td><p>[required] The name of the delivery stream for which you want to enable server-side
-encryption (SSE).</p></td>
-    </tr>
-    <tr>
-      <th>DeliveryStreamEncryptionConfigurationInput</th>
-      <td><p>Used to specify the type and Amazon Resource Name (ARN) of the KMS key
-needed for Server-Side Encryption (SSE).</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation is asynchronous. It returns immediately. When you invoke
+<p>This operation is asynchronous. It returns immediately. When you invoke
 it, Kinesis Data Firehose first sets the encryption status of the stream
 to <code>ENABLING</code>, and then to <code>ENABLED</code>. The encryption status of a
 delivery stream is the <code>Status</code> property in
@@ -149,7 +167,7 @@ and write data to your delivery stream while the encryption status is
 after the encryption status changes to <code>ENABLED</code> before all records
 written to the delivery stream are encrypted. To find out whether a
 record or a batch of records was encrypted, check the response elements
-PutRecordOutput\$Encrypted and PutRecordBatchOutput\$Encrypted,
+PutRecordOutput$Encrypted and PutRecordBatchOutput$Encrypted,
 respectively.</p>
 <p>To check the encryption status of a delivery stream, use
 DescribeDeliveryStream.</p>
@@ -168,9 +186,9 @@ the CMK failed. In this case, encryption remains enabled with the old
 CMK.</p>
 <p>If the encryption status of your delivery stream is <code>ENABLING_FAILED</code>,
 you can invoke this operation again with a valid CMK. The CMK must be
-enabled and the key policy mustn\'t explicitly deny the permission for
+enabled and the key policy mustn't explicitly deny the permission for
 Kinesis Data Firehose to invoke KMS encrypt and decrypt operations.</p>
-<p>You can enable SSE for a delivery stream only if it\'s a delivery stream
+<p>You can enable SSE for a delivery stream only if it's a delivery stream
 that uses <code>DirectPut</code> as its source.</p>
 <p>The <code>StartDeliveryStreamEncryption</code> and <code>StopDeliveryStreamEncryption</code>
 operations have a combined limit of 25 calls per delivery stream per 24
@@ -178,16 +196,37 @@ hours. For example, you reach the limit if you call
 <code>StartDeliveryStreamEncryption</code> 13 times and
 <code>StopDeliveryStreamEncryption</code> 12 times for the same delivery stream in
 a 24-hour period.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>firehose_start_delivery_stream_encryption</span><span class='op'>(</span><span class='va'>DeliveryStreamName</span>,
+  <span class='va'>DeliveryStreamEncryptionConfigurationInput</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>DeliveryStreamName</th>
+      <td><p>[required] The name of the delivery stream for which you want to enable server-side
+encryption (SSE).</p></td>
+    </tr>
+    <tr>
+      <th>DeliveryStreamEncryptionConfigurationInput</th>
+      <td><p>Used to specify the type and Amazon Resource Name (ARN) of the KMS key
+needed for Server-Side Encryption (SSE).</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>start_delivery_stream_encryption</span>(
-  <span class='kw'>DeliveryStreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DeliveryStreamEncryptionConfigurationInput</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>KeyARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>KeyType</span> <span class='kw'>=</span> <span class='st'>"AWS_OWNED_CMK"</span><span class='kw'>|</span><span class='st'>"CUSTOMER_MANAGED_CMK"</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>start_delivery_stream_encryption</span><span class='op'>(</span>
+  DeliveryStreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  DeliveryStreamEncryptionConfigurationInput <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    KeyARN <span class='op'>=</span> <span class='st'>"string"</span>,
+    KeyType <span class='op'>=</span> <span class='st'>"AWS_OWNED_CMK"</span><span class='op'>|</span><span class='st'>"CUSTOMER_MANAGED_CMK"</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -205,7 +244,7 @@ a 24-hour period.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

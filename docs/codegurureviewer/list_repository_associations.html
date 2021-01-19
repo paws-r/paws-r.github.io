@@ -85,7 +85,7 @@ Owner
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@ Owner
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -105,7 +105,7 @@ Owner
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,8 +143,8 @@ You can filter the returned list by
 .</p>
     </div>
 
-    <pre class="usage"><span class='fu'>codegurureviewer_list_repository_associations</span>(<span class='no'>ProviderTypes</span>, <span class='no'>States</span>,
-  <span class='no'>Names</span>, <span class='no'>Owners</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>codegurureviewer_list_repository_associations</span><span class='op'>(</span><span class='va'>ProviderTypes</span>, <span class='va'>States</span>,
+  <span class='va'>Names</span>, <span class='va'>Owners</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,16 +161,23 @@ You can filter the returned list by
 <li><p><strong>Associating</strong>: CodeGuru Reviewer is:</p><ul>
 <li><p>Setting up pull request notifications. This is required for pull
 requests to trigger a CodeGuru Reviewer review.</p>
-<p>If your repository <code>ProviderType</code> is <code>GitHub</code> or <code>Bitbucket</code>,
-CodeGuru Reviewer creates webhooks in your repository to trigger
-CodeGuru Reviewer reviews. If you delete these webhooks, reviews
-of code in your repository cannot be triggered.</p></li>
+<p>If your repository <code>ProviderType</code> is <code>GitHub</code>,
+<code>GitHub Enterprise Server</code>, or <code>Bitbucket</code>, CodeGuru Reviewer
+creates webhooks in your repository to trigger CodeGuru Reviewer
+reviews. If you delete these webhooks, reviews of code in your
+repository cannot be triggered.</p></li>
 <li><p>Setting up source code access. This is required for CodeGuru
 Reviewer to securely clone code in your repository.</p></li>
 </ul></li>
 <li><p><strong>Failed</strong>: The repository failed to associate or disassociate.</p></li>
-<li><p><strong>Disassociating</strong>: CodeGuru Reviewer is removing the repository\'s
+<li><p><strong>Disassociating</strong>: CodeGuru Reviewer is removing the repository's
 pull request notifications and source code access.</p></li>
+<li><p><strong>Disassociated</strong>: CodeGuru Reviewer successfully disassociated the
+repository. You can create a new association with this repository if
+you want to review source code in it later. You can control access
+to code reviews created in an associated repository with tags after
+it has been disassociated. For more information, see <a href='https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/auth-and-access-control-using-tags.html'>Using tags to control access to associated repositories</a>
+in the <em>Amazon CodeGuru Reviewer User Guide</em>.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -181,8 +188,9 @@ pull request notifications and source code access.</p></li>
       <th>Owners</th>
       <td><p>List of owners to use as a filter. For AWS CodeCommit, it is the name of
 the CodeCommit account that was used to associate the repository. For
-other repository source providers, such as Bitbucket, this is name of
-the account that was used to associate the repository.</p></td>
+other repository source providers, such as Bitbucket and GitHub
+Enterprise Server, this is name of the account that was used to
+associate the repository.</p></td>
     </tr>
     <tr>
       <th>MaxResults</th>
@@ -210,22 +218,23 @@ the next items in a list and not for other programmatic purposes.</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>list_repository_associations</span>(
-  <span class='kw'>ProviderTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"CodeCommit"</span><span class='kw'>|</span><span class='st'>"GitHub"</span><span class='kw'>|</span><span class='st'>"Bitbucket"</span><span class='kw'>|</span><span class='st'>"GitHubEnterpriseServer"</span>
-  ),
-  <span class='kw'>States</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"Associated"</span><span class='kw'>|</span><span class='st'>"Associating"</span><span class='kw'>|</span><span class='st'>"Failed"</span><span class='kw'>|</span><span class='st'>"Disassociating"</span>
-  ),
-  <span class='kw'>Names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>list_repository_associations</span><span class='op'>(</span>
+  ProviderTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"CodeCommit"</span><span class='op'>|</span><span class='st'>"GitHub"</span><span class='op'>|</span><span class='st'>"Bitbucket"</span><span class='op'>|</span><span class='st'>"GitHubEnterpriseServer"</span>
+  <span class='op'>)</span>,
+  States <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"Associated"</span><span class='op'>|</span><span class='st'>"Associating"</span><span class='op'>|</span><span class='st'>"Failed"</span><span class='op'>|</span><span class='st'>"Disassociating"</span><span class='op'>|</span><span class='st'>"Disassociated"</span>
+  <span class='op'>)</span>,
+  Names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Owners</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  Owners <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -243,7 +252,7 @@ the next items in a list and not for other programmatic purposes.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

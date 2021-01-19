@@ -43,12 +43,37 @@
 <meta property="og:description" content="Describes the status of the specified volumes. Volume status provides
 the result of the checks performed on your volumes to determine events
 that can impair the performance of your volumes. The performance of a
-volume can be affected if an issue occurs on the volume\'s underlying
-host. If the volume\'s underlying host experiences a power outage or
+volume can be affected if an issue occurs on the volume's underlying
+host. If the volume's underlying host experiences a power outage or
 system issue, after the system is restored, there could be data
 inconsistencies on the volume. Volume events notify you if this occurs.
 Volume actions notify you if any action needs to be taken in response to
-the event." />
+the event.
+The DescribeVolumeStatus operation provides the following information
+about the specified volumes:
+Status: Reflects the current status of the volume. The possible values
+are ok, impaired , warning, or insufficient-data. If all checks
+pass, the overall status of the volume is ok. If the check fails, the
+overall status is impaired. If the status is insufficient-data, then
+the checks might still be taking place on your volume at the time. We
+recommend that you retry the request. For more information about volume
+status, see Monitoring the status of your volumes
+in the Amazon Elastic Compute Cloud User Guide.
+Events: Reflect the cause of a volume status and might require you to
+take action. For example, if your volume returns an impaired status,
+then the volume event might be potential-data-inconsistency. This
+means that your volume has been affected by an issue with the underlying
+host, has all I/O operations disabled, and might have inconsistent data.
+Actions: Reflect the actions you might have to take in response to an
+event. For example, if the status of the volume is impaired and the
+volume event shows potential-data-inconsistency, then the action shows
+enable-volume-io. This means that you may want to enable the I/O
+operations for the volume by calling the EnableVolumeIO action and then
+check the volume for data consistency.
+Volume status is based on the volume status checks, and does not reflect
+the volume state. Therefore, volume status does not indicate volumes in
+the error state (for example, when a volume is incapable of accepting
+I/O.)" />
 
 
 
@@ -80,7 +105,7 @@ the event." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +113,7 @@ the event." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +125,7 @@ the event." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,16 +151,41 @@ the event." />
     <p>Describes the status of the specified volumes. Volume status provides
 the result of the checks performed on your volumes to determine events
 that can impair the performance of your volumes. The performance of a
-volume can be affected if an issue occurs on the volume\'s underlying
-host. If the volume\'s underlying host experiences a power outage or
+volume can be affected if an issue occurs on the volume's underlying
+host. If the volume's underlying host experiences a power outage or
 system issue, after the system is restored, there could be data
 inconsistencies on the volume. Volume events notify you if this occurs.
 Volume actions notify you if any action needs to be taken in response to
 the event.</p>
+<p>The <code>DescribeVolumeStatus</code> operation provides the following information
+about the specified volumes:</p>
+<p><em>Status</em>: Reflects the current status of the volume. The possible values
+are <code>ok</code>, <code>impaired</code> , <code>warning</code>, or <code>insufficient-data</code>. If all checks
+pass, the overall status of the volume is <code>ok</code>. If the check fails, the
+overall status is <code>impaired</code>. If the status is <code>insufficient-data</code>, then
+the checks might still be taking place on your volume at the time. We
+recommend that you retry the request. For more information about volume
+status, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-volume-status.html'>Monitoring the status of your volumes</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
+<p><em>Events</em>: Reflect the cause of a volume status and might require you to
+take action. For example, if your volume returns an <code>impaired</code> status,
+then the volume event might be <code>potential-data-inconsistency</code>. This
+means that your volume has been affected by an issue with the underlying
+host, has all I/O operations disabled, and might have inconsistent data.</p>
+<p><em>Actions</em>: Reflect the actions you might have to take in response to an
+event. For example, if the status of the volume is <code>impaired</code> and the
+volume event shows <code>potential-data-inconsistency</code>, then the action shows
+<code>enable-volume-io</code>. This means that you may want to enable the I/O
+operations for the volume by calling the EnableVolumeIO action and then
+check the volume for data consistency.</p>
+<p>Volume status is based on the volume status checks, and does not reflect
+the volume state. Therefore, volume status does not indicate volumes in
+the <code>error</code> state (for example, when a volume is incapable of accepting
+I/O.)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_describe_volume_status</span>(<span class='no'>Filters</span>, <span class='no'>MaxResults</span>, <span class='no'>NextToken</span>, <span class='no'>VolumeIds</span>,
-  <span class='no'>DryRun</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_describe_volume_status</span><span class='op'>(</span><span class='va'>Filters</span>, <span class='va'>MaxResults</span>, <span class='va'>NextToken</span>, <span class='va'>VolumeIds</span>,
+  <span class='va'>DryRun</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,19 +200,19 @@ the event.</p>
 <li><p><code>availability-zone</code> - The Availability Zone of the instance.</p></li>
 <li><p><code>event.description</code> - A description of the event.</p></li>
 <li><p><code>event.event-id</code> - The event ID.</p></li>
-<li><p><code>event.event-type</code> - The event type (for <code>io-enabled</code>: <code>passed</code> \|
-<code>failed</code>; for <code>io-performance</code>: <code>io-performance:degraded</code> \|
-<code>io-performance:severely-degraded</code> \| <code>io-performance:stalled</code>).</p></li>
+<li><p><code>event.event-type</code> - The event type (for <code>io-enabled</code>: <code>passed</code> |
+<code>failed</code>; for <code>io-performance</code>: <code>io-performance:degraded</code> |
+<code>io-performance:severely-degraded</code> | <code>io-performance:stalled</code>).</p></li>
 <li><p><code>event.not-after</code> - The latest end time for the event.</p></li>
 <li><p><code>event.not-before</code> - The earliest start time for the event.</p></li>
 <li><p><code>volume-status.details-name</code> - The cause for <code>volume-status.status</code>
-(<code>io-enabled</code> \| <code>io-performance</code>).</p></li>
+(<code>io-enabled</code> | <code>io-performance</code>).</p></li>
 <li><p><code>volume-status.details-status</code> - The status of
-<code>volume-status.details-name</code> (for <code>io-enabled</code>: <code>passed</code> \|
-<code>failed</code>; for <code>io-performance</code>: <code>normal</code> \| <code>degraded</code> \|
-<code>severely-degraded</code> \| <code>stalled</code>).</p></li>
-<li><p><code>volume-status.status</code> - The status of the volume (<code>ok</code> \|
-<code>impaired</code> \| <code>warning</code> \| <code>insufficient-data</code>).</p></li>
+<code>volume-status.details-name</code> (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>;
+for <code>io-performance</code>: <code>normal</code> | <code>degraded</code> | <code>severely-degraded</code> |
+<code>stalled</code>).</p></li>
+<li><p><code>volume-status.status</code> - The status of the volume (<code>ok</code> | <code>impaired</code>
+| <code>warning</code> | <code>insufficient-data</code>).</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -172,8 +222,8 @@ in paginated output. When this parameter is used, the request only
 returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code>
 response element. The remaining results of the initial request can be
 seen by sending another request with the returned <code>NextToken</code> value.
-This value can be between 5 and 1000; if <code>MaxResults</code> is given a value
-larger than 1000, only 1000 results are returned. If this parameter is
+This value can be between 5 and 1,000; if <code>MaxResults</code> is given a value
+larger than 1,000, only 1,000 results are returned. If this parameter is
 not used, then <code>DescribeVolumeStatus</code> returns all results. You cannot
 specify this parameter and the volume IDs parameter in the same request.</p></td>
     </tr>
@@ -198,77 +248,53 @@ Otherwise, it is <code>UnauthorizedOperation</code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The <code>DescribeVolumeStatus</code> operation provides the following information
-about the specified volumes:</p>
-<p><em>Status</em>: Reflects the current status of the volume. The possible values
-are <code>ok</code>, <code>impaired</code> , <code>warning</code>, or <code>insufficient-data</code>. If all checks
-pass, the overall status of the volume is <code>ok</code>. If the check fails, the
-overall status is <code>impaired</code>. If the status is <code>insufficient-data</code>, then
-the checks may still be taking place on your volume at the time. We
-recommend that you retry the request. For more information about volume
-status, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-volume-status.html'>Monitoring the Status of Your Volumes</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
-<p><em>Events</em>: Reflect the cause of a volume status and may require you to
-take action. For example, if your volume returns an <code>impaired</code> status,
-then the volume event might be <code>potential-data-inconsistency</code>. This
-means that your volume has been affected by an issue with the underlying
-host, has all I/O operations disabled, and may have inconsistent data.</p>
-<p><em>Actions</em>: Reflect the actions you may have to take in response to an
-event. For example, if the status of the volume is <code>impaired</code> and the
-volume event shows <code>potential-data-inconsistency</code>, then the action shows
-<code>enable-volume-io</code>. This means that you may want to enable the I/O
-operations for the volume by calling the EnableVolumeIO action and then
-check the volume for data consistency.</p>
-<p>Volume status is based on the volume status checks, and does not reflect
-the volume state. Therefore, volume status does not indicate volumes in
-the <code>error</code> state (for example, when a volume is incapable of accepting
-I/O.)</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_volume_status</span>(
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_volume_status</span><span class='op'>(</span>
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VolumeIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  VolumeIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-)</pre>
+  <span class='op'>)</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example describes the status for the volume</span>
 <span class='co'># `vol-1234567890abcdef0`.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_volume_status</span>(
-  <span class='kw'>VolumeIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_volume_status</span><span class='op'>(</span>
+  VolumeIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"vol-1234567890abcdef0"</span>
-  )
-)
+  <span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># This example describes the status for all volumes that are impaired. In</span>
 <span class='co'># this example output, there are no impaired volumes.</span>
-<span class='no'>svc</span>$<span class='fu'>describe_volume_status</span>(
-  <span class='kw'>Filters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"volume-status.status"</span>,
-      <span class='kw'>Values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_volume_status</span><span class='op'>(</span>
+  Filters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Name <span class='op'>=</span> <span class='st'>"volume-status.status"</span>,
+      Values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"impaired"</span>
-      )
-    )
-  )
-)
-}</pre>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -284,7 +310,7 @@ I/O.)</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

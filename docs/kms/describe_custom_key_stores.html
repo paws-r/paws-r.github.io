@@ -41,7 +41,42 @@
 
 <meta property="og:title" content="Gets information about custom key stores in the account and region — kms_describe_custom_key_stores" />
 <meta property="og:description" content="Gets information about custom key stores
-in the account and region." />
+in the account and region.
+This operation is part of the Custom Key Store feature
+feature in AWS KMS, which combines the convenience and extensive
+integration of AWS KMS with the isolation and control of a single-tenant
+key store.
+By default, this operation returns information about all custom key
+stores in the account and region. To get only information about a
+particular custom key store, use either the CustomKeyStoreName or
+CustomKeyStoreId parameter (but not both).
+To determine whether the custom key store is connected to its AWS
+CloudHSM cluster, use the ConnectionState element in the response. If
+an attempt to connect the custom key store failed, the ConnectionState
+value is FAILED and the ConnectionErrorCode element in the response
+indicates the cause of the failure. For help interpreting the
+ConnectionErrorCode, see CustomKeyStoresListEntry.
+Custom key stores have a DISCONNECTED connection state if the key
+store has never been connected or you use the DisconnectCustomKeyStore
+operation to disconnect it. If your custom key store state is
+CONNECTED but you are having trouble using it, make sure that its
+associated AWS CloudHSM cluster is active and contains the minimum
+number of HSMs required for the operation, if any.
+For help repairing your custom key store, see the Troubleshooting Custom Key Stores
+topic in the AWS Key Management Service Developer Guide.
+Cross-account use: No. You cannot perform this operation on a custom
+key store in a different AWS account.
+Required permissions:
+kms:DescribeCustomKeyStores
+(IAM policy)
+Related operations:
+ConnectCustomKeyStore
+CreateCustomKeyStore
+DeleteCustomKeyStore
+DisconnectCustomKeyStore
+UpdateCustomKeyStore
+
+" />
 
 
 
@@ -73,7 +108,7 @@ in the account and region." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +116,7 @@ in the account and region." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +128,7 @@ in the account and region." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,10 +153,45 @@ in the account and region." />
     <div class="ref-description">
     <p>Gets information about <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>custom key stores</a>
 in the account and region.</p>
+<p>This operation is part of the <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>Custom Key Store feature</a>
+feature in AWS KMS, which combines the convenience and extensive
+integration of AWS KMS with the isolation and control of a single-tenant
+key store.</p>
+<p>By default, this operation returns information about all custom key
+stores in the account and region. To get only information about a
+particular custom key store, use either the <code>CustomKeyStoreName</code> or
+<code>CustomKeyStoreId</code> parameter (but not both).</p>
+<p>To determine whether the custom key store is connected to its AWS
+CloudHSM cluster, use the <code>ConnectionState</code> element in the response. If
+an attempt to connect the custom key store failed, the <code>ConnectionState</code>
+value is <code>FAILED</code> and the <code>ConnectionErrorCode</code> element in the response
+indicates the cause of the failure. For help interpreting the
+<code>ConnectionErrorCode</code>, see CustomKeyStoresListEntry.</p>
+<p>Custom key stores have a <code>DISCONNECTED</code> connection state if the key
+store has never been connected or you use the DisconnectCustomKeyStore
+operation to disconnect it. If your custom key store state is
+<code>CONNECTED</code> but you are having trouble using it, make sure that its
+associated AWS CloudHSM cluster is active and contains the minimum
+number of HSMs required for the operation, if any.</p>
+<p>For help repairing your custom key store, see the <a href='https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html'>Troubleshooting Custom Key Stores</a>
+topic in the <em>AWS Key Management Service Developer Guide</em>.</p>
+<p><strong>Cross-account use</strong>: No. You cannot perform this operation on a custom
+key store in a different AWS account.</p>
+<p><strong>Required permissions</strong>:
+<a href='https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html'>kms:DescribeCustomKeyStores</a>
+(IAM policy)</p>
+<p><strong>Related operations:</strong></p><ul>
+<li><p>ConnectCustomKeyStore</p></li>
+<li><p>CreateCustomKeyStore</p></li>
+<li><p>DeleteCustomKeyStore</p></li>
+<li><p>DisconnectCustomKeyStore</p></li>
+<li><p>UpdateCustomKeyStore</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>kms_describe_custom_key_stores</span>(<span class='no'>CustomKeyStoreId</span>, <span class='no'>CustomKeyStoreName</span>,
-  <span class='no'>Limit</span>, <span class='no'>Marker</span>)</pre>
+    <pre class="usage"><span class='fu'>kms_describe_custom_key_stores</span><span class='op'>(</span><span class='va'>CustomKeyStoreId</span>, <span class='va'>CustomKeyStoreName</span>,
+  <span class='va'>Limit</span>, <span class='va'>Marker</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,39 +228,16 @@ truncated response you just received.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This operation is part of the <a href='https://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html'>Custom Key Store feature</a>
-feature in AWS KMS, which combines the convenience and extensive
-integration of AWS KMS with the isolation and control of a single-tenant
-key store.</p>
-<p>By default, this operation returns information about all custom key
-stores in the account and region. To get only information about a
-particular custom key store, use either the <code>CustomKeyStoreName</code> or
-<code>CustomKeyStoreId</code> parameter (but not both).</p>
-<p>To determine whether the custom key store is connected to its AWS
-CloudHSM cluster, use the <code>ConnectionState</code> element in the response. If
-an attempt to connect the custom key store failed, the <code>ConnectionState</code>
-value is <code>FAILED</code> and the <code>ConnectionErrorCode</code> element in the response
-indicates the cause of the failure. For help interpreting the
-<code>ConnectionErrorCode</code>, see CustomKeyStoresListEntry.</p>
-<p>Custom key stores have a <code>DISCONNECTED</code> connection state if the key
-store has never been connected or you use the DisconnectCustomKeyStore
-operation to disconnect it. If your custom key store state is
-<code>CONNECTED</code> but you are having trouble using it, make sure that its
-associated AWS CloudHSM cluster is active and contains the minimum
-number of HSMs required for the operation, if any.</p>
-<p>For help repairing your custom key store, see the <a href='https://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html'>Troubleshooting Custom Key Stores</a>
-topic in the <em>AWS Key Management Service Developer Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_custom_key_stores</span>(
-  <span class='kw'>CustomKeyStoreId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CustomKeyStoreName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Limit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>Marker</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_custom_key_stores</span><span class='op'>(</span>
+  CustomKeyStoreId <span class='op'>=</span> <span class='st'>"string"</span>,
+  CustomKeyStoreName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Limit <span class='op'>=</span> <span class='fl'>123</span>,
+  Marker <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -208,7 +255,7 @@ topic in the <em>AWS Key Management Service Developer Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

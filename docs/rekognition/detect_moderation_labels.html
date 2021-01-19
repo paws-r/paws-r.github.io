@@ -43,7 +43,15 @@
 <meta property="og:description" content="Detects unsafe content in a specified JPEG or PNG format image. Use
 DetectModerationLabels to moderate images depending on your
 requirements. For example, you might want to filter images that contain
-nudity, but not images containing suggestive content." />
+nudity, but not images containing suggestive content.
+To filter images, use the labels returned by DetectModerationLabels to
+determine which types of content are appropriate.
+For information about moderation labels, see Detecting Unsafe Content in
+the Amazon Rekognition Developer Guide.
+You pass the input image either as base64-encoded image bytes or as a
+reference to an image in an Amazon S3 bucket. If you use the AWS CLI to
+call Amazon Rekognition operations, passing image bytes is not
+supported. The image must be either a PNG or JPEG formatted file." />
 
 
 
@@ -75,7 +83,7 @@ nudity, but not images containing suggestive content." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -83,7 +91,7 @@ nudity, but not images containing suggestive content." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +103,7 @@ nudity, but not images containing suggestive content." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +130,18 @@ nudity, but not images containing suggestive content." />
 <code>DetectModerationLabels</code> to moderate images depending on your
 requirements. For example, you might want to filter images that contain
 nudity, but not images containing suggestive content.</p>
+<p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to
+determine which types of content are appropriate.</p>
+<p>For information about moderation labels, see Detecting Unsafe Content in
+the Amazon Rekognition Developer Guide.</p>
+<p>You pass the input image either as base64-encoded image bytes or as a
+reference to an image in an Amazon S3 bucket. If you use the AWS CLI to
+call Amazon Rekognition operations, passing image bytes is not
+supported. The image must be either a PNG or JPEG formatted file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rekognition_detect_moderation_labels</span>(<span class='no'>Image</span>, <span class='no'>MinConfidence</span>,
-  <span class='no'>HumanLoopConfig</span>)</pre>
+    <pre class="usage"><span class='fu'>rekognition_detect_moderation_labels</span><span class='op'>(</span><span class='va'>Image</span>, <span class='va'>MinConfidence</span>,
+  <span class='va'>HumanLoopConfig</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,9 +158,9 @@ more information, see Images in the Amazon Rekognition developer guide.</p></td>
     <tr>
       <th>MinConfidence</th>
       <td><p>Specifies the minimum confidence level for the labels to return. Amazon
-Rekognition doesn\'t return any labels with a confidence level lower
-than this specified value.</p>
-<p>If you don\'t specify <code>MinConfidence</code>, the operation returns labels with
+Rekognition doesn't return any labels with a confidence level lower than
+this specified value.</p>
+<p>If you don't specify <code>MinConfidence</code>, the operation returns labels with
 confidence values greater than or equal to 50 percent.</p></td>
     </tr>
     <tr>
@@ -154,39 +170,30 @@ FlowDefinition the image will be sent to.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To filter images, use the labels returned by <code>DetectModerationLabels</code> to
-determine which types of content are appropriate.</p>
-<p>For information about moderation labels, see Detecting Unsafe Content in
-the Amazon Rekognition Developer Guide.</p>
-<p>You pass the input image either as base64-encoded image bytes or as a
-reference to an image in an Amazon S3 bucket. If you use the AWS CLI to
-call Amazon Rekognition operations, passing image bytes is not
-supported. The image must be either a PNG or JPEG formatted file.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>detect_moderation_labels</span>(
-  <span class='kw'>Image</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Bytes</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-    <span class='kw'>S3Object</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>MinConfidence</span> <span class='kw'>=</span> <span class='fl'>123.0</span>,
-  <span class='kw'>HumanLoopConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>HumanLoopName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>FlowDefinitionArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>DataAttributes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ContentClassifiers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='st'>"FreeOfPersonallyIdentifiableInformation"</span><span class='kw'>|</span><span class='st'>"FreeOfAdultContent"</span>
-      )
-    )
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>detect_moderation_labels</span><span class='op'>(</span>
+  Image <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Bytes <span class='op'>=</span> <span class='va'>raw</span>,
+    S3Object <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+      Name <span class='op'>=</span> <span class='st'>"string"</span>,
+      Version <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MinConfidence <span class='op'>=</span> <span class='fl'>123.0</span>,
+  HumanLoopConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    HumanLoopName <span class='op'>=</span> <span class='st'>"string"</span>,
+    FlowDefinitionArn <span class='op'>=</span> <span class='st'>"string"</span>,
+    DataAttributes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ContentClassifiers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='st'>"FreeOfPersonallyIdentifiableInformation"</span><span class='op'>|</span><span class='st'>"FreeOfAdultContent"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -204,7 +211,7 @@ supported. The image must be either a PNG or JPEG formatted file.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

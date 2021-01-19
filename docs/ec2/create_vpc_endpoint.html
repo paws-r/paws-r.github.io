@@ -44,7 +44,20 @@
 to create a private connection between your VPC and the service. The
 service may be provided by AWS, an AWS Marketplace Partner, or another
 AWS account. For more information, see VPC Endpoints
-in the Amazon Virtual Private Cloud User Guide." />
+in the Amazon Virtual Private Cloud User Guide.
+A gateway endpoint serves as a target for a route in your route table
+for traffic destined for the AWS service. You can specify an endpoint
+policy to attach to the endpoint, which will control access to the
+service from your VPC. You can also specify the VPC route tables that
+use the endpoint.
+An interface endpoint is a network interface in your subnet that
+serves as an endpoint for communicating with the specified service. You
+can specify the subnets in which to create an endpoint, and the security
+groups to associate with the endpoint network interface.
+A GatewayLoadBalancer endpoint is a network interface in your subnet
+that serves an endpoint for communicating with a Gateway Load Balancer
+that you've configured as a VPC endpoint service.
+Use DescribeVpcEndpointServices to get a list of supported services." />
 
 
 
@@ -76,7 +89,7 @@ in the Amazon Virtual Private Cloud User Guide." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +97,7 @@ in the Amazon Virtual Private Cloud User Guide." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +109,7 @@ in the Amazon Virtual Private Cloud User Guide." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,11 +137,24 @@ to create a private connection between your VPC and the service. The
 service may be provided by AWS, an AWS Marketplace Partner, or another
 AWS account. For more information, see <a href='https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html'>VPC Endpoints</a>
 in the <em>Amazon Virtual Private Cloud User Guide</em>.</p>
+<p>A <code>gateway</code> endpoint serves as a target for a route in your route table
+for traffic destined for the AWS service. You can specify an endpoint
+policy to attach to the endpoint, which will control access to the
+service from your VPC. You can also specify the VPC route tables that
+use the endpoint.</p>
+<p>An <code>interface</code> endpoint is a network interface in your subnet that
+serves as an endpoint for communicating with the specified service. You
+can specify the subnets in which to create an endpoint, and the security
+groups to associate with the endpoint network interface.</p>
+<p>A <code>GatewayLoadBalancer</code> endpoint is a network interface in your subnet
+that serves an endpoint for communicating with a Gateway Load Balancer
+that you've configured as a VPC endpoint service.</p>
+<p>Use DescribeVpcEndpointServices to get a list of supported services.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_create_vpc_endpoint</span>(<span class='no'>DryRun</span>, <span class='no'>VpcEndpointType</span>, <span class='no'>VpcId</span>, <span class='no'>ServiceName</span>,
-  <span class='no'>PolicyDocument</span>, <span class='no'>RouteTableIds</span>, <span class='no'>SubnetIds</span>, <span class='no'>SecurityGroupIds</span>, <span class='no'>ClientToken</span>,
-  <span class='no'>PrivateDnsEnabled</span>, <span class='no'>TagSpecifications</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_create_vpc_endpoint</span><span class='op'>(</span><span class='va'>DryRun</span>, <span class='va'>VpcEndpointType</span>, <span class='va'>VpcId</span>, <span class='va'>ServiceName</span>,
+  <span class='va'>PolicyDocument</span>, <span class='va'>RouteTableIds</span>, <span class='va'>SubnetIds</span>, <span class='va'>SecurityGroupIds</span>, <span class='va'>ClientToken</span>,
+  <span class='va'>PrivateDnsEnabled</span>, <span class='va'>TagSpecifications</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,10 +183,10 @@ provider.</p></td>
     </tr>
     <tr>
       <th>PolicyDocument</th>
-      <td><p>A policy to attach to the endpoint that controls access to the service.
-The policy must be in valid JSON format. If this parameter is not
-specified, we attach a default policy that allows full access to the
-service.</p></td>
+      <td><p>(Interface and gateway endpoints) A policy to attach to the endpoint
+that controls access to the service. The policy must be in valid JSON
+format. If this parameter is not specified, we attach a default policy
+that allows full access to the service.</p></td>
     </tr>
     <tr>
       <th>RouteTableIds</th>
@@ -168,8 +194,9 @@ service.</p></td>
     </tr>
     <tr>
       <th>SubnetIds</th>
-      <td><p>(Interface endpoint) The ID of one or more subnets in which to create an
-endpoint network interface.</p></td>
+      <td><p>(Interface and Gateway Load Balancer endpoints) The ID of one or more
+subnets in which to create an endpoint network interface. For a Gateway
+Load Balancer endpoint, you can specify one subnet only.</p></td>
     </tr>
     <tr>
       <th>SecurityGroupIds</th>
@@ -202,50 +229,39 @@ ModifyVpcAttribute to set the VPC attributes.</p>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A <code>gateway</code> endpoint serves as a target for a route in your route table
-for traffic destined for the AWS service. You can specify an endpoint
-policy to attach to the endpoint, which will control access to the
-service from your VPC. You can also specify the VPC route tables that
-use the endpoint.</p>
-<p>An <code>interface</code> endpoint is a network interface in your subnet that
-serves as an endpoint for communicating with the specified service. You
-can specify the subnets in which to create an endpoint, and the security
-groups to associate with the endpoint network interface.</p>
-<p>Use DescribeVpcEndpointServices to get a list of supported services.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_vpc_endpoint</span>(
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>VpcEndpointType</span> <span class='kw'>=</span> <span class='st'>"Interface"</span><span class='kw'>|</span><span class='st'>"Gateway"</span>,
-  <span class='kw'>VpcId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ServiceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PolicyDocument</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>RouteTableIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_vpc_endpoint</span><span class='op'>(</span>
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  VpcEndpointType <span class='op'>=</span> <span class='st'>"Interface"</span><span class='op'>|</span><span class='st'>"Gateway"</span><span class='op'>|</span><span class='st'>"GatewayLoadBalancer"</span>,
+  VpcId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ServiceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  PolicyDocument <span class='op'>=</span> <span class='st'>"string"</span>,
+  RouteTableIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SubnetIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  SubnetIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>ClientToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PrivateDnsEnabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>TagSpecifications</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='kw'>|</span><span class='st'>"customer-gateway"</span><span class='kw'>|</span><span class='st'>"dedicated-host"</span><span class='kw'>|</span><span class='st'>"dhcp-options"</span><span class='kw'>|</span><span class='st'>"elastic-ip"</span><span class='kw'>|</span><span class='st'>"elastic-gpu"</span><span class='kw'>|</span><span class='st'>"export-image-task"</span><span class='kw'>|</span><span class='st'>"export-instance-task"</span><span class='kw'>|</span><span class='st'>"fleet"</span><span class='kw'>|</span><span class='st'>"fpga-image"</span><span class='kw'>|</span><span class='st'>"host-reservation"</span><span class='kw'>|</span><span class='st'>"image"</span><span class='kw'>|</span><span class='st'>"import-image-task"</span><span class='kw'>|</span><span class='st'>"import-snapshot-task"</span><span class='kw'>|</span><span class='st'>"instance"</span><span class='kw'>|</span><span class='st'>"internet-gateway"</span><span class='kw'>|</span><span class='st'>"key-pair"</span><span class='kw'>|</span><span class='st'>"launch-template"</span><span class='kw'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='kw'>|</span><span class='st'>"natgateway"</span><span class='kw'>|</span><span class='st'>"network-acl"</span><span class='kw'>|</span><span class='st'>"network-interface"</span><span class='kw'>|</span><span class='st'>"placement-group"</span><span class='kw'>|</span><span class='st'>"reserved-instances"</span><span class='kw'>|</span><span class='st'>"route-table"</span><span class='kw'>|</span><span class='st'>"security-group"</span><span class='kw'>|</span><span class='st'>"snapshot"</span><span class='kw'>|</span><span class='st'>"spot-fleet-request"</span><span class='kw'>|</span><span class='st'>"spot-instances-request"</span><span class='kw'>|</span><span class='st'>"subnet"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-session"</span><span class='kw'>|</span><span class='st'>"traffic-mirror-target"</span><span class='kw'>|</span><span class='st'>"transit-gateway"</span><span class='kw'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='kw'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='kw'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='kw'>|</span><span class='st'>"volume"</span><span class='kw'>|</span><span class='st'>"vpc"</span><span class='kw'>|</span><span class='st'>"vpc-peering-connection"</span><span class='kw'>|</span><span class='st'>"vpn-connection"</span><span class='kw'>|</span><span class='st'>"vpn-gateway"</span><span class='kw'>|</span><span class='st'>"vpc-flow-log"</span>,
-      <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  ClientToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  PrivateDnsEnabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  TagSpecifications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      ResourceType <span class='op'>=</span> <span class='st'>"client-vpn-endpoint"</span><span class='op'>|</span><span class='st'>"customer-gateway"</span><span class='op'>|</span><span class='st'>"dedicated-host"</span><span class='op'>|</span><span class='st'>"dhcp-options"</span><span class='op'>|</span><span class='st'>"egress-only-internet-gateway"</span><span class='op'>|</span><span class='st'>"elastic-ip"</span><span class='op'>|</span><span class='st'>"elastic-gpu"</span><span class='op'>|</span><span class='st'>"export-image-task"</span><span class='op'>|</span><span class='st'>"export-instance-task"</span><span class='op'>|</span><span class='st'>"fleet"</span><span class='op'>|</span><span class='st'>"fpga-image"</span><span class='op'>|</span><span class='st'>"host-reservation"</span><span class='op'>|</span><span class='st'>"image"</span><span class='op'>|</span><span class='st'>"import-image-task"</span><span class='op'>|</span><span class='st'>"import-snapshot-task"</span><span class='op'>|</span><span class='st'>"instance"</span><span class='op'>|</span><span class='st'>"internet-gateway"</span><span class='op'>|</span><span class='st'>"key-pair"</span><span class='op'>|</span><span class='st'>"launch-template"</span><span class='op'>|</span><span class='st'>"local-gateway-route-table-vpc-association"</span><span class='op'>|</span><span class='st'>"natgateway"</span><span class='op'>|</span><span class='st'>"network-acl"</span><span class='op'>|</span><span class='st'>"network-interface"</span><span class='op'>|</span><span class='st'>"network-insights-analysis"</span><span class='op'>|</span><span class='st'>"network-insights-path"</span><span class='op'>|</span><span class='st'>"placement-group"</span><span class='op'>|</span><span class='st'>"reserved-instances"</span><span class='op'>|</span><span class='st'>"route-table"</span><span class='op'>|</span><span class='st'>"security-group"</span><span class='op'>|</span><span class='st'>"snapshot"</span><span class='op'>|</span><span class='st'>"spot-fleet-request"</span><span class='op'>|</span><span class='st'>"spot-instances-request"</span><span class='op'>|</span><span class='st'>"subnet"</span><span class='op'>|</span><span class='st'>"traffic-mirror-filter"</span><span class='op'>|</span><span class='st'>"traffic-mirror-session"</span><span class='op'>|</span><span class='st'>"traffic-mirror-target"</span><span class='op'>|</span><span class='st'>"transit-gateway"</span><span class='op'>|</span><span class='st'>"transit-gateway-attachment"</span><span class='op'>|</span><span class='st'>"transit-gateway-connect-peer"</span><span class='op'>|</span><span class='st'>"transit-gateway-multicast-domain"</span><span class='op'>|</span><span class='st'>"transit-gateway-route-table"</span><span class='op'>|</span><span class='st'>"volume"</span><span class='op'>|</span><span class='st'>"vpc"</span><span class='op'>|</span><span class='st'>"vpc-peering-connection"</span><span class='op'>|</span><span class='st'>"vpn-connection"</span><span class='op'>|</span><span class='st'>"vpn-gateway"</span><span class='op'>|</span><span class='st'>"vpc-flow-log"</span>,
+      Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          Key <span class='op'>=</span> <span class='st'>"string"</span>,
+          Value <span class='op'>=</span> <span class='st'>"string"</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -263,7 +279,7 @@ groups to associate with the endpoint network interface.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

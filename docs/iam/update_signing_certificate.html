@@ -44,7 +44,12 @@ to disabled, or vice versa — iam_update_signing_certificate • paws</title>
 to disabled, or vice versa — iam_update_signing_certificate" />
 <meta property="og:description" content="Changes the status of the specified user signing certificate from active
 to disabled, or vice versa. This operation can be used to disable an IAM
-user\'s signing certificate as part of a certificate rotation work flow." />
+user's signing certificate as part of a certificate rotation work flow.
+If the UserName field is not specified, the user name is determined
+implicitly based on the AWS access key ID used to sign the request. This
+operation works for access keys under the AWS account. Consequently, you
+can use this operation to manage AWS account root user credentials even
+if the AWS account has no associated users." />
 
 
 
@@ -76,7 +81,7 @@ user\'s signing certificate as part of a certificate rotation work flow." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +89,7 @@ user\'s signing certificate as part of a certificate rotation work flow." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +101,7 @@ user\'s signing certificate as part of a certificate rotation work flow." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -122,10 +127,15 @@ to disabled, or vice versa</h1>
     <div class="ref-description">
     <p>Changes the status of the specified user signing certificate from active
 to disabled, or vice versa. This operation can be used to disable an IAM
-user\'s signing certificate as part of a certificate rotation work flow.</p>
+user's signing certificate as part of a certificate rotation work flow.</p>
+<p>If the <code>UserName</code> field is not specified, the user name is determined
+implicitly based on the AWS access key ID used to sign the request. This
+operation works for access keys under the AWS account. Consequently, you
+can use this operation to manage AWS account root user credentials even
+if the AWS account has no associated users.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>iam_update_signing_certificate</span>(<span class='no'>UserName</span>, <span class='no'>CertificateId</span>, <span class='no'>Status</span>)</pre>
+    <pre class="usage"><span class='fu'>iam_update_signing_certificate</span><span class='op'>(</span><span class='va'>UserName</span>, <span class='va'>CertificateId</span>, <span class='va'>Status</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,15 +143,15 @@ user\'s signing certificate as part of a certificate rotation work flow.</p>
     <tr>
       <th>UserName</th>
       <td><p>The name of the IAM user the signing certificate belongs to.</p>
-<p>This parameter allows (through its <a href='http://wikipedia.org/wiki/regex'>regex pattern</a>) a string of characters
+<p>This parameter allows (through its <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a>) a string of characters
 consisting of upper and lowercase alphanumeric characters with no
 spaces. You can also include any of the following characters: \_+=,.@-</p></td>
     </tr>
     <tr>
       <th>CertificateId</th>
       <td><p>[required] The ID of the signing certificate you want to update.</p>
-<p>This parameter allows (through its <a href='http://wikipedia.org/wiki/regex'>regex pattern</a>) a string of characters that
-can consist of any upper or lowercased letter or digit.</p></td>
+<p>This parameter allows (through its <a href='https://en.wikipedia.org/wiki/Regex'>regex pattern</a>) a string of characters
+that can consist of any upper or lowercased letter or digit.</p></td>
     </tr>
     <tr>
       <th>Status</th>
@@ -151,33 +161,29 @@ the certificate cannot be used.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If the <code>UserName</code> field is not specified, the user name is determined
-implicitly based on the AWS access key ID used to sign the request. This
-operation works for access keys under the AWS account. Consequently, you
-can use this operation to manage AWS account root user credentials even
-if the AWS account has no associated users.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_signing_certificate</span>(
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>CertificateId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Active"</span><span class='kw'>|</span><span class='st'>"Inactive"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_signing_certificate</span><span class='op'>(</span>
+  UserName <span class='op'>=</span> <span class='st'>"string"</span>,
+  CertificateId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Status <span class='op'>=</span> <span class='st'>"Active"</span><span class='op'>|</span><span class='st'>"Inactive"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># The following command changes the status of a signing certificate for a</span>
 <span class='co'># user named Bob to Inactive.</span>
-<span class='no'>svc</span>$<span class='fu'>update_signing_certificate</span>(
-  <span class='kw'>CertificateId</span> <span class='kw'>=</span> <span class='st'>"TA7SMP42TDN5Z26OBPJE7EXAMPLE"</span>,
-  <span class='kw'>Status</span> <span class='kw'>=</span> <span class='st'>"Inactive"</span>,
-  <span class='kw'>UserName</span> <span class='kw'>=</span> <span class='st'>"Bob"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_signing_certificate</span><span class='op'>(</span>
+  CertificateId <span class='op'>=</span> <span class='st'>"TA7SMP42TDN5Z26OBPJE7EXAMPLE"</span>,
+  Status <span class='op'>=</span> <span class='st'>"Inactive"</span>,
+  UserName <span class='op'>=</span> <span class='st'>"Bob"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -193,7 +199,7 @@ if the AWS account has no associated users.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -40,7 +40,34 @@
 
 
 <meta property="og:title" content="Creates an access point and associates it with the specified bucket — s3control_create_access_point" />
-<meta property="og:description" content="Creates an access point and associates it with the specified bucket." />
+<meta property="og:description" content="Creates an access point and associates it with the specified bucket. For
+more information, see Managing Data Access with Amazon S3 Access Points
+in the Amazon Simple Storage Service Developer Guide.
+Using this action with Amazon S3 on Outposts
+This action:
+Requires a virtual private cloud (VPC) configuration as S3 on
+Outposts only supports VPC style access points.
+Does not support ACL on S3 on Outposts buckets.
+Does not support Public Access on S3 on Outposts buckets.
+Does not support object lock for S3 on Outposts buckets.
+
+
+For more information, see Using Amazon S3 on Outposts
+in the Amazon Simple Storage Service Developer Guide .
+All Amazon S3 on Outposts REST API requests for this action require an
+additional parameter of x-amz-outpost-id to be passed with the request
+and an S3 on Outposts endpoint hostname prefix instead of s3-control.
+For an example of the request syntax for Amazon S3 on Outposts that uses
+the S3 on Outposts endpoint hostname prefix and the x-amz-outpost-id
+derived using the access point ARN, see the
+Examples
+section.
+The following actions are related to CreateAccessPoint:
+GetAccessPoint
+DeleteAccessPoint
+ListAccessPoints
+
+" />
 
 
 
@@ -72,7 +99,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +107,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +119,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -115,11 +142,38 @@
     </div>
 
     <div class="ref-description">
-    <p>Creates an access point and associates it with the specified bucket.</p>
+    <p>Creates an access point and associates it with the specified bucket. For
+more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/access-points.html'>Managing Data Access with Amazon S3 Access Points</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p><strong>Using this action with Amazon S3 on Outposts</strong></p>
+<p>This action:</p><ul>
+<li><p>Requires a virtual private cloud (VPC) configuration as S3 on
+Outposts only supports VPC style access points.</p></li>
+<li><p>Does not support ACL on S3 on Outposts buckets.</p></li>
+<li><p>Does not support Public Access on S3 on Outposts buckets.</p></li>
+<li><p>Does not support object lock for S3 on Outposts buckets.</p></li>
+</ul>
+
+<p>For more information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/S3onOutposts.html'>Using Amazon S3 on Outposts</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em> .</p>
+<p>All Amazon S3 on Outposts REST API requests for this action require an
+additional parameter of <code>x-amz-outpost-id</code> to be passed with the request
+and an S3 on Outposts endpoint hostname prefix instead of <code>s3-control</code>.
+For an example of the request syntax for Amazon S3 on Outposts that uses
+the S3 on Outposts endpoint hostname prefix and the <code>x-amz-outpost-id</code>
+derived using the access point ARN, see the
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_CreateAccessPoint.html#API_control_CreateAccessPoint_Examples'>Examples</a>
+section.</p>
+<p>The following actions are related to <code>CreateAccessPoint</code>:</p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_GetAccessPoint.html'>GetAccessPoint</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_DeleteAccessPoint.html'>DeleteAccessPoint</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_ListAccessPoints.html'>ListAccessPoints</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3control_create_access_point</span>(<span class='no'>AccountId</span>, <span class='no'>Name</span>, <span class='no'>Bucket</span>, <span class='no'>VpcConfiguration</span>,
-  <span class='no'>PublicAccessBlockConfiguration</span>)</pre>
+    <pre class="usage"><span class='fu'>s3control_create_access_point</span><span class='op'>(</span><span class='va'>AccountId</span>, <span class='va'>Name</span>, <span class='va'>Bucket</span>, <span class='va'>VpcConfiguration</span>,
+  <span class='va'>PublicAccessBlockConfiguration</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,12 +190,24 @@ create an access point.</p></td>
     <tr>
       <th>Bucket</th>
       <td><p>[required] The name of the bucket that you want to associate this access point
-with.</p></td>
+with.</p>
+<p>For using this parameter with Amazon S3 on Outposts with the REST API,
+you must specify the name and the x-amz-outpost-id as well.</p>
+<p>For using this parameter with S3 on Outposts with the AWS SDK and CLI,
+you must specify the ARN of the bucket accessed in the format
+<code>arn:aws:s3-outposts:&amp;lt;Region&amp;gt;:&amp;lt;account-id&amp;gt;:outpost/&amp;lt;outpost-id&amp;gt;/bucket/&amp;lt;my-bucket-name&amp;gt;</code>.
+For example, to access the bucket <code>reports</code> through outpost <code>my-outpost</code>
+owned by account <code>123456789012</code> in Region <code>us-west-2</code>, use the URL
+encoding of
+<code>arn:aws:s3-outposts:us-west-2:123456789012:outpost/my-outpost/bucket/reports</code>.
+The value must be URL encoded.</p></td>
     </tr>
     <tr>
       <th>VpcConfiguration</th>
       <td><p>If you include this field, Amazon S3 restricts access to this access
-point to requests from the specified virtual private cloud (VPC).</p></td>
+point to requests from the specified virtual private cloud (VPC).</p>
+<p>This is required for creating an access point for Amazon S3 on Outposts
+buckets.</p></td>
     </tr>
     <tr>
       <th>PublicAccessBlockConfiguration</th>
@@ -152,20 +218,21 @@ point to requests from the specified virtual private cloud (VPC).</p></td>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_access_point</span>(
-  <span class='kw'>AccountId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Name</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VpcConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>VpcId</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>PublicAccessBlockConfiguration</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>BlockPublicAcls</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>IgnorePublicAcls</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>BlockPublicPolicy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-    <span class='kw'>RestrictPublicBuckets</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_access_point</span><span class='op'>(</span>
+  AccountId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Name <span class='op'>=</span> <span class='st'>"string"</span>,
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  VpcConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    VpcId <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  PublicAccessBlockConfiguration <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    BlockPublicAcls <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    IgnorePublicAcls <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    BlockPublicPolicy <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+    RestrictPublicBuckets <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -183,7 +250,7 @@ point to requests from the specified virtual private cloud (VPC).</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

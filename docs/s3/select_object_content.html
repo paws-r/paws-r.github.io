@@ -48,7 +48,75 @@ with the SQL expression, you must also specify a data serialization
 format (JSON, CSV, or Apache Parquet) of the object. Amazon S3 uses this
 format to parse object data into records, and returns only records that
 match the specified SQL expression. You must also specify the data
-serialization format for the response." />
+serialization format for the response.
+This action is not supported by Amazon S3 on Outposts.
+For more information about Amazon S3 Select, see Selecting Content from Objects
+in the Amazon Simple Storage Service Developer Guide.
+For more information about using SQL with Amazon S3 Select, see SQL Reference for Amazon S3 Select and S3 Glacier Select
+in the Amazon Simple Storage Service Developer Guide.
+Permissions
+You must have s3:GetObject permission for this operation. Amazon S3
+Select does not support anonymous access. For more information about
+permissions, see Specifying Permissions in a Policy
+in the Amazon Simple Storage Service Developer Guide.
+Object Data Formats
+You can use Amazon S3 Select to query objects that have the following
+format properties:
+CSV, JSON, and Parquet - Objects must be in CSV, JSON, or Parquet
+format.
+UTF-8 - UTF-8 is the only encoding type Amazon S3 Select supports.
+GZIP or BZIP2 - CSV and JSON files can be compressed using GZIP or
+BZIP2. GZIP and BZIP2 are the only compression formats that Amazon
+S3 Select supports for CSV and JSON files. Amazon S3 Select supports
+columnar compression for Parquet using GZIP or Snappy. Amazon S3
+Select does not support whole-object compression for Parquet
+objects.
+Server-side encryption - Amazon S3 Select supports querying
+objects that are protected with server-side encryption.
+For objects that are encrypted with customer-provided encryption
+keys (SSE-C), you must use HTTPS, and you must use the headers that
+are documented in the
+GetObject.
+For more information about SSE-C, see Server-Side Encryption (Using Customer-Provided Encryption Keys)
+in the Amazon Simple Storage Service Developer Guide.
+For objects that are encrypted with Amazon S3 managed encryption
+keys (SSE-S3) and customer master keys (CMKs) stored in AWS Key
+Management Service (SSE-KMS), server-side encryption is handled
+transparently, so you don't need to specify anything. For more
+information about server-side encryption, including SSE-S3 and
+SSE-KMS, see Protecting Data Using Server-Side Encryption
+in the Amazon Simple Storage Service Developer Guide.
+
+
+Working with the Response Body
+Given the response size is unknown, Amazon S3 Select streams the
+response as a series of messages and includes a Transfer-Encoding
+header with chunked as its value in the response. For more
+information, see Appendix: SelectObjectContent Response
+.
+GetObject Support
+The SelectObjectContent operation does not support the following
+GetObject functionality. For more information, see
+GetObject.
+Range: Although you can specify a scan range for an Amazon S3
+Select request (see SelectObjectContentRequest - ScanRange
+in the request parameters), you cannot specify the range of bytes of
+an object to return.
+GLACIER, DEEP\_ARCHIVE and REDUCED\_REDUNDANCY storage classes: You
+cannot specify the GLACIER, DEEP\_ARCHIVE, or REDUCED_REDUNDANCY
+storage classes. For more information, about storage classes see
+Storage Classes
+in the Amazon Simple Storage Service Developer Guide.
+
+
+Special Errors
+For a list of special errors for this operation, see List of SELECT Object Content Error Codes
+Related Resources
+GetObject
+GetBucketLifecycleConfiguration
+PutBucketLifecycleConfiguration
+
+" />
 
 
 
@@ -80,7 +148,7 @@ serialization format for the response." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -88,7 +156,7 @@ serialization format for the response." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -100,7 +168,7 @@ serialization format for the response." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -131,11 +199,80 @@ format (JSON, CSV, or Apache Parquet) of the object. Amazon S3 uses this
 format to parse object data into records, and returns only records that
 match the specified SQL expression. You must also specify the data
 serialization format for the response.</p>
+<p>This action is not supported by Amazon S3 on Outposts.</p>
+<p>For more information about Amazon S3 Select, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html'>Selecting Content from Objects</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>For more information about using SQL with Amazon S3 Select, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html'>SQL Reference for Amazon S3 Select and S3 Glacier Select</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p><strong>Permissions</strong></p>
+<p>You must have <code>s3:GetObject</code> permission for this operation. Amazon S3
+Select does not support anonymous access. For more information about
+permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html'>Specifying Permissions in a Policy</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p><em>Object Data Formats</em></p>
+<p>You can use Amazon S3 Select to query objects that have the following
+format properties:</p><ul>
+<li><p><em>CSV, JSON, and Parquet</em> - Objects must be in CSV, JSON, or Parquet
+format.</p></li>
+<li><p><em>UTF-8</em> - UTF-8 is the only encoding type Amazon S3 Select supports.</p></li>
+<li><p><em>GZIP or BZIP2</em> - CSV and JSON files can be compressed using GZIP or
+BZIP2. GZIP and BZIP2 are the only compression formats that Amazon
+S3 Select supports for CSV and JSON files. Amazon S3 Select supports
+columnar compression for Parquet using GZIP or Snappy. Amazon S3
+Select does not support whole-object compression for Parquet
+objects.</p></li>
+<li><p><em>Server-side encryption</em> - Amazon S3 Select supports querying
+objects that are protected with server-side encryption.</p>
+<p>For objects that are encrypted with customer-provided encryption
+keys (SSE-C), you must use HTTPS, and you must use the headers that
+are documented in the
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html'>GetObject</a>.
+For more information about SSE-C, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html'>Server-Side Encryption (Using Customer-Provided Encryption Keys)</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
+<p>For objects that are encrypted with Amazon S3 managed encryption
+keys (SSE-S3) and customer master keys (CMKs) stored in AWS Key
+Management Service (SSE-KMS), server-side encryption is handled
+transparently, so you don't need to specify anything. For more
+information about server-side encryption, including SSE-S3 and
+SSE-KMS, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html'>Protecting Data Using Server-Side Encryption</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
+</ul>
+
+<p><strong>Working with the Response Body</strong></p>
+<p>Given the response size is unknown, Amazon S3 Select streams the
+response as a series of messages and includes a <code>Transfer-Encoding</code>
+header with <code>chunked</code> as its value in the response. For more
+information, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/RESTSelectObjectAppendix.html'>Appendix: SelectObjectContent Response</a>
+.</p>
+<p><strong>GetObject Support</strong></p>
+<p>The <code>SelectObjectContent</code> operation does not support the following
+<code>GetObject</code> functionality. For more information, see
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html'>GetObject</a>.</p><ul>
+<li><p><code>Range</code>: Although you can specify a scan range for an Amazon S3
+Select request (see <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_SelectObjectContent.html#AmazonS3-SelectObjectContent-request-ScanRange'>SelectObjectContentRequest - ScanRange</a>
+in the request parameters), you cannot specify the range of bytes of
+an object to return.</p></li>
+<li><p>GLACIER, DEEP\_ARCHIVE and REDUCED\_REDUNDANCY storage classes: You
+cannot specify the GLACIER, DEEP\_ARCHIVE, or <code>REDUCED_REDUNDANCY</code>
+storage classes. For more information, about storage classes see
+<a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#storage-class-intro'>Storage Classes</a>
+in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
+</ul>
+
+<p><strong>Special Errors</strong></p>
+<p>For a list of special errors for this operation, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#SelectObjectContentErrorCodeList'>List of SELECT Object Content Error Codes</a></p>
+<p><strong>Related Resources</strong></p><ul>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html'>GetObject</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycleConfiguration.html'>GetBucketLifecycleConfiguration</a></p></li>
+<li><p><a href='https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html'>PutBucketLifecycleConfiguration</a></p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>s3_select_object_content</span>(<span class='no'>Bucket</span>, <span class='no'>Key</span>, <span class='no'>SSECustomerAlgorithm</span>,
-  <span class='no'>SSECustomerKey</span>, <span class='no'>SSECustomerKeyMD5</span>, <span class='no'>Expression</span>, <span class='no'>ExpressionType</span>,
-  <span class='no'>RequestProgress</span>, <span class='no'>InputSerialization</span>, <span class='no'>OutputSerialization</span>, <span class='no'>ScanRange</span>)</pre>
+    <pre class="usage"><span class='fu'>s3_select_object_content</span><span class='op'>(</span><span class='va'>Bucket</span>, <span class='va'>Key</span>, <span class='va'>SSECustomerAlgorithm</span>,
+  <span class='va'>SSECustomerKey</span>, <span class='va'>SSECustomerKeyMD5</span>, <span class='va'>Expression</span>, <span class='va'>ExpressionType</span>,
+  <span class='va'>RequestProgress</span>, <span class='va'>InputSerialization</span>, <span class='va'>OutputSerialization</span>, <span class='va'>ScanRange</span>,
+  <span class='va'>ExpectedBucketOwner</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,122 +336,63 @@ process only the records starting after the byte 50</p></li>
 process only the records within the last 50 bytes of the file.</p></li>
 </ul></td>
     </tr>
+    <tr>
+      <th>ExpectedBucketOwner</th>
+      <td><p>The account id of the expected bucket owner. If the bucket is owned by a
+different account, the request will fail with an HTTP
+<code>403 (Access Denied)</code> error.</p></td>
+    </tr>
     </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For more information about Amazon S3 Select, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html'>Selecting Content from Objects</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
-<p>For more information about using SQL with Amazon S3 Select, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html'>SQL Reference for Amazon S3 Select and S3 Glacier Select</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
-<p><strong>Permissions</strong></p>
-<p>You must have <code>s3:GetObject</code> permission for this operation.Â Amazon S3
-Select does not support anonymous access. For more information about
-permissions, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html'>Specifying Permissions in a Policy</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
-<p><em>Object Data Formats</em></p>
-<p>You can use Amazon S3 Select to query objects that have the following
-format properties:</p><ul>
-<li><p><em>CSV, JSON, and Parquet</em> - Objects must be in CSV, JSON, or Parquet
-format.</p></li>
-<li><p><em>UTF-8</em> - UTF-8 is the only encoding type Amazon S3 Select supports.</p></li>
-<li><p><em>GZIP or BZIP2</em> - CSV and JSON files can be compressed using GZIP or
-BZIP2. GZIP and BZIP2 are the only compression formats that Amazon
-S3 Select supports for CSV and JSON files. Amazon S3 Select supports
-columnar compression for Parquet using GZIP or Snappy. Amazon S3
-Select does not support whole-object compression for Parquet
-objects.</p></li>
-<li><p><em>Server-side encryption</em> - Amazon S3 Select supports querying
-objects that are protected with server-side encryption.</p>
-<p>For objects that are encrypted with customer-provided encryption
-keys (SSE-C), you must use HTTPS, and you must use the headers that
-are documented in the GetObject. For more information about SSE-C,
-see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html'>Server-Side Encryption (Using Customer-Provided Encryption Keys)</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p>
-<p>For objects that are encrypted with Amazon S3 managed encryption
-keys (SSE-S3) and customer master keys (CMKs) stored in AWS Key
-Management Service (SSE-KMS), server-side encryption is handled
-transparently, so you don\'t need to specify anything. For more
-information about server-side encryption, including SSE-S3 and
-SSE-KMS, see <a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html'>Protecting Data Using Server-Side Encryption</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
-</ul>
-
-<p><strong>Working with the Response Body</strong></p>
-<p>Given the response size is unknown, Amazon S3 Select streams the
-response as a series of messages and includes a <code>Transfer-Encoding</code>
-header with <code>chunked</code> as its value in the response. For more
-information, see RESTSelectObjectAppendix .</p>
-<p><strong>GetObject Support</strong></p>
-<p>The <code>SelectObjectContent</code> operation does not support the following
-<code>GetObject</code> functionality. For more information, see GetObject.</p><ul>
-<li><p><code>Range</code>: Although you can specify a scan range for an Amazon S3
-Select request (see SelectObjectContentRequest\$ScanRange in the
-request parameters), you cannot specify the range of bytes of an
-object to return.</p></li>
-<li><p>GLACIER, DEEP\_ARCHIVE and REDUCED\_REDUNDANCY storage classes: You
-cannot specify the GLACIER, DEEP\_ARCHIVE, or <code>REDUCED_REDUNDANCY</code>
-storage classes. For more information, about storage classes see
-<a href='https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#storage-class-intro'>Storage Classes</a>
-in the <em>Amazon Simple Storage Service Developer Guide</em>.</p></li>
-</ul>
-
-<p><strong>Special Errors</strong></p>
-<p>For a list of special errors for this operation, see
-SelectObjectContentErrorCodeList</p>
-<p><strong>Related Resources</strong></p><ul>
-<li><p>GetObject</p></li>
-<li><p>GetBucketLifecycleConfiguration</p></li>
-<li><p>PutBucketLifecycleConfiguration</p></li>
-</ul>
 
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>select_object_content</span>(
-  <span class='kw'>Bucket</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SSECustomerAlgorithm</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SSECustomerKey</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-  <span class='kw'>SSECustomerKeyMD5</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Expression</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ExpressionType</span> <span class='kw'>=</span> <span class='st'>"SQL"</span>,
-  <span class='kw'>RequestProgress</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-  ),
-  <span class='kw'>InputSerialization</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CSV</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>FileHeaderInfo</span> <span class='kw'>=</span> <span class='st'>"USE"</span><span class='kw'>|</span><span class='st'>"IGNORE"</span><span class='kw'>|</span><span class='st'>"NONE"</span>,
-      <span class='kw'>Comments</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>QuoteEscapeCharacter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>RecordDelimiter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>FieldDelimiter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>QuoteCharacter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>AllowQuotedRecordDelimiter</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>
-    ),
-    <span class='kw'>CompressionType</span> <span class='kw'>=</span> <span class='st'>"NONE"</span><span class='kw'>|</span><span class='st'>"GZIP"</span><span class='kw'>|</span><span class='st'>"BZIP2"</span>,
-    <span class='kw'>JSON</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Type</span> <span class='kw'>=</span> <span class='st'>"DOCUMENT"</span><span class='kw'>|</span><span class='st'>"LINES"</span>
-    ),
-    <span class='kw'>Parquet</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
-  ),
-  <span class='kw'>OutputSerialization</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>CSV</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>QuoteFields</span> <span class='kw'>=</span> <span class='st'>"ALWAYS"</span><span class='kw'>|</span><span class='st'>"ASNEEDED"</span>,
-      <span class='kw'>QuoteEscapeCharacter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>RecordDelimiter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>FieldDelimiter</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>QuoteCharacter</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    ),
-    <span class='kw'>JSON</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>RecordDelimiter</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>ScanRange</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>Start</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>End</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  )
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>select_object_content</span><span class='op'>(</span>
+  Bucket <span class='op'>=</span> <span class='st'>"string"</span>,
+  Key <span class='op'>=</span> <span class='st'>"string"</span>,
+  SSECustomerAlgorithm <span class='op'>=</span> <span class='st'>"string"</span>,
+  SSECustomerKey <span class='op'>=</span> <span class='va'>raw</span>,
+  SSECustomerKeyMD5 <span class='op'>=</span> <span class='st'>"string"</span>,
+  Expression <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExpressionType <span class='op'>=</span> <span class='st'>"SQL"</span>,
+  RequestProgress <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+  <span class='op'>)</span>,
+  InputSerialization <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CSV <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      FileHeaderInfo <span class='op'>=</span> <span class='st'>"USE"</span><span class='op'>|</span><span class='st'>"IGNORE"</span><span class='op'>|</span><span class='st'>"NONE"</span>,
+      Comments <span class='op'>=</span> <span class='st'>"string"</span>,
+      QuoteEscapeCharacter <span class='op'>=</span> <span class='st'>"string"</span>,
+      RecordDelimiter <span class='op'>=</span> <span class='st'>"string"</span>,
+      FieldDelimiter <span class='op'>=</span> <span class='st'>"string"</span>,
+      QuoteCharacter <span class='op'>=</span> <span class='st'>"string"</span>,
+      AllowQuotedRecordDelimiter <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+    <span class='op'>)</span>,
+    CompressionType <span class='op'>=</span> <span class='st'>"NONE"</span><span class='op'>|</span><span class='st'>"GZIP"</span><span class='op'>|</span><span class='st'>"BZIP2"</span>,
+    JSON <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Type <span class='op'>=</span> <span class='st'>"DOCUMENT"</span><span class='op'>|</span><span class='st'>"LINES"</span>
+    <span class='op'>)</span>,
+    Parquet <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='op'>)</span>,
+  OutputSerialization <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    CSV <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      QuoteFields <span class='op'>=</span> <span class='st'>"ALWAYS"</span><span class='op'>|</span><span class='st'>"ASNEEDED"</span>,
+      QuoteEscapeCharacter <span class='op'>=</span> <span class='st'>"string"</span>,
+      RecordDelimiter <span class='op'>=</span> <span class='st'>"string"</span>,
+      FieldDelimiter <span class='op'>=</span> <span class='st'>"string"</span>,
+      QuoteCharacter <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>,
+    JSON <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      RecordDelimiter <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  ScanRange <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    Start <span class='op'>=</span> <span class='fl'>123</span>,
+    End <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  ExpectedBucketOwner <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -332,7 +410,7 @@ SelectObjectContentErrorCodeList</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

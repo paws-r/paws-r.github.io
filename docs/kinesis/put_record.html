@@ -44,7 +44,39 @@
 PutRecord to send data into the stream for real-time ingestion and
 subsequent processing, one record at a time. Each shard can support
 writes up to 1,000 records per second, up to a maximum data write total
-of 1 MB per second." />
+of 1 MiB per second.
+You must specify the name of the stream that captures, stores, and
+transports the data; a partition key; and the data blob itself.
+The data blob can be any type of data; for example, a segment from a log
+file, geographic/location data, website clickstream data, and so on.
+The partition key is used by Kinesis Data Streams to distribute data
+across shards. Kinesis Data Streams segregates the data records that
+belong to a stream into multiple shards, using the partition key
+associated with each data record to determine the shard to which a given
+data record belongs.
+Partition keys are Unicode strings, with a maximum length limit of 256
+characters for each key. An MD5 hash function is used to map partition
+keys to 128-bit integer values and to map associated data records to
+shards using the hash key ranges of the shards. You can override hashing
+the partition key to determine the shard by explicitly specifying a hash
+value using the ExplicitHashKey parameter. For more information, see
+Adding Data to a Stream
+in the Amazon Kinesis Data Streams Developer Guide.
+PutRecord returns the shard ID of where the data record was placed and
+the sequence number that was assigned to the data record.
+Sequence numbers increase over time and are specific to a shard within a
+stream, not across all shards within a stream. To guarantee strictly
+increasing ordering, write serially to a shard and use the
+SequenceNumberForOrdering parameter. For more information, see Adding Data to a Stream
+in the Amazon Kinesis Data Streams Developer Guide.
+After you write a record to a stream, you cannot modify that record or
+its order within the stream.
+If a PutRecord request cannot be processed because of insufficient
+provisioned throughput on the shard involved in the request, PutRecord
+throws ProvisionedThroughputExceededException.
+By default, data records are accessible for 24 hours from the time that
+they are added to a stream. You can use IncreaseStreamRetentionPeriod or
+DecreaseStreamRetentionPeriod to modify this retention period." />
 
 
 
@@ -76,7 +108,7 @@ of 1 MB per second." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +116,7 @@ of 1 MB per second." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +128,7 @@ of 1 MB per second." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,11 +155,43 @@ of 1 MB per second." />
 <code>PutRecord</code> to send data into the stream for real-time ingestion and
 subsequent processing, one record at a time. Each shard can support
 writes up to 1,000 records per second, up to a maximum data write total
-of 1 MB per second.</p>
+of 1 MiB per second.</p>
+<p>You must specify the name of the stream that captures, stores, and
+transports the data; a partition key; and the data blob itself.</p>
+<p>The data blob can be any type of data; for example, a segment from a log
+file, geographic/location data, website clickstream data, and so on.</p>
+<p>The partition key is used by Kinesis Data Streams to distribute data
+across shards. Kinesis Data Streams segregates the data records that
+belong to a stream into multiple shards, using the partition key
+associated with each data record to determine the shard to which a given
+data record belongs.</p>
+<p>Partition keys are Unicode strings, with a maximum length limit of 256
+characters for each key. An MD5 hash function is used to map partition
+keys to 128-bit integer values and to map associated data records to
+shards using the hash key ranges of the shards. You can override hashing
+the partition key to determine the shard by explicitly specifying a hash
+value using the <code>ExplicitHashKey</code> parameter. For more information, see
+<a href='https://docs.aws.amazon.com/streams/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream'>Adding Data to a Stream</a>
+in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
+<p><code>PutRecord</code> returns the shard ID of where the data record was placed and
+the sequence number that was assigned to the data record.</p>
+<p>Sequence numbers increase over time and are specific to a shard within a
+stream, not across all shards within a stream. To guarantee strictly
+increasing ordering, write serially to a shard and use the
+<code>SequenceNumberForOrdering</code> parameter. For more information, see <a href='https://docs.aws.amazon.com/streams/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream'>Adding Data to a Stream</a>
+in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
+<p>After you write a record to a stream, you cannot modify that record or
+its order within the stream.</p>
+<p>If a <code>PutRecord</code> request cannot be processed because of insufficient
+provisioned throughput on the shard involved in the request, <code>PutRecord</code>
+throws <code>ProvisionedThroughputExceededException</code>.</p>
+<p>By default, data records are accessible for 24 hours from the time that
+they are added to a stream. You can use IncreaseStreamRetentionPeriod or
+DecreaseStreamRetentionPeriod to modify this retention period.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>kinesis_put_record</span>(<span class='no'>StreamName</span>, <span class='no'>Data</span>, <span class='no'>PartitionKey</span>, <span class='no'>ExplicitHashKey</span>,
-  <span class='no'>SequenceNumberForOrdering</span>)</pre>
+    <pre class="usage"><span class='fu'>kinesis_put_record</span><span class='op'>(</span><span class='va'>StreamName</span>, <span class='va'>Data</span>, <span class='va'>PartitionKey</span>, <span class='va'>ExplicitHashKey</span>,
+  <span class='va'>SequenceNumberForOrdering</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,7 +205,7 @@ of 1 MB per second.</p>
       <td><p>[required] The data blob to put into the record, which is base64-encoded when the
 blob is serialized. When the data blob (the payload before
 base64-encoding) is added to the partition key size, the total size must
-not exceed the maximum record size (1 MB).</p></td>
+not exceed the maximum record size (1 MiB).</p></td>
     </tr>
     <tr>
       <th>PartitionKey</th>
@@ -171,48 +235,17 @@ time.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You must specify the name of the stream that captures, stores, and
-transports the data; a partition key; and the data blob itself.</p>
-<p>The data blob can be any type of data; for example, a segment from a log
-file, geographic/location data, website clickstream data, and so on.</p>
-<p>The partition key is used by Kinesis Data Streams to distribute data
-across shards. Kinesis Data Streams segregates the data records that
-belong to a stream into multiple shards, using the partition key
-associated with each data record to determine the shard to which a given
-data record belongs.</p>
-<p>Partition keys are Unicode strings, with a maximum length limit of 256
-characters for each key. An MD5 hash function is used to map partition
-keys to 128-bit integer values and to map associated data records to
-shards using the hash key ranges of the shards. You can override hashing
-the partition key to determine the shard by explicitly specifying a hash
-value using the <code>ExplicitHashKey</code> parameter. For more information, see
-<a href='http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream'>Adding Data to a Stream</a>
-in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
-<p><code>PutRecord</code> returns the shard ID of where the data record was placed and
-the sequence number that was assigned to the data record.</p>
-<p>Sequence numbers increase over time and are specific to a shard within a
-stream, not across all shards within a stream. To guarantee strictly
-increasing ordering, write serially to a shard and use the
-<code>SequenceNumberForOrdering</code> parameter. For more information, see <a href='http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream'>Adding Data to a Stream</a>
-in the <em>Amazon Kinesis Data Streams Developer Guide</em>.</p>
-<p>If a <code>PutRecord</code> request cannot be processed because of insufficient
-provisioned throughput on the shard involved in the request, <code>PutRecord</code>
-throws <code>ProvisionedThroughputExceededException</code>.</p>
-<p>By default, data records are accessible for 24 hours from the time that
-they are added to a stream. You can use IncreaseStreamRetentionPeriod or
-DecreaseStreamRetentionPeriod to modify this retention period.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_record</span>(
-  <span class='kw'>StreamName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Data</span> <span class='kw'>=</span> <span class='no'>raw</span>,
-  <span class='kw'>PartitionKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ExplicitHashKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SequenceNumberForOrdering</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_record</span><span class='op'>(</span>
+  StreamName <span class='op'>=</span> <span class='st'>"string"</span>,
+  Data <span class='op'>=</span> <span class='va'>raw</span>,
+  PartitionKey <span class='op'>=</span> <span class='st'>"string"</span>,
+  ExplicitHashKey <span class='op'>=</span> <span class='st'>"string"</span>,
+  SequenceNumberForOrdering <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -230,7 +263,7 @@ DecreaseStreamRetentionPeriod to modify this retention period.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

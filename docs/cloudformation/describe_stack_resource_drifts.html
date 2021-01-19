@@ -45,7 +45,15 @@ drift in the specified stack — cloudformation_describe_stack_resource_drifts" 
 <meta property="og:description" content="Returns drift information for the resources that have been checked for
 drift in the specified stack. This includes actual and expected
 configuration values for resources where AWS CloudFormation detects
-configuration drift." />
+configuration drift.
+For a given stack, there will be one StackResourceDrift for each stack
+resource that has been checked for drift. Resources that have not yet
+been checked for drift are not included. Resources that do not currently
+support drift detection are not checked, and so not included. For a list
+of resources that support drift detection, see Resources that Support Drift Detection.
+Use DetectStackResourceDrift to detect drift on individual resources, or
+DetectStackDrift to detect drift on all supported resources for a given
+stack." />
 
 
 
@@ -77,7 +85,7 @@ configuration drift." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -85,7 +93,7 @@ configuration drift." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +105,7 @@ configuration drift." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,10 +133,18 @@ drift in the specified stack</h1>
 drift in the specified stack. This includes actual and expected
 configuration values for resources where AWS CloudFormation detects
 configuration drift.</p>
+<p>For a given stack, there will be one <code>StackResourceDrift</code> for each stack
+resource that has been checked for drift. Resources that have not yet
+been checked for drift are not included. Resources that do not currently
+support drift detection are not checked, and so not included. For a list
+of resources that support drift detection, see <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resource-import-supported-resources.html'>Resources that Support Drift Detection</a>.</p>
+<p>Use DetectStackResourceDrift to detect drift on individual resources, or
+DetectStackDrift to detect drift on all supported resources for a given
+stack.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloudformation_describe_stack_resource_drifts</span>(<span class='no'>StackName</span>,
-  <span class='no'>StackResourceDriftStatusFilters</span>, <span class='no'>NextToken</span>, <span class='no'>MaxResults</span>)</pre>
+    <pre class="usage"><span class='fu'>cloudformation_describe_stack_resource_drifts</span><span class='op'>(</span><span class='va'>StackName</span>,
+  <span class='va'>StackResourceDriftStatusFilters</span>, <span class='va'>NextToken</span>, <span class='va'>MaxResults</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,8 +161,8 @@ drift results returned.</p><ul>
 configuration in that the resource has been deleted.</p></li>
 <li><p><code>MODIFIED</code>: One or more resource properties differ from their
 expected template values.</p></li>
-<li><p><code>IN_SYNC</code>: The resources\'s actual configuration matches its
-expected template configuration.</p></li>
+<li><p><code>IN_SYNC</code>: The resources's actual configuration matches its expected
+template configuration.</p></li>
 <li><p><code>NOT_CHECKED</code>: AWS CloudFormation does not currently return this
 value.</p></li>
 </ul></td>
@@ -164,27 +180,18 @@ parameter to get the next set of results.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For a given stack, there will be one <code>StackResourceDrift</code> for each stack
-resource that has been checked for drift. Resources that have not yet
-been checked for drift are not included. Resources that do not currently
-support drift detection are not checked, and so not included. For a list
-of resources that support drift detection, see <a href='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift-resource-list.html'>Resources that Support Drift Detection</a>.</p>
-<p>Use DetectStackResourceDrift to detect drift on individual resources, or
-DetectStackDrift to detect drift on all supported resources for a given
-stack.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_stack_resource_drifts</span>(
-  <span class='kw'>StackName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>StackResourceDriftStatusFilters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"IN_SYNC"</span><span class='kw'>|</span><span class='st'>"MODIFIED"</span><span class='kw'>|</span><span class='st'>"DELETED"</span><span class='kw'>|</span><span class='st'>"NOT_CHECKED"</span>
-  ),
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxResults</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_stack_resource_drifts</span><span class='op'>(</span>
+  StackName <span class='op'>=</span> <span class='st'>"string"</span>,
+  StackResourceDriftStatusFilters <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"IN_SYNC"</span><span class='op'>|</span><span class='st'>"MODIFIED"</span><span class='op'>|</span><span class='st'>"DELETED"</span><span class='op'>|</span><span class='st'>"NOT_CHECKED"</span>
+  <span class='op'>)</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxResults <span class='op'>=</span> <span class='fl'>123</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -202,7 +209,7 @@ stack.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

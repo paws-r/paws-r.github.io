@@ -46,8 +46,26 @@ specified log group — cloudwatchlogs_put_subscription_filter" />
 specified log group. Subscription filters allow you to subscribe to a
 real-time stream of log events ingested through
 PutLogEvents
-and have them delivered to a specific destination. Currently, the
-supported destinations are:" />
+and have them delivered to a specific destination. When log events are
+sent to the receiving service, they are Base64 encoded and compressed
+with the gzip format.
+The following destinations are supported for subscription filters:
+An Amazon Kinesis stream belonging to the same account as the
+subscription filter, for same-account delivery.
+A logical destination that belongs to a different account, for
+cross-account delivery.
+An Amazon Kinesis Firehose delivery stream that belongs to the same
+account as the subscription filter, for same-account delivery.
+An AWS Lambda function that belongs to the same account as the
+subscription filter, for same-account delivery.
+
+
+There can only be one subscription filter associated with a log group.
+If you are updating an existing filter, you must specify the correct
+name in filterName. Otherwise, the call fails because you cannot
+associate a second filter with a log group.
+To perform a PutSubscriptionFilter operation, you must also have the
+iam:PassRole permission." />
 
 
 
@@ -79,7 +97,7 @@ supported destinations are:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -87,7 +105,7 @@ supported destinations are:" />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -99,7 +117,7 @@ supported destinations are:" />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,12 +145,30 @@ specified log group</h1>
 specified log group. Subscription filters allow you to subscribe to a
 real-time stream of log events ingested through
 <a href='https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutLogEvents.html'>PutLogEvents</a>
-and have them delivered to a specific destination. Currently, the
-supported destinations are:</p>
+and have them delivered to a specific destination. When log events are
+sent to the receiving service, they are Base64 encoded and compressed
+with the gzip format.</p>
+<p>The following destinations are supported for subscription filters:</p><ul>
+<li><p>An Amazon Kinesis stream belonging to the same account as the
+subscription filter, for same-account delivery.</p></li>
+<li><p>A logical destination that belongs to a different account, for
+cross-account delivery.</p></li>
+<li><p>An Amazon Kinesis Firehose delivery stream that belongs to the same
+account as the subscription filter, for same-account delivery.</p></li>
+<li><p>An AWS Lambda function that belongs to the same account as the
+subscription filter, for same-account delivery.</p></li>
+</ul>
+
+<p>There can only be one subscription filter associated with a log group.
+If you are updating an existing filter, you must specify the correct
+name in <code>filterName</code>. Otherwise, the call fails because you cannot
+associate a second filter with a log group.</p>
+<p>To perform a <code>PutSubscriptionFilter</code> operation, you must also have the
+<code>iam:PassRole</code> permission.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cloudwatchlogs_put_subscription_filter</span>(<span class='no'>logGroupName</span>, <span class='no'>filterName</span>,
-  <span class='no'>filterPattern</span>, <span class='no'>destinationArn</span>, <span class='no'>roleArn</span>, <span class='no'>distribution</span>)</pre>
+    <pre class="usage"><span class='fu'>cloudwatchlogs_put_subscription_filter</span><span class='op'>(</span><span class='va'>logGroupName</span>, <span class='va'>filterName</span>,
+  <span class='va'>filterPattern</span>, <span class='va'>destinationArn</span>, <span class='va'>roleArn</span>, <span class='va'>distribution</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,48 +207,31 @@ subscription filter, for same-account delivery.</p></li>
     <tr>
       <th>roleArn</th>
       <td><p>The ARN of an IAM role that grants CloudWatch Logs permissions to
-deliver ingested log events to the destination stream. You don\'t need
-to provide the ARN when you are working with a logical destination for
+deliver ingested log events to the destination stream. You don't need to
+provide the ARN when you are working with a logical destination for
 cross-account delivery.</p></td>
     </tr>
     <tr>
       <th>distribution</th>
-      <td><p>The method used to distribute log data to the destination. By default
+      <td><p>The method used to distribute log data to the destination. By default,
 log data is grouped by log stream, but the grouping can be set to random
 for a more even distribution. This property is only applicable when the
 destination is an Amazon Kinesis stream.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<ul>
-<li><p>An Amazon Kinesis stream belonging to the same account as the
-subscription filter, for same-account delivery.</p></li>
-<li><p>A logical destination that belongs to a different account, for
-cross-account delivery.</p></li>
-<li><p>An Amazon Kinesis Firehose delivery stream that belongs to the same
-account as the subscription filter, for same-account delivery.</p></li>
-<li><p>An AWS Lambda function that belongs to the same account as the
-subscription filter, for same-account delivery.</p></li>
-</ul>
-
-<p>There can only be one subscription filter associated with a log group.
-If you are updating an existing filter, you must specify the correct
-name in <code>filterName</code>. Otherwise, the call fails because you cannot
-associate a second filter with a log group.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>put_subscription_filter</span>(
-  <span class='kw'>logGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>filterName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>filterPattern</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>destinationArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>roleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>distribution</span> <span class='kw'>=</span> <span class='st'>"Random"</span><span class='kw'>|</span><span class='st'>"ByLogStream"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>put_subscription_filter</span><span class='op'>(</span>
+  logGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  filterName <span class='op'>=</span> <span class='st'>"string"</span>,
+  filterPattern <span class='op'>=</span> <span class='st'>"string"</span>,
+  destinationArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  roleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  distribution <span class='op'>=</span> <span class='st'>"Random"</span><span class='op'>|</span><span class='st'>"ByLogStream"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -230,7 +249,7 @@ associate a second filter with a log group.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

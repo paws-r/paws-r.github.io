@@ -41,7 +41,38 @@
 
 <meta property="og:title" content="Creates an Amazon SageMaker notebook instance — sagemaker_create_notebook_instance" />
 <meta property="og:description" content="Creates an Amazon SageMaker notebook instance. A notebook instance is a
-machine learning (ML) compute instance running on a Jupyter notebook." />
+machine learning (ML) compute instance running on a Jupyter notebook.
+In a CreateNotebookInstance request, specify the type of ML compute
+instance that you want to run. Amazon SageMaker launches the instance,
+installs common libraries that you can use to explore datasets for model
+training, and attaches an ML storage volume to the notebook instance.
+Amazon SageMaker also provides a set of example notebooks. Each notebook
+demonstrates how to use Amazon SageMaker with a specific algorithm or
+with a machine learning framework.
+After receiving the request, Amazon SageMaker does the following:
+Creates a network interface in the Amazon SageMaker VPC.
+(Option) If you specified SubnetId, Amazon SageMaker creates a
+network interface in your own VPC, which is inferred from the subnet
+ID that you provide in the input. When creating this network
+interface, Amazon SageMaker attaches the security group that you
+specified in the request to the network interface that it creates in
+your VPC.
+Launches an EC2 instance of the type specified in the request in the
+Amazon SageMaker VPC. If you specified SubnetId of your VPC,
+Amazon SageMaker specifies both network interfaces when launching
+this instance. This enables inbound traffic from your own VPC to the
+notebook instance, assuming that the security groups allow it.
+
+
+After creating the notebook instance, Amazon SageMaker returns its
+Amazon Resource Name (ARN). You can't change the name of a notebook
+instance after you create it.
+After Amazon SageMaker creates the notebook instance, you can connect to
+the Jupyter server and work in Jupyter notebooks. For example, you can
+write code to explore a dataset that you can use for model training,
+train a model, host models by creating Amazon SageMaker endpoints, and
+validate hosted models.
+For more information, see How It Works." />
 
 
 
@@ -73,7 +104,7 @@ machine learning (ML) compute instance running on a Jupyter notebook." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -81,7 +112,7 @@ machine learning (ML) compute instance running on a Jupyter notebook." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -93,7 +124,7 @@ machine learning (ML) compute instance running on a Jupyter notebook." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -118,13 +149,44 @@ machine learning (ML) compute instance running on a Jupyter notebook." />
     <div class="ref-description">
     <p>Creates an Amazon SageMaker notebook instance. A notebook instance is a
 machine learning (ML) compute instance running on a Jupyter notebook.</p>
+<p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute
+instance that you want to run. Amazon SageMaker launches the instance,
+installs common libraries that you can use to explore datasets for model
+training, and attaches an ML storage volume to the notebook instance.</p>
+<p>Amazon SageMaker also provides a set of example notebooks. Each notebook
+demonstrates how to use Amazon SageMaker with a specific algorithm or
+with a machine learning framework.</p>
+<p>After receiving the request, Amazon SageMaker does the following:</p><ol>
+<li><p>Creates a network interface in the Amazon SageMaker VPC.</p></li>
+<li><p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a
+network interface in your own VPC, which is inferred from the subnet
+ID that you provide in the input. When creating this network
+interface, Amazon SageMaker attaches the security group that you
+specified in the request to the network interface that it creates in
+your VPC.</p></li>
+<li><p>Launches an EC2 instance of the type specified in the request in the
+Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC,
+Amazon SageMaker specifies both network interfaces when launching
+this instance. This enables inbound traffic from your own VPC to the
+notebook instance, assuming that the security groups allow it.</p></li>
+</ol>
+
+<p>After creating the notebook instance, Amazon SageMaker returns its
+Amazon Resource Name (ARN). You can't change the name of a notebook
+instance after you create it.</p>
+<p>After Amazon SageMaker creates the notebook instance, you can connect to
+the Jupyter server and work in Jupyter notebooks. For example, you can
+write code to explore a dataset that you can use for model training,
+train a model, host models by creating Amazon SageMaker endpoints, and
+validate hosted models.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/sagemaker/latest/dg/'>How It Works</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sagemaker_create_notebook_instance</span>(<span class='no'>NotebookInstanceName</span>, <span class='no'>InstanceType</span>,
-  <span class='no'>SubnetId</span>, <span class='no'>SecurityGroupIds</span>, <span class='no'>RoleArn</span>, <span class='no'>KmsKeyId</span>, <span class='no'>Tags</span>,
-  <span class='no'>LifecycleConfigName</span>, <span class='no'>DirectInternetAccess</span>, <span class='no'>VolumeSizeInGB</span>,
-  <span class='no'>AcceleratorTypes</span>, <span class='no'>DefaultCodeRepository</span>, <span class='no'>AdditionalCodeRepositories</span>,
-  <span class='no'>RootAccess</span>)</pre>
+    <pre class="usage"><span class='fu'>sagemaker_create_notebook_instance</span><span class='op'>(</span><span class='va'>NotebookInstanceName</span>, <span class='va'>InstanceType</span>,
+  <span class='va'>SubnetId</span>, <span class='va'>SecurityGroupIds</span>, <span class='va'>RoleArn</span>, <span class='va'>KmsKeyId</span>, <span class='va'>Tags</span>,
+  <span class='va'>LifecycleConfigName</span>, <span class='va'>DirectInternetAccess</span>, <span class='va'>VolumeSizeInGB</span>,
+  <span class='va'>AcceleratorTypes</span>, <span class='va'>DefaultCodeRepository</span>, <span class='va'>AdditionalCodeRepositories</span>,
+  <span class='va'>RootAccess</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,8 +230,9 @@ in the <em>AWS Key Management Service Developer Guide</em>.</p></td>
     </tr>
     <tr>
       <th>Tags</th>
-      <td><p>A list of tags to associate with the notebook instance. You can add tags
-later by using the <code>CreateTags</code> API.</p></td>
+      <td><p>An array of key-value pairs. You can use tags to categorize your AWS
+resources in different ways, for example, by purpose, owner, or
+environment. For more information, see <a href='https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html'>Tagging AWS Resources</a>.</p></td>
     </tr>
     <tr>
       <th>LifecycleConfigName</th>
@@ -183,7 +246,7 @@ instance. If you set this to <code>Disabled</code> this notebook instance will b
 able to access resources only in your VPC, and will not be able to
 connect to Amazon SageMaker training and endpoint services unless your
 configure a NAT Gateway in your VPC.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/sagemaker/latest/dg/appendix-additional-considerations.html#appendix-notebook-and-internet-access'>Notebook Instances Are Internet-Enabled by Default</a>.
+<p>For more information, see <a href='https://docs.aws.amazon.com/sagemaker/latest/dg/#appendix-notebook-and-internet-access'>Notebook Instances Are Internet-Enabled by Default</a>.
 You can set the value of this parameter to <code>Disabled</code> only if you set a
 value for the <code>SubnetId</code> parameter.</p></td>
     </tr>
@@ -227,69 +290,37 @@ root access for users.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>In a <code>CreateNotebookInstance</code> request, specify the type of ML compute
-instance that you want to run. Amazon SageMaker launches the instance,
-installs common libraries that you can use to explore datasets for model
-training, and attaches an ML storage volume to the notebook instance.</p>
-<p>Amazon SageMaker also provides a set of example notebooks. Each notebook
-demonstrates how to use Amazon SageMaker with a specific algorithm or
-with a machine learning framework.</p>
-<p>After receiving the request, Amazon SageMaker does the following:</p><ol>
-<li><p>Creates a network interface in the Amazon SageMaker VPC.</p></li>
-<li><p>(Option) If you specified <code>SubnetId</code>, Amazon SageMaker creates a
-network interface in your own VPC, which is inferred from the subnet
-ID that you provide in the input. When creating this network
-interface, Amazon SageMaker attaches the security group that you
-specified in the request to the network interface that it creates in
-your VPC.</p></li>
-<li><p>Launches an EC2 instance of the type specified in the request in the
-Amazon SageMaker VPC. If you specified <code>SubnetId</code> of your VPC,
-Amazon SageMaker specifies both network interfaces when launching
-this instance. This enables inbound traffic from your own VPC to the
-notebook instance, assuming that the security groups allow it.</p></li>
-</ol>
-
-<p>After creating the notebook instance, Amazon SageMaker returns its
-Amazon Resource Name (ARN). You can\'t change the name of a notebook
-instance after you create it.</p>
-<p>After Amazon SageMaker creates the notebook instance, you can connect to
-the Jupyter server and work in Jupyter notebooks. For example, you can
-write code to explore a dataset that you can use for model training,
-train a model, host models by creating Amazon SageMaker endpoints, and
-validate hosted models.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html'>How It Works</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_notebook_instance</span>(
-  <span class='kw'>NotebookInstanceName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"ml.t2.medium"</span><span class='kw'>|</span><span class='st'>"ml.t2.large"</span><span class='kw'>|</span><span class='st'>"ml.t2.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.t2.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.t3.medium"</span><span class='kw'>|</span><span class='st'>"ml.t3.large"</span><span class='kw'>|</span><span class='st'>"ml.t3.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.t3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.10xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m4.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='kw'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c4.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.4xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.9xlarge"</span><span class='kw'>|</span><span class='st'>"ml.c5d.18xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p2.16xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='kw'>|</span><span class='st'>"ml.p3.16xlarge"</span>,
-  <span class='kw'>SubnetId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SecurityGroupIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_notebook_instance</span><span class='op'>(</span>
+  NotebookInstanceName <span class='op'>=</span> <span class='st'>"string"</span>,
+  InstanceType <span class='op'>=</span> <span class='st'>"ml.t2.medium"</span><span class='op'>|</span><span class='st'>"ml.t2.large"</span><span class='op'>|</span><span class='st'>"ml.t2.xlarge"</span><span class='op'>|</span><span class='st'>"ml.t2.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.t3.medium"</span><span class='op'>|</span><span class='st'>"ml.t3.large"</span><span class='op'>|</span><span class='st'>"ml.t3.xlarge"</span><span class='op'>|</span><span class='st'>"ml.t3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.10xlarge"</span><span class='op'>|</span><span class='st'>"ml.m4.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.12xlarge"</span><span class='op'>|</span><span class='st'>"ml.m5.24xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c4.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.4xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.9xlarge"</span><span class='op'>|</span><span class='st'>"ml.c5d.18xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p2.16xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.2xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.8xlarge"</span><span class='op'>|</span><span class='st'>"ml.p3.16xlarge"</span>,
+  SubnetId <span class='op'>=</span> <span class='st'>"string"</span>,
+  SecurityGroupIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>RoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>KmsKeyId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>LifecycleConfigName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>DirectInternetAccess</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>,
-  <span class='kw'>VolumeSizeInGB</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>AcceleratorTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"ml.eia1.medium"</span><span class='kw'>|</span><span class='st'>"ml.eia1.large"</span><span class='kw'>|</span><span class='st'>"ml.eia1.xlarge"</span><span class='kw'>|</span><span class='st'>"ml.eia2.medium"</span><span class='kw'>|</span><span class='st'>"ml.eia2.large"</span><span class='kw'>|</span><span class='st'>"ml.eia2.xlarge"</span>
-  ),
-  <span class='kw'>DefaultCodeRepository</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AdditionalCodeRepositories</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  RoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  KmsKeyId <span class='op'>=</span> <span class='st'>"string"</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  LifecycleConfigName <span class='op'>=</span> <span class='st'>"string"</span>,
+  DirectInternetAccess <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>,
+  VolumeSizeInGB <span class='op'>=</span> <span class='fl'>123</span>,
+  AcceleratorTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"ml.eia1.medium"</span><span class='op'>|</span><span class='st'>"ml.eia1.large"</span><span class='op'>|</span><span class='st'>"ml.eia1.xlarge"</span><span class='op'>|</span><span class='st'>"ml.eia2.medium"</span><span class='op'>|</span><span class='st'>"ml.eia2.large"</span><span class='op'>|</span><span class='st'>"ml.eia2.xlarge"</span>
+  <span class='op'>)</span>,
+  DefaultCodeRepository <span class='op'>=</span> <span class='st'>"string"</span>,
+  AdditionalCodeRepositories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>RootAccess</span> <span class='kw'>=</span> <span class='st'>"Enabled"</span><span class='kw'>|</span><span class='st'>"Disabled"</span>
-)</pre>
+  <span class='op'>)</span>,
+  RootAccess <span class='op'>=</span> <span class='st'>"Enabled"</span><span class='op'>|</span><span class='st'>"Disabled"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -307,7 +338,7 @@ validate hosted models.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

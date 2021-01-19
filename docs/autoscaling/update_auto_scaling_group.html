@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Updates the configuration for the specified Auto Scaling group — autoscaling_update_auto_scaling_group • paws</title>
+<title>We strongly recommend that all Auto Scaling groups use launch templates
+to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2 — autoscaling_update_auto_scaling_group • paws</title>
 
 
 <!-- jquery -->
@@ -39,8 +40,49 @@
 
 
 
-<meta property="og:title" content="Updates the configuration for the specified Auto Scaling group — autoscaling_update_auto_scaling_group" />
-<meta property="og:description" content="Updates the configuration for the specified Auto Scaling group." />
+<meta property="og:title" content="We strongly recommend that all Auto Scaling groups use launch templates
+to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2 — autoscaling_update_auto_scaling_group" />
+<meta property="og:description" content="We strongly recommend that all Auto Scaling groups use launch
+templates to ensure full functionality for Amazon EC2 Auto Scaling and
+Amazon EC2.
+Updates the configuration for the specified Auto Scaling group.
+To update an Auto Scaling group, specify the name of the group and the
+parameter that you want to change. Any parameters that you don't specify
+are not changed by this update request. The new settings take effect on
+any scaling activities after this call returns.
+If you associate a new launch configuration or template with an Auto
+Scaling group, all new instances will get the updated configuration.
+Existing instances continue to run with the configuration that they were
+originally launched with. When you update a group to specify a mixed
+instances policy instead of a launch configuration or template, existing
+instances may be replaced to match the new purchasing options that you
+specified in the policy. For example, if the group currently has 100%
+On-Demand capacity and the policy specifies 50% Spot capacity, this
+means that half of your instances will be gradually terminated and
+relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto
+Scaling launches new instances before terminating the old ones, so that
+updating your group does not compromise the performance or availability
+of your application.
+Note the following about changing DesiredCapacity, MaxSize, or
+MinSize:
+If a scale-in activity occurs as a result of a new DesiredCapacity
+value that is lower than the current size of the group, the Auto
+Scaling group uses its termination policy to determine which
+instances to terminate.
+If you specify a new value for MinSize without specifying a value
+for DesiredCapacity, and the new MinSize is larger than the
+current size of the group, this sets the group's DesiredCapacity
+to the new MinSize value.
+If you specify a new value for MaxSize without specifying a value
+for DesiredCapacity, and the new MaxSize is smaller than the
+current size of the group, this sets the group's DesiredCapacity
+to the new MaxSize value.
+
+
+To see which parameters have been set, call the
+DescribeAutoScalingGroups API. To view the scaling policies for an Auto
+Scaling group, call the DescribePolicies API. If the group has scaling
+policies, you can update them by calling the PutScalingPolicy API." />
 
 
 
@@ -72,7 +114,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -80,7 +122,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -92,7 +134,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -109,163 +151,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Updates the configuration for the specified Auto Scaling group</h1>
+    <h1>We strongly recommend that all Auto Scaling groups use launch templates
+to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/autoscaling_operations.R'><code>R/autoscaling_operations.R</code></a></small>
     <div class="hidden name"><code>autoscaling_update_auto_scaling_group.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Updates the configuration for the specified Auto Scaling group.</p>
-    </div>
-
-    <pre class="usage"><span class='fu'>autoscaling_update_auto_scaling_group</span>(<span class='no'>AutoScalingGroupName</span>,
-  <span class='no'>LaunchConfigurationName</span>, <span class='no'>LaunchTemplate</span>, <span class='no'>MixedInstancesPolicy</span>, <span class='no'>MinSize</span>,
-  <span class='no'>MaxSize</span>, <span class='no'>DesiredCapacity</span>, <span class='no'>DefaultCooldown</span>, <span class='no'>AvailabilityZones</span>,
-  <span class='no'>HealthCheckType</span>, <span class='no'>HealthCheckGracePeriod</span>, <span class='no'>PlacementGroup</span>,
-  <span class='no'>VPCZoneIdentifier</span>, <span class='no'>TerminationPolicies</span>,
-  <span class='no'>NewInstancesProtectedFromScaleIn</span>, <span class='no'>ServiceLinkedRoleARN</span>,
-  <span class='no'>MaxInstanceLifetime</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>AutoScalingGroupName</th>
-      <td><p>[required] The name of the Auto Scaling group.</p></td>
-    </tr>
-    <tr>
-      <th>LaunchConfigurationName</th>
-      <td><p>The name of the launch configuration. If you specify
-<code>LaunchConfigurationName</code> in your update request, you can\'t specify
-<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>.</p></td>
-    </tr>
-    <tr>
-      <th>LaunchTemplate</th>
-      <td><p>The launch template and version to use to specify the updates. If you
-specify <code>LaunchTemplate</code> in your update request, you can\'t specify
-<code>LaunchConfigurationName</code> or <code>MixedInstancesPolicy</code>.</p>
-<p>For more information, see
-<a href='https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_LaunchTemplateSpecification.html'>LaunchTemplateSpecification</a>
-in the <em>Amazon EC2 Auto Scaling API Reference</em>.</p></td>
-    </tr>
-    <tr>
-      <th>MixedInstancesPolicy</th>
-      <td><p>An embedded object that specifies a mixed instances policy.</p>
-<p>In your call to <code>UpdateAutoScalingGroup</code>, you can make changes to the
-policy that is specified. All optional parameters are left unchanged if
-not specified.</p>
-<p>For more information, see
-<a href='https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_MixedInstancesPolicy.html'>MixedInstancesPolicy</a>
-in the <em>Amazon EC2 Auto Scaling API Reference</em> and <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html'>Auto Scaling Groups with Multiple Instance Types and Purchase Options</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
-    </tr>
-    <tr>
-      <th>MinSize</th>
-      <td><p>The minimum size of the Auto Scaling group.</p></td>
-    </tr>
-    <tr>
-      <th>MaxSize</th>
-      <td><p>The maximum size of the Auto Scaling group.</p>
-<p>With a mixed instances policy that uses instance weighting, Amazon EC2
-Auto Scaling may need to go above <code>MaxSize</code> to meet your capacity
-requirements. In this event, Amazon EC2 Auto Scaling will never go above
-<code>MaxSize</code> by more than your maximum instance weight (weights that define
-how many capacity units each instance contributes to the capacity of the
-group).</p></td>
-    </tr>
-    <tr>
-      <th>DesiredCapacity</th>
-      <td><p>The desired capacity is the initial capacity of the Auto Scaling group
-after this operation completes and the capacity it attempts to maintain.</p>
-<p>This number must be greater than or equal to the minimum size of the
-group and less than or equal to the maximum size of the group.</p></td>
-    </tr>
-    <tr>
-      <th>DefaultCooldown</th>
-      <td><p>The amount of time, in seconds, after a scaling activity completes
-before another scaling activity can start. The default value is <code>300</code>.</p>
-<p>This setting applies when using simple scaling policies, but not when
-using other scaling policies or scheduled scaling. For more information,
-see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html'>Scaling Cooldowns for Amazon EC2 Auto Scaling</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
-    </tr>
-    <tr>
-      <th>AvailabilityZones</th>
-      <td><p>One or more Availability Zones for the group.</p></td>
-    </tr>
-    <tr>
-      <th>HealthCheckType</th>
-      <td><p>The service to use for the health checks. The valid values are <code>EC2</code> and
-<code>ELB</code>. If you configure an Auto Scaling group to use ELB health checks,
-it considers the instance unhealthy if it fails either the EC2 status
-checks or the load balancer health checks.</p></td>
-    </tr>
-    <tr>
-      <th>HealthCheckGracePeriod</th>
-      <td><p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits
-before checking the health status of an EC2 instance that has come into
-service. The default value is <code>0</code>.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html#health-check-grace-period'>Health Check Grace Period</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p>
-<p>Required if you are adding an <code>ELB</code> health check.</p></td>
-    </tr>
-    <tr>
-      <th>PlacementGroup</th>
-      <td><p>The name of the placement group into which to launch your instances, if
-any. A placement group is a logical grouping of instances within a
-single Availability Zone. You cannot specify multiple Availability Zones
-and a placement group. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html'>Placement Groups</a>
-in the <em>Amazon EC2 User Guide for Linux Instances</em>.</p></td>
-    </tr>
-    <tr>
-      <th>VPCZoneIdentifier</th>
-      <td><p>A comma-separated list of subnet IDs for virtual private cloud (VPC).</p>
-<p>If you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, the subnets
-that you specify for this parameter must reside in those Availability
-Zones.</p></td>
-    </tr>
-    <tr>
-      <th>TerminationPolicies</th>
-      <td><p>A standalone termination policy or a list of termination policies used
-to select the instance to terminate. The policies are executed in the
-order that they are listed.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html'>Controlling Which Instances Auto Scaling Terminates During Scale In</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
-    </tr>
-    <tr>
-      <th>NewInstancesProtectedFromScaleIn</th>
-      <td><p>Indicates whether newly launched instances are protected from
-termination by Amazon EC2 Auto Scaling when scaling in.</p>
-<p>For more information about preventing instances from terminating on
-scale in, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection'>Instance Protection</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
-    </tr>
-    <tr>
-      <th>ServiceLinkedRoleARN</th>
-      <td><p>The Amazon Resource Name (ARN) of the service-linked role that the Auto
-Scaling group uses to call other AWS services on your behalf. For more
-information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html'>Service-Linked Roles</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
-    </tr>
-    <tr>
-      <th>MaxInstanceLifetime</th>
-      <td><p>The maximum amount of time, in seconds, that an instance can be in
-service. The default is null.</p>
-<p>This parameter is optional, but if you specify a value for it, you must
-specify a value of at least 604,800 seconds (7 days). To clear a
-previously set value, specify a new value of 0.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-max-instance-lifetime.html'>Replacing Auto Scaling Instances Based on Maximum Instance Lifetime</a>
-in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p>
-<p>Valid Range: Minimum value of 0.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>To update an Auto Scaling group, specify the name of the group and the
-parameter that you want to change. Any parameters that you don\'t
-specify are not changed by this update request. The new settings take
-effect on any scaling activities after this call returns.</p>
+    <p><strong>We strongly recommend that all Auto Scaling groups use launch
+templates to ensure full functionality for Amazon EC2 Auto Scaling and
+Amazon EC2.</strong></p>
+<p>Updates the configuration for the specified Auto Scaling group.</p>
+<p>To update an Auto Scaling group, specify the name of the group and the
+parameter that you want to change. Any parameters that you don't specify
+are not changed by this update request. The new settings take effect on
+any scaling activities after this call returns.</p>
 <p>If you associate a new launch configuration or template with an Auto
 Scaling group, all new instances will get the updated configuration.
 Existing instances continue to run with the configuration that they were
@@ -287,11 +187,11 @@ Scaling group uses its termination policy to determine which
 instances to terminate.</p></li>
 <li><p>If you specify a new value for <code>MinSize</code> without specifying a value
 for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the
-current size of the group, this sets the group\'s <code>DesiredCapacity</code>
+current size of the group, this sets the group's <code>DesiredCapacity</code>
 to the new <code>MinSize</code> value.</p></li>
 <li><p>If you specify a new value for <code>MaxSize</code> without specifying a value
 for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the
-current size of the group, this sets the group\'s <code>DesiredCapacity</code>
+current size of the group, this sets the group's <code>DesiredCapacity</code>
 to the new <code>MaxSize</code> value.</p></li>
 </ul>
 
@@ -299,84 +199,233 @@ to the new <code>MaxSize</code> value.</p></li>
 DescribeAutoScalingGroups API. To view the scaling policies for an Auto
 Scaling group, call the DescribePolicies API. If the group has scaling
 policies, you can update them by calling the PutScalingPolicy API.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>autoscaling_update_auto_scaling_group</span><span class='op'>(</span><span class='va'>AutoScalingGroupName</span>,
+  <span class='va'>LaunchConfigurationName</span>, <span class='va'>LaunchTemplate</span>, <span class='va'>MixedInstancesPolicy</span>, <span class='va'>MinSize</span>,
+  <span class='va'>MaxSize</span>, <span class='va'>DesiredCapacity</span>, <span class='va'>DefaultCooldown</span>, <span class='va'>AvailabilityZones</span>,
+  <span class='va'>HealthCheckType</span>, <span class='va'>HealthCheckGracePeriod</span>, <span class='va'>PlacementGroup</span>,
+  <span class='va'>VPCZoneIdentifier</span>, <span class='va'>TerminationPolicies</span>,
+  <span class='va'>NewInstancesProtectedFromScaleIn</span>, <span class='va'>ServiceLinkedRoleARN</span>,
+  <span class='va'>MaxInstanceLifetime</span>, <span class='va'>CapacityRebalance</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>AutoScalingGroupName</th>
+      <td><p>[required] The name of the Auto Scaling group.</p></td>
+    </tr>
+    <tr>
+      <th>LaunchConfigurationName</th>
+      <td><p>The name of the launch configuration. If you specify
+<code>LaunchConfigurationName</code> in your update request, you can't specify
+<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>.</p></td>
+    </tr>
+    <tr>
+      <th>LaunchTemplate</th>
+      <td><p>The launch template and version to use to specify the updates. If you
+specify <code>LaunchTemplate</code> in your update request, you can't specify
+<code>LaunchConfigurationName</code> or <code>MixedInstancesPolicy</code>.</p></td>
+    </tr>
+    <tr>
+      <th>MixedInstancesPolicy</th>
+      <td><p>An embedded object that specifies a mixed instances policy. When you
+make changes to an existing policy, all optional parameters are left
+unchanged if not specified. For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html'>Auto Scaling groups with multiple instance types and purchase options</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>MinSize</th>
+      <td><p>The minimum size of the Auto Scaling group.</p></td>
+    </tr>
+    <tr>
+      <th>MaxSize</th>
+      <td><p>The maximum size of the Auto Scaling group.</p>
+<p>With a mixed instances policy that uses instance weighting, Amazon EC2
+Auto Scaling may need to go above <code>MaxSize</code> to meet your capacity
+requirements. In this event, Amazon EC2 Auto Scaling will never go above
+<code>MaxSize</code> by more than your largest instance weight (weights that define
+how many units each instance contributes to the desired capacity of the
+group).</p></td>
+    </tr>
+    <tr>
+      <th>DesiredCapacity</th>
+      <td><p>The desired capacity is the initial capacity of the Auto Scaling group
+after this operation completes and the capacity it attempts to maintain.
+This number must be greater than or equal to the minimum size of the
+group and less than or equal to the maximum size of the group.</p></td>
+    </tr>
+    <tr>
+      <th>DefaultCooldown</th>
+      <td><p>The amount of time, in seconds, after a scaling activity completes
+before another scaling activity can start. The default value is <code>300</code>.
+This setting applies when using simple scaling policies, but not when
+using other scaling policies or scheduled scaling. For more information,
+see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html'>Scaling cooldowns for Amazon EC2 Auto Scaling</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>AvailabilityZones</th>
+      <td><p>One or more Availability Zones for the group.</p></td>
+    </tr>
+    <tr>
+      <th>HealthCheckType</th>
+      <td><p>The service to use for the health checks. The valid values are <code>EC2</code> and
+<code>ELB</code>. If you configure an Auto Scaling group to use ELB health checks,
+it considers the instance unhealthy if it fails either the EC2 status
+checks or the load balancer health checks.</p></td>
+    </tr>
+    <tr>
+      <th>HealthCheckGracePeriod</th>
+      <td><p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits
+before checking the health status of an EC2 instance that has come into
+service. The default value is <code>0</code>. For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html#health-check-grace-period'>Health check grace period</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p>
+<p>Conditional: Required if you are adding an <code>ELB</code> health check.</p></td>
+    </tr>
+    <tr>
+      <th>PlacementGroup</th>
+      <td><p>The name of an existing placement group into which to launch your
+instances, if any. A placement group is a logical grouping of instances
+within a single Availability Zone. You cannot specify multiple
+Availability Zones and a placement group. For more information, see
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html'>Placement Groups</a>
+in the <em>Amazon EC2 User Guide for Linux Instances</em>.</p></td>
+    </tr>
+    <tr>
+      <th>VPCZoneIdentifier</th>
+      <td><p>A comma-separated list of subnet IDs for a virtual private cloud (VPC).
+If you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, the subnets
+that you specify for this parameter must reside in those Availability
+Zones.</p></td>
+    </tr>
+    <tr>
+      <th>TerminationPolicies</th>
+      <td><p>A policy or a list of policies that are used to select the instances to
+terminate. The policies are executed in the order that you list them.
+For more information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html'>Controlling which Auto Scaling instances terminate during scale in</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>NewInstancesProtectedFromScaleIn</th>
+      <td><p>Indicates whether newly launched instances are protected from
+termination by Amazon EC2 Auto Scaling when scaling in. For more
+information about preventing instances from terminating on scale in, see
+<a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection'>Instance scale-in protection</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>ServiceLinkedRoleARN</th>
+      <td><p>The Amazon Resource Name (ARN) of the service-linked role that the Auto
+Scaling group uses to call other AWS services on your behalf. For more
+information, see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html'>Service-linked roles</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>MaxInstanceLifetime</th>
+      <td><p>The maximum amount of time, in seconds, that an instance can be in
+service. The default is null. If specified, the value must be either 0
+or a number equal to or greater than 86,400 seconds (1 day). To clear a
+previously set value, specify a new value of 0. For more information,
+see <a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-max-instance-lifetime.html'>Replacing Auto Scaling instances based on maximum instance lifetime</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
+    </tr>
+    <tr>
+      <th>CapacityRebalance</th>
+      <td><p>Enables or disables Capacity Rebalancing. For more information, see
+<a href='https://docs.aws.amazon.com/autoscaling/ec2/userguide/capacity-rebalance.html'>Amazon EC2 Auto Scaling Capacity Rebalancing</a>
+in the <em>Amazon EC2 Auto Scaling User Guide</em>.</p></td>
+    </tr>
+    </table>
+
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>update_auto_scaling_group</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LaunchConfigurationName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>LaunchTemplate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>LaunchTemplateId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>LaunchTemplateName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-  ),
-  <span class='kw'>MixedInstancesPolicy</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>LaunchTemplate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>LaunchTemplateSpecification</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='kw'>LaunchTemplateId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>LaunchTemplateName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-        <span class='kw'>Version</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-      ),
-      <span class='kw'>Overrides</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-          <span class='kw'>InstanceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-          <span class='kw'>WeightedCapacity</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-        )
-      )
-    ),
-    <span class='kw'>InstancesDistribution</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>OnDemandAllocationStrategy</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>OnDemandBaseCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>OnDemandPercentageAboveBaseCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>SpotAllocationStrategy</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>SpotInstancePools</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-      <span class='kw'>SpotMaxPrice</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>MinSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>MaxSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>DesiredCapacity</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>DefaultCooldown</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>AvailabilityZones</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_auto_scaling_group</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  LaunchConfigurationName <span class='op'>=</span> <span class='st'>"string"</span>,
+  LaunchTemplate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    LaunchTemplateId <span class='op'>=</span> <span class='st'>"string"</span>,
+    LaunchTemplateName <span class='op'>=</span> <span class='st'>"string"</span>,
+    Version <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  MixedInstancesPolicy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    LaunchTemplate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      LaunchTemplateSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        LaunchTemplateId <span class='op'>=</span> <span class='st'>"string"</span>,
+        LaunchTemplateName <span class='op'>=</span> <span class='st'>"string"</span>,
+        Version <span class='op'>=</span> <span class='st'>"string"</span>
+      <span class='op'>)</span>,
+      Overrides <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+          InstanceType <span class='op'>=</span> <span class='st'>"string"</span>,
+          WeightedCapacity <span class='op'>=</span> <span class='st'>"string"</span>,
+          LaunchTemplateSpecification <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+            LaunchTemplateId <span class='op'>=</span> <span class='st'>"string"</span>,
+            LaunchTemplateName <span class='op'>=</span> <span class='st'>"string"</span>,
+            Version <span class='op'>=</span> <span class='st'>"string"</span>
+          <span class='op'>)</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    InstancesDistribution <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      OnDemandAllocationStrategy <span class='op'>=</span> <span class='st'>"string"</span>,
+      OnDemandBaseCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+      OnDemandPercentageAboveBaseCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+      SpotAllocationStrategy <span class='op'>=</span> <span class='st'>"string"</span>,
+      SpotInstancePools <span class='op'>=</span> <span class='fl'>123</span>,
+      SpotMaxPrice <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  MinSize <span class='op'>=</span> <span class='fl'>123</span>,
+  MaxSize <span class='op'>=</span> <span class='fl'>123</span>,
+  DesiredCapacity <span class='op'>=</span> <span class='fl'>123</span>,
+  DefaultCooldown <span class='op'>=</span> <span class='fl'>123</span>,
+  AvailabilityZones <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>HealthCheckType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>HealthCheckGracePeriod</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>PlacementGroup</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>VPCZoneIdentifier</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>TerminationPolicies</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  HealthCheckType <span class='op'>=</span> <span class='st'>"string"</span>,
+  HealthCheckGracePeriod <span class='op'>=</span> <span class='fl'>123</span>,
+  PlacementGroup <span class='op'>=</span> <span class='st'>"string"</span>,
+  VPCZoneIdentifier <span class='op'>=</span> <span class='st'>"string"</span>,
+  TerminationPolicies <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>NewInstancesProtectedFromScaleIn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>ServiceLinkedRoleARN</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>MaxInstanceLifetime</span> <span class='kw'>=</span> <span class='fl'>123</span>
-)</pre>
+  <span class='op'>)</span>,
+  NewInstancesProtectedFromScaleIn <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  ServiceLinkedRoleARN <span class='op'>=</span> <span class='st'>"string"</span>,
+  MaxInstanceLifetime <span class='op'>=</span> <span class='fl'>123</span>,
+  CapacityRebalance <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example updates the launch configuration of the specified Auto</span>
 <span class='co'># Scaling group.</span>
-<span class='no'>svc</span>$<span class='fu'>update_auto_scaling_group</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
-  <span class='kw'>LaunchConfigurationName</span> <span class='kw'>=</span> <span class='st'>"new-launch-config"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_auto_scaling_group</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
+  LaunchConfigurationName <span class='op'>=</span> <span class='st'>"new-launch-config"</span>
+<span class='op'>)</span>
 
 <span class='co'># This example updates the minimum size and maximum size of the specified</span>
 <span class='co'># Auto Scaling group.</span>
-<span class='no'>svc</span>$<span class='fu'>update_auto_scaling_group</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
-  <span class='kw'>MaxSize</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
-  <span class='kw'>MinSize</span> <span class='kw'>=</span> <span class='fl'>1L</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_auto_scaling_group</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
+  MaxSize <span class='op'>=</span> <span class='fl'>3L</span>,
+  MinSize <span class='op'>=</span> <span class='fl'>1L</span>
+<span class='op'>)</span>
 
 <span class='co'># This example enables instance protection for the specified Auto Scaling</span>
 <span class='co'># group.</span>
-<span class='no'>svc</span>$<span class='fu'>update_auto_scaling_group</span>(
-  <span class='kw'>AutoScalingGroupName</span> <span class='kw'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
-  <span class='kw'>NewInstancesProtectedFromScaleIn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>update_auto_scaling_group</span><span class='op'>(</span>
+  AutoScalingGroupName <span class='op'>=</span> <span class='st'>"my-auto-scaling-group"</span>,
+  NewInstancesProtectedFromScaleIn <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -392,7 +441,7 @@ policies, you can update them by calling the PutScalingPolicy API.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

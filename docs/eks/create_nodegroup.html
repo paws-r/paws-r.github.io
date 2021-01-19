@@ -44,7 +44,13 @@
 only create a node group for your cluster that is equal to the current
 Kubernetes version for the cluster. All node groups are created with the
 latest AMI release version for the respective minor Kubernetes version
-of the cluster." />
+of the cluster, unless you deploy a custom AMI using a launch template.
+For more information about using launch templates, see Launch template support.
+An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and
+associated Amazon EC2 instances that are managed by AWS for an Amazon
+EKS cluster. Each node group uses a version of the Amazon EKS optimized
+Amazon Linux 2 AMI. For more information, see Managed Node Groups
+in the Amazon EKS User Guide." />
 
 
 
@@ -76,7 +82,7 @@ of the cluster." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +90,7 @@ of the cluster." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +102,7 @@ of the cluster." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -123,12 +129,19 @@ of the cluster." />
 only create a node group for your cluster that is equal to the current
 Kubernetes version for the cluster. All node groups are created with the
 latest AMI release version for the respective minor Kubernetes version
-of the cluster.</p>
+of the cluster, unless you deploy a custom AMI using a launch template.
+For more information about using launch templates, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>.</p>
+<p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and
+associated Amazon EC2 instances that are managed by AWS for an Amazon
+EKS cluster. Each node group uses a version of the Amazon EKS optimized
+Amazon Linux 2 AMI. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html'>Managed Node Groups</a>
+in the <em>Amazon EKS User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>eks_create_nodegroup</span>(<span class='no'>clusterName</span>, <span class='no'>nodegroupName</span>, <span class='no'>scalingConfig</span>,
-  <span class='no'>diskSize</span>, <span class='no'>subnets</span>, <span class='no'>instanceTypes</span>, <span class='no'>amiType</span>, <span class='no'>remoteAccess</span>, <span class='no'>nodeRole</span>,
-  <span class='no'>labels</span>, <span class='no'>tags</span>, <span class='no'>clientRequestToken</span>, <span class='no'>version</span>, <span class='no'>releaseVersion</span>)</pre>
+    <pre class="usage"><span class='fu'>eks_create_nodegroup</span><span class='op'>(</span><span class='va'>clusterName</span>, <span class='va'>nodegroupName</span>, <span class='va'>scalingConfig</span>,
+  <span class='va'>diskSize</span>, <span class='va'>subnets</span>, <span class='va'>instanceTypes</span>, <span class='va'>amiType</span>, <span class='va'>remoteAccess</span>, <span class='va'>nodeRole</span>,
+  <span class='va'>labels</span>, <span class='va'>tags</span>, <span class='va'>clientRequestToken</span>, <span class='va'>launchTemplate</span>, <span class='va'>capacityType</span>, <span class='va'>version</span>,
+  <span class='va'>releaseVersion</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,32 +162,57 @@ created for your node group.</p></td>
     <tr>
       <th>diskSize</th>
       <td><p>The root device disk size (in GiB) for your node group instances. The
-default disk size is 20 GiB.</p></td>
+default disk size is 20 GiB. If you specify <code>launchTemplate</code>, then don't
+specify <code>diskSize</code>, or the node group deployment will fail. For more
+information about using launch templates with Amazon EKS, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>
+in the Amazon EKS User Guide.</p></td>
     </tr>
     <tr>
       <th>subnets</th>
       <td><p>[required] The subnets to use for the Auto Scaling group that is created for your
 node group. These subnets must have the tag key
 <code>kubernetes.io/cluster/CLUSTER_NAME</code> with a value of <code>shared</code>, where
-<code>CLUSTER_NAME</code> is replaced with the name of your cluster.</p></td>
+<code>CLUSTER_NAME</code> is replaced with the name of your cluster. If you specify
+<code>launchTemplate</code>, then don't specify
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateNetworkInterface.html'><code>SubnetId</code></a>
+in your launch template, or the node group deployment will fail. For
+more information about using launch templates with Amazon EKS, see
+<a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>
+in the Amazon EKS User Guide.</p></td>
     </tr>
     <tr>
       <th>instanceTypes</th>
-      <td><p>The instance type to use for your node group. Currently, you can specify
-a single instance type for a node group. The default value for this
-parameter is <code>t3.medium</code>. If you choose a GPU instance type, be sure to
-specify the <code>AL2_x86_64_GPU</code> with the <code>amiType</code> parameter.</p></td>
+      <td><p>Specify the instance types for a node group. If you specify a GPU
+instance type, be sure to specify <code>AL2_x86_64_GPU</code> with the <code>amiType</code>
+parameter. If you specify <code>launchTemplate</code>, then you can specify zero or
+one instance type in your launch template <em>or</em> you can specify 0-20
+instance types for <code>instanceTypes</code>. If however, you specify an instance
+type in your launch template <em>and</em> specify any <code>instanceTypes</code>, the node
+group deployment will fail. If you don't specify an instance type in a
+launch template or for <code>instanceTypes</code>, then <code>t3.medium</code> is used, by
+default. If you specify <code>Spot</code> for <code>capacityType</code>, then we recommend
+specifying multiple values for <code>instanceTypes</code>. For more information,
+see Managed node group capacity types and <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>
+in the <em>Amazon EKS User Guide</em>.</p></td>
     </tr>
     <tr>
       <th>amiType</th>
       <td><p>The AMI type for your node group. GPU instance types should use the
-<code>AL2_x86_64_GPU</code> AMI type, which uses the Amazon EKS-optimized Linux AMI
-with GPU support. Non-GPU instances should use the <code>AL2_x86_64</code> AMI
-type, which uses the Amazon EKS-optimized Linux AMI.</p></td>
+<code>AL2_x86_64_GPU</code> AMI type. Non-GPU instances should use the <code>AL2_x86_64</code>
+AMI type. Arm instances should use the <code>AL2_ARM_64</code> AMI type. All types
+use the Amazon EKS optimized Amazon Linux 2 AMI. If you specify
+<code>launchTemplate</code>, and your launch template uses a custom AMI, then don't
+specify <code>amiType</code>, or the node group deployment will fail. For more
+information about using launch templates with Amazon EKS, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>
+in the Amazon EKS User Guide.</p></td>
     </tr>
     <tr>
       <th>remoteAccess</th>
-      <td><p>The remote access (SSH) configuration to use with your node group.</p></td>
+      <td><p>The remote access (SSH) configuration to use with your node group. If
+you specify <code>launchTemplate</code>, then don't specify <code>remoteAccess</code>, or the
+node group deployment will fail. For more information about using launch
+templates with Amazon EKS, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>
+in the Amazon EKS User Guide.</p></td>
     </tr>
     <tr>
       <th>nodeRole</th>
@@ -184,8 +222,13 @@ AWS APIs on your behalf. Worker nodes receive permissions for these API
 calls through an IAM instance profile and associated policies. Before
 you can launch worker nodes and register them into a cluster, you must
 create an IAM role for those worker nodes to use when they are launched.
-For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html'>Amazon EKS Worker Node IAM Role</a>
-in the <strong>Amazon EKS User Guide</strong> .</p></td>
+For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/'>Amazon EKS Worker Node IAM Role</a> in the <strong>Amazon
+EKS User Guide</strong> . If you specify <code>launchTemplate</code>, then don't specify
+<a href='https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html'><code>IamInstanceProfile</code></a>
+in your launch template, or the node group deployment will fail. For
+more information about using launch templates with Amazon EKS, see
+<a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>
+in the Amazon EKS User Guide.</p></td>
     </tr>
     <tr>
       <th>labels</th>
@@ -206,64 +249,82 @@ instances or subnets.</p></td>
 idempotency of the request.</p></td>
     </tr>
     <tr>
+      <th>launchTemplate</th>
+      <td><p>An object representing a node group's launch template specification. If
+specified, then do not specify <code>instanceTypes</code>, <code>diskSize</code>, or
+<code>remoteAccess</code> and make sure that the launch template meets the
+requirements in <code>launchTemplateSpecification</code>.</p></td>
+    </tr>
+    <tr>
+      <th>capacityType</th>
+      <td><p>The capacity type for your node group.</p></td>
+    </tr>
+    <tr>
       <th>version</th>
       <td><p>The Kubernetes version to use for your managed nodes. By default, the
 Kubernetes version of the cluster is used, and this is the only accepted
-specified value.</p></td>
+specified value. If you specify <code>launchTemplate</code>, and your launch
+template uses a custom AMI, then don't specify <code>version</code>, or the node
+group deployment will fail. For more information about using launch
+templates with Amazon EKS, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>
+in the Amazon EKS User Guide.</p></td>
     </tr>
     <tr>
       <th>releaseVersion</th>
-      <td><p>The AMI version of the Amazon EKS-optimized AMI to use with your node
-group. By default, the latest available AMI version for the node
-group\'s current Kubernetes version is used. For more information, see
-<a href='https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html'>Amazon EKS-Optimized Linux AMI Versions</a>
-in the <em>Amazon EKS User Guide</em>.</p></td>
+      <td><p>The AMI version of the Amazon EKS optimized AMI to use with your node
+group. By default, the latest available AMI version for the node group's
+current Kubernetes version is used. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/eks-linux-ami-versions.html'>Amazon EKS optimized Amazon Linux 2 AMI versions</a>
+in the <em>Amazon EKS User Guide</em>. If you specify <code>launchTemplate</code>, and
+your launch template uses a custom AMI, then don't specify
+<code>releaseVersion</code>, or the node group deployment will fail. For more
+information about using launch templates with Amazon EKS, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html'>Launch template support</a>
+in the Amazon EKS User Guide.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and
-associated Amazon EC2 instances that are managed by AWS for an Amazon
-EKS cluster. Each node group uses a version of the Amazon EKS-optimized
-Amazon Linux 2 AMI. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html'>Managed Node Groups</a>
-in the <em>Amazon EKS User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_nodegroup</span>(
-  <span class='kw'>clusterName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>nodegroupName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>scalingConfig</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>minSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>maxSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-    <span class='kw'>desiredSize</span> <span class='kw'>=</span> <span class='fl'>123</span>
-  ),
-  <span class='kw'>diskSize</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>subnets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_nodegroup</span><span class='op'>(</span>
+  clusterName <span class='op'>=</span> <span class='st'>"string"</span>,
+  nodegroupName <span class='op'>=</span> <span class='st'>"string"</span>,
+  scalingConfig <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    minSize <span class='op'>=</span> <span class='fl'>123</span>,
+    maxSize <span class='op'>=</span> <span class='fl'>123</span>,
+    desiredSize <span class='op'>=</span> <span class='fl'>123</span>
+  <span class='op'>)</span>,
+  diskSize <span class='op'>=</span> <span class='fl'>123</span>,
+  subnets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>instanceTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  instanceTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>amiType</span> <span class='kw'>=</span> <span class='st'>"AL2_x86_64"</span><span class='kw'>|</span><span class='st'>"AL2_x86_64_GPU"</span>,
-  <span class='kw'>remoteAccess</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>ec2SshKey</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-    <span class='kw'>sourceSecurityGroups</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  amiType <span class='op'>=</span> <span class='st'>"AL2_x86_64"</span><span class='op'>|</span><span class='st'>"AL2_x86_64_GPU"</span><span class='op'>|</span><span class='st'>"AL2_ARM_64"</span>,
+  remoteAccess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    ec2SshKey <span class='op'>=</span> <span class='st'>"string"</span>,
+    sourceSecurityGroups <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
       <span class='st'>"string"</span>
-    )
-  ),
-  <span class='kw'>nodeRole</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  nodeRole <span class='op'>=</span> <span class='st'>"string"</span>,
+  labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>clientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>version</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>releaseVersion</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+  <span class='op'>)</span>,
+  clientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  launchTemplate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    name <span class='op'>=</span> <span class='st'>"string"</span>,
+    version <span class='op'>=</span> <span class='st'>"string"</span>,
+    id <span class='op'>=</span> <span class='st'>"string"</span>
+  <span class='op'>)</span>,
+  capacityType <span class='op'>=</span> <span class='st'>"ON_DEMAND"</span><span class='op'>|</span><span class='st'>"SPOT"</span>,
+  version <span class='op'>=</span> <span class='st'>"string"</span>,
+  releaseVersion <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -281,7 +342,7 @@ in the <em>Amazon EKS User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

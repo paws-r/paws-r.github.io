@@ -42,7 +42,27 @@
 <meta property="og:title" content="Indicates whether the specified AWS resources are compliant — configservice_describe_compliance_by_resource" />
 <meta property="og:description" content="Indicates whether the specified AWS resources are compliant. If a
 resource is noncompliant, this action returns the number of AWS Config
-rules that the resource does not comply with." />
+rules that the resource does not comply with.
+A resource is compliant if it complies with all the AWS Config rules
+that evaluate it. It is noncompliant if it does not comply with one or
+more of these rules.
+If AWS Config has no current evaluation results for the resource, it
+returns INSUFFICIENT_DATA. This result might indicate one of the
+following conditions about the rules that evaluate the resource:
+AWS Config has never invoked an evaluation for the rule. To check
+whether it has, use the DescribeConfigRuleEvaluationStatus action
+to get the LastSuccessfulInvocationTime and
+LastFailedInvocationTime.
+The rule's AWS Lambda function is failing to send evaluation results
+to AWS Config. Verify that the role that you assigned to your
+configuration recorder includes the config:PutEvaluations
+permission. If the rule is a custom rule, verify that the AWS Lambda
+execution role includes the config:PutEvaluations permission.
+The rule's AWS Lambda function has returned NOT_APPLICABLE for all
+evaluation results. This can occur if the resources were deleted or
+removed from the rule's scope.
+
+" />
 
 
 
@@ -74,7 +94,7 @@ rules that the resource does not comply with." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +102,7 @@ rules that the resource does not comply with." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +114,7 @@ rules that the resource does not comply with." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +140,30 @@ rules that the resource does not comply with." />
     <p>Indicates whether the specified AWS resources are compliant. If a
 resource is noncompliant, this action returns the number of AWS Config
 rules that the resource does not comply with.</p>
+<p>A resource is compliant if it complies with all the AWS Config rules
+that evaluate it. It is noncompliant if it does not comply with one or
+more of these rules.</p>
+<p>If AWS Config has no current evaluation results for the resource, it
+returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the
+following conditions about the rules that evaluate the resource:</p><ul>
+<li><p>AWS Config has never invoked an evaluation for the rule. To check
+whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action
+to get the <code>LastSuccessfulInvocationTime</code> and
+<code>LastFailedInvocationTime</code>.</p></li>
+<li><p>The rule's AWS Lambda function is failing to send evaluation results
+to AWS Config. Verify that the role that you assigned to your
+configuration recorder includes the <code>config:PutEvaluations</code>
+permission. If the rule is a custom rule, verify that the AWS Lambda
+execution role includes the <code>config:PutEvaluations</code> permission.</p></li>
+<li><p>The rule's AWS Lambda function has returned <code>NOT_APPLICABLE</code> for all
+evaluation results. This can occur if the resources were deleted or
+removed from the rule's scope.</p></li>
+</ul>
+
     </div>
 
-    <pre class="usage"><span class='fu'>configservice_describe_compliance_by_resource</span>(<span class='no'>ResourceType</span>, <span class='no'>ResourceId</span>,
-  <span class='no'>ComplianceTypes</span>, <span class='no'>Limit</span>, <span class='no'>NextToken</span>)</pre>
+    <pre class="usage"><span class='fu'>configservice_describe_compliance_by_resource</span><span class='op'>(</span><span class='va'>ResourceType</span>, <span class='va'>ResourceId</span>,
+  <span class='va'>ComplianceTypes</span>, <span class='va'>Limit</span>, <span class='va'>NextToken</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,40 +199,19 @@ the next page of results in a paginated response.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>A resource is compliant if it complies with all the AWS Config rules
-that evaluate it. It is noncompliant if it does not comply with one or
-more of these rules.</p>
-<p>If AWS Config has no current evaluation results for the resource, it
-returns <code>INSUFFICIENT_DATA</code>. This result might indicate one of the
-following conditions about the rules that evaluate the resource:</p><ul>
-<li><p>AWS Config has never invoked an evaluation for the rule. To check
-whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action
-to get the <code>LastSuccessfulInvocationTime</code> and
-<code>LastFailedInvocationTime</code>.</p></li>
-<li><p>The rule\'s AWS Lambda function is failing to send evaluation
-results to AWS Config. Verify that the role that you assigned to
-your configuration recorder includes the <code>config:PutEvaluations</code>
-permission. If the rule is a custom rule, verify that the AWS Lambda
-execution role includes the <code>config:PutEvaluations</code> permission.</p></li>
-<li><p>The rule\'s AWS Lambda function has returned <code>NOT_APPLICABLE</code> for
-all evaluation results. This can occur if the resources were deleted
-or removed from the rule\'s scope.</p></li>
-</ul>
-
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>describe_compliance_by_resource</span>(
-  <span class='kw'>ResourceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ResourceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>ComplianceTypes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='st'>"COMPLIANT"</span><span class='kw'>|</span><span class='st'>"NON_COMPLIANT"</span><span class='kw'>|</span><span class='st'>"NOT_APPLICABLE"</span><span class='kw'>|</span><span class='st'>"INSUFFICIENT_DATA"</span>
-  ),
-  <span class='kw'>Limit</span> <span class='kw'>=</span> <span class='fl'>123</span>,
-  <span class='kw'>NextToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>describe_compliance_by_resource</span><span class='op'>(</span>
+  ResourceType <span class='op'>=</span> <span class='st'>"string"</span>,
+  ResourceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  ComplianceTypes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='st'>"COMPLIANT"</span><span class='op'>|</span><span class='st'>"NON_COMPLIANT"</span><span class='op'>|</span><span class='st'>"NOT_APPLICABLE"</span><span class='op'>|</span><span class='st'>"INSUFFICIENT_DATA"</span>
+  <span class='op'>)</span>,
+  Limit <span class='op'>=</span> <span class='fl'>123</span>,
+  NextToken <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -210,7 +229,7 @@ or removed from the rule\'s scope.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

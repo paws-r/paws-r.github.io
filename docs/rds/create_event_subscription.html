@@ -44,7 +44,25 @@
 topic Amazon Resource Name (ARN) created by either the RDS console, the
 SNS console, or the SNS API. To obtain an ARN with SNS, you must create
 a topic in Amazon SNS and subscribe to the topic. The ARN is displayed
-in the SNS console." />
+in the SNS console.
+You can specify the type of source (SourceType) that you want to be
+notified of and provide a list of RDS sources (SourceIds) that
+triggers the events. You can also provide a list of event categories
+(EventCategories) for events that you want to be notified of. For
+example, you can specify SourceType = db-instance, SourceIds =
+mydbinstance1, mydbinstance2 and EventCategories = Availability,
+Backup.
+If you specify both the SourceType and SourceIds, such as
+SourceType = db-instance and SourceIdentifier = myDBInstance1,
+you are notified of all the db-instance events for the specified
+source. If you specify a SourceType but do not specify a
+SourceIdentifier, you receive notice of the events for that source
+type for all your RDS sources. If you don't specify either the
+SourceType or the SourceIdentifier, you are notified of events
+generated from all RDS sources belonging to your customer account.
+RDS event notification is only available for unencrypted SNS topics. If
+you specify an encrypted SNS topic, event notifications aren't sent for
+the topic." />
 
 
 
@@ -76,7 +94,7 @@ in the SNS console." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -84,7 +102,7 @@ in the SNS console." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,7 +114,7 @@ in the SNS console." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -124,10 +142,28 @@ topic Amazon Resource Name (ARN) created by either the RDS console, the
 SNS console, or the SNS API. To obtain an ARN with SNS, you must create
 a topic in Amazon SNS and subscribe to the topic. The ARN is displayed
 in the SNS console.</p>
+<p>You can specify the type of source (<code>SourceType</code>) that you want to be
+notified of and provide a list of RDS sources (<code>SourceIds</code>) that
+triggers the events. You can also provide a list of event categories
+(<code>EventCategories</code>) for events that you want to be notified of. For
+example, you can specify <code>SourceType</code> = <code>db-instance</code>, <code>SourceIds</code> =
+<code>mydbinstance1</code>, <code>mydbinstance2</code> and <code>EventCategories</code> = <code>Availability</code>,
+<code>Backup</code>.</p>
+<p>If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as
+<code>SourceType</code> = <code>db-instance</code> and <code>SourceIdentifier</code> = <code>myDBInstance1</code>,
+you are notified of all the <code>db-instance</code> events for the specified
+source. If you specify a <code>SourceType</code> but do not specify a
+<code>SourceIdentifier</code>, you receive notice of the events for that source
+type for all your RDS sources. If you don't specify either the
+SourceType or the <code>SourceIdentifier</code>, you are notified of events
+generated from all RDS sources belonging to your customer account.</p>
+<p>RDS event notification is only available for unencrypted SNS topics. If
+you specify an encrypted SNS topic, event notifications aren't sent for
+the topic.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rds_create_event_subscription</span>(<span class='no'>SubscriptionName</span>, <span class='no'>SnsTopicArn</span>, <span class='no'>SourceType</span>,
-  <span class='no'>EventCategories</span>, <span class='no'>SourceIds</span>, <span class='no'>Enabled</span>, <span class='no'>Tags</span>)</pre>
+    <pre class="usage"><span class='fu'>rds_create_event_subscription</span><span class='op'>(</span><span class='va'>SubscriptionName</span>, <span class='va'>SnsTopicArn</span>, <span class='va'>SourceType</span>,
+  <span class='va'>EventCategories</span>, <span class='va'>SourceIds</span>, <span class='va'>Enabled</span>, <span class='va'>Tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,43 +182,49 @@ and subscribe to it.</p></td>
     <tr>
       <th>SourceType</th>
       <td><p>The type of source that is generating the events. For example, if you
-want to be notified of events generated by a DB instance, you would set
-this parameter to db-instance. if this value isn\'t specified, all
-events are returned.</p>
-<p>Valid values: <code>db-instance</code> \| <code>db-cluster</code> \| <code>db-parameter-group</code> \|
-<code>db-security-group</code> \| <code>db-snapshot</code> \| <code>db-cluster-snapshot</code></p></td>
+want to be notified of events generated by a DB instance, you set this
+parameter to <code>db-instance</code>. If this value isn't specified, all events
+are returned.</p>
+<p>Valid values: <code>db-instance</code> | <code>db-cluster</code> | <code>db-parameter-group</code> |
+<code>db-security-group</code> | <code>db-snapshot</code> | <code>db-cluster-snapshot</code></p></td>
     </tr>
     <tr>
       <th>EventCategories</th>
-      <td><p>A list of event categories for a SourceType that you want to subscribe
-to. You can see a list of the categories for a given SourceType in the
+      <td><p>A list of event categories for a particular source type (<code>SourceType</code>)
+that you want to subscribe to. You can see a list of the categories for
+a given source type in
 <a href='https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.html'>Events</a>
-topic in the <em>Amazon RDS User Guide</em> or by using the
-<strong>DescribeEventCategories</strong> action.</p></td>
+in the <em>Amazon RDS User Guide</em> or by using the <code>DescribeEventCategories</code>
+operation.</p></td>
     </tr>
     <tr>
       <th>SourceIds</th>
       <td><p>The list of identifiers of the event sources for which events are
 returned. If not specified, then all sources are included in the
 response. An identifier must begin with a letter and must contain only
-ASCII letters, digits, and hyphens. It can\'t end with a hyphen or
+ASCII letters, digits, and hyphens. It can't end with a hyphen or
 contain two consecutive hyphens.</p>
 <p>Constraints:</p><ul>
-<li><p>If SourceIds are supplied, SourceType must also be provided.</p></li>
-<li><p>If the source type is a DB instance, then a <code>DBInstanceIdentifier</code>
+<li><p>If a <code>SourceIds</code> value is supplied, <code>SourceType</code> must also be
+provided.</p></li>
+<li><p>If the source type is a DB instance, a <code>DBInstanceIdentifier</code> value
 must be supplied.</p></li>
-<li><p>If the source type is a DB security group, a <code>DBSecurityGroupName</code>
+<li><p>If the source type is a DB cluster, a <code>DBClusterIdentifier</code> value
 must be supplied.</p></li>
 <li><p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code>
+value must be supplied.</p></li>
+<li><p>If the source type is a DB security group, a <code>DBSecurityGroupName</code>
+value must be supplied.</p></li>
+<li><p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> value
 must be supplied.</p></li>
-<li><p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> must
-be supplied.</p></li>
+<li><p>If the source type is a DB cluster snapshot, a
+<code>DBClusterSnapshotIdentifier</code> value must be supplied.</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>Enabled</th>
       <td><p>A value that indicates whether to activate the subscription. If the
-event notification subscription isn\'t activated, the subscription is
+event notification subscription isn't activated, the subscription is
 created but not active.</p></td>
     </tr>
     <tr>
@@ -191,46 +233,28 @@ created but not active.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>You can specify the type of source (SourceType) you want to be notified
-of, provide a list of RDS sources (SourceIds) that triggers the events,
-and provide a list of event categories (EventCategories) for events you
-want to be notified of. For example, you can specify SourceType =
-db-instance, SourceIds = mydbinstance1, mydbinstance2 and
-EventCategories = Availability, Backup.</p>
-<p>If you specify both the SourceType and SourceIds, such as SourceType =
-db-instance and SourceIdentifier = myDBInstance1, you are notified of
-all the db-instance events for the specified source. If you specify a
-SourceType but do not specify a SourceIdentifier, you receive notice of
-the events for that source type for all your RDS sources. If you don\'t
-specify either the SourceType or the SourceIdentifier, you are notified
-of events generated from all RDS sources belonging to your customer
-account.</p>
-<p>RDS event notification is only available for unencrypted SNS topics. If
-you specify an encrypted SNS topic, event notifications aren\'t sent for
-the topic.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_event_subscription</span>(
-  <span class='kw'>SubscriptionName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SnsTopicArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>SourceType</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>EventCategories</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_event_subscription</span><span class='op'>(</span>
+  SubscriptionName <span class='op'>=</span> <span class='st'>"string"</span>,
+  SnsTopicArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  SourceType <span class='op'>=</span> <span class='st'>"string"</span>,
+  EventCategories <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>SourceIds</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  SourceIds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>Enabled</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>Tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>Key</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>Value</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-    )
-  )
-)</pre>
+  <span class='op'>)</span>,
+  Enabled <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  Tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      Key <span class='op'>=</span> <span class='st'>"string"</span>,
+      Value <span class='op'>=</span> <span class='st'>"string"</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -248,7 +272,7 @@ the topic.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

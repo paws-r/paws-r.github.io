@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Associates an Elastic IP address with an instance or a network interface — ec2_associate_address • paws</title>
+<title>Associates an Elastic IP address, or carrier IP address (for instances
+that are in subnets in Wavelength Zones) with an instance or a network
+interface — ec2_associate_address • paws</title>
 
 
 <!-- jquery -->
@@ -39,10 +41,36 @@
 
 
 
-<meta property="og:title" content="Associates an Elastic IP address with an instance or a network interface — ec2_associate_address" />
-<meta property="og:description" content="Associates an Elastic IP address with an instance or a network
+<meta property="og:title" content="Associates an Elastic IP address, or carrier IP address (for instances
+that are in subnets in Wavelength Zones) with an instance or a network
+interface — ec2_associate_address" />
+<meta property="og:description" content="Associates an Elastic IP address, or carrier IP address (for instances
+that are in subnets in Wavelength Zones) with an instance or a network
 interface. Before you can use an Elastic IP address, you must allocate
-it to your account." />
+it to your account.
+An Elastic IP address is for use in either the EC2-Classic platform or
+in a VPC. For more information, see Elastic IP Addresses
+in the Amazon Elastic Compute Cloud User Guide.
+[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP
+address is already associated with a different instance, it is
+disassociated from that instance and associated with the specified
+instance. If you associate an Elastic IP address with an instance that
+has an existing Elastic IP address, the existing address is
+disassociated from the instance, but remains allocated to your account.
+[VPC in an EC2-Classic account] If you don't specify a private IP
+address, the Elastic IP address is associated with the primary IP
+address. If the Elastic IP address is already associated with a
+different instance or a network interface, you get an error unless you
+allow reassociation. You cannot associate an Elastic IP address with an
+instance or network interface that has an existing Elastic IP address.
+[Subnets in Wavelength Zones] You can associate an IP address from the
+telecommunication carrier to the instance or network interface.
+You cannot associate an Elastic IP address with an interface in a
+different network border group.
+This is an idempotent operation. If you perform the operation more than
+once, Amazon EC2 doesn't return an error, and you may be charged for
+each time the Elastic IP address is remapped to the same instance. For
+more information, see the Elastic IP Addresses section of Amazon EC2 Pricing." />
 
 
 
@@ -74,7 +102,7 @@ it to your account." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +110,7 @@ it to your account." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +122,7 @@ it to your account." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -111,19 +139,45 @@ it to your account." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Associates an Elastic IP address with an instance or a network interface</h1>
+    <h1>Associates an Elastic IP address, or carrier IP address (for instances
+that are in subnets in Wavelength Zones) with an instance or a network
+interface</h1>
     <small class="dont-index">Source: <a href='https://github.com/paws-r/paws/blob/master/R/ec2_operations.R'><code>R/ec2_operations.R</code></a></small>
     <div class="hidden name"><code>ec2_associate_address.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Associates an Elastic IP address with an instance or a network
+    <p>Associates an Elastic IP address, or carrier IP address (for instances
+that are in subnets in Wavelength Zones) with an instance or a network
 interface. Before you can use an Elastic IP address, you must allocate
 it to your account.</p>
+<p>An Elastic IP address is for use in either the EC2-Classic platform or
+in a VPC. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html'>Elastic IP Addresses</a>
+in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
+<p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP
+address is already associated with a different instance, it is
+disassociated from that instance and associated with the specified
+instance. If you associate an Elastic IP address with an instance that
+has an existing Elastic IP address, the existing address is
+disassociated from the instance, but remains allocated to your account.</p>
+<p>[VPC in an EC2-Classic account] If you don't specify a private IP
+address, the Elastic IP address is associated with the primary IP
+address. If the Elastic IP address is already associated with a
+different instance or a network interface, you get an error unless you
+allow reassociation. You cannot associate an Elastic IP address with an
+instance or network interface that has an existing Elastic IP address.</p>
+<p>[Subnets in Wavelength Zones] You can associate an IP address from the
+telecommunication carrier to the instance or network interface.</p>
+<p>You cannot associate an Elastic IP address with an interface in a
+different network border group.</p>
+<p>This is an idempotent operation. If you perform the operation more than
+once, Amazon EC2 doesn't return an error, and you may be charged for
+each time the Elastic IP address is remapped to the same instance. For
+more information, see the <em>Elastic IP Addresses</em> section of <a href='https://aws.amazon.com/ec2/pricing/'>Amazon EC2 Pricing</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ec2_associate_address</span>(<span class='no'>AllocationId</span>, <span class='no'>InstanceId</span>, <span class='no'>PublicIp</span>,
-  <span class='no'>AllowReassociation</span>, <span class='no'>DryRun</span>, <span class='no'>NetworkInterfaceId</span>, <span class='no'>PrivateIpAddress</span>)</pre>
+    <pre class="usage"><span class='fu'>ec2_associate_address</span><span class='op'>(</span><span class='va'>AllocationId</span>, <span class='va'>InstanceId</span>, <span class='va'>PublicIp</span>,
+  <span class='va'>AllowReassociation</span>, <span class='va'>DryRun</span>, <span class='va'>NetworkInterfaceId</span>, <span class='va'>PrivateIpAddress</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,66 +230,46 @@ Elastic IP address is associated with the primary private IP address.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>An Elastic IP address is for use in either the EC2-Classic platform or
-in a VPC. For more information, see <a href='https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html'>Elastic IP Addresses</a>
-in the <em>Amazon Elastic Compute Cloud User Guide</em>.</p>
-<p>[EC2-Classic, VPC in an EC2-VPC-only account] If the Elastic IP
-address is already associated with a different instance, it is
-disassociated from that instance and associated with the specified
-instance. If you associate an Elastic IP address with an instance that
-has an existing Elastic IP address, the existing address is
-disassociated from the instance, but remains allocated to your account.</p>
-<p>[VPC in an EC2-Classic account] If you don\'t specify a private IP
-address, the Elastic IP address is associated with the primary IP
-address. If the Elastic IP address is already associated with a
-different instance or a network interface, you get an error unless you
-allow reassociation. You cannot associate an Elastic IP address with an
-instance or network interface that has an existing Elastic IP address.</p>
-<p>You cannot associate an Elastic IP address with an interface in a
-different network border group.</p>
-<p>This is an idempotent operation. If you perform the operation more than
-once, Amazon EC2 doesn\'t return an error, and you may be charged for
-each time the Elastic IP address is remapped to the same instance. For
-more information, see the <em>Elastic IP Addresses</em> section of <a href='http://aws.amazon.com/ec2/pricing/'>Amazon EC2 Pricing</a>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>associate_address</span>(
-  <span class='kw'>AllocationId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>InstanceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PublicIp</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>AllowReassociation</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>DryRun</span> <span class='kw'>=</span> <span class='fl'>TRUE</span><span class='kw'>|</span><span class='fl'>FALSE</span>,
-  <span class='kw'>NetworkInterfaceId</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>PrivateIpAddress</span> <span class='kw'>=</span> <span class='st'>"string"</span>
-)</pre>
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>associate_address</span><span class='op'>(</span>
+  AllocationId <span class='op'>=</span> <span class='st'>"string"</span>,
+  InstanceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PublicIp <span class='op'>=</span> <span class='st'>"string"</span>,
+  AllowReassociation <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  DryRun <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>|</span><span class='cn'>FALSE</span>,
+  NetworkInterfaceId <span class='op'>=</span> <span class='st'>"string"</span>,
+  PrivateIpAddress <span class='op'>=</span> <span class='st'>"string"</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This example associates the specified Elastic IP address with the</span>
 <span class='co'># specified instance in a VPC.</span>
-<span class='no'>svc</span>$<span class='fu'>associate_address</span>(
-  <span class='kw'>AllocationId</span> <span class='kw'>=</span> <span class='st'>"eipalloc-64d5890a"</span>,
-  <span class='kw'>InstanceId</span> <span class='kw'>=</span> <span class='st'>"i-0b263919b6498b123"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>associate_address</span><span class='op'>(</span>
+  AllocationId <span class='op'>=</span> <span class='st'>"eipalloc-64d5890a"</span>,
+  InstanceId <span class='op'>=</span> <span class='st'>"i-0b263919b6498b123"</span>
+<span class='op'>)</span>
 
 <span class='co'># This example associates the specified Elastic IP address with the</span>
 <span class='co'># specified network interface.</span>
-<span class='no'>svc</span>$<span class='fu'>associate_address</span>(
-  <span class='kw'>AllocationId</span> <span class='kw'>=</span> <span class='st'>"eipalloc-64d5890a"</span>,
-  <span class='kw'>NetworkInterfaceId</span> <span class='kw'>=</span> <span class='st'>"eni-1a2b3c4d"</span>
-)
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>associate_address</span><span class='op'>(</span>
+  AllocationId <span class='op'>=</span> <span class='st'>"eipalloc-64d5890a"</span>,
+  NetworkInterfaceId <span class='op'>=</span> <span class='st'>"eni-1a2b3c4d"</span>
+<span class='op'>)</span>
 
 <span class='co'># This example associates an Elastic IP address with an instance in</span>
 <span class='co'># EC2-Classic.</span>
-<span class='no'>svc</span>$<span class='fu'>associate_address</span>(
-  <span class='kw'>InstanceId</span> <span class='kw'>=</span> <span class='st'>"i-07ffe74c7330ebf53"</span>,
-  <span class='kw'>PublicIp</span> <span class='kw'>=</span> <span class='st'>"198.51.100.0"</span>
-)
-}</pre>
+<span class='va'>svc</span><span class='op'>$</span><span class='fu'>associate_address</span><span class='op'>(</span>
+  InstanceId <span class='op'>=</span> <span class='st'>"i-07ffe74c7330ebf53"</span>,
+  PublicIp <span class='op'>=</span> <span class='st'>"198.51.100.0"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -251,7 +285,7 @@ more information, see the <em>Elastic IP Addresses</em> section of <a href='http
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

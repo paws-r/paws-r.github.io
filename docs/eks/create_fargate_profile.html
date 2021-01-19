@@ -42,7 +42,32 @@
 <meta property="og:title" content="Creates an AWS Fargate profile for your Amazon EKS cluster — eks_create_fargate_profile" />
 <meta property="og:description" content="Creates an AWS Fargate profile for your Amazon EKS cluster. You must
 have at least one Fargate profile in a cluster to be able to run pods on
-Fargate." />
+Fargate.
+The Fargate profile allows an administrator to declare which pods run on
+Fargate and specify which pods run on which Fargate profile. This
+declaration is done through the profile’s selectors. Each profile can
+have up to five selectors that contain a namespace and labels. A
+namespace is required for every selector. The label field consists of
+multiple optional key-value pairs. Pods that match the selectors are
+scheduled on Fargate. If a to-be-scheduled pod matches any of the
+selectors in the Fargate profile, then that pod is run on Fargate.
+When you create a Fargate profile, you must specify a pod execution role
+to use with the pods that are scheduled with the profile. This role is
+added to the cluster's Kubernetes Role Based Access Control
+(RBAC) for authorization so that the kubelet that is running on the
+Fargate infrastructure can register with your Amazon EKS cluster so that
+it can appear in your cluster as a node. The pod execution role also
+provides IAM permissions to the Fargate infrastructure to allow read
+access to Amazon ECR image repositories. For more information, see Pod Execution Role
+in the Amazon EKS User Guide.
+Fargate profiles are immutable. However, you can create a new updated
+profile to replace an existing profile and then delete the original
+after the updated profile has finished creating.
+If any Fargate profiles in a cluster are in the DELETING status, you
+must wait for that Fargate profile to finish deleting before you can
+create any other profiles in that cluster.
+For more information, see AWS Fargate Profile
+in the Amazon EKS User Guide." />
 
 
 
@@ -74,7 +99,7 @@ Fargate." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="..">paws</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
       </span>
     </div>
 
@@ -82,7 +107,7 @@ Fargate." />
       <ul class="nav navbar-nav">
         <li>
   <a href="..">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,7 +119,7 @@ Fargate." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/paws-r/paws/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -120,10 +145,35 @@ Fargate." />
     <p>Creates an AWS Fargate profile for your Amazon EKS cluster. You must
 have at least one Fargate profile in a cluster to be able to run pods on
 Fargate.</p>
+<p>The Fargate profile allows an administrator to declare which pods run on
+Fargate and specify which pods run on which Fargate profile. This
+declaration is done through the profile’s selectors. Each profile can
+have up to five selectors that contain a namespace and labels. A
+namespace is required for every selector. The label field consists of
+multiple optional key-value pairs. Pods that match the selectors are
+scheduled on Fargate. If a to-be-scheduled pod matches any of the
+selectors in the Fargate profile, then that pod is run on Fargate.</p>
+<p>When you create a Fargate profile, you must specify a pod execution role
+to use with the pods that are scheduled with the profile. This role is
+added to the cluster's Kubernetes <a href='https://kubernetes.io/docs/reference/access-authn-authz/rbac/'>Role Based Access Control</a>
+(RBAC) for authorization so that the <code>kubelet</code> that is running on the
+Fargate infrastructure can register with your Amazon EKS cluster so that
+it can appear in your cluster as a node. The pod execution role also
+provides IAM permissions to the Fargate infrastructure to allow read
+access to Amazon ECR image repositories. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html'>Pod Execution Role</a>
+in the <em>Amazon EKS User Guide</em>.</p>
+<p>Fargate profiles are immutable. However, you can create a new updated
+profile to replace an existing profile and then delete the original
+after the updated profile has finished creating.</p>
+<p>If any Fargate profiles in a cluster are in the <code>DELETING</code> status, you
+must wait for that Fargate profile to finish deleting before you can
+create any other profiles in that cluster.</p>
+<p>For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html'>AWS Fargate Profile</a>
+in the <em>Amazon EKS User Guide</em>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>eks_create_fargate_profile</span>(<span class='no'>fargateProfileName</span>, <span class='no'>clusterName</span>,
-  <span class='no'>podExecutionRoleArn</span>, <span class='no'>subnets</span>, <span class='no'>selectors</span>, <span class='no'>clientRequestToken</span>, <span class='no'>tags</span>)</pre>
+    <pre class="usage"><span class='fu'>eks_create_fargate_profile</span><span class='op'>(</span><span class='va'>fargateProfileName</span>, <span class='va'>clusterName</span>,
+  <span class='va'>podExecutionRoleArn</span>, <span class='va'>subnets</span>, <span class='va'>selectors</span>, <span class='va'>clientRequestToken</span>, <span class='va'>tags</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,56 +224,30 @@ such as the pods that are scheduled with it.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The Fargate profile allows an administrator to declare which pods run on
-Fargate and specify which pods run on which Fargate profile. This
-declaration is done through the profile's selectors. Each profile can
-have up to five selectors that contain a namespace and labels. A
-namespace is required for every selector. The label field consists of
-multiple optional key-value pairs. Pods that match the selectors are
-scheduled on Fargate. If a to-be-scheduled pod matches any of the
-selectors in the Fargate profile, then that pod is run on Fargate.</p>
-<p>When you create a Fargate profile, you must specify a pod execution role
-to use with the pods that are scheduled with the profile. This role is
-added to the cluster\'s Kubernetes <a href='https://kubernetes.io/docs/admin/authorization/rbac/'>Role Based Access Control</a> (RBAC)
-for authorization so that the <code>kubelet</code> that is running on the Fargate
-infrastructure can register with your Amazon EKS cluster so that it can
-appear in your cluster as a node. The pod execution role also provides
-IAM permissions to the Fargate infrastructure to allow read access to
-Amazon ECR image repositories. For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/pod-execution-role.html'>Pod Execution Role</a>
-in the <em>Amazon EKS User Guide</em>.</p>
-<p>Fargate profiles are immutable. However, you can create a new updated
-profile to replace an existing profile and then delete the original
-after the updated profile has finished creating.</p>
-<p>If any Fargate profiles in a cluster are in the <code>DELETING</code> status, you
-must wait for that Fargate profile to finish deleting before you can
-create any other profiles in that cluster.</p>
-<p>For more information, see <a href='https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html'>AWS Fargate Profile</a>
-in the <em>Amazon EKS User Guide</em>.</p>
     <h2 class="hasAnchor" id="request-syntax"><a class="anchor" href="#request-syntax"></a>Request syntax</h2>
 
     
-<pre><span class='no'>svc</span>$<span class='fu'>create_fargate_profile</span>(
-  <span class='kw'>fargateProfileName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>clusterName</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>podExecutionRoleArn</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>subnets</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+<pre><span class='va'>svc</span><span class='op'>$</span><span class='fu'>create_fargate_profile</span><span class='op'>(</span>
+  fargateProfileName <span class='op'>=</span> <span class='st'>"string"</span>,
+  clusterName <span class='op'>=</span> <span class='st'>"string"</span>,
+  podExecutionRoleArn <span class='op'>=</span> <span class='st'>"string"</span>,
+  subnets <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  ),
-  <span class='kw'>selectors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>namespace</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-      <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  <span class='op'>)</span>,
+  selectors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      namespace <span class='op'>=</span> <span class='st'>"string"</span>,
+      labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
         <span class='st'>"string"</span>
-      )
-    )
-  ),
-  <span class='kw'>clientRequestToken</span> <span class='kw'>=</span> <span class='st'>"string"</span>,
-  <span class='kw'>tags</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>)</span>,
+  clientRequestToken <span class='op'>=</span> <span class='st'>"string"</span>,
+  tags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
     <span class='st'>"string"</span>
-  )
-)</pre>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
   </div>
@@ -241,7 +265,7 @@ in the <em>Amazon EKS User Guide</em>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
