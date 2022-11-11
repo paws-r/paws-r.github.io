@@ -41,10 +41,14 @@ build_site <- function (src, dst) {
 
 # Get the index for the CRAN version of Paws.
 dir <- tempdir()
-build_site("../paws/cran/paws", dir)
+paws_dir <- "../paws/cran/paws"
+roxygen2::roxygenise(paws_dir, roclets = c("rd"))
+build_site(paws_dir, dir)
 
 # Generate all the documentation.
-build_site("../paws/paws", "./docs")
+docs_dir <- "../paws/paws"
+roxygen2::roxygenise(paws_dir, roclets = c("rd"))
+build_site(docs_dir, "./docs")
 
 # Copy the CRAN index.
 file.copy(file.path(dir, "reference/index.html"), "./docs/reference", overwrite = TRUE)
