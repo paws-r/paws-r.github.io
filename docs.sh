@@ -14,7 +14,7 @@ find docs -name "*.html" -exec sed -i.bkp -E 's/(href|src)="\.\.\/([^"]*)"/href=
 find docs -name "*.html" -exec sed -i.bkp -E '/(reference|news)\/index.html/d' {} +
 
 # In each service's index, replace links to 'xxx_yyy.html' with links to 'yyy.html'.
-find docs -name "index.html" -exec sed -i.bkp -E "s/href='([^_]+)_(.+).html'/href='\2.html'/g" {} +
+find docs -name "index.html" -exec sed -i.bkp -E 's/href="([a-zA-Z0-9]+)_([a-zA-Z0-9_]+).html"/href="\2.html"/g' {} +
 
 # Replace links to 'xxx/index.html' with links to 'xxx'.
 find docs -name "*.html" -exec sed -i.bkp -E 's/href="(.+)\/index.html"/href="\1"/g' {} +
@@ -24,4 +24,4 @@ find docs -name "*.html" -exec sed -i.bkp -E 's/(# NOT RUN \{|# \})//g' {} +
 
 # Delete empty comment lines in examples.
 find docs -name "*.html" -exec perl -i.bkp -p0e "s/\n?<span class='co'><\/span>\n?//g" {} +
-find docs -name "*.bak" -exec rm {} +
+find docs -name "*.bkp" -exec rm {} +
