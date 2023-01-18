@@ -4,12 +4,12 @@ get_paths <- function(x) {
   base <- basename(x)
   service <- gsub("^([^_]+)_(.*)", "\\1", base)
   file <- gsub("^([^_]+)_(.*)", "\\2", base)
-  
+
   # Service index pages, e.g. acm.html for ACM.
   index <- !grepl("_", base)
   service <- ifelse(index, tools::file_path_sans_ext(base), service)
   file <- ifelse(index, "index.html", file)
-  
+
   result <- file.path(service, file)
   return(result)
 }
@@ -17,7 +17,7 @@ get_paths <- function(x) {
 build_site <- function (src, dst) {
   attach(loadNamespace("pkgdown"), name = "pkgdown_all")
   pkg <- section_init(normalizePath(src), depth = 0, override = list())
-  
+
   pkg$dst_path <- normalizePath(dst)
   pkg$topics$file_out <- get_paths(pkg$topics$file_out)
 
@@ -28,13 +28,13 @@ build_site <- function (src, dst) {
     path_out <- file.path(pkg$dst_path, "reference", dir)
     dir.create(path_out, showWarnings = FALSE, recursive = TRUE)
   }
-  
+
   rule("Building pkgdown site", line = 2)
   cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
   cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
   init_site(pkg)
-  build_reference(pkg, lazy = FALSE, devel = FALSE, examples = FALSE, 
-                  run_dont_run = FALSE, seed = 1014, override = list(), 
+  build_reference(pkg, lazy = FALSE, devel = FALSE, examples = FALSE,
+                  run_dont_run = FALSE, seed = 1014, override = list(),
                   preview = FALSE)
   detach("pkgdown_all")
 }
@@ -47,7 +47,8 @@ build_site(paws_dir, dir)
 
 # Generate all the documentation.
 docs_dir <- "../paws/paws"
-roxygen2::roxygenise(paws_dir, roclets = c("rd"))
+roxygen2::update_collate(docs_dir)
+roxygen2::roxygenise(docs_dir, roclets = c("rd"))
 build_site(docs_dir, "./docs")
 
 # Copy the CRAN index.
