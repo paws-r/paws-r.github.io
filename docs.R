@@ -29,9 +29,9 @@ build_site <- function (src, dst) {
     dir.create(path_out, showWarnings = FALSE, recursive = TRUE)
   }
 
-  rule("Building pkgdown site", line = 2)
-  cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
-  cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
+  cli::rule("Building pkgdown site", line = 2)
+  cli::cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
+  cli::cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
   init_site(pkg)
   build_reference(pkg, lazy = FALSE, devel = FALSE, examples = FALSE,
                   run_dont_run = FALSE, seed = 1014, override = list(),
@@ -41,12 +41,12 @@ build_site <- function (src, dst) {
 
 # Get the index for the CRAN version of Paws.
 dir <- tempdir()
-paws_dir <- "../paws/cran/paws"
+paws_dir <- "vendor/paws/cran/paws"
 roxygen2::roxygenise(paws_dir, roclets = c("rd"))
 build_site(paws_dir, dir)
 
 # Generate all the documentation.
-docs_dir <- "../paws/paws"
+docs_dir <- "vendor/paws/paws"
 roxygen2::update_collate(docs_dir)
 roxygen2::roxygenise(docs_dir, roclets = c("rd"))
 build_site(docs_dir, "./docs")
