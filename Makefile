@@ -10,6 +10,12 @@ export R_USER
 
 .PHONY: all
 
+update-deps:
+	@echo "update paws dependency"
+	@git submodules update --remotes
+	@git submodule init
+	@git submodule update
+
 all:
 	@rm -fr docs
 	@Rscript docs.R
