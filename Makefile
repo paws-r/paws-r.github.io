@@ -12,7 +12,7 @@ export R_USER
 
 update-deps:
 	@echo "update paws dependency"
-	@git submodule update --remotes
+	@git submodule update --remote
 	@git submodule init
 	@git submodule update
 
