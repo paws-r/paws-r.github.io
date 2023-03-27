@@ -36,7 +36,7 @@ jobs:
 
       - name: Install Website Dependencies
         run: |
-          install.packages(c('cli', 'pkgdown', 'roxygen2'))
+          install.packages(c('cli', 'pkgdown', 'roxygen2', 'desc'))
         shell: Rscript {0}
 
       - name: Create Branch
@@ -49,15 +49,21 @@ jobs:
         run: |
           make update-deps
           make all
+          
+      - name: Get Paws SDK Version
+        id: version
+        run: |
+          version=$(Rscript get_version.R)
+          pr_body="Regenerate Paws SDK Website: ${version}"
 
       - name: Create Commit Message
         run: |
           git add .
-          git commit -m "Regenerate Paws Website"
+          git commit -m "Regenerate Paws Website Version: ${{ steps.version.outputs.version }}"
           git push origin regen_paws_website
 
       - name: Create Github Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create --title "Regenerate Paws" --body "Regenerate Paws SDK Website"
+          gh pr create --title "Regenerate Paws" --body "${{ steps.version.outputs.pr_body }}"
