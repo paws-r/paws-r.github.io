@@ -36,7 +36,24 @@ jobs:
 
       - name: Install Website Dependencies
         run: |
-          install.packages(c('cli', 'pkgdown', 'roxygen2', 'desc'))
+          install.packages(c('cli', 'pkgdown', 'roxygen2', 'remotes'))
+        shell: Rscript {0}
+        
+      - name: Get Paws Submodule
+        run: |
+          make update-deps
+        
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+        
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('vendor/paws/cran')
         shell: Rscript {0}
 
       - name: Create Branch
@@ -47,7 +64,6 @@ jobs:
 
       - name: Regenerate Paws Website
         run: |
-          make update-deps
           make all
           
       - name: Get Paws SDK Version
