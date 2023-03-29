@@ -1,3 +1,19 @@
+library(optparse)
+
+option_list <- list(
+  make_option(c("--docs"),
+    action = "store_true", default = TRUE,
+    help = "Generate all the documentation"
+  ),
+  make_option(c("--index"),
+    action = "store_false",
+    dest = "docs", help = "Get the index for the CRAN version of Paws."
+  )
+)
+
+# get command line options
+opt <- parse_args(OptionParser(option_list=option_list))
+
 # Convert a filename from R documentation to output path
 # e.g. acm_list_certificates.Rd -> acm/list_certificates.Rd
 get_paths <- function(x) {
@@ -39,17 +55,18 @@ build_site <- function (src, dst) {
   detach("pkgdown_all")
 }
 
-# Get the index for the CRAN version of Paws.
-dir <- tempdir()
-paws_dir <- "vendor/paws/cran/paws"
-roxygen2::roxygenise(paws_dir, roclets = c("rd"))
-build_site(paws_dir, dir)
-
-# Generate all the documentation.
-docs_dir <- "vendor/paws/paws"
-roxygen2::update_collate(docs_dir)
-roxygen2::roxygenise(docs_dir, roclets = c("rd"))
-build_site(docs_dir, "./docs")
-
-# Copy the CRAN index.
-file.copy(file.path(dir, "reference/index.html"), "./docs/reference", overwrite = TRUE)
+if (opt$docs) { 
+  # Generate all the documentation.
+  docs_dir <- "vendor/paws/paws"
+  roxygen2::update_collate(docs_dir)
+  roxygen2::roxygenise(docs_dir, roclets = c("rd"))
+  build_site(docs_dir, "./docs")
+} else {
+  # Get the index for the CRAN version of Paws.
+  dir <- tempdir()
+  paws_dir <- "vendor/paws/cran/paws"
+  roxygen2::roxygenise(paws_dir, roclets = c("rd"))
+  build_site(paws_dir, dir)
+  # Copy the CRAN index.
+  file.copy(file.path(dir, "reference/index.html"), "./docs/reference", overwrite = TRUE)
+}

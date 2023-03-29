@@ -16,7 +16,10 @@ update-deps:
 	@git submodule init
 	@git submodule update
 
-all:
+build-docs:
 	@rm -fr docs
-	@Rscript docs.R
+	@Rscript docs.R --docs
+
+build-index:
+	@Rscript docs.R --index
 	@sh docs.sh
