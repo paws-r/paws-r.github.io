@@ -11,9 +11,9 @@ on:
         description: 'Manual re-build'
 
 jobs:
-  regenerate-paws:
+  all-doc:
     runs-on: ubuntu-latest
-    name: regenerate-paws-website
+    name: regenerate-all-doc-paws-website
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
 
       - name: Install Website Dependencies
         run: |
-          install.packages(c('cli', 'pkgdown', 'roxygen2', 'remotes'))
+          install.packages(c('cli', 'pkgdown', 'roxygen2', 'remotes', 'optparse'))
         shell: Rscript {0}
         
       - name: Get Paws Submodule
@@ -62,9 +62,9 @@ jobs:
           git config user.email github-actions@github.com
           git checkout -b regen_paws_website
 
-      - name: Regenerate Paws Website
+      - name: Regenerate Paws Website Docs
         run: |
-          make all
+          build-docs
           
       - name: Get Paws SDK Version
         id: version
@@ -75,7 +75,79 @@ jobs:
       - name: Create Commit Message
         run: |
           git add .
-          git commit -m "Regenerate Paws Website Version: ${{ steps.version.outputs.version }}"
+          git commit -m "Regenerate Documentation for Paws Website Version: ${{ steps.version.outputs.version }}"
+          git push origin regen_paws_website
+
+  index:
+    needs: all-doc
+    
+    runs-on: ubuntu-latest
+    name: regenerate-index-paws-website
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+        
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+
+      - name: Install Website Dependencies
+        run: |
+          install.packages(c('cli', 'pkgdown', 'roxygen2', 'remotes', 'optparse'))
+        shell: Rscript {0}
+        
+      - name: Get Paws Submodule
+        run: |
+          make update-deps
+        
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+        
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('vendor/paws/cran')
+        shell: Rscript {0}
+
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git fetch
+          
+          git checkout -b regen_paws_website
+          git pull 
+
+      - name: Regenerate Paws Website Index
+        run: |
+          build-index
+          
+      - name: Get Paws SDK Version
+        id: version
+        run: |
+          version=$(Rscript get_version.R)
+          pr_body="Regenerate Paws SDK Website: ${version}"
+
+      - name: Create Commit Message
+        run: |
+          git add .
+          git commit -m "Regenerate Index for Paws Website Version: ${{ steps.version.outputs.version }}"
           git push origin regen_paws_website
 
       - name: Create Github Pull Request
@@ -83,3 +155,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create --title "Regenerate Paws" --body "${{ steps.version.outputs.pr_body }}"
+    
