@@ -27,7 +27,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
         with:
           pandoc-version: '2.17.1'
-        
+
       - name: Install System Dependencies
         run: |
           sudo apt-get update
@@ -36,19 +36,19 @@ jobs:
 
       - name: Install Website Dependencies
         run: |
-          install.packages(c('cli', 'pkgdown', 'roxygen2', 'remotes', 'optparse'))
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
         shell: Rscript {0}
-        
+
       - name: Get Paws Submodule
         run: |
           make update-deps
-        
+
       - name: Install Paws Dependencies
         run: |
           remotes::install_deps('vendor/paws/paws.common', dependencies = TRUE)
           remotes::install_deps('vendor/paws/make.paws', dependencies = TRUE)
         shell: Rscript {0}
-        
+
       - name: Install Paws Packages
         run: |
           remotes::install_local('vendor/paws/paws.common', force = TRUE)
@@ -65,7 +65,7 @@ jobs:
       - name: Regenerate Paws Website Docs
         run: |
           make build-docs
-          
+
       - name: Get Paws SDK Version
         id: version
         run: |
@@ -79,7 +79,7 @@ jobs:
 
   index:
     needs: all-doc
-    
+
     runs-on: ubuntu-latest
     name: regenerate-index-paws-website
 
@@ -95,7 +95,7 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
         with:
           pandoc-version: '2.17.1'
-        
+
       - name: Install System Dependencies
         run: |
           sudo apt-get update
@@ -104,19 +104,19 @@ jobs:
 
       - name: Install Website Dependencies
         run: |
-          install.packages(c('cli', 'pkgdown', 'roxygen2', 'remotes', 'optparse'))
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
         shell: Rscript {0}
-        
+
       - name: Get Paws Submodule
         run: |
           make update-deps
-        
+
       - name: Install Paws Dependencies
         run: |
           remotes::install_deps('vendor/paws/paws.common', dependencies = TRUE)
           remotes::install_deps('vendor/paws/make.paws', dependencies = TRUE)
         shell: Rscript {0}
-        
+
       - name: Install Paws Packages
         run: |
           remotes::install_local('vendor/paws/paws.common', force = TRUE)
@@ -134,7 +134,7 @@ jobs:
       - name: Regenerate Paws Website Index
         run: |
           make build-index
-          
+
       - name: Get Paws SDK Version
         id: version
         run: |
@@ -152,4 +152,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create --title "Regenerate Paws" --body "${{ steps.version.outputs.pr_body }}"
-    
+
