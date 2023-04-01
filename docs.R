@@ -30,7 +30,7 @@ get_paths <- function(x) {
   return(result)
 }
 
-build_site <- function (src, dst) {
+build_site <- function (src, dst, index = FALSE) {
   attach(loadNamespace("pkgdown"), name = "pkgdown_all")
   pkg <- section_init(normalizePath(src), depth = 0, override = list())
 
@@ -45,17 +45,21 @@ build_site <- function (src, dst) {
     dir.create(path_out, showWarnings = FALSE, recursive = TRUE)
   }
 
-  cli::rule("Building pkgdown site", line = 2)
-  cli::cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
-  cli::cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
+  rule("Building pkgdown site", line = 2)
+  cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
+  cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
   init_site(pkg)
-  build_reference(pkg, lazy = FALSE, devel = FALSE, examples = FALSE,
-                  run_dont_run = FALSE, seed = 1014, override = list(),
-                  preview = FALSE)
+  if (index) {
+    build_reference(pkg, lazy = FALSE, devel = FALSE, examples = FALSE,
+                    run_dont_run = FALSE, seed = 1014, override = list(),
+                    preview = FALSE)
+  } else {
+    build_reference_index(pkg)
+  }
   detach("pkgdown_all")
 }
 
-if (opt$docs) { 
+if (opt$docs) {
   # Generate all the documentation.
   docs_dir <- "vendor/paws/paws"
   roxygen2::update_collate(docs_dir)
@@ -66,7 +70,7 @@ if (opt$docs) {
   dir <- tempdir()
   paws_dir <- "vendor/paws/cran/paws"
   roxygen2::roxygenise(paws_dir, roclets = c("rd"))
-  build_site(paws_dir, dir)
+  build_site(paws_dir, dir, index = TRUE)
   # Copy the CRAN index.
   file.copy(file.path(dir, "reference/index.html"), "./docs/reference", overwrite = TRUE)
 }
