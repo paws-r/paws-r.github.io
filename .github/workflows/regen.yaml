@@ -39,7 +39,7 @@ jobs:
           install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
         shell: Rscript {0}
 
-      - name: Get Paws Submodule
+      - name: Update Paws Submodule
         run: |
           make update-deps
 
@@ -48,6 +48,11 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git checkout -b regen_paws_website
+          
+      - name: Clear down Website read for re-build
+        run: |
+          rm -fr docs
+          mkdir docs
 
       - name: Create Commit Message
         run: |
@@ -68,7 +73,7 @@ jobs:
           make.paws::paws_install('vendor/paws/cran')
         shell: Rscript {0}
 
-      - name: Regenerate Paws Website Docs
+      - name: Regenerate Paws Website topics
         run: |
           make build-topics
 
