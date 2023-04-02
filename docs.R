@@ -158,4 +158,3 @@ if (opt$index) {
   # Copy the CRAN index.
   file.copy(file.path(dir, "reference/index.html"), "./docs/reference", overwrite = TRUE)
 }
-opt$topics
