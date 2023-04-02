@@ -2,12 +2,19 @@ library(optparse)
 
 option_list <- list(
   make_option(c("--docs"),
-    action = "store_true", default = TRUE,
+    action = "store_false", default = FALSE,
     help = "Generate all the documentation"
   ),
   make_option(c("--index"),
-    action = "store_false",
-    dest = "docs", help = "Get the index for the CRAN version of Paws."
+    action = "store_false", default = FALSE,
+    dest = "index", help = "Get the index for the CRAN version of Paws."
+  ),
+  make_option(c("--topics"),
+    action = "store_false", default = FALSE,
+    dest = "topics", help = "Create Paws Topics."
+  ),
+  make_option("--file",
+    default = "", type = "character", help = "Topic file to build Paws website."
   )
 )
 
@@ -30,14 +37,59 @@ get_paths <- function(x) {
   return(result)
 }
 
-build_site <- function (src, dst, index = FALSE) {
+paws_build_reference <- function(pkg = ".",
+                                 seed = 1014,
+                                 override = list(),
+                                 topics = NULL) {
+  pkg <- pkgdown:::section_init(pkg, depth = 1L, override = override)
+
+  pkgdown:::rule("Building function reference")
+  # build_reference_index(pkg)
+
+  pkgdown:::copy_figures(pkg)
+  examples_env <- NULL
+
+  if (!is.null(topics)) {
+    topics <- purrr::transpose(pkg$topics[pkg$topics$name %in% topics, ])
+    lazy <- FALSE
+  } else {
+    topics <- purrr::transpose(pkg$topics)
+  }
+
+  purrr::map(topics,
+             pkgdown:::build_reference_topic,
+             pkg = pkg,
+             lazy = FALSE,
+             examples_env = FALSE,
+             run_dont_run = FALSE
+  )
+}
+
+write_topics <- function(src, n = 3) {
+  topics <- list.files(file.path(src, "man"))
+  topics <- gsub(".Rd", "", topics)
+  topics <- split(topics, seq_along(topics)%%n)
+  lapply(1:n, function(x){
+    base::writeLines(topics[[x]], sprintf("topics_prt%s.txt", x))
+  })
+}
+
+read_topics <- function(src = "") {
+  if (!file.exists(src)) {
+    return(NULL)
+  }
+  return(readLines(src))
+}
+
+
+build_site <- function (src, dst, topics = NULL, index = FALSE) {
   attach(loadNamespace("pkgdown"), name = "pkgdown_all")
   pkg <- section_init(normalizePath(src), depth = 0, override = list())
 
   pkg$dst_path <- normalizePath(dst)
   pkg$topics$file_out <- get_paths(pkg$topics$file_out)
 
-  unlink(pkg$dst_path, recursive = TRUE, force = TRUE)
+  # unlink(pkg$dst_path, recursive = TRUE, force = TRUE)
   dir.create(pkg$dst_path)
   file.create(file.path(pkg$dst_path, "pkgdown.yml"))
   for (dir in unique(dirname(pkg$topics$file_out))) {
@@ -49,27 +101,37 @@ build_site <- function (src, dst, index = FALSE) {
   cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
   cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
   init_site(pkg)
-  if (index) {
-    build_reference(pkg, lazy = FALSE, devel = FALSE, examples = FALSE,
-                    run_dont_run = FALSE, seed = 1014, override = list(),
-                    preview = FALSE)
+  if (!index) {
+    paws_build_reference(pkg, seed = 1014, override = list(), topics = topics)
   } else {
     build_reference_index(pkg)
   }
   detach("pkgdown_all")
 }
 
-if (opt$docs) {
+if (opt$topics){
   # Generate all the documentation.
   docs_dir <- "vendor/paws/paws"
   roxygen2::update_collate(docs_dir)
   roxygen2::roxygenise(docs_dir, roclets = c("rd"))
-  build_site(docs_dir, "./docs")
-} else {
+  write_topics("topics")
+}
+
+if (opt$docs) {
+  docs_dir <- "vendor/paws/paws"
+  if (!file.exists(doc_dir)) {
+    docs_dir <- file.path("temp", docs_dir)
+  }
+  build_site(docs_dir, "./docs", topics = read_topics(opt$file))
+}
+
+if (opt$index) {
   # Get the index for the CRAN version of Paws.
   dir <- tempdir()
   paws_dir <- "vendor/paws/cran/paws"
-  roxygen2::roxygenise(paws_dir, roclets = c("rd"))
+  if (!file.exists(paws_dir)) {
+    paws_dir <- file.path("temp", paws_dir)
+  }
   build_site(paws_dir, dir, index = TRUE)
   # Copy the CRAN index.
   file.copy(file.path(dir, "reference/index.html"), "./docs/reference", overwrite = TRUE)

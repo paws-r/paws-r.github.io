@@ -16,10 +16,24 @@ update-deps:
 	@git submodule init
 	@git submodule update
 
+build-topics:
+	@Rscript docs.R --topics
+
 build-docs:
-	@rm -fr docs
 	@Rscript docs.R --docs
 
 build-index:
 	@Rscript docs.R --index
 	@sh docs.sh
+
+all:
+	rm -fr docs
+	@Rscript docs.R --topics
+	@Rscript docs.R --docs
+	@Rscript docs.R --index
+	@sh docs.sh
+
+clean-up:
+	@if [ -d topics ]; then rm -fr topics; fi
+	@if [ -d temp ]; then rm -fr temp; fi
+	@if [ -f vendor.zip ]; then rm vendor.zip; fi

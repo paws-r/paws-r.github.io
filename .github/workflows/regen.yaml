@@ -11,7 +11,7 @@ on:
         description: 'Manual re-build'
 
 jobs:
-  all-doc:
+  setup:
     runs-on: ubuntu-latest
     name: regenerate-all-doc-paws-website
 
@@ -62,23 +62,34 @@ jobs:
           git config user.email github-actions@github.com
           git checkout -b regen_paws_website
 
+
       - name: Regenerate Paws Website Docs
         run: |
-          make build-docs
+          make build-topics
 
-      - name: Get Paws SDK Version
-        id: version
+      - name: cache vendor dependencies
         run: |
-          version=$(Rscript get_version.R)
+          zip -r vendor.zip vendor
+
+      - uses: actions/upload-artifact@v3
+        with:
+        name: vendor-dependency
+        path: |
+          vendor.zip
+          topics/
+
+      - name: Clean Up
+        run: |
+          make clean-up
 
       - name: Create Commit Message
         run: |
           git add .
-          git commit -m "Regenerate Documentation for Paws Website Version: ${{ steps.version.outputs.version }}"
+          git commit -m "Update dependencies"
           git push origin regen_paws_website
 
-  index:
-    needs: all-doc
+  doc-build-prt1:
+    needs: stepup
 
     runs-on: ubuntu-latest
     name: regenerate-index-paws-website
@@ -107,10 +118,229 @@ jobs:
           install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
         shell: Rscript {0}
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: vendor-dependency
+          path: .
+
+      - name: unzip vendor dependencies
+        run: |
+          unzip vendor.zip -d temp
+
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('temp/vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('temp/vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('temp/vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('temp/vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('temp/vendor/paws/cran')
+        shell: Rscript {0}
+
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout regen_paws_website
+          git pull origin
+
+      - name: Regenerate Paws Website part 1
+        run: |
+          Rscript docs.R --docs --file topics/topics_prt1.txt
+
+      - name: clean up
+        run: |
+          make clean-up
+
+      - name: Create Commit Message
+        run: |
+          git add .
+          git commit -m "Build Paws Website Part 1"
+          git push origin regen_paws_website
+
+
+  doc-build-prt2:
+    needs: stepup
+
+    runs-on: ubuntu-latest
+    name: regenerate-index-paws-website
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+
+      - name: Install Website Dependencies
+        run: |
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
+        shell: Rscript {0}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: vendor-dependency
+          path: .
+
+      - name: unzip vendor dependencies
+        run: |
+          unzip vendor.zip -d temp
+
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('temp/vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('temp/vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('temp/vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('temp/vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('temp/vendor/paws/cran')
+        shell: Rscript {0}
+
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout regen_paws_website
+          git pull origin
+
+      - name: Regenerate Paws Website part 1
+        run: |
+          Rscript docs.R --docs --file topics/topics_prt2.txt
+
+      - name: clean up
+        run: |
+          make clean-up
+
+      - name: Create Commit Message
+        run: |
+          git add .
+          git commit -m "Build Paws Website Part 2"
+          git push origin regen_paws_website
+
+  doc-build-prt3:
+    needs: stepup
+
+    runs-on: ubuntu-latest
+    name: regenerate-index-paws-website
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+
+      - name: Install Website Dependencies
+        run: |
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
+        shell: Rscript {0}
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: vendor-dependency
+          path: .
+
+      - name: unzip vendor dependencies
+        run: |
+          unzip vendor.zip -d temp
+
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('temp/vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('temp/vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('temp/vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('temp/vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('temp/vendor/paws/cran')
+        shell: Rscript {0}
+
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout regen_paws_website
+          git pull origin
+
+      - name: Regenerate Paws Website part 1
+        run: |
+          Rscript docs.R --docs --file topics/topics_prt3.txt
+
+      - name: clean up
+        run: |
+          make clean-up
+
+      - name: Create Commit Message
+        run: |
+          git add .
+          git commit -m "Build Paws Website Part 3"
+          git push origin regen_paws_website
+
+
+  index:
+    needs: [doc-build-prt1, doc-build-prt2, doc-build-prt3]
+
+    runs-on: ubuntu-latest
+    name: regenerate-index-paws-website
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+      - name: Install Website Dependencies
+        run: |
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
+        shell: Rscript {0}
+
       - name: Get Paws Submodule
         run: |
           make update-deps
-
       - name: Install Paws Dependencies
         run: |
           remotes::install_deps('vendor/paws/paws.common', dependencies = TRUE)
@@ -144,12 +374,10 @@ jobs:
       - name: Create Commit Message
         run: |
           git add .
-          git commit -m "Regenerate Index for Paws Website Version: ${{ steps.version.outputs.version }}"
+          git commit -m "Regenerate Index for Paws Website Version"
           git push origin regen_paws_website
-
       - name: Create Github Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create --title "Regenerate Paws" --body "${{ steps.version.outputs.pr_body }}"
-
