@@ -69,16 +69,37 @@ write_topics <- function(src, n = 3) {
   topics <- list.files(file.path(src, "man"))
   topics <- gsub(".Rd", "", topics)
   topics <- split(topics, seq_along(topics)%%n)
+  dir.create("topics")
   lapply(1:n, function(x){
-    base::writeLines(topics[[x]], sprintf("topics_prt%s.txt", x))
+    base::writeLines(topics[[x]], sprintf("topics/topics_prt%s.txt", x))
   })
 }
 
-read_topics <- function(src = "") {
+ read_topics <- function(src = "") {
   if (!file.exists(src)) {
     return(NULL)
   }
   return(readLines(src))
+}
+
+initial_index <- function(src, dst){
+  pkg <- pkgdown:::section_init(normalizePath(src), depth = 0, override = list())
+  dir.create(dst)
+  
+  pkg$dst_path <- normalizePath(dst)
+  pkg$topics$file_out <- get_paths(pkg$topics$file_out)
+  
+  file.create(file.path(pkg$dst_path, "pkgdown.yml"))
+  for (dir in unique(dirname(pkg$topics$file_out))) {
+    path_out <- file.path(pkg$dst_path, "reference", dir)
+    dir.create(path_out, showWarnings = FALSE, recursive = TRUE)
+  }
+  
+  pkgdown:::rule("Building pkgdown site", line = 2)
+  pkgdown:::cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
+  pkgdown:::cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
+  init_site(pkg)
+  pkgdown:::build_reference_index(pkg)
 }
 
 
@@ -114,7 +135,8 @@ if (opt$topics){
   docs_dir <- "vendor/paws/paws"
   roxygen2::update_collate(docs_dir)
   roxygen2::roxygenise(docs_dir, roclets = c("rd"))
-  write_topics("topics")
+  initial_index(docs_dir, "./docs")
+  write_topics(docs_dir)
 }
 
 if (opt$docs) {
