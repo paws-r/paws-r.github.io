@@ -96,9 +96,9 @@ initial_index <- function(src, dst){
   }
   
   pkgdown:::rule("Building pkgdown site", line = 2)
-  pkgdown:::cat_line("Reading from: ", src_path(path_abs(pkg$src_path)))
-  pkgdown:::cat_line("Writing to:   ", dst_path(path_abs(pkg$dst_path)))
-  init_site(pkg)
+  pkgdown:::cat_line("Reading from: ", pkgdown:::src_path(pkgdown:::path_abs(pkg$src_path)))
+  pkgdown:::cat_line("Writing to:   ", pkgdown:::dst_path(pkgdown:::path_abs(pkg$dst_path)))
+  pkgdown:::init_site(pkg)
   pkgdown:::build_reference_index(pkg)
 }
 
