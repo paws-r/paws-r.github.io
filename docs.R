@@ -2,15 +2,15 @@ library(optparse)
 
 option_list <- list(
   make_option(c("--docs"),
-    action = "store_false", default = FALSE,
+    action = "store_true", default = FALSE,
     help = "Generate all the documentation"
   ),
   make_option(c("--index"),
-    action = "store_false", default = FALSE,
+    action = "store_true", default = FALSE,
     dest = "index", help = "Get the index for the CRAN version of Paws."
   ),
   make_option(c("--topics"),
-    action = "store_false", default = FALSE,
+    action = "store_true", default = FALSE,
     dest = "topics", help = "Create Paws Topics."
   ),
   make_option("--file",
@@ -158,3 +158,4 @@ if (opt$index) {
   # Copy the CRAN index.
   file.copy(file.path(dir, "reference/index.html"), "./docs/reference", overwrite = TRUE)
 }
+opt$topics
