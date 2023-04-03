@@ -28,9 +28,7 @@ build-index:
 
 all:
 	rm -fr docs
-	@Rscript docs.R --topics
-	@Rscript docs.R --docs
-	@Rscript docs.R --index
+	@Rscript docs.R --topics --docs --index
 	@sh docs.sh
 
 clean-up:
