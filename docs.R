@@ -60,7 +60,7 @@ paws_build_reference <- function(pkg = ".",
              pkgdown:::build_reference_topic,
              pkg = pkg,
              lazy = FALSE,
-             examples_env = FALSE,
+             examples_env = NULL,
              run_dont_run = FALSE
   )
 }
