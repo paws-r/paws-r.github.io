@@ -29,6 +29,7 @@ build-index:
 all:
 	rm -fr docs
 	@Rscript docs.R --topics --docs --index
+	@if [ -d topics ]; then rm -fr topics; fi
 	@sh docs.sh
 
 clean-up:
