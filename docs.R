@@ -69,7 +69,7 @@ write_topics <- function(src, n = 3) {
   topics <- list.files(file.path(src, "man"))
   topics <- gsub(".Rd", "", topics)
   topics <- split(topics, seq_along(topics)%%n)
-  dir.create("topics")
+  dir.create("topics", showWarnings = F)
   lapply(1:n, function(x){
     base::writeLines(topics[[x]], sprintf("topics/topics_prt%s.txt", x))
   })
@@ -84,7 +84,7 @@ write_topics <- function(src, n = 3) {
 
 initial_index <- function(src, dst){
   pkg <- pkgdown:::section_init(normalizePath(src), depth = 0, override = list())
-  dir.create(dst)
+  dir.create(dst, showWarnings = F)
   
   pkg$dst_path <- normalizePath(dst)
   pkg$topics$file_out <- get_paths(pkg$topics$file_out)
