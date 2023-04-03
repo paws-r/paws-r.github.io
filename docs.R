@@ -76,10 +76,13 @@ write_topics <- function(src, n = 3) {
 }
 
  read_topics <- function(src = "") {
-  if (!file.exists(src)) {
-    return(NULL)
-  }
-  return(base::readLines(src))
+   if(!nzchar(src)){
+     return(NULL)
+   }
+   if (!file.exists(src)) {
+     return(NULL)
+   }
+   return(base::readLines(src))
 }
 
 initial_index <- function(src, dst){
