@@ -111,7 +111,7 @@ build_site <- function (src, dst, topics = NULL, index = FALSE) {
   pkg$topics$file_out <- get_paths(pkg$topics$file_out)
 
   # unlink(pkg$dst_path, recursive = TRUE, force = TRUE)
-  dir.create(pkg$dst_path)
+  dir.create(pkg$dst_path, showWarnings = FALSE)
   file.create(file.path(pkg$dst_path, "pkgdown.yml"))
   for (dir in unique(dirname(pkg$topics$file_out))) {
     path_out <- file.path(pkg$dst_path, "reference", dir)
