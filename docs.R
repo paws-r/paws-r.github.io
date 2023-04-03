@@ -141,7 +141,7 @@ if (opt$topics){
 
 if (opt$docs) {
   docs_dir <- "vendor/paws/paws"
-  if (!file.exists(doc_dir)) {
+  if (!file.exists(docs_dir)) {
     docs_dir <- file.path("temp", docs_dir)
   }
   build_site(docs_dir, "./docs", topics = read_topics(opt$file))
