@@ -79,7 +79,7 @@ write_topics <- function(src, n = 3) {
   if (!file.exists(src)) {
     return(NULL)
   }
-  return(readLines(src))
+  return(base::readLines(src))
 }
 
 initial_index <- function(src, dst){
