@@ -47,11 +47,9 @@ paws_build_reference <- function(pkg = ".",
   # build_reference_index(pkg)
 
   pkgdown:::copy_figures(pkg)
-  examples_env <- NULL
 
   if (!is.null(topics)) {
     topics <- purrr::transpose(pkg$topics[pkg$topics$name %in% topics, ])
-    lazy <- FALSE
   } else {
     topics <- purrr::transpose(pkg$topics)
   }
