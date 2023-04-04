@@ -36,3 +36,4 @@ clean-up:
 	@if [ -d topics ]; then rm -fr topics; fi
 	@if [ -d temp ]; then rm -fr temp; fi
 	@if [ -f vendor.zip ]; then rm vendor.zip; fi
+	@if [ -f docs.zip ]; then rm docs.zip; fi

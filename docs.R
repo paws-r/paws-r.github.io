@@ -5,6 +5,10 @@ option_list <- list(
     action = "store_true", default = FALSE,
     help = "Generate all the documentation"
   ),
+  make_option(c("--combine"),
+    action = "store_true", default = FALSE,
+    help = "Combine documentation together"
+  ),
   make_option(c("--index"),
     action = "store_true", default = FALSE,
     dest = "index", help = "Get the index for the CRAN version of Paws."
@@ -131,6 +135,25 @@ build_site <- function (src, dst, topics = NULL, index = FALSE) {
   detach("pkgdown_all")
 }
 
+combine_docs <- function(src, dest) {
+  dir_ls <- list.dirs(src, full.names = T,recursive = F)
+  file_ls_src <- unlist(
+    lapply(dir_ls, function(dir) {
+      list.files(dir, recursive = T, all.files = T, full.names = T)
+    }),
+    recursive = F
+  )
+  m <- regexpr(paste0(dest,".*"), file_ls_src)
+  file_ls_dest <- regmatches(file_ls_src, m)
+  
+  # lapply(dirname(file_ls_dest), dir.create, showWarnings = F, recursive = T)
+  lapply(seq_along(file_ls_src), function(i) {
+    file.copy(
+      file_ls_src[i], file_ls_dest[i]
+    )
+  })
+}
+
 if (opt$topics){
   # Generate all the documentation.
   docs_dir <- "vendor/paws/paws"
@@ -146,6 +169,10 @@ if (opt$docs) {
     docs_dir <- file.path("temp", docs_dir)
   }
   build_site(docs_dir, "./docs", topics = read_topics(opt$file))
+}
+
+if (opt$combine) {
+  combine_docs("temp", "docs")
 }
 
 if (opt$index) {
