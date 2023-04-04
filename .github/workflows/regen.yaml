@@ -164,12 +164,17 @@ jobs:
       - name: clean up
         run: |
           make clean-up
-
-      - name: Create Commit Message
+          
+      - name: zip up documentation part
         run: |
-          git add .
-          git commit -m "Build Paws Website Part 1"
-          git push origin regen_paws_website
+          zip -r docs.zip docs/reference
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: docs-prt1
+          path: |
+            docs.zip
+        
 
 
   doc-build-prt2:
@@ -240,11 +245,15 @@ jobs:
         run: |
           make clean-up
 
-      - name: Create Commit Message
+      - name: zip up documentation part
         run: |
-          git add .
-          git commit -m "Build Paws Website Part 2"
-          git push origin regen_paws_website
+          zip -r docs.zip docs/reference
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: docs-prt2
+          path: |
+            docs.zip
 
   doc-build-prt3:
     needs: setup
@@ -314,15 +323,92 @@ jobs:
         run: |
           make clean-up
 
+      - name: zip up documentation part
+        run: |
+          zip -r docs.zip docs/reference
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: docs-prt3
+          path: |
+            docs.zip
+
+
+  combine-docs:
+    needs: [doc-build-prt1, doc-build-prt2, doc-build-prt3]
+
+    runs-on: ubuntu-latest
+    name: regenerate-docs-paws-website-3
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+          
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git fetch origin
+          git switch regen_paws_website
+          git pull
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: docs-prt1
+          path: .
+          
+      - name: process prt1
+        run: |
+          mkdir -p temp/temp1
+          unzip docs.zip -d temp/temp1
+          rm docs.zip
+          
+      - uses: actions/download-artifact@v3
+        with:
+          name: docs-prt2
+          path: .
+          
+      - name: process prt2
+        run: |
+          mkdir -p temp/temp2
+          unzip docs.zip -d temp/temp2
+          rm docs.zip
+          
+      - uses: actions/download-artifact@v3
+        with:
+          name: docs-prt3
+          path: .
+          
+      - name: process prt3
+        run: |
+          mkdir -p temp/temp3
+          unzip docs.zip -d temp/temp3
+
+      - name: combine-docs
+        run: |
+          Rscript docs.R --combine
+
+      - name: clean up
+        run: |
+          make clean-up
+
       - name: Create Commit Message
         run: |
           git add .
-          git commit -m "Build Paws Website Part 3"
+          git commit -m "Regenerate Docs for Paws Website Version"
           git push origin regen_paws_website
 
-
   index:
-    needs: [doc-build-prt1, doc-build-prt2, doc-build-prt3]
+    needs: combine-docs
 
     runs-on: ubuntu-latest
     name: regenerate-index-paws-website
@@ -389,6 +475,7 @@ jobs:
           git add .
           git commit -m "Regenerate Index for Paws Website Version"
           git push origin regen_paws_website
+
       - name: Create Github Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
