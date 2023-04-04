@@ -146,7 +146,7 @@ combine_docs <- function(src, dest) {
   m <- regexpr(paste0(dest,".*"), file_ls_src)
   file_ls_dest <- regmatches(file_ls_src, m)
   
-  lapply(dirname(file_ls_dest), dir.create, showWarnings = F, recursive = T)
+  lapply(unique(dirname(file_ls_dest)), dir.create, showWarnings = F, recursive = T)
   lapply(seq_along(file_ls_src), function(i) {
     file.copy(
       file_ls_src[i], file_ls_dest[i]
