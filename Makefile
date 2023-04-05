@@ -32,6 +32,9 @@ all:
 	@if [ -d topics ]; then rm -fr topics; fi
 	@sh docs.sh
 
+create-pr:
+	@sh create_pr.sh
+
 clean-up:
 	@if [ -d topics ]; then rm -fr topics; fi
 	@if [ -d temp ]; then rm -fr temp; fi
