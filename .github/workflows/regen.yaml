@@ -101,7 +101,7 @@ jobs:
     needs: setup
 
     runs-on: ubuntu-latest
-    name: regenerate-docs-paws-website-1
+    name: build-docs-prt1
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -181,7 +181,7 @@ jobs:
     needs: setup
 
     runs-on: ubuntu-latest
-    name: regenerate-docs-paws-website-2
+    name: build-docs-prt2
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -259,7 +259,7 @@ jobs:
     needs: setup
 
     runs-on: ubuntu-latest
-    name: regenerate-docs-paws-website-3
+    name: build-docs-prt3
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -444,6 +444,7 @@ jobs:
       - name: Get Paws Submodule
         run: |
           make update-deps
+          
       - name: Install Paws Dependencies
         run: |
           remotes::install_deps('vendor/paws/paws.common', dependencies = TRUE)
@@ -469,12 +470,6 @@ jobs:
         run: |
           make build-index
 
-      - name: Get Paws SDK Version
-        id: version
-        run: |
-          version=$(Rscript get_version.R)
-          pr_body="Regenerate Paws SDK Website: ${version}"
-
       - name: Create Commit Message
         run: |
           git add .
@@ -485,4 +480,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create --title "Regenerate Paws" --body "${{ steps.version.outputs.pr_body }}"
+          make create-pr
