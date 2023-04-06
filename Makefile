@@ -10,7 +10,33 @@ export R_USER
 
 .PHONY: all
 
-all:
-	@rm -fr docs
-	@Rscript docs.R
+update-deps:
+	@echo "update paws dependency"
+	@git submodule update --remote
+	@git submodule init
+	@git submodule update
+
+build-topics:
+	@Rscript docs.R --topics
+
+build-docs:
+	@Rscript docs.R --docs
+
+build-index:
+	@Rscript docs.R --index
 	@sh docs.sh
+
+all:
+	rm -fr docs
+	@Rscript docs.R --topics --docs --index
+	@if [ -d topics ]; then rm -fr topics; fi
+	@sh docs.sh
+
+create-pr:
+	@sh create_pr.sh
+
+clean-up:
+	@if [ -d topics ]; then rm -fr topics; fi
+	@if [ -d temp ]; then rm -fr temp; fi
+	@if [ -f vendor.zip ]; then rm vendor.zip; fi
+	@if [ -f docs.zip ]; then rm docs.zip; fi
