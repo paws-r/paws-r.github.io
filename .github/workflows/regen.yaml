@@ -39,15 +39,15 @@ jobs:
           install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
         shell: Rscript {0}
 
-      - name: Update Paws Submodule
-        run: |
-          make update-deps
-
       - name: Create Branch
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git checkout -b regen_paws_website
+          git switch regen_paws_website
+
+      - name: Update Paws Submodule
+        run: |
+          make update-deps
           
       - name: Clear down Website read for re-build
         run: |
@@ -440,6 +440,14 @@ jobs:
         run: |
           install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
         shell: Rscript {0}
+        
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git fetch origin
+          git switch regen_paws_website
+          git pull
 
       - name: Get Paws Submodule
         run: |
@@ -457,14 +465,6 @@ jobs:
           remotes::install_local('vendor/paws/make.paws', force = TRUE)
           make.paws::paws_install('vendor/paws/cran')
         shell: Rscript {0}
-
-      - name: Change Branch
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git fetch origin
-          git switch regen_paws_website
-          git pull
 
       - name: Regenerate Paws Website Index
         run: |
