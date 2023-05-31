@@ -12,9 +12,8 @@ export R_USER
 
 update-deps:
 	@echo "update paws dependency"
-	@git submodule update --remote
 	@git submodule init
-	@git submodule update
+	@git submodule update --remote
 
 build-topics:
 	@Rscript docs.R --topics
