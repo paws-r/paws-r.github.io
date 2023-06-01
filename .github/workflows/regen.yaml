@@ -565,9 +565,321 @@ jobs:
           path: |
             docs.zip
 
+  doc-build-prt7:
+    needs: setup
 
+    runs-on: ubuntu-latest
+    name: build-docs-prt7
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+
+      - name: Install Website Dependencies
+        run: |
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
+        shell: Rscript {0}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: vendor-dependency
+          path: .
+
+      - name: unzip vendor dependencies
+        run: |
+          unzip vendor.zip -d temp
+
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('temp/vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('temp/vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('temp/vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('temp/vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('temp/vendor/paws/cran')
+        shell: Rscript {0}
+
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git fetch origin
+          git switch regen_paws_website
+          git pull
+
+      - name: Regenerate Paws Website part 7
+        run: |
+          Rscript docs.R --docs --file topics/topics_prt7.txt
+
+      - name: clean up
+        run: |
+          make clean-up
+          
+      - name: zip up documentation part
+        run: |
+          zip -r docs.zip docs/reference
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: docs-prt7
+          path: |
+            docs.zip
+            
+            
+  doc-build-prt8:
+    needs: setup
+
+    runs-on: ubuntu-latest
+    name: build-docs-prt8
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+
+      - name: Install Website Dependencies
+        run: |
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
+        shell: Rscript {0}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: vendor-dependency
+          path: .
+
+      - name: unzip vendor dependencies
+        run: |
+          unzip vendor.zip -d temp
+
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('temp/vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('temp/vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('temp/vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('temp/vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('temp/vendor/paws/cran')
+        shell: Rscript {0}
+
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git fetch origin
+          git switch regen_paws_website
+          git pull
+
+      - name: Regenerate Paws Website part 8
+        run: |
+          Rscript docs.R --docs --file topics/topics_prt8.txt
+
+      - name: clean up
+        run: |
+          make clean-up
+          
+      - name: zip up documentation part
+        run: |
+          zip -r docs.zip docs/reference
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: docs-prt8
+          path: |
+            docs.zip          
+            
+  doc-build-prt9:
+    needs: setup
+
+    runs-on: ubuntu-latest
+    name: build-docs-prt9
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+
+      - name: Install Website Dependencies
+        run: |
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
+        shell: Rscript {0}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: vendor-dependency
+          path: .
+
+      - name: unzip vendor dependencies
+        run: |
+          unzip vendor.zip -d temp
+
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('temp/vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('temp/vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('temp/vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('temp/vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('temp/vendor/paws/cran')
+        shell: Rscript {0}
+
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git fetch origin
+          git switch regen_paws_website
+          git pull
+
+      - name: Regenerate Paws Website part 9
+        run: |
+          Rscript docs.R --docs --file topics/topics_prt9.txt
+
+      - name: clean up
+        run: |
+          make clean-up
+          
+      - name: zip up documentation part
+        run: |
+          zip -r docs.zip docs/reference
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: docs-prt9
+          path: |
+            docs.zip
+    
+  doc-build-prt10:
+    needs: setup
+
+    runs-on: ubuntu-latest
+    name: build-docs-prt10
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: '2.17.1'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+
+      - name: Install Website Dependencies
+        run: |
+          install.packages(c('pkgdown', 'roxygen2', 'remotes', 'optparse'))
+        shell: Rscript {0}
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: vendor-dependency
+          path: .
+
+      - name: unzip vendor dependencies
+        run: |
+          unzip vendor.zip -d temp
+
+      - name: Install Paws Dependencies
+        run: |
+          remotes::install_deps('temp/vendor/paws/paws.common', dependencies = TRUE)
+          remotes::install_deps('temp/vendor/paws/make.paws', dependencies = TRUE)
+        shell: Rscript {0}
+
+      - name: Install Paws Packages
+        run: |
+          remotes::install_local('temp/vendor/paws/paws.common', force = TRUE)
+          remotes::install_local('temp/vendor/paws/make.paws', force = TRUE)
+          make.paws::paws_install('temp/vendor/paws/cran')
+        shell: Rscript {0}
+
+      - name: Change Branch
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git fetch origin
+          git switch regen_paws_website
+          git pull
+
+      - name: Regenerate Paws Website part 10
+        run: |
+          Rscript docs.R --docs --file topics/topics_prt10.txt
+
+      - name: clean up
+        run: |
+          make clean-up
+          
+      - name: zip up documentation part
+        run: |
+          zip -r docs.zip docs/reference
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: docs-prt10
+          path: |
+            docs.zip
+            
   combine-docs:
-    needs: [doc-build-prt1, doc-build-prt2, doc-build-prt3, doc-build-prt4, doc-build-prt5, doc-build-prt6]
+    needs: [doc-build-prt1, doc-build-prt2, doc-build-prt3, doc-build-prt4, doc-build-prt5, doc-build-prt6, doc-build-prt7, doc-build-prt8, doc-build-prt9, doc-build-prt10]
 
     runs-on: ubuntu-latest
     name: combine-docs
@@ -662,6 +974,51 @@ jobs:
         run: |
           mkdir -p temp/temp6
           unzip docs.zip -d temp/temp6
+          rm docs.zip
+          
+          
+      - uses: actions/download-artifact@v3
+        with:
+          name: docs-prt7
+          path: .
+          
+      - name: process prt7
+        run: |
+          mkdir -p temp/temp1
+          unzip docs.zip -d temp/temp7
+          rm docs.zip
+          
+      - uses: actions/download-artifact@v3
+        with:
+          name: docs-prt8
+          path: .
+          
+      - name: process prt8
+        run: |
+          mkdir -p temp/temp8
+          unzip docs.zip -d temp/temp8
+          rm docs.zip
+          
+      - uses: actions/download-artifact@v3
+        with:
+          name: docs-prt9
+          path: .
+          
+      - name: process prt9
+        run: |
+          mkdir -p temp/temp9
+          unzip docs.zip -d temp/temp9
+          rm docs.zip
+          
+      - uses: actions/download-artifact@v3
+        with:
+          name: docs-prt10
+          path: .
+          
+      - name: process prt10
+        run: |
+          mkdir -p temp/temp10
+          unzip docs.zip -d temp/temp10
           rm docs.zip
           
       - name: combine-docs
