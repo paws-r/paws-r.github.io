@@ -67,7 +67,7 @@ paws_build_reference <- function(pkg = ".",
   )
 }
 
-write_topics <- function(src, n = 3) {
+write_topics <- function(src, n = 6) {
   topics <- list.files(file.path(src, "man"))
   topics <- gsub(".Rd", "", topics)
   topics <- split(topics, seq_along(topics)%%n)
