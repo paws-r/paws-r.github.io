@@ -33,6 +33,6 @@ regen-site: build-site
 	@mv -vf build/mkdocs/site/* .
 
 requirements: 
-	@Rscript  -e "install.packages(c('rmarkdown', 'fs', 'yaml') repo = 'https://packagemanager.rstudio.com')"
+	@Rscript  -e "install.packages(c('rmarkdown', 'fs', 'yaml'), repo = 'https://packagemanager.rstudio.com')"
 	@python -m pip install --upgrade pip
 	@pip install --upgrade mkdocs-material
