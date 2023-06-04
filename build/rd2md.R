@@ -12,6 +12,11 @@ find_and_replace <- function(string, operator) {
   )
 }
 
+# create Rd docs
+long_doc <- "vendor/paws/paws"
+roxygen2::update_collate(long_doc)
+roxygen2::roxygenize(long_doc, roclets = c("rd"))
+
 if (file.exists(md_dir)) fs::dir_delete(md_dir)
 fs::dir_create(c(md_dir, temp_html_dir), recurse = TRUE)
 
