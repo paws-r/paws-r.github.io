@@ -12,13 +12,31 @@ find_and_replace <- function(string, operator) {
   )
 }
 
-# create Rd docs
-long_doc <- "vendor/paws/paws"
-roxygen2::update_collate(long_doc)
-roxygen2::roxygenize(long_doc, roclets = c("rd"))
+# basic logger
+log_info <- function(msg) {
+  date_time <- strftime(Sys.time(), format = "%Y-%m-%d %H:%M:%S")
+  log_msg <- sprintf("INFO %s: %s", date_time, msg)
+  writeLines(log_msg)
+}
+
+build_long_rd <- function(long_doc = "vendor/paws/paws") {
+  temp_file <- tempfile()
+  on.exit(unlink(temp_file))
+  sink(temp_file)
+  roxygen2::update_collate(long_doc)
+  roxygen2::roxygenize(long_doc, roclets = c("rd"))
+  sink()
+}
 
 if (file.exists(md_dir)) fs::dir_delete(md_dir)
 fs::dir_create(c(md_dir, temp_html_dir), recurse = TRUE)
+
+log_info("Build Rd docs")
+
+# create Rd docs
+build_long_rd()
+
+log_info("Converting Rd to Markdown")
 
 files <- list.files(dir)
 
