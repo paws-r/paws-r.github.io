@@ -15,27 +15,24 @@ update-deps:
 	@git submodule init
 	@git submodule update --remote
 
-build-topics:
-	@Rscript docs.R --topics
+clear-down:
+	@echo "INFO $$(date +%F) $$(date +%T): Clearing down site"
+	@rm -rf articles assets docs examples img search
 
-build-docs:
-	@Rscript docs.R --docs
+build-docs: clear-down
+	@echo "INFO $$(date +%F) $$(date +%T): Converting Rd to Markdown"
+	@Rscript build/rd2md.R
+	@echo "INFO $$(date +%F) $$(date +%T): Build site assests"
+	@Rscript build/build_assests.R
 
-build-index:
-	@Rscript docs.R --index
-	@sh docs.sh
+build-site: build-docs
+	@echo "INFO $$(date +%F) $$(date +%T): Building site"
+	@cd build/mkdocs && python -m mkdocs build
 
-all:
-	rm -fr docs
-	@Rscript docs.R --topics --docs --index
-	@if [ -d topics ]; then rm -fr topics; fi
-	@sh docs.sh
+regen-site: build-site
+	@mv -vf build/mkdocs/site/* .
 
-create-pr:
-	@sh create_pr.sh
-
-clean-up:
-	@if [ -d topics ]; then rm -fr topics; fi
-	@if [ -d temp ]; then rm -fr temp; fi
-	@if [ -f vendor.zip ]; then rm vendor.zip; fi
-	@if [ -f docs.zip ]; then rm docs.zip; fi
+requirements: 
+	@Rscript  -e "install.packages(c('rmarkdown', 'fs', 'yaml') repo = 'https://packagemanager.rstudio.com')"
+	@python -m pip install --upgrade pip
+	@pip install --upgrade mkdocs-material
