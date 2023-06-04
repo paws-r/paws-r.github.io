@@ -20,9 +20,7 @@ clear-down:
 	@rm -rf articles assets docs examples img search
 
 build-docs: clear-down
-	@echo "INFO $$(date +%F) $$(date +%T): Converting Rd to Markdown"
 	@Rscript build/rd2md.R
-	@echo "INFO $$(date +%F) $$(date +%T): Build site assests"
 	@Rscript build/build_assests.R
 
 build-site: build-docs
@@ -30,9 +28,11 @@ build-site: build-docs
 	@cd build/mkdocs && python -m mkdocs build
 
 regen-site: build-site
+	@echo "INFO $$(date +%F) $$(date +%T): Moving site to root"
 	@mv -vf build/mkdocs/site/* .
+	@rm -rf build/mkdocs/docs
 
 requirements: 
-	@Rscript  -e "install.packages(c('rmarkdown', 'fs', 'yaml'), repos='https://cran.rstudio.com/')"
+	@Rscript  -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2'), repos='https://cran.rstudio.com/')"
 	@python -m pip install --upgrade pip
 	@pip install --upgrade mkdocs-material
