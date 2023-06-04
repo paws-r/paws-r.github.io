@@ -20,12 +20,10 @@ log_info <- function(msg) {
 }
 
 build_long_rd <- function(long_doc = "vendor/paws/paws") {
-  temp_file <- tempfile()
-  on.exit(unlink(temp_file))
-  sink(temp_file)
-  roxygen2::update_collate(long_doc)
-  roxygen2::roxygenize(long_doc, roclets = c("rd"))
-  sink()
+  suppressMessages({
+    roxygen2::update_collate(long_doc)
+    roxygen2::roxygenize(long_doc, roclets = c("rd"))
+  })
 }
 
 if (file.exists(md_dir)) fs::dir_delete(md_dir)
