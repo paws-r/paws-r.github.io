@@ -1,0 +1,67 @@
+<table style="width: 100%;">
+<tbody>
+<tr class="odd">
+<td>route53_get_traffic_policy_instance</td>
+<td style="text-align: right;">R Documentation</td>
+</tr>
+</tbody>
+</table>
+
+## Gets information about a specified traffic policy instance
+
+### Description
+
+Gets information about a specified traffic policy instance.
+
+After you submit a `create_traffic_policy_instance` or an
+`update_traffic_policy_instance` request, there's a brief delay while
+Amazon Route 53 creates the resource record sets that are specified in
+the traffic policy definition. For more information, see the `State`
+response element.
+
+In the Route 53 console, traffic policy instances are known as policy
+records.
+
+### Usage
+
+    route53_get_traffic_policy_instance(Id)
+
+### Arguments
+
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code id="route53_get_traffic_policy_instance_:_Id">Id</code></td>
+<td><p>[required] The ID of the traffic policy instance that you want to
+get information about.</p></td>
+</tr>
+</tbody>
+</table>
+
+### Value
+
+A list with the following syntax:
+
+    list(
+      TrafficPolicyInstance = list(
+        Id = "string",
+        HostedZoneId = "string",
+        Name = "string",
+        TTL = 123,
+        State = "string",
+        Message = "string",
+        TrafficPolicyId = "string",
+        TrafficPolicyVersion = 123,
+        TrafficPolicyType = "SOA"|"A"|"TXT"|"NS"|"CNAME"|"MX"|"NAPTR"|"PTR"|"SRV"|"SPF"|"AAAA"|"CAA"|"DS"
+      )
+    )
+
+### Request syntax
+
+    svc$get_traffic_policy_instance(
+      Id = "string"
+    )

@@ -1,0 +1,53 @@
+<table style="width: 100%;">
+<tbody>
+<tr class="odd">
+<td>efs_describe_file_system_policy</td>
+<td style="text-align: right;">R Documentation</td>
+</tr>
+</tbody>
+</table>
+
+## Returns the FileSystemPolicy for the specified EFS file system
+
+### Description
+
+Returns the `FileSystemPolicy` for the specified EFS file system.
+
+This operation requires permissions for the
+`elasticfilesystem:DescribeFileSystemPolicy` action.
+
+### Usage
+
+    efs_describe_file_system_policy(FileSystemId)
+
+### Arguments
+
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code
+id="efs_describe_file_system_policy_:_FileSystemId">FileSystemId</code></td>
+<td><p>[required] Specifies which EFS file system to retrieve the
+<code>FileSystemPolicy</code> for.</p></td>
+</tr>
+</tbody>
+</table>
+
+### Value
+
+A list with the following syntax:
+
+    list(
+      FileSystemId = "string",
+      Policy = "string"
+    )
+
+### Request syntax
+
+    svc$describe_file_system_policy(
+      FileSystemId = "string"
+    )

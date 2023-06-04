@@ -1,0 +1,92 @@
+<table style="width: 100%;">
+<tbody>
+<tr class="odd">
+<td>cloud9_update_environment_membership</td>
+<td style="text-align: right;">R Documentation</td>
+</tr>
+</tbody>
+</table>
+
+## Changes the settings of an existing environment member for an Cloud9 development environment
+
+### Description
+
+Changes the settings of an existing environment member for an Cloud9
+development environment.
+
+### Usage
+
+    cloud9_update_environment_membership(environmentId, userArn,
+      permissions)
+
+### Arguments
+
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code
+id="cloud9_update_environment_membership_:_environmentId">environmentId</code></td>
+<td><p>[required] The ID of the environment for the environment member
+whose settings you want to change.</p></td>
+</tr>
+<tr class="even">
+<td><code
+id="cloud9_update_environment_membership_:_userArn">userArn</code></td>
+<td><p>[required] The Amazon Resource Name (ARN) of the environment
+member whose settings you want to change.</p></td>
+</tr>
+<tr class="odd">
+<td><code
+id="cloud9_update_environment_membership_:_permissions">permissions</code></td>
+<td><p>[required] The replacement type of environment member permissions
+you want to associate with this environment member. Available values
+include:</p>
+<ul>
+<li><p><code>read-only</code>: Has read-only access to the
+environment.</p></li>
+<li><p><code>read-write</code>: Has read-write access to the
+environment.</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+
+### Value
+
+A list with the following syntax:
+
+    list(
+      membership = list(
+        permissions = "owner"|"read-write"|"read-only",
+        userId = "string",
+        userArn = "string",
+        environmentId = "string",
+        lastAccess = as.POSIXct(
+          "2015-01-01"
+        )
+      )
+    )
+
+### Request syntax
+
+    svc$update_environment_membership(
+      environmentId = "string",
+      userArn = "string",
+      permissions = "read-write"|"read-only"
+    )
+
+### Examples
+
+    ## Not run: 
+    # 
+    svc$update_environment_membership(
+      environmentId = "8d9967e2f0624182b74e7690ad69ebEX",
+      permissions = "read-only",
+      userArn = "arn:aws:iam::123456789012:user/AnotherDemoUser"
+    )
+
+    ## End(Not run)
