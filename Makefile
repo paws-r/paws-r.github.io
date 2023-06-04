@@ -33,6 +33,8 @@ regen-site: build-site
 	@rm -rf build/mkdocs/docs
 
 requirements: 
-	@Rscript  -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2'), repos='https://cran.rstudio.com/')"
+	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2'), repos='https://cran.rstudio.com/')"
+	@Rscript -e "remotes::install_deps('vendor/paws/paws.common', dependencies = TRUE)"
+	@Rscript -e "remotes::install_local('vendor/paws/paws.common', force = TRUE)"
 	@python -m pip install --upgrade pip
 	@pip install --upgrade mkdocs-material
