@@ -1,3 +1,12 @@
+# basic logger
+log_info <- function(msg) {
+  date_time <- strftime(Sys.time(), format = "%Y-%m-%d %H:%M:%S")
+  log_msg <- sprintf("INFO %s: %s", date_time, msg)
+  writeLines(log_msg)
+}
+
+log_info("Build site assests")
+
 # copy assests from vendor
 fs::file_copy("vendor/paws/README.md", "build/mkdocs/docs", overwrite = TRUE)
 fs::file_copy("vendor/paws/docs/logo.png", "build/mkdocs/docs", overwrite = TRUE)
