@@ -40,6 +40,9 @@ for (f in c("code_completion.gif")) {
 
 edit_readme <- function(file = "build/mkdocs/docs/README.md") {
   readme <- readLines(file)
+  # fix logo image
+  idx <- grep('<img src="docs/logo.png" align="right" height="150" />', readme)
+  readme[idx] <- gsub("docs/logo.png", "logo.png", readme[idx])
 
   # fix docs links
   idx <- grepl(r"{\[.*\]\(docs/.*\)|\[.*\]\(articles/docs/.*\)}", readme)
@@ -48,8 +51,6 @@ edit_readme <- function(file = "build/mkdocs/docs/README.md") {
     r"{!\[\]\(docs/code_completion.gif\)}", r"{!\[\]\(img/code_completion\.gif\)}",
     readme[idx]
   )
-  # readme[idx] <- gsub("\\(docs/cheat_sheet\\.pdf\\)", "\\(articles/cheat_sheet\\.md\\)", readme[idx])
-
   readme[idx] <- gsub("docs/articles|docs", "articles", readme[idx])
 
   # fix examples links
