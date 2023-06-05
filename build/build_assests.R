@@ -42,7 +42,11 @@ edit_readme <- function(file = "build/mkdocs/docs/README.md") {
   readme <- readLines(file)
   # fix logo image
   idx <- grep('<img src="docs/logo.png" align="right" height="150" />', readme)
-  readme[idx] <- gsub("docs/logo.png", "logo.png", readme[idx])
+  readme[idx] <- gsub(
+    '<img src="docs/logo.png" align="right" height="150" />',
+    '<img src= "logo.png" style="float:right;height:150px;width:auto" />',
+    readme[idx]
+  )
 
   # fix docs links
   idx <- grepl(r"{\[.*\]\(docs/.*\)|\[.*\]\(articles/docs/.*\)}", readme)
