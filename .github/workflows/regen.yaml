@@ -17,6 +17,9 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
 
     steps:
       - uses: actions/checkout@v3
@@ -61,13 +64,13 @@ jobs:
         run: |
           make regen-site
 
-      - name: free disk space
-        run: |
-          sudo swapoff -a
-          sudo rm -f /swapfile
-          sudo apt clean
-          docker rmi $(docker image ls -aq)
-          df -h
+      - name: Push to Website AWS S3
+        run:
+          aws s3 sync build/mkdocs/site ${{ secrets.S3FOLDER }} --delete --quiet
+
+      - name: Clean Up
+        run:
+          make clean-down
 
       - name: Create Commit Message
         run: |
