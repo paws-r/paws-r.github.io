@@ -78,14 +78,13 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
   ref <- sub("[a-zA-Z0-9]+_", "", hierarchy, perl = T)
   ref <- gsub("\\.md$", "", ref)
 
-  # ref[lvl == ref] <- "svc$operation"
+  ref[lvl == ref] <- "Client"
   hierarchy <- sprintf("%s: docs/%s", ref, hierarchy)
   hierarchy <- split(hierarchy, lvl)
 
   # order hierarchy
   for (j in seq_along(hierarchy)) {
-    # idx <- grep("svc\\$operation", hierarchy[[i]])
-    idx <- grep(sprintf("%s:", names(hierarchy[j])), hierarchy[[j]])
+    idx <- grep("Client", hierarchy[[j]])
     hierarchy[[j]] <- c(hierarchy[[j]][idx], sort(hierarchy[[j]][-idx]))
   }
   return(hierarchy)
@@ -104,14 +103,13 @@ paws_make_hierarchy <- function(paws_dir = "vendor/paws/cran") {
     ref <- sub("[a-zA-Z0-9]+_", "", hierarchy[[i]], perl = T)
     ref <- gsub("\\.md$", "", ref)
 
-    # ref[lvl == ref] <- "svc$operation"
+    ref[lvl == ref] <- "Client"
     hierarchy[[i]] <- sprintf("%s: docs/%s", ref, hierarchy[[i]])
     hierarchy[[i]] <- split(hierarchy[[i]], lvl)
 
     # order hierarchy
     for (j in seq_along(hierarchy[[i]])) {
-      # idx <- grep("svc\\$operation", hierarchy[[i]])
-      idx <- grep(sprintf("%s:", names(hierarchy[[i]][j])), hierarchy[[i]][[j]])
+      idx <- grep("Client", hierarchy[[i]][[j]])
       hierarchy[[i]][[j]] <- c(hierarchy[[i]][[j]][idx], sort(hierarchy[[i]][[j]][-idx]))
     }
   }
