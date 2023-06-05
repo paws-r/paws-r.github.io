@@ -19,7 +19,7 @@ clean-down:
 	@echo "INFO $$(date +%F) $$(date +%T): Clearing down site"
 	@rm -rf build/mkdocs/site
 
-build-docs: clear-down
+build-docs: clean-down
 	@Rscript build/rd2md.R
 	@Rscript build/build_assests.R
 
