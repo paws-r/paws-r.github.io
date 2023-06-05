@@ -15,9 +15,9 @@ update-deps:
 	@git submodule init
 	@git submodule update --remote
 
-clear-down:
+clean-down:
 	@echo "INFO $$(date +%F) $$(date +%T): Clearing down site"
-	@rm -rf articles assets docs examples img search
+	@rm -rf build/mkdocs/site
 
 build-docs: clear-down
 	@Rscript build/rd2md.R
@@ -29,10 +29,9 @@ build-site: build-docs
 
 regen-site: build-site
 	@echo "INFO $$(date +%F) $$(date +%T): Moving site to root"
-	@mv -vf build/mkdocs/site/* .
 	@rm -rf build/mkdocs/docs
 
 requirements: 
 	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2', 'remotes'), repos='https://cran.rstudio.com/')"
 	@python -m pip install --upgrade pip
-	@pip install --upgrade mkdocs-material
+	@pip install --upgrade mkdocs-material awscli
