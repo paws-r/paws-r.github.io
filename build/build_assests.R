@@ -157,7 +157,7 @@ build_site_yaml <- function() {
 
   # add references
   ref_idx <- which(vapply(site_yaml$nav, \(x) names(x) == "Reference", FUN.VALUE = logical(1)))
-  site_yaml$nav[[ref_idx]]$Reference <- paws_make_hierarchy() # make_hierarchy()
+  site_yaml$nav[[ref_idx]]$Reference <- make_hierarchy() # paws_make_hierarchy()
 
   # add articles
   ref_idx <- which(vapply(site_yaml$nav, \(x) names(x) == "Articles", FUN.VALUE = logical(1)))
