@@ -159,15 +159,21 @@ paws_make_hierarchy <- function(paws_dir = "vendor/paws/cran") {
   return(hierarchy)
 }
 
+convert_name <- function(file_names) {
+  file_names <- gsub("\\..*$", "", file_names)
+  file_names <- tolower(gsub("_", " ", file_names))
+  return(tools::toTitleCase(file_names))
+}
+
 get_developer_guide <- function(dir = "build/mkdocs/docs/developer_guide") {
   developer_guide <- sort(basename(fs::dir_ls(dir, type = "file")), decreasing = T)
-  developer_guide <- sprintf("%s: developer_guide/%s", gsub("\\..*$", "", developer_guide), developer_guide)
+  developer_guide <- sprintf("%s: developer_guide/%s", convert_name(developer_guide), developer_guide)
   return(as.list(developer_guide))
 }
 
 get_examples <- function(dir = "build/mkdocs/docs/examples") {
   example <- basename(fs::dir_ls(dir, type = "file"))
-  example <- sprintf("%s: examples/%s", gsub("\\..*$", "", example), example)
+  example <- sprintf("%s: examples/%s", convert_name(example), example)
   return(as.list(example))
 }
 
