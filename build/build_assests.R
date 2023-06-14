@@ -100,7 +100,7 @@ reference_index <- function(paws_dir = "vendor/paws/cran") {
     ref <- sub("[a-zA-Z0-9]+_", "", reference[[i]], perl = T)
     ref <- gsub("\\.md$", "", ref)
     reference[[i]] <- paste(
-      sprintf('- <a href="../%s/"> %s </a>', ref[lvl == ref], ref[lvl == ref]),
+      sprintf('- <a href="../%s/"> %s </a>', ref[lvl == ref], convert_name(ref[lvl == ref])),
       collapse = "\n"
     )
   }
@@ -121,14 +121,15 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
   ref <- gsub("\\.md$", "", ref)
 
   ref[lvl == ref] <- "Client"
-  hierarchy <- sprintf("%s: docs/%s", ref, hierarchy)
+  hierarchy <- sprintf("%s: docs/%s", convert_name(ref), hierarchy)
   hierarchy <- split(hierarchy, lvl)
 
   # order hierarchy
   for (j in seq_along(hierarchy)) {
-    idx <- grep("Client", hierarchy[[j]])
+    idx <- grep("^Client:", hierarchy[[j]], perl = T)
     hierarchy[[j]] <- c(hierarchy[[j]][idx], sort(hierarchy[[j]][-idx]))
   }
+  names(hierarchy) <- convert_name(names(hierarchy))
 
   return(c("Aviable Services" = reference_index(), hierarchy))
 }
