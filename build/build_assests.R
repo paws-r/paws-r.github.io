@@ -100,11 +100,11 @@ reference_index <- function(paws_dir = "vendor/paws/cran") {
     ref <- sub("[a-zA-Z0-9]+_", "", reference[[i]], perl = T)
     ref <- gsub("\\.md$", "", ref)
     reference[[i]] <- paste(
-      sprintf('\t- <a href="../%s/"> %s </a>', ref[lvl == ref], ref[lvl == ref]),
+      sprintf('- <a href="../%s/"> %s </a>', ref[lvl == ref], ref[lvl == ref]),
       collapse = "\n"
     )
   }
-  names(reference) <- sprintf("- %s", names(reference))
+  names(reference) <- sprintf("## %s", names(reference))
   reference <- paste(names(reference), reference, sep = "\n")
   writeLines(
     c("# Available Services", reference),
@@ -131,32 +131,6 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
   }
 
   return(c("Aviable Services" = reference_index(), hierarchy))
-}
-
-paws_make_hierarchy <- function(paws_dir = "vendor/paws/cran") {
-  paws_desc <- fs::path(paws_dir, "/paws/DESCRIPTION")
-  lines <- readLines(paws_desc)
-  pkgs <- lines[grepl("paws\\.[a-z\\.]", lines, perl = T)]
-  paws_pkg <- trimws(gsub("\\([^)]*\\).*", "", pkgs))
-
-  hierarchy <- sapply(paws_pkg, \(x) gsub("\\.Rd$", "\\.md", basename(fs::dir_ls(file.path(paws_dir, x, "man")))), simplify = F)
-
-  for (i in seq_along(hierarchy)) {
-    lvl <- gsub("_.*|\\.md$", "", hierarchy[[i]])
-    ref <- sub("[a-zA-Z0-9]+_", "", hierarchy[[i]], perl = T)
-    ref <- gsub("\\.md$", "", ref)
-
-    ref[lvl == ref] <- "Client"
-    hierarchy[[i]] <- sprintf("%s: docs/%s", ref, hierarchy[[i]])
-    hierarchy[[i]] <- split(hierarchy[[i]], lvl)
-
-    # order hierarchy
-    for (j in seq_along(hierarchy[[i]])) {
-      idx <- grep("Client", hierarchy[[i]][[j]])
-      hierarchy[[i]][[j]] <- c(hierarchy[[i]][[j]][idx], sort(hierarchy[[i]][[j]][-idx]))
-    }
-  }
-  return(hierarchy)
 }
 
 convert_name <- function(file_names) {
