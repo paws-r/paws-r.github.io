@@ -4,8 +4,8 @@ This repository builds [paws-r](https://github.com/paws-r/paws) website: [www.pa
 
 ## Templates
 
-Cloudformation: https://github.com/aws-samples/amazon-cloudfront-secure-static-site
-Cloudfront functions: https://github.com/aws-samples/amazon-cloudfront-functions/tree/main/
+- **Cloudformation:** https://github.com/aws-samples/amazon-cloudfront-secure-static-site
+- **Cloudfront functions:** https://github.com/aws-samples/amazon-cloudfront-functions/tree/main/
 
 ## Cloudfront Functions:
 
