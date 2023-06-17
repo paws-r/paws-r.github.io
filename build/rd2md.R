@@ -42,8 +42,7 @@ files <- list.files(dir)
 # remove paws-package.Rd
 files <- files[files != "paws-package.Rd"]
 
-html_files <- fs::path(temp_html_dir, gsub("\\.Rd", "\\.html", files))
-md_files <- fs::path(getwd(), md_dir, gsub("\\.Rd", "\\.md", files))
+md_dir <- fs::path_abs(md_dir)
 rd_files <- fs::path_abs(file.path(dir, files))
 
 col_width <- c(
@@ -53,20 +52,32 @@ col_width <- c(
   "</colgroup>"
 )
 
+file_name <- function(dir, name, ext = "") {
+  fs::path(dir, sprintf("%s.%s", name, ext))
+}
+
 # rd to markdown
 for (i in seq_along(rd_files)) {
-  tools::Rd2HTML(rd_files[[i]], html_files[[i]])
+  # get rd name and not use alias
+  lines <- readLines(rd_files[[i]], n = 3)
+  name <- lines[grep("\\\\name\\{", lines, perl = TRUE)]
+  name <- gsub("\\\\name\\{|\\}", "", name)
+
+  html_file <- file_name(temp_html_dir, name, "html")
+  md_file <- file_name(md_dir, name, "md")
+
+  tools::Rd2HTML(rd_files[[i]], html_file)
   rmarkdown::pandoc_convert(
-    html_files[[i]],
+    html_file,
     to = "markdown_strict",
-    output = md_files[[i]]
+    output = md_file
   )
 
   # add url links
-  if (!grepl("_", basename(md_files[[i]]))) {
-    md <- readLines(md_files[[i]])
+  if (!grepl("_", basename(md_file))) {
+    md <- readLines(md_file)
     idx <- grep('style=\"text-align: left;\">[a-z0-9_]+</td>', md)
-    operator <- gsub("\\.md$", "", basename(md_files[[i]]))
+    operator <- gsub("\\.md$", "", basename(md_file))
     for (j in idx) {
       md[[j]] <- find_and_replace(md[[j]], operator)
     }
@@ -75,9 +86,9 @@ for (i in seq_along(rd_files)) {
     idx <- grep('<col style="width: 50%" />', md)
     md[[idx[1]]] <- gsub("50", "15", md[[idx[1]]])
     md[[idx[2]]] <- gsub("50", "85", md[[idx[2]]])
-    writeLines(md, md_files[[i]])
+    writeLines(md, md_file)
   } else {
-    md <- readLines(md_files[[i]])
+    md <- readLines(md_file)
 
     # edit existing col groupings
     if (any(grepl("<colgroup>", md))) {
@@ -91,7 +102,7 @@ for (i in seq_along(rd_files)) {
         md <- c(md[1:idx], col_width, md[(idx + 1):length(md)])
       }
     }
-    writeLines(md, md_files[[i]])
+    writeLines(md, md_file)
   }
 }
 

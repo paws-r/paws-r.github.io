@@ -187,6 +187,7 @@ build_site_yaml <- function() {
 
   site_yaml <- yaml::as.yaml(site_yaml, indent.mapping.sequence = T)
   site_yaml <- gsub("- '", "- ", site_yaml)
+  site_yaml <- gsub(":\n          docs", ": docs", site_yaml)
 
   # tidy up file paths
   for (ext in c("md", "pdf")) {
