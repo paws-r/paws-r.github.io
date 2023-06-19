@@ -56,6 +56,40 @@ file_name <- function(dir, name, ext = "") {
   fs::path(dir, sprintf("%s.%s", name, ext))
 }
 
+html_table_to_list <- function(lines) {
+  # convert table to list
+  idx <- grep("<table>|</table>", lines)[-1]
+  idx_ranges <- split(idx, ceiling(seq_along(idx) / 2))
+  idx_ranges <- lapply(idx_ranges, \(x) x[1]:x[2])
+
+  for (idx_range in idx_ranges) {
+    lines[idx_range] <- gsub("<table>", "<dl>", lines[idx_range])
+    lines[idx_range] <- gsub("</table>", "</dl>", lines[idx_range])
+
+    lines[idx_range] <- gsub("<td><code", "<dt><code", lines[idx_range])
+    lines[idx_range] <- gsub('<td style="text-align: left;"><a', "<dt><a", lines[idx_range])
+
+    lines[idx_range] <- gsub("</code></td>", "</code></dt>", lines[idx_range])
+    lines[idx_range] <- gsub("</a></td>", "</a></dt>", lines[idx_range])
+
+    lines[idx_range] <- gsub("<td><p>", "<dd><p>", lines[idx_range])
+    lines[idx_range] <- gsub('<td style="text-align: left;">', "<dd>", lines[idx_range])
+
+    lines[idx_range] <- gsub("</p></td>", "</p></dd>", lines[idx_range])
+    lines[idx_range] <- gsub("</td>", "</dd>", lines[idx_range])
+
+    rm_tbody <- grep("<tbody>|</tbody>", lines[idx_range])
+    rm_tr <- grep("<tr|</tr>", lines[idx_range])
+    rm_colgp <- grep("<colgroup>|</colgroup>", lines[idx_range])
+    if (length(rm_colgp) > 0) {
+      rm_colgp <- rm_colgp[1]:rm_colgp[2]
+    }
+    remove <- c(rm_tbody, rm_tr, rm_colgp)
+    lines[idx_range][remove] <- ""
+  }
+  return(lines)
+}
+
 # rd to markdown
 for (i in seq_along(rd_files)) {
   # get rd name and not use alias
@@ -72,7 +106,6 @@ for (i in seq_along(rd_files)) {
     to = "markdown_strict",
     output = md_file
   )
-
   # add url links
   if (!grepl("_", basename(md_file))) {
     md <- readLines(md_file)
@@ -81,27 +114,11 @@ for (i in seq_along(rd_files)) {
     for (j in idx) {
       md[[j]] <- find_and_replace(md[[j]], operator)
     }
-
-    # format table width
-    idx <- grep('<col style="width: 50%" />', md)
-    md[[idx[1]]] <- gsub("50", "15", md[[idx[1]]])
-    md[[idx[2]]] <- gsub("50", "85", md[[idx[2]]])
+    md <- html_table_to_list(md)
     writeLines(md, md_file)
   } else {
     md <- readLines(md_file)
-
-    # edit existing col groupings
-    if (any(grepl("<colgroup>", md))) {
-      idx <- grep('<col style="width: 50%" />', md)
-      md[[idx[1]]] <- gsub("50", "35", md[[idx[1]]])
-      md[[idx[2]]] <- gsub("50", "65", md[[idx[2]]])
-    } else {
-      # add col groupings
-      idx <- grep("<table>", md)
-      if (length(idx) > 0) {
-        md <- c(md[1:idx], col_width, md[(idx + 1):length(md)])
-      }
-    }
+    md <- html_table_to_list(md)
     writeLines(md, md_file)
   }
 }
