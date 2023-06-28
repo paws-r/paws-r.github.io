@@ -12,31 +12,26 @@ export R_USER
 
 update-deps:
 	@echo "update paws dependency"
-	@git submodule update --remote
 	@git submodule init
-	@git submodule update
+	@git submodule update --remote
 
-build-topics:
-	@Rscript docs.R --topics
+clean-down:
+	@echo "INFO $$(date +%F) $$(date +%T): Clearing down site"
+	@rm -rf build/mkdocs/site
 
-build-docs:
-	@Rscript docs.R --docs
+build-docs: clean-down
+	@Rscript build/rd2md.R
+	@Rscript build/build_assests.R
 
-build-index:
-	@Rscript docs.R --index
-	@sh docs.sh
+build-site: build-docs
+	@echo "INFO $$(date +%F) $$(date +%T): Building site"
+	@cd build/mkdocs && python -m mkdocs build
 
-all:
-	rm -fr docs
-	@Rscript docs.R --topics --docs --index
-	@if [ -d topics ]; then rm -fr topics; fi
-	@sh docs.sh
+regen-site: build-site
+	@echo "INFO $$(date +%F) $$(date +%T): Moving site to root"
+	@rm -rf build/mkdocs/docs
 
-create-pr:
-	@sh create_pr.sh
-
-clean-up:
-	@if [ -d topics ]; then rm -fr topics; fi
-	@if [ -d temp ]; then rm -fr temp; fi
-	@if [ -f vendor.zip ]; then rm vendor.zip; fi
-	@if [ -f docs.zip ]; then rm docs.zip; fi
+requirements: 
+	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2', 'remotes'), repos='https://cran.rstudio.com/')"
+	@python -m pip install --upgrade pip
+	@pip install --upgrade mkdocs-material awscli
