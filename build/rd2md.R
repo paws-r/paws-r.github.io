@@ -44,6 +44,9 @@ files <- files[files != "paws-package.Rd"]
 
 md_dir <- fs::path_abs(md_dir)
 rd_files <- fs::path_abs(file.path(dir, files))
+rd_files[length(rd_files) + 1] <- fs::path_abs(file.path(
+  "vendor/paws", "paws.common", "man", "set_service_parameter.Rd"
+))
 
 col_width <- c(
   "<colgroup>",
@@ -104,8 +107,9 @@ wrap_r_code <- function(lines) {
 wrap_r_usage <- function(lines) {
   start <- (grep("### Usage", lines, perl = T) + 1)
   end <- (grep("### Arguments", lines, perl = T) - 1)
-  if (length(end) == 0) 
-    end <- (grep("### Value", lines, perl = T) - 1)  
+  if (length(end) == 0) {
+    end <- (grep("### Value", lines, perl = T) - 1)
+  }
   if (length(start) > 0) {
     idx_range <- start:end
     lines[idx_range] <- gsub("^[ ]{4}", "", lines[idx_range], perl = T)
@@ -120,6 +124,9 @@ wrap_r_value <- function(lines) {
   end <- (grep("### Request syntax", lines, perl = T) - 1)
   if (length(end) == 0) {
     end <- (grep("### Service syntax", lines, perl = T) - 1)
+  }
+  if (length(end) == 0) {
+    end <- (grep("### Examples", lines, perl = T) - 1)
   }
   if (length(start) > 0) {
     if (length(end) == 0) end <- length(lines) + 1
@@ -139,8 +146,9 @@ wrap_r_request_syntax <- function(lines) {
   # format function syntax
   start <- (grep("### Request syntax", lines, perl = T) + 1)
   end <- (grep("### Examples", lines, perl = T) - 1)
-  if (length(end) == 0) 
+  if (length(end) == 0) {
     end <- length(lines) + 1
+  }
   if (length(start) > 0) {
     idx_range <- start:end
     lines[idx_range] <- gsub("^[ ]{4}", "", lines[idx_range], perl = T)
@@ -152,12 +160,15 @@ wrap_r_request_syntax <- function(lines) {
 
 wrap_r_examples <- function(lines) {
   start <- (grep("### Examples", lines, perl = T) + 1)
-  end <- (grep("## End\\(Not run\\)", lines, perl = T))
+  end <- (grep("## End\\(Not run\\)", lines, perl = T) + 1)
+  if (length(end) == 0) {
+    end <- length(lines) + 1
+  }
   if (length(start) > 0) {
     idx_range <- start:end
     lines[idx_range] <- gsub("^[ ]{4}", "", lines[idx_range], perl = T)
     lines[start] <- "```r"
-    lines[end + 1] <- "```"
+    lines[end] <- "```"
   }
   return(lines)
 }
@@ -175,8 +186,10 @@ wrap_r_service_syntax <- function(lines) {
   return(lines)
 }
 
+pb <- progress::progress_bar$new(total = length(rd_files))
 # rd to markdown
 for (i in seq_along(rd_files)) {
+  pb$tick()
   # get rd name and not use alias
   lines <- readLines(rd_files[[i]], n = 3)
   name <- lines[grep("\\\\name\\{", lines, perl = TRUE)]
