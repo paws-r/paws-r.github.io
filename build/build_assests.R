@@ -114,7 +114,9 @@ reference_index <- function(paws_dir = "vendor/paws/cran") {
 }
 
 make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
+  service_param <- "set_service_parameter.md"
   hierarchy <- list.files(dir)
+  hierarchy <- hierarchy[hierarchy != service_param]
 
   lvl <- gsub("_.*|\\.md$", "", hierarchy)
   ref <- sub("[a-zA-Z0-9]+_", "", hierarchy, perl = T)
@@ -130,8 +132,14 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
     hierarchy[[j]] <- c(hierarchy[[j]][idx], sort(hierarchy[[j]][-idx]))
   }
   names(hierarchy) <- convert_name(names(hierarchy))
-
-  return(c("Aviable Services" = reference_index(), hierarchy))
+  names(service_param) <- convert_name(service_param)
+  service_param[[1]] <- sprintf("docs/%s", service_param)
+  hierarchy <- c(
+    "Aviable Services" = reference_index(),
+    service_param,
+    hierarchy
+  )
+  return(hierarchy)
 }
 
 convert_name <- function(file_names) {
