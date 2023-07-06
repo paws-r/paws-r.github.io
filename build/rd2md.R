@@ -85,7 +85,92 @@ html_table_to_list <- function(lines) {
       rm_colgp <- rm_colgp[1]:rm_colgp[2]
     }
     remove <- c(rm_tbody, rm_tr, rm_colgp)
-    lines[idx_range][remove] <- ""
+    lines[idx_range][remove] <- "REMOVE LINE"
+  }
+  return(Filter(function(x) {
+    x != "REMOVE LINE"
+  }, lines))
+}
+
+wrap_r_code <- function(lines) {
+  lines <- wrap_r_usage(lines)
+  lines <- wrap_r_service_syntax(lines)
+  lines <- wrap_r_value(lines)
+  lines <- wrap_r_request_syntax(lines)
+  lines <- wrap_r_examples(lines)
+  return(lines)
+}
+
+wrap_r_usage <- function(lines) {
+  start <- (grep("### Usage", lines, perl = T) + 1)
+  end <- (grep("### Arguments", lines, perl = T) - 1)
+  if (length(end) == 0) 
+    end <- (grep("### Value", lines, perl = T) - 1)  
+  if (length(start) > 0) {
+    idx_range <- start:end
+    lines[idx_range] <- gsub("^[ ]{4}", "", lines[idx_range], perl = T)
+    lines[start] <- "```r"
+    lines[end] <- "```"
+  }
+  return(lines)
+}
+
+wrap_r_value <- function(lines) {
+  start <- grep("### Value", lines, perl = T)
+  end <- (grep("### Request syntax", lines, perl = T) - 1)
+  if (length(end) == 0) {
+    end <- (grep("### Service syntax", lines, perl = T) - 1)
+  }
+  if (length(start) > 0) {
+    if (length(end) == 0) end <- length(lines) + 1
+    idx_range <- start:end
+    # format return value
+    code_start <- grep("^[ ]{4}list\\(", lines[idx_range], perl = T)
+    if (length(code_start) > 0) {
+      lines[idx_range][code_start - 1] <- "```r"
+      lines[end] <- "```"
+    }
+    lines[idx_range] <- gsub("^[ ]{4}", "", lines[idx_range], perl = T)
+  }
+  return(lines)
+}
+
+wrap_r_request_syntax <- function(lines) {
+  # format function syntax
+  start <- (grep("### Request syntax", lines, perl = T) + 1)
+  end <- (grep("### Examples", lines, perl = T) - 1)
+  if (length(end) == 0) 
+    end <- length(lines) + 1
+  if (length(start) > 0) {
+    idx_range <- start:end
+    lines[idx_range] <- gsub("^[ ]{4}", "", lines[idx_range], perl = T)
+    lines[start] <- "```r"
+    lines[end] <- "```"
+  }
+  return(lines)
+}
+
+wrap_r_examples <- function(lines) {
+  start <- (grep("### Examples", lines, perl = T) + 1)
+  end <- (grep("## End\\(Not run\\)", lines, perl = T))
+  if (length(start) > 0) {
+    idx_range <- start:end
+    lines[idx_range] <- gsub("^[ ]{4}", "", lines[idx_range], perl = T)
+    lines[start] <- "```r"
+    lines[end + 1] <- "```"
+  }
+  return(lines)
+}
+
+wrap_r_service_syntax <- function(lines) {
+  # format function syntax
+  start <- (grep("### Service syntax", lines, perl = T) + 1)
+  end <- (grep("### Operations", lines, perl = T) - 1)
+  if (length(start) > 0) {
+    idx_range <- start:end
+    lines[idx_range] <- gsub("^[ ]{4}", "", lines[idx_range], perl = T)
+    lines[start] <- "```r"
+    lines[end] <- "```"
   }
   return(lines)
 }
@@ -106,21 +191,20 @@ for (i in seq_along(rd_files)) {
     to = "markdown_strict",
     output = md_file
   )
+
+  md <- readLines(md_file)
   # add url links
   if (!grepl("_", basename(md_file))) {
-    md <- readLines(md_file)
     idx <- grep('style=\"text-align: left;\">[a-z0-9_]+</td>', md)
     operator <- gsub("\\.md$", "", basename(md_file))
     for (j in idx) {
       md[[j]] <- find_and_replace(md[[j]], operator)
     }
-    md <- html_table_to_list(md)
-    writeLines(md, md_file)
-  } else {
-    md <- readLines(md_file)
-    md <- html_table_to_list(md)
-    writeLines(md, md_file)
   }
+
+  md <- html_table_to_list(md)
+  md <- wrap_r_code(md)
+  writeLines(md, md_file)
 }
 
 fs::dir_delete(temp_html_dir)
