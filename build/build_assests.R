@@ -135,7 +135,7 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
   names(service_param) <- convert_name(service_param)
   service_param[[1]] <- sprintf("docs/%s", service_param)
   hierarchy <- c(
-    "Aviable Services" = reference_index(),
+    "Available Services" = reference_index(),
     service_param,
     hierarchy
   )
