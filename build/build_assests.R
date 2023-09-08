@@ -20,10 +20,11 @@ fs::dir_create(dirs, recurse = TRUE)
 # copy assests examples from vendor
 fs::dir_copy("vendor/paws/examples", "build/mkdocs/docs/examples", overwrite = TRUE)
 
+developer_guide_files <- list.files("vendor/paws/docs")[!grepl("\\.png$|\\.gif$", list.files("vendor/paws/docs"))]
 # copy articles from vendor
-for (f in c("credentials.md", "cheat_sheet.pdf")) {
+for (f in developer_guide_files) {
   fs::file_copy(
-    file.path("vendor/paws/docs", f),
+    file.path("vendor", "paws", "docs", f),
     file.path("build/mkdocs/docs/developer_guide", f),
     overwrite = T
   )
@@ -90,6 +91,7 @@ reference_index <- function(paws_dir = "vendor/paws/cran") {
   lines <- readLines(paws_desc)
   pkgs <- lines[grepl("paws\\.[a-z\\.]", lines, perl = T)]
   paws_pkg <- trimws(gsub("\\([^)]*\\).*", "", pkgs))
+  paws_pkg <- paws_pkg[paws_pkg != "paws.common"]
 
   reference <- sapply(paws_pkg, \(x) {
     gsub("\\.Rd$", "\\.md", basename(fs::dir_ls(file.path(paws_dir, x, "man"))))
@@ -114,9 +116,13 @@ reference_index <- function(paws_dir = "vendor/paws/cran") {
 }
 
 make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
-  service_param <- "set_service_parameter.md"
+  addons <- c(
+    "set_service_parameter.md",
+    "paginate.md",
+    "list_paginators.md"
+  )
   hierarchy <- list.files(dir)
-  hierarchy <- hierarchy[hierarchy != service_param]
+  hierarchy <- hierarchy[!(hierarchy %in% addons)]
 
   lvl <- gsub("_.*|\\.md$", "", hierarchy)
   ref <- sub("[a-zA-Z0-9]+_", "", hierarchy, perl = T)
@@ -132,11 +138,15 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
     hierarchy[[j]] <- c(hierarchy[[j]][idx], sort(hierarchy[[j]][-idx]))
   }
   names(hierarchy) <- convert_name(names(hierarchy))
-  names(service_param) <- convert_name(service_param)
-  service_param[[1]] <- sprintf("docs/%s", service_param)
+  addons <- setNames(sprintf("docs/%s", addons), convert_name(addons))
+  
+  # group paginators
+  pag_n <- grepl("paginat", addons)
+  addons <- c(addons[!pag_n], list("Paws Paginators" = addons[pag_n]))
+  
   hierarchy <- c(
     "Available Services" = reference_index(),
-    service_param,
+    addons,
     hierarchy
   )
   return(hierarchy)
@@ -183,7 +193,7 @@ build_site_yaml <- function() {
 
   # add references
   ref_idx <- which(vapply(site_yaml$nav, \(x) names(x) == "Reference", FUN.VALUE = logical(1)))
-  site_yaml$nav[[ref_idx]]$Reference <- make_hierarchy() # paws_make_hierarchy()
+  site_yaml$nav[[ref_idx]]$Reference <- make_hierarchy()
 
   # add developer guide
   ref_idx <- which(vapply(site_yaml$nav, \(x) names(x) == "Developer Guide", FUN.VALUE = logical(1)))
