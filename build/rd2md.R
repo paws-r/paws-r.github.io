@@ -44,6 +44,7 @@ files <- files[files != "paws-package.Rd"]
 
 md_dir <- fs::path_abs(md_dir)
 rd_files <- fs::path_abs(file.path(dir, files))
+rd_files <- rd_files[fs::path_file(rd_files) != "reexports.Rd"]
 rd_files[length(rd_files) + 1] <- fs::path_abs(file.path(
   "vendor/paws", "paws.common", "man", "set_service_parameter.Rd"
 ))
