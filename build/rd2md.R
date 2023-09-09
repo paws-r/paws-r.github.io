@@ -207,11 +207,18 @@ for (i in seq_along(rd_files)) {
   md_file <- file_name(md_dir, name, "md")
 
   tools::Rd2HTML(rd_files[[i]], html_file)
+
+  # delete rd file
+  fs::file_delete(rd_files[[i]])
+
   rmarkdown::pandoc_convert(
     html_file,
     to = "markdown_strict",
     output = md_file
   )
+
+  # delete html file
+  fs::file_delete(html_file)
 
   md <- readLines(md_file)
   # add url links
