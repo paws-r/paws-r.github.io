@@ -199,7 +199,7 @@ pb <- progress::progress_bar$new(total = length(rd_files))
 for (i in seq_along(rd_files)) {
   pb$tick()
   # get rd name and not use alias
-  lines <- readLines(rd_files[[i]], n = 3)
+  lines <- readLines(rd_files[[i]], n = 5)
   name <- lines[grep("\\\\name\\{", lines, perl = TRUE)]
   name <- gsub("\\\\name\\{|\\}", "", name)
 
