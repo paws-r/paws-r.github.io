@@ -17,6 +17,7 @@ update-deps:
 
 clean-down:
 	@echo "INFO $$(date +%F) $$(date +%T): Clearing down site"
+	@rm -rf docs
 	@rm -rf build/mkdocs/site
 
 build-docs: clean-down

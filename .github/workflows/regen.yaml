@@ -40,27 +40,6 @@ jobs:
         with:
           python-version: 3.x
 
-      # Clean unnecessary files to save disk space
-      # - name: clean unncessary files to save space
-      #   run: |
-      #     docker rmi `docker images -q`
-      #     sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/sudo apt/sources.list.d
-      #     sudo apt -y autoremove --purge
-      #     sudo apt -y autoclean
-      #     sudo apt clean
-      #     rm --recursive --force "$AGENT_TOOLSDIRECTORY"
-      #     df -h          
-
-      # Free up disk space on Ubuntu
-      # - name: Free Disk Space (Ubuntu)
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-      #     tool-cache: false
-      #     large-packages: true
-      #     swap-storage: true
-
-
       - name: Install System Dependencies
         run: |
           sudo apt-get update
@@ -80,6 +59,10 @@ jobs:
           remotes::install_local('vendor/paws/paws.common', force = TRUE)
         shell: Rscript {0}
 
+      - name: Clean Up
+        run:
+          make clean-down
+
       - name: Regen Paws Site
         run: |
           make regen-site
@@ -92,11 +75,19 @@ jobs:
         run:
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION }} --paths "/*" 2>&1 > /dev/null
 
-      - name: Clean Up
-        run:
-          make clean-down
+      - name: Update docs
+        run: |
+          mv build/mkdocs/site docs/
 
       # Commit all changed files back to the repository
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Regenerate Paws Website"
+      - name: Commit and push changes.
+        run: |
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git config --global user.name github-actions
+            git config --global user.email actions@github.com
+            git add .
+            git commit -m "Regenerate Paws Website"
+            git push -u origin main
+          fi
