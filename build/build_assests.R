@@ -93,24 +93,30 @@ reference_index <- function(paws_dir = "vendor/paws/cran") {
   paws_pkg <- trimws(gsub("\\([^)]*\\).*", "", pkgs))
   paws_pkg <- paws_pkg[paws_pkg != "paws.common"]
 
-  reference <- sapply(paws_pkg, \(x) {
-    gsub("\\.Rd$", "\\.md", basename(fs::dir_ls(file.path(paws_dir, x, "man"))))
-  }, simplify = F)
-
-  for (i in seq_along(reference)) {
-    lvl <- gsub("_.*|\\.md$", "", reference[[i]])
-    ref <- sub("[a-zA-Z0-9]+_", "", reference[[i]], perl = T)
-    ref <- gsub("\\.md$", "", ref)
-    reference[[i]] <- paste(
-      sprintf('- <a href="../%s/"> %s </a>', ref[lvl == ref], convert_name(ref[lvl == ref])),
-      collapse = "\n"
-    )
+  reference <- vector("list", length(paws_pkg))
+  names(reference) <- paws_pkg
+  for (pkg in paws_pkg) {
+      file_list <- gsub(
+        "\\.Rd$", "\\.md", basename(fs::dir_ls(file.path(paws_dir, pkg, "man")))
+      )
+      lvl <- gsub("_.*|\\.md$", "", file_list)
+      ref <- sub("[a-zA-Z0-9]+_", "", file_list, perl = T)
+      ref <- gsub("\\.md$", "", ref)
+      ref <- ref[lvl == ref]
+      ref <- ref[ref != "reexports"]
+      reference[[pkg]] <- paste(
+        sprintf('- <a href="../%s/"> %s </a>', ref, convert_name(ref)),
+        collapse = "\n"
+      )
   }
   names(reference) <- sprintf("## %s", names(reference))
   reference <- paste(names(reference), reference, sep = "\n")
+  # Delete file is exists
+  path <- "build/mkdocs/docs/docs/reference_index.md"
+  if (fs::file_exists(path)) fs::file_delete(path)
   writeLines(
     c("# Available Services", reference),
-    "build/mkdocs/docs/docs/reference_index.md"
+    path
   )
   return("docs/reference_index.md")
 }
@@ -139,11 +145,11 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
   }
   names(hierarchy) <- convert_name(names(hierarchy))
   addons <- setNames(sprintf("docs/%s", addons), convert_name(addons))
-  
+
   # group paginators
   pag_n <- grepl("paginat", addons)
   addons <- c(addons[!pag_n], list("Paws Paginators" = addons[pag_n]))
-  
+
   hierarchy <- c(
     "Available Services" = reference_index(),
     addons,
