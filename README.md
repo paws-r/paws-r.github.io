@@ -1,6 +1,6 @@
 # Description:
 
-This repository builds [paws-r](https://github.com/paws-r/paws) website: [www.paws-r-sdk.com](www.paws-r-sdk.com)
+This repository builds [paws-r](https://github.com/paws-r/paws) website: [www.paws-r-sdk.com](https://www.paws-r-sdk.com/)
 
 Github Website: [https://paws-r.github.io/](https://paws-r.github.io/)
 
