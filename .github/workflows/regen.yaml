@@ -72,6 +72,7 @@ jobs:
           aws s3 sync build/mkdocs/site ${{ secrets.S3FOLDER }} --delete --quiet
 
       - name: Force CloudFront to update
+        if: $GITHUB_REPOSITORY == 'paws-r/paws-r.github.io'
         run:
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION }} --paths "/*" 2>&1 > /dev/null
 

@@ -33,6 +33,6 @@ regen-site: build-site
 	@rm -rf build/mkdocs/docs
 
 requirements: 
-	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2', 'remotes', 'progress'), repos='https://cran.rstudio.com/')"
+	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2', 'remotes', 'progress', 'heck'), repos='https://cran.rstudio.com/')"
 	@python -m pip install --upgrade pip
 	@pip install --upgrade mkdocs-material awscli
