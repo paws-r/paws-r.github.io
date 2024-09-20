@@ -95,19 +95,31 @@ reference_index <- function(paws_dir = "vendor/paws/cran") {
 
   reference <- vector("list", length(paws_pkg))
   names(reference) <- paws_pkg
+
+  override <- as.data.frame(do.call(rbind, yaml::read_yaml("build/aws_service_alias.yml")))
   for (pkg in paws_pkg) {
-      file_list <- gsub(
-        "\\.Rd$", "\\.md", basename(fs::dir_ls(file.path(paws_dir, pkg, "man")))
+    file_list <- gsub(
+      "\\.Rd$", "\\.md", basename(fs::dir_ls(file.path(paws_dir, pkg, "man")))
+    )
+    lvl <- gsub("_.*|\\.md$", "", file_list)
+    ref <- sub("[a-zA-Z0-9]+_", "", file_list, perl = T)
+    ref <- gsub("\\.md$", "", ref)
+    ref <- ref[lvl == ref]
+    ref <- ref[ref != "reexports"]
+
+    found <- override$service %in% ref
+    ref_name <- as.character(
+      ifelse(
+        ref %in% override$service,
+        sprintf("%s (%s)", override$name[found], ref),
+        sprintf("%s (%s)", convert_name(ref), ref)
       )
-      lvl <- gsub("_.*|\\.md$", "", file_list)
-      ref <- sub("[a-zA-Z0-9]+_", "", file_list, perl = T)
-      ref <- gsub("\\.md$", "", ref)
-      ref <- ref[lvl == ref]
-      ref <- ref[ref != "reexports"]
-      reference[[pkg]] <- paste(
-        sprintf('- <a href="../%s/"> %s </a>', ref, convert_name(ref)),
-        collapse = "\n"
-      )
+    )
+
+    reference[[pkg]] <- paste(
+      sprintf('- <a href="../%s/"> %s </a>', ref, ref_name),
+      collapse = "\n"
+    )
   }
   names(reference) <- sprintf("## %s", names(reference))
   reference <- paste(names(reference), reference, sep = "\n")
@@ -135,6 +147,7 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
   ref <- gsub("\\.md$", "", ref)
 
   ref[lvl == ref] <- "Client"
+
   hierarchy <- sprintf("%s: docs/%s", convert_name(ref), hierarchy)
   hierarchy <- split(hierarchy, lvl)
 
@@ -143,7 +156,15 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
     idx <- grep("^Client:", hierarchy[[j]], perl = T)
     hierarchy[[j]] <- c(hierarchy[[j]][idx], sort(hierarchy[[j]][-idx]))
   }
-  names(hierarchy) <- convert_name(names(hierarchy))
+  override <- as.data.frame(do.call(rbind, yaml::read_yaml("build/aws_service_alias.yml")))
+  found <- override$service %in% names(hierarchy)
+  names(hierarchy) <- as.character(
+    ifelse(
+      names(hierarchy) %in% override$service,
+      sprintf("%s (%s)", override$name[found], override$service[found]),
+      sprintf("%s (%s)", convert_name(names(hierarchy)), names(hierarchy))
+    )
+  )
   addons <- setNames(sprintf("docs/%s", addons), convert_name(addons))
 
   # group paginators
@@ -160,8 +181,7 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
 
 convert_name <- function(file_names) {
   file_names <- gsub("\\..*$", "", file_names)
-  file_names <- tolower(gsub("_", " ", file_names))
-  return(tools::toTitleCase(file_names))
+  return(heck::to_title_case(file_names))
 }
 
 get_developer_guide <- function(dir = "build/mkdocs/docs/developer_guide") {
