@@ -271,6 +271,6 @@ mm <- mirai_map(
   rd_files,
   rd_to_md,
   .args = list(html_dir = temp_html_dir, md_dir = md_dir)
-)[.progress]
+)[]
 
 fs::dir_delete(temp_html_dir)
