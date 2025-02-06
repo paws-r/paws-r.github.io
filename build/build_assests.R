@@ -10,7 +10,11 @@ log_info("Build site assests")
 
 # copy assests from vendor
 fs::file_copy("vendor/paws/README.md", "build/mkdocs/docs", overwrite = TRUE)
-fs::file_copy("vendor/paws/docs/logo.png", "build/mkdocs/docs", overwrite = TRUE)
+fs::file_copy(
+  "vendor/paws/docs/logo.png",
+  "build/mkdocs/docs",
+  overwrite = TRUE
+)
 
 # create site directory structure
 dirs <- fs::path("build/mkdocs/docs", c("examples", "developer_guide", "img"))
@@ -18,9 +22,15 @@ if (all(file.exists(dirs))) fs::dir_delete(dirs)
 fs::dir_create(dirs, recurse = TRUE)
 
 # copy assests examples from vendor
-fs::dir_copy("vendor/paws/examples", "build/mkdocs/docs/examples", overwrite = TRUE)
+fs::dir_copy(
+  "vendor/paws/examples",
+  "build/mkdocs/docs/examples",
+  overwrite = TRUE
+)
 
-developer_guide_files <- list.files("vendor/paws/docs")[!grepl("\\.png$|\\.gif$", list.files("vendor/paws/docs"))]
+developer_guide_files <- list.files("vendor/paws/docs")[
+  !grepl("\\.png$|\\.gif$", list.files("vendor/paws/docs"))
+]
 # copy articles from vendor
 for (f in developer_guide_files) {
   fs::file_copy(
@@ -62,10 +72,15 @@ edit_readme <- function(file = "build/mkdocs/docs/README.md") {
   idx <- grepl(r"{\[.*\]\(docs/.*\)|\[.*\]\(developer_guide/docs/.*\)}", readme)
   readme[idx] <- gsub(r"{\[Logo\]\(docs/logo.png\)}", "Logo", readme[idx])
   readme[idx] <- gsub(
-    r"{!\[\]\(docs/code_completion.gif\)}", r"{!\[\]\(img/code_completion\.gif\)}",
+    r"{!\[\]\(docs/code_completion.gif\)}",
+    r"{!\[\]\(img/code_completion\.gif\)}",
     readme[idx]
   )
-  readme[idx] <- gsub("docs/developer_guide|docs", "developer_guide", readme[idx])
+  readme[idx] <- gsub(
+    "docs/developer_guide|docs",
+    "developer_guide",
+    readme[idx]
+  )
 
   # fix examples links
   idx <- grepl(r"{\[.*\]\(examples/.*\)}", readme)
@@ -96,10 +111,14 @@ reference_index <- function(paws_dir = "vendor/paws/cran") {
   reference <- vector("list", length(paws_pkg))
   names(reference) <- paws_pkg
 
-  override <- as.data.frame(do.call(rbind, yaml::read_yaml("build/aws_service_alias.yml")))
+  override <- as.data.frame(
+    do.call(rbind, yaml::read_yaml("build/aws_service_alias.yml"))
+  )
   for (pkg in paws_pkg) {
     file_list <- gsub(
-      "\\.Rd$", "\\.md", basename(fs::dir_ls(file.path(paws_dir, pkg, "man")))
+      "\\.Rd$",
+      "\\.md",
+      basename(fs::dir_ls(file.path(paws_dir, pkg, "man")))
     )
     lvl <- gsub("_.*|\\.md$", "", file_list)
     ref <- sub("[a-zA-Z0-9]+_", "", file_list, perl = T)
@@ -137,7 +156,8 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
   addons <- c(
     "set_service_parameter.md",
     "paginate.md",
-    "list_paginators.md"
+    "list_paginators.md",
+    "paws_stream.md"
   )
   hierarchy <- list.files(dir)
   hierarchy <- hierarchy[!(hierarchy %in% addons)]
@@ -156,7 +176,9 @@ make_hierarchy <- function(dir = "build/mkdocs/docs/docs") {
     idx <- grep("^Client:", hierarchy[[j]], perl = T)
     hierarchy[[j]] <- c(hierarchy[[j]][idx], sort(hierarchy[[j]][-idx]))
   }
-  override <- as.data.frame(do.call(rbind, yaml::read_yaml("build/aws_service_alias.yml")))
+  override <- as.data.frame(
+    do.call(rbind, yaml::read_yaml("build/aws_service_alias.yml"))
+  )
   found <- override$service %in% names(hierarchy)
   names(hierarchy) <- as.character(
     ifelse(
@@ -185,8 +207,15 @@ convert_name <- function(file_names) {
 }
 
 get_developer_guide <- function(dir = "build/mkdocs/docs/developer_guide") {
-  developer_guide <- sort(basename(fs::dir_ls(dir, type = "file")), decreasing = T)
-  developer_guide <- sprintf("%s: developer_guide/%s", convert_name(developer_guide), developer_guide)
+  developer_guide <- sort(
+    basename(fs::dir_ls(dir, type = "file")),
+    decreasing = T
+  )
+  developer_guide <- sprintf(
+    "%s: developer_guide/%s",
+    convert_name(developer_guide),
+    developer_guide
+  )
   return(as.list(developer_guide))
 }
 
@@ -218,15 +247,29 @@ build_site_yaml <- function() {
   site_yaml$site_name <- sprintf("paws: %s", get_version())
 
   # add references
-  ref_idx <- which(vapply(site_yaml$nav, \(x) names(x) == "Reference", FUN.VALUE = logical(1)))
+  ref_idx <- which(
+    vapply(site_yaml$nav, \(x) names(x) == "Reference", FUN.VALUE = logical(1))
+  )
   site_yaml$nav[[ref_idx]]$Reference <- make_hierarchy()
 
   # add developer guide
-  ref_idx <- which(vapply(site_yaml$nav, \(x) names(x) == "Developer Guide", FUN.VALUE = logical(1)))
+  ref_idx <- which(
+    vapply(
+      site_yaml$nav,
+      \(x) names(x) == "Developer Guide",
+      FUN.VALUE = logical(1)
+    )
+  )
   site_yaml$nav[[ref_idx]][["Developer Guide"]] <- get_developer_guide()
 
   # add examples
-  ref_idx <- which(vapply(site_yaml$nav, \(x) names(x) == "Code Examples", FUN.VALUE = logical(1)))
+  ref_idx <- which(
+    vapply(
+      site_yaml$nav,
+      \(x) names(x) == "Code Examples",
+      FUN.VALUE = logical(1)
+    )
+  )
   site_yaml$nav[[ref_idx]][["Code Examples"]] <- get_examples()
 
   site_yaml <- yaml::as.yaml(site_yaml, indent.mapping.sequence = T)
