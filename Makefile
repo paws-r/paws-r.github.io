@@ -33,5 +33,8 @@ regen-site: build-site
 	@rm -rf build/mkdocs/docs
 
 requirements: 
+	@Rscript -e "if (!require(pak)) install.packages('pak')"
 	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2', 'remotes', 'mirai', 'heck'))"
+	@Rscript -e "pak::local_install_dev_deps('vendor/paws/paws.common')"
+	@Rscript -e "pak::local_install('vendor/paws/paws.common')"		  
 	@uv sync --frozen
