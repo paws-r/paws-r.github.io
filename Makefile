@@ -26,13 +26,12 @@ build-docs: clean-down
 
 build-site: build-docs
 	@echo "INFO $$(date +%F) $$(date +%T): Building site"
-	@cd build/mkdocs && python -m mkdocs build
+	@cd build/mkdocs && uv run mkdocs build
 
 regen-site: build-site
 	@echo "INFO $$(date +%F) $$(date +%T): Moving site to root"
 	@rm -rf build/mkdocs/docs
 
 requirements: 
-	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2', 'remotes', 'mirai', 'heck'), repos='https://cran.rstudio.com/')"
-	@python -m pip install --upgrade pip
-	@pip install --upgrade mkdocs-material awscli
+	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2', 'remotes', 'mirai', 'heck'))"
+	@uv sync --frozen
