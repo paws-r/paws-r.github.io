@@ -73,13 +73,13 @@ jobs:
         run: |
           echo $GITHUB_REPOSITORY
           if [[ "$GITHUB_REPOSITORY" == "paws-r/paws-r.github.io" ]]; then
-            aws s3 sync build/mkdocs/site ${{ secrets.S3FOLDER }} --delete --quiet
+            uv run aws s3 sync build/mkdocs/site ${{ secrets.S3FOLDER }} --delete --quiet
           fi
 
       - name: Force CloudFront to update
         run: |
           if [[ "$GITHUB_REPOSITORY" == "paws-r/paws-r.github.io" ]]; then
-            aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION }} --paths "/*" 2>&1 > /dev/null
+            uv run aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION }} --paths "/*" 2>&1 > /dev/null
           fi
 
       - name: Update docs
