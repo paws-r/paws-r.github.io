@@ -54,25 +54,22 @@ build_rd_chunk <- function(chunk_services, pkg_dir, all_files, prefix, shared_fi
 
 #' Regenerate Rd documentation for a package, parallelized across services
 #'
-#' `roxygen2::roxygenize()` is single-threaded, and for a package the size
-#' of `paws` it dominates a full site rebuild's wall-clock time far more
-#' than the (already-parallel, via [pmap_build()]) Rd-to-Markdown
-#' conversion step does. This splits `pkg_dir`'s services into `chunks`
-#' groups, roxygenizes each group as an isolated temporary package copy in
-#' parallel via [pmap_build()] and `build_rd_chunk()`, then merges the
-#' resulting `man/*.Rd` files back into `pkg_dir`.
+#' Splits `pkg_dir`'s services into `chunks` groups, roxygenizes each
+#' group as an isolated temporary package copy in parallel via
+#' [pmap_build()] and `build_rd_chunk()`, then merges the resulting
+#' `man/*.Rd` files back into `pkg_dir`. Services are grouped by the
+#' `{service}_service.R` / `{service}_operations.R` / `{service}_custom.R`
+#' file naming convention `paws`'s generated source uses, so a service's
+#' own files - including any hand-written `_custom.R` extras - always land
+#' in the same chunk. Files matching none of those suffixes (e.g.
+#' `paws_package.R`) are treated as package-global and included in every
+#' chunk.
 #'
-#' Services are grouped by the `{service}_service.R` / `{service}_operations.R`
-#' / `{service}_custom.R` file naming convention `paws`'s generated source
-#' uses, so a service's own files - including any hand-written
-#' `_custom.R` extras - always land in the same chunk. Files matching none
-#' of those suffixes (e.g. `paws_package.R`) are treated as package-global
-#' and included in every chunk.
-#'
-#' See `plans/speed-up-rd2md-build.md` for the investigation and
-#' benchmark behind this (~4-6x faster on the real `vendor/paws` corpus,
-#' verified byte-identical to a single-process [build_long_rd()] run
-#' across all ~14,000 generated files).
+#' Exists because `roxygen2::roxygenize()` is single-threaded and
+#' dominates a full site rebuild's wall-clock time; see
+#' `plans/speed-up-rd2md-build.md` for the investigation and benchmark
+#' (~4-6x faster on the real `vendor/paws` corpus, verified
+#' byte-identical to a single-process [build_long_rd()] run).
 #'
 #' @param pkg_dir Path to the package source directory to roxygenize.
 #' @param chunks Number of groups to split `pkg_dir`'s services into.

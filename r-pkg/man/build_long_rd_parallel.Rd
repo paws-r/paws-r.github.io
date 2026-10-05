@@ -24,24 +24,21 @@ chunking/merge logic without starting \code{mirai} daemons.}
 \code{pkg_dir}, invisibly.
 }
 \description{
-\code{roxygen2::roxygenize()} is single-threaded, and for a package the size
-of \code{paws} it dominates a full site rebuild's wall-clock time far more
-than the (already-parallel, via \code{\link[=pmap_build]{pmap_build()}}) Rd-to-Markdown
-conversion step does. This splits \code{pkg_dir}'s services into \code{chunks}
-groups, roxygenizes each group as an isolated temporary package copy in
-parallel via \code{\link[=pmap_build]{pmap_build()}} and \code{build_rd_chunk()}, then merges the
-resulting \verb{man/*.Rd} files back into \code{pkg_dir}.
+Splits \code{pkg_dir}'s services into \code{chunks} groups, roxygenizes each
+group as an isolated temporary package copy in parallel via
+\code{\link[=pmap_build]{pmap_build()}} and \code{build_rd_chunk()}, then merges the resulting
+\verb{man/*.Rd} files back into \code{pkg_dir}. Services are grouped by the
+\verb{\{service\}_service.R} / \verb{\{service\}_operations.R} / \verb{\{service\}_custom.R}
+file naming convention \code{paws}'s generated source uses, so a service's
+own files - including any hand-written \verb{_custom.R} extras - always land
+in the same chunk. Files matching none of those suffixes (e.g.
+\code{paws_package.R}) are treated as package-global and included in every
+chunk.
 }
 \details{
-Services are grouped by the \verb{\{service\}_service.R} / \verb{\{service\}_operations.R}
-/ \verb{\{service\}_custom.R} file naming convention \code{paws}'s generated source
-uses, so a service's own files - including any hand-written
-\verb{_custom.R} extras - always land in the same chunk. Files matching none
-of those suffixes (e.g. \code{paws_package.R}) are treated as package-global
-and included in every chunk.
-
-See \code{plans/speed-up-rd2md-build.md} for the investigation and
-benchmark behind this (~4-6x faster on the real \code{vendor/paws} corpus,
-verified byte-identical to a single-process \code{\link[=build_long_rd]{build_long_rd()}} run
-across all ~14,000 generated files).
+Exists because \code{roxygen2::roxygenize()} is single-threaded and
+dominates a full site rebuild's wall-clock time; see
+\code{plans/speed-up-rd2md-build.md} for the investigation and benchmark
+(~4-6x faster on the real \code{vendor/paws} corpus, verified
+byte-identical to a single-process \code{\link[=build_long_rd]{build_long_rd()}} run).
 }

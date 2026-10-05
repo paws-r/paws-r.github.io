@@ -51,11 +51,11 @@ build_site_yaml <- function(
   ref_idx <- which(
     vapply(site_yaml$nav, \(x) names(x) == "Reference", FUN.VALUE = logical(1))
   )
-  site_yaml$nav[[ref_idx]]$Reference <- make_hierarchy(
+  site_yaml$nav[[ref_idx]]$Reference <- as_nav_sequence(make_hierarchy(
     md_dir,
     alias_file,
     reference_index_out_file
-  )
+  ))
 
   reference_index(paws_dir, alias_file, reference_index_out_file)
 
@@ -92,4 +92,16 @@ build_site_yaml <- function(
   }
   writeLines(site_yaml, out_file, "")
   invisible(out_file)
+}
+
+#' Convert a named list into a sequence of single-key entries
+#'
+#' `yaml::as.yaml()` renders a plain named list as a mapping, but mkdocs'
+#' `nav` option requires a sequence of single-key mappings at every level -
+#' [make_hierarchy()] returns a named list (so callers can look entries up
+#' by name, see its tests), so that contract has to be converted at the
+#' point it's spliced into `nav` rather than changed at the source.
+#' @noRd
+as_nav_sequence <- function(x) {
+  unname(Map(function(nm, val) setNames(list(val), nm), names(x), x))
 }

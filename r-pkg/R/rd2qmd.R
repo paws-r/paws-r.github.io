@@ -21,11 +21,11 @@ rd2qmd_bin <- function(path = rd2qmd_path()) {
 
 #' Convert a directory of Rd files to Markdown via rd2qmd
 #'
-#' Replaces the historical `rd_to_md()` / `wrap_r_code()` /
-#' `html_table_to_list()` / `find_and_replace()` pipeline: one subprocess
-#' call handles conversion, internal cross-reference link resolution, and
-#' parallelism for the whole directory. See `plans/adopt-rd2qmd.md` for why
-#' each flag below is needed.
+#' Runs the `rd2qmd` binary ([rd2qmd_bin()]) once over the whole
+#' directory: converts every `.Rd` file to Markdown, resolves internal
+#' cross-reference links between them, and parallelizes the work across
+#' `workers` jobs - all in one subprocess call. See
+#' `plans/adopt-rd2qmd.md` for why each flag below is needed.
 #'
 #' @param man_dir Directory of `.Rd` files to convert. All files in this
 #'   directory are treated as one topic set for internal link resolution,

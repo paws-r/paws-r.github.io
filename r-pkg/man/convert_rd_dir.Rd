@@ -21,9 +21,9 @@ it doesn't exist.}
 \code{md_dir}, invisibly.
 }
 \description{
-Replaces the historical \code{rd_to_md()} / \code{wrap_r_code()} /
-\code{html_table_to_list()} / \code{find_and_replace()} pipeline: one subprocess
-call handles conversion, internal cross-reference link resolution, and
-parallelism for the whole directory. See \code{plans/adopt-rd2qmd.md} for why
-each flag below is needed.
+Runs the \code{rd2qmd} binary (\code{\link[=rd2qmd_bin]{rd2qmd_bin()}}) once over the whole
+directory: converts every \code{.Rd} file to Markdown, resolves internal
+cross-reference links between them, and parallelizes the work across
+\code{workers} jobs - all in one subprocess call. See
+\code{plans/adopt-rd2qmd.md} for why each flag below is needed.
 }
