@@ -1,0 +1,44 @@
+name: pawsdocs R CMD check
+
+on:
+  pull_request:
+    paths:
+      - "r-pkg/**"
+  push:
+    branches: [main]
+    paths:
+      - "r-pkg/**"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: R CMD check
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: "3.9.0.2"
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+          sudo apt-get install -y libharfbuzz-dev libfribidi-dev
+
+      - name: Install pak
+        run: Rscript -e "if (!require(pak)) install.packages('pak')"
+
+      - name: Install package and dev dependencies
+        run: |
+          Rscript -e "pak::local_install_dev_deps('r-pkg', dependencies = TRUE)"
+          Rscript -e "pak::pak('rcmdcheck')"
+
+      - name: R CMD check
+        run: Rscript -e "rcmdcheck::rcmdcheck('r-pkg', args = c('--no-manual'), error_on = 'warning')"

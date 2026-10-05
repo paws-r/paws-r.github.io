@@ -21,8 +21,7 @@ clean-down:
 	@rm -rf build/mkdocs/site
 
 build-docs: clean-down
-	@Rscript build/rd2md.R
-	@Rscript build/build_assests.R
+	@Rscript -e "pawsdocs::build_docs()"
 
 build-site: build-docs
 	@echo "INFO $$(date +%F) $$(date +%T): Building site"
@@ -32,9 +31,9 @@ regen-site: build-site
 	@echo "INFO $$(date +%F) $$(date +%T): Moving site to root"
 	@rm -rf build/mkdocs/docs
 
-requirements: 
+requirements:
 	@Rscript -e "if (!require(pak)) install.packages('pak')"
 	@Rscript -e "install.packages(c('rmarkdown', 'fs', 'yaml', 'roxygen2', 'remotes', 'mirai', 'heck'))"
-	@Rscript -e "pak::local_install_dev_deps('vendor/paws/paws.common')"
-	@Rscript -e "pak::local_install('vendor/paws/paws.common')"		  
+	@Rscript -e "pak::local_install('vendor/paws/paws.common', dependencies = T)"
+	@Rscript -e "pak::local_install('r-pkg', dependencies = T)"
 	@uv sync --frozen
