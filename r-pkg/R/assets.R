@@ -1,9 +1,10 @@
 #' Copy static site assets out of the vendored paws checkout
 #'
-#' Copies the top-level `README.md` and logo, the `examples/` directory, the
-#' developer guide articles (`docs/*`, excluding images, plus
-#' `CODE_OF_CONDUCT.md` and `DEVELOPER_GUIDE.md`), and the `code_completion`
-#' gif into the mkdocs docs tree.
+#' Copies the top-level `README.md` and logo, the `examples/` directory, and
+#' the developer guide articles. Every file in `docs/` (other than
+#' `logo.png`) is picked up dynamically: images go to `img/`, everything
+#' else (Markdown, PDFs, etc.) goes to `developer_guide/`, alongside
+#' `CODE_OF_CONDUCT.md` and `DEVELOPER_GUIDE.md`.
 #'
 #' @param vendor_dir Path to the vendored `paws` checkout (containing
 #'   `README.md`, `docs/`, `examples/`).
@@ -32,10 +33,19 @@ copy_vendor_assets <- function(vendor_dir, out_dir) {
   )
 
   vendor_docs <- fs::path(vendor_dir, "docs")
-  developer_guide_files <- list.files(vendor_docs)[
-    !grepl("\\.png$|\\.gif$", list.files(vendor_docs))
-  ]
-  for (f in developer_guide_files) {
+  docs_files <- list.files(vendor_docs)
+  docs_files <- docs_files[docs_files != "logo.png"]
+  is_image <- grepl("\\.(png|gif|jpe?g|svg)$", docs_files, ignore.case = TRUE)
+
+  for (f in docs_files[is_image]) {
+    fs::file_copy(
+      fs::path(vendor_docs, f),
+      fs::path(out_dir, "img", f),
+      overwrite = TRUE
+    )
+  }
+
+  for (f in docs_files[!is_image]) {
     fs::file_copy(
       fs::path(vendor_docs, f),
       fs::path(out_dir, "developer_guide", f),
@@ -47,14 +57,6 @@ copy_vendor_assets <- function(vendor_dir, out_dir) {
     fs::file_copy(
       fs::path(vendor_dir, f),
       fs::path(out_dir, "developer_guide", f),
-      overwrite = TRUE
-    )
-  }
-
-  for (f in c("code_completion.gif")) {
-    fs::file_copy(
-      fs::path(vendor_docs, f),
-      fs::path(out_dir, "img", f),
       overwrite = TRUE
     )
   }
