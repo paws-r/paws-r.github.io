@@ -87,7 +87,7 @@ reference_index <- function(
 #' Build the mkdocs navigation hierarchy for the Reference section
 #'
 #' @param md_dir Directory of converted operator `.md` files (as produced by
-#'   [rd_to_md()]).
+#'   [convert_rd_dir()]).
 #' @param alias_file Path to the YAML file mapping service short names to
 #'   display names (`service`/`name` pairs).
 #' @param reference_index_file Path to the reference index page written by

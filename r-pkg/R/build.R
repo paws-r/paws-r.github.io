@@ -1,9 +1,20 @@
 #' Regenerate Rd docs and convert them all to Markdown
 #'
 #' End-to-end replacement for the historical `build/rd2md.R` script:
-#' roxygenizes `pkg_dir`, clears out `md_dir`, then converts every operator
-#' `.Rd` file (plus a handful of `paws.common` addon pages) to Markdown in
-#' parallel via [pmap_build()] and [rd_to_md()].
+#' roxygenizes `pkg_dir` (in parallel via [build_long_rd_parallel()]), then
+#' converts every operator `.Rd` file (plus a handful of `paws.common`
+#' addon pages) to Markdown via [convert_rd_dir()].
+#'
+#' `pkg_dir`'s own `.Rd` files and the `paws.common` addon pages are staged
+#' into one temporary directory before conversion - `rd2qmd` resolves
+#' internal cross-reference links (e.g. a service's operation table linking
+#' to each operation's own page) against whatever topic set it's given, so
+#' the addons need to be visible alongside the operators for those links to
+#' resolve, without permanently copying them into either source package's
+#' own `man/` directory. `paws-package.Rd` and `reexports.Rd` are excluded
+#' from staging: both have the same file-name stem as their own "service"
+#' once converted (no `_` to split on), so [make_hierarchy()] would
+#' otherwise mistake each for a spurious one-page "Client" entry.
 #'
 #' @param pkg_dir Path to the vendored `paws` package source to roxygenize
 #'   (e.g. `vendor/paws/paws`).
@@ -15,7 +26,9 @@
 #'   `build/mkdocs/docs/docs`). Deleted and recreated.
 #' @param addons Character vector of `paws.common` addon `.Rd` file names to
 #'   include alongside `pkg_dir`'s own operators.
-#' @param workers Number of parallel workers to pass to [pmap_build()].
+#' @param workers Number of parallel workers used for both roxygenizing
+#'   `pkg_dir` (as chunks, via [build_long_rd_parallel()]) and converting
+#'   its Rd files to Markdown (via [convert_rd_dir()]).
 #' @return `md_dir`, invisibly.
 #' @export
 build_rd_docs <- function(
@@ -31,33 +44,24 @@ build_rd_docs <- function(
   ),
   workers = parallel::detectCores()
 ) {
-  temp_html_dir <- tempfile()
-  if (file.exists(md_dir)) fs::dir_delete(md_dir)
-  fs::dir_create(c(md_dir, temp_html_dir), recurse = TRUE)
+  if (fs::dir_exists(md_dir)) fs::dir_delete(md_dir)
+  fs::dir_create(md_dir, recurse = TRUE)
 
   log_info("Build Rd docs")
-  build_long_rd(pkg_dir)
+  build_long_rd_parallel(pkg_dir, chunks = workers, workers = workers)
 
   log_info("Converting Rd to Markdown")
+  staging_dir <- fs::file_temp()
+  fs::dir_create(staging_dir)
+
   files <- list.files(man_dir)
-  # remove paws-package.Rd
-  files <- files[files != "paws-package.Rd"]
+  files <- files[!(files %in% c("paws-package.Rd", "reexports.Rd"))]
+  fs::file_copy(fs::path(man_dir, files), fs::path(staging_dir, files))
+  fs::file_copy(fs::path(common_man_dir, addons), fs::path(staging_dir, addons))
 
-  md_dir <- fs::path_abs(md_dir)
-  rd_files <- fs::path_abs(file.path(man_dir, files))
-  rd_files <- rd_files[fs::path_file(rd_files) != "reexports.Rd"]
-  rd_files <- c(rd_files, fs::path_abs(file.path(common_man_dir, addons)))
+  convert_rd_dir(staging_dir, md_dir, workers = workers)
+  fs::dir_delete(staging_dir)
 
-  log_info(sprintf("Assigning %s cores.", workers))
-  pmap_build(
-    rd_files,
-    rd_to_md,
-    html_dir = temp_html_dir,
-    md_dir = md_dir,
-    workers = workers
-  )
-
-  fs::dir_delete(temp_html_dir)
   invisible(md_dir)
 }
 

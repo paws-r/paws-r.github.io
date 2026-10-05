@@ -30,14 +30,28 @@ generated \code{.Rd} files to convert.}
 \item{addons}{Character vector of \code{paws.common} addon \code{.Rd} file names to
 include alongside \code{pkg_dir}'s own operators.}
 
-\item{workers}{Number of parallel workers to pass to \code{\link[=pmap_build]{pmap_build()}}.}
+\item{workers}{Number of parallel workers used for both roxygenizing
+\code{pkg_dir} (as chunks, via \code{\link[=build_long_rd_parallel]{build_long_rd_parallel()}}) and converting
+its Rd files to Markdown (via \code{\link[=convert_rd_dir]{convert_rd_dir()}}).}
 }
 \value{
 \code{md_dir}, invisibly.
 }
 \description{
 End-to-end replacement for the historical \code{build/rd2md.R} script:
-roxygenizes \code{pkg_dir}, clears out \code{md_dir}, then converts every operator
-\code{.Rd} file (plus a handful of \code{paws.common} addon pages) to Markdown in
-parallel via \code{\link[=pmap_build]{pmap_build()}} and \code{\link[=rd_to_md]{rd_to_md()}}.
+roxygenizes \code{pkg_dir} (in parallel via \code{\link[=build_long_rd_parallel]{build_long_rd_parallel()}}), then
+converts every operator \code{.Rd} file (plus a handful of \code{paws.common}
+addon pages) to Markdown via \code{\link[=convert_rd_dir]{convert_rd_dir()}}.
+}
+\details{
+\code{pkg_dir}'s own \code{.Rd} files and the \code{paws.common} addon pages are staged
+into one temporary directory before conversion - \code{rd2qmd} resolves
+internal cross-reference links (e.g. a service's operation table linking
+to each operation's own page) against whatever topic set it's given, so
+the addons need to be visible alongside the operators for those links to
+resolve, without permanently copying them into either source package's
+own \verb{man/} directory. \code{paws-package.Rd} and \code{reexports.Rd} are excluded
+from staging: both have the same file-name stem as their own "service"
+once converted (no \verb{_} to split on), so \code{\link[=make_hierarchy]{make_hierarchy()}} would
+otherwise mistake each for a spurious one-page "Client" entry.
 }

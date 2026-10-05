@@ -14,7 +14,7 @@ make_hierarchy(
 }
 \arguments{
 \item{md_dir}{Directory of converted operator \code{.md} files (as produced by
-\code{\link[=rd_to_md]{rd_to_md()}}).}
+\code{\link[=convert_rd_dir]{convert_rd_dir()}}).}
 
 \item{alias_file}{Path to the YAML file mapping service short names to
 display names (\code{service}/\code{name} pairs).}

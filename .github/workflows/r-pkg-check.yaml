@@ -22,10 +22,6 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-pandoc@v2
-        with:
-          pandoc-version: "3.9.0.2"
-
       - name: Install System Dependencies
         run: |
           sudo apt-get update
@@ -38,7 +34,11 @@ jobs:
       - name: Install package and dev dependencies
         run: |
           Rscript -e "pak::local_install_dev_deps('r-pkg', dependencies = TRUE)"
+          Rscript -e "pak::local_install('r-pkg')"
           Rscript -e "pak::pak('rcmdcheck')"
+
+      - name: Install rd2qmd
+        run: Rscript -e "pawsdocs::install_rd2qmd()"
 
       - name: R CMD check
         run: Rscript -e "rcmdcheck::rcmdcheck('r-pkg', args = c('--no-manual'), error_on = 'warning')"
