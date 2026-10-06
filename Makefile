@@ -25,7 +25,7 @@ build-docs: clean-down
 
 build-site: build-docs
 	@echo "INFO $$(date +%F) $$(date +%T): Building site"
-	@cd build/mkdocs && uv run mkdocs build
+	@cd build/mkdocs && uv run zensical build
 
 regen-site: build-site
 	@echo "INFO $$(date +%F) $$(date +%T): Moving site to root"
