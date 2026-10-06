@@ -17,15 +17,26 @@ make_paws_cran_fixture <- function() {
 
   fs::dir_create(fs::path(paws_dir, "paws.storage", "man"), recurse = TRUE)
   fs::file_create(fs::path(
-    paws_dir, "paws.storage", "man",
+    paws_dir,
+    "paws.storage",
+    "man",
     c(
-      "s3.Rd", "s3_list_buckets.Rd", "s3_put_object.Rd",
-      "glacier.Rd", "glacier_create_vault.Rd", "reexports.Rd"
+      "s3.Rd",
+      "s3_list_buckets.Rd",
+      "s3_put_object.Rd",
+      "glacier.Rd",
+      "glacier_create_vault.Rd",
+      "reexports.Rd"
     )
   ))
 
   fs::dir_create(fs::path(paws_dir, "paws.compute", "man"), recurse = TRUE)
-  fs::file_create(fs::path(paws_dir, "paws.compute", "man", c("ec2.Rd", "ec2_run_instances.Rd")))
+  fs::file_create(fs::path(
+    paws_dir,
+    "paws.compute",
+    "man",
+    c("ec2.Rd", "ec2_run_instances.Rd")
+  ))
 
   paws_dir
 }
@@ -41,10 +52,22 @@ test_that("reference_index groups services by paws.* package and applies the ali
   expect_true("## paws.storage" %in% out)
   expect_true("## paws.compute" %in% out)
   # aliased services use the override display name
-  expect_true(any(grepl('<a href="../s3/"> Amazon S3 (s3) </a>', out, fixed = TRUE)))
-  expect_true(any(grepl('<a href="../ec2/"> Amazon EC2 (ec2) </a>', out, fixed = TRUE)))
+  expect_true(any(grepl(
+    '<a href="../s3/"> Amazon S3 (s3) </a>',
+    out,
+    fixed = TRUE
+  )))
+  expect_true(any(grepl(
+    '<a href="../ec2/"> Amazon EC2 (ec2) </a>',
+    out,
+    fixed = TRUE
+  )))
   # services with no override fall back to convert_name()
-  expect_true(any(grepl('<a href="../glacier/"> Glacier (glacier) </a>', out, fixed = TRUE)))
+  expect_true(any(grepl(
+    '<a href="../glacier/"> Glacier (glacier) </a>',
+    out,
+    fixed = TRUE
+  )))
   # paws.common and reexports.Rd are never listed
   expect_false(any(grepl("reexports", out)))
 })
@@ -54,8 +77,13 @@ make_md_fixture <- function() {
   fs::file_create(fs::path(
     md_dir,
     c(
-      "s3.md", "s3_list_buckets.md", "s3_put_object.md",
-      "paginate.md", "list_paginators.md", "set_service_parameter.md", "paws_stream.md"
+      "s3.md",
+      "s3_list_buckets.md",
+      "s3_put_object.md",
+      "paginate.md",
+      "list_paginators.md",
+      "set_service_parameter.md",
+      "paws_stream.md"
     )
   ))
   md_dir
@@ -68,7 +96,11 @@ test_that("make_hierarchy groups a service's operator pages under its Client pag
   # on-disk path (relative to the repo root, not to the mkdocs docs_dir) -
   # make_hierarchy() must derive the nav-relative "docs/<file>" path from
   # just the file name, not use this verbatim.
-  h <- make_hierarchy(md_dir, alias_fixture, fs::path(md_dir, "reference_index.md"))
+  h <- make_hierarchy(
+    md_dir,
+    alias_fixture,
+    fs::path(md_dir, "reference_index.md")
+  )
 
   expect_equal(h[["Available Services"]], "docs/reference_index.md")
   expect_equal(
@@ -86,11 +118,21 @@ test_that("make_hierarchy does not scramble names when multiple services have ov
   fs::file_create(fs::path(md_dir, c("aaa.md", "bbb.md", "ccc.md", "ddd.md")))
   multi_alias <- test_path("fixtures", "aws_service_alias_multi.yml")
 
-  h <- make_hierarchy(md_dir, multi_alias, fs::path(md_dir, "reference_index.md"))
+  h <- make_hierarchy(
+    md_dir,
+    multi_alias,
+    fs::path(md_dir, "reference_index.md")
+  )
 
-  expect_equal(h[[sprintf("%s (aaa)", convert_name("aaa"))]], "Client: docs/aaa.md")
+  expect_equal(
+    h[[sprintf("%s (aaa)", convert_name("aaa"))]],
+    "Client: docs/aaa.md"
+  )
   expect_equal(h[["BBB Service (bbb)"]], "Client: docs/bbb.md")
-  expect_equal(h[[sprintf("%s (ccc)", convert_name("ccc"))]], "Client: docs/ccc.md")
+  expect_equal(
+    h[[sprintf("%s (ccc)", convert_name("ccc"))]],
+    "Client: docs/ccc.md"
+  )
   expect_equal(h[["DDD Service (ddd)"]], "Client: docs/ddd.md")
 })
 
@@ -102,7 +144,12 @@ test_that("reference_index does not scramble names when multiple services have o
     fs::path(paws_dir, "paws", "DESCRIPTION")
   )
   fs::dir_create(fs::path(paws_dir, "paws.example", "man"), recurse = TRUE)
-  fs::file_create(fs::path(paws_dir, "paws.example", "man", c("aaa.Rd", "bbb.Rd", "ccc.Rd", "ddd.Rd")))
+  fs::file_create(fs::path(
+    paws_dir,
+    "paws.example",
+    "man",
+    c("aaa.Rd", "bbb.Rd", "ccc.Rd", "ddd.Rd")
+  ))
 
   multi_alias <- test_path("fixtures", "aws_service_alias_multi.yml")
   out_file <- withr::local_tempfile()
@@ -110,8 +157,16 @@ test_that("reference_index does not scramble names when multiple services have o
   reference_index(paws_dir, multi_alias, out_file)
   out <- readLines(out_file)
 
-  expect_true(any(grepl('<a href="../bbb/"> BBB Service (bbb) </a>', out, fixed = TRUE)))
-  expect_true(any(grepl('<a href="../ddd/"> DDD Service (ddd) </a>', out, fixed = TRUE)))
+  expect_true(any(grepl(
+    '<a href="../bbb/"> BBB Service (bbb) </a>',
+    out,
+    fixed = TRUE
+  )))
+  expect_true(any(grepl(
+    '<a href="../ddd/"> DDD Service (ddd) </a>',
+    out,
+    fixed = TRUE
+  )))
   expect_false(any(grepl("BBB Service (ddd)", out, fixed = TRUE)))
   expect_false(any(grepl("DDD Service (bbb)", out, fixed = TRUE)))
 })
@@ -123,7 +178,11 @@ test_that("make_hierarchy surfaces non-service addon pages as top-level nav entr
   # on-disk path (relative to the repo root, not to the mkdocs docs_dir) -
   # make_hierarchy() must derive the nav-relative "docs/<file>" path from
   # just the file name, not use this verbatim.
-  h <- make_hierarchy(md_dir, alias_fixture, fs::path(md_dir, "reference_index.md"))
+  h <- make_hierarchy(
+    md_dir,
+    alias_fixture,
+    fs::path(md_dir, "reference_index.md")
+  )
 
   expect_equal(h[["Set Service Parameter"]], "docs/set_service_parameter.md")
   expect_equal(h[["Paws Stream"]], "docs/paws_stream.md")
@@ -136,11 +195,18 @@ test_that("make_hierarchy groups the paginator addons together", {
   # on-disk path (relative to the repo root, not to the mkdocs docs_dir) -
   # make_hierarchy() must derive the nav-relative "docs/<file>" path from
   # just the file name, not use this verbatim.
-  h <- make_hierarchy(md_dir, alias_fixture, fs::path(md_dir, "reference_index.md"))
+  h <- make_hierarchy(
+    md_dir,
+    alias_fixture,
+    fs::path(md_dir, "reference_index.md")
+  )
 
   expect_equal(
     h[["Paws Paginators"]],
-    c(Paginate = "docs/paginate.md", "List Paginators" = "docs/list_paginators.md")
+    c(
+      Paginate = "docs/paginate.md",
+      "List Paginators" = "docs/list_paginators.md"
+    )
   )
 })
 
@@ -152,7 +218,10 @@ test_that("get_developer_guide lists files sorted by name descending", {
 
   expect_equal(
     out,
-    list("Article B: developer_guide/article_b.md", "Article A: developer_guide/article_a.md")
+    list(
+      "Article B: developer_guide/article_b.md",
+      "Article A: developer_guide/article_a.md"
+    )
   )
 })
 
@@ -166,11 +235,13 @@ test_that("get_examples lists example files with display names", {
 })
 
 test_that("get_version extracts the semantic version from DESCRIPTION", {
-  file <- withr::local_tempfile(lines = c(
-    "Package: paws",
-    "Version: 1.2.3",
-    "Title: Something"
-  ))
+  file <- withr::local_tempfile(
+    lines = c(
+      "Package: paws",
+      "Version: 1.2.3",
+      "Title: Something"
+    )
+  )
 
   expect_equal(get_version(file), "1.2.3")
 })

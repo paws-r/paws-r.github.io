@@ -21,12 +21,17 @@ find_rd_tag <- function(rd, tag) {
 test_that("link resolution falls back to the literal alias when no index is given", {
   desc <- find_rd_tag(
     parse_rd_text(
-      "\\name{x}", "\\alias{x}", "\\title{x}",
+      "\\name{x}",
+      "\\alias{x}",
+      "\\title{x}",
       "\\description{\\link[=some_long_alias]{some_long_alias}}"
     ),
     "\\description"
   )
-  expect_equal(render_rd_inline(desc), "[`some_long_alias`](some_long_alias.md)")
+  expect_equal(
+    render_rd_inline(desc),
+    "[`some_long_alias`](some_long_alias.md)"
+  )
 })
 
 test_that("link resolution uses alias_index to find a topic's real file", {
@@ -41,7 +46,9 @@ test_that("link resolution uses alias_index to find a topic's real file", {
   # mismatch broke 23 links across 4 client pages' Operations tables.
   desc <- find_rd_tag(
     parse_rd_text(
-      "\\name{x}", "\\alias{x}", "\\title{x}",
+      "\\name{x}",
+      "\\alias{x}",
+      "\\title{x}",
       "\\description{\\link[=some_long_alias]{some_long_alias}}"
     ),
     "\\description"
@@ -60,7 +67,13 @@ test_that("build_rd_alias_index maps every alias to its real file basename", {
   # paginate/paginate_lapply/paginate_sapply together) and one simulating
   # roxygen2's truncation (alias != file basename)
   writeLines(
-    c("\\name{bar}", "\\alias{bar}", "\\alias{bar_alt}", "\\title{Bar}", "\\usage{bar()}"),
+    c(
+      "\\name{bar}",
+      "\\alias{bar}",
+      "\\alias{bar_alt}",
+      "\\title{Bar}",
+      "\\usage{bar()}"
+    ),
     fs::path(man_dir, "truncated_file.Rd")
   )
 
@@ -171,5 +184,8 @@ test_that("render_client_rd_file writes to the expected path", {
   out_file <- render_client_rd_file(test_path("fixtures", "client.Rd"), md_dir)
   expect_equal(out_file, fs::path(md_dir, "client.md"))
   expect_true(fs::file_exists(out_file))
-  expect_equal(readLines(out_file), render_client_rd(test_path("fixtures", "client.Rd")))
+  expect_equal(
+    readLines(out_file),
+    render_client_rd(test_path("fixtures", "client.Rd"))
+  )
 })

@@ -15,7 +15,9 @@ test_that("build_site_yaml fills in version, Reference, Developer Guide and Code
     orig_yaml
   )
 
-  description_file <- withr::local_tempfile(lines = c("Package: paws", "Version: 1.2.3"))
+  description_file <- withr::local_tempfile(
+    lines = c("Package: paws", "Version: 1.2.3")
+  )
 
   paws_dir <- fs::path(base, "cran")
   fs::dir_create(fs::path(paws_dir, "paws"))

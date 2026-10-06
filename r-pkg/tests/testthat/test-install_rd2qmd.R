@@ -31,11 +31,15 @@ test_that("rd2qmd_asset_url honours the rd2qmd.url mirror override", {
 test_that("install_rd2qmd resolves version = \"latest\" via rd2qmd_latest_version", {
   mockery::stub(install_rd2qmd, "rd2qmd_latest_version", "v9.9.9")
   captured_url <- NULL
-  mockery::stub(install_rd2qmd, "utils::download.file", function(url, destfile, ...) {
-    captured_url <<- url
-    writeLines("", destfile) # on.exit cleanup expects a file to exist
-    1L # fail the download on purpose - we only care which URL was requested
-  })
+  mockery::stub(
+    install_rd2qmd,
+    "utils::download.file",
+    function(url, destfile, ...) {
+      captured_url <<- url
+      writeLines("", destfile) # on.exit cleanup expects a file to exist
+      1L # fail the download on purpose - we only care which URL was requested
+    }
+  )
   tmp <- withr::local_tempdir()
 
   expect_error(
@@ -52,13 +56,17 @@ test_that("rd2qmd_latest_version resolves to a real release tag", {
 
 test_that("rd2qmd_version returns NA when nothing is installed", {
   tmp <- withr::local_tempdir()
-  expect_identical(rd2qmd_version(path = tmp), NA_integer_)
+  expect_identical(rd2qmd_version(path = tmp), NA_character_)
 })
 
 test_that("rd2qmd_version parses `rd2qmd --version` output", {
   tmp <- withr::local_tempdir()
   fs::file_create(fs::path(tmp, rd2qmd_bin_name(system_os())))
-  mockery::stub(rd2qmd_version, "processx::run", list(stdout = "rd2qmd 0.6.0\n"))
+  mockery::stub(
+    rd2qmd_version,
+    "processx::run",
+    list(stdout = "rd2qmd 0.6.0\n")
+  )
 
   expect_equal(rd2qmd_version(path = tmp), package_version("0.6.0"))
 })
@@ -69,11 +77,15 @@ test_that("install_rd2qmd upgrades instead of no-op-ing when the installed versi
 
   mockery::stub(install_rd2qmd, "rd2qmd_version", "0.1.0")
   captured_url <- NULL
-  mockery::stub(install_rd2qmd, "utils::download.file", function(url, destfile, ...) {
-    captured_url <<- url
-    writeLines("", destfile) # on.exit cleanup expects a file to exist
-    1L # fail the download on purpose - we only care that one was attempted
-  })
+  mockery::stub(
+    install_rd2qmd,
+    "utils::download.file",
+    function(url, destfile, ...) {
+      captured_url <<- url
+      writeLines("", destfile) # on.exit cleanup expects a file to exist
+      1L # fail the download on purpose - we only care that one was attempted
+    }
+  )
 
   expect_error(
     install_rd2qmd(path = tmp, version = "v0.6.0"),
@@ -83,7 +95,11 @@ test_that("install_rd2qmd upgrades instead of no-op-ing when the installed versi
 })
 
 test_that("install_rd2qmd rejects a download that fails its checksum", {
-  mockery::stub(install_rd2qmd, "digest::digest", "0000000000000000000000000000000000000000000000000000000000000")
+  mockery::stub(
+    install_rd2qmd,
+    "digest::digest",
+    "0000000000000000000000000000000000000000000000000000000000000"
+  )
   tmp <- withr::local_tempdir()
 
   expect_error(

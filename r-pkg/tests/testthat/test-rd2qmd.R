@@ -1,8 +1,11 @@
 rd2qmd_available <- function() {
-  tryCatch({
-    rd2qmd_bin()
-    TRUE
-  }, error = function(e) FALSE)
+  tryCatch(
+    {
+      rd2qmd_bin()
+      TRUE
+    },
+    error = function(e) FALSE
+  )
 }
 
 test_that("rd2qmd_bin errors with a clear fix when not installed", {

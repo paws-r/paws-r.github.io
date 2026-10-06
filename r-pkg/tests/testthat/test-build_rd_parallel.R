@@ -37,7 +37,10 @@ test_that("build_long_rd_parallel does not drop files from later chunks", {
   build_long_rd_parallel(dir, chunks = 2, workers = 1)
 
   man_files <- list.files(fs::path(dir, "man"))
-  expect_true(all(c("foo.Rd", "foo_get.Rd", "bar.Rd", "bar_get.Rd", "bar_get_default.Rd") %in% man_files))
+  expect_true(all(
+    c("foo.Rd", "foo_get.Rd", "bar.Rd", "bar_get.Rd", "bar_get_default.Rd") %in%
+      man_files
+  ))
   expect_true("dummypkgservices-package.Rd" %in% man_files)
 })
 
@@ -53,7 +56,10 @@ test_that("build_long_rd_parallel keeps a service's own files in one chunk", {
   prefix <- sub("_(service|operations|custom)\\.R$", "", all_files)
 
   bar_files <- all_files[prefix == "bar"]
-  expect_setequal(bar_files, c("bar_service.R", "bar_operations.R", "bar_custom.R"))
+  expect_setequal(
+    bar_files,
+    c("bar_service.R", "bar_operations.R", "bar_custom.R")
+  )
 })
 
 test_that("build_long_rd_parallel never starts mirai daemons when workers is 1", {

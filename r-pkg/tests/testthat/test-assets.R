@@ -2,13 +2,19 @@ make_vendor_fixture <- function() {
   vendor_dir <- withr::local_tempdir(.local_envir = parent.frame())
   fs::dir_create(fs::path(vendor_dir, c("docs", "examples")), recurse = TRUE)
 
-  writeLines(c("# My Package", "![](docs/logo.png)"), fs::path(vendor_dir, "README.md"))
+  writeLines(
+    c("# My Package", "![](docs/logo.png)"),
+    fs::path(vendor_dir, "README.md")
+  )
   fs::file_create(fs::path(vendor_dir, "docs", "logo.png"))
   fs::file_create(fs::path(vendor_dir, "docs", "code_completion.gif"))
   writeLines("# Article", fs::path(vendor_dir, "docs", "article.md"))
   writeLines("# COC", fs::path(vendor_dir, "CODE_OF_CONDUCT.md"))
   writeLines("# Dev Guide", fs::path(vendor_dir, "DEVELOPER_GUIDE.md"))
-  writeLines('svc$list_buckets()', fs::path(vendor_dir, "examples", "list_buckets.R"))
+  writeLines(
+    'svc$list_buckets()',
+    fs::path(vendor_dir, "examples", "list_buckets.R")
+  )
 
   vendor_dir
 }
@@ -22,22 +28,40 @@ test_that("copy_vendor_assets copies README, logo, examples and developer guide"
   expect_true(fs::file_exists(fs::path(out_dir, "README.md")))
   expect_true(fs::file_exists(fs::path(out_dir, "logo.png")))
   expect_true(fs::file_exists(fs::path(out_dir, "examples", "list_buckets.R")))
-  expect_true(fs::file_exists(fs::path(out_dir, "developer_guide", "article.md")))
-  expect_true(fs::file_exists(fs::path(out_dir, "developer_guide", "CODE_OF_CONDUCT.md")))
-  expect_true(fs::file_exists(fs::path(out_dir, "developer_guide", "DEVELOPER_GUIDE.md")))
+  expect_true(fs::file_exists(fs::path(
+    out_dir,
+    "developer_guide",
+    "article.md"
+  )))
+  expect_true(fs::file_exists(fs::path(
+    out_dir,
+    "developer_guide",
+    "CODE_OF_CONDUCT.md"
+  )))
+  expect_true(fs::file_exists(fs::path(
+    out_dir,
+    "developer_guide",
+    "DEVELOPER_GUIDE.md"
+  )))
   expect_true(fs::file_exists(fs::path(out_dir, "img", "code_completion.gif")))
   # the gif/png live under img/developer_guide via docs/, not duplicated into developer_guide
-  expect_false(fs::file_exists(fs::path(out_dir, "developer_guide", "logo.png")))
+  expect_false(fs::file_exists(fs::path(
+    out_dir,
+    "developer_guide",
+    "logo.png"
+  )))
 })
 
 test_that("edit_readme rewrites the logo tag and docs/examples links", {
-  file <- withr::local_tempfile(lines = c(
-    '<img src="docs/logo.png" align="right" height="150" />',
-    "[Logo](docs/logo.png)",
-    "![](docs/code_completion.gif)",
-    "[Guide](docs/developer_guide/article.md)",
-    "[Example](examples/list_buckets.R)"
-  ))
+  file <- withr::local_tempfile(
+    lines = c(
+      '<img src="docs/logo.png" align="right" height="150" />',
+      "[Logo](docs/logo.png)",
+      "![](docs/code_completion.gif)",
+      "[Guide](docs/developer_guide/article.md)",
+      "[Example](examples/list_buckets.R)"
+    )
+  )
 
   edit_readme(file)
   out <- readLines(file)

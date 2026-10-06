@@ -1,15 +1,21 @@
 rd2qmd_installed <- function() {
-  tryCatch({
-    rd2qmd_bin()
-    TRUE
-  }, error = function(e) FALSE)
+  tryCatch(
+    {
+      rd2qmd_bin()
+      TRUE
+    },
+    error = function(e) FALSE
+  )
 }
 
 test_that("build_rd_docs roxygenizes, stages addons, and excludes package/reexports pages", {
   skip_if_not(rd2qmd_installed(), "rd2qmd not installed - run install_rd2qmd()")
 
   pkg_dir <- withr::local_tempdir()
-  fs::dir_copy(test_path("fixtures", "dummypkg_services"), fs::path(pkg_dir, "pkg"))
+  fs::dir_copy(
+    test_path("fixtures", "dummypkg_services"),
+    fs::path(pkg_dir, "pkg")
+  )
   pkg_dir <- fs::path(pkg_dir, "pkg")
 
   common_man_dir <- withr::local_tempdir()
@@ -46,7 +52,9 @@ test_that("build_rd_docs roxygenizes, stages addons, and excludes package/reexpo
   )
 
   md_files <- list.files(md_dir)
-  expect_true(all(c("foo.md", "bar.md", "bar_get_default.md", "my_addon.md") %in% md_files))
+  expect_true(all(
+    c("foo.md", "bar.md", "bar_get_default.md", "my_addon.md") %in% md_files
+  ))
 })
 
 test_that("build_rd_docs excludes paws-package.Rd from staging", {
@@ -59,7 +67,10 @@ test_that("build_rd_docs excludes paws-package.Rd from staging", {
   # staging/exclusion step end to end rather than just its filter
   # expression in isolation.
   pkg_dir <- withr::local_tempdir()
-  fs::dir_copy(test_path("fixtures", "dummypkg_services"), fs::path(pkg_dir, "pkg"))
+  fs::dir_copy(
+    test_path("fixtures", "dummypkg_services"),
+    fs::path(pkg_dir, "pkg")
+  )
   pkg_dir <- fs::path(pkg_dir, "pkg")
   desc <- readLines(fs::path(pkg_dir, "DESCRIPTION"))
   desc[grepl("^Package:", desc)] <- "Package: paws"
