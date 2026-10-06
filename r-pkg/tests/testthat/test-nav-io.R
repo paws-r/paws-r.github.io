@@ -53,18 +53,18 @@ test_that("reference_index groups services by paws.* package and applies the ali
   expect_true("## paws.compute" %in% out)
   # aliased services use the override display name
   expect_true(any(grepl(
-    '<a href="../s3/"> Amazon S3 (s3) </a>',
+    '[Amazon S3 (s3)](s3)',
     out,
     fixed = TRUE
   )))
   expect_true(any(grepl(
-    '<a href="../ec2/"> Amazon EC2 (ec2) </a>',
+    '[Amazon EC2 (ec2)](ec2)',
     out,
     fixed = TRUE
   )))
   # services with no override fall back to convert_name()
   expect_true(any(grepl(
-    '<a href="../glacier/"> Glacier (glacier) </a>',
+    '[Glacier (glacier)](glacier)',
     out,
     fixed = TRUE
   )))
@@ -158,12 +158,12 @@ test_that("reference_index does not scramble names when multiple services have o
   out <- readLines(out_file)
 
   expect_true(any(grepl(
-    '<a href="../bbb/"> BBB Service (bbb) </a>',
+    '[BBB Service (bbb)](bbb)',
     out,
     fixed = TRUE
   )))
   expect_true(any(grepl(
-    '<a href="../ddd/"> DDD Service (ddd) </a>',
+    '[DDD Service (ddd)](ddd)',
     out,
     fixed = TRUE
   )))

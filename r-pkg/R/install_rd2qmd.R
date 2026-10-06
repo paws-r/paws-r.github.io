@@ -1,6 +1,6 @@
 #' @importFrom tools R_user_dir
 #' @importFrom fs path file_exists file_temp dir_create
-#' @importFrom utils download.file unzip
+#' @importFrom utils download.file unzip untar
 #' @importFrom digest digest
 NULL
 
