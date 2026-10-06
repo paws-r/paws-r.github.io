@@ -1,3 +1,7 @@
+#' @importFrom mirai daemons everywhere mirai_map
+#' @importFrom parallel detectCores
+NULL
+
 #' Map a function over a list using parallel `mirai` workers
 #'
 #' Wraps [mirai::mirai_map()] with daemon setup/teardown. When `workers` is

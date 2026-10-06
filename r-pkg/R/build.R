@@ -1,3 +1,7 @@
+#' @importFrom parallel detectCores
+#' @importFrom fs dir_exists dir_create dir_delete path file_copy file_temp
+NULL
+
 #' Regenerate Rd docs and convert them all to Markdown
 #'
 #' Roxygenizes `pkg_dir` (via [build_long_rd_parallel()]), then converts
@@ -46,7 +50,9 @@ build_rd_docs <- function(
   ),
   workers = parallel::detectCores()
 ) {
-  if (fs::dir_exists(md_dir)) fs::dir_delete(md_dir)
+  if (fs::dir_exists(md_dir)) {
+    fs::dir_delete(md_dir)
+  }
   fs::dir_create(md_dir, recurse = TRUE)
 
   log_info("Build Rd docs")
@@ -71,7 +77,10 @@ build_rd_docs <- function(
   staging_dir <- fs::file_temp()
   fs::dir_create(staging_dir)
 
-  fs::file_copy(fs::path(man_dir, operation_files), fs::path(staging_dir, operation_files))
+  fs::file_copy(
+    fs::path(man_dir, operation_files),
+    fs::path(staging_dir, operation_files)
+  )
   fs::file_copy(fs::path(common_man_dir, addons), fs::path(staging_dir, addons))
 
   convert_rd_dir(staging_dir, md_dir, workers = workers)
@@ -141,26 +150,39 @@ build_site_assets <- function(
 #' [build_rd_docs()] then [build_site_assets()] with paths matching this
 #' repository's layout.
 #'
+#' @param vendor_dir Path to the directory containing the vendored `paws`
+#'   checkout (i.e. `vendor_dir/paws` holds the `paws`, `paws.common`, and
+#'   `cran` subdirectories).
+#' @param out_dir Path to the build output directory that the mkdocs site
+#'   (config, converted docs, and copied assets) is assembled under.
 #' @param workers Number of parallel workers to pass to [build_rd_docs()].
 #' @return The path returned by [build_site_assets()], invisibly.
 #' @export
-build_docs <- function(workers = parallel::detectCores()) {
+build_docs <- function(
+  vendor_dir = "vendor",
+  out_dir = "build",
+  workers = parallel::detectCores()
+) {
+  pkg_dir <- fs::path(vendor_dir, "paws", "paws")
+  man_dir <- fs::path(vendor_dir, "paws", "paws", "man")
+  common_man_dir <- fs::path(vendor_dir, "paws", "paws.common", "man")
+  md_dir <- fs::path(out_dir, "mkdocs", "docs", "docs")
   build_rd_docs(
-    pkg_dir = "vendor/paws/paws",
-    man_dir = "vendor/paws/paws/man",
-    common_man_dir = "vendor/paws/paws.common/man",
-    md_dir = "build/mkdocs/docs/docs",
+    pkg_dir = pkg_dir,
+    man_dir = man_dir,
+    common_man_dir = common_man_dir,
+    md_dir = md_dir,
     workers = workers
   )
-
+  paws_cran_dir <- fs::path(vendor_dir, "paws", "cran")
   build_site_assets(
-    vendor_dir = "vendor/paws",
-    out_dir = "build/mkdocs/docs",
-    orig_yaml_file = "build/mkdocs.orig.yml",
-    site_yaml_out_file = "build/mkdocs/mkdocs.yml",
-    description_file = "vendor/paws/cran/paws/DESCRIPTION",
-    md_dir = "build/mkdocs/docs/docs",
-    alias_file = "build/aws_service_alias.yml",
-    paws_cran_dir = "vendor/paws/cran"
+    vendor_dir = fs::path(vendor_dir, "paws"),
+    out_dir = fs::path(out_dir, "mkdocs", "docs"),
+    orig_yaml_file = fs::path(out_dir, "mkdocs.orig.yml"),
+    site_yaml_out_file = fs::path(out_dir, "mkdocs", "mkdocs.yml"),
+    description_file = fs::path(paws_cran_dir, "paws", "DESCRIPTION"),
+    md_dir = md_dir,
+    alias_file = fs::path(out_dir, "aws_service_alias.yml"),
+    paws_cran_dir = paws_cran_dir
   )
 }

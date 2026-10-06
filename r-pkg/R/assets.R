@@ -1,3 +1,6 @@
+#' @importFrom fs file_copy path dir_delete dir_copy dir_ls
+NULL
+
 #' Copy static site assets out of the vendored paws checkout
 #'
 #' Copies the top-level `README.md` and logo, the `examples/` directory, and

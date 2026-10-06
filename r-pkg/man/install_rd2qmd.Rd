@@ -9,7 +9,7 @@ install_rd2qmd(
   arch = system_arch(),
   path = rd2qmd_path(),
   force = FALSE,
-  version = rd2qmd_version()
+  version = "latest"
 )
 }
 \arguments{
@@ -20,11 +20,12 @@ machine's.}
 \code{tools::R_user_dir("pawsdocs", "data")}, overridable with
 \code{options(rd2qmd.dir = ...)}.}
 
-\item{force}{Reinstall even if a binary is already present at \code{path}.}
+\item{force}{Reinstall even if a binary matching \code{version} is already
+present at \code{path}.}
 
-\item{version}{Release tag to install. Defaults to the version this
-package is validated against, overridable with
-\code{options(rd2qmd.version = ...)}.}
+\item{version}{Release tag to install. Defaults to \code{"latest"}, which
+resolves to the newest full release on GitHub; pass an explicit tag
+(e.g. \code{"0.6.0"}) to pin a specific release instead.}
 }
 \value{
 Path to the installed binary, invisibly.

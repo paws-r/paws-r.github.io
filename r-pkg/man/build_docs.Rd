@@ -4,9 +4,20 @@
 \alias{build_docs}
 \title{Build the complete docs source tree for the mkdocs site}
 \usage{
-build_docs(workers = parallel::detectCores())
+build_docs(
+  vendor_dir = "vendor",
+  out_dir = "build",
+  workers = parallel::detectCores()
+)
 }
 \arguments{
+\item{vendor_dir}{Path to the directory containing the vendored \code{paws}
+checkout (i.e. \code{vendor_dir/paws} holds the \code{paws}, \code{paws.common}, and
+\code{cran} subdirectories).}
+
+\item{out_dir}{Path to the build output directory that the mkdocs site
+(config, converted docs, and copied assets) is assembled under.}
+
 \item{workers}{Number of parallel workers to pass to \code{\link[=build_rd_docs]{build_rd_docs()}}.}
 }
 \value{

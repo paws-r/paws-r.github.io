@@ -1,3 +1,6 @@
+#' @importFrom yaml as.yaml yaml.load_file
+NULL
+
 #' Build `mkdocs.yml` from the template and generated nav sections
 #'
 #' Reads `orig_yaml_file`, fills in the `site_name` version, the `Reference`

@@ -1,8 +1,8 @@
-# The rd2qmd release this package is validated against (see
-# plans/adopt-rd2qmd.md). Bumping this is a deliberate, tested decision, not
-# a "float to latest" dependency - a new release could change output in ways
-# that need re-validating against the real paws corpus.
-rd2qmd_release <- "v0.6.0"
+#' @importFrom tools R_user_dir
+#' @importFrom fs path file_exists file_temp dir_create
+#' @importFrom utils download.file unzip
+#' @importFrom digest digest
+NULL
 
 #' Install the rd2qmd binary
 #'
@@ -15,10 +15,11 @@ rd2qmd_release <- "v0.6.0"
 #' @param path Destination directory for the binary. Defaults to
 #'   `tools::R_user_dir("pawsdocs", "data")`, overridable with
 #'   `options(rd2qmd.dir = ...)`.
-#' @param force Reinstall even if a binary is already present at `path`.
-#' @param version Release tag to install. Defaults to the version this
-#'   package is validated against, overridable with
-#'   `options(rd2qmd.version = ...)`.
+#' @param force Reinstall even if a binary matching `version` is already
+#'   present at `path`.
+#' @param version Release tag to install. Defaults to `"latest"`, which
+#'   resolves to the newest full release on GitHub; pass an explicit tag
+#'   (e.g. `"0.6.0"`) to pin a specific release instead.
 #' @return Path to the installed binary, invisibly.
 #' @export
 install_rd2qmd <- function(
@@ -26,12 +27,20 @@ install_rd2qmd <- function(
   arch = system_arch(),
   path = rd2qmd_path(),
   force = FALSE,
-  version = rd2qmd_version()
+  version = "latest"
 ) {
+  if (identical(version, "latest")) {
+    version <- rd2qmd_latest_version()
+  }
   bin <- rd2qmd_bin_name(os)
   binary <- fs::path(path, bin)
   if (fs::file_exists(binary) && !force) {
-    return(invisible(binary)) # already installed
+    installed <- sprintf("v%s", rd2qmd_version(path, os = os))
+    if (identical(installed, version)) {
+      log_info("Already installed latest rd2qmd version")
+      return(invisible(binary))
+    }
+    log_info(sprintf("Upgrading rd2qmd %s -> %s", installed, version))
   }
   fs::dir_create(path)
 
@@ -71,7 +80,11 @@ install_rd2qmd <- function(
   } else {
     utils::untar(tmp, exdir = extract_dir)
   }
-  extracted_bin <- fs::dir_ls(extract_dir, recurse = TRUE, regexp = paste0(bin, "$"))[[1]]
+  extracted_bin <- fs::dir_ls(
+    extract_dir,
+    recurse = TRUE,
+    regexp = paste0(bin, "$")
+  )[[1]]
   fs::file_move(extracted_bin, binary)
   fs::file_chmod(binary, "+x")
   invisible(binary)
@@ -79,8 +92,12 @@ install_rd2qmd <- function(
 
 rd2qmd_download_error <- function(url, version) {
   paste0(
-    "Failed to download the rd2qmd binary from:\n  ", url, "\n\n",
-    "If this asset has moved or ", version, " is no longer available, ",
+    "Failed to download the rd2qmd binary from:\n  ",
+    url,
+    "\n\n",
+    "If this asset has moved or ",
+    version,
+    " is no longer available, ",
     "either install rd2qmd yourself and point pawsdocs at it with\n",
     '  options(rd2qmd.dir = "<directory containing rd2qmd>")\n',
     "or supply a mirror with\n",
@@ -91,18 +108,83 @@ rd2qmd_download_error <- function(url, version) {
 rd2qmd_checksum_error <- function(asset, expected, actual) {
   sprintf(
     "Checksum mismatch for %s.\nExpected: %s\nActual:   %s\n\n%s",
-    asset, expected, actual,
+    asset,
+    expected,
+    actual,
     "The download may be corrupted or tampered with - not installing it."
   )
 }
 
 # Options mirror the pattern used by https://github.com/cboettig/minioclient:
-# rd2qmd.version / rd2qmd.dir / rd2qmd.url let a user pin a different
-# release, install location, or mirror without touching code.
-rd2qmd_version <- function() getOption("rd2qmd.version", rd2qmd_release)
-
+# rd2qmd.dir / rd2qmd.url let a user pin a different install location or
+# mirror without touching code.
 rd2qmd_path <- function() {
   getOption("rd2qmd.dir", tools::R_user_dir("pawsdocs", "data"))
+}
+
+#' Report the installed rd2qmd binary's version
+#'
+#' Runs `rd2qmd --version` and parses its output, rather than trusting
+#' whatever `version` [install_rd2qmd()] was last called with - this is what's
+#' actually sitting at `path` right now.
+#'
+#' @param path Directory to look for the binary in. Defaults to
+#'   `rd2qmd_path()`.
+#' @param os Operating system; defaults to the current machine's. Only
+#'   affects the binary name (`.exe` on Windows).
+#' @return Character Versions, or `NA_character_`
+#'   if no binary is installed at `path`.
+#' @export
+rd2qmd_version <- function(path = rd2qmd_path(), os = system_os()) {
+  binary <- fs::path(path, rd2qmd_bin_name(os))
+  if (!fs::file_exists(binary)) {
+    return(NA_character_)
+  }
+  out <- processx::run(binary, "--version")$stdout
+  m <- regmatches(out, regexpr("[0-9]+\\.[0-9]+\\.[0-9]+", out))
+  if (length(m) == 0 || !nzchar(m)) {
+    stop(
+      "Could not parse a version number from `",
+      binary,
+      " --version`.",
+      call. = FALSE
+    )
+  }
+  package_version(m)
+}
+
+# GitHub's "latest release" API (rather than /tags) because it already
+# excludes drafts and pre-releases - the same release GitHub's web UI badges
+# as "Latest". Parsed with a regex instead of a JSON package to avoid adding
+# a dependency just for one field.
+rd2qmd_latest_version <- function() {
+  con <- url(
+    "https://api.github.com/repos/eitsupi/rd2qmd/releases/latest",
+    headers = c(Accept = "application/vnd.github+json")
+  )
+  body <- tryCatch(
+    paste(readLines(con, warn = FALSE), collapse = "\n"),
+    error = function(e) {
+      stop(
+        "Failed to look up the latest rd2qmd release from GitHub:\n  ",
+        conditionMessage(e),
+        call. = FALSE
+      )
+    },
+    finally = close(con)
+  )
+  m <- regmatches(
+    body,
+    regexpr('"tag_name"[[:space:]]*:[[:space:]]*"[^"]+"', body)
+  )
+  if (length(m) == 0 || !nzchar(m)) {
+    stop(
+      "Could not find a tag_name in the GitHub releases/latest response.",
+      call. = FALSE
+    )
+  }
+  version <- sub('.*"tag_name"[[:space:]]*:[[:space:]]*"([^"]+)".*', "\\1", m)
+  return(version)
 }
 
 rd2qmd_asset_url <- function(asset, version) {
@@ -112,22 +194,17 @@ rd2qmd_asset_url <- function(asset, version) {
   }
   sprintf(
     "https://github.com/eitsupi/rd2qmd/releases/download/%s/%s",
-    version, asset
+    version,
+    asset
   )
 }
 
-# asset.sha256 files are "<hex digest> *<filename>" on one line - standard
-# shasum/sha256sum format. `asset_url` is the exact URL the asset itself
-# was downloaded from; its checksum lives at that same URL with ".sha256"
-# appended.
 rd2qmd_checksum <- function(asset_url) {
   con <- url(paste0(asset_url, ".sha256"))
   on.exit(close(con))
   sub("\\s.*$", "", readLines(con, n = 1))
 }
 
-# Translate R's platform identifiers into the Rust target triples rd2qmd's
-# release assets are named with.
 rd2qmd_target <- function(os, arch) {
   triple <- switch(
     os,
@@ -139,7 +216,9 @@ rd2qmd_target <- function(os, arch) {
   sprintf("%s-%s", arch, triple)
 }
 
-rd2qmd_bin_name <- function(os) if (identical(os, "windows")) "rd2qmd.exe" else "rd2qmd"
+rd2qmd_bin_name <- function(os) {
+  if (identical(os, "windows")) "rd2qmd.exe" else "rd2qmd"
+}
 
 system_os <- function() {
   switch(
@@ -151,6 +230,4 @@ system_os <- function() {
   )
 }
 
-# R.version$arch already reports "aarch64"/"x86_64", matching Rust triples
-# directly - no remapping needed, unlike OS names.
 system_arch <- function() R.version$arch

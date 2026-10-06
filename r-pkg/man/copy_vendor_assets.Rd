@@ -17,8 +17,9 @@ copy_vendor_assets(vendor_dir, out_dir)
 \code{out_dir}, invisibly.
 }
 \description{
-Copies the top-level \code{README.md} and logo, the \verb{examples/} directory, the
-developer guide articles (\verb{docs/*}, excluding images, plus
-\code{CODE_OF_CONDUCT.md} and \code{DEVELOPER_GUIDE.md}), and the \code{code_completion}
-gif into the mkdocs docs tree.
+Copies the top-level \code{README.md} and logo, the \verb{examples/} directory, and
+the developer guide articles. Every file in \verb{docs/} (other than
+\code{logo.png}) is picked up dynamically: images go to \verb{img/}, everything
+else (Markdown, PDFs, etc.) goes to \verb{developer_guide/}, alongside
+\code{CODE_OF_CONDUCT.md} and \code{DEVELOPER_GUIDE.md}.
 }

@@ -1,3 +1,7 @@
+#' @importFrom fs path path_abs file_exists dir_create dir_ls
+#' @importFrom processx run
+NULL
+
 #' Locate the installed rd2qmd binary
 #'
 #' Errors with a clear fix rather than installing silently - CI should
@@ -41,17 +45,18 @@ convert_rd_dir <- function(man_dir, md_dir, workers = parallel::detectCores()) {
   result <- processx::run(
     rd2qmd_bin(),
     c(
-      "convert", fs::path_abs(man_dir), "-o", fs::path_abs(md_dir),
-      "-f", "md",
-      # list-table (the default) is Pandoc/Quarto-only syntax; mkdocs'
-      # Python-Markdown engine can't render it.
-      "--arguments-format", "list",
+      "convert",
+      fs::path_abs(man_dir),
+      "-o",
+      fs::path_abs(md_dir),
+      "-f",
+      "md",
+      "--arguments-format",
+      "list",
       "--no-frontmatter",
-      # paws tags every generated operation \keyword{internal}; rd2qmd
-      # skips those by default (pkgdown convention), which would silently
-      # drop almost the whole site without this flag.
       "--include-internal",
-      "-j", as.character(workers)
+      "-j",
+      as.character(workers)
     ),
     error_on_status = FALSE
   )
@@ -91,7 +96,11 @@ escape_false_links_line <- function(line) {
   }
   targets <- sub(false_link_pattern, "\\2", whole_matches, perl = TRUE)
   is_real_link <- grepl("\\.md$", targets) | grepl("^https?://", targets)
-  replacements <- ifelse(is_real_link, whole_matches, paste0("\\", whole_matches))
+  replacements <- ifelse(
+    is_real_link,
+    whole_matches,
+    paste0("\\", whole_matches)
+  )
   regmatches(line, m) <- list(replacements)
   line
 }

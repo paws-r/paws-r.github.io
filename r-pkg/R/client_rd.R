@@ -1,3 +1,7 @@
+#' @importFrom tools file_path_sans_ext parse_Rd
+#' @importFrom fs path path_ext_set path_file
+NULL
+
 #' Does this `.Rd` basename belong to a service's client/constructor page?
 #'
 #' Client pages (e.g. `s3.Rd`, `ec2.Rd`) are named after their service with
@@ -40,10 +44,14 @@ is_client_rd <- function(basename) {
 #' @export
 render_client_rd <- function(rd_file, alias_index = NULL) {
   rd <- tools::parse_Rd(rd_file)
-  tags <- vapply(rd, function(x) {
-    tag <- attr(x, "Rd_tag")
-    if (is.null(tag)) "" else tag
-  }, character(1))
+  tags <- vapply(
+    rd,
+    function(x) {
+      tag <- attr(x, "Rd_tag")
+      if (is.null(tag)) "" else tag
+    },
+    character(1)
+  )
   find_tag <- function(tag) rd[[which(tags == tag)[1]]]
 
   out <- c(
@@ -61,7 +69,11 @@ render_client_rd <- function(rd_file, alias_index = NULL) {
   for (idx in which(tags == "\\section")) {
     section_title <- render_rd_inline(rd[[idx]][[1]], alias_index)
     if (identical(section_title, "Service syntax")) {
-      out <- c(out, render_rd_preformatted_section(rd[[idx]], "Service syntax"), "")
+      out <- c(
+        out,
+        render_rd_preformatted_section(rd[[idx]], "Service syntax"),
+        ""
+      )
     } else if (identical(section_title, "Operations")) {
       out <- c(out, render_rd_operations_section(rd[[idx]], alias_index), "")
     }
@@ -109,7 +121,10 @@ build_rd_alias_index <- function(man_dir) {
     # \name{} and before \title{}/\usage{} - no need to read the whole
     # file just to find it.
     lines <- readLines(fs::path(man_dir, files[i]), n = 30)
-    found <- regmatches(lines, regexpr("(?<=\\\\alias\\{)[^}]+", lines, perl = TRUE))
+    found <- regmatches(
+      lines,
+      regexpr("(?<=\\\\alias\\{)[^}]+", lines, perl = TRUE)
+    )
     aliases <- unlist(found[lengths(found) > 0])
     if (length(aliases) > 0) index[aliases] <- stems[i]
   }
@@ -132,7 +147,15 @@ build_rd_alias_index <- function(man_dir) {
 #' @return Character scalar.
 #' @export
 render_rd_inline <- function(nodes, alias_index = NULL) {
-  paste0(vapply(nodes, render_rd_inline_one, character(1), alias_index = alias_index), collapse = "")
+  paste0(
+    vapply(
+      nodes,
+      render_rd_inline_one,
+      character(1),
+      alias_index = alias_index
+    ),
+    collapse = ""
+  )
 }
 
 render_rd_inline_one <- function(node, alias_index = NULL) {
@@ -140,10 +163,18 @@ render_rd_inline_one <- function(node, alias_index = NULL) {
   if (is.null(tag) || tag %in% c("TEXT", "RCODE", "VERB")) {
     return(as.character(node))
   }
-  if (identical(tag, "\\strong")) return(sprintf("**%s**", render_rd_inline(node[[1]], alias_index)))
-  if (identical(tag, "\\emph")) return(sprintf("*%s*", render_rd_inline(node[[1]], alias_index)))
-  if (identical(tag, "\\code")) return(sprintf("`%s`", render_rd_inline(node[[1]], alias_index)))
-  if (identical(tag, "\\verb")) return(sprintf("`%s`", render_rd_inline(node[[1]], alias_index)))
+  if (identical(tag, "\\strong")) {
+    return(sprintf("**%s**", render_rd_inline(node[[1]], alias_index)))
+  }
+  if (identical(tag, "\\emph")) {
+    return(sprintf("*%s*", render_rd_inline(node[[1]], alias_index)))
+  }
+  if (identical(tag, "\\code")) {
+    return(sprintf("`%s`", render_rd_inline(node[[1]], alias_index)))
+  }
+  if (identical(tag, "\\verb")) {
+    return(sprintf("`%s`", render_rd_inline(node[[1]], alias_index)))
+  }
   if (identical(tag, "\\url")) {
     url <- render_rd_inline(node[[1]], alias_index)
     return(sprintf("[%s](%s)", url, url))
@@ -156,7 +187,11 @@ render_rd_inline_one <- function(node, alias_index = NULL) {
   if (identical(tag, "\\link")) {
     text <- render_rd_inline(node[[1]], alias_index)
     target <- attr(node, "Rd_option")
-    target <- if (!is.null(target)) sub("^=", "", as.character(target)) else text
+    target <- if (!is.null(target)) {
+      sub("^=", "", as.character(target))
+    } else {
+      text
+    }
     if (!is.null(alias_index) && !is.na(alias_index[target])) {
       target <- alias_index[[target]]
     }
@@ -205,8 +240,11 @@ render_rd_itemize <- function(node, indent = 0, alias_index = NULL) {
   i <- 1
   while (i <= length(children)) {
     item <- children[[i]]
-    if (length(item) == 0 && i < length(children) &&
-        identical(attr(children[[i + 1]], "Rd_tag"), "LIST")) {
+    if (
+      length(item) == 0 &&
+        i < length(children) &&
+        identical(attr(children[[i + 1]], "Rd_tag"), "LIST")
+    ) {
       content <- children[[i + 1]]
       i <- i + 2
     } else {
@@ -222,7 +260,11 @@ render_rd_itemize <- function(node, indent = 0, alias_index = NULL) {
 # followed by one nested \itemize - split those two apart so the nested
 # part can recurse at indent + 1.
 split_trailing_itemize <- function(content) {
-  is_nested <- vapply(content, function(x) identical(attr(x, "Rd_tag"), "\\itemize"), logical(1))
+  is_nested <- vapply(
+    content,
+    function(x) identical(attr(x, "Rd_tag"), "\\itemize"),
+    logical(1)
+  )
   idx <- which(is_nested)
   if (length(idx) > 0) {
     list(inline = content[-idx], nested = content[[idx[1]]])
@@ -264,7 +306,11 @@ render_rd_arguments <- function(node, alias_index = NULL) {
     text <- normalize_rd_prose(render_rd_inline(split$inline, alias_index))
     lines <- c(lines, sprintf("- **`%s`**", name), "", paste0("  ", text))
     if (!is.null(split$nested)) {
-      lines <- c(lines, "", render_rd_itemize(split$nested, indent = 1, alias_index = alias_index))
+      lines <- c(
+        lines,
+        "",
+        render_rd_itemize(split$nested, indent = 1, alias_index = alias_index)
+      )
     }
     lines <- c(lines, "")
   }
@@ -308,7 +354,9 @@ render_rd_description <- function(node, alias_index = NULL) {
   # between the in-memory vector and a written-then-reread file.
   body <- character(0)
   for (p in paragraphs) {
-    if (length(body) > 0) body <- c(body, "")
+    if (length(body) > 0) {
+      body <- c(body, "")
+    }
     body <- c(body, p)
   }
   c("## Description", "", body)
@@ -320,7 +368,9 @@ find_rd_child <- function(node, tag) {
 
 trim_blank_edges <- function(lines) {
   nonblank <- which(nzchar(trimws(lines)))
-  if (length(nonblank) == 0) return(character(0))
+  if (length(nonblank) == 0) {
+    return(character(0))
+  }
   lines[nonblank[1]:nonblank[length(nonblank)]]
 }
 
@@ -337,7 +387,13 @@ trim_blank_edges <- function(lines) {
 render_rd_preformatted_section <- function(section_node, heading) {
   pre <- find_rd_child(section_node[[2]], "\\preformatted")
   code <- paste0(vapply(pre, as.character, character(1)), collapse = "")
-  c(paste("##", heading), "", "```", trim_blank_edges(strsplit(code, "\n")[[1]]), "```")
+  c(
+    paste("##", heading),
+    "",
+    "```",
+    trim_blank_edges(strsplit(code, "\n")[[1]]),
+    "```"
+  )
 }
 
 #' Render a `\section{Operations}` node's `\tabular` body into a table
@@ -380,7 +436,11 @@ render_rd_operations_section <- function(section_node, alias_index = NULL) {
 
   lines <- c("## Operations", "")
   for (j in seq_along(rows)) {
-    cells <- vapply(rows[[j]], function(c) normalize_rd_prose(render_rd_inline(c, alias_index)), character(1))
+    cells <- vapply(
+      rows[[j]],
+      function(c) normalize_rd_prose(render_rd_inline(c, alias_index)),
+      character(1)
+    )
     lines <- c(lines, sprintf("|  %s  |  %s  |", cells[1], cells[2]))
     if (j == 1) lines <- c(lines, "|:---|:---|")
   }
@@ -399,5 +459,11 @@ render_rd_examples <- function(node) {
   dontrun <- find_rd_child(node, "\\dontrun")
   body <- if (!is.null(dontrun)) dontrun else node
   code <- paste0(vapply(body, as.character, character(1)), collapse = "")
-  c("## Examples", "", "```r", trim_blank_edges(strsplit(code, "\n")[[1]]), "```")
+  c(
+    "## Examples",
+    "",
+    "```r",
+    trim_blank_edges(strsplit(code, "\n")[[1]]),
+    "```"
+  )
 }

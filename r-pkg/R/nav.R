@@ -1,3 +1,8 @@
+#' @importFrom heck to_title_case
+#' @importFrom fs path path_file dir_ls
+#' @importFrom yaml read_yaml
+NULL
+
 #' Convert file names into title-cased display names
 #'
 #' @param file_names Character vector of file names (extension stripped
@@ -76,7 +81,9 @@ reference_index <- function(
   names(reference) <- sprintf("## %s", names(reference))
   reference <- paste(names(reference), reference, sep = "\n")
 
-  if (fs::file_exists(out_file)) fs::file_delete(out_file)
+  if (fs::file_exists(out_file)) {
+    fs::file_delete(out_file)
+  }
   writeLines(
     c("# Available Services", reference),
     out_file
@@ -143,7 +150,10 @@ make_hierarchy <- function(
   addons <- c(addons[!pag_n], list("Paws Paginators" = addons[pag_n]))
 
   c(
-    "Available Services" = sprintf("docs/%s", fs::path_file(reference_index_file)),
+    "Available Services" = sprintf(
+      "docs/%s",
+      fs::path_file(reference_index_file)
+    ),
     addons,
     hierarchy
   )

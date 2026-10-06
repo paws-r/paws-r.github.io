@@ -1,3 +1,7 @@
+#' @importFrom roxygen2 update_collate roxygenize
+#' @importFrom fs path path_file dir_create dir_exists dir_ls file_copy
+NULL
+
 #' Regenerate Rd documentation for a package via roxygen2
 #'
 #' @param pkg_dir Path to the package source directory to roxygenize.
@@ -31,12 +35,25 @@ build_long_rd <- function(pkg_dir) {
 #' @param man_dir Absolute path to the shared output `man/` directory.
 #' @return The number of `.Rd` files this chunk produced.
 #' @noRd
-build_rd_chunk <- function(chunk_services, pkg_dir, all_files, prefix, shared_files, man_dir) {
+build_rd_chunk <- function(
+  chunk_services,
+  pkg_dir,
+  all_files,
+  prefix,
+  shared_files,
+  man_dir
+) {
   chunk_files <- c(shared_files, all_files[prefix %in% chunk_services])
   chunk_dir <- fs::path(tempfile())
   fs::dir_create(fs::path(chunk_dir, "R"))
-  fs::file_copy(fs::path(pkg_dir, "DESCRIPTION"), fs::path(chunk_dir, "DESCRIPTION"))
-  fs::file_copy(fs::path(pkg_dir, "R", chunk_files), fs::path(chunk_dir, "R", chunk_files))
+  fs::file_copy(
+    fs::path(pkg_dir, "DESCRIPTION"),
+    fs::path(chunk_dir, "DESCRIPTION")
+  )
+  fs::file_copy(
+    fs::path(pkg_dir, "R", chunk_files),
+    fs::path(chunk_dir, "R", chunk_files)
+  )
   build_long_rd(chunk_dir)
 
   rd_files <- fs::dir_ls(fs::path(chunk_dir, "man"))
@@ -48,7 +65,11 @@ build_rd_chunk <- function(chunk_services, pkg_dir, all_files, prefix, shared_fi
   # that sorts after it alphabetically - see
   # test-build_rd_parallel.R's "does not drop files" test for the
   # regression this guards against.
-  fs::file_copy(rd_files, fs::path(man_dir, fs::path_file(rd_files)), overwrite = TRUE)
+  fs::file_copy(
+    rd_files,
+    fs::path(man_dir, fs::path_file(rd_files)),
+    overwrite = TRUE
+  )
   length(rd_files)
 }
 
@@ -91,7 +112,9 @@ build_long_rd_parallel <- function(
   services <- unique(prefix[prefix != all_files])
 
   man_dir <- fs::path(pkg_dir, "man")
-  if (fs::dir_exists(man_dir)) fs::dir_delete(man_dir)
+  if (fs::dir_exists(man_dir)) {
+    fs::dir_delete(man_dir)
+  }
   fs::dir_create(man_dir)
 
   chunk_id <- rep(seq_len(chunks), length.out = length(services))
