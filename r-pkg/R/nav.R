@@ -74,7 +74,7 @@ reference_index <- function(
     ref_name <- sprintf("%s (%s)", alias_display_name(ref, override), ref)
 
     reference[[pkg]] <- paste(
-      sprintf('- <a href="../%s/"> %s </a>', ref, ref_name),
+      sprintf('- [%s](%s)', ref_name, ref),
       collapse = "\n"
     )
   }

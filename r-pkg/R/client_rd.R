@@ -276,7 +276,7 @@ split_trailing_itemize <- function(content) {
 render_rd_item_content <- function(content, indent, alias_index = NULL) {
   split <- split_trailing_itemize(content)
   text <- normalize_rd_prose(render_rd_inline(split$inline, alias_index))
-  lines <- paste0(strrep("  ", indent), "- ", text)
+  lines <- paste0(strrep("    ", indent), "- ", text)
   if (!is.null(split$nested)) {
     lines <- c(lines, render_rd_itemize(split$nested, indent + 1, alias_index))
   }
@@ -304,7 +304,7 @@ render_rd_arguments <- function(node, alias_index = NULL) {
     name <- render_rd_inline(item[1], alias_index)
     split <- split_trailing_itemize(item[[2]])
     text <- normalize_rd_prose(render_rd_inline(split$inline, alias_index))
-    lines <- c(lines, sprintf("- **`%s`**", name), "", paste0("  ", text))
+    lines <- c(lines, sprintf("- **`%s`**", name), "", paste0("    ", text))
     if (!is.null(split$nested)) {
       lines <- c(
         lines,
