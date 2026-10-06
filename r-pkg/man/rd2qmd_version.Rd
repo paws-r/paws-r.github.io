@@ -14,7 +14,7 @@ rd2qmd_version(path = rd2qmd_path(), os = system_os())
 affects the binary name (\code{.exe} on Windows).}
 }
 \value{
-Numeric Versions, or \code{NA_integer_}
+Character Versions, or \code{NA_character_}
 if no binary is installed at \code{path}.
 }
 \description{
