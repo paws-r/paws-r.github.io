@@ -147,13 +147,13 @@ test_that("render_client_rd renders every expected section with correct conventi
   expect_true(any(grepl("^## Operations$", out)))
   expect_true(any(grepl("^## Examples$", out)))
 
-  # Usage/Examples fence as r; Service syntax does not - matches the
-  # convention already established by rd2qmd's own (correct) output for
-  # these sections elsewhere.
+  # Usage/Examples/Service syntax all fence as r - Service syntax shows R
+  # object-construction syntax (the R analogue of boto3's syntax blocks),
+  # not AWS CLI pseudocode, so it gets R highlighting too.
   usage_start <- which(out == "## Usage")
   expect_equal(out[usage_start + 2], "```r")
   syntax_start <- which(out == "## Service syntax")
-  expect_equal(out[syntax_start + 2], "```")
+  expect_equal(out[syntax_start + 2], "```r")
 
   # description paragraph breaks are preserved, not collapsed
   expect_true(any(grepl("First paragraph", out)))
