@@ -33,7 +33,6 @@ regen-site: build-site
 
 requirements:
 	@Rscript -e "if (!require(pak)) install.packages('pak')"
-	@Rscript -e "install.packages(c('fs', 'yaml', 'roxygen2', 'remotes', 'mirai', 'heck', 'digest', 'processx'))"
 	@Rscript -e "pak::local_install('vendor/paws/paws.common', dependencies = T)"
 	@Rscript -e "pak::local_install('r-pkg', dependencies = T)"
 	@Rscript -e "pawsdocs::install_rd2qmd()"

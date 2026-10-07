@@ -1,5 +1,7 @@
 #' @importFrom parallel detectCores
 #' @importFrom fs dir_exists dir_create dir_delete path file_copy file_temp
+#'
+#' @include formatting.R
 NULL
 
 #' Regenerate Rd docs and convert them all to Markdown
@@ -156,7 +158,7 @@ build_site_assets <- function(
 #' @param out_dir Path to the build output directory that the mkdocs site
 #'   (config, converted docs, and copied assets) is assembled under.
 #' @param workers Number of parallel workers to pass to [build_rd_docs()].
-#' @return The path returned by [build_site_assets()], invisibly.
+#' @return NULL invisibly.
 #' @export
 build_docs <- function(
   vendor_dir = "vendor",
@@ -175,9 +177,10 @@ build_docs <- function(
     workers = workers
   )
   paws_cran_dir <- fs::path(vendor_dir, "paws", "cran")
-  build_site_assets(
+  docs_out_dir <- fs::path(out_dir, "mkdocs", "docs")
+  result <- build_site_assets(
     vendor_dir = fs::path(vendor_dir, "paws"),
-    out_dir = fs::path(out_dir, "mkdocs", "docs"),
+    out_dir = docs_out_dir,
     orig_yaml_file = fs::path(out_dir, "mkdocs.orig.yml"),
     site_yaml_out_file = fs::path(out_dir, "mkdocs", "mkdocs.yml"),
     description_file = fs::path(paws_cran_dir, "paws", "DESCRIPTION"),
@@ -185,4 +188,8 @@ build_docs <- function(
     alias_file = fs::path(out_dir, "aws_service_alias.yml"),
     paws_cran_dir = paws_cran_dir
   )
+  log_info("Formatting Markdown")
+  add_r_to_fences_dir(docs_out_dir)
+  reindent_lists_dir(docs_out_dir)
+  return(invisible(NULL))
 }

@@ -21,7 +21,7 @@ checkout (i.e. \code{vendor_dir/paws} holds the \code{paws}, \code{paws.common},
 \item{workers}{Number of parallel workers to pass to \code{\link[=build_rd_docs]{build_rd_docs()}}.}
 }
 \value{
-The path returned by \code{\link[=build_site_assets]{build_site_assets()}}, invisibly.
+NULL invisibly.
 }
 \description{
 Equivalent to the \code{Makefile}'s \code{build-docs} target: runs

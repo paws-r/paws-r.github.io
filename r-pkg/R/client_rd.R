@@ -390,7 +390,7 @@ render_rd_preformatted_section <- function(section_node, heading) {
   c(
     paste("##", heading),
     "",
-    "```",
+    "```r",
     trim_blank_edges(strsplit(code, "\n")[[1]]),
     "```"
   )
