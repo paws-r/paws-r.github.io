@@ -22,6 +22,8 @@ clean-down:
 
 build-docs: clean-down
 	@Rscript -e "pawsdocs::build_docs()"
+	@echo "INFO $$(date +%F) $$(date +%T): Formatting Markdown"
+	@uv run rumdl check --fix build/mkdocs
 
 build-site: build-docs
 	@echo "INFO $$(date +%F) $$(date +%T): Building site"
