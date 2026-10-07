@@ -158,7 +158,7 @@ build_site_assets <- function(
 #' @param out_dir Path to the build output directory that the mkdocs site
 #'   (config, converted docs, and copied assets) is assembled under.
 #' @param workers Number of parallel workers to pass to [build_rd_docs()].
-#' @return The path returned by [build_site_assets()], invisibly.
+#' @return NULL invisibly.
 #' @export
 build_docs <- function(
   vendor_dir = "vendor",
@@ -188,7 +188,8 @@ build_docs <- function(
     alias_file = fs::path(out_dir, "aws_service_alias.yml"),
     paws_cran_dir = paws_cran_dir
   )
+  log_info("Formatting Markdown")
   add_r_to_fences_dir(docs_out_dir)
-
-  return(result)
+  reindent_lists_dir(docs_out_dir)
+  return(invisible(NULL))
 }

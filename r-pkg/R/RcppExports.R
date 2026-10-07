@@ -3,7 +3,13 @@
 
 #' @useDynLib pawsdocs _pawsdocs_add_r_to_fences
 #' @importFrom Rcpp evalCpp
-add_r_to_fences <- function(path, out = "") {
-    .Call('_pawsdocs_add_r_to_fences', PACKAGE = 'pawsdocs', path, out)
+add_r_to_fences <- function(path, out = "", max_indent = 3L) {
+    .Call('_pawsdocs_add_r_to_fences', PACKAGE = 'pawsdocs', path, out, max_indent)
+}
+
+#' @useDynLib pawsdocs _pawsdocs_reindent_lists
+#' @importFrom Rcpp evalCpp
+reindent_lists <- function(path, out = "", width = 4L) {
+    .Call('_pawsdocs_reindent_lists', PACKAGE = 'pawsdocs', path, out, width)
 }
 

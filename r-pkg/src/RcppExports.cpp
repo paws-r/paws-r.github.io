@@ -11,20 +11,35 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // add_r_to_fences
-int add_r_to_fences(std::string path, std::string out);
-RcppExport SEXP _pawsdocs_add_r_to_fences(SEXP pathSEXP, SEXP outSEXP) {
+int add_r_to_fences(std::string path, std::string out, int max_indent);
+RcppExport SEXP _pawsdocs_add_r_to_fences(SEXP pathSEXP, SEXP outSEXP, SEXP max_indentSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type path(pathSEXP);
     Rcpp::traits::input_parameter< std::string >::type out(outSEXP);
-    rcpp_result_gen = Rcpp::wrap(add_r_to_fences(path, out));
+    Rcpp::traits::input_parameter< int >::type max_indent(max_indentSEXP);
+    rcpp_result_gen = Rcpp::wrap(add_r_to_fences(path, out, max_indent));
+    return rcpp_result_gen;
+END_RCPP
+}
+// reindent_lists
+int reindent_lists(std::string path, std::string out, int width);
+RcppExport SEXP _pawsdocs_reindent_lists(SEXP pathSEXP, SEXP outSEXP, SEXP widthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type path(pathSEXP);
+    Rcpp::traits::input_parameter< std::string >::type out(outSEXP);
+    Rcpp::traits::input_parameter< int >::type width(widthSEXP);
+    rcpp_result_gen = Rcpp::wrap(reindent_lists(path, out, width));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_pawsdocs_add_r_to_fences", (DL_FUNC) &_pawsdocs_add_r_to_fences, 2},
+    {"_pawsdocs_add_r_to_fences", (DL_FUNC) &_pawsdocs_add_r_to_fences, 3},
+    {"_pawsdocs_reindent_lists", (DL_FUNC) &_pawsdocs_reindent_lists, 3},
     {NULL, NULL, 0}
 };
 
