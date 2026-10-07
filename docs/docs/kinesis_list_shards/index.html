@@ -16573,88 +16573,90 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>StreamName</code></strong></li>
-</ul>
+<li>
+<p><strong><code>StreamName</code></strong></p>
 <p>The name of the data stream whose shards you want to list.</p>
 <p>You cannot specify this parameter if you specify the <code>NextToken</code> parameter.</p>
-<ul>
-<li><strong><code>NextToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>NextToken</code></strong></p>
 <p>When the number of shards in the data stream is greater than the default value for the <code>MaxResults</code> parameter, or if you explicitly specify a value for <code>MaxResults</code> that is less than the number of shards in the data stream, the response includes a pagination token named <code>NextToken</code>. You can specify this <code>NextToken</code> value in a subsequent call to <a href="../kinesis_list_shards/"><code>list_shards</code></a> to list the next set of shards.</p>
 <p>Don't specify <code>StreamName</code> or <code>StreamCreationTimestamp</code> if you specify <code>NextToken</code> because the latter unambiguously identifies the stream.</p>
 <p>You can optionally specify a value for the <code>MaxResults</code> parameter when you specify <code>NextToken</code>. If you specify a <code>MaxResults</code> value that is less than the number of shards that the operation returns if you don't specify <code>MaxResults</code>, the response will contain a new <code>NextToken</code> value. You can use the new <code>NextToken</code> value in a subsequent call to the <a href="../kinesis_list_shards/"><code>list_shards</code></a> operation.</p>
 <p>Tokens expire after 300 seconds. When you obtain a value for <code>NextToken</code> in the response to a call to <a href="../kinesis_list_shards/"><code>list_shards</code></a>, you have 300 seconds to use that value. If you specify an expired token in a call to <a href="../kinesis_list_shards/"><code>list_shards</code></a>, you get <code>ExpiredNextTokenException</code>.</p>
-<ul>
-<li><strong><code>ExclusiveStartShardId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ExclusiveStartShardId</code></strong></p>
 <p>Specify this parameter to indicate that you want to list the shards starting with the shard whose ID immediately follows <code>ExclusiveStartShardId</code>.</p>
 <p>If you don't specify this parameter, the default behavior is for <a href="../kinesis_list_shards/"><code>list_shards</code></a> to list the shards starting with the first one in the stream.</p>
 <p>You cannot specify this parameter if you specify <code>NextToken</code>.</p>
-<ul>
-<li><strong><code>MaxResults</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>MaxResults</code></strong></p>
 <p>The maximum number of shards to return in a single call to <a href="../kinesis_list_shards/"><code>list_shards</code></a>. The maximum number of shards to return in a single call. The default value is 1000. If you specify a value greater than 1000, at most 1000 results are returned.</p>
 <p>When the number of shards to be listed is greater than the value of <code>MaxResults</code>, the response contains a <code>NextToken</code> value that you can use in a subsequent call to <a href="../kinesis_list_shards/"><code>list_shards</code></a> to list the next set of shards.</p>
-<ul>
-<li><strong><code>StreamCreationTimestamp</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>StreamCreationTimestamp</code></strong></p>
 <p>Specify this input parameter to distinguish data streams that have the same name. For example, if you create a data stream and then delete it, and you later create another data stream with the same name, you can use this input parameter to specify which of the two streams you want to list the shards for.</p>
 <p>You cannot specify this parameter if you specify the <code>NextToken</code> parameter.</p>
-<ul>
-<li><strong><code>ShardFilter</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ShardFilter</code></strong></p>
 <p>Enables you to filter out the response of the <a href="../kinesis_list_shards/"><code>list_shards</code></a> API. You can only specify one filter at a time.</p>
 <p>If you use the <code>ShardFilter</code> parameter when invoking the ListShards API, the <code>Type</code> is the required property and must be specified. If you specify the <code>AT_TRIM_HORIZON</code>, <code>FROM_TRIM_HORIZON</code>, or <code>AT_LATEST</code> types, you do not need to specify either the <code>ShardId</code> or the <code>Timestamp</code> optional properties.</p>
 <p>If you specify the <code>AFTER_SHARD_ID</code> type, you must also provide the value for the optional <code>ShardId</code> property. The <code>ShardId</code> property is identical in fuctionality to the <code>ExclusiveStartShardId</code> parameter of the <a href="../kinesis_list_shards/"><code>list_shards</code></a> API. When <code>ShardId</code> property is specified, the response includes the shards starting with the shard whose ID immediately follows the <code>ShardId</code> that you provided.</p>
 <p>If you specify the <code>AT_TIMESTAMP</code> or <code>FROM_TIMESTAMP_ID</code> type, you must also provide the value for the optional <code>Timestamp</code> property. If you specify the AT_TIMESTAMP type, then all shards that were open at the provided timestamp are returned. If you specify the FROM_TIMESTAMP type, then all shards starting from the provided timestamp to TIP are returned.</p>
-<ul>
-<li><strong><code>StreamARN</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>StreamARN</code></strong></p>
 <p>The ARN of the stream.</p>
-<ul>
-<li><strong><code>StreamId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>StreamId</code></strong></p>
 <p>Not Implemented. Reserved for future use.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  Shards = list(
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    list(
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>      ShardId = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>      ParentShardId = &quot;string&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>      AdjacentParentShardId = &quot;string&quot;,
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>      HashKeyRange = list(
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        StartingHashKey = &quot;string&quot;,
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        EndingHashKey = &quot;string&quot;
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>      ),
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>      SequenceNumberRange = list(
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        StartingSequenceNumber = &quot;string&quot;,
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        EndingSequenceNumber = &quot;string&quot;
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>      )
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    )
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  ),
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  NextToken = &quot;string&quot;
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">Shards</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="n">ShardId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="n">ParentShardId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="n">AdjacentParentShardId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="n">HashKeyRange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="n">StartingHashKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="n">EndingHashKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="n">SequenceNumberRange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="n">StartingSequenceNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="n">EndingSequenceNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$list_shards(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  StreamName = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  NextToken = &quot;string&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  ExclusiveStartShardId = &quot;string&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  MaxResults = 123,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  StreamCreationTimestamp = as.POSIXct(
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  ),
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  ShardFilter = list(
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    Type = &quot;AFTER_SHARD_ID&quot;|&quot;AT_TRIM_HORIZON&quot;|&quot;FROM_TRIM_HORIZON&quot;|&quot;AT_LATEST&quot;|&quot;AT_TIMESTAMP&quot;|&quot;FROM_TIMESTAMP&quot;,
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    ShardId = &quot;string&quot;,
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    Timestamp = as.POSIXct(
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>      &quot;2015-01-01&quot;
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    )
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>  ),
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>  StreamARN = &quot;string&quot;,
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>  StreamId = &quot;string&quot;
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">list_shards</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">StreamName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">ExclusiveStartShardId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">MaxResults</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">StreamCreationTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="n">ShardFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="n">Type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AFTER_SHARD_ID&quot;</span><span class="o">|</span><span class="s">&quot;AT_TRIM_HORIZON&quot;</span><span class="o">|</span><span class="s">&quot;FROM_TRIM_HORIZON&quot;</span><span class="o">|</span><span class="s">&quot;AT_LATEST&quot;</span><span class="o">|</span><span class="s">&quot;AT_TIMESTAMP&quot;</span><span class="o">|</span><span class="s">&quot;FROM_TIMESTAMP&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="n">ShardId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="n">Timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">      </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="n">StreamARN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="n">StreamId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="p">)</span>
 </code></pre></div>
 
 

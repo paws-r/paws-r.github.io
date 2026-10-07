@@ -37150,16 +37150,16 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>SnapshotId</code></strong></li>
-</ul>
+<li>
+<p><strong><code>SnapshotId</code></strong></p>
 <p>[required] The ID of the snapshot to lock.</p>
-<ul>
-<li><strong><code>DryRun</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DryRun</code></strong></p>
 <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
-<ul>
-<li><strong><code>LockMode</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>LockMode</code></strong></p>
 <p>[required] The mode in which to lock the snapshot. Specify one of the following:</p>
 <ul>
 <li>
@@ -37170,61 +37170,63 @@
 </ul>
 <p>Users with the appropriate IAM permissions can unlock the snapshot, increase or decrease the lock duration, and change the lock mode to <code>compliance</code> at any time.</p>
 <p>If you lock a snapshot in <code>governance</code> mode, omit <strong>CoolOffPeriod</strong>.
-  - <code>compliance</code> - Locks the snapshot in compliance mode. Snapshots locked in compliance mode can't be unlocked by any user. They can be deleted only after the lock duration expires. Users can't decrease the lock duration or change the lock mode to <code>governance</code>. However, users with appropriate IAM permissions can increase the lock duration at any time.</p>
+    - <code>compliance</code> - Locks the snapshot in compliance mode. Snapshots locked in compliance mode can't be unlocked by any user. They can be deleted only after the lock duration expires. Users can't decrease the lock duration or change the lock mode to <code>governance</code>. However, users with appropriate IAM permissions can increase the lock duration at any time.</p>
 <p>If you lock a snapshot in <code>compliance</code> mode, you can optionally specify <strong>CoolOffPeriod</strong>.</p>
+</li>
+</ul>
 </li>
 <li>
 <p><strong><code>CoolOffPeriod</code></strong></p>
-</li>
-</ul>
 <p>The cooling-off period during which you can unlock the snapshot or modify the lock settings after locking the snapshot in compliance mode, in hours. After the cooling-off period expires, you can't unlock or delete the snapshot, decrease the lock duration, or change the lock mode. You can increase the lock duration after the cooling-off period expires.</p>
 <p>The cooling-off period is optional when locking a snapshot in compliance mode. If you are locking the snapshot in governance mode, omit this parameter.</p>
 <p>To lock the snapshot in compliance mode immediately without a cooling-off period, omit this parameter.</p>
 <p>If you are extending the lock duration for a snapshot that is locked in compliance mode after the cooling-off period has expired, omit this parameter. If you specify a cooling-period in a such a request, the request fails.</p>
 <p>Allowed values: Min 1, max 72.</p>
-<ul>
-<li><strong><code>LockDuration</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>LockDuration</code></strong></p>
 <p>The period of time for which to lock the snapshot, in days. The snapshot lock will automatically expire after this period lapses.</p>
 <p>You must specify either this parameter or <strong>ExpirationDate</strong>, but not both.</p>
 <p>Allowed values: Min: 1, max 36500</p>
-<ul>
-<li><strong><code>ExpirationDate</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ExpirationDate</code></strong></p>
 <p>The date and time at which the snapshot lock is to automatically expire, in the UTC time zone (<code>YYYY-MM-DDThh:mm:ss.sssZ</code>).</p>
 <p>You must specify either this parameter or <strong>LockDuration</strong>, but not both.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  SnapshotId = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  LockState = &quot;compliance&quot;|&quot;governance&quot;|&quot;compliance-cooloff&quot;|&quot;expired&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  LockDuration = 123,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  CoolOffPeriod = 123,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  CoolOffPeriodExpiresOn = as.POSIXct(
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  ),
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  LockCreatedOn = as.POSIXct(
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  ),
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  LockExpiresOn = as.POSIXct(
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  ),
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  LockDurationStartTime = as.POSIXct(
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  )
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">SnapshotId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">LockState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;compliance&quot;</span><span class="o">|</span><span class="s">&quot;governance&quot;</span><span class="o">|</span><span class="s">&quot;compliance-cooloff&quot;</span><span class="o">|</span><span class="s">&quot;expired&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">LockDuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">CoolOffPeriod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">CoolOffPeriodExpiresOn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="n">LockCreatedOn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="n">LockExpiresOn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="n">LockDurationStartTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$lock_snapshot(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  SnapshotId = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  DryRun = TRUE|FALSE,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  LockMode = &quot;compliance&quot;|&quot;governance&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  CoolOffPeriod = 123,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  LockDuration = 123,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  ExpirationDate = as.POSIXct(
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  )
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">lock_snapshot</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">SnapshotId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">DryRun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">LockMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;compliance&quot;</span><span class="o">|</span><span class="s">&quot;governance&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">CoolOffPeriod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">LockDuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">ExpirationDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">)</span>
 </code></pre></div>
 
 

@@ -15575,68 +15575,70 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>TypeName</code></strong></li>
-</ul>
+<li>
+<p><strong><code>TypeName</code></strong></p>
 <p>[required] The name of the resource type.</p>
-<ul>
-<li><strong><code>TypeVersionId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>TypeVersionId</code></strong></p>
 <p>For private resource types, the type version to use in this resource operation. If you do not specify a resource version, CloudFormation uses the default version.</p>
-<ul>
-<li><strong><code>RoleArn</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>RoleArn</code></strong></p>
 <p>The Amazon Resource Name (ARN) of the Identity and Access Management (IAM) role for Cloud Control API to use when performing this resource operation. The role specified must have the permissions required for this operation. The necessary permissions for each event handler are defined in the <code>handlers</code> section of the <a href="https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-schema.html">resource type definition schema</a>.</p>
 <p>If you do not specify a role, Cloud Control API uses a temporary session created using your Amazon Web Services user credentials.</p>
 <p>For more information, see <a href="https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/resource-operations.html#resource-operations-permissions">Specifying credentials</a> in the <em>Amazon Web Services Cloud Control API User Guide</em>.</p>
-<ul>
-<li><strong><code>ClientToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ClientToken</code></strong></p>
 <p>A unique identifier to ensure the idempotency of the resource request. As a best practice, specify this token to ensure idempotency, so that Amazon Web Services Cloud Control API can accurately distinguish between request retries and new resource requests. You might retry a resource request to ensure that it was successfully received.</p>
 <p>A client token is valid for 36 hours once used. After that, a resource request with the same client token is treated as a new request.</p>
 <p>If you do not specify a client token, one is generated for inclusion in the request.</p>
 <p>For more information, see <a href="https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/resource-operations.html#resource-operations-idempotency">Ensuring resource operation requests are unique</a> in the <em>Amazon Web Services Cloud Control API User Guide</em>.</p>
-<ul>
-<li><strong><code>Identifier</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Identifier</code></strong></p>
 <p>[required] The identifier for the resource.</p>
 <p>You can specify the primary identifier, or any secondary identifier defined for the resource type in its resource schema. You can only specify one identifier. Primary identifiers can be specified as a string or JSON; secondary identifiers must be specified as JSON.</p>
 <p>For compound primary identifiers (that is, one that consists of multiple resource properties strung together), to specify the primary identifier as a string, list the property values <em>in the order they are specified</em> in the primary identifier definition, separated by <code>|</code>.</p>
 <p>For more information, see <a href="https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/resource-identifier.html">Identifying resources</a> in the <em>Amazon Web Services Cloud Control API User Guide</em>.</p>
-<ul>
-<li><strong><code>PatchDocument</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PatchDocument</code></strong></p>
 <p>[required] A JavaScript Object Notation (JSON) document listing the patch operations that represent the updates to apply to the current resource properties. For details, see <a href="https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/resource-operations-update.html#resource-operations-update-patch">Composing the patch document</a> in the <em>Amazon Web Services Cloud Control API User Guide</em>.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  ProgressEvent = list(
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    TypeName = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    Identifier = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    RequestToken = &quot;string&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    HooksRequestToken = &quot;string&quot;,
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    Operation = &quot;CREATE&quot;|&quot;DELETE&quot;|&quot;UPDATE&quot;,
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    OperationStatus = &quot;PENDING&quot;|&quot;IN_PROGRESS&quot;|&quot;SUCCESS&quot;|&quot;FAILED&quot;|&quot;CANCEL_IN_PROGRESS&quot;|&quot;CANCEL_COMPLETE&quot;,
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    EventTime = as.POSIXct(
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>      &quot;2015-01-01&quot;
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    ),
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    ResourceModel = &quot;string&quot;,
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    StatusMessage = &quot;string&quot;,
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    ErrorCode = &quot;NotUpdatable&quot;|&quot;InvalidRequest&quot;|&quot;AccessDenied&quot;|&quot;UnauthorizedTaggingOperation&quot;|&quot;InvalidCredentials&quot;|&quot;AlreadyExists&quot;|&quot;NotFound&quot;|&quot;ResourceConflict&quot;|&quot;Throttling&quot;|&quot;ServiceLimitExceeded&quot;|&quot;NotStabilized&quot;|&quot;GeneralServiceException&quot;|&quot;ServiceInternalError&quot;|&quot;ServiceTimeout&quot;|&quot;NetworkFailure&quot;|&quot;InternalFailure&quot;,
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    RetryAfter = as.POSIXct(
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>      &quot;2015-01-01&quot;
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    )
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  )
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">ProgressEvent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">TypeName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">Identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">RequestToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">HooksRequestToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">Operation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;CREATE&quot;</span><span class="o">|</span><span class="s">&quot;DELETE&quot;</span><span class="o">|</span><span class="s">&quot;UPDATE&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">OperationStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;PENDING&quot;</span><span class="o">|</span><span class="s">&quot;IN_PROGRESS&quot;</span><span class="o">|</span><span class="s">&quot;SUCCESS&quot;</span><span class="o">|</span><span class="s">&quot;FAILED&quot;</span><span class="o">|</span><span class="s">&quot;CANCEL_IN_PROGRESS&quot;</span><span class="o">|</span><span class="s">&quot;CANCEL_COMPLETE&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">EventTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="n">ResourceModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="n">StatusMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="n">ErrorCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;NotUpdatable&quot;</span><span class="o">|</span><span class="s">&quot;InvalidRequest&quot;</span><span class="o">|</span><span class="s">&quot;AccessDenied&quot;</span><span class="o">|</span><span class="s">&quot;UnauthorizedTaggingOperation&quot;</span><span class="o">|</span><span class="s">&quot;InvalidCredentials&quot;</span><span class="o">|</span><span class="s">&quot;AlreadyExists&quot;</span><span class="o">|</span><span class="s">&quot;NotFound&quot;</span><span class="o">|</span><span class="s">&quot;ResourceConflict&quot;</span><span class="o">|</span><span class="s">&quot;Throttling&quot;</span><span class="o">|</span><span class="s">&quot;ServiceLimitExceeded&quot;</span><span class="o">|</span><span class="s">&quot;NotStabilized&quot;</span><span class="o">|</span><span class="s">&quot;GeneralServiceException&quot;</span><span class="o">|</span><span class="s">&quot;ServiceInternalError&quot;</span><span class="o">|</span><span class="s">&quot;ServiceTimeout&quot;</span><span class="o">|</span><span class="s">&quot;NetworkFailure&quot;</span><span class="o">|</span><span class="s">&quot;InternalFailure&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="n">RetryAfter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$update_resource(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  TypeName = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  TypeVersionId = &quot;string&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  RoleArn = &quot;string&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  ClientToken = &quot;string&quot;,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  Identifier = &quot;string&quot;,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  PatchDocument = &quot;string&quot;
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">update_resource</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">TypeName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">TypeVersionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">RoleArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">ClientToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">Identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">PatchDocument</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">)</span>
 </code></pre></div>
 
 

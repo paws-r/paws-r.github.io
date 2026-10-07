@@ -18552,67 +18552,69 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>logGroupName</code></strong></li>
-</ul>
+<li>
+<p><strong><code>logGroupName</code></strong></p>
 <p>[required] The name of the log group.</p>
-<ul>
-<li><strong><code>filterName</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>filterName</code></strong></p>
 <p>[required] A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. To find the name of the filter currently associated with a log group, use <a href="../cloudwatchlogs_describe_subscription_filters/"><code>describe_subscription_filters</code></a>.</p>
-<ul>
-<li><strong><code>filterPattern</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>filterPattern</code></strong></p>
 <p>[required] A filter pattern for subscribing to a filtered stream of log events.</p>
-<ul>
-<li><strong><code>destinationArn</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>destinationArn</code></strong></p>
 <p>[required] The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p>
 <ul>
 <li>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</li>
 <li>
 <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p>
 <p>If you're setting up a cross-account subscription, the destination must have an IAM policy associated with it. The IAM policy must allow the sender to send logs to the destination. For more information, see <a href="../cloudwatchlogs_put_destination_policy/"><code>put_destination_policy</code></a>.
-  - A Kinesis Data Firehose delivery stream belonging to the same account as the subscription filter, for same-account delivery.
-  - A Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p>
+    - A Kinesis Data Firehose delivery stream belonging to the same account as the subscription filter, for same-account delivery.
+    - A Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p>
+</li>
+</ul>
 </li>
 <li>
 <p><strong><code>roleArn</code></strong></p>
-</li>
-</ul>
 <p>The ARN of an IAM role that grants CloudWatch Logs permissions to deliver ingested log events to the destination stream. You don't need to provide the ARN when you are working with a logical destination for cross-account delivery.</p>
-<ul>
-<li><strong><code>distribution</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>distribution</code></strong></p>
 <p>The method used to distribute log data to the destination. By default, log data is grouped by log stream, but the grouping can be set to random for a more even distribution. This property is only applicable when the destination is an Amazon Kinesis data stream.</p>
-<ul>
-<li><strong><code>applyOnTransformedLogs</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>applyOnTransformedLogs</code></strong></p>
 <p>This parameter is valid only for log groups that have an active log transformer. For more information about log transformers, see <a href="../cloudwatchlogs_put_transformer/"><code>put_transformer</code></a>.</p>
 <p>If the log group uses either a log-group level or account-level transformer, and you specify <code>true</code>, the subscription filter will be applied on the transformed version of the log events instead of the original ingested log events.</p>
-<ul>
-<li><strong><code>fieldSelectionCriteria</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>fieldSelectionCriteria</code></strong></p>
 <p>A filter expression that specifies which log events should be processed by this subscription filter based on system fields such as source account and source region. Uses selection criteria syntax with operators like <code>=</code>, <code>!=</code>, <code>AND</code>, <code>OR</code>, <code>IN</code>, <code>NOT IN</code>. Example: <code>@aws.region NOT IN ["cn-north-1"]</code> or <code>@aws.account = "123456789012" AND @aws.region = "us-east-1"</code>. Maximum length: 2000 characters.</p>
-<ul>
-<li><strong><code>emitSystemFields</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>emitSystemFields</code></strong></p>
 <p>A list of system fields to include in the log events sent to the subscription destination. Valid values are <code>@aws.account</code>, <code>@aws.region</code>, and <code>@source.log</code>. These fields provide source information for centralized log data in the forwarded payload.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>An empty list.</p>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>svc$put_subscription_filter(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  logGroupName = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  filterName = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  filterPattern = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  destinationArn = &quot;string&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  roleArn = &quot;string&quot;,
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  distribution = &quot;Random&quot;|&quot;ByLogStream&quot;,
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  applyOnTransformedLogs = TRUE|FALSE,
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  fieldSelectionCriteria = &quot;string&quot;,
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  emitSystemFields = list(
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    &quot;string&quot;
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  )
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">put_subscription_filter</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">logGroupName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">filterName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">filterPattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">destinationArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">roleArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="n">distribution</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Random&quot;</span><span class="o">|</span><span class="s">&quot;ByLogStream&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="n">applyOnTransformedLogs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="n">fieldSelectionCriteria</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="n">emitSystemFields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">)</span>
 </code></pre></div>
 
 

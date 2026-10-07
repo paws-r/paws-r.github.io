@@ -16854,12 +16854,12 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>MetricDataQueries</code></strong></li>
-</ul>
+<li>
+<p><strong><code>MetricDataQueries</code></strong></p>
 <p>[required] The metric queries to be returned. A single <a href="../cloudwatch_get_metric_data/"><code>get_metric_data</code></a> call can include as many as 500 <code>MetricDataQuery</code> structures. Each of these structures can specify either a metric to retrieve, a Metrics Insights query, or a math expression to perform on retrieved data.</p>
-<ul>
-<li><strong><code>StartTime</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>StartTime</code></strong></p>
 <p>[required] The time stamp indicating the earliest data to be returned.</p>
 <p>The value specified is inclusive; results include data points with the specified time stamp.</p>
 <p>CloudWatch rounds the specified time stamp as follows:</p>
@@ -16870,102 +16870,104 @@
 </ul>
 <p>If you set <code>Period</code> to 5, 10, 20, or 30, the start time of your request is rounded down to the nearest time that corresponds to even 5-, 10-, 20-, or 30-second divisions of a minute. For example, if you make a query at (HH:mm:ss) 01:05:23 for the previous 10-second period, the start time of your request is rounded down and you receive data from 01:05:10 to 01:05:20. If you make a query at 15:07:17 for the previous 5 minutes of data, using a period of 5 seconds, you receive data timestamped between 15:02:15 and 15:07:15.</p>
 <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>StartTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>StartTime</code>.</p>
-<ul>
-<li><strong><code>EndTime</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>EndTime</code></strong></p>
 <p>[required] The time stamp indicating the latest data to be returned.</p>
 <p>The value specified is exclusive; results include data points up to the specified time stamp.</p>
 <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>EndTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>EndTime</code>.</p>
-<ul>
-<li><strong><code>NextToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>NextToken</code></strong></p>
 <p>Include this value, if it was returned by the previous <a href="../cloudwatch_get_metric_data/"><code>get_metric_data</code></a> operation, to get the next set of data points.</p>
-<ul>
-<li><strong><code>ScanBy</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ScanBy</code></strong></p>
 <p>The order in which data points should be returned. <code>TimestampDescending</code> returns the newest data first and paginates when the <code>MaxDatapoints</code> limit is reached. <code>TimestampAscending</code> returns the oldest data first and paginates when the <code>MaxDatapoints</code> limit is reached.</p>
 <p>If you omit this parameter, the default of <code>TimestampDescending</code> is used.</p>
-<ul>
-<li><strong><code>MaxDatapoints</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>MaxDatapoints</code></strong></p>
 <p>The maximum number of data points the request should return before paginating. If you omit this, the default of 100,800 is used.</p>
-<ul>
-<li><strong><code>LabelOptions</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>LabelOptions</code></strong></p>
 <p>This structure includes the <code>Timezone</code> parameter, which you can use to specify your time zone so that the labels of returned data display the correct time for your time zone.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  MetricDataResults = list(
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    list(
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>      Id = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>      Label = &quot;string&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>      Timestamps = list(
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        as.POSIXct(
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>          &quot;2015-01-01&quot;
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        )
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>      ),
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>      Values = list(
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        123.0
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>      ),
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>      StatusCode = &quot;Complete&quot;|&quot;InternalError&quot;|&quot;PartialData&quot;|&quot;Forbidden&quot;,
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>      Messages = list(
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        list(
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>          Code = &quot;string&quot;,
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>          Value = &quot;string&quot;
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>        )
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>      )
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    )
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>  ),
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>  NextToken = &quot;string&quot;,
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>  Messages = list(
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    list(
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>      Code = &quot;string&quot;,
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>      Value = &quot;string&quot;
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    )
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>  )
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">MetricDataResults</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="n">Label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="n">Timestamps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">          </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="n">Values</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="m">123.0</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="n">StatusCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Complete&quot;</span><span class="o">|</span><span class="s">&quot;InternalError&quot;</span><span class="o">|</span><span class="s">&quot;PartialData&quot;</span><span class="o">|</span><span class="s">&quot;Forbidden&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="n">Messages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">          </span><span class="n">Code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">          </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">  </span><span class="n">Messages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">      </span><span class="n">Code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">      </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$get_metric_data(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  MetricDataQueries = list(
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    list(
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>      Id = &quot;string&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>      MetricStat = list(
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        Metric = list(
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>          Namespace = &quot;string&quot;,
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>          MetricName = &quot;string&quot;,
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>          Dimensions = list(
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>            list(
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>              Name = &quot;string&quot;,
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>              Value = &quot;string&quot;
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>            )
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>          )
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        ),
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        Period = 123,
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>        Stat = &quot;string&quot;,
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>        Unit = &quot;Seconds&quot;|&quot;Microseconds&quot;|&quot;Milliseconds&quot;|&quot;Bytes&quot;|&quot;Kilobytes&quot;|&quot;Megabytes&quot;|&quot;Gigabytes&quot;|&quot;Terabytes&quot;|&quot;Bits&quot;|&quot;Kilobits&quot;|&quot;Megabits&quot;|&quot;Gigabits&quot;|&quot;Terabits&quot;|&quot;Percent&quot;|&quot;Count&quot;|&quot;Bytes/Second&quot;|&quot;Kilobytes/Second&quot;|&quot;Megabytes/Second&quot;|&quot;Gigabytes/Second&quot;|&quot;Terabytes/Second&quot;|&quot;Bits/Second&quot;|&quot;Kilobits/Second&quot;|&quot;Megabits/Second&quot;|&quot;Gigabits/Second&quot;|&quot;Terabits/Second&quot;|&quot;Count/Second&quot;|&quot;None&quot;
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>      ),
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>      Expression = &quot;string&quot;,
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>      Label = &quot;string&quot;,
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>      ReturnData = TRUE|FALSE,
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>      Period = 123,
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>      AccountId = &quot;string&quot;
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>    )
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>  ),
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>  StartTime = as.POSIXct(
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>  ),
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>  EndTime = as.POSIXct(
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>  ),
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>  NextToken = &quot;string&quot;,
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>  ScanBy = &quot;TimestampDescending&quot;|&quot;TimestampAscending&quot;,
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>  MaxDatapoints = 123,
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>  LabelOptions = list(
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    Timezone = &quot;string&quot;
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>  )
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">get_metric_data</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">MetricDataQueries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="n">MetricStat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="n">Metric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">          </span><span class="n">Namespace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">          </span><span class="n">MetricName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">          </span><span class="n">Dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">            </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">              </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">              </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">            </span><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">          </span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">        </span><span class="n">Period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="n">Stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">        </span><span class="n">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Seconds&quot;</span><span class="o">|</span><span class="s">&quot;Microseconds&quot;</span><span class="o">|</span><span class="s">&quot;Milliseconds&quot;</span><span class="o">|</span><span class="s">&quot;Bytes&quot;</span><span class="o">|</span><span class="s">&quot;Kilobytes&quot;</span><span class="o">|</span><span class="s">&quot;Megabytes&quot;</span><span class="o">|</span><span class="s">&quot;Gigabytes&quot;</span><span class="o">|</span><span class="s">&quot;Terabytes&quot;</span><span class="o">|</span><span class="s">&quot;Bits&quot;</span><span class="o">|</span><span class="s">&quot;Kilobits&quot;</span><span class="o">|</span><span class="s">&quot;Megabits&quot;</span><span class="o">|</span><span class="s">&quot;Gigabits&quot;</span><span class="o">|</span><span class="s">&quot;Terabits&quot;</span><span class="o">|</span><span class="s">&quot;Percent&quot;</span><span class="o">|</span><span class="s">&quot;Count&quot;</span><span class="o">|</span><span class="s">&quot;Bytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Kilobytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Megabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Gigabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Terabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Bits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Kilobits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Megabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Gigabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Terabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Count/Second&quot;</span><span class="o">|</span><span class="s">&quot;None&quot;</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">      </span><span class="n">Label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">      </span><span class="n">ReturnData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">      </span><span class="n">Period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">      </span><span class="n">AccountId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">  </span><span class="n">StartTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">  </span><span class="n">EndTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">  </span><span class="n">ScanBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;TimestampDescending&quot;</span><span class="o">|</span><span class="s">&quot;TimestampAscending&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">  </span><span class="n">MaxDatapoints</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">  </span><span class="n">LabelOptions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">    </span><span class="n">Timezone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="p">)</span>
 </code></pre></div>
 
 

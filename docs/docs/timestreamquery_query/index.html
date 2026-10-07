@@ -15767,11 +15767,11 @@
 </li>
 <li>
 <p>If the size of the row (including the query metadata) exceeds 1 MB, then the query will fail with the following error message:</p>
-</li>
-</ul>
 <p><code>Query aborted as max page response size has been exceeded by the output result row</code></p>
-<ul>
-<li>If the IAM principal of the query initiator and the result reader are not the same and/or the query initiator and the result reader do not have the same query string in the query requests, the query will fail with an <code>Invalid pagination token</code> error.</li>
+</li>
+<li>
+<p>If the IAM principal of the query initiator and the result reader are not the same and/or the query initiator and the result reader do not have the same query string in the query requests, the query will fail with an <code>Invalid pagination token</code> error.</p>
+</li>
 </ul>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">timestreamquery_query</span><span class="p">(</span><span class="n">QueryString</span><span class="p">,</span><span class="w"> </span><span class="n">ClientToken</span><span class="p">,</span><span class="w"> </span><span class="n">NextToken</span><span class="p">,</span><span class="w"> </span><span class="n">MaxRows</span><span class="p">,</span>
@@ -15779,24 +15779,22 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>QueryString</code></strong></li>
-</ul>
+<li>
+<p><strong><code>QueryString</code></strong></p>
 <p>[required] The query to be run by Timestream.</p>
-<ul>
-<li><strong><code>ClientToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ClientToken</code></strong></p>
 <p>Unique, case-sensitive string of up to 64 ASCII characters specified when a <a href="../timestreamquery_query/"><code>query</code></a> request is made. Providing a <code>ClientToken</code> makes the call to <a href="../timestreamquery_query/"><code>query</code></a> <em>idempotent</em>. This means that running the same query repeatedly will produce the same result. In other words, making multiple identical <a href="../timestreamquery_query/"><code>query</code></a> requests has the same effect as making a single request. When using <code>ClientToken</code> in a query, note the following:</p>
 <ul>
 <li>If the Query API is instantiated without a <code>ClientToken</code>, the Query SDK generates a <code>ClientToken</code> on your behalf.</li>
 <li>If the <a href="../timestreamquery_query/"><code>query</code></a> invocation only contains the <code>ClientToken</code> but does not include a <code>NextToken</code>, that invocation of <a href="../timestreamquery_query/"><code>query</code></a> is assumed to be a new query run.</li>
 <li>If the invocation contains <code>NextToken</code>, that particular invocation is assumed to be a subsequent invocation of a prior call to the Query API, and a result set is returned.</li>
-<li>
-<p>After 4 hours, any request with the same <code>ClientToken</code> is treated as a new request.</p>
+<li>After 4 hours, any request with the same <code>ClientToken</code> is treated as a new request.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>NextToken</code></strong></p>
-</li>
-</ul>
 <p>A pagination token used to return a set of results. When the <a href="../timestreamquery_query/"><code>query</code></a> API is invoked using <code>NextToken</code>, that particular invocation is assumed to be a subsequent invocation of a prior call to <a href="../timestreamquery_query/"><code>query</code></a>, and a result set is returned. However, if the <a href="../timestreamquery_query/"><code>query</code></a> invocation only contains the <code>ClientToken</code>, that invocation of <a href="../timestreamquery_query/"><code>query</code></a> is assumed to be a new query run.</p>
 <p>Note the following when using NextToken in a query:</p>
 <ul>
@@ -15805,13 +15803,11 @@
 <li>Suppose a <a href="../timestreamquery_query/"><code>query</code></a> invocation returns two <code>NextToken</code> values, <code>TokenA</code> and <code>TokenB</code>. If <code>TokenB</code> is used in a subsequent <a href="../timestreamquery_query/"><code>query</code></a> invocation, then <code>TokenA</code> is invalidated and cannot be reused.</li>
 <li>To request a previous result set from a query after pagination has begun, you must re-invoke the Query API.</li>
 <li>The latest <code>NextToken</code> should be used to paginate until <code>null</code> is returned, at which point a new <code>NextToken</code> should be used.</li>
-<li>
-<p>If the IAM principal of the query initiator and the result reader are not the same and/or the query initiator and the result reader do not have the same query string in the query requests, the query will fail with an <code>Invalid pagination token</code> error.</p>
+<li>If the IAM principal of the query initiator and the result reader are not the same and/or the query initiator and the result reader do not have the same query string in the query requests, the query will fail with an <code>Invalid pagination token</code> error.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>MaxRows</code></strong></p>
-</li>
-</ul>
 <p>The total number of rows to be returned in the <a href="../timestreamquery_query/"><code>query</code></a> output. The initial run of <a href="../timestreamquery_query/"><code>query</code></a> with a <code>MaxRows</code> value specified will return the result set of the query in two cases:</p>
 <ul>
 <li>The size of the result is less than <code>1MB</code>.</li>
@@ -15819,85 +15815,87 @@
 </ul>
 <p>Otherwise, the initial invocation of <a href="../timestreamquery_query/"><code>query</code></a> only returns a <code>NextToken</code>, which can then be used in subsequent calls to fetch the result set. To resume pagination, provide the <code>NextToken</code> value in the subsequent command.</p>
 <p>If the row size is large (e.g. a row has many columns), Timestream may return fewer rows to keep the response size from exceeding the 1 MB limit. If <code>MaxRows</code> is not provided, Timestream will send the necessary number of rows to meet the 1 MB limit.</p>
-<ul>
-<li><strong><code>QueryInsights</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>QueryInsights</code></strong></p>
 <p>Encapsulates settings for enabling <code>QueryInsights</code>.</p>
 <p>Enabling <code>QueryInsights</code> returns insights and metrics in addition to query results for the query that you executed. You can use <code>QueryInsights</code> to tune your query performance.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  QueryId = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  NextToken = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  Rows = list(
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    list(
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>      Data = list(
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        list(
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>          ScalarValue = &quot;string&quot;,
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>          TimeSeriesValue = list(
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>            list(
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>              Time = &quot;string&quot;,
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>              Value = list()
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>            )
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>          ),
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>          ArrayValue = list(),
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>          RowValue = list(),
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>          NullValue = TRUE|FALSE
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>        )
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>      )
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    )
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>  ),
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>  ColumnInfo = list(
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    list(
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>      Name = &quot;string&quot;,
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>      Type = list(
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>        ScalarType = &quot;VARCHAR&quot;|&quot;BOOLEAN&quot;|&quot;BIGINT&quot;|&quot;DOUBLE&quot;|&quot;TIMESTAMP&quot;|&quot;DATE&quot;|&quot;TIME&quot;|&quot;INTERVAL_DAY_TO_SECOND&quot;|&quot;INTERVAL_YEAR_TO_MONTH&quot;|&quot;UNKNOWN&quot;|&quot;INTEGER&quot;,
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>        ArrayColumnInfo = list(),
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>        TimeSeriesMeasureValueColumnInfo = list(),
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>        RowColumnInfo = list()
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>      )
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>    )
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>  ),
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>  QueryStatus = list(
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>    ProgressPercentage = 123.0,
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    CumulativeBytesScanned = 123,
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>    CumulativeBytesMetered = 123
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>  ),
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>  QueryInsightsResponse = list(
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>    QuerySpatialCoverage = list(
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>      Max = list(
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>        Value = 123.0,
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>        TableArn = &quot;string&quot;,
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>        PartitionKey = list(
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>          &quot;string&quot;
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>        )
-<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>      )
-<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>    ),
-<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>    QueryTemporalRange = list(
-<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>      Max = list(
-<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>        Value = 123,
-<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>        TableArn = &quot;string&quot;
-<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>      )
-<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>    ),
-<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>    QueryTableCount = 123,
-<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>    OutputRows = 123,
-<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>    OutputBytes = 123,
-<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>    UnloadPartitionCount = 123,
-<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>    UnloadWrittenRows = 123,
-<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>    UnloadWrittenBytes = 123
-<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>  )
-<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">QueryId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">Rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="n">Data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">          </span><span class="n">ScalarValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">          </span><span class="n">TimeSeriesValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">            </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">              </span><span class="n">Time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">              </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">            </span><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">          </span><span class="p">),</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">          </span><span class="n">ArrayValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(),</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">          </span><span class="n">RowValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(),</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">          </span><span class="n">NullValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span><span class="n">ColumnInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">      </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">      </span><span class="n">Type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">        </span><span class="n">ScalarType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;VARCHAR&quot;</span><span class="o">|</span><span class="s">&quot;BOOLEAN&quot;</span><span class="o">|</span><span class="s">&quot;BIGINT&quot;</span><span class="o">|</span><span class="s">&quot;DOUBLE&quot;</span><span class="o">|</span><span class="s">&quot;TIMESTAMP&quot;</span><span class="o">|</span><span class="s">&quot;DATE&quot;</span><span class="o">|</span><span class="s">&quot;TIME&quot;</span><span class="o">|</span><span class="s">&quot;INTERVAL_DAY_TO_SECOND&quot;</span><span class="o">|</span><span class="s">&quot;INTERVAL_YEAR_TO_MONTH&quot;</span><span class="o">|</span><span class="s">&quot;UNKNOWN&quot;</span><span class="o">|</span><span class="s">&quot;INTEGER&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">        </span><span class="n">ArrayColumnInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(),</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">        </span><span class="n">TimeSeriesMeasureValueColumnInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(),</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">        </span><span class="n">RowColumnInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">  </span><span class="n">QueryStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">    </span><span class="n">ProgressPercentage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123.0</span><span class="p">,</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">    </span><span class="n">CumulativeBytesScanned</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">    </span><span class="n">CumulativeBytesMetered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">  </span><span class="n">QueryInsightsResponse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">    </span><span class="n">QuerySpatialCoverage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">      </span><span class="n">Max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">        </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123.0</span><span class="p">,</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="w">        </span><span class="n">TableArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">        </span><span class="n">PartitionKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">          </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="w">    </span><span class="n">QueryTemporalRange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="w">      </span><span class="n">Max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="w">        </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="w">        </span><span class="n">TableArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="w">    </span><span class="n">QueryTableCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a><span class="w">    </span><span class="n">OutputRows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a><span class="w">    </span><span class="n">OutputBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a><span class="w">    </span><span class="n">UnloadPartitionCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a><span class="w">    </span><span class="n">UnloadWrittenRows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a><span class="w">    </span><span class="n">UnloadWrittenBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$query(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  QueryString = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  ClientToken = &quot;string&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  NextToken = &quot;string&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  MaxRows = 123,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  QueryInsights = list(
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    Mode = &quot;ENABLED_WITH_RATE_CONTROL&quot;|&quot;DISABLED&quot;
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  )
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">query</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">QueryString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">ClientToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">MaxRows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">QueryInsights</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="n">Mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ENABLED_WITH_RATE_CONTROL&quot;</span><span class="o">|</span><span class="s">&quot;DISABLED&quot;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">)</span>
 </code></pre></div>
 
 

@@ -18111,62 +18111,64 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>DetectorId</code></strong></li>
-</ul>
+<li>
+<p><strong><code>DetectorId</code></strong></p>
 <p>[required] The unique ID of the detector to update.</p>
 <p>To find the <code>detectorId</code> in the current Region, see the Settings page in the GuardDuty console, or run the <a href="../guardduty_list_detectors/"><code>list_detectors</code></a> API.</p>
-<ul>
-<li><strong><code>Enable</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Enable</code></strong></p>
 <p>Specifies whether the detector is enabled or not enabled.</p>
-<ul>
-<li><strong><code>FindingPublishingFrequency</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>FindingPublishingFrequency</code></strong></p>
 <p>An enum value that specifies how frequently findings are exported, such as to CloudWatch Events.</p>
-<ul>
-<li><strong><code>DataSources</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DataSources</code></strong></p>
 <p>Describes which data sources will be updated.</p>
 <p>There might be regional differences because some data sources might not be available in all the Amazon Web Services Regions where GuardDuty is presently supported. For more information, see <a href="https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_regions.html">Regions and endpoints</a>.</p>
-<ul>
-<li><strong><code>Features</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Features</code></strong></p>
 <p>Provides the features that will be updated for the detector.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>An empty list.</p>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>svc$update_detector(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  DetectorId = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  Enable = TRUE|FALSE,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  FindingPublishingFrequency = &quot;FIFTEEN_MINUTES&quot;|&quot;ONE_HOUR&quot;|&quot;SIX_HOURS&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  DataSources = list(
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    S3Logs = list(
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>      Enable = TRUE|FALSE
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    ),
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    Kubernetes = list(
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>      AuditLogs = list(
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        Enable = TRUE|FALSE
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>      )
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    ),
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    MalwareProtection = list(
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>      ScanEc2InstanceWithFindings = list(
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        EbsVolumes = TRUE|FALSE
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>      )
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    )
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>  ),
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>  Features = list(
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    list(
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>      Name = &quot;S3_DATA_EVENTS&quot;|&quot;EKS_AUDIT_LOGS&quot;|&quot;EBS_MALWARE_PROTECTION&quot;|&quot;RDS_LOGIN_EVENTS&quot;|&quot;LAMBDA_NETWORK_LOGS&quot;|&quot;EKS_RUNTIME_MONITORING&quot;|&quot;RUNTIME_MONITORING&quot;|&quot;AI_PROTECTION&quot;|&quot;AI_ANALYST&quot;,
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>      Status = &quot;ENABLED&quot;|&quot;DISABLED&quot;,
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>      AdditionalConfiguration = list(
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>        list(
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>          Name = &quot;EKS_ADDON_MANAGEMENT&quot;|&quot;ECS_FARGATE_AGENT_MANAGEMENT&quot;|&quot;EC2_AGENT_MANAGEMENT&quot;,
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>          Status = &quot;ENABLED&quot;|&quot;DISABLED&quot;
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>        )
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>      )
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>    )
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>  )
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">update_detector</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">DetectorId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">Enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">FindingPublishingFrequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;FIFTEEN_MINUTES&quot;</span><span class="o">|</span><span class="s">&quot;ONE_HOUR&quot;</span><span class="o">|</span><span class="s">&quot;SIX_HOURS&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">DataSources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">S3Logs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="n">Enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">Kubernetes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="n">AuditLogs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="n">Enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="n">MalwareProtection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="n">ScanEc2InstanceWithFindings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="n">EbsVolumes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">  </span><span class="n">Features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">      </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;S3_DATA_EVENTS&quot;</span><span class="o">|</span><span class="s">&quot;EKS_AUDIT_LOGS&quot;</span><span class="o">|</span><span class="s">&quot;EBS_MALWARE_PROTECTION&quot;</span><span class="o">|</span><span class="s">&quot;RDS_LOGIN_EVENTS&quot;</span><span class="o">|</span><span class="s">&quot;LAMBDA_NETWORK_LOGS&quot;</span><span class="o">|</span><span class="s">&quot;EKS_RUNTIME_MONITORING&quot;</span><span class="o">|</span><span class="s">&quot;RUNTIME_MONITORING&quot;</span><span class="o">|</span><span class="s">&quot;AI_PROTECTION&quot;</span><span class="o">|</span><span class="s">&quot;AI_ANALYST&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="n">Status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ENABLED&quot;</span><span class="o">|</span><span class="s">&quot;DISABLED&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">      </span><span class="n">AdditionalConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">          </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;EKS_ADDON_MANAGEMENT&quot;</span><span class="o">|</span><span class="s">&quot;ECS_FARGATE_AGENT_MANAGEMENT&quot;</span><span class="o">|</span><span class="s">&quot;EC2_AGENT_MANAGEMENT&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">          </span><span class="n">Status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ENABLED&quot;</span><span class="o">|</span><span class="s">&quot;DISABLED&quot;</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="p">)</span>
 </code></pre></div>
 
 

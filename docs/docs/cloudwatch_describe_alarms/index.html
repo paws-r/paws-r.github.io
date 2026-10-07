@@ -16842,259 +16842,261 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>AlarmNames</code></strong></li>
-</ul>
+<li>
+<p><strong><code>AlarmNames</code></strong></p>
 <p>The names of the alarms to retrieve information about.</p>
-<ul>
-<li><strong><code>AlarmNamePrefix</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>AlarmNamePrefix</code></strong></p>
 <p>An alarm name prefix. If you specify this parameter, you receive information about all alarms that have names that start with this prefix.</p>
 <p>If this parameter is specified, you cannot specify <code>AlarmNames</code>.</p>
-<ul>
-<li><strong><code>AlarmTypes</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>AlarmTypes</code></strong></p>
 <p>Use this parameter to specify whether you want the operation to return metric alarms, composite alarms, or log alarms. If you omit this parameter, only metric alarms are returned, even if composite alarms or log alarms exist in the account.</p>
 <p>For example, if you omit this parameter or specify <code>MetricAlarms</code>, the operation returns only a list of metric alarms. It does not return any composite alarms or log alarms, even if they exist in the account.</p>
 <p>If you specify <code>CompositeAlarms</code>, the operation returns only a list of composite alarms, and does not return any metric alarms or log alarms.</p>
 <p>If you specify <code>LogAlarms</code>, the operation returns only a list of log alarms, and does not return any metric alarms or composite alarms.</p>
-<ul>
-<li><strong><code>ChildrenOfAlarmName</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ChildrenOfAlarmName</code></strong></p>
 <p>If you use this parameter and specify the name of a composite alarm, the operation returns information about the "children" alarms of the alarm you specify. These are the metric alarms and composite alarms referenced in the <code>AlarmRule</code> field of the composite alarm that you specify in <code>ChildrenOfAlarmName</code>. Information about the composite alarm that you name in <code>ChildrenOfAlarmName</code> is not returned.</p>
 <p>If you specify <code>ChildrenOfAlarmName</code>, you cannot specify any other parameters in the request except for <code>MaxRecords</code> and <code>NextToken</code>. If you do so, you receive a validation error.</p>
 <p>Only the <code>Alarm Name</code>, <code>ARN</code>, <code>StateValue</code> (OK/ALARM/INSUFFICIENT_DATA), and <code>StateUpdatedTimestamp</code> information are returned by this operation when you use this parameter. To get complete information about these alarms, perform another <a href="../cloudwatch_describe_alarms/"><code>describe_alarms</code></a> operation and specify the parent alarm names in the <code>AlarmNames</code> parameter.</p>
-<ul>
-<li><strong><code>ParentsOfAlarmName</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ParentsOfAlarmName</code></strong></p>
 <p>If you use this parameter and specify the name of a metric or composite alarm, the operation returns information about the "parent" alarms of the alarm you specify. These are the composite alarms that have <code>AlarmRule</code> parameters that reference the alarm named in <code>ParentsOfAlarmName</code>. Information about the alarm that you specify in <code>ParentsOfAlarmName</code> is not returned.</p>
 <p>If you specify <code>ParentsOfAlarmName</code>, you cannot specify any other parameters in the request except for <code>MaxRecords</code> and <code>NextToken</code>. If you do so, you receive a validation error.</p>
 <p>Only the Alarm Name and ARN are returned by this operation when you use this parameter. To get complete information about these alarms, perform another <a href="../cloudwatch_describe_alarms/"><code>describe_alarms</code></a> operation and specify the parent alarm names in the <code>AlarmNames</code> parameter.</p>
-<ul>
-<li><strong><code>StateValue</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>StateValue</code></strong></p>
 <p>Specify this parameter to receive information only about alarms that are currently in the state that you specify.</p>
-<ul>
-<li><strong><code>ActionPrefix</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ActionPrefix</code></strong></p>
 <p>Use this parameter to filter the results of the operation to only those alarms that use a certain alarm action. For example, you could specify the ARN of an SNS topic to find all alarms that send notifications to that topic.</p>
-<ul>
-<li><strong><code>MaxRecords</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>MaxRecords</code></strong></p>
 <p>The maximum number of alarm descriptions to retrieve.</p>
-<ul>
-<li><strong><code>NextToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>NextToken</code></strong></p>
 <p>The token returned by a previous call to indicate that there is more data available.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  CompositeAlarms = list(
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    list(
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>      ActionsEnabled = TRUE|FALSE,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>      AlarmActions = list(
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        &quot;string&quot;
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>      ),
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>      AlarmArn = &quot;string&quot;,
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>      AlarmConfigurationUpdatedTimestamp = as.POSIXct(
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>      ),
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>      AlarmDescription = &quot;string&quot;,
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>      AlarmName = &quot;string&quot;,
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>      AlarmRule = &quot;string&quot;,
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>      InsufficientDataActions = list(
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        &quot;string&quot;
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>      ),
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>      OKActions = list(
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>        &quot;string&quot;
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>      ),
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>      StateReason = &quot;string&quot;,
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>      StateReasonData = &quot;string&quot;,
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>      StateUpdatedTimestamp = as.POSIXct(
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>      ),
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>      StateValue = &quot;OK&quot;|&quot;ALARM&quot;|&quot;INSUFFICIENT_DATA&quot;,
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>      StateTransitionedTimestamp = as.POSIXct(
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>      ),
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>      ActionsSuppressedBy = &quot;WaitPeriod&quot;|&quot;ExtensionPeriod&quot;|&quot;Alarm&quot;,
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>      ActionsSuppressedReason = &quot;string&quot;,
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>      ActionsSuppressor = &quot;string&quot;,
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>      ActionsSuppressorWaitPeriod = 123,
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>      ActionsSuppressorExtensionPeriod = 123
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    )
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>  ),
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>  MetricAlarms = list(
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>    list(
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>      AlarmName = &quot;string&quot;,
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>      AlarmArn = &quot;string&quot;,
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>      AlarmDescription = &quot;string&quot;,
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>      AlarmConfigurationUpdatedTimestamp = as.POSIXct(
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>      ),
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>      ActionsEnabled = TRUE|FALSE,
-<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>      OKActions = list(
-<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>        &quot;string&quot;
-<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>      ),
-<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>      AlarmActions = list(
-<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>        &quot;string&quot;
-<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>      ),
-<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>      InsufficientDataActions = list(
-<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>        &quot;string&quot;
-<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>      ),
-<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>      StateValue = &quot;OK&quot;|&quot;ALARM&quot;|&quot;INSUFFICIENT_DATA&quot;,
-<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>      StateReason = &quot;string&quot;,
-<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>      StateReasonData = &quot;string&quot;,
-<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>      StateUpdatedTimestamp = as.POSIXct(
-<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>      ),
-<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>      MetricName = &quot;string&quot;,
-<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>      Namespace = &quot;string&quot;,
-<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>      Statistic = &quot;SampleCount&quot;|&quot;Average&quot;|&quot;Sum&quot;|&quot;Minimum&quot;|&quot;Maximum&quot;,
-<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>      ExtendedStatistic = &quot;string&quot;,
-<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>      Dimensions = list(
-<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>        list(
-<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>          Name = &quot;string&quot;,
-<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>          Value = &quot;string&quot;
-<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>        )
-<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>      ),
-<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a>      Period = 123,
-<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a>      Unit = &quot;Seconds&quot;|&quot;Microseconds&quot;|&quot;Milliseconds&quot;|&quot;Bytes&quot;|&quot;Kilobytes&quot;|&quot;Megabytes&quot;|&quot;Gigabytes&quot;|&quot;Terabytes&quot;|&quot;Bits&quot;|&quot;Kilobits&quot;|&quot;Megabits&quot;|&quot;Gigabits&quot;|&quot;Terabits&quot;|&quot;Percent&quot;|&quot;Count&quot;|&quot;Bytes/Second&quot;|&quot;Kilobytes/Second&quot;|&quot;Megabytes/Second&quot;|&quot;Gigabytes/Second&quot;|&quot;Terabytes/Second&quot;|&quot;Bits/Second&quot;|&quot;Kilobits/Second&quot;|&quot;Megabits/Second&quot;|&quot;Gigabits/Second&quot;|&quot;Terabits/Second&quot;|&quot;Count/Second&quot;|&quot;None&quot;,
-<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a>      EvaluationPeriods = 123,
-<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a>      DatapointsToAlarm = 123,
-<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a>      Threshold = 123.0,
-<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a>      ComparisonOperator = &quot;GreaterThanOrEqualToThreshold&quot;|&quot;GreaterThanThreshold&quot;|&quot;LessThanThreshold&quot;|&quot;LessThanOrEqualToThreshold&quot;|&quot;LessThanLowerOrGreaterThanUpperThreshold&quot;|&quot;LessThanLowerThreshold&quot;|&quot;GreaterThanUpperThreshold&quot;,
-<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a>      TreatMissingData = &quot;string&quot;,
-<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a>      EvaluateLowSampleCountPercentile = &quot;string&quot;,
-<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a>      Metrics = list(
-<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a>        list(
-<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a>          Id = &quot;string&quot;,
-<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a>          MetricStat = list(
-<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a>            Metric = list(
-<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a>              Namespace = &quot;string&quot;,
-<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a>              MetricName = &quot;string&quot;,
-<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a>              Dimensions = list(
-<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a>                list(
-<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a>                  Name = &quot;string&quot;,
-<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a>                  Value = &quot;string&quot;
-<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a>                )
-<a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a>              )
-<a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a>            ),
-<a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a>            Period = 123,
-<a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a>            Stat = &quot;string&quot;,
-<a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a>            Unit = &quot;Seconds&quot;|&quot;Microseconds&quot;|&quot;Milliseconds&quot;|&quot;Bytes&quot;|&quot;Kilobytes&quot;|&quot;Megabytes&quot;|&quot;Gigabytes&quot;|&quot;Terabytes&quot;|&quot;Bits&quot;|&quot;Kilobits&quot;|&quot;Megabits&quot;|&quot;Gigabits&quot;|&quot;Terabits&quot;|&quot;Percent&quot;|&quot;Count&quot;|&quot;Bytes/Second&quot;|&quot;Kilobytes/Second&quot;|&quot;Megabytes/Second&quot;|&quot;Gigabytes/Second&quot;|&quot;Terabytes/Second&quot;|&quot;Bits/Second&quot;|&quot;Kilobits/Second&quot;|&quot;Megabits/Second&quot;|&quot;Gigabits/Second&quot;|&quot;Terabits/Second&quot;|&quot;Count/Second&quot;|&quot;None&quot;
-<a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a>          ),
-<a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a>          Expression = &quot;string&quot;,
-<a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a>          Label = &quot;string&quot;,
-<a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a>          ReturnData = TRUE|FALSE,
-<a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a>          Period = 123,
-<a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a>          AccountId = &quot;string&quot;
-<a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a>        )
-<a id="__codelineno-1-103" name="__codelineno-1-103" href="#__codelineno-1-103"></a>      ),
-<a id="__codelineno-1-104" name="__codelineno-1-104" href="#__codelineno-1-104"></a>      ThresholdMetricId = &quot;string&quot;,
-<a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a>      EvaluationState = &quot;PARTIAL_DATA&quot;|&quot;EVALUATION_FAILURE&quot;|&quot;EVALUATION_ERROR&quot;,
-<a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a>      StateTransitionedTimestamp = as.POSIXct(
-<a id="__codelineno-1-107" name="__codelineno-1-107" href="#__codelineno-1-107"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a>      ),
-<a id="__codelineno-1-109" name="__codelineno-1-109" href="#__codelineno-1-109"></a>      EvaluationWindow = list(
-<a id="__codelineno-1-110" name="__codelineno-1-110" href="#__codelineno-1-110"></a>        WallClockWindow = list(
-<a id="__codelineno-1-111" name="__codelineno-1-111" href="#__codelineno-1-111"></a>          Timezone = &quot;string&quot;
-<a id="__codelineno-1-112" name="__codelineno-1-112" href="#__codelineno-1-112"></a>        ),
-<a id="__codelineno-1-113" name="__codelineno-1-113" href="#__codelineno-1-113"></a>        SlidingWindow = list()
-<a id="__codelineno-1-114" name="__codelineno-1-114" href="#__codelineno-1-114"></a>      ),
-<a id="__codelineno-1-115" name="__codelineno-1-115" href="#__codelineno-1-115"></a>      WarmUpConfiguration = list(
-<a id="__codelineno-1-116" name="__codelineno-1-116" href="#__codelineno-1-116"></a>        WarmUpPeriodDurationInMinutes = 123,
-<a id="__codelineno-1-117" name="__codelineno-1-117" href="#__codelineno-1-117"></a>        OnlyStartEvaluatingAfterWarmUpPeriodEnds = TRUE|FALSE
-<a id="__codelineno-1-118" name="__codelineno-1-118" href="#__codelineno-1-118"></a>      ),
-<a id="__codelineno-1-119" name="__codelineno-1-119" href="#__codelineno-1-119"></a>      EvaluationCriteria = list(
-<a id="__codelineno-1-120" name="__codelineno-1-120" href="#__codelineno-1-120"></a>        PromQLCriteria = list(
-<a id="__codelineno-1-121" name="__codelineno-1-121" href="#__codelineno-1-121"></a>          Query = &quot;string&quot;,
-<a id="__codelineno-1-122" name="__codelineno-1-122" href="#__codelineno-1-122"></a>          PendingPeriod = 123,
-<a id="__codelineno-1-123" name="__codelineno-1-123" href="#__codelineno-1-123"></a>          RecoveryPeriod = 123
-<a id="__codelineno-1-124" name="__codelineno-1-124" href="#__codelineno-1-124"></a>        )
-<a id="__codelineno-1-125" name="__codelineno-1-125" href="#__codelineno-1-125"></a>      ),
-<a id="__codelineno-1-126" name="__codelineno-1-126" href="#__codelineno-1-126"></a>      EvaluationInterval = 123
-<a id="__codelineno-1-127" name="__codelineno-1-127" href="#__codelineno-1-127"></a>    )
-<a id="__codelineno-1-128" name="__codelineno-1-128" href="#__codelineno-1-128"></a>  ),
-<a id="__codelineno-1-129" name="__codelineno-1-129" href="#__codelineno-1-129"></a>  LogAlarms = list(
-<a id="__codelineno-1-130" name="__codelineno-1-130" href="#__codelineno-1-130"></a>    list(
-<a id="__codelineno-1-131" name="__codelineno-1-131" href="#__codelineno-1-131"></a>      AlarmName = &quot;string&quot;,
-<a id="__codelineno-1-132" name="__codelineno-1-132" href="#__codelineno-1-132"></a>      AlarmArn = &quot;string&quot;,
-<a id="__codelineno-1-133" name="__codelineno-1-133" href="#__codelineno-1-133"></a>      AlarmDescription = &quot;string&quot;,
-<a id="__codelineno-1-134" name="__codelineno-1-134" href="#__codelineno-1-134"></a>      AlarmConfigurationUpdatedTimestamp = as.POSIXct(
-<a id="__codelineno-1-135" name="__codelineno-1-135" href="#__codelineno-1-135"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-136" name="__codelineno-1-136" href="#__codelineno-1-136"></a>      ),
-<a id="__codelineno-1-137" name="__codelineno-1-137" href="#__codelineno-1-137"></a>      ActionsEnabled = TRUE|FALSE,
-<a id="__codelineno-1-138" name="__codelineno-1-138" href="#__codelineno-1-138"></a>      OKActions = list(
-<a id="__codelineno-1-139" name="__codelineno-1-139" href="#__codelineno-1-139"></a>        &quot;string&quot;
-<a id="__codelineno-1-140" name="__codelineno-1-140" href="#__codelineno-1-140"></a>      ),
-<a id="__codelineno-1-141" name="__codelineno-1-141" href="#__codelineno-1-141"></a>      AlarmActions = list(
-<a id="__codelineno-1-142" name="__codelineno-1-142" href="#__codelineno-1-142"></a>        &quot;string&quot;
-<a id="__codelineno-1-143" name="__codelineno-1-143" href="#__codelineno-1-143"></a>      ),
-<a id="__codelineno-1-144" name="__codelineno-1-144" href="#__codelineno-1-144"></a>      InsufficientDataActions = list(
-<a id="__codelineno-1-145" name="__codelineno-1-145" href="#__codelineno-1-145"></a>        &quot;string&quot;
-<a id="__codelineno-1-146" name="__codelineno-1-146" href="#__codelineno-1-146"></a>      ),
-<a id="__codelineno-1-147" name="__codelineno-1-147" href="#__codelineno-1-147"></a>      StateValue = &quot;OK&quot;|&quot;ALARM&quot;|&quot;INSUFFICIENT_DATA&quot;,
-<a id="__codelineno-1-148" name="__codelineno-1-148" href="#__codelineno-1-148"></a>      StateReason = &quot;string&quot;,
-<a id="__codelineno-1-149" name="__codelineno-1-149" href="#__codelineno-1-149"></a>      StateReasonData = &quot;string&quot;,
-<a id="__codelineno-1-150" name="__codelineno-1-150" href="#__codelineno-1-150"></a>      StateUpdatedTimestamp = as.POSIXct(
-<a id="__codelineno-1-151" name="__codelineno-1-151" href="#__codelineno-1-151"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-152" name="__codelineno-1-152" href="#__codelineno-1-152"></a>      ),
-<a id="__codelineno-1-153" name="__codelineno-1-153" href="#__codelineno-1-153"></a>      ScheduledQueryConfiguration = list(
-<a id="__codelineno-1-154" name="__codelineno-1-154" href="#__codelineno-1-154"></a>        QueryString = &quot;string&quot;,
-<a id="__codelineno-1-155" name="__codelineno-1-155" href="#__codelineno-1-155"></a>        LogGroupIdentifiers = list(
-<a id="__codelineno-1-156" name="__codelineno-1-156" href="#__codelineno-1-156"></a>          &quot;string&quot;
-<a id="__codelineno-1-157" name="__codelineno-1-157" href="#__codelineno-1-157"></a>        ),
-<a id="__codelineno-1-158" name="__codelineno-1-158" href="#__codelineno-1-158"></a>        QueryARN = &quot;string&quot;,
-<a id="__codelineno-1-159" name="__codelineno-1-159" href="#__codelineno-1-159"></a>        ScheduledQueryRoleARN = &quot;string&quot;,
-<a id="__codelineno-1-160" name="__codelineno-1-160" href="#__codelineno-1-160"></a>        ScheduleConfiguration = list(
-<a id="__codelineno-1-161" name="__codelineno-1-161" href="#__codelineno-1-161"></a>          ScheduleExpression = &quot;string&quot;,
-<a id="__codelineno-1-162" name="__codelineno-1-162" href="#__codelineno-1-162"></a>          StartTimeOffset = 123,
-<a id="__codelineno-1-163" name="__codelineno-1-163" href="#__codelineno-1-163"></a>          EndTimeOffset = 123
-<a id="__codelineno-1-164" name="__codelineno-1-164" href="#__codelineno-1-164"></a>        ),
-<a id="__codelineno-1-165" name="__codelineno-1-165" href="#__codelineno-1-165"></a>        AggregationExpression = &quot;string&quot;,
-<a id="__codelineno-1-166" name="__codelineno-1-166" href="#__codelineno-1-166"></a>        Tags = list(
-<a id="__codelineno-1-167" name="__codelineno-1-167" href="#__codelineno-1-167"></a>          list(
-<a id="__codelineno-1-168" name="__codelineno-1-168" href="#__codelineno-1-168"></a>            Key = &quot;string&quot;,
-<a id="__codelineno-1-169" name="__codelineno-1-169" href="#__codelineno-1-169"></a>            Value = &quot;string&quot;
-<a id="__codelineno-1-170" name="__codelineno-1-170" href="#__codelineno-1-170"></a>          )
-<a id="__codelineno-1-171" name="__codelineno-1-171" href="#__codelineno-1-171"></a>        )
-<a id="__codelineno-1-172" name="__codelineno-1-172" href="#__codelineno-1-172"></a>      ),
-<a id="__codelineno-1-173" name="__codelineno-1-173" href="#__codelineno-1-173"></a>      QueryResultsToEvaluate = 123,
-<a id="__codelineno-1-174" name="__codelineno-1-174" href="#__codelineno-1-174"></a>      QueryResultsToAlarm = 123,
-<a id="__codelineno-1-175" name="__codelineno-1-175" href="#__codelineno-1-175"></a>      Threshold = 123.0,
-<a id="__codelineno-1-176" name="__codelineno-1-176" href="#__codelineno-1-176"></a>      ComparisonOperator = &quot;GreaterThanOrEqualToThreshold&quot;|&quot;GreaterThanThreshold&quot;|&quot;LessThanThreshold&quot;|&quot;LessThanOrEqualToThreshold&quot;|&quot;LessThanLowerOrGreaterThanUpperThreshold&quot;|&quot;LessThanLowerThreshold&quot;|&quot;GreaterThanUpperThreshold&quot;,
-<a id="__codelineno-1-177" name="__codelineno-1-177" href="#__codelineno-1-177"></a>      TreatMissingData = &quot;string&quot;,
-<a id="__codelineno-1-178" name="__codelineno-1-178" href="#__codelineno-1-178"></a>      StateTransitionedTimestamp = as.POSIXct(
-<a id="__codelineno-1-179" name="__codelineno-1-179" href="#__codelineno-1-179"></a>        &quot;2015-01-01&quot;
-<a id="__codelineno-1-180" name="__codelineno-1-180" href="#__codelineno-1-180"></a>      ),
-<a id="__codelineno-1-181" name="__codelineno-1-181" href="#__codelineno-1-181"></a>      EvaluationState = &quot;PARTIAL_DATA&quot;|&quot;EVALUATION_FAILURE&quot;|&quot;EVALUATION_ERROR&quot;,
-<a id="__codelineno-1-182" name="__codelineno-1-182" href="#__codelineno-1-182"></a>      ActionLogLineCount = 123,
-<a id="__codelineno-1-183" name="__codelineno-1-183" href="#__codelineno-1-183"></a>      ActionLogLineRoleArn = &quot;string&quot;,
-<a id="__codelineno-1-184" name="__codelineno-1-184" href="#__codelineno-1-184"></a>      WarmUpConfiguration = list(
-<a id="__codelineno-1-185" name="__codelineno-1-185" href="#__codelineno-1-185"></a>        WarmUpPeriodDurationInMinutes = 123,
-<a id="__codelineno-1-186" name="__codelineno-1-186" href="#__codelineno-1-186"></a>        OnlyStartEvaluatingAfterWarmUpPeriodEnds = TRUE|FALSE
-<a id="__codelineno-1-187" name="__codelineno-1-187" href="#__codelineno-1-187"></a>      )
-<a id="__codelineno-1-188" name="__codelineno-1-188" href="#__codelineno-1-188"></a>    )
-<a id="__codelineno-1-189" name="__codelineno-1-189" href="#__codelineno-1-189"></a>  ),
-<a id="__codelineno-1-190" name="__codelineno-1-190" href="#__codelineno-1-190"></a>  NextToken = &quot;string&quot;
-<a id="__codelineno-1-191" name="__codelineno-1-191" href="#__codelineno-1-191"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">CompositeAlarms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="n">ActionsEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="n">AlarmActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="n">AlarmArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="n">AlarmConfigurationUpdatedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="n">AlarmDescription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="n">AlarmName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="n">AlarmRule</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="n">InsufficientDataActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">      </span><span class="n">OKActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">      </span><span class="n">StateReason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">      </span><span class="n">StateReasonData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="n">StateUpdatedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">      </span><span class="n">StateValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;OK&quot;</span><span class="o">|</span><span class="s">&quot;ALARM&quot;</span><span class="o">|</span><span class="s">&quot;INSUFFICIENT_DATA&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">      </span><span class="n">StateTransitionedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">      </span><span class="n">ActionsSuppressedBy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;WaitPeriod&quot;</span><span class="o">|</span><span class="s">&quot;ExtensionPeriod&quot;</span><span class="o">|</span><span class="s">&quot;Alarm&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">      </span><span class="n">ActionsSuppressedReason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">      </span><span class="n">ActionsSuppressor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">      </span><span class="n">ActionsSuppressorWaitPeriod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">      </span><span class="n">ActionsSuppressorExtensionPeriod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">  </span><span class="n">MetricAlarms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">      </span><span class="n">AlarmName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">      </span><span class="n">AlarmArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">      </span><span class="n">AlarmDescription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="w">      </span><span class="n">AlarmConfigurationUpdatedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="w">      </span><span class="n">ActionsEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="w">      </span><span class="n">OKActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="w">      </span><span class="n">AlarmActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="w">      </span><span class="n">InsufficientDataActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a><span class="w">      </span><span class="n">StateValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;OK&quot;</span><span class="o">|</span><span class="s">&quot;ALARM&quot;</span><span class="o">|</span><span class="s">&quot;INSUFFICIENT_DATA&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a><span class="w">      </span><span class="n">StateReason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a><span class="w">      </span><span class="n">StateReasonData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a><span class="w">      </span><span class="n">StateUpdatedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a><span class="w">      </span><span class="n">MetricName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a><span class="w">      </span><span class="n">Namespace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a><span class="w">      </span><span class="n">Statistic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SampleCount&quot;</span><span class="o">|</span><span class="s">&quot;Average&quot;</span><span class="o">|</span><span class="s">&quot;Sum&quot;</span><span class="o">|</span><span class="s">&quot;Minimum&quot;</span><span class="o">|</span><span class="s">&quot;Maximum&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a><span class="w">      </span><span class="n">ExtendedStatistic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a><span class="w">      </span><span class="n">Dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a><span class="w">          </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a><span class="w">          </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a><span class="w">      </span><span class="n">Period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a><span class="w">      </span><span class="n">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Seconds&quot;</span><span class="o">|</span><span class="s">&quot;Microseconds&quot;</span><span class="o">|</span><span class="s">&quot;Milliseconds&quot;</span><span class="o">|</span><span class="s">&quot;Bytes&quot;</span><span class="o">|</span><span class="s">&quot;Kilobytes&quot;</span><span class="o">|</span><span class="s">&quot;Megabytes&quot;</span><span class="o">|</span><span class="s">&quot;Gigabytes&quot;</span><span class="o">|</span><span class="s">&quot;Terabytes&quot;</span><span class="o">|</span><span class="s">&quot;Bits&quot;</span><span class="o">|</span><span class="s">&quot;Kilobits&quot;</span><span class="o">|</span><span class="s">&quot;Megabits&quot;</span><span class="o">|</span><span class="s">&quot;Gigabits&quot;</span><span class="o">|</span><span class="s">&quot;Terabits&quot;</span><span class="o">|</span><span class="s">&quot;Percent&quot;</span><span class="o">|</span><span class="s">&quot;Count&quot;</span><span class="o">|</span><span class="s">&quot;Bytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Kilobytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Megabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Gigabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Terabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Bits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Kilobits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Megabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Gigabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Terabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Count/Second&quot;</span><span class="o">|</span><span class="s">&quot;None&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a><span class="w">      </span><span class="n">EvaluationPeriods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a><span class="w">      </span><span class="n">DatapointsToAlarm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-75" name="__codelineno-1-75" href="#__codelineno-1-75"></a><span class="w">      </span><span class="n">Threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123.0</span><span class="p">,</span>
+<a id="__codelineno-1-76" name="__codelineno-1-76" href="#__codelineno-1-76"></a><span class="w">      </span><span class="n">ComparisonOperator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;GreaterThanOrEqualToThreshold&quot;</span><span class="o">|</span><span class="s">&quot;GreaterThanThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanOrEqualToThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanLowerOrGreaterThanUpperThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanLowerThreshold&quot;</span><span class="o">|</span><span class="s">&quot;GreaterThanUpperThreshold&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-77" name="__codelineno-1-77" href="#__codelineno-1-77"></a><span class="w">      </span><span class="n">TreatMissingData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-78" name="__codelineno-1-78" href="#__codelineno-1-78"></a><span class="w">      </span><span class="n">EvaluateLowSampleCountPercentile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-79" name="__codelineno-1-79" href="#__codelineno-1-79"></a><span class="w">      </span><span class="n">Metrics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-80" name="__codelineno-1-80" href="#__codelineno-1-80"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-81" name="__codelineno-1-81" href="#__codelineno-1-81"></a><span class="w">          </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-82" name="__codelineno-1-82" href="#__codelineno-1-82"></a><span class="w">          </span><span class="n">MetricStat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-83" name="__codelineno-1-83" href="#__codelineno-1-83"></a><span class="w">            </span><span class="n">Metric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-84" name="__codelineno-1-84" href="#__codelineno-1-84"></a><span class="w">              </span><span class="n">Namespace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-85" name="__codelineno-1-85" href="#__codelineno-1-85"></a><span class="w">              </span><span class="n">MetricName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-86" name="__codelineno-1-86" href="#__codelineno-1-86"></a><span class="w">              </span><span class="n">Dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-87" name="__codelineno-1-87" href="#__codelineno-1-87"></a><span class="w">                </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-88" name="__codelineno-1-88" href="#__codelineno-1-88"></a><span class="w">                  </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-89" name="__codelineno-1-89" href="#__codelineno-1-89"></a><span class="w">                  </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-90" name="__codelineno-1-90" href="#__codelineno-1-90"></a><span class="w">                </span><span class="p">)</span>
+<a id="__codelineno-1-91" name="__codelineno-1-91" href="#__codelineno-1-91"></a><span class="w">              </span><span class="p">)</span>
+<a id="__codelineno-1-92" name="__codelineno-1-92" href="#__codelineno-1-92"></a><span class="w">            </span><span class="p">),</span>
+<a id="__codelineno-1-93" name="__codelineno-1-93" href="#__codelineno-1-93"></a><span class="w">            </span><span class="n">Period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-94" name="__codelineno-1-94" href="#__codelineno-1-94"></a><span class="w">            </span><span class="n">Stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-95" name="__codelineno-1-95" href="#__codelineno-1-95"></a><span class="w">            </span><span class="n">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Seconds&quot;</span><span class="o">|</span><span class="s">&quot;Microseconds&quot;</span><span class="o">|</span><span class="s">&quot;Milliseconds&quot;</span><span class="o">|</span><span class="s">&quot;Bytes&quot;</span><span class="o">|</span><span class="s">&quot;Kilobytes&quot;</span><span class="o">|</span><span class="s">&quot;Megabytes&quot;</span><span class="o">|</span><span class="s">&quot;Gigabytes&quot;</span><span class="o">|</span><span class="s">&quot;Terabytes&quot;</span><span class="o">|</span><span class="s">&quot;Bits&quot;</span><span class="o">|</span><span class="s">&quot;Kilobits&quot;</span><span class="o">|</span><span class="s">&quot;Megabits&quot;</span><span class="o">|</span><span class="s">&quot;Gigabits&quot;</span><span class="o">|</span><span class="s">&quot;Terabits&quot;</span><span class="o">|</span><span class="s">&quot;Percent&quot;</span><span class="o">|</span><span class="s">&quot;Count&quot;</span><span class="o">|</span><span class="s">&quot;Bytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Kilobytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Megabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Gigabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Terabytes/Second&quot;</span><span class="o">|</span><span class="s">&quot;Bits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Kilobits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Megabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Gigabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Terabits/Second&quot;</span><span class="o">|</span><span class="s">&quot;Count/Second&quot;</span><span class="o">|</span><span class="s">&quot;None&quot;</span>
+<a id="__codelineno-1-96" name="__codelineno-1-96" href="#__codelineno-1-96"></a><span class="w">          </span><span class="p">),</span>
+<a id="__codelineno-1-97" name="__codelineno-1-97" href="#__codelineno-1-97"></a><span class="w">          </span><span class="n">Expression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-98" name="__codelineno-1-98" href="#__codelineno-1-98"></a><span class="w">          </span><span class="n">Label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-99" name="__codelineno-1-99" href="#__codelineno-1-99"></a><span class="w">          </span><span class="n">ReturnData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-100" name="__codelineno-1-100" href="#__codelineno-1-100"></a><span class="w">          </span><span class="n">Period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-101" name="__codelineno-1-101" href="#__codelineno-1-101"></a><span class="w">          </span><span class="n">AccountId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-102" name="__codelineno-1-102" href="#__codelineno-1-102"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-103" name="__codelineno-1-103" href="#__codelineno-1-103"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-104" name="__codelineno-1-104" href="#__codelineno-1-104"></a><span class="w">      </span><span class="n">ThresholdMetricId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-105" name="__codelineno-1-105" href="#__codelineno-1-105"></a><span class="w">      </span><span class="n">EvaluationState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;PARTIAL_DATA&quot;</span><span class="o">|</span><span class="s">&quot;EVALUATION_FAILURE&quot;</span><span class="o">|</span><span class="s">&quot;EVALUATION_ERROR&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-106" name="__codelineno-1-106" href="#__codelineno-1-106"></a><span class="w">      </span><span class="n">StateTransitionedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-107" name="__codelineno-1-107" href="#__codelineno-1-107"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-108" name="__codelineno-1-108" href="#__codelineno-1-108"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-109" name="__codelineno-1-109" href="#__codelineno-1-109"></a><span class="w">      </span><span class="n">EvaluationWindow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-110" name="__codelineno-1-110" href="#__codelineno-1-110"></a><span class="w">        </span><span class="n">WallClockWindow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-111" name="__codelineno-1-111" href="#__codelineno-1-111"></a><span class="w">          </span><span class="n">Timezone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-112" name="__codelineno-1-112" href="#__codelineno-1-112"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-1-113" name="__codelineno-1-113" href="#__codelineno-1-113"></a><span class="w">        </span><span class="n">SlidingWindow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span>
+<a id="__codelineno-1-114" name="__codelineno-1-114" href="#__codelineno-1-114"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-115" name="__codelineno-1-115" href="#__codelineno-1-115"></a><span class="w">      </span><span class="n">WarmUpConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-116" name="__codelineno-1-116" href="#__codelineno-1-116"></a><span class="w">        </span><span class="n">WarmUpPeriodDurationInMinutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-117" name="__codelineno-1-117" href="#__codelineno-1-117"></a><span class="w">        </span><span class="n">OnlyStartEvaluatingAfterWarmUpPeriodEnds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-1-118" name="__codelineno-1-118" href="#__codelineno-1-118"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-119" name="__codelineno-1-119" href="#__codelineno-1-119"></a><span class="w">      </span><span class="n">EvaluationCriteria</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-120" name="__codelineno-1-120" href="#__codelineno-1-120"></a><span class="w">        </span><span class="n">PromQLCriteria</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-121" name="__codelineno-1-121" href="#__codelineno-1-121"></a><span class="w">          </span><span class="n">Query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-122" name="__codelineno-1-122" href="#__codelineno-1-122"></a><span class="w">          </span><span class="n">PendingPeriod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-123" name="__codelineno-1-123" href="#__codelineno-1-123"></a><span class="w">          </span><span class="n">RecoveryPeriod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-1-124" name="__codelineno-1-124" href="#__codelineno-1-124"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-125" name="__codelineno-1-125" href="#__codelineno-1-125"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-126" name="__codelineno-1-126" href="#__codelineno-1-126"></a><span class="w">      </span><span class="n">EvaluationInterval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-1-127" name="__codelineno-1-127" href="#__codelineno-1-127"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-128" name="__codelineno-1-128" href="#__codelineno-1-128"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-129" name="__codelineno-1-129" href="#__codelineno-1-129"></a><span class="w">  </span><span class="n">LogAlarms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-130" name="__codelineno-1-130" href="#__codelineno-1-130"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-131" name="__codelineno-1-131" href="#__codelineno-1-131"></a><span class="w">      </span><span class="n">AlarmName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-132" name="__codelineno-1-132" href="#__codelineno-1-132"></a><span class="w">      </span><span class="n">AlarmArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-133" name="__codelineno-1-133" href="#__codelineno-1-133"></a><span class="w">      </span><span class="n">AlarmDescription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-134" name="__codelineno-1-134" href="#__codelineno-1-134"></a><span class="w">      </span><span class="n">AlarmConfigurationUpdatedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-135" name="__codelineno-1-135" href="#__codelineno-1-135"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-136" name="__codelineno-1-136" href="#__codelineno-1-136"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-137" name="__codelineno-1-137" href="#__codelineno-1-137"></a><span class="w">      </span><span class="n">ActionsEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-138" name="__codelineno-1-138" href="#__codelineno-1-138"></a><span class="w">      </span><span class="n">OKActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-139" name="__codelineno-1-139" href="#__codelineno-1-139"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-140" name="__codelineno-1-140" href="#__codelineno-1-140"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-141" name="__codelineno-1-141" href="#__codelineno-1-141"></a><span class="w">      </span><span class="n">AlarmActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-142" name="__codelineno-1-142" href="#__codelineno-1-142"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-143" name="__codelineno-1-143" href="#__codelineno-1-143"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-144" name="__codelineno-1-144" href="#__codelineno-1-144"></a><span class="w">      </span><span class="n">InsufficientDataActions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-145" name="__codelineno-1-145" href="#__codelineno-1-145"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-146" name="__codelineno-1-146" href="#__codelineno-1-146"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-147" name="__codelineno-1-147" href="#__codelineno-1-147"></a><span class="w">      </span><span class="n">StateValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;OK&quot;</span><span class="o">|</span><span class="s">&quot;ALARM&quot;</span><span class="o">|</span><span class="s">&quot;INSUFFICIENT_DATA&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-148" name="__codelineno-1-148" href="#__codelineno-1-148"></a><span class="w">      </span><span class="n">StateReason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-149" name="__codelineno-1-149" href="#__codelineno-1-149"></a><span class="w">      </span><span class="n">StateReasonData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-150" name="__codelineno-1-150" href="#__codelineno-1-150"></a><span class="w">      </span><span class="n">StateUpdatedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-151" name="__codelineno-1-151" href="#__codelineno-1-151"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-152" name="__codelineno-1-152" href="#__codelineno-1-152"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-153" name="__codelineno-1-153" href="#__codelineno-1-153"></a><span class="w">      </span><span class="n">ScheduledQueryConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-154" name="__codelineno-1-154" href="#__codelineno-1-154"></a><span class="w">        </span><span class="n">QueryString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-155" name="__codelineno-1-155" href="#__codelineno-1-155"></a><span class="w">        </span><span class="n">LogGroupIdentifiers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-156" name="__codelineno-1-156" href="#__codelineno-1-156"></a><span class="w">          </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-157" name="__codelineno-1-157" href="#__codelineno-1-157"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-1-158" name="__codelineno-1-158" href="#__codelineno-1-158"></a><span class="w">        </span><span class="n">QueryARN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-159" name="__codelineno-1-159" href="#__codelineno-1-159"></a><span class="w">        </span><span class="n">ScheduledQueryRoleARN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-160" name="__codelineno-1-160" href="#__codelineno-1-160"></a><span class="w">        </span><span class="n">ScheduleConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-161" name="__codelineno-1-161" href="#__codelineno-1-161"></a><span class="w">          </span><span class="n">ScheduleExpression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-162" name="__codelineno-1-162" href="#__codelineno-1-162"></a><span class="w">          </span><span class="n">StartTimeOffset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-163" name="__codelineno-1-163" href="#__codelineno-1-163"></a><span class="w">          </span><span class="n">EndTimeOffset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-1-164" name="__codelineno-1-164" href="#__codelineno-1-164"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-1-165" name="__codelineno-1-165" href="#__codelineno-1-165"></a><span class="w">        </span><span class="n">AggregationExpression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-166" name="__codelineno-1-166" href="#__codelineno-1-166"></a><span class="w">        </span><span class="n">Tags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-167" name="__codelineno-1-167" href="#__codelineno-1-167"></a><span class="w">          </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-168" name="__codelineno-1-168" href="#__codelineno-1-168"></a><span class="w">            </span><span class="n">Key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-169" name="__codelineno-1-169" href="#__codelineno-1-169"></a><span class="w">            </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-170" name="__codelineno-1-170" href="#__codelineno-1-170"></a><span class="w">          </span><span class="p">)</span>
+<a id="__codelineno-1-171" name="__codelineno-1-171" href="#__codelineno-1-171"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-172" name="__codelineno-1-172" href="#__codelineno-1-172"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-173" name="__codelineno-1-173" href="#__codelineno-1-173"></a><span class="w">      </span><span class="n">QueryResultsToEvaluate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-174" name="__codelineno-1-174" href="#__codelineno-1-174"></a><span class="w">      </span><span class="n">QueryResultsToAlarm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-175" name="__codelineno-1-175" href="#__codelineno-1-175"></a><span class="w">      </span><span class="n">Threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123.0</span><span class="p">,</span>
+<a id="__codelineno-1-176" name="__codelineno-1-176" href="#__codelineno-1-176"></a><span class="w">      </span><span class="n">ComparisonOperator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;GreaterThanOrEqualToThreshold&quot;</span><span class="o">|</span><span class="s">&quot;GreaterThanThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanOrEqualToThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanLowerOrGreaterThanUpperThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanLowerThreshold&quot;</span><span class="o">|</span><span class="s">&quot;GreaterThanUpperThreshold&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-177" name="__codelineno-1-177" href="#__codelineno-1-177"></a><span class="w">      </span><span class="n">TreatMissingData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-178" name="__codelineno-1-178" href="#__codelineno-1-178"></a><span class="w">      </span><span class="n">StateTransitionedTimestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-179" name="__codelineno-1-179" href="#__codelineno-1-179"></a><span class="w">        </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-180" name="__codelineno-1-180" href="#__codelineno-1-180"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-181" name="__codelineno-1-181" href="#__codelineno-1-181"></a><span class="w">      </span><span class="n">EvaluationState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;PARTIAL_DATA&quot;</span><span class="o">|</span><span class="s">&quot;EVALUATION_FAILURE&quot;</span><span class="o">|</span><span class="s">&quot;EVALUATION_ERROR&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-182" name="__codelineno-1-182" href="#__codelineno-1-182"></a><span class="w">      </span><span class="n">ActionLogLineCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-183" name="__codelineno-1-183" href="#__codelineno-1-183"></a><span class="w">      </span><span class="n">ActionLogLineRoleArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-184" name="__codelineno-1-184" href="#__codelineno-1-184"></a><span class="w">      </span><span class="n">WarmUpConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-185" name="__codelineno-1-185" href="#__codelineno-1-185"></a><span class="w">        </span><span class="n">WarmUpPeriodDurationInMinutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-186" name="__codelineno-1-186" href="#__codelineno-1-186"></a><span class="w">        </span><span class="n">OnlyStartEvaluatingAfterWarmUpPeriodEnds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-1-187" name="__codelineno-1-187" href="#__codelineno-1-187"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-188" name="__codelineno-1-188" href="#__codelineno-1-188"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-189" name="__codelineno-1-189" href="#__codelineno-1-189"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-190" name="__codelineno-1-190" href="#__codelineno-1-190"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-191" name="__codelineno-1-191" href="#__codelineno-1-191"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$describe_alarms(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  AlarmNames = list(
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    &quot;string&quot;
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  ),
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  AlarmNamePrefix = &quot;string&quot;,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  AlarmTypes = list(
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    &quot;CompositeAlarm&quot;|&quot;MetricAlarm&quot;|&quot;LogAlarm&quot;
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  ),
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  ChildrenOfAlarmName = &quot;string&quot;,
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  ParentsOfAlarmName = &quot;string&quot;,
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  StateValue = &quot;OK&quot;|&quot;ALARM&quot;|&quot;INSUFFICIENT_DATA&quot;,
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  ActionPrefix = &quot;string&quot;,
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>  MaxRecords = 123,
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>  NextToken = &quot;string&quot;
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">describe_alarms</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">AlarmNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">AlarmNamePrefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">AlarmTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="s">&quot;CompositeAlarm&quot;</span><span class="o">|</span><span class="s">&quot;MetricAlarm&quot;</span><span class="o">|</span><span class="s">&quot;LogAlarm&quot;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="n">ChildrenOfAlarmName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="n">ParentsOfAlarmName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="n">StateValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;OK&quot;</span><span class="o">|</span><span class="s">&quot;ALARM&quot;</span><span class="o">|</span><span class="s">&quot;INSUFFICIENT_DATA&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="n">ActionPrefix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="n">MaxRecords</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="p">)</span>
 </code></pre></div>
 
 

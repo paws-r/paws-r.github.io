@@ -17275,11 +17275,11 @@
 </li>
 <li>
 <p>For public hosted zones, Route 53 automatically creates a default SOA record and four NS records for the zone. For more information about SOA and NS records, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/SOA-NSrecords.html">NS and SOA Records that Route 53 Creates for a Hosted Zone</a> in the <em>Amazon Route 53 Developer Guide</em>.</p>
-</li>
-</ul>
 <p>If you want to use the same name servers for multiple public hosted zones, you can optionally associate a reusable delegation set with the hosted zone. See the <code>DelegationSetId</code> element.</p>
-<ul>
-<li>If your domain is registered with a registrar other than Route 53, you must update the name servers with your registrar to make Route 53 the DNS service for the domain. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html">Migrating DNS Service for an Existing Domain to Amazon Route 53</a> in the <em>Amazon Route 53 Developer Guide</em>.</li>
+</li>
+<li>
+<p>If your domain is registered with a registrar other than Route 53, you must update the name servers with your registrar to make Route 53 the DNS service for the domain. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/MigratingDNS.html">Migrating DNS Service for an Existing Domain to Amazon Route 53</a> in the <em>Amazon Route 53 Developer Guide</em>.</p>
+</li>
 </ul>
 <p>When you submit a <a href="../route53_create_hosted_zone/"><code>create_hosted_zone</code></a> request, the initial status of the hosted zone is <code>PENDING</code>. For public hosted zones, this means that the NS and SOA records are not yet available on all Route 53 DNS servers. When the NS and SOA records are available, the status of the zone changes to <code>INSYNC</code>.</p>
 <p>The <a href="../route53_create_hosted_zone/"><code>create_hosted_zone</code></a> request requires the caller to have an <code>ec2:DescribeVpcs</code> permission.</p>
@@ -17297,93 +17297,95 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>Name</code></strong></li>
-</ul>
+<li>
+<p><strong><code>Name</code></strong></p>
 <p>[required] The name of the domain. Specify a fully qualified domain name, for example, <em>www.example.com</em>. The trailing dot is optional; Amazon Route 53 assumes that the domain name is fully qualified. This means that Route 53 treats <em>www.example.com</em> (without a trailing dot) and <em>www.example.com.</em> (with a trailing dot) as identical.</p>
 <p>If you're creating a public hosted zone, this is the name you have registered with your DNS registrar. If your domain name is registered with a registrar other than Route 53, change the name servers for your domain to the set of <code>NameServers</code> that <a href="../route53_create_hosted_zone/"><code>create_hosted_zone</code></a> returns in <code>DelegationSet</code>.</p>
-<ul>
-<li><strong><code>VPC</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>VPC</code></strong></p>
 <p>(Private hosted zones only) A complex type that contains information about the Amazon VPC that you're associating with this hosted zone.</p>
 <p>You can specify only one Amazon VPC when you create a private hosted zone. If you are associating a VPC with a hosted zone with this request, the paramaters <code>VPCId</code> and <code>VPCRegion</code> are also required.</p>
 <p>To associate additional Amazon VPCs with the hosted zone, use <a href="../route53_associate_vpc_with_hosted_zone/"><code>associate_vpc_with_hosted_zone</code></a> after you create a hosted zone.</p>
-<ul>
-<li><strong><code>CallerReference</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>CallerReference</code></strong></p>
 <p>[required] A unique string that identifies the request and that allows failed <a href="../route53_create_hosted_zone/"><code>create_hosted_zone</code></a> requests to be retried without the risk of executing the operation twice. You must use a unique <code>CallerReference</code> string every time you submit a <a href="../route53_create_hosted_zone/"><code>create_hosted_zone</code></a> request. <code>CallerReference</code> can be any unique string, for example, a date/time stamp.</p>
-<ul>
-<li><strong><code>HostedZoneConfig</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>HostedZoneConfig</code></strong></p>
 <p>(Optional) A complex type that contains the following optional values:</p>
 <ul>
 <li>For public and private hosted zones, an optional comment</li>
 <li>For private hosted zones, an optional <code>PrivateZone</code> element</li>
 </ul>
 <p>If you don't specify a comment or the <code>PrivateZone</code> element, omit <code>HostedZoneConfig</code> and the other elements.</p>
-<ul>
-<li><strong><code>DelegationSetId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DelegationSetId</code></strong></p>
 <p>If you want to associate a reusable delegation set with this hosted zone, the ID that Amazon Route 53 assigned to the reusable delegation set when you created it. For more information about reusable delegation sets, see <a href="../route53_create_reusable_delegation_set/"><code>create_reusable_delegation_set</code></a>.</p>
 <p>If you are using a reusable delegation set to create a public hosted zone for a subdomain, make sure that the parent hosted zone doesn't use one or more of the same name servers. If you have overlapping nameservers, the operation will cause a <code>ConflictingDomainsExist</code> error.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  HostedZone = list(
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    Id = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    Name = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    CallerReference = &quot;string&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    Config = list(
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>      Comment = &quot;string&quot;,
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>      PrivateZone = TRUE|FALSE
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    ),
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    ResourceRecordSetCount = 123,
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    LinkedService = list(
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>      ServicePrincipal = &quot;string&quot;,
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>      Description = &quot;string&quot;
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    ),
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    Features = list(
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>      AcceleratedRecoveryStatus = &quot;ENABLING&quot;|&quot;ENABLE_FAILED&quot;|&quot;ENABLING_HOSTED_ZONE_LOCKED&quot;|&quot;ENABLED&quot;|&quot;DISABLING&quot;|&quot;DISABLE_FAILED&quot;|&quot;DISABLED&quot;|&quot;DISABLING_HOSTED_ZONE_LOCKED&quot;,
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>      FailureReasons = list(
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>        AcceleratedRecovery = &quot;string&quot;
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>      )
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    )
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>  ),
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>  ChangeInfo = list(
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    Id = &quot;string&quot;,
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>    Status = &quot;PENDING&quot;|&quot;INSYNC&quot;,
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    SubmittedAt = as.POSIXct(
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>      &quot;2015-01-01&quot;
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    ),
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    Comment = &quot;string&quot;
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>  ),
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>  DelegationSet = list(
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>    Id = &quot;string&quot;,
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>    CallerReference = &quot;string&quot;,
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    NameServers = list(
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>      &quot;string&quot;
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    )
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>  ),
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>  VPC = list(
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>    VPCRegion = &quot;us-east-1&quot;|&quot;us-east-2&quot;|&quot;us-west-1&quot;|&quot;us-west-2&quot;|&quot;eu-west-1&quot;|&quot;eu-west-2&quot;|&quot;eu-west-3&quot;|&quot;eu-central-1&quot;|&quot;eu-central-2&quot;|&quot;ap-east-1&quot;|&quot;me-south-1&quot;|&quot;us-gov-west-1&quot;|&quot;us-gov-east-1&quot;|&quot;us-iso-east-1&quot;|&quot;us-iso-west-1&quot;|&quot;us-isob-east-1&quot;|&quot;me-central-1&quot;|&quot;ap-southeast-1&quot;|&quot;ap-southeast-2&quot;|&quot;ap-southeast-3&quot;|&quot;ap-south-1&quot;|&quot;ap-south-2&quot;|&quot;ap-northeast-1&quot;|&quot;ap-northeast-2&quot;|&quot;ap-northeast-3&quot;|&quot;eu-north-1&quot;|&quot;sa-east-1&quot;|&quot;ca-central-1&quot;|&quot;cn-north-1&quot;|&quot;cn-northwest-1&quot;|&quot;af-south-1&quot;|&quot;eu-south-1&quot;|&quot;eu-south-2&quot;|&quot;ap-southeast-4&quot;|&quot;il-central-1&quot;|&quot;ca-west-1&quot;|&quot;ap-southeast-5&quot;|&quot;mx-central-1&quot;|&quot;us-isof-south-1&quot;|&quot;us-isof-east-1&quot;|&quot;ap-southeast-7&quot;|&quot;ap-east-2&quot;|&quot;eu-isoe-west-1&quot;|&quot;ap-southeast-6&quot;|&quot;us-isob-west-1&quot;|&quot;eusc-de-east-1&quot;,
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>    VPCId = &quot;string&quot;
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>  ),
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>  Location = &quot;string&quot;
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">HostedZone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">CallerReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">Config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="n">Comment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="n">PrivateZone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">ResourceRecordSetCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="n">LinkedService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="n">ServicePrincipal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="n">Description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="n">Features</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="n">AcceleratedRecoveryStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ENABLING&quot;</span><span class="o">|</span><span class="s">&quot;ENABLE_FAILED&quot;</span><span class="o">|</span><span class="s">&quot;ENABLING_HOSTED_ZONE_LOCKED&quot;</span><span class="o">|</span><span class="s">&quot;ENABLED&quot;</span><span class="o">|</span><span class="s">&quot;DISABLING&quot;</span><span class="o">|</span><span class="s">&quot;DISABLE_FAILED&quot;</span><span class="o">|</span><span class="s">&quot;DISABLED&quot;</span><span class="o">|</span><span class="s">&quot;DISABLING_HOSTED_ZONE_LOCKED&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">      </span><span class="n">FailureReasons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">        </span><span class="n">AcceleratedRecovery</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span><span class="n">ChangeInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">    </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">    </span><span class="n">Status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;PENDING&quot;</span><span class="o">|</span><span class="s">&quot;INSYNC&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">    </span><span class="n">SubmittedAt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">      </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">    </span><span class="n">Comment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">  </span><span class="n">DelegationSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">    </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">    </span><span class="n">CallerReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">    </span><span class="n">NameServers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">  </span><span class="n">VPC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">    </span><span class="n">VPCRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;us-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-east-2&quot;</span><span class="o">|</span><span class="s">&quot;us-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-3&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-1&quot;</span><span class="o">|</span><span class="s">&quot;me-south-1&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-iso-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-iso-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isob-east-1&quot;</span><span class="o">|</span><span class="s">&quot;me-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-3&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-3&quot;</span><span class="o">|</span><span class="s">&quot;eu-north-1&quot;</span><span class="o">|</span><span class="s">&quot;sa-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ca-central-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-north-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-northwest-1&quot;</span><span class="o">|</span><span class="s">&quot;af-south-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-4&quot;</span><span class="o">|</span><span class="s">&quot;il-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ca-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-5&quot;</span><span class="o">|</span><span class="s">&quot;mx-central-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isof-south-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isof-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-7&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-isoe-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-6&quot;</span><span class="o">|</span><span class="s">&quot;us-isob-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eusc-de-east-1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">    </span><span class="n">VPCId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">  </span><span class="n">Location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$create_hosted_zone(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  Name = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  VPC = list(
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    VPCRegion = &quot;us-east-1&quot;|&quot;us-east-2&quot;|&quot;us-west-1&quot;|&quot;us-west-2&quot;|&quot;eu-west-1&quot;|&quot;eu-west-2&quot;|&quot;eu-west-3&quot;|&quot;eu-central-1&quot;|&quot;eu-central-2&quot;|&quot;ap-east-1&quot;|&quot;me-south-1&quot;|&quot;us-gov-west-1&quot;|&quot;us-gov-east-1&quot;|&quot;us-iso-east-1&quot;|&quot;us-iso-west-1&quot;|&quot;us-isob-east-1&quot;|&quot;me-central-1&quot;|&quot;ap-southeast-1&quot;|&quot;ap-southeast-2&quot;|&quot;ap-southeast-3&quot;|&quot;ap-south-1&quot;|&quot;ap-south-2&quot;|&quot;ap-northeast-1&quot;|&quot;ap-northeast-2&quot;|&quot;ap-northeast-3&quot;|&quot;eu-north-1&quot;|&quot;sa-east-1&quot;|&quot;ca-central-1&quot;|&quot;cn-north-1&quot;|&quot;cn-northwest-1&quot;|&quot;af-south-1&quot;|&quot;eu-south-1&quot;|&quot;eu-south-2&quot;|&quot;ap-southeast-4&quot;|&quot;il-central-1&quot;|&quot;ca-west-1&quot;|&quot;ap-southeast-5&quot;|&quot;mx-central-1&quot;|&quot;us-isof-south-1&quot;|&quot;us-isof-east-1&quot;|&quot;ap-southeast-7&quot;|&quot;ap-east-2&quot;|&quot;eu-isoe-west-1&quot;|&quot;ap-southeast-6&quot;|&quot;us-isob-west-1&quot;|&quot;eusc-de-east-1&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    VPCId = &quot;string&quot;
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  ),
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  CallerReference = &quot;string&quot;,
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  HostedZoneConfig = list(
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    Comment = &quot;string&quot;,
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    PrivateZone = TRUE|FALSE
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  ),
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  DelegationSetId = &quot;string&quot;
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">create_hosted_zone</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">VPC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">VPCRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;us-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-east-2&quot;</span><span class="o">|</span><span class="s">&quot;us-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-3&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-1&quot;</span><span class="o">|</span><span class="s">&quot;me-south-1&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-iso-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-iso-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isob-east-1&quot;</span><span class="o">|</span><span class="s">&quot;me-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-3&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-3&quot;</span><span class="o">|</span><span class="s">&quot;eu-north-1&quot;</span><span class="o">|</span><span class="s">&quot;sa-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ca-central-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-north-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-northwest-1&quot;</span><span class="o">|</span><span class="s">&quot;af-south-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-4&quot;</span><span class="o">|</span><span class="s">&quot;il-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ca-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-5&quot;</span><span class="o">|</span><span class="s">&quot;mx-central-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isof-south-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isof-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-7&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-isoe-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-6&quot;</span><span class="o">|</span><span class="s">&quot;us-isob-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eusc-de-east-1&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">VPCId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">CallerReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="n">HostedZoneConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="n">Comment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="n">PrivateZone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="n">DelegationSetId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">)</span>
 </code></pre></div>
 
 

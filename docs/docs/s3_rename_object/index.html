@@ -18636,82 +18636,84 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>Bucket</code></strong></li>
-</ul>
+<li>
+<p><strong><code>Bucket</code></strong></p>
 <p>[required] The bucket name of the directory bucket containing the object.</p>
 <p>You must use virtual-hosted-style requests in the format <code>Bucket-name.s3express-zone-id.region-code.amazonaws.com</code>. Path-style requests are not supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>bucket-base-name--zone-id--x-s3</code> (for example, <code>amzn-s3-demo-bucket--usw2-az1--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <em>Amazon S3 User Guide</em>.</p>
-<ul>
-<li><strong><code>Key</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Key</code></strong></p>
 <p>[required] Key name of the object to rename.</p>
-<ul>
-<li><strong><code>RenameSource</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>RenameSource</code></strong></p>
 <p>[required] Specifies the source for the rename operation. The value must be URL encoded.</p>
-<ul>
-<li><strong><code>DestinationIfMatch</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DestinationIfMatch</code></strong></p>
 <p>Renames the object only if the ETag (entity tag) value provided during the operation matches the ETag of the object in S3. The <code>If-Match</code> header field makes the request method conditional on ETags. If the ETag values do not match, the operation returns a <code>412 Precondition Failed</code> error.</p>
 <p>Expects the ETag value as a string.</p>
-<ul>
-<li><strong><code>DestinationIfNoneMatch</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DestinationIfNoneMatch</code></strong></p>
 <p>Renames the object only if the destination does not already exist in the specified directory bucket. If the object does exist when you send a request with <code>If-None-Match:*</code>, the S3 API will return a <code>412 Precondition Failed</code> error, preventing an overwrite. The <code>If-None-Match</code> header prevents overwrites of existing data by validating that there's not an object with the same key name already in your directory bucket.</p>
 <p>Expects the <code>*</code> character (asterisk).</p>
-<ul>
-<li><strong><code>DestinationIfModifiedSince</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DestinationIfModifiedSince</code></strong></p>
 <p>Renames the object if the destination exists and if it has been modified since the specified time.</p>
-<ul>
-<li><strong><code>DestinationIfUnmodifiedSince</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DestinationIfUnmodifiedSince</code></strong></p>
 <p>Renames the object if it hasn't been modified since the specified time.</p>
-<ul>
-<li><strong><code>SourceIfMatch</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SourceIfMatch</code></strong></p>
 <p>Renames the object if the source exists and if its entity tag (ETag) matches the specified ETag.</p>
-<ul>
-<li><strong><code>SourceIfNoneMatch</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SourceIfNoneMatch</code></strong></p>
 <p>Renames the object if the source exists and if its entity tag (ETag) is different than the specified ETag. If an asterisk (<code>*</code>) character is provided, the operation will fail and return a <code>412 Precondition Failed</code> error.</p>
-<ul>
-<li><strong><code>SourceIfModifiedSince</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SourceIfModifiedSince</code></strong></p>
 <p>Renames the object if the source exists and if it has been modified since the specified time.</p>
-<ul>
-<li><strong><code>SourceIfUnmodifiedSince</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SourceIfUnmodifiedSince</code></strong></p>
 <p>Renames the object if the source exists and hasn't been modified since the specified time.</p>
-<ul>
-<li><strong><code>ClientToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ClientToken</code></strong></p>
 <p>A unique string with a max of 64 ASCII characters in the ASCII range of 33 - 126.</p>
 <p><a href="../s3_rename_object/"><code>rename_object</code></a> supports idempotency using a client token. To make an idempotent API request using <a href="../s3_rename_object/"><code>rename_object</code></a>, specify a client token in the request. You should not reuse the same client token for other API requests. If you retry a request that completed successfully using the same client token and the same parameters, the retry succeeds without performing any further actions. If you retry a successful request using the same client token, but one or more of the parameters are different, the retry fails and an <code>IdempotentParameterMismatch</code> error is returned.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>An empty list.</p>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>svc$rename_object(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  Bucket = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  Key = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  RenameSource = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  DestinationIfMatch = &quot;string&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  DestinationIfNoneMatch = &quot;string&quot;,
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  DestinationIfModifiedSince = as.POSIXct(
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  ),
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  DestinationIfUnmodifiedSince = as.POSIXct(
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  ),
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  SourceIfMatch = &quot;string&quot;,
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  SourceIfNoneMatch = &quot;string&quot;,
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  SourceIfModifiedSince = as.POSIXct(
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  ),
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  SourceIfUnmodifiedSince = as.POSIXct(
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>  ),
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>  ClientToken = &quot;string&quot;
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">rename_object</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">Bucket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">Key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">RenameSource</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">DestinationIfMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">DestinationIfNoneMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="n">DestinationIfModifiedSince</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="n">DestinationIfUnmodifiedSince</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="n">SourceIfMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="n">SourceIfNoneMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="n">SourceIfModifiedSince</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="n">SourceIfUnmodifiedSince</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">  </span><span class="n">ClientToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="p">)</span>
 </code></pre></div>
 
 

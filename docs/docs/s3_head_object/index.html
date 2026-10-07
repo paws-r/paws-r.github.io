@@ -18688,19 +18688,19 @@
 <p>Request headers are limited to 8 KB in size. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/">Common Request Headers</a>.</p>
 <h3 id="permissions">Permissions<a class="headerlink" href="#permissions" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>General purpose bucket permissions</strong> - To use <code>HEAD</code>, you must have the <code>s3:GetObject</code> permission. You need the relevant read object (or version) permission for this operation. For more information, see <a href="https://docs.aws.amazon.com/service-authorization/latest/reference/">Actions, resources, and condition keys for Amazon S3</a> in the <em>Amazon S3 User Guide</em>. For more information about the permissions to S3 API operations by S3 resource types, see Required permissions for Amazon S3 API operations in the <em>Amazon S3 User Guide</em>.</li>
-</ul>
+<li>
+<p><strong>General purpose bucket permissions</strong> - To use <code>HEAD</code>, you must have the <code>s3:GetObject</code> permission. You need the relevant read object (or version) permission for this operation. For more information, see <a href="https://docs.aws.amazon.com/service-authorization/latest/reference/">Actions, resources, and condition keys for Amazon S3</a> in the <em>Amazon S3 User Guide</em>. For more information about the permissions to S3 API operations by S3 resource types, see Required permissions for Amazon S3 API operations in the <em>Amazon S3 User Guide</em>.</p>
 <p>If the object you request doesn't exist, the error that Amazon S3 returns depends on whether you also have the <code>s3:ListBucket</code> permission.</p>
 <ul>
 <li>If you have the <code>s3:ListBucket</code> permission on the bucket, Amazon S3 returns an HTTP status code <code>404 Not Found</code> error.</li>
-<li>
-<p>If you don’t have the <code>s3:ListBucket</code> permission, Amazon S3 returns an HTTP status code <code>403 Forbidden</code> error.</p>
+<li>If you don’t have the <code>s3:ListBucket</code> permission, Amazon S3 returns an HTTP status code <code>403 Forbidden</code> error.</li>
+</ul>
 </li>
 <li>
 <p><strong>Directory bucket permissions</strong> - To grant access to this API operation on a directory bucket, we recommend that you use the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html"><code>create_session</code></a> API operation for session-based authorization. Specifically, you grant the <code>s3express:CreateSession</code> permission to the directory bucket in a bucket policy or an IAM identity-based policy. Then, you make the <a href="../s3_create_session/"><code>create_session</code></a> API call on the bucket to obtain a session token. With the session token in your request header, you can make API requests to this operation. After the session token expires, you make another <a href="../s3_create_session/"><code>create_session</code></a> API call to generate a new session token for use. Amazon Web Services CLI or SDKs create session and refresh the session token automatically to avoid service interruptions when a session expires. For more information about authorization, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateSession.html"><code>create_session</code></a> .</p>
+<p>If you enable <code>x-amz-checksum-mode</code> in the request and the object is encrypted with Amazon Web Services Key Management Service (Amazon Web Services KMS), you must also have the <code>kms:GenerateDataKey</code> and <code>kms:Decrypt</code> permissions in IAM identity-based policies and KMS key policies for the KMS key to retrieve the checksum of the object.</p>
 </li>
 </ul>
-<p>If you enable <code>x-amz-checksum-mode</code> in the request and the object is encrypted with Amazon Web Services Key Management Service (Amazon Web Services KMS), you must also have the <code>kms:GenerateDataKey</code> and <code>kms:Decrypt</code> permissions in IAM identity-based policies and KMS key policies for the KMS key to retrieve the checksum of the object.</p>
 <h3 id="encryption">Encryption<a class="headerlink" href="#encryption" title="Permanent link">&para;</a></h3>
 <p>Encryption request headers, like <code>x-amz-server-side-encryption</code>, should not be sent for <code>HEAD</code> requests if your object uses server-side encryption with Key Management Service (KMS) keys (SSE-KMS), dual-layer server-side encryption with Amazon Web Services KMS keys (DSSE-KMS), or server-side encryption with Amazon S3 managed encryption keys (SSE-S3). The <code>x-amz-server-side-encryption</code> header is used when you <code>PUT</code> an object to S3 and want to specify the encryption method. If you include this header in a <code>HEAD</code> request for an object that uses these types of keys, you’ll get an HTTP <code>400 Bad Request</code> error. It's because the encryption method can't be changed when you retrieve the object.</p>
 <p>If you encrypt an object by using server-side encryption with customer-provided encryption keys (SSE-C) when you store the object in Amazon S3, then when you retrieve the metadata from the object, you must use the following headers to provide the encryption key for the server to be able to retrieve the object's metadata. The headers are:</p>
@@ -18737,16 +18737,16 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>Bucket</code></strong></li>
-</ul>
+<li>
+<p><strong><code>Bucket</code></strong></p>
 <p>[required] The name of the bucket that contains the object.</p>
 <p><strong>Directory buckets</strong> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>Bucket-name.s3express-zone-id.region-code.amazonaws.com</code>. Path-style requests are not supported. Directory bucket names must be unique in the chosen Zone (Availability Zone or Local Zone). Bucket names must follow the format <code>bucket-base-name--zone-id--x-s3</code> (for example, <code>amzn-s3-demo-bucket--usw2-az1--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p><strong>Access points</strong> - When you use this action with an access point for general purpose buckets, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When you use this action with an access point for directory buckets, you must provide the access point name in place of the bucket name. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form <em>AccessPointName</em>-<em>AccountId</em>.s3-accesspoint.<em>Region</em>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>Object Lambda access points are not supported by directory buckets.</p>
 <p><strong>S3 on Outposts</strong> - When you use this action with S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>AccessPointName-AccountId.outpostID.s3-outposts.Region.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/s3-outposts/S3onOutposts.html">What is S3 on Outposts?</a> in the <em>Amazon S3 User Guide</em>.</p>
-<ul>
-<li><strong><code>IfMatch</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>IfMatch</code></strong></p>
 <p>Return the object only if its entity tag (ETag) is the same as the one specified; otherwise, return a 412 (precondition failed) error.</p>
 <p>If both of the <code>If-Match</code> and <code>If-Unmodified-Since</code> headers are present in the request as follows:</p>
 <ul>
@@ -18755,9 +18755,9 @@
 </ul>
 <p>Then Amazon S3 returns <code>200 OK</code> and the data requested.</p>
 <p>For more information about conditional requests, see <a href="https://www.rfc-editor.org/info/rfc7232/">RFC 7232</a>.</p>
-<ul>
-<li><strong><code>IfModifiedSince</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>IfModifiedSince</code></strong></p>
 <p>Return the object only if it has been modified since the specified time; otherwise, return a 304 (not modified) error.</p>
 <p>If both of the <code>If-None-Match</code> and <code>If-Modified-Since</code> headers are present in the request as follows:</p>
 <ul>
@@ -18766,9 +18766,9 @@
 </ul>
 <p>Then Amazon S3 returns the <code>304 Not Modified</code> response code.</p>
 <p>For more information about conditional requests, see <a href="https://www.rfc-editor.org/info/rfc7232/">RFC 7232</a>.</p>
-<ul>
-<li><strong><code>IfNoneMatch</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>IfNoneMatch</code></strong></p>
 <p>Return the object only if its entity tag (ETag) is different from the one specified; otherwise, return a 304 (not modified) error.</p>
 <p>If both of the <code>If-None-Match</code> and <code>If-Modified-Since</code> headers are present in the request as follows:</p>
 <ul>
@@ -18777,9 +18777,9 @@
 </ul>
 <p>Then Amazon S3 returns the <code>304 Not Modified</code> response code.</p>
 <p>For more information about conditional requests, see <a href="https://www.rfc-editor.org/info/rfc7232/">RFC 7232</a>.</p>
-<ul>
-<li><strong><code>IfUnmodifiedSince</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>IfUnmodifiedSince</code></strong></p>
 <p>Return the object only if it has not been modified since the specified time; otherwise, return a 412 (precondition failed) error.</p>
 <p>If both of the <code>If-Match</code> and <code>If-Unmodified-Since</code> headers are present in the request as follows:</p>
 <ul>
@@ -18788,164 +18788,166 @@
 </ul>
 <p>Then Amazon S3 returns <code>200 OK</code> and the data requested.</p>
 <p>For more information about conditional requests, see <a href="https://www.rfc-editor.org/info/rfc7232/">RFC 7232</a>.</p>
-<ul>
-<li><strong><code>Key</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Key</code></strong></p>
 <p>[required] The object key.</p>
-<ul>
-<li><strong><code>Range</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Range</code></strong></p>
 <p>HeadObject returns only the metadata for an object. If the Range is satisfiable, only the <code>ContentLength</code> is affected in the response. If the Range is not satisfiable, S3 returns a <code>416 - Requested Range Not Satisfiable</code> error.</p>
-<ul>
-<li><strong><code>ResponseCacheControl</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ResponseCacheControl</code></strong></p>
 <p>Sets the <code>Cache-Control</code> header of the response.</p>
-<ul>
-<li><strong><code>ResponseContentDisposition</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ResponseContentDisposition</code></strong></p>
 <p>Sets the <code>Content-Disposition</code> header of the response.</p>
-<ul>
-<li><strong><code>ResponseContentEncoding</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ResponseContentEncoding</code></strong></p>
 <p>Sets the <code>Content-Encoding</code> header of the response.</p>
-<ul>
-<li><strong><code>ResponseContentLanguage</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ResponseContentLanguage</code></strong></p>
 <p>Sets the <code>Content-Language</code> header of the response.</p>
-<ul>
-<li><strong><code>ResponseContentType</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ResponseContentType</code></strong></p>
 <p>Sets the <code>Content-Type</code> header of the response.</p>
-<ul>
-<li><strong><code>ResponseExpires</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ResponseExpires</code></strong></p>
 <p>Sets the <code>Expires</code> header of the response.</p>
-<ul>
-<li><strong><code>VersionId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>VersionId</code></strong></p>
 <p>Version ID used to reference a specific version of the object.</p>
 <p>For directory buckets in this API operation, only the <code>null</code> value of the version ID is supported.</p>
-<ul>
-<li><strong><code>SSECustomerAlgorithm</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSECustomerAlgorithm</code></strong></p>
 <p>Specifies the algorithm to use when encrypting the object (for example, AES256).</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>SSECustomerKey</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSECustomerKey</code></strong></p>
 <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use with the algorithm specified in the <code>x-amz-server-side-encryption-customer-algorithm</code> header.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>SSECustomerKeyMD5</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSECustomerKeyMD5</code></strong></p>
 <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure that the encryption key was transmitted without error.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>RequestPayer</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>RequestPayer</code></strong></p>
 <p>Confirms that the requester knows that they will be charged for the request. Bucket owners need not specify this parameter in their requests. If either the source or destination S3 bucket has Requester Pays enabled, the requester will pay for the corresponding charges. For information about downloading objects from Requester Pays buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ObjectsinRequesterPaysBuckets.html">Downloading Objects in Requester Pays Buckets</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>PartNumber</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PartNumber</code></strong></p>
 <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object.</p>
-<ul>
-<li><strong><code>ExpectedBucketOwner</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ExpectedBucketOwner</code></strong></p>
 <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
-<ul>
-<li><strong><code>ChecksumMode</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ChecksumMode</code></strong></p>
 <p>To retrieve the checksum, this parameter must be enabled.</p>
 <p><strong>General purpose buckets</strong> - If you enable checksum mode and the object is uploaded with a <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_Checksum.html">checksum</a> and encrypted with an Key Management Service (KMS) key, you must have permission to use the <code>kms:Decrypt</code> action to retrieve the checksum.</p>
 <p><strong>Directory buckets</strong> - If you enable <code>ChecksumMode</code> and the object is encrypted with Amazon Web Services Key Management Service (Amazon Web Services KMS), you must also have the <code>kms:GenerateDataKey</code> and <code>kms:Decrypt</code> permissions in IAM identity-based policies and KMS key policies for the KMS key to retrieve the checksum of the object.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  DeleteMarker = TRUE|FALSE,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  AcceptRanges = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  Expiration = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  Restore = &quot;string&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  ArchiveStatus = &quot;ARCHIVE_ACCESS&quot;|&quot;DEEP_ARCHIVE_ACCESS&quot;,
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  LastModified = as.POSIXct(
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  ),
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  ContentLength = 123,
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  ChecksumCRC32 = &quot;string&quot;,
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  ChecksumCRC32C = &quot;string&quot;,
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  ChecksumCRC64NVME = &quot;string&quot;,
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  ChecksumSHA1 = &quot;string&quot;,
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  ChecksumSHA256 = &quot;string&quot;,
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  ChecksumSHA512 = &quot;string&quot;,
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  ChecksumMD5 = &quot;string&quot;,
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>  ChecksumXXHASH64 = &quot;string&quot;,
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>  ChecksumXXHASH3 = &quot;string&quot;,
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>  ChecksumXXHASH128 = &quot;string&quot;,
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>  ChecksumType = &quot;COMPOSITE&quot;|&quot;FULL_OBJECT&quot;,
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>  ETag = &quot;string&quot;,
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>  MissingMeta = 123,
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>  VersionId = &quot;string&quot;,
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>  CacheControl = &quot;string&quot;,
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>  ContentDisposition = &quot;string&quot;,
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>  ContentEncoding = &quot;string&quot;,
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>  ContentLanguage = &quot;string&quot;,
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>  ContentType = &quot;string&quot;,
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>  ContentRange = &quot;string&quot;,
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>  Expires = &quot;string&quot;,
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>  WebsiteRedirectLocation = &quot;string&quot;,
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>  ServerSideEncryption = &quot;AES256&quot;|&quot;aws:fsx&quot;|&quot;aws:backup&quot;|&quot;aws:kms&quot;|&quot;aws:kms:dsse&quot;,
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>  Metadata = list(
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    &quot;string&quot;
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>  ),
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>  SSECustomerAlgorithm = &quot;string&quot;,
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>  SSECustomerKeyMD5 = &quot;string&quot;,
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>  SSEKMSKeyId = &quot;string&quot;,
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>  BucketKeyEnabled = TRUE|FALSE,
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>  StorageClass = &quot;STANDARD&quot;|&quot;REDUCED_REDUNDANCY&quot;|&quot;STANDARD_IA&quot;|&quot;ONEZONE_IA&quot;|&quot;INTELLIGENT_TIERING&quot;|&quot;GLACIER&quot;|&quot;DEEP_ARCHIVE&quot;|&quot;OUTPOSTS&quot;|&quot;GLACIER_IR&quot;|&quot;SNOW&quot;|&quot;EXPRESS_ONEZONE&quot;|&quot;FSX_OPENZFS&quot;|&quot;FSX_ONTAP&quot;|&quot;AWS_BACKUP_WARM&quot;|&quot;AWS_BACKUP_LOW_COST_WARM&quot;,
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>  RequestCharged = &quot;requester&quot;,
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>  ReplicationStatus = &quot;COMPLETE&quot;|&quot;PENDING&quot;|&quot;FAILED&quot;|&quot;REPLICA&quot;|&quot;COMPLETED&quot;,
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>  PartsCount = 123,
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>  TagCount = 123,
-<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>  ObjectLockMode = &quot;GOVERNANCE&quot;|&quot;COMPLIANCE&quot;,
-<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>  ObjectLockRetainUntilDate = as.POSIXct(
-<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>  ),
-<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>  ObjectLockLegalHoldStatus = &quot;ON&quot;|&quot;OFF&quot;,
-<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>  ObjectLockEventHold = &quot;ON&quot;|&quot;OFF&quot;,
-<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>  ObjectLockEventHoldDurationDays = 123,
-<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>  ObjectLockEventHoldDurationYears = 123
-<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">DeleteMarker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">AcceptRanges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">Expiration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">Restore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">ArchiveStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ARCHIVE_ACCESS&quot;</span><span class="o">|</span><span class="s">&quot;DEEP_ARCHIVE_ACCESS&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="n">LastModified</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="n">ContentLength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="n">ChecksumCRC32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="n">ChecksumCRC32C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="n">ChecksumCRC64NVME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="n">ChecksumSHA1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="n">ChecksumSHA256</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">  </span><span class="n">ChecksumSHA512</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="n">ChecksumMD5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="n">ChecksumXXHASH64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">  </span><span class="n">ChecksumXXHASH3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">  </span><span class="n">ChecksumXXHASH128</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">  </span><span class="n">ChecksumType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;COMPOSITE&quot;</span><span class="o">|</span><span class="s">&quot;FULL_OBJECT&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">  </span><span class="n">ETag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">  </span><span class="n">MissingMeta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">  </span><span class="n">VersionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">  </span><span class="n">CacheControl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">  </span><span class="n">ContentDisposition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">  </span><span class="n">ContentEncoding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">  </span><span class="n">ContentLanguage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">  </span><span class="n">ContentType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">  </span><span class="n">ContentRange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">  </span><span class="n">Expires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">  </span><span class="n">WebsiteRedirectLocation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">  </span><span class="n">ServerSideEncryption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AES256&quot;</span><span class="o">|</span><span class="s">&quot;aws:fsx&quot;</span><span class="o">|</span><span class="s">&quot;aws:backup&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms:dsse&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">  </span><span class="n">Metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">  </span><span class="n">SSECustomerAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">  </span><span class="n">SSECustomerKeyMD5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">  </span><span class="n">SSEKMSKeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">  </span><span class="n">BucketKeyEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">  </span><span class="n">StorageClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;STANDARD&quot;</span><span class="o">|</span><span class="s">&quot;REDUCED_REDUNDANCY&quot;</span><span class="o">|</span><span class="s">&quot;STANDARD_IA&quot;</span><span class="o">|</span><span class="s">&quot;ONEZONE_IA&quot;</span><span class="o">|</span><span class="s">&quot;INTELLIGENT_TIERING&quot;</span><span class="o">|</span><span class="s">&quot;GLACIER&quot;</span><span class="o">|</span><span class="s">&quot;DEEP_ARCHIVE&quot;</span><span class="o">|</span><span class="s">&quot;OUTPOSTS&quot;</span><span class="o">|</span><span class="s">&quot;GLACIER_IR&quot;</span><span class="o">|</span><span class="s">&quot;SNOW&quot;</span><span class="o">|</span><span class="s">&quot;EXPRESS_ONEZONE&quot;</span><span class="o">|</span><span class="s">&quot;FSX_OPENZFS&quot;</span><span class="o">|</span><span class="s">&quot;FSX_ONTAP&quot;</span><span class="o">|</span><span class="s">&quot;AWS_BACKUP_WARM&quot;</span><span class="o">|</span><span class="s">&quot;AWS_BACKUP_LOW_COST_WARM&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="w">  </span><span class="n">RequestCharged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;requester&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">  </span><span class="n">ReplicationStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;COMPLETE&quot;</span><span class="o">|</span><span class="s">&quot;PENDING&quot;</span><span class="o">|</span><span class="s">&quot;FAILED&quot;</span><span class="o">|</span><span class="s">&quot;REPLICA&quot;</span><span class="o">|</span><span class="s">&quot;COMPLETED&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">  </span><span class="n">PartsCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="w">  </span><span class="n">TagCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="w">  </span><span class="n">ObjectLockMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;GOVERNANCE&quot;</span><span class="o">|</span><span class="s">&quot;COMPLIANCE&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="w">  </span><span class="n">ObjectLockRetainUntilDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="w">  </span><span class="n">ObjectLockLegalHoldStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ON&quot;</span><span class="o">|</span><span class="s">&quot;OFF&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="w">  </span><span class="n">ObjectLockEventHold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ON&quot;</span><span class="o">|</span><span class="s">&quot;OFF&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="w">  </span><span class="n">ObjectLockEventHoldDurationDays</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="w">  </span><span class="n">ObjectLockEventHoldDurationYears</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$head_object(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  Bucket = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  IfMatch = &quot;string&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  IfModifiedSince = as.POSIXct(
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  ),
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  IfNoneMatch = &quot;string&quot;,
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  IfUnmodifiedSince = as.POSIXct(
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  ),
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  Key = &quot;string&quot;,
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  Range = &quot;string&quot;,
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>  ResponseCacheControl = &quot;string&quot;,
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>  ResponseContentDisposition = &quot;string&quot;,
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>  ResponseContentEncoding = &quot;string&quot;,
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>  ResponseContentLanguage = &quot;string&quot;,
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>  ResponseContentType = &quot;string&quot;,
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>  ResponseExpires = as.POSIXct(
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>  ),
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>  VersionId = &quot;string&quot;,
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>  SSECustomerAlgorithm = &quot;string&quot;,
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>  SSECustomerKey = &quot;string&quot;,
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>  SSECustomerKeyMD5 = &quot;string&quot;,
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>  RequestPayer = &quot;requester&quot;,
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>  PartNumber = 123,
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>  ExpectedBucketOwner = &quot;string&quot;,
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>  ChecksumMode = &quot;ENABLED&quot;
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">head_object</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">Bucket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">IfMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">IfModifiedSince</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">IfNoneMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="n">IfUnmodifiedSince</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="n">Key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="n">Range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="n">ResponseCacheControl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="n">ResponseContentDisposition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="n">ResponseContentEncoding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="n">ResponseContentLanguage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="n">ResponseContentType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span><span class="n">ResponseExpires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="n">VersionId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">  </span><span class="n">SSECustomerAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">  </span><span class="n">SSECustomerKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">  </span><span class="n">SSECustomerKeyMD5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">  </span><span class="n">RequestPayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;requester&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">  </span><span class="n">PartNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">  </span><span class="n">ExpectedBucketOwner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">  </span><span class="n">ChecksumMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ENABLED&quot;</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># The following example retrieves an object metadata.</span>

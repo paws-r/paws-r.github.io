@@ -17276,23 +17276,21 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>HealthCheckId</code></strong></li>
-</ul>
+<li>
+<p><strong><code>HealthCheckId</code></strong></p>
 <p>[required] The ID for the health check for which you want detailed information. When you created the health check, <a href="../route53_create_health_check/"><code>create_health_check</code></a> returned the ID in the response, in the <code>HealthCheckId</code> element.</p>
-<ul>
-<li><strong><code>HealthCheckVersion</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>HealthCheckVersion</code></strong></p>
 <p>A sequential counter that Amazon Route 53 sets to <code>1</code> when you create a health check and increments by 1 each time you update settings for the health check.</p>
 <p>We recommend that you use <a href="../route53_get_health_check/"><code>get_health_check</code></a> or <a href="../route53_list_health_checks/"><code>list_health_checks</code></a> to get the current value of <code>HealthCheckVersion</code> for the health check that you want to update, and that you include that value in your <a href="../route53_update_health_check/"><code>update_health_check</code></a> request. This prevents Route 53 from overwriting an intervening update:</p>
 <ul>
 <li>If the value in the <a href="../route53_update_health_check/"><code>update_health_check</code></a> request matches the value of <code>HealthCheckVersion</code> in the health check, Route 53 updates the health check with the new settings.</li>
-<li>
-<p>If the value of <code>HealthCheckVersion</code> in the health check is greater, the health check was changed after you got the version number. Route 53 does not update the health check, and it returns a <code>HealthCheckVersionMismatch</code> error.</p>
+<li>If the value of <code>HealthCheckVersion</code> in the health check is greater, the health check was changed after you got the version number. Route 53 does not update the health check, and it returns a <code>HealthCheckVersionMismatch</code> error.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>IPAddress</code></strong></p>
-</li>
-</ul>
 <p>The IPv4 or IPv6 IP address for the endpoint that you want Amazon Route 53 to perform health checks on. If you don't specify a value for <code>IPAddress</code>, Route 53 sends a DNS request to resolve the domain name that you specify in <code>FullyQualifiedDomainName</code> at the interval that you specify in <code>RequestInterval</code>. Using an IP address that is returned by DNS, Route 53 then checks the health of the endpoint.</p>
 <p>Use one of the following formats for the value of <code>IPAddress</code>:</p>
 <ul>
@@ -17310,23 +17308,21 @@
 <ul>
 <li><a href="https://www.rfc-editor.org/info/rfc5735/">RFC 5735, Special Use IPv4 Addresses</a></li>
 <li><a href="https://www.rfc-editor.org/info/rfc6598/">RFC 6598, IANA-Reserved IPv4 Prefix for Shared Address Space</a></li>
-<li>
-<p><a href="https://www.rfc-editor.org/info/rfc5156/">RFC 5156, Special-Use IPv6 Addresses</a></p>
+<li><a href="https://www.rfc-editor.org/info/rfc5156/">RFC 5156, Special-Use IPv6 Addresses</a></li>
+</ul>
 </li>
 <li>
 <p><strong><code>Port</code></strong></p>
-</li>
-</ul>
 <p>The port on the endpoint that you want Amazon Route 53 to perform health checks on.</p>
 <p>Don't specify a value for <code>Port</code> when you specify a value for <code>Type</code> of <code>CLOUDWATCH_METRIC</code> or <code>CALCULATED</code>.</p>
-<ul>
-<li><strong><code>ResourcePath</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ResourcePath</code></strong></p>
 <p>The path that you want Amazon Route 53 to request when performing health checks. The path can be any value for which your endpoint will return an HTTP status code of 2xx or 3xx when the endpoint is healthy, for example the file /docs/route53-health-check.html. You can also include query string parameters, for example, <code>/welcome.html?language=jp&amp;login=y</code>.</p>
 <p>Specify this value only if you want to change it.</p>
-<ul>
-<li><strong><code>FullyQualifiedDomainName</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>FullyQualifiedDomainName</code></strong></p>
 <p>Amazon Route 53 behavior depends on whether you specify a value for <code>IPAddress</code>.</p>
 <p>If a health check already has a value for <code>IPAddress</code>, you can change the value. However, you can't update an existing health check to add or remove the value of <code>IPAddress</code>.</p>
 <p><strong>If you specify a value for</strong> <code>IPAddress</code>:</p>
@@ -17345,22 +17341,22 @@
 <p>If you want to check the health of weighted, latency, or failover resource record sets and you choose to specify the endpoint only by <code>FullyQualifiedDomainName</code>, we recommend that you create a separate health check for each endpoint. For example, create a health check for each HTTP server that is serving content for www.example.com. For the value of <code>FullyQualifiedDomainName</code>, specify the domain name of the server (such as <code>us-east-2-www.example.com</code>), not the name of the resource record sets (www.example.com).</p>
 <p>In this configuration, if the value of <code>FullyQualifiedDomainName</code> matches the name of the resource record sets and you then associate the health check with those resource record sets, health check results will be unpredictable.</p>
 <p>In addition, if the value of <code>Type</code> is <code>HTTP</code>, <code>HTTPS</code>, <code>HTTP_STR_MATCH</code>, or <code>HTTPS_STR_MATCH</code>, Route 53 passes the value of <code>FullyQualifiedDomainName</code> in the <code>Host</code> header, as it does when you specify a value for <code>IPAddress</code>. If the value of <code>Type</code> is <code>TCP</code>, Route 53 doesn't pass a <code>Host</code> header.</p>
-<ul>
-<li><strong><code>SearchString</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SearchString</code></strong></p>
 <p>If the value of <code>Type</code> is <code>HTTP_STR_MATCH</code> or <code>HTTPS_STR_MATCH</code>, the string that you want Amazon Route 53 to search for in the response body from the specified resource. If the string appears in the response body, Route 53 considers the resource healthy. (You can't change the value of <code>Type</code> when you update a health check.)</p>
-<ul>
-<li><strong><code>FailureThreshold</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>FailureThreshold</code></strong></p>
 <p>The number of consecutive health checks that an endpoint must pass or fail for Amazon Route 53 to change the current status of the endpoint from unhealthy to healthy or vice versa. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html">How Amazon Route 53 Determines Whether an Endpoint Is Healthy</a> in the <em>Amazon Route 53 Developer Guide</em>.</p>
 <p>Otherwise, if you don't specify a value for <code>FailureThreshold</code>, the default value is three health checks.</p>
-<ul>
-<li><strong><code>Inverted</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Inverted</code></strong></p>
 <p>Specify whether you want Amazon Route 53 to invert the status of a health check, for example, to consider a health check unhealthy when it otherwise would be considered healthy.</p>
-<ul>
-<li><strong><code>Disabled</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Disabled</code></strong></p>
 <p>Stops Route 53 from performing health checks. When you disable a health check, here's what happens:</p>
 <ul>
 <li><strong>Health checks that check the health of endpoints:</strong> Route 53 stops submitting requests to your application, server, or other resource.</li>
@@ -17369,49 +17365,45 @@
 </ul>
 <p>After you disable a health check, Route 53 considers the status of the health check to always be healthy. If you configured DNS failover, Route 53 continues to route traffic to the corresponding resources. Additionally, in disabled state, you can also invert the status of the health check to route traffic differently. For more information, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_UpdateHealthCheck.html#Route53-UpdateHealthCheck-request-Inverted">Inverted</a>.</p>
 <p>Charges for a health check still apply when the health check is disabled. For more information, see <a href="https://aws.amazon.com/route53/pricing/">Amazon Route 53 Pricing</a>.</p>
-<ul>
-<li><strong><code>HealthThreshold</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>HealthThreshold</code></strong></p>
 <p>The number of child health checks that are associated with a <code>CALCULATED</code> health that Amazon Route 53 must consider healthy for the <code>CALCULATED</code> health check to be considered healthy. To specify the child health checks that you want to associate with a <code>CALCULATED</code> health check, use the <code>ChildHealthChecks</code> and <code>ChildHealthCheck</code> elements.</p>
 <p>Note the following:</p>
 <ul>
 <li>If you specify a number greater than the number of child health checks, Route 53 always considers this health check to be unhealthy.</li>
-<li>
-<p>If you specify <code>0</code>, Route 53 always considers this health check to be healthy.</p>
+<li>If you specify <code>0</code>, Route 53 always considers this health check to be healthy.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>ChildHealthChecks</code></strong></p>
-</li>
-</ul>
 <p>A complex type that contains one <code>ChildHealthCheck</code> element for each health check that you want to associate with a <code>CALCULATED</code> health check.</p>
-<ul>
-<li><strong><code>EnableSNI</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>EnableSNI</code></strong></p>
 <p>Specify whether you want Amazon Route 53 to send the value of <code>FullyQualifiedDomainName</code> to the endpoint in the <code>client_hello</code> message during <code>TLS</code> negotiation. This allows the endpoint to respond to <code>HTTPS</code> health check requests with the applicable SSL/TLS certificate.</p>
 <p>Some endpoints require that HTTPS requests include the host name in the <code>client_hello</code> message. If you don't enable SNI, the status of the health check will be SSL alert <code>handshake_failure</code>. A health check can also have that status for other reasons. If SNI is enabled and you're still getting the error, check the SSL/TLS configuration on your endpoint and confirm that your certificate is valid.</p>
 <p>The SSL/TLS certificate on your endpoint includes a domain name in the <code>Common Name</code> field and possibly several more in the <code>Subject Alternative Names</code> field. One of the domain names in the certificate should match the value that you specify for <code>FullyQualifiedDomainName</code>. If the endpoint responds to the <code>client_hello</code> message with a certificate that does not include the domain name that you specified in <code>FullyQualifiedDomainName</code>, a health checker will retry the handshake. In the second attempt, the health checker will omit <code>FullyQualifiedDomainName</code> from the <code>client_hello</code> message.</p>
-<ul>
-<li><strong><code>Regions</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Regions</code></strong></p>
 <p>A complex type that contains one <code>Region</code> element for each region that you want Amazon Route 53 health checkers to check the specified endpoint from.</p>
-<ul>
-<li><strong><code>AlarmIdentifier</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>AlarmIdentifier</code></strong></p>
 <p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether the specified health check is healthy.</p>
-<ul>
-<li><strong><code>InsufficientDataHealthStatus</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>InsufficientDataHealthStatus</code></strong></p>
 <p>When CloudWatch has insufficient data about the metric to determine the alarm state, the status that you want Amazon Route 53 to assign to the health check:</p>
 <ul>
 <li><code>Healthy</code>: Route 53 considers the health check to be healthy.</li>
 <li><code>Unhealthy</code>: Route 53 considers the health check to be unhealthy.</li>
-<li>
-<p><code>LastKnownStatus</code>: By default, Route 53 uses the status of the health check from the last time CloudWatch had sufficient data to determine the alarm state. For new health checks that have no last known status, the status for the health check is healthy.</p>
+<li><code>LastKnownStatus</code>: By default, Route 53 uses the status of the health check from the last time CloudWatch had sufficient data to determine the alarm state. For new health checks that have no last known status, the status for the health check is healthy.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>ResetElements</code></strong></p>
-</li>
-</ul>
 <p>A complex type that contains one <code>ResettableElementName</code> element for each element that you want to reset to the default value. Valid values for <code>ResettableElementName</code> include the following:</p>
 <ul>
 <li><code>ChildHealthChecks</code>: Amazon Route 53 resets <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_HealthCheckConfig.html#Route53-Type-HealthCheckConfig-ChildHealthChecks">ChildHealthChecks</a> to null.</li>
@@ -17419,91 +17411,93 @@
 <li><code>Regions</code>: Route 53 resets the <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_HealthCheckConfig.html#Route53-Type-HealthCheckConfig-Regions">Regions</a> list to the default set of regions.</li>
 <li><code>ResourcePath</code>: Route 53 resets <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_HealthCheckConfig.html#Route53-Type-HealthCheckConfig-ResourcePath">ResourcePath</a> to null.</li>
 </ul>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  HealthCheck = list(
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    Id = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    CallerReference = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    LinkedService = list(
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>      ServicePrincipal = &quot;string&quot;,
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>      Description = &quot;string&quot;
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    ),
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    HealthCheckConfig = list(
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>      IPAddress = &quot;string&quot;,
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>      Port = 123,
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>      Type = &quot;HTTP&quot;|&quot;HTTPS&quot;|&quot;HTTP_STR_MATCH&quot;|&quot;HTTPS_STR_MATCH&quot;|&quot;TCP&quot;|&quot;CALCULATED&quot;|&quot;CLOUDWATCH_METRIC&quot;|&quot;RECOVERY_CONTROL&quot;,
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>      ResourcePath = &quot;string&quot;,
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>      FullyQualifiedDomainName = &quot;string&quot;,
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>      SearchString = &quot;string&quot;,
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>      RequestInterval = 123,
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>      FailureThreshold = 123,
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>      MeasureLatency = TRUE|FALSE,
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>      Inverted = TRUE|FALSE,
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>      Disabled = TRUE|FALSE,
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>      HealthThreshold = 123,
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>      ChildHealthChecks = list(
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>        &quot;string&quot;
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>      ),
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>      EnableSNI = TRUE|FALSE,
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>      Regions = list(
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>        &quot;us-east-1&quot;|&quot;us-west-1&quot;|&quot;us-west-2&quot;|&quot;eu-west-1&quot;|&quot;ap-southeast-1&quot;|&quot;ap-southeast-2&quot;|&quot;ap-northeast-1&quot;|&quot;sa-east-1&quot;
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>      ),
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>      AlarmIdentifier = list(
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>        Region = &quot;us-east-1&quot;|&quot;us-east-2&quot;|&quot;us-west-1&quot;|&quot;us-west-2&quot;|&quot;ca-central-1&quot;|&quot;eu-central-1&quot;|&quot;eu-central-2&quot;|&quot;eu-west-1&quot;|&quot;eu-west-2&quot;|&quot;eu-west-3&quot;|&quot;ap-east-1&quot;|&quot;me-south-1&quot;|&quot;me-central-1&quot;|&quot;ap-south-1&quot;|&quot;ap-south-2&quot;|&quot;ap-southeast-1&quot;|&quot;ap-southeast-2&quot;|&quot;ap-southeast-3&quot;|&quot;ap-northeast-1&quot;|&quot;ap-northeast-2&quot;|&quot;ap-northeast-3&quot;|&quot;eu-north-1&quot;|&quot;sa-east-1&quot;|&quot;cn-northwest-1&quot;|&quot;cn-north-1&quot;|&quot;af-south-1&quot;|&quot;eu-south-1&quot;|&quot;eu-south-2&quot;|&quot;us-gov-west-1&quot;|&quot;us-gov-east-1&quot;|&quot;us-iso-east-1&quot;|&quot;us-iso-west-1&quot;|&quot;us-isob-east-1&quot;|&quot;ap-southeast-4&quot;|&quot;il-central-1&quot;|&quot;ca-west-1&quot;|&quot;ap-southeast-5&quot;|&quot;mx-central-1&quot;|&quot;us-isof-south-1&quot;|&quot;us-isof-east-1&quot;|&quot;ap-southeast-7&quot;|&quot;ap-east-2&quot;|&quot;eu-isoe-west-1&quot;|&quot;ap-southeast-6&quot;|&quot;us-isob-west-1&quot;|&quot;eusc-de-east-1&quot;,
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>        Name = &quot;string&quot;
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>      ),
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>      InsufficientDataHealthStatus = &quot;Healthy&quot;|&quot;Unhealthy&quot;|&quot;LastKnownStatus&quot;,
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>      RoutingControlArn = &quot;string&quot;
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    ),
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>    HealthCheckVersion = 123,
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>    CloudWatchAlarmConfiguration = list(
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>      EvaluationPeriods = 123,
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>      Threshold = 123.0,
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>      ComparisonOperator = &quot;GreaterThanOrEqualToThreshold&quot;|&quot;GreaterThanThreshold&quot;|&quot;LessThanThreshold&quot;|&quot;LessThanOrEqualToThreshold&quot;,
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>      Period = 123,
-<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>      MetricName = &quot;string&quot;,
-<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>      Namespace = &quot;string&quot;,
-<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>      Statistic = &quot;Average&quot;|&quot;Sum&quot;|&quot;SampleCount&quot;|&quot;Maximum&quot;|&quot;Minimum&quot;,
-<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>      Dimensions = list(
-<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>        list(
-<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>          Name = &quot;string&quot;,
-<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>          Value = &quot;string&quot;
-<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>        )
-<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>      )
-<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a>    )
-<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>  )
-<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">HealthCheck</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">CallerReference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">LinkedService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="n">ServicePrincipal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="n">Description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">HealthCheckConfig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="n">IPAddress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="n">Type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HTTP&quot;</span><span class="o">|</span><span class="s">&quot;HTTPS&quot;</span><span class="o">|</span><span class="s">&quot;HTTP_STR_MATCH&quot;</span><span class="o">|</span><span class="s">&quot;HTTPS_STR_MATCH&quot;</span><span class="o">|</span><span class="s">&quot;TCP&quot;</span><span class="o">|</span><span class="s">&quot;CALCULATED&quot;</span><span class="o">|</span><span class="s">&quot;CLOUDWATCH_METRIC&quot;</span><span class="o">|</span><span class="s">&quot;RECOVERY_CONTROL&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="n">ResourcePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="n">FullyQualifiedDomainName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="n">SearchString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="n">RequestInterval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">      </span><span class="n">FailureThreshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">      </span><span class="n">MeasureLatency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">      </span><span class="n">Inverted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">      </span><span class="n">Disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">      </span><span class="n">HealthThreshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">      </span><span class="n">ChildHealthChecks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">        </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">      </span><span class="n">EnableSNI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">      </span><span class="n">Regions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">        </span><span class="s">&quot;us-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-1&quot;</span><span class="o">|</span><span class="s">&quot;sa-east-1&quot;</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">      </span><span class="n">AlarmIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">        </span><span class="n">Region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;us-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-east-2&quot;</span><span class="o">|</span><span class="s">&quot;us-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-2&quot;</span><span class="o">|</span><span class="s">&quot;ca-central-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-3&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-1&quot;</span><span class="o">|</span><span class="s">&quot;me-south-1&quot;</span><span class="o">|</span><span class="s">&quot;me-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-3&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-3&quot;</span><span class="o">|</span><span class="s">&quot;eu-north-1&quot;</span><span class="o">|</span><span class="s">&quot;sa-east-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-northwest-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-north-1&quot;</span><span class="o">|</span><span class="s">&quot;af-south-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-2&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-iso-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-iso-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isob-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-4&quot;</span><span class="o">|</span><span class="s">&quot;il-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ca-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-5&quot;</span><span class="o">|</span><span class="s">&quot;mx-central-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isof-south-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isof-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-7&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-isoe-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-6&quot;</span><span class="o">|</span><span class="s">&quot;us-isob-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eusc-de-east-1&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">        </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">      </span><span class="n">InsufficientDataHealthStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Healthy&quot;</span><span class="o">|</span><span class="s">&quot;Unhealthy&quot;</span><span class="o">|</span><span class="s">&quot;LastKnownStatus&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">      </span><span class="n">RoutingControlArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">    </span><span class="n">HealthCheckVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">    </span><span class="n">CloudWatchAlarmConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">      </span><span class="n">EvaluationPeriods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">      </span><span class="n">Threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123.0</span><span class="p">,</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">      </span><span class="n">ComparisonOperator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;GreaterThanOrEqualToThreshold&quot;</span><span class="o">|</span><span class="s">&quot;GreaterThanThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanThreshold&quot;</span><span class="o">|</span><span class="s">&quot;LessThanOrEqualToThreshold&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">      </span><span class="n">Period</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="w">      </span><span class="n">MetricName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">      </span><span class="n">Namespace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">      </span><span class="n">Statistic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Average&quot;</span><span class="o">|</span><span class="s">&quot;Sum&quot;</span><span class="o">|</span><span class="s">&quot;SampleCount&quot;</span><span class="o">|</span><span class="s">&quot;Maximum&quot;</span><span class="o">|</span><span class="s">&quot;Minimum&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="w">      </span><span class="n">Dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="w">          </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="w">          </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$update_health_check(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  HealthCheckId = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  HealthCheckVersion = 123,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  IPAddress = &quot;string&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  Port = 123,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  ResourcePath = &quot;string&quot;,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  FullyQualifiedDomainName = &quot;string&quot;,
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  SearchString = &quot;string&quot;,
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  FailureThreshold = 123,
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  Inverted = TRUE|FALSE,
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  Disabled = TRUE|FALSE,
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  HealthThreshold = 123,
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>  ChildHealthChecks = list(
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    &quot;string&quot;
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>  ),
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>  EnableSNI = TRUE|FALSE,
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>  Regions = list(
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    &quot;us-east-1&quot;|&quot;us-west-1&quot;|&quot;us-west-2&quot;|&quot;eu-west-1&quot;|&quot;ap-southeast-1&quot;|&quot;ap-southeast-2&quot;|&quot;ap-northeast-1&quot;|&quot;sa-east-1&quot;
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>  ),
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>  AlarmIdentifier = list(
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    Region = &quot;us-east-1&quot;|&quot;us-east-2&quot;|&quot;us-west-1&quot;|&quot;us-west-2&quot;|&quot;ca-central-1&quot;|&quot;eu-central-1&quot;|&quot;eu-central-2&quot;|&quot;eu-west-1&quot;|&quot;eu-west-2&quot;|&quot;eu-west-3&quot;|&quot;ap-east-1&quot;|&quot;me-south-1&quot;|&quot;me-central-1&quot;|&quot;ap-south-1&quot;|&quot;ap-south-2&quot;|&quot;ap-southeast-1&quot;|&quot;ap-southeast-2&quot;|&quot;ap-southeast-3&quot;|&quot;ap-northeast-1&quot;|&quot;ap-northeast-2&quot;|&quot;ap-northeast-3&quot;|&quot;eu-north-1&quot;|&quot;sa-east-1&quot;|&quot;cn-northwest-1&quot;|&quot;cn-north-1&quot;|&quot;af-south-1&quot;|&quot;eu-south-1&quot;|&quot;eu-south-2&quot;|&quot;us-gov-west-1&quot;|&quot;us-gov-east-1&quot;|&quot;us-iso-east-1&quot;|&quot;us-iso-west-1&quot;|&quot;us-isob-east-1&quot;|&quot;ap-southeast-4&quot;|&quot;il-central-1&quot;|&quot;ca-west-1&quot;|&quot;ap-southeast-5&quot;|&quot;mx-central-1&quot;|&quot;us-isof-south-1&quot;|&quot;us-isof-east-1&quot;|&quot;ap-southeast-7&quot;|&quot;ap-east-2&quot;|&quot;eu-isoe-west-1&quot;|&quot;ap-southeast-6&quot;|&quot;us-isob-west-1&quot;|&quot;eusc-de-east-1&quot;,
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    Name = &quot;string&quot;
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>  ),
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>  InsufficientDataHealthStatus = &quot;Healthy&quot;|&quot;Unhealthy&quot;|&quot;LastKnownStatus&quot;,
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>  ResetElements = list(
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    &quot;FullyQualifiedDomainName&quot;|&quot;Regions&quot;|&quot;ResourcePath&quot;|&quot;ChildHealthChecks&quot;
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>  )
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">update_health_check</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">HealthCheckId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">HealthCheckVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">IPAddress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">ResourcePath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">FullyQualifiedDomainName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="n">SearchString</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="n">FailureThreshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="n">Inverted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="n">Disabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="n">HealthThreshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="n">ChildHealthChecks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="n">EnableSNI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="n">Regions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="s">&quot;us-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-1&quot;</span><span class="o">|</span><span class="s">&quot;sa-east-1&quot;</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">  </span><span class="n">AlarmIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="n">Region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;us-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-east-2&quot;</span><span class="o">|</span><span class="s">&quot;us-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-2&quot;</span><span class="o">|</span><span class="s">&quot;ca-central-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-3&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-1&quot;</span><span class="o">|</span><span class="s">&quot;me-south-1&quot;</span><span class="o">|</span><span class="s">&quot;me-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-3&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-3&quot;</span><span class="o">|</span><span class="s">&quot;eu-north-1&quot;</span><span class="o">|</span><span class="s">&quot;sa-east-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-northwest-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-north-1&quot;</span><span class="o">|</span><span class="s">&quot;af-south-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-2&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-iso-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-iso-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isob-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-4&quot;</span><span class="o">|</span><span class="s">&quot;il-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ca-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-5&quot;</span><span class="o">|</span><span class="s">&quot;mx-central-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isof-south-1&quot;</span><span class="o">|</span><span class="s">&quot;us-isof-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-7&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-isoe-west-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-6&quot;</span><span class="o">|</span><span class="s">&quot;us-isob-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eusc-de-east-1&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">    </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">  </span><span class="n">InsufficientDataHealthStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Healthy&quot;</span><span class="o">|</span><span class="s">&quot;Unhealthy&quot;</span><span class="o">|</span><span class="s">&quot;LastKnownStatus&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">  </span><span class="n">ResetElements</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">    </span><span class="s">&quot;FullyQualifiedDomainName&quot;</span><span class="o">|</span><span class="s">&quot;Regions&quot;</span><span class="o">|</span><span class="s">&quot;ResourcePath&quot;</span><span class="o">|</span><span class="s">&quot;ChildHealthChecks&quot;</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="p">)</span>
 </code></pre></div>
 
 

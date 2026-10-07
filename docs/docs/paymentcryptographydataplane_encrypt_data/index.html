@@ -15775,75 +15775,77 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>KeyIdentifier</code></strong></li>
-</ul>
+<li>
+<p><strong><code>KeyIdentifier</code></strong></p>
 <p>[required] The <code>keyARN</code> of the encryption key that Amazon Web Services Payment Cryptography uses for plaintext encryption.</p>
 <p>When a WrappedKeyBlock is provided, this value will be the identifier to the key wrapping key. Otherwise, it is the key identifier used to perform the operation.</p>
-<ul>
-<li><strong><code>PlainText</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PlainText</code></strong></p>
 <p>[required] The plaintext to be encrypted.</p>
 <p>For encryption using asymmetric keys, plaintext data length is constrained by encryption key strength that you define in <code>KeyAlgorithm</code> and padding type that you define in <code>AsymmetricEncryptionAttributes</code>. For more information, see <a href="https://docs.aws.amazon.com/payment-cryptography/latest/userguide/encrypt-data.html">Encrypt data</a> in the <em>Amazon Web Services Payment Cryptography User Guide</em>.</p>
-<ul>
-<li><strong><code>EncryptionAttributes</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>EncryptionAttributes</code></strong></p>
 <p>[required] The encryption key type and attributes for plaintext encryption.</p>
-<ul>
-<li><strong><code>WrappedKey</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>WrappedKey</code></strong></p>
 <p>The WrappedKeyBlock containing the encryption key for plaintext encryption.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  KeyArn = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  KeyCheckValue = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  CipherText = &quot;string&quot;
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">KeyArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">KeyCheckValue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">CipherText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$encrypt_data(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  KeyIdentifier = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  PlainText = &quot;string&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  EncryptionAttributes = list(
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    Symmetric = list(
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>      Mode = &quot;ECB&quot;|&quot;CBC&quot;|&quot;CFB&quot;|&quot;CFB1&quot;|&quot;CFB8&quot;|&quot;CFB64&quot;|&quot;CFB128&quot;|&quot;OFB&quot;,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>      InitializationVector = &quot;string&quot;,
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>      PaddingType = &quot;PKCS1&quot;|&quot;OAEP_SHA1&quot;|&quot;OAEP_SHA256&quot;|&quot;OAEP_SHA512&quot;
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ),
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    Asymmetric = list(
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>      PaddingType = &quot;PKCS1&quot;|&quot;OAEP_SHA1&quot;|&quot;OAEP_SHA256&quot;|&quot;OAEP_SHA512&quot;
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    ),
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    Dukpt = list(
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>      KeySerialNumber = &quot;string&quot;,
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>      Mode = &quot;ECB&quot;|&quot;CBC&quot;,
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>      DukptKeyDerivationType = &quot;TDES_2KEY&quot;|&quot;TDES_3KEY&quot;|&quot;AES_128&quot;|&quot;AES_192&quot;|&quot;AES_256&quot;,
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>      DukptKeyVariant = &quot;BIDIRECTIONAL&quot;|&quot;REQUEST&quot;|&quot;RESPONSE&quot;,
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>      InitializationVector = &quot;string&quot;
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    ),
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    Emv = list(
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>      MajorKeyDerivationMode = &quot;EMV_OPTION_A&quot;|&quot;EMV_OPTION_B&quot;,
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>      PrimaryAccountNumber = &quot;string&quot;,
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>      PanSequenceNumber = &quot;string&quot;,
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>      SessionDerivationData = &quot;string&quot;,
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>      Mode = &quot;ECB&quot;|&quot;CBC&quot;,
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>      InitializationVector = &quot;string&quot;
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    )
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>  ),
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>  WrappedKey = list(
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>    WrappedKeyMaterial = list(
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>      Tr31KeyBlock = &quot;string&quot;,
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>      DiffieHellmanSymmetricKey = list(
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>        CertificateAuthorityPublicKeyIdentifier = &quot;string&quot;,
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>        PublicKeyCertificate = &quot;string&quot;,
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>        KeyAlgorithm = &quot;TDES_2KEY&quot;|&quot;TDES_3KEY&quot;|&quot;AES_128&quot;|&quot;AES_192&quot;|&quot;AES_256&quot;|&quot;HMAC_SHA256&quot;|&quot;HMAC_SHA384&quot;|&quot;HMAC_SHA512&quot;|&quot;HMAC_SHA224&quot;,
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>        KeyDerivationFunction = &quot;NIST_SP800&quot;|&quot;ANSI_X963&quot;,
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>        KeyDerivationHashAlgorithm = &quot;SHA_256&quot;|&quot;SHA_384&quot;|&quot;SHA_512&quot;,
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>        SharedInformation = &quot;string&quot;
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>      )
-<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>    ),
-<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>    KeyCheckValueAlgorithm = &quot;CMAC&quot;|&quot;ANSI_X9_24&quot;|&quot;HMAC&quot;|&quot;SHA_1&quot;
-<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>  )
-<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">encrypt_data</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">KeyIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">PlainText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">EncryptionAttributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">Symmetric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="n">Mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ECB&quot;</span><span class="o">|</span><span class="s">&quot;CBC&quot;</span><span class="o">|</span><span class="s">&quot;CFB&quot;</span><span class="o">|</span><span class="s">&quot;CFB1&quot;</span><span class="o">|</span><span class="s">&quot;CFB8&quot;</span><span class="o">|</span><span class="s">&quot;CFB64&quot;</span><span class="o">|</span><span class="s">&quot;CFB128&quot;</span><span class="o">|</span><span class="s">&quot;OFB&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="n">InitializationVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="n">PaddingType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;PKCS1&quot;</span><span class="o">|</span><span class="s">&quot;OAEP_SHA1&quot;</span><span class="o">|</span><span class="s">&quot;OAEP_SHA256&quot;</span><span class="o">|</span><span class="s">&quot;OAEP_SHA512&quot;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="n">Asymmetric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="n">PaddingType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;PKCS1&quot;</span><span class="o">|</span><span class="s">&quot;OAEP_SHA1&quot;</span><span class="o">|</span><span class="s">&quot;OAEP_SHA256&quot;</span><span class="o">|</span><span class="s">&quot;OAEP_SHA512&quot;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="n">Dukpt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">      </span><span class="n">KeySerialNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">      </span><span class="n">Mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ECB&quot;</span><span class="o">|</span><span class="s">&quot;CBC&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span><span class="n">DukptKeyDerivationType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;TDES_2KEY&quot;</span><span class="o">|</span><span class="s">&quot;TDES_3KEY&quot;</span><span class="o">|</span><span class="s">&quot;AES_128&quot;</span><span class="o">|</span><span class="s">&quot;AES_192&quot;</span><span class="o">|</span><span class="s">&quot;AES_256&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">      </span><span class="n">DukptKeyVariant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;BIDIRECTIONAL&quot;</span><span class="o">|</span><span class="s">&quot;REQUEST&quot;</span><span class="o">|</span><span class="s">&quot;RESPONSE&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">      </span><span class="n">InitializationVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">    </span><span class="n">Emv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">      </span><span class="n">MajorKeyDerivationMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;EMV_OPTION_A&quot;</span><span class="o">|</span><span class="s">&quot;EMV_OPTION_B&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">      </span><span class="n">PrimaryAccountNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">      </span><span class="n">PanSequenceNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">      </span><span class="n">SessionDerivationData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">      </span><span class="n">Mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ECB&quot;</span><span class="o">|</span><span class="s">&quot;CBC&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">      </span><span class="n">InitializationVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">  </span><span class="n">WrappedKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">    </span><span class="n">WrappedKeyMaterial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">      </span><span class="n">Tr31KeyBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">      </span><span class="n">DiffieHellmanSymmetricKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">        </span><span class="n">CertificateAuthorityPublicKeyIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">        </span><span class="n">PublicKeyCertificate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">        </span><span class="n">KeyAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;TDES_2KEY&quot;</span><span class="o">|</span><span class="s">&quot;TDES_3KEY&quot;</span><span class="o">|</span><span class="s">&quot;AES_128&quot;</span><span class="o">|</span><span class="s">&quot;AES_192&quot;</span><span class="o">|</span><span class="s">&quot;AES_256&quot;</span><span class="o">|</span><span class="s">&quot;HMAC_SHA256&quot;</span><span class="o">|</span><span class="s">&quot;HMAC_SHA384&quot;</span><span class="o">|</span><span class="s">&quot;HMAC_SHA512&quot;</span><span class="o">|</span><span class="s">&quot;HMAC_SHA224&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">        </span><span class="n">KeyDerivationFunction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;NIST_SP800&quot;</span><span class="o">|</span><span class="s">&quot;ANSI_X963&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">        </span><span class="n">KeyDerivationHashAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SHA_256&quot;</span><span class="o">|</span><span class="s">&quot;SHA_384&quot;</span><span class="o">|</span><span class="s">&quot;SHA_512&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">        </span><span class="n">SharedInformation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="w">    </span><span class="n">KeyCheckValueAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;CMAC&quot;</span><span class="o">|</span><span class="s">&quot;ANSI_X9_24&quot;</span><span class="o">|</span><span class="s">&quot;HMAC&quot;</span><span class="o">|</span><span class="s">&quot;SHA_1&quot;</span>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a><span class="p">)</span>
 </code></pre></div>
 
 

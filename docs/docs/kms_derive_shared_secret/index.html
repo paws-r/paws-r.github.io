@@ -16811,24 +16811,26 @@
 <p>DeriveSharedSecret uses the Elliptic Curve Cryptography Cofactor Diffie-Hellman Primitive (ECDH) to establish a key agreement between two peers by deriving a shared secret from their elliptic curve public-private key pairs. You can use the raw shared secret that DeriveSharedSecret returns to derive a symmetric key that can encrypt and decrypt data that is sent between the two peers, or that can generate and verify HMACs. KMS recommends that you follow NIST recommendations for key derivation when using the raw shared secret to derive a symmetric key.</p>
 <p>The following workflow demonstrates how to establish key agreement over an insecure communication channel using DeriveSharedSecret.</p>
 <ol>
-<li><strong>Alice</strong> calls <a href="../kms_create_key/"><code>create_key</code></a> to create an asymmetric KMS key pair with a <code>KeyUsage</code> value of <code>KEY_AGREEMENT</code>.</li>
-</ol>
+<li>
+<p><strong>Alice</strong> calls <a href="../kms_create_key/"><code>create_key</code></a> to create an asymmetric KMS key pair with a <code>KeyUsage</code> value of <code>KEY_AGREEMENT</code>.</p>
 <p>The asymmetric KMS key must use a NIST-standard elliptic curve (ECC) or SM2 (China Regions only) key spec.</p>
-<ol>
-<li><strong>Bob</strong> creates an elliptic curve key pair.</li>
-</ol>
+</li>
+<li>
+<p><strong>Bob</strong> creates an elliptic curve key pair.</p>
 <p>Bob can call <a href="../kms_create_key/"><code>create_key</code></a> to create an asymmetric KMS key pair or generate a key pair outside of KMS. Bob's key pair must use the same NIST-standard elliptic curve (ECC) or SM2 (China Regions ony) curve as Alice.</p>
-<ol>
-<li>Alice and Bob <strong>exchange their public keys</strong> through an insecure communication channel (like the internet).</li>
-</ol>
+</li>
+<li>
+<p>Alice and Bob <strong>exchange their public keys</strong> through an insecure communication channel (like the internet).</p>
 <p>Use <a href="../kms_get_public_key/"><code>get_public_key</code></a> to download the public key of your asymmetric KMS key pair.</p>
 <p>KMS strongly recommends verifying that the public key you receive came from the expected party before using it to derive a shared secret.</p>
-<ol>
-<li><strong>Alice</strong> calls DeriveSharedSecret.</li>
-</ol>
+</li>
+<li>
+<p><strong>Alice</strong> calls DeriveSharedSecret.</p>
 <p>KMS uses the private key from the KMS key pair generated in <strong>Step 1</strong>, Bob's public key, and the Elliptic Curve Cryptography Cofactor Diffie-Hellman Primitive to derive the shared secret. The private key in your KMS key pair never leaves KMS unencrypted. DeriveSharedSecret returns the raw shared secret.</p>
-<ol>
-<li><strong>Bob</strong> uses the Elliptic Curve Cryptography Cofactor Diffie-Hellman Primitive to calculate the same raw secret using his private key and Alice's public key.</li>
+</li>
+<li>
+<p><strong>Bob</strong> uses the Elliptic Curve Cryptography Cofactor Diffie-Hellman Primitive to calculate the same raw secret using his private key and Alice's public key.</p>
+</li>
 </ol>
 <p>To derive a shared secret you must provide a key agreement algorithm, the private key of the caller's asymmetric NIST-standard elliptic curve or SM2 (China Regions only) KMS key pair, and the public key from your peer's NIST-standard elliptic curve or SM2 (China Regions only) key pair. The public key can be from another asymmetric KMS key pair or from a key pair generated outside of KMS, but both key pairs must be on the same elliptic curve.</p>
 <p>The KMS key that you use for this operation must be in a compatible key state. For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">Key states of KMS keys</a> in the <em>Key Management Service Developer Guide</em>.</p>
@@ -16847,8 +16849,8 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>KeyId</code></strong></li>
-</ul>
+<li>
+<p><strong><code>KeyId</code></strong></p>
 <p>[required] Identifies an asymmetric NIST-standard ECC or SM2 (China Regions only) KMS key. KMS uses the private key in the specified key pair to derive the shared secret. The key usage of the KMS key must be <code>KEY_AGREEMENT</code>. To find the <code>KeyUsage</code> of a KMS key, use the <a href="../kms_describe_key/"><code>describe_key</code></a> operation.</p>
 <p>To specify a KMS key, use its key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>. To specify a KMS key in a different Amazon Web Services account, you must use the key ARN or alias ARN.</p>
 <p>For example:</p>
@@ -16859,59 +16861,61 @@
 <li>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code></li>
 </ul>
 <p>To get the key ID and key ARN for a KMS key, use <a href="../kms_list_keys/"><code>list_keys</code></a> or <a href="../kms_describe_key/"><code>describe_key</code></a>. To get the alias name and alias ARN, use <a href="../kms_list_aliases/"><code>list_aliases</code></a>.</p>
-<ul>
-<li><strong><code>KeyAgreementAlgorithm</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>KeyAgreementAlgorithm</code></strong></p>
 <p>[required] Specifies the key agreement algorithm used to derive the shared secret. The only valid value is <code>ECDH</code>.</p>
-<ul>
-<li><strong><code>PublicKey</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>PublicKey</code></strong></p>
 <p>[required] Specifies the public key in your peer's NIST-standard elliptic curve (ECC) or SM2 (China Regions only) key pair.</p>
 <p>The public key must be a DER-encoded X.509 public key, also known as <code>SubjectPublicKeyInfo</code> (SPKI), as defined in <a href="https://www.rfc-editor.org/info/rfc5280/">RFC 5280</a>.</p>
 <p><a href="../kms_get_public_key/"><code>get_public_key</code></a> returns the public key of an asymmetric KMS key pair in the required DER-encoded format.</p>
 <p>If you use <a href="https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-welcome.html">Amazon Web Services CLI version 1</a>, you must provide the DER-encoded X.509 public key in a file. Otherwise, the Amazon Web Services CLI Base64-encodes the public key a second time, resulting in a <code>ValidationException</code>.</p>
 <p>You can specify the public key as binary data in a file using fileb (<code>fileb://&lt;path-to-file&gt;</code>) or in-line using a Base64 encoded string.</p>
-<ul>
-<li><strong><code>GrantTokens</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>GrantTokens</code></strong></p>
 <p>A list of grant tokens.</p>
 <p>Use a grant token when your permission to call this operation comes from a new grant that has not yet achieved <em>eventual consistency</em>. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/grants.html#grant_token">Grant token</a> and <a href="https://docs.aws.amazon.com/kms/latest/developerguide/using-grant-token.html">Using a grant token</a> in the <em>Key Management Service Developer Guide</em>.</p>
-<ul>
-<li><strong><code>DryRun</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DryRun</code></strong></p>
 <p>Checks if your request will succeed. <code>DryRun</code> is an optional parameter.</p>
 <p>To learn more about how to use this parameter, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/testing-permissions.html">Testing your permissions</a> in the <em>Key Management Service Developer Guide</em>.</p>
-<ul>
-<li><strong><code>Recipient</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Recipient</code></strong></p>
 <p>A signed <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/#term-attestdoc">attestation document</a> from an Amazon Web Services Nitro enclave or NitroTPM, and the encryption algorithm to use with the public key in the attestation document. The only valid encryption algorithm is <code>RSAES_OAEP_SHA_256</code>.</p>
 <p>This parameter only supports attestation documents for Amazon Web Services Nitro Enclaves or Amazon Web Services NitroTPM. To call DeriveSharedSecret generate an attestation document use either <a href="https://docs.aws.amazon.com/enclaves/latest/user/developing-applications.html#sdk">Amazon Web Services Nitro Enclaves SDK</a> for an Amazon Web Services Nitro Enclaves or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/attestation-get-doc.html">Amazon Web Services NitroTPM tools</a> for Amazon Web Services NitroTPM. Then use the Recipient parameter from any Amazon Web Services SDK to provide the attestation document for the attested environment.</p>
 <p>When you use this parameter, instead of returning a plaintext copy of the shared secret, KMS encrypts the plaintext shared secret under the public key in the attestation document, and returns the resulting ciphertext in the <code>CiphertextForRecipient</code> field in the response. This ciphertext can be decrypted only with the private key in the attested environment. The <code>CiphertextBlob</code> field in the response contains the encrypted shared secret derived from the KMS key specified by the <code>KeyId</code> parameter and public key specified by the <code>PublicKey</code> parameter. The <code>SharedSecret</code> field in the response is null or empty.</p>
 <p>For information about the interaction between KMS and Amazon Web Services Nitro Enclaves or Amazon Web Services NitroTPM, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/cryptographic-attestation.html">Cryptographic attestation support in KMS</a> in the <em>Key Management Service Developer Guide</em>.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  KeyId = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  SharedSecret = raw,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  CiphertextForRecipient = raw,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  KeyAgreementAlgorithm = &quot;ECDH&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  KeyOrigin = &quot;AWS_KMS&quot;|&quot;EXTERNAL&quot;|&quot;AWS_CLOUDHSM&quot;|&quot;EXTERNAL_KEY_STORE&quot;
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">KeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">SharedSecret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">CiphertextForRecipient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">KeyAgreementAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ECDH&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">KeyOrigin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AWS_KMS&quot;</span><span class="o">|</span><span class="s">&quot;EXTERNAL&quot;</span><span class="o">|</span><span class="s">&quot;AWS_CLOUDHSM&quot;</span><span class="o">|</span><span class="s">&quot;EXTERNAL_KEY_STORE&quot;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$derive_shared_secret(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  KeyId = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  KeyAgreementAlgorithm = &quot;ECDH&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  PublicKey = raw,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  GrantTokens = list(
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    &quot;string&quot;
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  ),
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  DryRun = TRUE|FALSE,
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  Recipient = list(
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    KeyEncryptionAlgorithm = &quot;RSAES_OAEP_SHA_256&quot;,
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    AttestationDocument = raw
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  )
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">derive_shared_secret</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">KeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">KeyAgreementAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ECDH&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">PublicKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">GrantTokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="n">DryRun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="n">Recipient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="n">KeyEncryptionAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;RSAES_OAEP_SHA_256&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="n">AttestationDocument</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">)</span>
 </code></pre></div>
 
 

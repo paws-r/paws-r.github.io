@@ -18666,61 +18666,63 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>SessionMode</code></strong></li>
-</ul>
+<li>
+<p><strong><code>SessionMode</code></strong></p>
 <p>Specifies the mode of the session that will be created, either <code>ReadWrite</code> or <code>ReadOnly</code>. If no session mode is specified, the default behavior attempts to create a session with the maximum allowable privilege. It will first attempt to create a <code>ReadWrite</code> session, and if that is not allowed by permissions, it will attempt to create a <code>ReadOnly</code> session. If neither session type is allowed, the request will return an Access Denied error. A <code>ReadWrite</code> session is capable of executing all the Zonal endpoint API operations on a directory bucket. A <code>ReadOnly</code> session is constrained to execute the following Zonal endpoint API operations: <a href="../s3_get_object/"><code>get_object</code></a>, <a href="../s3_head_object/"><code>head_object</code></a>, <a href="../s3_list_objects_v2/"><code>list_objects_v2</code></a>, <a href="../s3_get_object_attributes/"><code>get_object_attributes</code></a>, <a href="../s3_list_parts/"><code>list_parts</code></a>, and <a href="../s3_list_multipart_uploads/"><code>list_multipart_uploads</code></a>.</p>
-<ul>
-<li><strong><code>Bucket</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Bucket</code></strong></p>
 <p>[required] The name of the bucket that you create a session for.</p>
-<ul>
-<li><strong><code>ServerSideEncryption</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ServerSideEncryption</code></strong></p>
 <p>The server-side encryption algorithm to use when you store objects in the directory bucket.</p>
 <p>For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). By default, Amazon S3 encrypts data with SSE-S3. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html">Protecting data with server-side encryption</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p><strong>S3 access points for Amazon FSx</strong> - When accessing data stored in Amazon FSx file systems using S3 access points, the only valid server side encryption option is <code>aws:fsx</code>. All Amazon FSx file systems have encryption configured by default and are encrypted at rest. Data is automatically encrypted before being written to the file system, and automatically decrypted as it is read. These processes are handled transparently by Amazon FSx.</p>
-<ul>
-<li><strong><code>SSEKMSKeyId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSEKMSKeyId</code></strong></p>
 <p>If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code>, you must specify the <code>x-amz-server-side-encryption-aws-kms-key-id</code> header with the ID (Key ID or Key ARN) of the KMS symmetric encryption customer managed key to use. Otherwise, you get an HTTP <code>400 Bad Request</code> error. Only use the key ID or key ARN. The key alias format of the KMS key isn't supported. Also, if the KMS key doesn't exist in the same account that't issuing the command, you must use the full Key ARN not the Key ID.</p>
 <p>Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket's lifetime. The <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.</p>
-<ul>
-<li><strong><code>SSEKMSEncryptionContext</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSEKMSEncryptionContext</code></strong></p>
 <p>Specifies the Amazon Web Services KMS Encryption Context as an additional encryption context to use for object encryption. The value of this header is a Base64 encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs. This value is stored as object metadata and automatically gets passed on to Amazon Web Services KMS for future <a href="../s3_get_object/"><code>get_object</code></a> operations on this object.</p>
 <p><strong>General purpose buckets</strong> - This value must be explicitly added during <a href="../s3_copy_object/"><code>copy_object</code></a> operations if you want an additional encryption context for your object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html#encryption-context">Encryption context</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p><strong>Directory buckets</strong> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported.</p>
-<ul>
-<li><strong><code>BucketKeyEnabled</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>BucketKeyEnabled</code></strong></p>
 <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with server-side encryption using KMS keys (SSE-KMS).</p>
 <p>S3 Bucket Keys are always enabled for <code>GET</code> and <code>PUT</code> operations in a directory bucket and can’t be disabled. S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="../s3_copy_object/"><code>copy_object</code></a>, <a href="../s3_upload_part_copy/"><code>upload_part_copy</code></a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-Batch-Ops.html">the Copy operation in Batch Operations</a>, or <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job.html">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  ServerSideEncryption = &quot;AES256&quot;|&quot;aws:fsx&quot;|&quot;aws:backup&quot;|&quot;aws:kms&quot;|&quot;aws:kms:dsse&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  SSEKMSKeyId = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  SSEKMSEncryptionContext = &quot;string&quot;,
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  BucketKeyEnabled = TRUE|FALSE,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  Credentials = list(
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    AccessKeyId = &quot;string&quot;,
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    SecretAccessKey = &quot;string&quot;,
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    SessionToken = &quot;string&quot;,
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    Expiration = as.POSIXct(
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>      &quot;2015-01-01&quot;
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    )
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  )
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">ServerSideEncryption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AES256&quot;</span><span class="o">|</span><span class="s">&quot;aws:fsx&quot;</span><span class="o">|</span><span class="s">&quot;aws:backup&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms:dsse&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">SSEKMSKeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">SSEKMSEncryptionContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">BucketKeyEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">Credentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">AccessKeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">SecretAccessKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">SessionToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">Expiration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$create_session(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  SessionMode = &quot;ReadOnly&quot;|&quot;ReadWrite&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  Bucket = &quot;string&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  ServerSideEncryption = &quot;AES256&quot;|&quot;aws:fsx&quot;|&quot;aws:backup&quot;|&quot;aws:kms&quot;|&quot;aws:kms:dsse&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  SSEKMSKeyId = &quot;string&quot;,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  SSEKMSEncryptionContext = &quot;string&quot;,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  BucketKeyEnabled = TRUE|FALSE
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">create_session</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">SessionMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ReadOnly&quot;</span><span class="o">|</span><span class="s">&quot;ReadWrite&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">Bucket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">ServerSideEncryption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AES256&quot;</span><span class="o">|</span><span class="s">&quot;aws:fsx&quot;</span><span class="o">|</span><span class="s">&quot;aws:backup&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms:dsse&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">SSEKMSKeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">SSEKMSEncryptionContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">BucketKeyEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">)</span>
 </code></pre></div>
 
 

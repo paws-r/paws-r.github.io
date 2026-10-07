@@ -16841,10 +16841,10 @@
 <p>Each time you import key material into KMS, you can determine whether (<code>ExpirationModel</code>) and when (<code>ValidTo</code>) the key material expires. To change the expiration of your key material, you must import it again, either by calling <a href="../kms_import_key_material/"><code>import_key_material</code></a> or using the <a href="https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-import-key-material.html#importing-keys-import-key-material-console">import features</a> of the KMS console.</p>
 <p>Before you call <a href="../kms_import_key_material/"><code>import_key_material</code></a>, complete these steps:</p>
 <ul>
-<li>Create or identify a KMS key with <code>EXTERNAL</code> origin, which indicates that the KMS key is designed for imported key material.</li>
-</ul>
+<li>
+<p>Create or identify a KMS key with <code>EXTERNAL</code> origin, which indicates that the KMS key is designed for imported key material.</p>
 <p>To create a new KMS key for imported key material, call the <a href="../kms_create_key/"><code>create_key</code></a> operation with an <code>Origin</code> value of <code>EXTERNAL</code>. You can create a symmetric encryption KMS key, HMAC KMS key, asymmetric encryption KMS key, asymmetric key agreement key, or asymmetric signing KMS key. You can also import key material into a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html">multi-Region key</a> of any supported type. However, you can't import key material into a KMS key in a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>.</p>
-<ul>
+</li>
 <li>
 <p>Call the <a href="../kms_get_parameters_for_import/"><code>get_parameters_for_import</code></a> operation to get a public key and import token set for importing key material.</p>
 </li>
@@ -16865,9 +16865,9 @@
 </li>
 <li>
 <p>Whether the key material expires (<code>ExpirationModel</code>) and, if so, when (<code>ValidTo</code>). For help with this choice, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-import-key-material.html#importing-keys-expiration">Setting an expiration time</a> in the <em>Key Management Service Developer Guide</em>.</p>
+<p>If you set an expiration date, KMS deletes the key material from the KMS key on the specified date, making the KMS key unusable. To use the KMS key in cryptographic operations again, you must reimport the same key material. However, you can delete and reimport the key material at any time, including before the key material expires. Each time you reimport, you can eliminate or reset the expiration time.</p>
 </li>
 </ul>
-<p>If you set an expiration date, KMS deletes the key material from the KMS key on the specified date, making the KMS key unusable. To use the KMS key in cryptographic operations again, you must reimport the same key material. However, you can delete and reimport the key material at any time, including before the key material expires. Each time you reimport, you can eliminate or reset the expiration time.</p>
 <p>When this operation is successful, the state of the KMS key changes to <code>Enabled</code>, and you can use the KMS key in cryptographic operations. For symmetric encryption keys, you will need to import all of the key materials associated with the KMS key to change its state to <code>Enabled</code>. Use the <a href="../kms_list_key_rotations/"><code>list_key_rotations</code></a> operation to list the ID and import state of each key material associated with a KMS key.</p>
 <p>If this operation fails, use the exception to help determine the problem. If the error is related to the key material, the import token, or wrapping key, use <a href="../kms_get_parameters_for_import/"><code>get_parameters_for_import</code></a> to get a new public key and import token for the KMS key and repeat the import procedure. For help, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-conceptual.html">Create a KMS key with imported key material</a> in the <em>Key Management Service Developer Guide</em>.</p>
 <p>The KMS key that you use for this operation must be in a compatible key state. For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">Key states of KMS keys</a> in the <em>Key Management Service Developer Guide</em>.</p>
@@ -16888,8 +16888,8 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>KeyId</code></strong></li>
-</ul>
+<li>
+<p><strong><code>KeyId</code></strong></p>
 <p>[required] The identifier of the KMS key that will be associated with the imported key material. This must be the same KMS key specified in the <code>KeyID</code> parameter of the corresponding <a href="../kms_get_parameters_for_import/"><code>get_parameters_for_import</code></a> request. The <code>Origin</code> of the KMS key must be <code>EXTERNAL</code> and its <code>KeyState</code> must be <code>PendingImport</code>.</p>
 <p>The KMS key can be a symmetric encryption KMS key, HMAC KMS key, asymmetric encryption KMS key, or asymmetric signing KMS key, including a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html">multi-Region key</a> of any supported type. You cannot perform this operation on a KMS key in a custom key store, or on a KMS key in a different Amazon Web Services account.</p>
 <p>Specify the key ID or key ARN of the KMS key.</p>
@@ -16899,39 +16899,39 @@
 <li>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code></li>
 </ul>
 <p>To get the key ID and key ARN for a KMS key, use <a href="../kms_list_keys/"><code>list_keys</code></a> or <a href="../kms_describe_key/"><code>describe_key</code></a>.</p>
-<ul>
-<li><strong><code>ImportToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ImportToken</code></strong></p>
 <p>[required] The import token that you received in the response to a previous <a href="../kms_get_parameters_for_import/"><code>get_parameters_for_import</code></a> request. It must be from the same response that contained the public key that you used to encrypt the key material.</p>
-<ul>
-<li><strong><code>EncryptedKeyMaterial</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>EncryptedKeyMaterial</code></strong></p>
 <p>[required] The encrypted key material to import. The key material must be encrypted under the public wrapping key that <a href="../kms_get_parameters_for_import/"><code>get_parameters_for_import</code></a> returned, using the wrapping algorithm that you specified in the same <a href="../kms_get_parameters_for_import/"><code>get_parameters_for_import</code></a> request.</p>
-<ul>
-<li><strong><code>ValidTo</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ValidTo</code></strong></p>
 <p>The date and time when the imported key material expires. This parameter is required when the value of the <code>ExpirationModel</code> parameter is <code>KEY_MATERIAL_EXPIRES</code>. Otherwise it is not valid.</p>
 <p>The value of this parameter must be a future date and time. The maximum value is 365 days from the request date.</p>
 <p>When the key material expires, KMS deletes the key material from the KMS key. Without its key material, the KMS key is unusable. To use the KMS key in cryptographic operations, you must reimport the same key material.</p>
 <p>You cannot change the <code>ExpirationModel</code> or <code>ValidTo</code> values for the current import after the request completes. To change either value, you must delete (<a href="../kms_delete_imported_key_material/"><code>delete_imported_key_material</code></a>) and reimport the key material.</p>
-<ul>
-<li><strong><code>ExpirationModel</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ExpirationModel</code></strong></p>
 <p>Specifies whether the key material expires. The default is <code>KEY_MATERIAL_EXPIRES</code>. For help with this choice, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-import-key-material.html#importing-keys-expiration">Setting an expiration time</a> in the <em>Key Management Service Developer Guide</em>.</p>
 <p>When the value of <code>ExpirationModel</code> is <code>KEY_MATERIAL_EXPIRES</code>, you must specify a value for the <code>ValidTo</code> parameter. When value is <code>KEY_MATERIAL_DOES_NOT_EXPIRE</code>, you must omit the <code>ValidTo</code> parameter.</p>
 <p>You cannot change the <code>ExpirationModel</code> or <code>ValidTo</code> values for the current import after the request completes. To change either value, you must reimport the key material.</p>
-<ul>
-<li><strong><code>ImportType</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ImportType</code></strong></p>
 <p>Indicates whether the key material being imported is previously associated with this KMS key or not. This parameter is optional and only usable with symmetric encryption keys. If no key material has ever been imported into the KMS key, and this parameter is omitted, the parameter defaults to <code>NEW_KEY_MATERIAL</code>. After the first key material is imported, if this parameter is omitted then the parameter defaults to <code>EXISTING_KEY_MATERIAL</code>.</p>
 <p>For multi-Region keys, you must first import new key material into the primary Region key. You should use the <code>NEW_KEY_MATERIAL</code> import type when importing key material into the primary Region key. Then, you can import the same key material into the replica Region key. The import type for the replica Region key should be <code>EXISTING_KEY_MATERIAL</code>.</p>
-<ul>
-<li><strong><code>KeyMaterialDescription</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>KeyMaterialDescription</code></strong></p>
 <p>Description for the key material being imported. This parameter is optional and only usable with symmetric encryption keys. If you do not specify a key material description, KMS retains the value you specified when you last imported the same key material into this KMS key.</p>
-<ul>
-<li><strong><code>KeyMaterialId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>KeyMaterialId</code></strong></p>
 <p>Identifies the key material being imported. This parameter is optional and only usable with symmetric encryption keys. You cannot specify a key material ID with <code>ImportType</code> set to <code>NEW_KEY_MATERIAL</code>. Whenever you import key material into a symmetric encryption key, KMS assigns a unique identifier to the key material based on the KMS key ID and the imported key material. When you re-import key material with a specified key material ID, KMS:</p>
 <ul>
 <li>Computes the identifier for the key material</li>
@@ -16939,26 +16939,28 @@
 <li>Verifies that the key material ID is already associated with the KMS key</li>
 </ul>
 <p>To get the list of key material IDs associated with a KMS key, use <a href="../kms_list_key_rotations/"><code>list_key_rotations</code></a>.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  KeyId = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  KeyMaterialId = &quot;string&quot;
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">KeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">KeyMaterialId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$import_key_material(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  KeyId = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  ImportToken = raw,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  EncryptedKeyMaterial = raw,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  ValidTo = as.POSIXct(
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  ),
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  ExpirationModel = &quot;KEY_MATERIAL_EXPIRES&quot;|&quot;KEY_MATERIAL_DOES_NOT_EXPIRE&quot;,
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  ImportType = &quot;NEW_KEY_MATERIAL&quot;|&quot;EXISTING_KEY_MATERIAL&quot;,
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  KeyMaterialDescription = &quot;string&quot;,
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  KeyMaterialId = &quot;string&quot;
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">import_key_material</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">KeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">ImportToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">EncryptedKeyMaterial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">ValidTo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="n">ExpirationModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;KEY_MATERIAL_EXPIRES&quot;</span><span class="o">|</span><span class="s">&quot;KEY_MATERIAL_DOES_NOT_EXPIRE&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="n">ImportType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;NEW_KEY_MATERIAL&quot;</span><span class="o">|</span><span class="s">&quot;EXISTING_KEY_MATERIAL&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="n">KeyMaterialDescription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="n">KeyMaterialId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># The following example imports key material into the specified KMS key.</span>

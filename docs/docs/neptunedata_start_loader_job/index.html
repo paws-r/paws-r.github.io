@@ -16519,8 +16519,8 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>source</code></strong></li>
-</ul>
+<li>
+<p><strong><code>source</code></strong></p>
 <p>[required] The <code>source</code> parameter accepts an S3 URI that identifies a single file, multiple files, a folder, or multiple folders. Neptune loads every data file in any folder that is specified.</p>
 <p>The URI can be in any of the following formats.</p>
 <ul>
@@ -16530,9 +16530,9 @@
 </ul>
 <p>The <code>object-key-name</code> element of the URI is equivalent to the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html#API_ListObjects_RequestParameters">prefix</a> parameter in an S3 <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html">ListObjects</a> API call. It identifies all the objects in the specified S3 bucket whose names begin with that prefix. That can be a single file or folder, or multiple files and/or folders.</p>
 <p>The specified folder or folders can contain multiple vertex files and multiple edge files.</p>
-<ul>
-<li><strong><code>format</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>format</code></strong></p>
 <p>[required] The format of the data. For more information about data formats for the Neptune <code>Loader</code> command, see <a href="https://docs.aws.amazon.com/neptune/latest/userguide/bulk-load-tutorial-format.html">Load Data Formats</a>.</p>
 <p><strong>Allowed values</strong></p>
 <ul>
@@ -16541,21 +16541,19 @@
 <li><strong><code>ntriples</code></strong> for the <a href="https://www.w3.org/TR/n-triples/">N-Triples RDF data format</a>.</li>
 <li><strong><code>nquads</code></strong> for the <a href="https://www.w3.org/TR/n-quads/">N-Quads RDF data format</a>.</li>
 <li><strong><code>rdfxml</code></strong> for the <a href="https://www.w3.org/TR/rdf-syntax-grammar/">RDF\XML RDF data format</a>.</li>
-<li>
-<p><strong><code>turtle</code></strong> for the <a href="https://www.w3.org/TR/turtle/">Turtle RDF data format</a>.</p>
+<li><strong><code>turtle</code></strong> for the <a href="https://www.w3.org/TR/turtle/">Turtle RDF data format</a>.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>s3BucketRegion</code></strong></p>
-</li>
-</ul>
 <p>[required] The Amazon region of the S3 bucket. This must match the Amazon Region of the DB cluster.</p>
-<ul>
-<li><strong><code>iamRoleArn</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>iamRoleArn</code></strong></p>
 <p>[required] The Amazon Resource Name (ARN) for an IAM role to be assumed by the Neptune DB instance for access to the S3 bucket. The IAM role ARN provided here should be attached to the DB cluster (see <a href="https://docs.aws.amazon.com/neptune/latest/userguide/bulk-load-tutorial-IAM-add-role-cluster.html">Adding the IAM Role to an Amazon Neptune Cluster</a>.</p>
-<ul>
-<li><strong><code>mode</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>mode</code></strong></p>
 <p>The load job mode.</p>
 <p><em>Allowed values</em>: <code>RESUME</code>, <code>NEW</code>, <code>AUTO</code>.</p>
 <p><em>Default value</em>: <code>AUTO</code>.</p>
@@ -16563,22 +16561,22 @@
 <li>
 <p><code>RESUME</code> - In RESUME mode, the loader looks for a previous load from this source, and if it finds one, resumes that load job. If no previous load job is found, the loader stops.</p>
 <p>The loader avoids reloading files that were successfully loaded in a previous job. It only tries to process failed files. If you dropped previously loaded data from your Neptune cluster, that data is not reloaded in this mode. If a previous load job loaded all files from the same source successfully, nothing is reloaded, and the loader returns success.
-  - <code>NEW</code> - In NEW mode, the creates a new load request regardless of any previous loads. You can use this mode to reload all the data from a source after dropping previously loaded data from your Neptune cluster, or to load new data available at the same source.
-  - <code>AUTO</code> - In AUTO mode, the loader looks for a previous load job from the same source, and if it finds one, resumes that job, just as in <code>RESUME</code> mode.</p>
+    - <code>NEW</code> - In NEW mode, the creates a new load request regardless of any previous loads. You can use this mode to reload all the data from a source after dropping previously loaded data from your Neptune cluster, or to load new data available at the same source.
+    - <code>AUTO</code> - In AUTO mode, the loader looks for a previous load job from the same source, and if it finds one, resumes that job, just as in <code>RESUME</code> mode.</p>
 <p>If the loader doesn't find a previous load job from the same source, it loads all data from the source, just as in <code>NEW</code> mode.</p>
+</li>
+</ul>
 </li>
 <li>
 <p><strong><code>failOnError</code></strong></p>
-</li>
-</ul>
 <p><strong><code>failOnError</code></strong> - A flag to toggle a complete stop on an error.</p>
 <p><em>Allowed values</em>: <code>"TRUE"</code>, <code>"FALSE"</code>.</p>
 <p><em>Default value</em>: <code>"TRUE"</code>.</p>
 <p>When this parameter is set to <code>"FALSE"</code>, the loader tries to load all the data in the location specified, skipping any entries with errors.</p>
 <p>When this parameter is set to <code>"TRUE"</code>, the loader stops as soon as it encounters an error. Data loaded up to that point persists.</p>
-<ul>
-<li><strong><code>parallelism</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>parallelism</code></strong></p>
 <p>The optional <code>parallelism</code> parameter can be set to reduce the number of threads used by the bulk load process.</p>
 <p><em>Allowed values</em>:</p>
 <ul>
@@ -16592,39 +16590,39 @@
 </ul>
 <p><em>Default value</em>: <code>HIGH</code></p>
 <p>The <code>parallelism</code> setting can sometimes result in a deadlock between threads when loading openCypher data. When this happens, Neptune returns the <code>LOAD_DATA_DEADLOCK</code> error. You can generally fix the issue by setting <code>parallelism</code> to a lower setting and retrying the load command.</p>
-<ul>
-<li><strong><code>parserConfiguration</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>parserConfiguration</code></strong></p>
 <p><strong><code>parserConfiguration</code></strong> – An optional object with additional parser configuration values. Each of the child parameters is also optional:</p>
 <ul>
 <li>
 <p><strong><code>namedGraphUri</code></strong> - The default graph for all RDF formats when no graph is specified (for non-quads formats and NQUAD entries with no graph).</p>
 <p>The default is <code>https://aws.amazon.com/neptune/vocab/v01/DefaultNamedGraph</code>.
-  - <strong><code>baseUri</code></strong> - The base URI for RDF/XML and Turtle formats.</p>
+    - <strong><code>baseUri</code></strong> - The base URI for RDF/XML and Turtle formats.</p>
 <p>The default is <code>https://aws.amazon.com/neptune/default</code>.
-  - <strong><code>allowEmptyStrings</code></strong> - Gremlin users need to be able to pass empty string values("") as node and edge properties when loading CSV data. If <code>allowEmptyStrings</code> is set to <code>false</code> (the default), such empty strings are treated as nulls and are not loaded.</p>
+    - <strong><code>allowEmptyStrings</code></strong> - Gremlin users need to be able to pass empty string values("") as node and edge properties when loading CSV data. If <code>allowEmptyStrings</code> is set to <code>false</code> (the default), such empty strings are treated as nulls and are not loaded.</p>
 <p>If <code>allowEmptyStrings</code> is set to <code>true</code>, the loader treats empty strings as valid property values and loads them accordingly.</p>
+</li>
+</ul>
 </li>
 <li>
 <p><strong><code>updateSingleCardinalityProperties</code></strong></p>
-</li>
-</ul>
 <p><code>updateSingleCardinalityProperties</code> is an optional parameter that controls how the bulk loader treats a new value for single-cardinality vertex or edge properties. This is not supported for loading openCypher data.</p>
 <p><em>Allowed values</em>: <code>"TRUE"</code>, <code>"FALSE"</code>.</p>
 <p><em>Default value</em>: <code>"FALSE"</code>.</p>
 <p>By default, or when <code>updateSingleCardinalityProperties</code> is explicitly set to <code>"FALSE"</code>, the loader treats a new value as an error, because it violates single cardinality.</p>
 <p>When <code>updateSingleCardinalityProperties</code> is set to <code>"TRUE"</code>, on the other hand, the bulk loader replaces the existing value with the new one. If multiple edge or single-cardinality vertex property values are provided in the source file(s) being loaded, the final value at the end of the bulk load could be any one of those new values. The loader only guarantees that the existing value has been replaced by one of the new ones.</p>
-<ul>
-<li><strong><code>queueRequest</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>queueRequest</code></strong></p>
 <p>This is an optional flag parameter that indicates whether the load request can be queued up or not.</p>
 <p>You don't have to wait for one load job to complete before issuing the next one, because Neptune can queue up as many as 64 jobs at a time, provided that their <code>queueRequest</code> parameters are all set to <code>"TRUE"</code>. The queue order of the jobs will be first-in-first-out (FIFO).</p>
 <p>If the <code>queueRequest</code> parameter is omitted or set to <code>"FALSE"</code>, the load request will fail if another load job is already running.</p>
 <p><em>Allowed values</em>: <code>"TRUE"</code>, <code>"FALSE"</code>.</p>
 <p><em>Default value</em>: <code>"FALSE"</code>.</p>
-<ul>
-<li><strong><code>dependencies</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>dependencies</code></strong></p>
 <p>This is an optional parameter that can make a queued load request contingent on the successful completion of one or more previous jobs in the queue.</p>
 <p>Neptune can queue up as many as 64 load requests at a time, if their <code>queueRequest</code> parameters are set to <code>"TRUE"</code>. The <code>dependencies</code> parameter lets you make execution of such a queued request dependent on the successful completion of one or more specified previous requests in the queue.</p>
 <p>For example, if load <code>Job-A</code> and <code>Job-B</code> are independent of each other, but load <code>Job-C</code> needs <code>Job-A</code> and <code>Job-B</code> to be finished before it begins, proceed as follows:</p>
@@ -16634,49 +16632,51 @@
 </ol>
 <p>Because of the <code>dependencies</code> parameter, the bulk loader will not start <code>Job-C</code> until <code>Job-A</code> and <code>Job-B</code> have completed successfully. If either one of them fails, Job-C will not be executed, and its status will be set to <code>LOAD_FAILED_BECAUSE_DEPENDENCY_NOT_SATISFIED</code>.</p>
 <p>You can set up multiple levels of dependency in this way, so that the failure of one job will cause all requests that are directly or indirectly dependent on it to be cancelled.</p>
-<ul>
-<li><strong><code>userProvidedEdgeIds</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>userProvidedEdgeIds</code></strong></p>
 <p>This parameter is required only when loading openCypher data that contains relationship IDs. It must be included and set to <code>True</code> when openCypher relationship IDs are explicitly provided in the load data (recommended).</p>
 <p>When <code>userProvidedEdgeIds</code> is absent or set to <code>True</code>, an <code>:ID</code> column must be present in every relationship file in the load.</p>
 <p>When <code>userProvidedEdgeIds</code> is present and set to <code>False</code>, relationship files in the load <strong>must not</strong> contain an <code>:ID</code> column. Instead, the Neptune loader automatically generates an ID for each relationship.</p>
 <p>It's useful to provide relationship IDs explicitly so that the loader can resume loading after error in the CSV data have been fixed, without having to reload any relationships that have already been loaded. If relationship IDs have not been explicitly assigned, the loader cannot resume a failed load if any relationship file has had to be corrected, and must instead reload all the relationships.</p>
-<ul>
-<li><strong><code>edgeOnlyLoad</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>edgeOnlyLoad</code></strong></p>
 <p><strong><code>edgeOnlyLoad</code></strong> - A flag that controls file processing order during bulk loading.</p>
 <p><em>Allowed values</em>: <code>"TRUE"</code>, <code>"FALSE"</code>.</p>
 <p><em>Default value</em>: <code>"FALSE"</code>.</p>
 <p>When this parameter is set to "FALSE", the loader automatically loads vertex files first, then edge files afterwards. It does this by first scanning all files to determine their contents (vertices or edges). When this parameter is set to "TRUE", the loader skips the initial scanning phase and immediately loads all files in the order they appear.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  status = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  payload = list(
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    &quot;string&quot;
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  )
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$start_loader_job(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  source = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  format = &quot;csv&quot;|&quot;opencypher&quot;|&quot;ntriples&quot;|&quot;nquads&quot;|&quot;rdfxml&quot;|&quot;turtle&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  s3BucketRegion = &quot;us-east-1&quot;|&quot;us-east-2&quot;|&quot;us-west-1&quot;|&quot;us-west-2&quot;|&quot;ca-central-1&quot;|&quot;sa-east-1&quot;|&quot;eu-north-1&quot;|&quot;eu-west-1&quot;|&quot;eu-west-2&quot;|&quot;eu-west-3&quot;|&quot;eu-central-1&quot;|&quot;me-south-1&quot;|&quot;af-south-1&quot;|&quot;ap-east-1&quot;|&quot;ap-northeast-1&quot;|&quot;ap-northeast-2&quot;|&quot;ap-southeast-1&quot;|&quot;ap-southeast-2&quot;|&quot;ap-south-1&quot;|&quot;cn-north-1&quot;|&quot;cn-northwest-1&quot;|&quot;us-gov-west-1&quot;|&quot;us-gov-east-1&quot;|&quot;ca-west-1&quot;|&quot;eu-south-2&quot;|&quot;il-central-1&quot;|&quot;me-central-1&quot;|&quot;ap-northeast-3&quot;|&quot;ap-southeast-3&quot;|&quot;ap-southeast-4&quot;|&quot;ap-southeast-5&quot;|&quot;ap-southeast-7&quot;|&quot;mx-central-1&quot;|&quot;ap-east-2&quot;|&quot;ap-south-2&quot;|&quot;eu-central-2&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  iamRoleArn = &quot;string&quot;,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  mode = &quot;RESUME&quot;|&quot;NEW&quot;|&quot;AUTO&quot;,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  failOnError = TRUE|FALSE,
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  parallelism = &quot;LOW&quot;|&quot;MEDIUM&quot;|&quot;HIGH&quot;|&quot;OVERSUBSCRIBE&quot;,
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  parserConfiguration = list(
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    &quot;string&quot;
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  ),
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  updateSingleCardinalityProperties = TRUE|FALSE,
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>  queueRequest = TRUE|FALSE,
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>  dependencies = list(
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    &quot;string&quot;
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>  ),
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>  userProvidedEdgeIds = TRUE|FALSE,
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>  edgeOnlyLoad = TRUE|FALSE
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">start_loader_job</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;csv&quot;</span><span class="o">|</span><span class="s">&quot;opencypher&quot;</span><span class="o">|</span><span class="s">&quot;ntriples&quot;</span><span class="o">|</span><span class="s">&quot;nquads&quot;</span><span class="o">|</span><span class="s">&quot;rdfxml&quot;</span><span class="o">|</span><span class="s">&quot;turtle&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">s3BucketRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;us-east-1&quot;</span><span class="o">|</span><span class="s">&quot;us-east-2&quot;</span><span class="o">|</span><span class="s">&quot;us-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-west-2&quot;</span><span class="o">|</span><span class="s">&quot;ca-central-1&quot;</span><span class="o">|</span><span class="s">&quot;sa-east-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-north-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-west-3&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-1&quot;</span><span class="o">|</span><span class="s">&quot;me-south-1&quot;</span><span class="o">|</span><span class="s">&quot;af-south-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-north-1&quot;</span><span class="o">|</span><span class="s">&quot;cn-northwest-1&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-west-1&quot;</span><span class="o">|</span><span class="s">&quot;us-gov-east-1&quot;</span><span class="o">|</span><span class="s">&quot;ca-west-1&quot;</span><span class="o">|</span><span class="s">&quot;eu-south-2&quot;</span><span class="o">|</span><span class="s">&quot;il-central-1&quot;</span><span class="o">|</span><span class="s">&quot;me-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-northeast-3&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-3&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-4&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-5&quot;</span><span class="o">|</span><span class="s">&quot;ap-southeast-7&quot;</span><span class="o">|</span><span class="s">&quot;mx-central-1&quot;</span><span class="o">|</span><span class="s">&quot;ap-east-2&quot;</span><span class="o">|</span><span class="s">&quot;ap-south-2&quot;</span><span class="o">|</span><span class="s">&quot;eu-central-2&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">iamRoleArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;RESUME&quot;</span><span class="o">|</span><span class="s">&quot;NEW&quot;</span><span class="o">|</span><span class="s">&quot;AUTO&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">failOnError</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="n">parallelism</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;LOW&quot;</span><span class="o">|</span><span class="s">&quot;MEDIUM&quot;</span><span class="o">|</span><span class="s">&quot;HIGH&quot;</span><span class="o">|</span><span class="s">&quot;OVERSUBSCRIBE&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="n">parserConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="n">updateSingleCardinalityProperties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="n">queueRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="n">dependencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="n">userProvidedEdgeIds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span><span class="n">edgeOnlyLoad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="p">)</span>
 </code></pre></div>
 
 

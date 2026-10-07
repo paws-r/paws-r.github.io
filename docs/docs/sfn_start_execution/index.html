@@ -16351,19 +16351,21 @@
 <p>A qualified state machine ARN can either refer to a <em>Distributed Map state</em> defined within a state machine, a version ARN, or an alias ARN.</p>
 <p>The following are some examples of qualified and unqualified state machine ARNs:</p>
 <ul>
-<li>The following qualified state machine ARN refers to a <em>Distributed Map state</em> with a label <code>mapStateLabel</code> in a state machine named <code>myStateMachine</code>.</li>
-</ul>
+<li>
+<p>The following qualified state machine ARN refers to a <em>Distributed Map state</em> with a label <code>mapStateLabel</code> in a state machine named <code>myStateMachine</code>.</p>
 <p><code>arn:partition:states:region:account-id:stateMachine:myStateMachine/mapStateLabel</code></p>
 <p>If you provide a qualified state machine ARN that refers to a <em>Distributed Map state</em>, the request fails with <code>ValidationException</code>.</p>
-<ul>
-<li>The following qualified state machine ARN refers to an alias named <code>PROD</code>.</li>
-</ul>
+</li>
+<li>
+<p>The following qualified state machine ARN refers to an alias named <code>PROD</code>.</p>
 <p><code>arn:&lt;partition&gt;:states:&lt;region&gt;:&lt;account-id&gt;:stateMachine:&lt;myStateMachine:PROD&gt;</code></p>
 <p>If you provide a qualified state machine ARN that refers to a version ARN or an alias ARN, the request starts execution for that version or alias.</p>
-<ul>
-<li>The following unqualified state machine ARN refers to a state machine named <code>myStateMachine</code>.</li>
-</ul>
+</li>
+<li>
+<p>The following unqualified state machine ARN refers to a state machine named <code>myStateMachine</code>.</p>
 <p><code>arn:&lt;partition&gt;:states:&lt;region&gt;:&lt;account-id&gt;:stateMachine:&lt;myStateMachine&gt;</code></p>
+</li>
+</ul>
 <p>If you start an execution with an unqualified state machine ARN, Step Functions uses the latest revision of the state machine for the execution.</p>
 <p>To start executions of a state machine <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-state-machine-version.html">version</a>, call <a href="../sfn_start_execution/"><code>start_execution</code></a> and provide the version ARN or the ARN of an <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-state-machine-alias.html">alias</a> that points to the version.</p>
 <p><a href="../sfn_start_execution/"><code>start_execution</code></a> is idempotent for <code>STANDARD</code> workflows. For a <code>STANDARD</code> workflow, if you call <a href="../sfn_start_execution/"><code>start_execution</code></a> with the same name and input as a running execution, the call succeeds and return the same response as the original request. If the execution is closed or if the input is different, it returns a <code>400 ExecutionAlreadyExists</code> error. You can reuse the name 90 days after it closes.</p>
@@ -16373,8 +16375,8 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>stateMachineArn</code></strong></li>
-</ul>
+<li>
+<p><strong><code>stateMachineArn</code></strong></p>
 <p>[required] The Amazon Resource Name (ARN) of the state machine to execute.</p>
 <p>The <code>stateMachineArn</code> parameter accepts one of the following inputs:</p>
 <ul>
@@ -16382,17 +16384,17 @@
 <p><strong>An unqualified state machine ARN</strong> – Refers to a state machine ARN that isn't qualified with a version or alias ARN. The following is an example of an unqualified state machine ARN.</p>
 <p><code>arn:&lt;partition&gt;:states:&lt;region&gt;:&lt;account-id&gt;:stateMachine:&lt;myStateMachine&gt;</code></p>
 <p>Step Functions doesn't associate state machine executions that you start with an unqualified ARN with a version. This is true even if that version uses the same revision that the execution used.
-  - <strong>A state machine version ARN</strong> – Refers to a version ARN, which is a combination of state machine ARN and the version number separated by a colon (:). The following is an example of the ARN for version 10.</p>
+    - <strong>A state machine version ARN</strong> – Refers to a version ARN, which is a combination of state machine ARN and the version number separated by a colon (:). The following is an example of the ARN for version 10.</p>
 <p><code>arn:&lt;partition&gt;:states:&lt;region&gt;:&lt;account-id&gt;:stateMachine:&lt;myStateMachine&gt;:10</code></p>
 <p>Step Functions doesn't associate executions that you start with a version ARN with any aliases that point to that version.
-  - <strong>A state machine alias ARN</strong> – Refers to an alias ARN, which is a combination of state machine ARN and the alias name separated by a colon (:). The following is an example of the ARN for an alias named <code>PROD</code>.</p>
+    - <strong>A state machine alias ARN</strong> – Refers to an alias ARN, which is a combination of state machine ARN and the alias name separated by a colon (:). The following is an example of the ARN for an alias named <code>PROD</code>.</p>
 <p><code>arn:&lt;partition&gt;:states:&lt;region&gt;:&lt;account-id&gt;:stateMachine:&lt;myStateMachine:PROD&gt;</code></p>
 <p>Step Functions associates executions that you start with an alias ARN with that alias and the state machine version used for that execution.</p>
 </li>
+</ul>
+</li>
 <li>
 <p><strong><code>name</code></strong></p>
-</li>
-</ul>
 <p>Optional name of the execution. For STANDARD workflows, this name must be unique for your Amazon Web Services account, region, and state machine. If a previous execution with the same name exists, you can reuse the name 90 days after it closes. For EXPRESS workflows, execution names can be reused immediately. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/service-quotas.html#service-limits-state-machine-executions">Limits Related to State Machine Executions</a> in the <em>Step Functions Developer Guide</em>.</p>
 <p>If you don't provide a name for the execution, Step Functions automatically generates a universally unique identifier (UUID) as the execution name.</p>
 <p>A name must <em>not</em> contain:</p>
@@ -16406,34 +16408,36 @@
 <li>invalid characters (<code>U+10FFFF</code>)</li>
 </ul>
 <p>To enable logging with CloudWatch Logs, the name should only contain 0-9, A-Z, a-z, - and _.</p>
-<ul>
-<li><strong><code>input</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>input</code></strong></p>
 <p>The string that contains the JSON input data for the execution, for example:</p>
 <p><code>"{\"first_name\" : \"Alejandro\"}"</code></p>
 <p>If you don't include any JSON input data, you still must include the two braces, for example: <code>"{}"</code></p>
 <p>Length constraints apply to the payload size, and are expressed as bytes in UTF-8 encoding.</p>
-<ul>
-<li><strong><code>traceHeader</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>traceHeader</code></strong></p>
 <p>Passes the X-Ray trace header. The trace header can also be passed in the request payload.</p>
 <p>For X-Ray traces, all Amazon Web Services services use the <code>X-Amzn-Trace-Id</code> header from the HTTP request. Using the header is the preferred mechanism to identify a trace. <a href="../sfn_start_execution/"><code>start_execution</code></a> and <a href="../sfn_start_sync_execution/"><code>start_sync_execution</code></a> API operations can also use <code>traceHeader</code> from the body of the request payload. If <strong>both</strong> sources are provided, Step Functions will use the <strong>header value</strong> (preferred) over the value in the request body.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  executionArn = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  startDate = as.POSIXct(
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  )
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">executionArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">startDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$start_execution(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  stateMachineArn = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  name = &quot;string&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  input = &quot;string&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  traceHeader = &quot;string&quot;
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">start_execution</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">stateMachineArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">traceHeader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">)</span>
 </code></pre></div>
 
 

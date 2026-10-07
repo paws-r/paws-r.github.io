@@ -26085,9 +26085,9 @@
 </li>
 <li>
 <p>If the response is slow due to large result sets, try these approaches:</p>
-</li>
-<li>
-<p>Add filters to reduce the amount of data returned</p>
+<ul>
+<li>Add filters to reduce the amount of data returned</li>
+</ul>
 </li>
 </ul>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
@@ -26096,12 +26096,12 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>InstanceId</code></strong></li>
-</ul>
+<li>
+<p><strong><code>InstanceId</code></strong></p>
 <p>[required] The identifier of the Connect Customer instance. You can <a href="https://docs.aws.amazon.com/connect/latest/adminguide/find-instance-arn.html">find the instance ID</a> in the Amazon Resource Name (ARN) of the instance.</p>
-<ul>
-<li><strong><code>Filters</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Filters</code></strong></p>
 <p>[required] The filters to apply to returned metrics. You can filter up to the following limits:</p>
 <ul>
 <li>Queues: 100</li>
@@ -26118,9 +26118,9 @@
 <p>When using <code>ValidationTestTypes</code> as filter make sure Queues is added as primary filter.</p>
 <p>When using the <code>RoutingStepExpression</code> filter, you need to pass exactly one <code>QueueId</code>. The filter is also case sensitive so when using the <code>RoutingStepExpression</code> filter, grouping by <code>ROUTING_STEP_EXPRESSION</code> is required.</p>
 <p>Currently tagging is only supported on the resources that are passed in the filter.</p>
-<ul>
-<li><strong><code>Groupings</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Groupings</code></strong></p>
 <p>Defines the level of aggregation for metrics data by a dimension(s). Its similar to sorting items into buckets based on a common characteristic, then counting or calculating something for each bucket. For example, when grouped by <code>QUEUE</code>, the metrics returned apply to each queue rather than aggregated for all queues.</p>
 <p>The grouping list is an ordered list, with the first item in the list defined as the primary grouping. If no grouping is included in the request, the aggregation happens at the instance-level.</p>
 <ul>
@@ -26128,13 +26128,11 @@
 <li>If you group by <code>AGENT_STATUS</code>, you must include the <code>QUEUE</code> as the primary grouping and use queue filter. When you group by <code>AGENT_STATUS</code>, the only metric available is the <code>AGENTS_ONLINE</code> metric.</li>
 <li>If you group by <code>SUBTYPE</code> or <code>VALIDATION_TEST_TYPE</code> as secondary grouping then you must include <code>QUEUE</code> as primary grouping and use Queue as filter</li>
 <li>If you group by <code>ROUTING_PROFILE</code>, you must include either a queue or routing profile filter. In addition, a routing profile filter is required for metrics <code>CONTACTS_SCHEDULED</code>, <code>CONTACTS_IN_QUEUE</code>, and <code>OLDEST_CONTACT_AGE</code>.</li>
-<li>
-<p>When using the <code>RoutingStepExpression</code> filter, group by <code>ROUTING_STEP_EXPRESSION</code> is required.</p>
+<li>When using the <code>RoutingStepExpression</code> filter, group by <code>ROUTING_STEP_EXPRESSION</code> is required.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>CurrentMetrics</code></strong></p>
-</li>
-</ul>
 <p>[required] The metrics to retrieve. Specify the name or metricId, and unit for each metric. The following metrics are available. For a description of all the metrics, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/metrics-definitions.html">Metrics definitions</a> in the <em>Connect Customer Administrator Guide</em>.</p>
 <p>MetricId should be used to reference custom metrics or out of the box metrics as Arn. If using MetricId, the limit is 10 MetricId per request.</p>
 <p><strong>AGENTS_AFTER_CONTACT_WORK</strong></p>
@@ -26188,110 +26186,112 @@
 <p><strong>SLOTS_AVAILABLE</strong></p>
 <p>Unit: COUNT</p>
 <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/metrics-definitions.html#availability-real-time">Availability</a></p>
-<ul>
-<li><strong><code>NextToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>NextToken</code></strong></p>
 <p>The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results.</p>
 <p>The token expires after 5 minutes from the time it is created. Subsequent requests that use the token must use the same request parameters as the request that generated the token.</p>
-<ul>
-<li><strong><code>MaxResults</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>MaxResults</code></strong></p>
 <p>The maximum number of results to return per page.</p>
-<ul>
-<li><strong><code>SortCriteria</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SortCriteria</code></strong></p>
 <p>The way to sort the resulting response based on metrics. You can enter one sort criteria. By default resources are sorted based on <code>AGENTS_ONLINE</code>, <code>DESCENDING</code>. The metric collection is sorted based on the input metrics.</p>
 <p>Note the following:</p>
 <ul>
 <li>Sorting on <code>SLOTS_ACTIVE</code> and <code>SLOTS_AVAILABLE</code> is not supported.</li>
 </ul>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  NextToken = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  MetricResults = list(
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    list(
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>      Dimensions = list(
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        Queue = list(
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>          Id = &quot;string&quot;,
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>          Arn = &quot;string&quot;
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        ),
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        Channel = &quot;VOICE&quot;|&quot;CHAT&quot;|&quot;TASK&quot;|&quot;EMAIL&quot;,
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        RoutingProfile = list(
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>          Id = &quot;string&quot;,
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>          Arn = &quot;string&quot;
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        ),
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>        RoutingStepExpression = &quot;string&quot;,
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        AgentStatus = list(
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>          Arn = &quot;string&quot;,
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>          Id = &quot;string&quot;
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>        ),
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>        Subtype = &quot;string&quot;,
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>        ValidationTestType = &quot;string&quot;
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>      ),
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>      Collections = list(
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>        list(
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>          Metric = list(
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>            Name = &quot;AGENTS_ONLINE&quot;|&quot;AGENTS_AVAILABLE&quot;|&quot;AGENTS_ON_CALL&quot;|&quot;AGENTS_NON_PRODUCTIVE&quot;|&quot;AGENTS_AFTER_CONTACT_WORK&quot;|&quot;AGENTS_ERROR&quot;|&quot;AGENTS_STAFFED&quot;|&quot;CONTACTS_IN_QUEUE&quot;|&quot;OLDEST_CONTACT_AGE&quot;|&quot;CONTACTS_SCHEDULED&quot;|&quot;AGENTS_ON_CONTACT&quot;|&quot;SLOTS_ACTIVE&quot;|&quot;SLOTS_AVAILABLE&quot;|&quot;ESTIMATED_WAIT_TIME&quot;,
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>            MetricId = &quot;string&quot;,
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>            Unit = &quot;SECONDS&quot;|&quot;COUNT&quot;|&quot;PERCENT&quot;
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>          ),
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>          Value = 123.0
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>        )
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>      )
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    )
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>  ),
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>  DataSnapshotTime = as.POSIXct(
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>  ),
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>  ApproximateTotalCount = 123
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">MetricResults</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="n">Dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="n">Queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">          </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">          </span><span class="n">Arn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="n">Channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;VOICE&quot;</span><span class="o">|</span><span class="s">&quot;CHAT&quot;</span><span class="o">|</span><span class="s">&quot;TASK&quot;</span><span class="o">|</span><span class="s">&quot;EMAIL&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="n">RoutingProfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">          </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">          </span><span class="n">Arn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="n">RoutingStepExpression</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="n">AgentStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">          </span><span class="n">Arn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">          </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">        </span><span class="n">Subtype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">        </span><span class="n">ValidationTestType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="n">Collections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">          </span><span class="n">Metric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">            </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AGENTS_ONLINE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_AVAILABLE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ON_CALL&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_NON_PRODUCTIVE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_AFTER_CONTACT_WORK&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ERROR&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_STAFFED&quot;</span><span class="o">|</span><span class="s">&quot;CONTACTS_IN_QUEUE&quot;</span><span class="o">|</span><span class="s">&quot;OLDEST_CONTACT_AGE&quot;</span><span class="o">|</span><span class="s">&quot;CONTACTS_SCHEDULED&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ON_CONTACT&quot;</span><span class="o">|</span><span class="s">&quot;SLOTS_ACTIVE&quot;</span><span class="o">|</span><span class="s">&quot;SLOTS_AVAILABLE&quot;</span><span class="o">|</span><span class="s">&quot;ESTIMATED_WAIT_TIME&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">            </span><span class="n">MetricId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">            </span><span class="n">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SECONDS&quot;</span><span class="o">|</span><span class="s">&quot;COUNT&quot;</span><span class="o">|</span><span class="s">&quot;PERCENT&quot;</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">          </span><span class="p">),</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">          </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123.0</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">  </span><span class="n">DataSnapshotTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">  </span><span class="n">ApproximateTotalCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$get_current_metric_data(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  InstanceId = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  Filters = list(
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    Queues = list(
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>      &quot;string&quot;
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    ),
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    Channels = list(
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>      &quot;VOICE&quot;|&quot;CHAT&quot;|&quot;TASK&quot;|&quot;EMAIL&quot;
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ),
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    RoutingProfiles = list(
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>      &quot;string&quot;
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    ),
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    RoutingStepExpressions = list(
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>      &quot;string&quot;
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    ),
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    AgentStatuses = list(
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>      &quot;string&quot;
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    ),
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    Subtypes = list(
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>      &quot;string&quot;
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    ),
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    ValidationTestTypes = list(
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>      &quot;string&quot;
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    )
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>  ),
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>  Groupings = list(
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    &quot;QUEUE&quot;|&quot;CHANNEL&quot;|&quot;ROUTING_PROFILE&quot;|&quot;ROUTING_STEP_EXPRESSION&quot;|&quot;AGENT_STATUS&quot;|&quot;SUBTYPE&quot;|&quot;VALIDATION_TEST_TYPE&quot;
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>  ),
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>  CurrentMetrics = list(
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>    list(
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>      Name = &quot;AGENTS_ONLINE&quot;|&quot;AGENTS_AVAILABLE&quot;|&quot;AGENTS_ON_CALL&quot;|&quot;AGENTS_NON_PRODUCTIVE&quot;|&quot;AGENTS_AFTER_CONTACT_WORK&quot;|&quot;AGENTS_ERROR&quot;|&quot;AGENTS_STAFFED&quot;|&quot;CONTACTS_IN_QUEUE&quot;|&quot;OLDEST_CONTACT_AGE&quot;|&quot;CONTACTS_SCHEDULED&quot;|&quot;AGENTS_ON_CONTACT&quot;|&quot;SLOTS_ACTIVE&quot;|&quot;SLOTS_AVAILABLE&quot;|&quot;ESTIMATED_WAIT_TIME&quot;,
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>      MetricId = &quot;string&quot;,
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>      Unit = &quot;SECONDS&quot;|&quot;COUNT&quot;|&quot;PERCENT&quot;
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>    )
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>  ),
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>  NextToken = &quot;string&quot;,
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>  MaxResults = 123,
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>  SortCriteria = list(
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>    list(
-<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>      SortByMetric = &quot;AGENTS_ONLINE&quot;|&quot;AGENTS_AVAILABLE&quot;|&quot;AGENTS_ON_CALL&quot;|&quot;AGENTS_NON_PRODUCTIVE&quot;|&quot;AGENTS_AFTER_CONTACT_WORK&quot;|&quot;AGENTS_ERROR&quot;|&quot;AGENTS_STAFFED&quot;|&quot;CONTACTS_IN_QUEUE&quot;|&quot;OLDEST_CONTACT_AGE&quot;|&quot;CONTACTS_SCHEDULED&quot;|&quot;AGENTS_ON_CONTACT&quot;|&quot;SLOTS_ACTIVE&quot;|&quot;SLOTS_AVAILABLE&quot;|&quot;ESTIMATED_WAIT_TIME&quot;,
-<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>      SortOrder = &quot;ASCENDING&quot;|&quot;DESCENDING&quot;
-<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>    )
-<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>  )
-<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">get_current_metric_data</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">InstanceId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">Filters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">Queues</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="n">Channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="s">&quot;VOICE&quot;</span><span class="o">|</span><span class="s">&quot;CHAT&quot;</span><span class="o">|</span><span class="s">&quot;TASK&quot;</span><span class="o">|</span><span class="s">&quot;EMAIL&quot;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="n">RoutingProfiles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="n">RoutingStepExpressions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="n">AgentStatuses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="n">Subtypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">    </span><span class="n">ValidationTestTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">  </span><span class="n">Groupings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">    </span><span class="s">&quot;QUEUE&quot;</span><span class="o">|</span><span class="s">&quot;CHANNEL&quot;</span><span class="o">|</span><span class="s">&quot;ROUTING_PROFILE&quot;</span><span class="o">|</span><span class="s">&quot;ROUTING_STEP_EXPRESSION&quot;</span><span class="o">|</span><span class="s">&quot;AGENT_STATUS&quot;</span><span class="o">|</span><span class="s">&quot;SUBTYPE&quot;</span><span class="o">|</span><span class="s">&quot;VALIDATION_TEST_TYPE&quot;</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">  </span><span class="n">CurrentMetrics</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">      </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AGENTS_ONLINE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_AVAILABLE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ON_CALL&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_NON_PRODUCTIVE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_AFTER_CONTACT_WORK&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ERROR&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_STAFFED&quot;</span><span class="o">|</span><span class="s">&quot;CONTACTS_IN_QUEUE&quot;</span><span class="o">|</span><span class="s">&quot;OLDEST_CONTACT_AGE&quot;</span><span class="o">|</span><span class="s">&quot;CONTACTS_SCHEDULED&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ON_CONTACT&quot;</span><span class="o">|</span><span class="s">&quot;SLOTS_ACTIVE&quot;</span><span class="o">|</span><span class="s">&quot;SLOTS_AVAILABLE&quot;</span><span class="o">|</span><span class="s">&quot;ESTIMATED_WAIT_TIME&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">      </span><span class="n">MetricId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">      </span><span class="n">Unit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SECONDS&quot;</span><span class="o">|</span><span class="s">&quot;COUNT&quot;</span><span class="o">|</span><span class="s">&quot;PERCENT&quot;</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">  </span><span class="n">NextToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">  </span><span class="n">MaxResults</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">  </span><span class="n">SortCriteria</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">    </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="w">      </span><span class="n">SortByMetric</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AGENTS_ONLINE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_AVAILABLE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ON_CALL&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_NON_PRODUCTIVE&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_AFTER_CONTACT_WORK&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ERROR&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_STAFFED&quot;</span><span class="o">|</span><span class="s">&quot;CONTACTS_IN_QUEUE&quot;</span><span class="o">|</span><span class="s">&quot;OLDEST_CONTACT_AGE&quot;</span><span class="o">|</span><span class="s">&quot;CONTACTS_SCHEDULED&quot;</span><span class="o">|</span><span class="s">&quot;AGENTS_ON_CONTACT&quot;</span><span class="o">|</span><span class="s">&quot;SLOTS_ACTIVE&quot;</span><span class="o">|</span><span class="s">&quot;SLOTS_AVAILABLE&quot;</span><span class="o">|</span><span class="s">&quot;ESTIMATED_WAIT_TIME&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="w">      </span><span class="n">SortOrder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ASCENDING&quot;</span><span class="o">|</span><span class="s">&quot;DESCENDING&quot;</span>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a><span class="p">)</span>
 </code></pre></div>
 
 

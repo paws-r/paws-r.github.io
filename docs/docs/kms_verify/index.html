@@ -16845,8 +16845,8 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>KeyId</code></strong></li>
-</ul>
+<li>
+<p><strong><code>KeyId</code></strong></p>
 <p>[required] Identifies the asymmetric KMS key that will be used to verify the signature. This must be the same KMS key that was used to generate the signature. If you specify a different KMS key, the signature verification fails.</p>
 <p>To specify a KMS key, use its key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>. To specify a KMS key in a different Amazon Web Services account, you must use the key ARN or alias ARN.</p>
 <p>For example:</p>
@@ -16857,14 +16857,14 @@
 <li>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code></li>
 </ul>
 <p>To get the key ID and key ARN for a KMS key, use <a href="../kms_list_keys/"><code>list_keys</code></a> or <a href="../kms_describe_key/"><code>describe_key</code></a>. To get the alias name and alias ARN, use <a href="../kms_list_aliases/"><code>list_aliases</code></a>.</p>
-<ul>
-<li><strong><code>Message</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Message</code></strong></p>
 <p>[required] Specifies the message that was signed. You can submit a raw message of up to 4096 bytes, or a hash digest of the message. If you submit a digest, use the <code>MessageType</code> parameter with a value of <code>DIGEST</code>.</p>
 <p>If the message specified here is different from the message that was signed, the signature verification fails. A message and its hash digest are considered to be the same message.</p>
-<ul>
-<li><strong><code>MessageType</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>MessageType</code></strong></p>
 <p>Tells KMS whether the value of the <code>Message</code> parameter should be hashed as part of the signing algorithm. Use <code>RAW</code> for unhashed messages; use <code>DIGEST</code> for message digests, which are already hashed; use <code>EXTERNAL_MU</code> for 64-byte representative <code>u</code> used in ML-DSA signing as defined in NIST FIPS 204 Section 6.2.</p>
 <p>When the value of <code>MessageType</code> is <code>RAW</code>, KMS uses the standard signing algorithm, which begins with a hash function. When the value is <code>DIGEST</code>, KMS skips the hashing step in the signing algorithm. When the value is <code>EXTERNAL_MU</code> KMS skips the concatenated hashing of the public key hash and the message done in the ML-DSA signing algorithm.</p>
 <p>Use the <code>DIGEST</code> or <code>EXTERNAL_MU</code> value only when the value of the <code>Message</code> parameter is a message digest. If you use the <code>DIGEST</code> value with an unhashed message, the security of the signing operation can be compromised.</p>
@@ -16883,48 +16883,48 @@
 <li>Signing algorithms that end in SHA_384 use the SHA_384 hashing algorithm.</li>
 <li>Signing algorithms that end in SHA_512 use the SHA_512 hashing algorithm.</li>
 <li>Signing algorithms that end in SHAKE_256 use the SHAKE_256 hashing algorithm.</li>
-<li>
-<p>SM2DSA uses the SM3 hashing algorithm. For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/offline-operations.html#key-spec-sm-offline-verification">Offline verification with SM2 key pairs</a>.</p>
+<li>SM2DSA uses the SM3 hashing algorithm. For details, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/offline-operations.html#key-spec-sm-offline-verification">Offline verification with SM2 key pairs</a>.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>Signature</code></strong></p>
-</li>
-</ul>
 <p>[required] The signature that the <a href="../kms_sign/"><code>sign</code></a> operation generated.</p>
-<ul>
-<li><strong><code>SigningAlgorithm</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SigningAlgorithm</code></strong></p>
 <p>[required] The signing algorithm that was used to sign the message. If you submit a different algorithm, the signature verification fails.</p>
-<ul>
-<li><strong><code>GrantTokens</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>GrantTokens</code></strong></p>
 <p>A list of grant tokens.</p>
 <p>Use a grant token when your permission to call this operation comes from a new grant that has not yet achieved <em>eventual consistency</em>. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/grants.html#grant_token">Grant token</a> and <a href="https://docs.aws.amazon.com/kms/latest/developerguide/using-grant-token.html">Using a grant token</a> in the <em>Key Management Service Developer Guide</em>.</p>
-<ul>
-<li><strong><code>DryRun</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>DryRun</code></strong></p>
 <p>Checks if your request will succeed. <code>DryRun</code> is an optional parameter.</p>
 <p>To learn more about how to use this parameter, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/testing-permissions.html">Testing your permissions</a> in the <em>Key Management Service Developer Guide</em>.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  KeyId = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  SignatureValid = TRUE|FALSE,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  SigningAlgorithm = &quot;RSASSA_PSS_SHA_256&quot;|&quot;RSASSA_PSS_SHA_384&quot;|&quot;RSASSA_PSS_SHA_512&quot;|&quot;RSASSA_PKCS1_V1_5_SHA_256&quot;|&quot;RSASSA_PKCS1_V1_5_SHA_384&quot;|&quot;RSASSA_PKCS1_V1_5_SHA_512&quot;|&quot;ECDSA_SHA_256&quot;|&quot;ECDSA_SHA_384&quot;|&quot;ECDSA_SHA_512&quot;|&quot;SM2DSA&quot;|&quot;ML_DSA_SHAKE_256&quot;|&quot;ED25519_SHA_512&quot;|&quot;ED25519_PH_SHA_512&quot;
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">KeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">SignatureValid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">SigningAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;RSASSA_PSS_SHA_256&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PSS_SHA_384&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PSS_SHA_512&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PKCS1_V1_5_SHA_256&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PKCS1_V1_5_SHA_384&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PKCS1_V1_5_SHA_512&quot;</span><span class="o">|</span><span class="s">&quot;ECDSA_SHA_256&quot;</span><span class="o">|</span><span class="s">&quot;ECDSA_SHA_384&quot;</span><span class="o">|</span><span class="s">&quot;ECDSA_SHA_512&quot;</span><span class="o">|</span><span class="s">&quot;SM2DSA&quot;</span><span class="o">|</span><span class="s">&quot;ML_DSA_SHAKE_256&quot;</span><span class="o">|</span><span class="s">&quot;ED25519_SHA_512&quot;</span><span class="o">|</span><span class="s">&quot;ED25519_PH_SHA_512&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$verify(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  KeyId = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  Message = raw,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  MessageType = &quot;RAW&quot;|&quot;DIGEST&quot;|&quot;EXTERNAL_MU&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  Signature = raw,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  SigningAlgorithm = &quot;RSASSA_PSS_SHA_256&quot;|&quot;RSASSA_PSS_SHA_384&quot;|&quot;RSASSA_PSS_SHA_512&quot;|&quot;RSASSA_PKCS1_V1_5_SHA_256&quot;|&quot;RSASSA_PKCS1_V1_5_SHA_384&quot;|&quot;RSASSA_PKCS1_V1_5_SHA_512&quot;|&quot;ECDSA_SHA_256&quot;|&quot;ECDSA_SHA_384&quot;|&quot;ECDSA_SHA_512&quot;|&quot;SM2DSA&quot;|&quot;ML_DSA_SHAKE_256&quot;|&quot;ED25519_SHA_512&quot;|&quot;ED25519_PH_SHA_512&quot;,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  GrantTokens = list(
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    &quot;string&quot;
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  ),
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  DryRun = TRUE|FALSE
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">verify</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">KeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">Message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">MessageType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;RAW&quot;</span><span class="o">|</span><span class="s">&quot;DIGEST&quot;</span><span class="o">|</span><span class="s">&quot;EXTERNAL_MU&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">Signature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">SigningAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;RSASSA_PSS_SHA_256&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PSS_SHA_384&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PSS_SHA_512&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PKCS1_V1_5_SHA_256&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PKCS1_V1_5_SHA_384&quot;</span><span class="o">|</span><span class="s">&quot;RSASSA_PKCS1_V1_5_SHA_512&quot;</span><span class="o">|</span><span class="s">&quot;ECDSA_SHA_256&quot;</span><span class="o">|</span><span class="s">&quot;ECDSA_SHA_384&quot;</span><span class="o">|</span><span class="s">&quot;ECDSA_SHA_512&quot;</span><span class="o">|</span><span class="s">&quot;SM2DSA&quot;</span><span class="o">|</span><span class="s">&quot;ML_DSA_SHAKE_256&quot;</span><span class="o">|</span><span class="s">&quot;ED25519_SHA_512&quot;</span><span class="o">|</span><span class="s">&quot;ED25519_PH_SHA_512&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">GrantTokens</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="n">DryRun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># This operation uses the public key in an elliptic curve (ECC) asymmetric</span>

@@ -1280,23 +1280,23 @@
 <ul>
 <li>
 <p>paws - The package that you install from CRAN, which loads the separate 
-  paws.<category> packages that contain the Paws code for each AWS service.</p>
+    paws.<category> packages that contain the Paws code for each AWS service.</p>
 </li>
 <li>
 <p>paws.<category> - Separate packages that contain the Paws code for each AWS
-  service, e.g. paws.storage contains the code for S3, etc. These are broken
-  into categories because putting all the code into a single package would be
-  over the CRAN package size limit.</p>
+    service, e.g. paws.storage contains the code for S3, etc. These are broken
+    into categories because putting all the code into a single package would be
+    over the CRAN package size limit.</p>
 </li>
 <li>
 <p>paws.common - Common code for making AWS requests. All the paws.<category>
-  packages use this code to send requests and decode responses. paws.common is
-  also on CRAN.</p>
+    packages use this code to send requests and decode responses. paws.common is
+    also on CRAN.</p>
 </li>
 <li>
 <p>make.paws - Generates the R code for each AWS service; it reads in a JSON
-  file with metadata on each service and outputs R code that communicates
-  with that service. make.paws is not on CRAN.</p>
+    file with metadata on each service and outputs R code that communicates
+    with that service. make.paws is not on CRAN.</p>
 </li>
 </ul>
 <hr />
@@ -1313,59 +1313,63 @@ cache, e.g. if you've updated the code generator's code, run <code>make clean</c
 <h2 id="updating-paws">Updating Paws<a class="headerlink" href="#updating-paws" title="Permanent link">&para;</a></h2>
 <p>Updating paws can fall under a few different scenarios:</p>
 <ol>
-<li>Add an enhancement or fix a bug in the request handling code</li>
-</ol>
+<li>
+<p>Add an enhancement or fix a bug in the request handling code</p>
 <p>Most enhancements and bug fixes are to the request handling code in
-   paws.common. For example, to add a new method of authentication, it should
-   be added in paws.common.</p>
-<ol>
-<li>Fix a bug in the generated code</li>
-</ol>
+paws.common. For example, to add a new method of authentication, it should
+be added in paws.common.</p>
+</li>
+<li>
+<p>Fix a bug in the generated code</p>
 <p>Every operation has some metadata, e.g. operation name, and inputs and 
-   outputs whose elements are defined in the generated code. If there's a 
-   problem in one of these, the make.paws code generator itself needs to be
-   fixed, then the code must be re-generated.</p>
+outputs whose elements are defined in the generated code. If there's a 
+problem in one of these, the make.paws code generator itself needs to be
+fixed, then the code must be re-generated.</p>
 <p>Re-generating paws will change many files, so when making changes to the
-   make.paws, submit one PR for the changes to make.paws and a separate PR
-   with the re-generated code.</p>
-<ol>
-<li>Update AWS services with new parameters, operations, etc.</li>
-</ol>
+make.paws, submit one PR for the changes to make.paws and a separate PR
+with the re-generated code.</p>
+</li>
+<li>
+<p>Update AWS services with new parameters, operations, etc.</p>
 <p>AWS updates the JSON metadata with new services, operations for each service
-   (e.g. the PutObject operation for S3), and new operation parameters. This
-   requires re-running the code generator with <code>make build</code>, but generally
-   requires no other code changes.</p>
+(e.g. the PutObject operation for S3), and new operation parameters. This
+requires re-running the code generator with <code>make build</code>, but generally
+requires no other code changes.</p>
+</li>
+</ol>
 <hr />
 <h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
 <p>Paws uses a few different kinds of tests:</p>
 <ol>
-<li>Unit tests</li>
-</ol>
+<li>
+<p>Unit tests</p>
 <p>paws.common and make.paws both contain extensive unit tests. You can run
-   these from the command line with <code>make unit</code>. The paws.common unit tests
-   will also be run whenever you run R CMD check, e.g. when submitting to CRAN.
-   Whenever fixing a bug or adding an enhancement, add tests.</p>
-<ol>
-<li>Integration tests</li>
-</ol>
+these from the command line with <code>make unit</code>. The paws.common unit tests
+will also be run whenever you run R CMD check, e.g. when submitting to CRAN.
+Whenever fixing a bug or adding an enhancement, add tests.</p>
+</li>
+<li>
+<p>Integration tests</p>
 <p>paws automatically generates integration tests for operations that take
-   no parameters. You can run these with <code>make integration</code> assuming you're
-   using a machine with AWS credentials. This will check that you can
-   successfully make requests for most services. These are never run
-   automatically anywhere so must be run manually.</p>
+no parameters. You can run these with <code>make integration</code> assuming you're
+using a machine with AWS credentials. This will check that you can
+successfully make requests for most services. These are never run
+automatically anywhere so must be run manually.</p>
 <p>Note that some of these will fail for other reasons, e.g. the operation
-   actually requires some parameters, rate limiting, the AWS account needs to
-   be set up to work with a service, etc. We have a way to skip certain
-   integration tests in <code>make.paws/R/tests_config.R</code> but haven't implemented
-   for all failing tests.</p>
-<ol>
-<li>Package checks</li>
-</ol>
+actually requires some parameters, rate limiting, the AWS account needs to
+be set up to work with a service, etc. We have a way to skip certain
+integration tests in <code>make.paws/R/tests_config.R</code> but haven't implemented
+for all failing tests.</p>
+</li>
+<li>
+<p>Package checks</p>
 <p>Before submitting to CRAN, the packages must pass R CMD check. Use
-   <code>devtools::check(cran = TRUE)</code> to run R CMD check locally, and use
-   <code>devtools::check_rhub()</code> to run it for other platforms. The CRAN maintainers
-   receive the file <code>cran_comments.md</code> which typically states what you used
-   to check before submitting, and we use R-Hub.</p>
+<code>devtools::check(cran = TRUE)</code> to run R CMD check locally, and use
+<code>devtools::check_rhub()</code> to run it for other platforms. The CRAN maintainers
+receive the file <code>cran_comments.md</code> which typically states what you used
+to check before submitting, and we use R-Hub.</p>
+</li>
+</ol>
 <hr />
 <h2 id="submitting-to-cran">Submitting to CRAN<a class="headerlink" href="#submitting-to-cran" title="Permanent link">&para;</a></h2>
 <h3 id="pawscommon">paws.common<a class="headerlink" href="#pawscommon" title="Permanent link">&para;</a></h3>
@@ -1412,14 +1416,18 @@ packages and only then updating the central paws package.</p>
 <li>cran - CRAN packages, paws and paws.<category>.</li>
 <li>docs - Package documentation not part of the packages, e.g. on credentials.</li>
 <li>examples - Code examples.</li>
-<li>make.paws - Package for generating the paws package code (see above).</li>
+<li>make.paws - Package for generating the paws package code (see above).<ul>
 <li>inst/extdata/packages.yml - The mapping from AWS service to CRAN category
     package.</li>
 <li>R/custom/*.R - User-visible functions to be copied wholesale for a given 
     service (e.g. S3) in the generated code.</li>
-<li>paws.common - Package with common code for making AWS requests.</li>
+</ul>
+</li>
+<li>paws.common - Package with common code for making AWS requests.<ul>
 <li>R/custom_*.R - Non-user-visible functions to be run at request time for
     a given service, e.g. if a service's requests need special processing.</li>
+</ul>
+</li>
 <li>paws - Deprecated temporary code generation output folder.</li>
 <li>script - One off scripts with no other home.</li>
 <li>vendor/aws-sdk-js - AWS SDK for JS with JSON AWS metadata.</li>
@@ -1440,7 +1448,7 @@ http://adv-r.had.co.nz/Style.html.</p>
 </li>
 <li>
 <p>Use at most 80 characters per line, excepting only very long strings that you
-  can't break, e.g. a URL.</p>
+    can't break, e.g. a URL.</p>
 </li>
 </ul>
 <hr />

@@ -16677,180 +16677,182 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>computeEnvironmentName</code></strong></li>
-</ul>
+<li>
+<p><strong><code>computeEnvironmentName</code></strong></p>
 <p>[required] The name for your compute environment. It can be up to 128 characters long. It can contain uppercase and lowercase letters, numbers, hyphens (-), and underscores (_).</p>
-<ul>
-<li><strong><code>type</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>type</code></strong></p>
 <p>[required] The type of the compute environment: <code>MANAGED</code> or <code>UNMANAGED</code>. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html">Compute Environments</a> in the <em>Batch User Guide</em>.</p>
-<ul>
-<li><strong><code>state</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>state</code></strong></p>
 <p>The state of the compute environment. A compute environment must be created in the <code>ENABLED</code> state.</p>
 <p>If the state is <code>ENABLED</code>, then the compute environment accepts jobs from a queue and can scale out automatically based on queues.</p>
 <p>If the state is <code>ENABLED</code>, then the Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p>
 <p>If the state is <code>DISABLED</code>, then the Batch scheduler doesn't attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state don't scale out.</p>
 <p>Compute environments in a <code>DISABLED</code> state may continue to incur billing charges, for example, if they have running instances due to jobs that are still executing or a non-zero <code>minvCpus</code> setting. To prevent additional charges, disable and delete the compute environment.</p>
 <p>When an instance is idle, the instance scales down to the <code>minvCpus</code> value. However, the instance size doesn't change. For example, consider a <code>c5.8xlarge</code> instance with a <code>minvCpus</code> value of <code>4</code> and a <code>desiredvCpus</code> value of <code>36</code>. This instance doesn't scale down to a <code>c5.large</code> instance.</p>
-<ul>
-<li><strong><code>unmanagedvCpus</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>unmanagedvCpus</code></strong></p>
 <p>The maximum number of vCPUs for an unmanaged compute environment. This parameter is only used for fair-share scheduling to reserve vCPU capacity for new share identifiers. If this parameter isn't provided for a fair-share job queue, no vCPU capacity is reserved.</p>
 <p>This parameter is only supported when the <code>type</code> parameter is set to <code>UNMANAGED</code>.</p>
-<ul>
-<li><strong><code>computeResources</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>computeResources</code></strong></p>
 <p>Details about the compute resources managed by the compute environment. This parameter is required for managed compute environments. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html">Compute Environments</a> in the <em>Batch User Guide</em>.</p>
-<ul>
-<li><strong><code>serviceRole</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>serviceRole</code></strong></p>
 <p>The full Amazon Resource Name (ARN) of the IAM role that allows Batch to make calls to other Amazon Web Services services on your behalf. For more information, see <a href="https://docs.aws.amazon.com/batch/latest/userguide/using-service-linked-roles.html">Batch service IAM role</a> in the <em>Batch User Guide</em>.</p>
 <p>If your account already created the Batch service-linked role, that role is used by default for your compute environment unless you specify a different role here. If the Batch service-linked role doesn't exist in your account, and no role is specified here, the service attempts to create the Batch service-linked role in your account.</p>
 <p>This automatic service-linked role creation only applies to <code>MANAGED</code> compute environments. For <code>UNMANAGED</code> compute environments, you must explicitly specify a <code>serviceRole</code>.</p>
 <p>If your specified role has a path other than <code>/</code>, then you must specify either the full role ARN (recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code>, specify <code>/foo/bar</code> as the role name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names">Friendly names and paths</a> in the <em>IAM User Guide</em>.</p>
 <p>Depending on how you created your Batch service role, its ARN might contain the <code>service-role</code> path prefix. When you only specify the name of the service role, Batch assumes that your ARN doesn't use the <code>service-role</code> path prefix. Because of this, we recommend that you specify the full ARN of your service role when you create compute environments.</p>
-<ul>
-<li><strong><code>tags</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>tags</code></strong></p>
 <p>The tags that you apply to the compute environment to help you categorize and organize your resources. Each tag consists of a key and an optional value. For more information, see <a href="https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html">Tagging Amazon Web Services Resources</a> in <em>Amazon Web Services General Reference</em>.</p>
 <p>These tags can be updated or removed using the <a href="../batch_tag_resource/"><code>tag_resource</code></a> and <a href="../batch_untag_resource/"><code>untag_resource</code></a> API operations. These tags don't propagate to the underlying compute resources.</p>
-<ul>
-<li><strong><code>eksConfiguration</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>eksConfiguration</code></strong></p>
 <p>The details for the Amazon EKS cluster that supports the compute environment.</p>
 <p>To create a compute environment that uses EKS resources, the caller must have permissions to call <code>eks:DescribeCluster</code>. Additional Amazon EKS permissions are required for Batch to manage an access entry on the cluster; see <a href="https://docs.aws.amazon.com/batch/latest/userguide/eks-access-entries.html">Amazon EKS access entry authentication</a> in the <em>Batch User Guide</em>.</p>
-<ul>
-<li><strong><code>context</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>context</code></strong></p>
 <p>Reserved.</p>
-<ul>
-<li><strong><code>ecsSettings</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ecsSettings</code></strong></p>
 <p>The Amazon ECS settings for the compute environment. These settings control CloudWatch Container Insights collection for the compute environment.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  computeEnvironmentName = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  computeEnvironmentArn = &quot;string&quot;
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">computeEnvironmentName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">computeEnvironmentArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$create_compute_environment(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  computeEnvironmentName = &quot;string&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  type = &quot;MANAGED&quot;|&quot;UNMANAGED&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  state = &quot;ENABLED&quot;|&quot;DISABLED&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  unmanagedvCpus = 123,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  computeResources = list(
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    type = &quot;EC2&quot;|&quot;SPOT&quot;|&quot;FARGATE&quot;|&quot;FARGATE_SPOT&quot;|&quot;ECS_MANAGED_INSTANCES&quot;,
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    allocationStrategy = &quot;BEST_FIT&quot;|&quot;BEST_FIT_PROGRESSIVE&quot;|&quot;BEST_FIT_PROGRESSIVE_ORDERED&quot;|&quot;SPOT_CAPACITY_OPTIMIZED&quot;|&quot;SPOT_PRICE_CAPACITY_OPTIMIZED&quot;|&quot;SPOT_CAPACITY_OPTIMIZED_PRIORITIZED&quot;,
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    minvCpus = 123,
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    maxvCpus = 123,
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    desiredvCpus = 123,
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    instanceTypes = list(
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>      &quot;string&quot;
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    ),
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    imageId = &quot;string&quot;,
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    subnets = list(
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>      &quot;string&quot;
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    ),
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    securityGroupIds = list(
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>      &quot;string&quot;
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    ),
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    ec2KeyPair = &quot;string&quot;,
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    instanceRole = &quot;string&quot;,
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    tags = list(
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>      &quot;string&quot;
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    ),
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    placementGroup = &quot;string&quot;,
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>    bidPercentage = 123,
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    spotIamFleetRole = &quot;string&quot;,
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>    launchTemplate = list(
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>      launchTemplateId = &quot;string&quot;,
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>      launchTemplateName = &quot;string&quot;,
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>      version = &quot;string&quot;,
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>      overrides = list(
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>        list(
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>          launchTemplateId = &quot;string&quot;,
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>          launchTemplateName = &quot;string&quot;,
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>          version = &quot;string&quot;,
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>          targetInstanceTypes = list(
-<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>            &quot;string&quot;
-<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>          ),
-<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>          userdataType = &quot;EKS_BOOTSTRAP_SH&quot;|&quot;EKS_NODEADM&quot;
-<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>        )
-<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>      ),
-<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>      userdataType = &quot;EKS_BOOTSTRAP_SH&quot;|&quot;EKS_NODEADM&quot;
-<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>    ),
-<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>    ec2Configuration = list(
-<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>      list(
-<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>        imageType = &quot;string&quot;,
-<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>        imageIdOverride = &quot;string&quot;,
-<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>        batchImageStatus = &quot;string&quot;,
-<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a>        imageKubernetesVersion = &quot;string&quot;
-<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a>      )
-<a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a>    ),
-<a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a>    scalingPolicy = list(
-<a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a>      minScaleDownDelayMinutes = 123
-<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a>    ),
-<a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a>    managedInstancesProvider = list(
-<a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a>      propagateTags = &quot;string&quot;,
-<a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a>      infrastructureRoleArn = &quot;string&quot;,
-<a id="__codelineno-2-61" name="__codelineno-2-61" href="#__codelineno-2-61"></a>      instanceLaunchTemplate = list(
-<a id="__codelineno-2-62" name="__codelineno-2-62" href="#__codelineno-2-62"></a>        ec2InstanceProfileArn = &quot;string&quot;,
-<a id="__codelineno-2-63" name="__codelineno-2-63" href="#__codelineno-2-63"></a>        networkConfiguration = list(
-<a id="__codelineno-2-64" name="__codelineno-2-64" href="#__codelineno-2-64"></a>          subnets = list(
-<a id="__codelineno-2-65" name="__codelineno-2-65" href="#__codelineno-2-65"></a>            &quot;string&quot;
-<a id="__codelineno-2-66" name="__codelineno-2-66" href="#__codelineno-2-66"></a>          ),
-<a id="__codelineno-2-67" name="__codelineno-2-67" href="#__codelineno-2-67"></a>          securityGroups = list(
-<a id="__codelineno-2-68" name="__codelineno-2-68" href="#__codelineno-2-68"></a>            &quot;string&quot;
-<a id="__codelineno-2-69" name="__codelineno-2-69" href="#__codelineno-2-69"></a>          )
-<a id="__codelineno-2-70" name="__codelineno-2-70" href="#__codelineno-2-70"></a>        ),
-<a id="__codelineno-2-71" name="__codelineno-2-71" href="#__codelineno-2-71"></a>        instanceRequirements = list(
-<a id="__codelineno-2-72" name="__codelineno-2-72" href="#__codelineno-2-72"></a>          allowedInstanceTypes = list(
-<a id="__codelineno-2-73" name="__codelineno-2-73" href="#__codelineno-2-73"></a>            &quot;string&quot;
-<a id="__codelineno-2-74" name="__codelineno-2-74" href="#__codelineno-2-74"></a>          )
-<a id="__codelineno-2-75" name="__codelineno-2-75" href="#__codelineno-2-75"></a>        ),
-<a id="__codelineno-2-76" name="__codelineno-2-76" href="#__codelineno-2-76"></a>        capacityOptionType = &quot;string&quot;,
-<a id="__codelineno-2-77" name="__codelineno-2-77" href="#__codelineno-2-77"></a>        storageConfiguration = list(
-<a id="__codelineno-2-78" name="__codelineno-2-78" href="#__codelineno-2-78"></a>          storageSizeGiB = 123
-<a id="__codelineno-2-79" name="__codelineno-2-79" href="#__codelineno-2-79"></a>        ),
-<a id="__codelineno-2-80" name="__codelineno-2-80" href="#__codelineno-2-80"></a>        monitoring = &quot;string&quot;,
-<a id="__codelineno-2-81" name="__codelineno-2-81" href="#__codelineno-2-81"></a>        fipsEnabled = TRUE|FALSE,
-<a id="__codelineno-2-82" name="__codelineno-2-82" href="#__codelineno-2-82"></a>        capacityReservations = list(
-<a id="__codelineno-2-83" name="__codelineno-2-83" href="#__codelineno-2-83"></a>          reservationGroupArn = &quot;string&quot;,
-<a id="__codelineno-2-84" name="__codelineno-2-84" href="#__codelineno-2-84"></a>          reservationPreference = &quot;string&quot;
-<a id="__codelineno-2-85" name="__codelineno-2-85" href="#__codelineno-2-85"></a>        ),
-<a id="__codelineno-2-86" name="__codelineno-2-86" href="#__codelineno-2-86"></a>        instanceMetadataTagsPropagation = TRUE|FALSE,
-<a id="__codelineno-2-87" name="__codelineno-2-87" href="#__codelineno-2-87"></a>        localStorageConfiguration = list(
-<a id="__codelineno-2-88" name="__codelineno-2-88" href="#__codelineno-2-88"></a>          useLocalStorage = TRUE|FALSE
-<a id="__codelineno-2-89" name="__codelineno-2-89" href="#__codelineno-2-89"></a>        )
-<a id="__codelineno-2-90" name="__codelineno-2-90" href="#__codelineno-2-90"></a>      ),
-<a id="__codelineno-2-91" name="__codelineno-2-91" href="#__codelineno-2-91"></a>      infrastructureOptimization = list(
-<a id="__codelineno-2-92" name="__codelineno-2-92" href="#__codelineno-2-92"></a>        scaleInAfter = 123
-<a id="__codelineno-2-93" name="__codelineno-2-93" href="#__codelineno-2-93"></a>      )
-<a id="__codelineno-2-94" name="__codelineno-2-94" href="#__codelineno-2-94"></a>    ),
-<a id="__codelineno-2-95" name="__codelineno-2-95" href="#__codelineno-2-95"></a>    capacityTags = list(
-<a id="__codelineno-2-96" name="__codelineno-2-96" href="#__codelineno-2-96"></a>      &quot;string&quot;
-<a id="__codelineno-2-97" name="__codelineno-2-97" href="#__codelineno-2-97"></a>    )
-<a id="__codelineno-2-98" name="__codelineno-2-98" href="#__codelineno-2-98"></a>  ),
-<a id="__codelineno-2-99" name="__codelineno-2-99" href="#__codelineno-2-99"></a>  serviceRole = &quot;string&quot;,
-<a id="__codelineno-2-100" name="__codelineno-2-100" href="#__codelineno-2-100"></a>  tags = list(
-<a id="__codelineno-2-101" name="__codelineno-2-101" href="#__codelineno-2-101"></a>    &quot;string&quot;
-<a id="__codelineno-2-102" name="__codelineno-2-102" href="#__codelineno-2-102"></a>  ),
-<a id="__codelineno-2-103" name="__codelineno-2-103" href="#__codelineno-2-103"></a>  eksConfiguration = list(
-<a id="__codelineno-2-104" name="__codelineno-2-104" href="#__codelineno-2-104"></a>    eksClusterArn = &quot;string&quot;,
-<a id="__codelineno-2-105" name="__codelineno-2-105" href="#__codelineno-2-105"></a>    kubernetesNamespace = &quot;string&quot;,
-<a id="__codelineno-2-106" name="__codelineno-2-106" href="#__codelineno-2-106"></a>    accessEntry = list(
-<a id="__codelineno-2-107" name="__codelineno-2-107" href="#__codelineno-2-107"></a>      desiredState = &quot;ENABLED&quot;|&quot;DISABLED&quot;|&quot;INHERIT_FROM_CLUSTER&quot;,
-<a id="__codelineno-2-108" name="__codelineno-2-108" href="#__codelineno-2-108"></a>      status = &quot;ACTIVE&quot;|&quot;INACTIVE&quot;
-<a id="__codelineno-2-109" name="__codelineno-2-109" href="#__codelineno-2-109"></a>    )
-<a id="__codelineno-2-110" name="__codelineno-2-110" href="#__codelineno-2-110"></a>  ),
-<a id="__codelineno-2-111" name="__codelineno-2-111" href="#__codelineno-2-111"></a>  context = &quot;string&quot;,
-<a id="__codelineno-2-112" name="__codelineno-2-112" href="#__codelineno-2-112"></a>  ecsSettings = list(
-<a id="__codelineno-2-113" name="__codelineno-2-113" href="#__codelineno-2-113"></a>    containerInsights = &quot;ENABLED&quot;|&quot;ENHANCED&quot;|&quot;DISABLED&quot;
-<a id="__codelineno-2-114" name="__codelineno-2-114" href="#__codelineno-2-114"></a>  )
-<a id="__codelineno-2-115" name="__codelineno-2-115" href="#__codelineno-2-115"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">create_compute_environment</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">computeEnvironmentName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MANAGED&quot;</span><span class="o">|</span><span class="s">&quot;UNMANAGED&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ENABLED&quot;</span><span class="o">|</span><span class="s">&quot;DISABLED&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">unmanagedvCpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">computeResources</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;EC2&quot;</span><span class="o">|</span><span class="s">&quot;SPOT&quot;</span><span class="o">|</span><span class="s">&quot;FARGATE&quot;</span><span class="o">|</span><span class="s">&quot;FARGATE_SPOT&quot;</span><span class="o">|</span><span class="s">&quot;ECS_MANAGED_INSTANCES&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="n">allocationStrategy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;BEST_FIT&quot;</span><span class="o">|</span><span class="s">&quot;BEST_FIT_PROGRESSIVE&quot;</span><span class="o">|</span><span class="s">&quot;BEST_FIT_PROGRESSIVE_ORDERED&quot;</span><span class="o">|</span><span class="s">&quot;SPOT_CAPACITY_OPTIMIZED&quot;</span><span class="o">|</span><span class="s">&quot;SPOT_PRICE_CAPACITY_OPTIMIZED&quot;</span><span class="o">|</span><span class="s">&quot;SPOT_CAPACITY_OPTIMIZED_PRIORITIZED&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="n">minvCpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="n">maxvCpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="n">desiredvCpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="n">instanceTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="n">imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="n">subnets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="n">securityGroupIds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">    </span><span class="n">ec2KeyPair</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">    </span><span class="n">instanceRole</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">    </span><span class="n">tags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">    </span><span class="n">placementGroup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">    </span><span class="n">bidPercentage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">    </span><span class="n">spotIamFleetRole</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">    </span><span class="n">launchTemplate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">      </span><span class="n">launchTemplateId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">      </span><span class="n">launchTemplateName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">      </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">      </span><span class="n">overrides</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">          </span><span class="n">launchTemplateId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">          </span><span class="n">launchTemplateName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">          </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">          </span><span class="n">targetInstanceTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="w">            </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="w">          </span><span class="p">),</span>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a><span class="w">          </span><span class="n">userdataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;EKS_BOOTSTRAP_SH&quot;</span><span class="o">|</span><span class="s">&quot;EKS_NODEADM&quot;</span>
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a><span class="w">      </span><span class="n">userdataType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;EKS_BOOTSTRAP_SH&quot;</span><span class="o">|</span><span class="s">&quot;EKS_NODEADM&quot;</span>
+<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a><span class="w">    </span><span class="n">ec2Configuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a><span class="w">      </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a><span class="w">        </span><span class="n">imageType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a><span class="w">        </span><span class="n">imageIdOverride</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a><span class="w">        </span><span class="n">batchImageStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a><span class="w">        </span><span class="n">imageKubernetesVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a><span class="w">    </span><span class="n">scalingPolicy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a><span class="w">      </span><span class="n">minScaleDownDelayMinutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a><span class="w">    </span><span class="n">managedInstancesProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a><span class="w">      </span><span class="n">propagateTags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a><span class="w">      </span><span class="n">infrastructureRoleArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-61" name="__codelineno-2-61" href="#__codelineno-2-61"></a><span class="w">      </span><span class="n">instanceLaunchTemplate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-62" name="__codelineno-2-62" href="#__codelineno-2-62"></a><span class="w">        </span><span class="n">ec2InstanceProfileArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-63" name="__codelineno-2-63" href="#__codelineno-2-63"></a><span class="w">        </span><span class="n">networkConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-64" name="__codelineno-2-64" href="#__codelineno-2-64"></a><span class="w">          </span><span class="n">subnets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-65" name="__codelineno-2-65" href="#__codelineno-2-65"></a><span class="w">            </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-66" name="__codelineno-2-66" href="#__codelineno-2-66"></a><span class="w">          </span><span class="p">),</span>
+<a id="__codelineno-2-67" name="__codelineno-2-67" href="#__codelineno-2-67"></a><span class="w">          </span><span class="n">securityGroups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-68" name="__codelineno-2-68" href="#__codelineno-2-68"></a><span class="w">            </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-69" name="__codelineno-2-69" href="#__codelineno-2-69"></a><span class="w">          </span><span class="p">)</span>
+<a id="__codelineno-2-70" name="__codelineno-2-70" href="#__codelineno-2-70"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-2-71" name="__codelineno-2-71" href="#__codelineno-2-71"></a><span class="w">        </span><span class="n">instanceRequirements</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-72" name="__codelineno-2-72" href="#__codelineno-2-72"></a><span class="w">          </span><span class="n">allowedInstanceTypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-73" name="__codelineno-2-73" href="#__codelineno-2-73"></a><span class="w">            </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-74" name="__codelineno-2-74" href="#__codelineno-2-74"></a><span class="w">          </span><span class="p">)</span>
+<a id="__codelineno-2-75" name="__codelineno-2-75" href="#__codelineno-2-75"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-2-76" name="__codelineno-2-76" href="#__codelineno-2-76"></a><span class="w">        </span><span class="n">capacityOptionType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-77" name="__codelineno-2-77" href="#__codelineno-2-77"></a><span class="w">        </span><span class="n">storageConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-78" name="__codelineno-2-78" href="#__codelineno-2-78"></a><span class="w">          </span><span class="n">storageSizeGiB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-2-79" name="__codelineno-2-79" href="#__codelineno-2-79"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-2-80" name="__codelineno-2-80" href="#__codelineno-2-80"></a><span class="w">        </span><span class="n">monitoring</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-81" name="__codelineno-2-81" href="#__codelineno-2-81"></a><span class="w">        </span><span class="n">fipsEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-82" name="__codelineno-2-82" href="#__codelineno-2-82"></a><span class="w">        </span><span class="n">capacityReservations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-83" name="__codelineno-2-83" href="#__codelineno-2-83"></a><span class="w">          </span><span class="n">reservationGroupArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-84" name="__codelineno-2-84" href="#__codelineno-2-84"></a><span class="w">          </span><span class="n">reservationPreference</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-85" name="__codelineno-2-85" href="#__codelineno-2-85"></a><span class="w">        </span><span class="p">),</span>
+<a id="__codelineno-2-86" name="__codelineno-2-86" href="#__codelineno-2-86"></a><span class="w">        </span><span class="n">instanceMetadataTagsPropagation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-87" name="__codelineno-2-87" href="#__codelineno-2-87"></a><span class="w">        </span><span class="n">localStorageConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-88" name="__codelineno-2-88" href="#__codelineno-2-88"></a><span class="w">          </span><span class="n">useLocalStorage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-2-89" name="__codelineno-2-89" href="#__codelineno-2-89"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-2-90" name="__codelineno-2-90" href="#__codelineno-2-90"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-2-91" name="__codelineno-2-91" href="#__codelineno-2-91"></a><span class="w">      </span><span class="n">infrastructureOptimization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-92" name="__codelineno-2-92" href="#__codelineno-2-92"></a><span class="w">        </span><span class="n">scaleInAfter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span>
+<a id="__codelineno-2-93" name="__codelineno-2-93" href="#__codelineno-2-93"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-2-94" name="__codelineno-2-94" href="#__codelineno-2-94"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-95" name="__codelineno-2-95" href="#__codelineno-2-95"></a><span class="w">    </span><span class="n">capacityTags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-96" name="__codelineno-2-96" href="#__codelineno-2-96"></a><span class="w">      </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-97" name="__codelineno-2-97" href="#__codelineno-2-97"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-98" name="__codelineno-2-98" href="#__codelineno-2-98"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-99" name="__codelineno-2-99" href="#__codelineno-2-99"></a><span class="w">  </span><span class="n">serviceRole</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-100" name="__codelineno-2-100" href="#__codelineno-2-100"></a><span class="w">  </span><span class="n">tags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-101" name="__codelineno-2-101" href="#__codelineno-2-101"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-102" name="__codelineno-2-102" href="#__codelineno-2-102"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-103" name="__codelineno-2-103" href="#__codelineno-2-103"></a><span class="w">  </span><span class="n">eksConfiguration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-104" name="__codelineno-2-104" href="#__codelineno-2-104"></a><span class="w">    </span><span class="n">eksClusterArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-105" name="__codelineno-2-105" href="#__codelineno-2-105"></a><span class="w">    </span><span class="n">kubernetesNamespace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-106" name="__codelineno-2-106" href="#__codelineno-2-106"></a><span class="w">    </span><span class="n">accessEntry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-107" name="__codelineno-2-107" href="#__codelineno-2-107"></a><span class="w">      </span><span class="n">desiredState</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ENABLED&quot;</span><span class="o">|</span><span class="s">&quot;DISABLED&quot;</span><span class="o">|</span><span class="s">&quot;INHERIT_FROM_CLUSTER&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-108" name="__codelineno-2-108" href="#__codelineno-2-108"></a><span class="w">      </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ACTIVE&quot;</span><span class="o">|</span><span class="s">&quot;INACTIVE&quot;</span>
+<a id="__codelineno-2-109" name="__codelineno-2-109" href="#__codelineno-2-109"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-110" name="__codelineno-2-110" href="#__codelineno-2-110"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-111" name="__codelineno-2-111" href="#__codelineno-2-111"></a><span class="w">  </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-112" name="__codelineno-2-112" href="#__codelineno-2-112"></a><span class="w">  </span><span class="n">ecsSettings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-113" name="__codelineno-2-113" href="#__codelineno-2-113"></a><span class="w">    </span><span class="n">containerInsights</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ENABLED&quot;</span><span class="o">|</span><span class="s">&quot;ENHANCED&quot;</span><span class="o">|</span><span class="s">&quot;DISABLED&quot;</span>
+<a id="__codelineno-2-114" name="__codelineno-2-114" href="#__codelineno-2-114"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-115" name="__codelineno-2-115" href="#__codelineno-2-115"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># This example creates a managed compute environment with specific C4</span>

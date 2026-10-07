@@ -18703,7 +18703,7 @@
 <ul>
 <li>
 <p><strong>General purpose buckets</strong> - Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. Amazon S3 automatically encrypts all new objects that are uploaded to an S3 bucket. When doing a multipart upload, if you don't specify encryption information in your request, the encryption setting of the uploaded parts is set to the default encryption configuration of the destination bucket. By default, all buckets have a base level of encryption configuration that uses server-side encryption with Amazon S3 managed keys (SSE-S3). If the destination bucket has a default encryption configuration that uses server-side encryption with an Key Management Service (KMS) key (SSE-KMS), or a customer-provided encryption key (SSE-C), Amazon S3 uses the corresponding KMS key, or a customer-provided key to encrypt the uploaded parts. When you perform a CreateMultipartUpload operation, if you want to use a different type of encryption setting for the uploaded parts, you can request that Amazon S3 encrypts the object with a different encryption key (such as an Amazon S3 managed key, a KMS key, or a customer-provided key). When the encryption setting in your request is different from the default encryption configuration of the destination bucket, the encryption setting in your request takes precedence. If you choose to provide your own encryption key, the request headers you provide in <a href="../s3_upload_part/"><code>upload_part</code></a> and <a href="../s3_upload_part_copy/"><code>upload_part_copy</code></a> requests must match the headers you used in the <a href="../s3_create_multipart_upload/"><code>create_multipart_upload</code></a> request.</p>
-</li>
+<ul>
 <li>
 <p>Use KMS keys (SSE-KMS) that include the Amazon Web Services managed key (<code>aws/s3</code>) and KMS customer managed keys stored in Key Management Service (KMS) – If you want Amazon Web Services to manage the keys used to encrypt data, specify the following headers in the request.</p>
 <ul>
@@ -18730,13 +18730,15 @@
 </ul>
 <p>For more information about server-side encryption with customer-provided encryption keys (SSE-C), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html">Protecting data using server-side encryption with customer-provided encryption keys (SSE-C)</a> in the <em>Amazon S3 User Guide</em>.</p>
 </li>
+</ul>
+</li>
 <li>
 <p><strong>Directory buckets</strong> - For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your <a href="../s3_create_session/"><code>create_session</code></a> requests or <code>PUT</code> object requests. Then, new objects are automatically encrypted with the desired encryption settings. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/">Protecting data with server-side encryption</a> in the <em>Amazon S3 User Guide</em>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.</p>
-</li>
-</ul>
 <p>In the Zonal endpoint API calls (except <a href="../s3_copy_object/"><code>copy_object</code></a> and <a href="../s3_upload_part_copy/"><code>upload_part_copy</code></a>) using the REST API, the encryption request headers must match the encryption settings that are specified in the <a href="../s3_create_session/"><code>create_session</code></a> request. You can't override the values of the encryption settings (<code>x-amz-server-side-encryption</code>, <code>x-amz-server-side-encryption-aws-kms-key-id</code>, <code>x-amz-server-side-encryption-context</code>, and <code>x-amz-server-side-encryption-bucket-key-enabled</code>) that are specified in the <a href="../s3_create_session/"><code>create_session</code></a> request. You don't need to explicitly specify these encryption settings values in Zonal endpoint API calls, and Amazon S3 will use the encryption settings values from the <a href="../s3_create_session/"><code>create_session</code></a> request to protect new objects in the directory bucket.</p>
 <p>When you use the CLI or the Amazon Web Services SDKs, for <a href="../s3_create_session/"><code>create_session</code></a>, the session token refreshes automatically to avoid service interruptions when a session expires. The CLI or the Amazon Web Services SDKs use the bucket's default encryption configuration for the <a href="../s3_create_session/"><code>create_session</code></a> request. It's not supported to override the encryption settings values in the <a href="../s3_create_session/"><code>create_session</code></a> request. So in the Zonal endpoint API calls (except <a href="../s3_copy_object/"><code>copy_object</code></a> and <a href="../s3_upload_part_copy/"><code>upload_part_copy</code></a>), the encryption request headers must match the default encryption configuration of the directory bucket.</p>
 <p>For directory buckets, when you perform a <a href="../s3_create_multipart_upload/"><code>create_multipart_upload</code></a> operation and an <a href="../s3_upload_part_copy/"><code>upload_part_copy</code></a> operation, the request headers you provide in the <a href="../s3_create_multipart_upload/"><code>create_multipart_upload</code></a> request must match the default encryption configuration of the destination bucket.</p>
+</li>
+</ul>
 <h3 id="http-host-header-syntax">HTTP Host header syntax<a class="headerlink" href="#http-host-header-syntax" title="Permanent link">&para;</a></h3>
 <p><strong>Directory buckets</strong> - The HTTP Host header syntax is <code>Bucket-name.s3express-zone-id.region-code.amazonaws.com</code>.</p>
 <p>The following operations are related to <a href="../s3_create_multipart_upload/"><code>create_multipart_upload</code></a>:</p>
@@ -18762,52 +18764,50 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>ACL</code></strong></li>
-</ul>
+<li>
+<p><strong><code>ACL</code></strong></p>
 <p>The canned ACL to apply to the object. Amazon S3 supports a set of predefined ACLs, known as <em>canned ACLs</em>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#CannedACL">Canned ACL</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>By default, all objects are private. Only the owner has full access control. When uploading an object, you can grant access permissions to individual Amazon Web Services accounts or to predefined groups defined by Amazon S3. These permissions are then added to the access control list (ACL) on the new object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html">Using ACLs</a>. One way to grant the permissions using the request headers is to specify a canned ACL with the <code>x-amz-acl</code> request header.</p>
 <ul>
 <li>This functionality is not supported for directory buckets.</li>
-<li>
-<p>This functionality is not supported for Amazon S3 on Outposts.</p>
+<li>This functionality is not supported for Amazon S3 on Outposts.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>Bucket</code></strong></p>
-</li>
-</ul>
 <p>[required] The name of the bucket where the multipart upload is initiated and where the object is uploaded.</p>
 <p><strong>Directory buckets</strong> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>Bucket-name.s3express-zone-id.region-code.amazonaws.com</code>. Path-style requests are not supported. Directory bucket names must be unique in the chosen Zone (Availability Zone or Local Zone). Bucket names must follow the format <code>bucket-base-name--zone-id--x-s3</code> (for example, <code>amzn-s3-demo-bucket--usw2-az1--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p><strong>Access points</strong> - When you use this action with an access point for general purpose buckets, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When you use this action with an access point for directory buckets, you must provide the access point name in place of the bucket name. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form <em>AccessPointName</em>-<em>AccountId</em>.s3-accesspoint.<em>Region</em>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>Object Lambda access points are not supported by directory buckets.</p>
 <p><strong>S3 on Outposts</strong> - When you use this action with S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>AccessPointName-AccountId.outpostID.s3-outposts.Region.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/s3-outposts/S3onOutposts.html">What is S3 on Outposts?</a> in the <em>Amazon S3 User Guide</em>.</p>
-<ul>
-<li><strong><code>CacheControl</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>CacheControl</code></strong></p>
 <p>Specifies caching behavior along the request/reply chain.</p>
-<ul>
-<li><strong><code>ContentDisposition</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ContentDisposition</code></strong></p>
 <p>Specifies presentational information for the object.</p>
-<ul>
-<li><strong><code>ContentEncoding</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ContentEncoding</code></strong></p>
 <p>Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.</p>
 <p>For directory buckets, only the <code>aws-chunked</code> value is supported in this header field.</p>
-<ul>
-<li><strong><code>ContentLanguage</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ContentLanguage</code></strong></p>
 <p>The language that the content is in.</p>
-<ul>
-<li><strong><code>ContentType</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ContentType</code></strong></p>
 <p>A standard MIME type describing the format of the object data.</p>
-<ul>
-<li><strong><code>Expires</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Expires</code></strong></p>
 <p>The date and time at which the object is no longer cacheable.</p>
-<ul>
-<li><strong><code>GrantFullControl</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>GrantFullControl</code></strong></p>
 <p>Specify access permissions explicitly to give the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.</p>
 <p>By default, all objects are private. Only the owner has full access control. When uploading an object, you can use this header to explicitly grant access permissions to specific Amazon Web Services accounts or groups. This header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html">Access Control List (ACL) Overview</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>You specify each grantee as a type=value pair, where the type is one of the following:</p>
@@ -18834,13 +18834,11 @@
 <p><code>x-amz-grant-read: id="11112222333", id="444455556666"</code></p>
 <ul>
 <li>This functionality is not supported for directory buckets.</li>
-<li>
-<p>This functionality is not supported for Amazon S3 on Outposts.</p>
+<li>This functionality is not supported for Amazon S3 on Outposts.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>GrantRead</code></strong></p>
-</li>
-</ul>
 <p>Specify access permissions explicitly to allow grantee to read the object data and its metadata.</p>
 <p>By default, all objects are private. Only the owner has full access control. When uploading an object, you can use this header to explicitly grant access permissions to specific Amazon Web Services accounts or groups. This header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html">Access Control List (ACL) Overview</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>You specify each grantee as a type=value pair, where the type is one of the following:</p>
@@ -18867,13 +18865,11 @@
 <p><code>x-amz-grant-read: id="11112222333", id="444455556666"</code></p>
 <ul>
 <li>This functionality is not supported for directory buckets.</li>
-<li>
-<p>This functionality is not supported for Amazon S3 on Outposts.</p>
+<li>This functionality is not supported for Amazon S3 on Outposts.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>GrantReadACP</code></strong></p>
-</li>
-</ul>
 <p>Specify access permissions explicitly to allows grantee to read the object ACL.</p>
 <p>By default, all objects are private. Only the owner has full access control. When uploading an object, you can use this header to explicitly grant access permissions to specific Amazon Web Services accounts or groups. This header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html">Access Control List (ACL) Overview</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>You specify each grantee as a type=value pair, where the type is one of the following:</p>
@@ -18900,13 +18896,11 @@
 <p><code>x-amz-grant-read: id="11112222333", id="444455556666"</code></p>
 <ul>
 <li>This functionality is not supported for directory buckets.</li>
-<li>
-<p>This functionality is not supported for Amazon S3 on Outposts.</p>
+<li>This functionality is not supported for Amazon S3 on Outposts.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>GrantWriteACP</code></strong></p>
-</li>
-</ul>
 <p>Specify access permissions explicitly to allows grantee to allow grantee to write the ACL for the applicable object.</p>
 <p>By default, all objects are private. Only the owner has full access control. When uploading an object, you can use this header to explicitly grant access permissions to specific Amazon Web Services accounts or groups. This header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html">Access Control List (ACL) Overview</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>You specify each grantee as a type=value pair, where the type is one of the following:</p>
@@ -18933,191 +18927,189 @@
 <p><code>x-amz-grant-read: id="11112222333", id="444455556666"</code></p>
 <ul>
 <li>This functionality is not supported for directory buckets.</li>
-<li>
-<p>This functionality is not supported for Amazon S3 on Outposts.</p>
+<li>This functionality is not supported for Amazon S3 on Outposts.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>Key</code></strong></p>
-</li>
-</ul>
 <p>[required] Object key for which the multipart upload is to be initiated.</p>
-<ul>
-<li><strong><code>Metadata</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Metadata</code></strong></p>
 <p>A map of metadata to store with the object in S3.</p>
-<ul>
-<li><strong><code>ServerSideEncryption</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ServerSideEncryption</code></strong></p>
 <p>The server-side encryption algorithm used when you store this object in Amazon S3 or Amazon FSx.</p>
 <ul>
 <li>
 <p><strong>Directory buckets</strong> - For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your <a href="../s3_create_session/"><code>create_session</code></a> requests or <code>PUT</code> object requests. Then, new objects are automatically encrypted with the desired encryption settings. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/">Protecting data with server-side encryption</a> in the <em>Amazon S3 User Guide</em>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.</p>
 <p>In the Zonal endpoint API calls (except <a href="../s3_copy_object/"><code>copy_object</code></a> and <a href="../s3_upload_part_copy/"><code>upload_part_copy</code></a>) using the REST API, the encryption request headers must match the encryption settings that are specified in the <a href="../s3_create_session/"><code>create_session</code></a> request. You can't override the values of the encryption settings (<code>x-amz-server-side-encryption</code>, <code>x-amz-server-side-encryption-aws-kms-key-id</code>, <code>x-amz-server-side-encryption-context</code>, and <code>x-amz-server-side-encryption-bucket-key-enabled</code>) that are specified in the <a href="../s3_create_session/"><code>create_session</code></a> request. You don't need to explicitly specify these encryption settings values in Zonal endpoint API calls, and Amazon S3 will use the encryption settings values from the <a href="../s3_create_session/"><code>create_session</code></a> request to protect new objects in the directory bucket.</p>
 <p>When you use the CLI or the Amazon Web Services SDKs, for <a href="../s3_create_session/"><code>create_session</code></a>, the session token refreshes automatically to avoid service interruptions when a session expires. The CLI or the Amazon Web Services SDKs use the bucket's default encryption configuration for the <a href="../s3_create_session/"><code>create_session</code></a> request. It's not supported to override the encryption settings values in the <a href="../s3_create_session/"><code>create_session</code></a> request. So in the Zonal endpoint API calls (except <a href="../s3_copy_object/"><code>copy_object</code></a> and <a href="../s3_upload_part_copy/"><code>upload_part_copy</code></a>), the encryption request headers must match the default encryption configuration of the directory bucket.
-  - <strong>S3 access points for Amazon FSx</strong> - When accessing data stored in Amazon FSx file systems using S3 access points, the only valid server side encryption option is <code>aws:fsx</code>. All Amazon FSx file systems have encryption configured by default and are encrypted at rest. Data is automatically encrypted before being written to the file system, and automatically decrypted as it is read. These processes are handled transparently by Amazon FSx.</p>
+    - <strong>S3 access points for Amazon FSx</strong> - When accessing data stored in Amazon FSx file systems using S3 access points, the only valid server side encryption option is <code>aws:fsx</code>. All Amazon FSx file systems have encryption configured by default and are encrypted at rest. Data is automatically encrypted before being written to the file system, and automatically decrypted as it is read. These processes are handled transparently by Amazon FSx.</p>
+</li>
+</ul>
 </li>
 <li>
 <p><strong><code>StorageClass</code></strong></p>
-</li>
-</ul>
 <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The STANDARD storage class provides high durability and high availability. Depending on performance needs, you can specify a different Storage Class. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html">Storage Classes</a> in the <em>Amazon S3 User Guide</em>.</p>
 <ul>
 <li>Directory buckets only support <code>EXPRESS_ONEZONE</code> (the S3 Express One Zone storage class) in Availability Zones and <code>ONEZONE_IA</code> (the S3 One Zone-Infrequent Access storage class) in Dedicated Local Zones.</li>
-<li>
-<p>Amazon S3 on Outposts only uses the OUTPOSTS Storage Class.</p>
+<li>Amazon S3 on Outposts only uses the OUTPOSTS Storage Class.</li>
+</ul>
 </li>
 <li>
 <p><strong><code>WebsiteRedirectLocation</code></strong></p>
-</li>
-</ul>
 <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>SSECustomerAlgorithm</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSECustomerAlgorithm</code></strong></p>
 <p>Specifies the algorithm to use when encrypting the object (for example, AES256).</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>SSECustomerKey</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSECustomerKey</code></strong></p>
 <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon S3 does not store the encryption key. The key must be appropriate for use with the algorithm specified in the <code>x-amz-server-side-encryption-customer-algorithm</code> header.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>SSECustomerKeyMD5</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSECustomerKeyMD5</code></strong></p>
 <p>Specifies the 128-bit MD5 digest of the customer-provided encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure that the encryption key was transmitted without error.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>SSEKMSKeyId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSEKMSKeyId</code></strong></p>
 <p>Specifies the KMS key ID (Key ID, Key ARN, or Key Alias) to use for object encryption. If the KMS key doesn't exist in the same account that's issuing the command, you must use the full Key ARN not the Key ID.</p>
 <p><strong>General purpose buckets</strong> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code> or <code>aws:kms:dsse</code>, this header specifies the ID (Key ID, Key ARN, or Key Alias) of the KMS key to use. If you specify <code>x-amz-server-side-encryption:aws:kms</code> or <code>x-amz-server-side-encryption:aws:kms:dsse</code>, but do not provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key (<code>aws/s3</code>) to protect the data.</p>
 <p><strong>Directory buckets</strong> - To encrypt data using SSE-KMS, it's recommended to specify the <code>x-amz-server-side-encryption</code> header to <code>aws:kms</code>. Then, the <code>x-amz-server-side-encryption-aws-kms-key-id</code> header implicitly uses the bucket's default KMS customer managed key ID. If you want to explicitly set the <code>x-amz-server-side-encryption-aws-kms-key-id</code> header, it must match the bucket's default customer managed key (using key ID or ARN, not alias). Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket's lifetime. The <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported. Incorrect key specification results in an HTTP <code>400 Bad Request</code> error.</p>
-<ul>
-<li><strong><code>SSEKMSEncryptionContext</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SSEKMSEncryptionContext</code></strong></p>
 <p>Specifies the Amazon Web Services KMS Encryption Context to use for object encryption. The value of this header is a Base64 encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.</p>
 <p><strong>Directory buckets</strong> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported.</p>
-<ul>
-<li><strong><code>BucketKeyEnabled</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>BucketKeyEnabled</code></strong></p>
 <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with server-side encryption using Key Management Service (KMS) keys (SSE-KMS).</p>
 <p><strong>General purpose buckets</strong> - Setting this header to <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS. Also, specifying this header with a PUT action doesn't affect bucket-level settings for S3 Bucket Key.</p>
 <p><strong>Directory buckets</strong> - S3 Bucket Keys are always enabled for <code>GET</code> and <code>PUT</code> operations in a directory bucket and can’t be disabled. S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="../s3_copy_object/"><code>copy_object</code></a>, <a href="../s3_upload_part_copy/"><code>upload_part_copy</code></a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-Batch-Ops.html">the Copy operation in Batch Operations</a>, or <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job.html">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
-<ul>
-<li><strong><code>RequestPayer</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>RequestPayer</code></strong></p>
 <p>Confirms that the requester knows that they will be charged for the request. Bucket owners need not specify this parameter in their requests. If either the source or destination S3 bucket has Requester Pays enabled, the requester will pay for the corresponding charges. For information about downloading objects from Requester Pays buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ObjectsinRequesterPaysBuckets.html">Downloading Objects in Requester Pays Buckets</a> in the <em>Amazon S3 User Guide</em>.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>Tagging</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Tagging</code></strong></p>
 <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>ObjectLockMode</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ObjectLockMode</code></strong></p>
 <p>Specifies the Object Lock mode that you want to apply to the uploaded object.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>ObjectLockRetainUntilDate</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ObjectLockRetainUntilDate</code></strong></p>
 <p>Specifies the date and time when you want the Object Lock to expire.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>ObjectLockLegalHoldStatus</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ObjectLockLegalHoldStatus</code></strong></p>
 <p>Specifies whether you want to apply a legal hold to the uploaded object.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>ObjectLockEventHold</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ObjectLockEventHold</code></strong></p>
 <p>Specifies the event hold status to apply to the uploaded object. Set to <code>ON</code> to enable or <code>OFF</code> to disable.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>ObjectLockEventHoldDurationDays</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ObjectLockEventHoldDurationDays</code></strong></p>
 <p>Specifies the event hold duration in days to apply to the uploaded object. You cannot specify a duration in both days and years.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>ObjectLockEventHoldDurationYears</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ObjectLockEventHoldDurationYears</code></strong></p>
 <p>Specifies the event hold duration in years to apply to the uploaded object. You cannot specify a duration in both days and years.</p>
 <p>This functionality is not supported for directory buckets.</p>
-<ul>
-<li><strong><code>ExpectedBucketOwner</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ExpectedBucketOwner</code></strong></p>
 <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
-<ul>
-<li><strong><code>ChecksumAlgorithm</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ChecksumAlgorithm</code></strong></p>
 <p>Indicates the algorithm that you want Amazon S3 to use to create the checksum for the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the <em>Amazon S3 User Guide</em>.</p>
-<ul>
-<li><strong><code>ChecksumType</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ChecksumType</code></strong></p>
 <p>Indicates the checksum type that you want Amazon S3 to use to calculate the object’s checksum value. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity in the Amazon S3 User Guide</a>.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  AbortDate = as.POSIXct(
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  ),
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  AbortRuleId = &quot;string&quot;,
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  Bucket = &quot;string&quot;,
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  Key = &quot;string&quot;,
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  UploadId = &quot;string&quot;,
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  ServerSideEncryption = &quot;AES256&quot;|&quot;aws:fsx&quot;|&quot;aws:backup&quot;|&quot;aws:kms&quot;|&quot;aws:kms:dsse&quot;,
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  SSECustomerAlgorithm = &quot;string&quot;,
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  SSECustomerKeyMD5 = &quot;string&quot;,
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  SSEKMSKeyId = &quot;string&quot;,
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  SSEKMSEncryptionContext = &quot;string&quot;,
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  BucketKeyEnabled = TRUE|FALSE,
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  RequestCharged = &quot;requester&quot;,
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  ChecksumAlgorithm = &quot;CRC32&quot;|&quot;CRC32C&quot;|&quot;SHA1&quot;|&quot;SHA256&quot;|&quot;CRC64NVME&quot;|&quot;SHA512&quot;|&quot;MD5&quot;|&quot;XXHASH64&quot;|&quot;XXHASH3&quot;|&quot;XXHASH128&quot;,
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  ChecksumType = &quot;COMPOSITE&quot;|&quot;FULL_OBJECT&quot;
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">AbortDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">AbortRuleId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">Bucket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="n">Key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="n">UploadId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="n">ServerSideEncryption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AES256&quot;</span><span class="o">|</span><span class="s">&quot;aws:fsx&quot;</span><span class="o">|</span><span class="s">&quot;aws:backup&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms:dsse&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="n">SSECustomerAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="n">SSECustomerKeyMD5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="n">SSEKMSKeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="n">SSEKMSEncryptionContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="n">BucketKeyEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="n">RequestCharged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;requester&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">  </span><span class="n">ChecksumAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;CRC32&quot;</span><span class="o">|</span><span class="s">&quot;CRC32C&quot;</span><span class="o">|</span><span class="s">&quot;SHA1&quot;</span><span class="o">|</span><span class="s">&quot;SHA256&quot;</span><span class="o">|</span><span class="s">&quot;CRC64NVME&quot;</span><span class="o">|</span><span class="s">&quot;SHA512&quot;</span><span class="o">|</span><span class="s">&quot;MD5&quot;</span><span class="o">|</span><span class="s">&quot;XXHASH64&quot;</span><span class="o">|</span><span class="s">&quot;XXHASH3&quot;</span><span class="o">|</span><span class="s">&quot;XXHASH128&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="n">ChecksumType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;COMPOSITE&quot;</span><span class="o">|</span><span class="s">&quot;FULL_OBJECT&quot;</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$create_multipart_upload(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  ACL = &quot;private&quot;|&quot;public-read&quot;|&quot;public-read-write&quot;|&quot;authenticated-read&quot;|&quot;aws-exec-read&quot;|&quot;bucket-owner-read&quot;|&quot;bucket-owner-full-control&quot;,
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  Bucket = &quot;string&quot;,
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  CacheControl = &quot;string&quot;,
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  ContentDisposition = &quot;string&quot;,
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  ContentEncoding = &quot;string&quot;,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  ContentLanguage = &quot;string&quot;,
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  ContentType = &quot;string&quot;,
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  Expires = &quot;string&quot;,
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  GrantFullControl = &quot;string&quot;,
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  GrantRead = &quot;string&quot;,
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  GrantReadACP = &quot;string&quot;,
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>  GrantWriteACP = &quot;string&quot;,
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>  Key = &quot;string&quot;,
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>  Metadata = list(
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    &quot;string&quot;
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>  ),
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>  ServerSideEncryption = &quot;AES256&quot;|&quot;aws:fsx&quot;|&quot;aws:backup&quot;|&quot;aws:kms&quot;|&quot;aws:kms:dsse&quot;,
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>  StorageClass = &quot;STANDARD&quot;|&quot;REDUCED_REDUNDANCY&quot;|&quot;STANDARD_IA&quot;|&quot;ONEZONE_IA&quot;|&quot;INTELLIGENT_TIERING&quot;|&quot;GLACIER&quot;|&quot;DEEP_ARCHIVE&quot;|&quot;OUTPOSTS&quot;|&quot;GLACIER_IR&quot;|&quot;SNOW&quot;|&quot;EXPRESS_ONEZONE&quot;|&quot;FSX_OPENZFS&quot;|&quot;FSX_ONTAP&quot;|&quot;AWS_BACKUP_WARM&quot;|&quot;AWS_BACKUP_LOW_COST_WARM&quot;,
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>  WebsiteRedirectLocation = &quot;string&quot;,
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>  SSECustomerAlgorithm = &quot;string&quot;,
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>  SSECustomerKey = &quot;string&quot;,
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>  SSECustomerKeyMD5 = &quot;string&quot;,
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>  SSEKMSKeyId = &quot;string&quot;,
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>  SSEKMSEncryptionContext = &quot;string&quot;,
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>  BucketKeyEnabled = TRUE|FALSE,
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>  RequestPayer = &quot;requester&quot;,
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>  Tagging = &quot;string&quot;,
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>  ObjectLockMode = &quot;GOVERNANCE&quot;|&quot;COMPLIANCE&quot;,
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>  ObjectLockRetainUntilDate = as.POSIXct(
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>    &quot;2015-01-01&quot;
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>  ),
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>  ObjectLockLegalHoldStatus = &quot;ON&quot;|&quot;OFF&quot;,
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>  ObjectLockEventHold = &quot;ON&quot;|&quot;OFF&quot;,
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>  ObjectLockEventHoldDurationDays = 123,
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>  ObjectLockEventHoldDurationYears = 123,
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>  ExpectedBucketOwner = &quot;string&quot;,
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>  ChecksumAlgorithm = &quot;CRC32&quot;|&quot;CRC32C&quot;|&quot;SHA1&quot;|&quot;SHA256&quot;|&quot;CRC64NVME&quot;|&quot;SHA512&quot;|&quot;MD5&quot;|&quot;XXHASH64&quot;|&quot;XXHASH3&quot;|&quot;XXHASH128&quot;,
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>  ChecksumType = &quot;COMPOSITE&quot;|&quot;FULL_OBJECT&quot;
-<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">create_multipart_upload</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">ACL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;private&quot;</span><span class="o">|</span><span class="s">&quot;public-read&quot;</span><span class="o">|</span><span class="s">&quot;public-read-write&quot;</span><span class="o">|</span><span class="s">&quot;authenticated-read&quot;</span><span class="o">|</span><span class="s">&quot;aws-exec-read&quot;</span><span class="o">|</span><span class="s">&quot;bucket-owner-read&quot;</span><span class="o">|</span><span class="s">&quot;bucket-owner-full-control&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">Bucket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">CacheControl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">ContentDisposition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">ContentEncoding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">ContentLanguage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="n">ContentType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="n">Expires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="n">GrantFullControl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="n">GrantRead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="n">GrantReadACP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="n">GrantWriteACP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="n">Key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="n">Metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span><span class="n">ServerSideEncryption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AES256&quot;</span><span class="o">|</span><span class="s">&quot;aws:fsx&quot;</span><span class="o">|</span><span class="s">&quot;aws:backup&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms&quot;</span><span class="o">|</span><span class="s">&quot;aws:kms:dsse&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span><span class="n">StorageClass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;STANDARD&quot;</span><span class="o">|</span><span class="s">&quot;REDUCED_REDUNDANCY&quot;</span><span class="o">|</span><span class="s">&quot;STANDARD_IA&quot;</span><span class="o">|</span><span class="s">&quot;ONEZONE_IA&quot;</span><span class="o">|</span><span class="s">&quot;INTELLIGENT_TIERING&quot;</span><span class="o">|</span><span class="s">&quot;GLACIER&quot;</span><span class="o">|</span><span class="s">&quot;DEEP_ARCHIVE&quot;</span><span class="o">|</span><span class="s">&quot;OUTPOSTS&quot;</span><span class="o">|</span><span class="s">&quot;GLACIER_IR&quot;</span><span class="o">|</span><span class="s">&quot;SNOW&quot;</span><span class="o">|</span><span class="s">&quot;EXPRESS_ONEZONE&quot;</span><span class="o">|</span><span class="s">&quot;FSX_OPENZFS&quot;</span><span class="o">|</span><span class="s">&quot;FSX_ONTAP&quot;</span><span class="o">|</span><span class="s">&quot;AWS_BACKUP_WARM&quot;</span><span class="o">|</span><span class="s">&quot;AWS_BACKUP_LOW_COST_WARM&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">  </span><span class="n">WebsiteRedirectLocation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="n">SSECustomerAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">  </span><span class="n">SSECustomerKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">  </span><span class="n">SSECustomerKeyMD5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">  </span><span class="n">SSEKMSKeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">  </span><span class="n">SSEKMSEncryptionContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">  </span><span class="n">BucketKeyEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">  </span><span class="n">RequestPayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;requester&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">  </span><span class="n">Tagging</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">  </span><span class="n">ObjectLockMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;GOVERNANCE&quot;</span><span class="o">|</span><span class="s">&quot;COMPLIANCE&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">  </span><span class="n">ObjectLockRetainUntilDate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.POSIXct</span><span class="p">(</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">    </span><span class="s">&quot;2015-01-01&quot;</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">  </span><span class="n">ObjectLockLegalHoldStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ON&quot;</span><span class="o">|</span><span class="s">&quot;OFF&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">  </span><span class="n">ObjectLockEventHold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ON&quot;</span><span class="o">|</span><span class="s">&quot;OFF&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">  </span><span class="n">ObjectLockEventHoldDurationDays</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">  </span><span class="n">ObjectLockEventHoldDurationYears</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">  </span><span class="n">ExpectedBucketOwner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">  </span><span class="n">ChecksumAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;CRC32&quot;</span><span class="o">|</span><span class="s">&quot;CRC32C&quot;</span><span class="o">|</span><span class="s">&quot;SHA1&quot;</span><span class="o">|</span><span class="s">&quot;SHA256&quot;</span><span class="o">|</span><span class="s">&quot;CRC64NVME&quot;</span><span class="o">|</span><span class="s">&quot;SHA512&quot;</span><span class="o">|</span><span class="s">&quot;MD5&quot;</span><span class="o">|</span><span class="s">&quot;XXHASH64&quot;</span><span class="o">|</span><span class="s">&quot;XXHASH3&quot;</span><span class="o">|</span><span class="s">&quot;XXHASH128&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">  </span><span class="n">ChecksumType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;COMPOSITE&quot;</span><span class="o">|</span><span class="s">&quot;FULL_OBJECT&quot;</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># The following example initiates a multipart upload.</span>

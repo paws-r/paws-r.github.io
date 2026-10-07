@@ -18537,15 +18537,17 @@
 <p>Associates the specified KMS key with either one log group in the account, or with all stored CloudWatch Logs query insights results in the account.</p>
 <p>When you use <a href="../cloudwatchlogs_associate_kms_key/"><code>associate_kms_key</code></a>, you specify either the <code>logGroupName</code> parameter or the <code>resourceIdentifier</code> parameter. You can't specify both of those parameters in the same operation.</p>
 <ul>
-<li>Specify the <code>logGroupName</code> parameter to cause log events ingested into that log group to be encrypted with that key. Only the log events ingested after the key is associated are encrypted with that key.</li>
-</ul>
+<li>
+<p>Specify the <code>logGroupName</code> parameter to cause log events ingested into that log group to be encrypted with that key. Only the log events ingested after the key is associated are encrypted with that key.</p>
 <p>Associating a KMS key with a log group overrides any existing associations between the log group and a KMS key. After a KMS key is associated with a log group, all newly ingested data for the log group is encrypted using the KMS key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs. This enables CloudWatch Logs to decrypt this data whenever it is requested.</p>
 <p>Associating a key with a log group does not cause the results of queries of that log group to be encrypted with that key. To have query results encrypted with a KMS key, you must use an <a href="../cloudwatchlogs_associate_kms_key/"><code>associate_kms_key</code></a> operation with the <code>resourceIdentifier</code> parameter that specifies a <code>query-result</code> resource.</p>
-<ul>
-<li>Specify the <code>resourceIdentifier</code> parameter with a <code>query-result</code> resource, to use that key to encrypt the stored results of all future <a href="../cloudwatchlogs_start_query/"><code>start_query</code></a> operations in the account. The response from a <a href="../cloudwatchlogs_get_query_results/"><code>get_query_results</code></a> operation will still return the query results in plain text.</li>
-</ul>
+</li>
+<li>
+<p>Specify the <code>resourceIdentifier</code> parameter with a <code>query-result</code> resource, to use that key to encrypt the stored results of all future <a href="../cloudwatchlogs_start_query/"><code>start_query</code></a> operations in the account. The response from a <a href="../cloudwatchlogs_get_query_results/"><code>get_query_results</code></a> operation will still return the query results in plain text.</p>
 <p>Even if you have not associated a key with your query results, the query results are encrypted when stored, using the default CloudWatch Logs method.</p>
 <p>If you run a query from a monitoring account that queries logs in a source account, the query results key from the monitoring account, if any, is used.</p>
+</li>
+</ul>
 <p>If you delete the key that is used to encrypt log events or log group query results, then all the associated stored log events or query results that were encrypted with that key will be unencryptable and unusable.</p>
 <p>CloudWatch Logs supports only symmetric KMS keys. Do not associate an asymmetric KMS key with your log group or query results. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a>.</p>
 <p>It can take up to 5 minutes for this operation to take effect.</p>
@@ -18556,35 +18558,37 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>logGroupName</code></strong></li>
-</ul>
+<li>
+<p><strong><code>logGroupName</code></strong></p>
 <p>The name of the log group.</p>
 <p>In your <a href="../cloudwatchlogs_associate_kms_key/"><code>associate_kms_key</code></a> operation, you must specify either the <code>resourceIdentifier</code> parameter or the <code>logGroup</code> parameter, but you can't specify both.</p>
-<ul>
-<li><strong><code>kmsKeyId</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>kmsKeyId</code></strong></p>
 <p>[required] The Amazon Resource Name (ARN) of the KMS key to use when encrypting log data. This must be a symmetric KMS key. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html#arn-syntax-kms">Amazon Resource Names</a> and <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a>.</p>
-<ul>
-<li><strong><code>resourceIdentifier</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>resourceIdentifier</code></strong></p>
 <p>Specifies the target for this operation. You must specify one of the following:</p>
 <ul>
 <li>
 <p>Specify the following ARN to have future <a href="../cloudwatchlogs_get_query_results/"><code>get_query_results</code></a> operations in this account encrypt the results with the specified KMS key. Replace <em>REGION</em> and <em>ACCOUNT_ID</em> with your Region and account ID.</p>
 <p><code>arn:aws:logs:REGION:ACCOUNT_ID:query-result:*</code>
-  - Specify the ARN of a log group to have CloudWatch Logs use the KMS key to encrypt log events that are ingested and stored by that log group. The log group ARN must be in the following format. Replace <em>REGION</em> and <em>ACCOUNT_ID</em> with your Region and account ID.</p>
+    - Specify the ARN of a log group to have CloudWatch Logs use the KMS key to encrypt log events that are ingested and stored by that log group. The log group ARN must be in the following format. Replace <em>REGION</em> and <em>ACCOUNT_ID</em> with your Region and account ID.</p>
 <p><code>arn:aws:logs:REGION:ACCOUNT_ID:log-group:LOG_GROUP_NAME</code></p>
 </li>
 </ul>
 <p>In your <a href="../cloudwatchlogs_associate_kms_key/"><code>associate_kms_key</code></a> operation, you must specify either the <code>resourceIdentifier</code> parameter or the <code>logGroup</code> parameter, but you can't specify both.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>An empty list.</p>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>svc$associate_kms_key(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  logGroupName = &quot;string&quot;,
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  kmsKeyId = &quot;string&quot;,
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  resourceIdentifier = &quot;string&quot;
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">associate_kms_key</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">logGroupName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">kmsKeyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">resourceIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
 </code></pre></div>
 
 

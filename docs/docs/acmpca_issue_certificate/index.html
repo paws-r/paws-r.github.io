@@ -15978,177 +15978,179 @@
 </code></pre></div>
 <h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>ApiPassthrough</code></strong></li>
-</ul>
+<li>
+<p><strong><code>ApiPassthrough</code></strong></p>
 <p>Specifies X.509 certificate information to be included in the issued certificate. An <code>APIPassthrough</code> or <code>APICSRPassthrough</code> template variant must be selected, or else this parameter is ignored. For more information about using these templates, see <a href="https://docs.aws.amazon.com/privateca/latest/userguide/UsingTemplates.html">Understanding Certificate Templates</a>.</p>
 <p>If conflicting or duplicate certificate information is supplied during certificate issuance, Amazon Web Services Private CA applies <a href="https://docs.aws.amazon.com/privateca/latest/userguide/UsingTemplates.html#template-order-of-operations">order of operation rules</a> to determine what information is used.</p>
-<ul>
-<li><strong><code>CertificateAuthorityArn</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>CertificateAuthorityArn</code></strong></p>
 <p>[required] The Amazon Resource Name (ARN) that was returned when you called <a href="../acmpca_create_certificate_authority/"><code>create_certificate_authority</code></a>. This must be of the form:</p>
 <p><code>arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012</code></p>
-<ul>
-<li><strong><code>Csr</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Csr</code></strong></p>
 <p>[required] The certificate signing request (CSR) for the certificate you want to issue. As an example, you can use the following OpenSSL command to create the CSR and a 2048 bit RSA private key.</p>
 <p><code>openssl req -new -newkey rsa:2048 -days 365 -keyout private/test_cert_priv_key.pem -out csr/test_cert_.csr</code></p>
 <p>If you have a configuration file, you can then use the following OpenSSL command. The <code>usr_cert</code> block in the configuration file contains your X509 version 3 extensions.</p>
 <p><code>openssl req -new -config openssl_rsa.cnf -extensions usr_cert -newkey rsa:2048 -days 365 -keyout private/test_cert_priv_key.pem -out csr/test_cert_.csr</code></p>
 <p>Note: A CSR must provide either a <em>subject name</em> or a <em>subject alternative name</em> or the request will be rejected.</p>
-<ul>
-<li><strong><code>SigningAlgorithm</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>SigningAlgorithm</code></strong></p>
 <p>[required] The name of the algorithm that will be used to sign the certificate to be issued.</p>
 <p>This parameter should not be confused with the <code>SigningAlgorithm</code> parameter used to sign a CSR in the <a href="../acmpca_create_certificate_authority/"><code>create_certificate_authority</code></a> action.</p>
 <p>The specified signing algorithm family (RSA or ECDSA) must match the algorithm family of the CA's secret key.</p>
-<ul>
-<li><strong><code>TemplateArn</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>TemplateArn</code></strong></p>
 <p>Specifies a custom configuration template to use when issuing a certificate. If this parameter is not provided, Amazon Web Services Private CA defaults to the <code>EndEntityCertificate/V1</code> template. For CA certificates, you should choose the shortest path length that meets your needs. The path length is indicated by the PathLen<em>N</em> portion of the ARN, where <em>N</em> is the <a href="https://docs.aws.amazon.com/privateca/latest/userguide/PcaTerms.html#terms-cadepth">CA depth</a>.</p>
 <p>Note: The CA depth configured on a subordinate CA certificate must not exceed the limit set by its parents in the CA hierarchy.</p>
 <p>For a list of <code>TemplateArn</code> values supported by Amazon Web Services Private CA, see <a href="https://docs.aws.amazon.com/privateca/latest/userguide/UsingTemplates.html">Understanding Certificate Templates</a>.</p>
-<ul>
-<li><strong><code>Validity</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>Validity</code></strong></p>
 <p>[required] Information describing the end of the validity period of the certificate. This parameter sets the “Not After” date for the certificate.</p>
 <p>Certificate validity is the period of time during which a certificate is valid. Validity can be expressed as an explicit date and time when the certificate expires, or as a span of time after issuance, stated in days, months, or years. For more information, see <a href="https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.5">Validity</a> in RFC 5280.</p>
 <p>This value is unaffected when <code>ValidityNotBefore</code> is also specified. For example, if <code>Validity</code> is set to 20 days in the future, the certificate will expire 20 days from issuance time regardless of the <code>ValidityNotBefore</code> value.</p>
 <p>The end of the validity period configured on a certificate must not exceed the limit set on its parents in the CA hierarchy.</p>
-<ul>
-<li><strong><code>ValidityNotBefore</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>ValidityNotBefore</code></strong></p>
 <p>Information describing the start of the validity period of the certificate. This parameter sets the “Not Before" date for the certificate.</p>
 <p>By default, when issuing a certificate, Amazon Web Services Private CA sets the "Not Before" date to the issuance time minus 60 minutes. This compensates for clock inconsistencies across computer systems. The <code>ValidityNotBefore</code> parameter can be used to customize the “Not Before” value.</p>
 <p>Unlike the <code>Validity</code> parameter, the <code>ValidityNotBefore</code> parameter is optional.</p>
 <p>The <code>ValidityNotBefore</code> value is expressed as an explicit date and time, using the <code>Validity</code> type value <code>ABSOLUTE</code>. For more information, see <a href="https://docs.aws.amazon.com/privateca/latest/APIReference/API_Validity.html">Validity</a> in this API reference and <a href="https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.5">Validity</a> in RFC 5280.</p>
-<ul>
-<li><strong><code>IdempotencyToken</code></strong></li>
-</ul>
+</li>
+<li>
+<p><strong><code>IdempotencyToken</code></strong></p>
 <p>Alphanumeric string that can be used to distinguish between calls to the <strong>IssueCertificate</strong> action. Idempotency tokens for <strong>IssueCertificate</strong> time out after five minutes. Therefore, if you call <strong>IssueCertificate</strong> multiple times with the same idempotency token within five minutes, Amazon Web Services Private CA recognizes that you are requesting only one certificate and will issue only one. If you change the idempotency token for each call, Amazon Web Services Private CA recognizes that you are requesting multiple certificates.</p>
+</li>
+</ul>
 <h2 id="value">Value<a class="headerlink" href="#value" title="Permanent link">&para;</a></h2>
 <p>A list with the following syntax:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>list(
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  CertificateArn = &quot;string&quot;
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">CertificateArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="request-syntax">Request syntax<a class="headerlink" href="#request-syntax" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>svc$issue_certificate(
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  ApiPassthrough = list(
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    Extensions = list(
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>      CertificatePolicies = list(
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        list(
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>          CertPolicyId = &quot;string&quot;,
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>          PolicyQualifiers = list(
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>            list(
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>              PolicyQualifierId = &quot;CPS&quot;,
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>              Qualifier = list(
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>                CpsUri = &quot;string&quot;
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>              )
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>            )
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>          )
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        )
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>      ),
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>      ExtendedKeyUsage = list(
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>        list(
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>          ExtendedKeyUsageType = &quot;SERVER_AUTH&quot;|&quot;CLIENT_AUTH&quot;|&quot;CODE_SIGNING&quot;|&quot;EMAIL_PROTECTION&quot;|&quot;TIME_STAMPING&quot;|&quot;OCSP_SIGNING&quot;|&quot;SMART_CARD_LOGIN&quot;|&quot;DOCUMENT_SIGNING&quot;|&quot;CERTIFICATE_TRANSPARENCY&quot;,
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>          ExtendedKeyUsageObjectIdentifier = &quot;string&quot;
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        )
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>      ),
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>      KeyUsage = list(
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>        DigitalSignature = TRUE|FALSE,
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>        NonRepudiation = TRUE|FALSE,
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>        KeyEncipherment = TRUE|FALSE,
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>        DataEncipherment = TRUE|FALSE,
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>        KeyAgreement = TRUE|FALSE,
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>        KeyCertSign = TRUE|FALSE,
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>        CRLSign = TRUE|FALSE,
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>        EncipherOnly = TRUE|FALSE,
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>        DecipherOnly = TRUE|FALSE
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>      ),
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>      SubjectAlternativeNames = list(
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>        list(
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>          OtherName = list(
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>            TypeId = &quot;string&quot;,
-<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>            Value = &quot;string&quot;
-<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>          ),
-<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>          Rfc822Name = &quot;string&quot;,
-<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>          DnsName = &quot;string&quot;,
-<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>          DirectoryName = list(
-<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>            Country = &quot;string&quot;,
-<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>            Organization = &quot;string&quot;,
-<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>            OrganizationalUnit = &quot;string&quot;,
-<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>            DistinguishedNameQualifier = &quot;string&quot;,
-<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>            State = &quot;string&quot;,
-<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>            CommonName = &quot;string&quot;,
-<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>            SerialNumber = &quot;string&quot;,
-<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>            Locality = &quot;string&quot;,
-<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>            Title = &quot;string&quot;,
-<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a>            Surname = &quot;string&quot;,
-<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a>            GivenName = &quot;string&quot;,
-<a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a>            Initials = &quot;string&quot;,
-<a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a>            Pseudonym = &quot;string&quot;,
-<a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a>            GenerationQualifier = &quot;string&quot;,
-<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a>            CustomAttributes = list(
-<a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a>              list(
-<a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a>                ObjectIdentifier = &quot;string&quot;,
-<a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a>                Value = &quot;string&quot;
-<a id="__codelineno-2-61" name="__codelineno-2-61" href="#__codelineno-2-61"></a>              )
-<a id="__codelineno-2-62" name="__codelineno-2-62" href="#__codelineno-2-62"></a>            )
-<a id="__codelineno-2-63" name="__codelineno-2-63" href="#__codelineno-2-63"></a>          ),
-<a id="__codelineno-2-64" name="__codelineno-2-64" href="#__codelineno-2-64"></a>          EdiPartyName = list(
-<a id="__codelineno-2-65" name="__codelineno-2-65" href="#__codelineno-2-65"></a>            PartyName = &quot;string&quot;,
-<a id="__codelineno-2-66" name="__codelineno-2-66" href="#__codelineno-2-66"></a>            NameAssigner = &quot;string&quot;
-<a id="__codelineno-2-67" name="__codelineno-2-67" href="#__codelineno-2-67"></a>          ),
-<a id="__codelineno-2-68" name="__codelineno-2-68" href="#__codelineno-2-68"></a>          UniformResourceIdentifier = &quot;string&quot;,
-<a id="__codelineno-2-69" name="__codelineno-2-69" href="#__codelineno-2-69"></a>          IpAddress = &quot;string&quot;,
-<a id="__codelineno-2-70" name="__codelineno-2-70" href="#__codelineno-2-70"></a>          RegisteredId = &quot;string&quot;
-<a id="__codelineno-2-71" name="__codelineno-2-71" href="#__codelineno-2-71"></a>        )
-<a id="__codelineno-2-72" name="__codelineno-2-72" href="#__codelineno-2-72"></a>      ),
-<a id="__codelineno-2-73" name="__codelineno-2-73" href="#__codelineno-2-73"></a>      CustomExtensions = list(
-<a id="__codelineno-2-74" name="__codelineno-2-74" href="#__codelineno-2-74"></a>        list(
-<a id="__codelineno-2-75" name="__codelineno-2-75" href="#__codelineno-2-75"></a>          ObjectIdentifier = &quot;string&quot;,
-<a id="__codelineno-2-76" name="__codelineno-2-76" href="#__codelineno-2-76"></a>          Value = &quot;string&quot;,
-<a id="__codelineno-2-77" name="__codelineno-2-77" href="#__codelineno-2-77"></a>          Critical = TRUE|FALSE
-<a id="__codelineno-2-78" name="__codelineno-2-78" href="#__codelineno-2-78"></a>        )
-<a id="__codelineno-2-79" name="__codelineno-2-79" href="#__codelineno-2-79"></a>      )
-<a id="__codelineno-2-80" name="__codelineno-2-80" href="#__codelineno-2-80"></a>    ),
-<a id="__codelineno-2-81" name="__codelineno-2-81" href="#__codelineno-2-81"></a>    Subject = list(
-<a id="__codelineno-2-82" name="__codelineno-2-82" href="#__codelineno-2-82"></a>      Country = &quot;string&quot;,
-<a id="__codelineno-2-83" name="__codelineno-2-83" href="#__codelineno-2-83"></a>      Organization = &quot;string&quot;,
-<a id="__codelineno-2-84" name="__codelineno-2-84" href="#__codelineno-2-84"></a>      OrganizationalUnit = &quot;string&quot;,
-<a id="__codelineno-2-85" name="__codelineno-2-85" href="#__codelineno-2-85"></a>      DistinguishedNameQualifier = &quot;string&quot;,
-<a id="__codelineno-2-86" name="__codelineno-2-86" href="#__codelineno-2-86"></a>      State = &quot;string&quot;,
-<a id="__codelineno-2-87" name="__codelineno-2-87" href="#__codelineno-2-87"></a>      CommonName = &quot;string&quot;,
-<a id="__codelineno-2-88" name="__codelineno-2-88" href="#__codelineno-2-88"></a>      SerialNumber = &quot;string&quot;,
-<a id="__codelineno-2-89" name="__codelineno-2-89" href="#__codelineno-2-89"></a>      Locality = &quot;string&quot;,
-<a id="__codelineno-2-90" name="__codelineno-2-90" href="#__codelineno-2-90"></a>      Title = &quot;string&quot;,
-<a id="__codelineno-2-91" name="__codelineno-2-91" href="#__codelineno-2-91"></a>      Surname = &quot;string&quot;,
-<a id="__codelineno-2-92" name="__codelineno-2-92" href="#__codelineno-2-92"></a>      GivenName = &quot;string&quot;,
-<a id="__codelineno-2-93" name="__codelineno-2-93" href="#__codelineno-2-93"></a>      Initials = &quot;string&quot;,
-<a id="__codelineno-2-94" name="__codelineno-2-94" href="#__codelineno-2-94"></a>      Pseudonym = &quot;string&quot;,
-<a id="__codelineno-2-95" name="__codelineno-2-95" href="#__codelineno-2-95"></a>      GenerationQualifier = &quot;string&quot;,
-<a id="__codelineno-2-96" name="__codelineno-2-96" href="#__codelineno-2-96"></a>      CustomAttributes = list(
-<a id="__codelineno-2-97" name="__codelineno-2-97" href="#__codelineno-2-97"></a>        list(
-<a id="__codelineno-2-98" name="__codelineno-2-98" href="#__codelineno-2-98"></a>          ObjectIdentifier = &quot;string&quot;,
-<a id="__codelineno-2-99" name="__codelineno-2-99" href="#__codelineno-2-99"></a>          Value = &quot;string&quot;
-<a id="__codelineno-2-100" name="__codelineno-2-100" href="#__codelineno-2-100"></a>        )
-<a id="__codelineno-2-101" name="__codelineno-2-101" href="#__codelineno-2-101"></a>      )
-<a id="__codelineno-2-102" name="__codelineno-2-102" href="#__codelineno-2-102"></a>    )
-<a id="__codelineno-2-103" name="__codelineno-2-103" href="#__codelineno-2-103"></a>  ),
-<a id="__codelineno-2-104" name="__codelineno-2-104" href="#__codelineno-2-104"></a>  CertificateAuthorityArn = &quot;string&quot;,
-<a id="__codelineno-2-105" name="__codelineno-2-105" href="#__codelineno-2-105"></a>  Csr = raw,
-<a id="__codelineno-2-106" name="__codelineno-2-106" href="#__codelineno-2-106"></a>  SigningAlgorithm = &quot;SHA256WITHECDSA&quot;|&quot;SHA384WITHECDSA&quot;|&quot;SHA512WITHECDSA&quot;|&quot;SHA256WITHRSA&quot;|&quot;SHA384WITHRSA&quot;|&quot;SHA512WITHRSA&quot;|&quot;SHA256WITHRSA_PSS&quot;|&quot;SHA384WITHRSA_PSS&quot;|&quot;SHA512WITHRSA_PSS&quot;|&quot;SM3WITHSM2&quot;|&quot;ML_DSA_44&quot;|&quot;ML_DSA_65&quot;|&quot;ML_DSA_87&quot;,
-<a id="__codelineno-2-107" name="__codelineno-2-107" href="#__codelineno-2-107"></a>  TemplateArn = &quot;string&quot;,
-<a id="__codelineno-2-108" name="__codelineno-2-108" href="#__codelineno-2-108"></a>  Validity = list(
-<a id="__codelineno-2-109" name="__codelineno-2-109" href="#__codelineno-2-109"></a>    Value = 123,
-<a id="__codelineno-2-110" name="__codelineno-2-110" href="#__codelineno-2-110"></a>    Type = &quot;END_DATE&quot;|&quot;ABSOLUTE&quot;|&quot;DAYS&quot;|&quot;MONTHS&quot;|&quot;YEARS&quot;
-<a id="__codelineno-2-111" name="__codelineno-2-111" href="#__codelineno-2-111"></a>  ),
-<a id="__codelineno-2-112" name="__codelineno-2-112" href="#__codelineno-2-112"></a>  ValidityNotBefore = list(
-<a id="__codelineno-2-113" name="__codelineno-2-113" href="#__codelineno-2-113"></a>    Value = 123,
-<a id="__codelineno-2-114" name="__codelineno-2-114" href="#__codelineno-2-114"></a>    Type = &quot;END_DATE&quot;|&quot;ABSOLUTE&quot;|&quot;DAYS&quot;|&quot;MONTHS&quot;|&quot;YEARS&quot;
-<a id="__codelineno-2-115" name="__codelineno-2-115" href="#__codelineno-2-115"></a>  ),
-<a id="__codelineno-2-116" name="__codelineno-2-116" href="#__codelineno-2-116"></a>  IdempotencyToken = &quot;string&quot;
-<a id="__codelineno-2-117" name="__codelineno-2-117" href="#__codelineno-2-117"></a>)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">svc</span><span class="o">$</span><span class="nf">issue_certificate</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">ApiPassthrough</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">Extensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="n">CertificatePolicies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">          </span><span class="n">CertPolicyId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">          </span><span class="n">PolicyQualifiers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">            </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">              </span><span class="n">PolicyQualifierId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;CPS&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">              </span><span class="n">Qualifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">                </span><span class="n">CpsUri</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">              </span><span class="p">)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">            </span><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">          </span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">      </span><span class="n">ExtendedKeyUsage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">          </span><span class="n">ExtendedKeyUsageType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SERVER_AUTH&quot;</span><span class="o">|</span><span class="s">&quot;CLIENT_AUTH&quot;</span><span class="o">|</span><span class="s">&quot;CODE_SIGNING&quot;</span><span class="o">|</span><span class="s">&quot;EMAIL_PROTECTION&quot;</span><span class="o">|</span><span class="s">&quot;TIME_STAMPING&quot;</span><span class="o">|</span><span class="s">&quot;OCSP_SIGNING&quot;</span><span class="o">|</span><span class="s">&quot;SMART_CARD_LOGIN&quot;</span><span class="o">|</span><span class="s">&quot;DOCUMENT_SIGNING&quot;</span><span class="o">|</span><span class="s">&quot;CERTIFICATE_TRANSPARENCY&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">          </span><span class="n">ExtendedKeyUsageObjectIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">      </span><span class="n">KeyUsage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">        </span><span class="n">DigitalSignature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">        </span><span class="n">NonRepudiation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">        </span><span class="n">KeyEncipherment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">        </span><span class="n">DataEncipherment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">        </span><span class="n">KeyAgreement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">        </span><span class="n">KeyCertSign</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">        </span><span class="n">CRLSign</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">        </span><span class="n">EncipherOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span><span class="p">,</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">        </span><span class="n">DecipherOnly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="w">      </span><span class="n">SubjectAlternativeNames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">          </span><span class="n">OtherName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">            </span><span class="n">TypeId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">            </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">          </span><span class="p">),</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="w">          </span><span class="n">Rfc822Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="w">          </span><span class="n">DnsName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a><span class="w">          </span><span class="n">DirectoryName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a><span class="w">            </span><span class="n">Country</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a><span class="w">            </span><span class="n">Organization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a><span class="w">            </span><span class="n">OrganizationalUnit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a><span class="w">            </span><span class="n">DistinguishedNameQualifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a><span class="w">            </span><span class="n">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a><span class="w">            </span><span class="n">CommonName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a><span class="w">            </span><span class="n">SerialNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a><span class="w">            </span><span class="n">Locality</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a><span class="w">            </span><span class="n">Title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a><span class="w">            </span><span class="n">Surname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a><span class="w">            </span><span class="n">GivenName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a><span class="w">            </span><span class="n">Initials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a><span class="w">            </span><span class="n">Pseudonym</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a><span class="w">            </span><span class="n">GenerationQualifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a><span class="w">            </span><span class="n">CustomAttributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a><span class="w">              </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a><span class="w">                </span><span class="n">ObjectIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a><span class="w">                </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-61" name="__codelineno-2-61" href="#__codelineno-2-61"></a><span class="w">              </span><span class="p">)</span>
+<a id="__codelineno-2-62" name="__codelineno-2-62" href="#__codelineno-2-62"></a><span class="w">            </span><span class="p">)</span>
+<a id="__codelineno-2-63" name="__codelineno-2-63" href="#__codelineno-2-63"></a><span class="w">          </span><span class="p">),</span>
+<a id="__codelineno-2-64" name="__codelineno-2-64" href="#__codelineno-2-64"></a><span class="w">          </span><span class="n">EdiPartyName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-65" name="__codelineno-2-65" href="#__codelineno-2-65"></a><span class="w">            </span><span class="n">PartyName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-66" name="__codelineno-2-66" href="#__codelineno-2-66"></a><span class="w">            </span><span class="n">NameAssigner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-67" name="__codelineno-2-67" href="#__codelineno-2-67"></a><span class="w">          </span><span class="p">),</span>
+<a id="__codelineno-2-68" name="__codelineno-2-68" href="#__codelineno-2-68"></a><span class="w">          </span><span class="n">UniformResourceIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-69" name="__codelineno-2-69" href="#__codelineno-2-69"></a><span class="w">          </span><span class="n">IpAddress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-70" name="__codelineno-2-70" href="#__codelineno-2-70"></a><span class="w">          </span><span class="n">RegisteredId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-71" name="__codelineno-2-71" href="#__codelineno-2-71"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-2-72" name="__codelineno-2-72" href="#__codelineno-2-72"></a><span class="w">      </span><span class="p">),</span>
+<a id="__codelineno-2-73" name="__codelineno-2-73" href="#__codelineno-2-73"></a><span class="w">      </span><span class="n">CustomExtensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-74" name="__codelineno-2-74" href="#__codelineno-2-74"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-75" name="__codelineno-2-75" href="#__codelineno-2-75"></a><span class="w">          </span><span class="n">ObjectIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-76" name="__codelineno-2-76" href="#__codelineno-2-76"></a><span class="w">          </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-77" name="__codelineno-2-77" href="#__codelineno-2-77"></a><span class="w">          </span><span class="n">Critical</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="o">|</span><span class="kc">FALSE</span>
+<a id="__codelineno-2-78" name="__codelineno-2-78" href="#__codelineno-2-78"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-2-79" name="__codelineno-2-79" href="#__codelineno-2-79"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-2-80" name="__codelineno-2-80" href="#__codelineno-2-80"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-2-81" name="__codelineno-2-81" href="#__codelineno-2-81"></a><span class="w">    </span><span class="n">Subject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-82" name="__codelineno-2-82" href="#__codelineno-2-82"></a><span class="w">      </span><span class="n">Country</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-83" name="__codelineno-2-83" href="#__codelineno-2-83"></a><span class="w">      </span><span class="n">Organization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-84" name="__codelineno-2-84" href="#__codelineno-2-84"></a><span class="w">      </span><span class="n">OrganizationalUnit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-85" name="__codelineno-2-85" href="#__codelineno-2-85"></a><span class="w">      </span><span class="n">DistinguishedNameQualifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-86" name="__codelineno-2-86" href="#__codelineno-2-86"></a><span class="w">      </span><span class="n">State</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-87" name="__codelineno-2-87" href="#__codelineno-2-87"></a><span class="w">      </span><span class="n">CommonName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-88" name="__codelineno-2-88" href="#__codelineno-2-88"></a><span class="w">      </span><span class="n">SerialNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-89" name="__codelineno-2-89" href="#__codelineno-2-89"></a><span class="w">      </span><span class="n">Locality</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-90" name="__codelineno-2-90" href="#__codelineno-2-90"></a><span class="w">      </span><span class="n">Title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-91" name="__codelineno-2-91" href="#__codelineno-2-91"></a><span class="w">      </span><span class="n">Surname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-92" name="__codelineno-2-92" href="#__codelineno-2-92"></a><span class="w">      </span><span class="n">GivenName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-93" name="__codelineno-2-93" href="#__codelineno-2-93"></a><span class="w">      </span><span class="n">Initials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-94" name="__codelineno-2-94" href="#__codelineno-2-94"></a><span class="w">      </span><span class="n">Pseudonym</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-95" name="__codelineno-2-95" href="#__codelineno-2-95"></a><span class="w">      </span><span class="n">GenerationQualifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-96" name="__codelineno-2-96" href="#__codelineno-2-96"></a><span class="w">      </span><span class="n">CustomAttributes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-97" name="__codelineno-2-97" href="#__codelineno-2-97"></a><span class="w">        </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-98" name="__codelineno-2-98" href="#__codelineno-2-98"></a><span class="w">          </span><span class="n">ObjectIdentifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-99" name="__codelineno-2-99" href="#__codelineno-2-99"></a><span class="w">          </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-100" name="__codelineno-2-100" href="#__codelineno-2-100"></a><span class="w">        </span><span class="p">)</span>
+<a id="__codelineno-2-101" name="__codelineno-2-101" href="#__codelineno-2-101"></a><span class="w">      </span><span class="p">)</span>
+<a id="__codelineno-2-102" name="__codelineno-2-102" href="#__codelineno-2-102"></a><span class="w">    </span><span class="p">)</span>
+<a id="__codelineno-2-103" name="__codelineno-2-103" href="#__codelineno-2-103"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-104" name="__codelineno-2-104" href="#__codelineno-2-104"></a><span class="w">  </span><span class="n">CertificateAuthorityArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-105" name="__codelineno-2-105" href="#__codelineno-2-105"></a><span class="w">  </span><span class="n">Csr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
+<a id="__codelineno-2-106" name="__codelineno-2-106" href="#__codelineno-2-106"></a><span class="w">  </span><span class="n">SigningAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SHA256WITHECDSA&quot;</span><span class="o">|</span><span class="s">&quot;SHA384WITHECDSA&quot;</span><span class="o">|</span><span class="s">&quot;SHA512WITHECDSA&quot;</span><span class="o">|</span><span class="s">&quot;SHA256WITHRSA&quot;</span><span class="o">|</span><span class="s">&quot;SHA384WITHRSA&quot;</span><span class="o">|</span><span class="s">&quot;SHA512WITHRSA&quot;</span><span class="o">|</span><span class="s">&quot;SHA256WITHRSA_PSS&quot;</span><span class="o">|</span><span class="s">&quot;SHA384WITHRSA_PSS&quot;</span><span class="o">|</span><span class="s">&quot;SHA512WITHRSA_PSS&quot;</span><span class="o">|</span><span class="s">&quot;SM3WITHSM2&quot;</span><span class="o">|</span><span class="s">&quot;ML_DSA_44&quot;</span><span class="o">|</span><span class="s">&quot;ML_DSA_65&quot;</span><span class="o">|</span><span class="s">&quot;ML_DSA_87&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-107" name="__codelineno-2-107" href="#__codelineno-2-107"></a><span class="w">  </span><span class="n">TemplateArn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-108" name="__codelineno-2-108" href="#__codelineno-2-108"></a><span class="w">  </span><span class="n">Validity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-109" name="__codelineno-2-109" href="#__codelineno-2-109"></a><span class="w">    </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-110" name="__codelineno-2-110" href="#__codelineno-2-110"></a><span class="w">    </span><span class="n">Type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;END_DATE&quot;</span><span class="o">|</span><span class="s">&quot;ABSOLUTE&quot;</span><span class="o">|</span><span class="s">&quot;DAYS&quot;</span><span class="o">|</span><span class="s">&quot;MONTHS&quot;</span><span class="o">|</span><span class="s">&quot;YEARS&quot;</span>
+<a id="__codelineno-2-111" name="__codelineno-2-111" href="#__codelineno-2-111"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-112" name="__codelineno-2-112" href="#__codelineno-2-112"></a><span class="w">  </span><span class="n">ValidityNotBefore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<a id="__codelineno-2-113" name="__codelineno-2-113" href="#__codelineno-2-113"></a><span class="w">    </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">123</span><span class="p">,</span>
+<a id="__codelineno-2-114" name="__codelineno-2-114" href="#__codelineno-2-114"></a><span class="w">    </span><span class="n">Type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;END_DATE&quot;</span><span class="o">|</span><span class="s">&quot;ABSOLUTE&quot;</span><span class="o">|</span><span class="s">&quot;DAYS&quot;</span><span class="o">|</span><span class="s">&quot;MONTHS&quot;</span><span class="o">|</span><span class="s">&quot;YEARS&quot;</span>
+<a id="__codelineno-2-115" name="__codelineno-2-115" href="#__codelineno-2-115"></a><span class="w">  </span><span class="p">),</span>
+<a id="__codelineno-2-116" name="__codelineno-2-116" href="#__codelineno-2-116"></a><span class="w">  </span><span class="n">IdempotencyToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;string&quot;</span>
+<a id="__codelineno-2-117" name="__codelineno-2-117" href="#__codelineno-2-117"></a><span class="p">)</span>
 </code></pre></div>
 
 
